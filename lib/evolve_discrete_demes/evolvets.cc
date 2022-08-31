@@ -18,7 +18,7 @@
 #include "remove_extinct_genomes.hpp"
 #include "runtime_checks.hpp"
 
-#include "evolvets.hpp"
+#include <core/evolve_discrete_demes/evolvets.hpp>
 
 namespace ddemog = fwdpy11::discrete_demography;
 

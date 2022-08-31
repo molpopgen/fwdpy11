@@ -74,17 +74,7 @@ set(TS_SOURCES src/ts/init.cc src/ts/TreeIterator.cc src/ts/VariantIterator.cc
 
 set(EVOLVE_POPULATION_SOURCES src/evolve_population/init.cc
     src/evolve_population/_evolvets.cc
-    src/evolve_population/evolvets.cc
-    src/evolve_population/util.cc
-    src/evolve_population/cleanup_metadata.cc
-    src/evolve_population/diploid_pop_fitness.cc
-    src/evolve_population/index_and_count_mutations.cc
-    src/evolve_population/track_mutation_counts.cc
-    src/evolve_population/no_stopping.cc
-    src/evolve_population/remove_extinct_mutations.cc
-    src/evolve_population/track_ancestral_counts.cc
-    src/evolve_population/remove_extinct_genomes.cc
-    src/evolve_population/runtime_checks.cc)
+    src/evolve_population/no_stopping.cc)
 
 set(DISCRETE_DEMOGRAPHY_SOURCES src/discrete_demography/init.cc
     src/discrete_demography/MigrationMatrix.cc
