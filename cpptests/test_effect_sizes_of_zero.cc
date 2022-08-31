@@ -1,8 +1,21 @@
-#include <pybind11/pybind11.h>
+#include <boost/test/unit_test.hpp>
 #include <fwdpy11/regions/Sregion.hpp>
+#include <fwdpy11/types/DiploidPopulation.hpp>
 #include <fwdpy11/policies/mutation.hpp>
 
-using namespace pybind11::literals;
+BOOST_AUTO_TEST_SUITE(test_effect_sizes_of_zero)
+
+// This test is motivated by GitHub issue #432.
+// When a DES/DFE returns an effect size of zero,
+// such variants were not put into the 'smutations'
+// field of a genome, due to the way the fwdpp mutation
+// base class constructor was being called.  In PR #433,
+// we now require a DFE to tell the Mutation type if the
+// variant is neutral or not, and the expectation is that
+// the answer is "False".  This test creates a new Sregion
+// type where all variants have effect size zero and we run
+// a quick sim to make sure that they are all in both genomes
+// and in the mutation table.
 
 struct EsizeZero : public fwdpy11::Sregion
 {
@@ -43,16 +56,15 @@ struct EsizeZero : public fwdpy11::Sregion
     }
 };
 
-PYBIND11_MODULE(EsizeZero, m)
+BOOST_AUTO_TEST_CASE(test_single_mutation)
 {
-    pybind11::object base = pybind11::module::import("fwdpy11").attr("Sregion");
-    pybind11::class_<EsizeZero, fwdpy11::Sregion>(m, "EsizeZero")
-        .def(pybind11::init([](double beg, double end, double weight, bool coupled,
-                               std::uint16_t label) {
-            return EsizeZero(fwdpy11::Region(beg, end, weight, coupled, label));
-        }))
-    .def_property_readonly("beg",
-            [](const EsizeZero & self){ return self.region.beg;})
-    .def_property_readonly("end",
-            [](const EsizeZero & self){ return self.region.end;});
+    auto e = EsizeZero{fwdpy11::Region{0.0, 1.0, 1.0, false, 0}};
+    auto pop = fwdpy11::DiploidPopulation(10, 1.0);
+    auto q = fwdpp::flagged_mutation_queue{std::queue<std::size_t>{}};
+    auto rng = fwdpy11::GSLrng_t(0);
+    e(q, pop.mutations, pop.mut_lookup, pop.generation, rng);
+    BOOST_REQUIRE_EQUAL(pop.mutations.size(), 1);
+    BOOST_REQUIRE_EQUAL(pop.mutations[0].neutral, false);
 }
+
+BOOST_AUTO_TEST_SUITE_END()

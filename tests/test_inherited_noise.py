@@ -1,14 +1,26 @@
 import unittest
 
 import fwdpy11
+import fwdpy11.custom_genetic_value_decorators
 import numpy as np
 
-import inherit_noise
+
+@fwdpy11.custom_genetic_value_decorators.genetic_value_noise_default_clone
+class InheritedNoise(fwdpy11.GeneticValueNoise):
+    def __init__(self):
+        self.generation = 0
+        fwdpy11.GeneticValueNoise.__init__(self)
+
+    def __call__(self, data) -> float:
+        return data.parent1_metadata.e + self.generation
+
+    def update(self, pop):
+        self.generation = pop.generation
 
 
 class TestInheritNoise(unittest.TestCase):
     """
-    The class inherit_noise.TestInheritNoise passes the
+    The class InheritedNoise passes the
     sum of all generations into the "e" field of
     offspring metadata.  Thus, if offspring metadata
     can see parental metadata, then we can test that the
@@ -31,7 +43,7 @@ class TestInheritNoise(unittest.TestCase):
             ),
             "simlen": 3,
             "gvalue": fwdpy11.Additive(
-                2.0, fwdpy11.GSS(optimum=0.0, VS=1.0), inherit_noise.IneritedNoise()
+                2.0, fwdpy11.GSS(optimum=0.0, VS=1.0), InheritedNoise()
             ),
         }
 
