@@ -4,3 +4,6 @@
 [submodule "rust/corrosion"]
 	path = rust/corrosion
 	url = https://github.com/corrosion-rs/corrosion.git
+[submodule "tests/demes-spec"]
+	path = tests/demes-spec
+	url = https://github.com/popsim-consortium/demes-spec
