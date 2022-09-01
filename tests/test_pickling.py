@@ -20,30 +20,6 @@ import unittest
 
 import numpy as np
 
-import pickling_cpp
-
-
-class TestPickleMutation(unittest.TestCase):
-    @classmethod
-    def setUp(self):
-        import fwdpy11
-
-        self.m = fwdpy11.Mutation(0.1, -0.2, 1.0, 10, 3)
-
-    def testUnpickle(self):
-        import pickle
-
-        o = pickling_cpp.pickle_mutation(self.m)
-        m = pickle.loads(o)
-        self.assertEqual(m, self.m)
-
-    def testUnpickleFromGeneralPickler(self):
-        import pickle
-
-        o = pickling_cpp.general_pickler(self.m)
-        m = pickle.loads(o)
-        self.assertEqual(m, self.m)
-
 
 class TestPickleDiploidPopulation(unittest.TestCase):
     @classmethod
@@ -52,47 +28,11 @@ class TestPickleDiploidPopulation(unittest.TestCase):
 
         self.pop = quick_neutral_slocus()
 
-    def testPickleMutations(self):
-        import pickle
-
-        p = [pickling_cpp.general_pickler(i) for i in self.pop.mutations]
-        for i, j in zip(p, self.pop.mutations):
-            m = pickle.loads(i)
-            self.assertEqual(m, j)
-        x = pickle.dumps(self.pop.mutations)
-        p = pickle.loads(x)
-        for i, j in zip(p, self.pop.mutations):
-            self.assertEqual(i, j)
-
-    def testPickleHaploidGenomes(self):
-        import pickle
-
-        p = [pickling_cpp.general_pickler(i) for i in self.pop.haploid_genomes]
-        for i, j in zip(p, self.pop.haploid_genomes):
-            m = pickle.loads(i)
-            self.assertEqual(m, j)
-        x = pickling_cpp.general_pickler(self.pop.haploid_genomes)
-        p = pickle.loads(x)
-        for i, j in zip(p, self.pop.haploid_genomes):
-            self.assertEqual(i, j)
-
     def testPickleDiploidsPy(self):
         import pickle
 
         pd = pickle.dumps(self.pop.diploids)
         p = pickle.loads(pd)
-        for i, j in zip(p, self.pop.diploids):
-            self.assertEqual(i, j)
-
-    def testPickleDiploidsCpp(self):
-        import pickle
-
-        p = [pickling_cpp.general_pickler(i) for i in self.pop.diploids]
-        for i, j in zip(p, self.pop.diploids):
-            m = pickle.loads(i)
-            self.assertEqual(m, j)
-        x = pickling_cpp.general_pickler(self.pop.diploids)
-        p = pickle.loads(x)
         for i, j in zip(p, self.pop.diploids):
             self.assertEqual(i, j)
 
@@ -103,16 +43,8 @@ class TestPickleDiploidPopulation(unittest.TestCase):
         pp = pickle.loads(p)
         self.assertEqual(pp, self.pop)
 
-    def testPicklePopCpp(self):
-        import pickle
-
-        p = pickling_cpp.general_pickler(self.pop)
-        pp = pickle.loads(p)
-        self.assertEqual(pp, self.pop)
-
     def testPickleTableCollection(self):
         import pickle
-        import numpy as np
 
         p = pickle.dumps(self.pop.tables)
         up = pickle.loads(p)

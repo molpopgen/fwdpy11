@@ -5,7 +5,6 @@ import unittest
 
 import numpy as np
 
-import call_Sregion
 import fwdpy11
 
 # Choose global values that differ from default values in Python class constructors
@@ -365,13 +364,6 @@ class TestLogNormalS(unittest.TestCase):
         self.assertEqual(up.zeta, 0.1)
         self.assertEqual(up.sigma, 2)
 
-    def test_call(self):
-        m = call_Sregion.call(self.lns, 191)
-        self.assertTrue(m.s >= 0.0)
-        lns = fwdpy11.LogNormalS(0, 1, 1, 0.1, 2, scaling=-1)
-        m = call_Sregion.call(lns, 191)
-        self.assertTrue(m.s <= 0.0)
-
 
 class TestMultivariateLogNormalS(unittest.TestCase):
     @classmethod
@@ -396,15 +388,6 @@ class TestMultivariateLogNormalS(unittest.TestCase):
         self.assertEqual(up.scaling, 3.0)
         self.assertTrue(up.zeta is None)
         self.assertTrue(up.sigma is None)
-
-    def test_call(self):
-        mv = fwdpy11.mvDES(self.lns, np.zeros(2), np.identity(2))
-        m = call_Sregion.call(mv, 191)
-        self.assertTrue(np.all(m.esizes >= 0.0))
-        lns = fwdpy11.LogNormalS.mv(0, 1, 1, scaling=-1)
-        mv = fwdpy11.mvDES(lns, np.zeros(2), np.identity(2))
-        m = call_Sregion.call(mv, 191)
-        self.assertTrue(np.all(m.esizes <= 0.0))
 
 
 class TestDiscreteDESD(unittest.TestCase):
