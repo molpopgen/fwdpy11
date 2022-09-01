@@ -31,9 +31,11 @@ import numpy as np
 import tskit
 
 from ._flags import *  # NOQA
-from .metadata import (DiploidMetadata, decode_individual_metadata,
-                       decode_mutation_metadata)
-from .trees import WrappedTreeSequence
+from .metadata import (
+    DiploidMetadata,
+    decode_individual_metadata,
+    decode_mutation_metadata,
+)
 
 
 def get_toplevel_metadata(ts: tskit.TreeSequence, name: str) -> typing.Optional[object]:
@@ -106,28 +108,3 @@ def iterate_timepoints_with_individuals(
         else:
             decoded_individual_metadata = None
         yield utime, node_table_rows, decoded_individual_metadata
-
-
-def load(filename: str):
-    """
-    Load a tree sequence from a file.
-
-    :param filename: Name of the trees file.
-    :type filename: str
-
-    :returns: A wrapped tree sequence
-
-    .. deprecated:: 0.17.0
-
-        Prefer {meth}`tskit.TreeSequence.load`
-    """
-    import tskit
-
-    warnings.warn(
-        FutureWarning(
-            "fwdpy11.tskit_tools.load is deprecated. Please use tskit.load instead."
-        )
-    )
-
-    ts = tskit.load(filename)
-    return WrappedTreeSequence(ts=ts)
