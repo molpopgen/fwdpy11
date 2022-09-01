@@ -5,7 +5,6 @@ import unittest
 import numpy as np
 
 import fwdpy11 as fp11
-import fwdpy11.ezparams
 import snowdrift
 
 
@@ -54,12 +53,12 @@ def evolve_snowdrift(args):
         "gvalue": snowdrift.DiploidSnowdrift(0.2, -0.2, 1, -2, 1, 0.3),
         # evolve for 100 generations so that unit tests are
         # fast
-        "demography": fwdpy11.DiscreteDemography(),
+        "demography": fp11.DiscreteDemography(),
         "simlen": 20,
         "rates": (0.0, 0.0025, 0.001),
         "prune_selected": False,
     }
-    params = fwdpy11.ModelParams(**p)
+    params = fp11.ModelParams(**p)
     sampler = SamplePhenotypes(params.gvalue, 1, 0.3)
     fp11.evolvets(rng, pop, params, 100, sampler)
     # return our pop

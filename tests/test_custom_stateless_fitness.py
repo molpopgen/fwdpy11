@@ -2,7 +2,7 @@ import pickle
 import unittest
 
 import fwdpy11
-import fwdpy11.ezparams
+from ezparams import mslike
 
 import custom_additive as ca
 import custom_stateless_genotype as general
@@ -12,7 +12,7 @@ class testCustomAdditive(unittest.TestCase):
     @classmethod
     def setUp(self):
         self.pop = fwdpy11.DiploidPopulation(1000, 1.0)
-        self.pdict = fwdpy11.ezparams.mslike(
+        self.pdict = mslike(
             self.pop, dfe=fwdpy11.ExpS(0, 1, 1, -0.05), pneutral=0.95, simlen=10
         )
         self.pdict["gvalue"] = ca.additive()
@@ -33,7 +33,7 @@ class testGeneralModule(unittest.TestCase):
     @classmethod
     def setUp(self):
         self.pop = fwdpy11.DiploidPopulation(1000, 1.0)
-        self.pdict = fwdpy11.ezparams.mslike(
+        self.pdict = mslike(
             self.pop,
             dfe=fwdpy11.ConstantS(0, 1, 1, -0.05, 0.05),
             pneutral=0.95,
