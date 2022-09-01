@@ -6,7 +6,6 @@ import fwdpy11._types
 import fwdpy11.tskit_tools._dump_tables_to_tskit
 import numpy as np
 import tskit
-from fwdpy11.tskit_tools import WrappedTreeSequence
 
 from .._fwdpy11 import DiploidGenotype, DiploidMetadata, ll_DiploidPopulation
 from .model_params import ModelParams
@@ -208,7 +207,6 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
         seed: Optional[int] = None,
         parameters: Optional[Dict] = None,
         destructive=False,
-        wrapped=False,
     ) -> tskit.TreeSequence:
         """
         Dump the population's TableCollection into
@@ -235,9 +233,6 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
 
         :param destructive: If `True`, delete data held by the current instance.
         :type destructive: bool
-
-        :param wrapped: If `True`, return `fwdpy11.tskit_tools.WrappedTreeSequence`
-        :type wrapped: bool
 
         :rtype: tskit.TreeSequence
 
@@ -281,13 +276,11 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
 
             The `wrapped` keyword argument is deprecated.
 
+        .. versionadded:: 0.19.0
+
+            Removed deprecated `wrapped` keyword argument.
+
         """
-        if wrapped is True:
-            warnings.warn(
-                FutureWarning(
-                    "the wrapped kwarg is deprecated and will be removed in a future release"
-                )
-            )
         return fwdpy11.tskit_tools._dump_tables_to_tskit._dump_tables_to_tskit(
             self,
             model_params=model_params,
@@ -297,7 +290,6 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
             seed=seed,
             parameters=parameters,
             destructive=destructive,
-            wrapped=wrapped,
         )
 
     def dump_to_file(self, filename: str):
