@@ -27,8 +27,6 @@ import numpy as np
 import tskit
 from fwdpy11._types.model_params import ModelParams
 
-from .trees import WrappedTreeSequence
-
 
 def _initializePopulationTable(
     node_view, population_metadata: typing.Optional[typing.Dict[int, object]], tc
@@ -134,8 +132,7 @@ def _dump_tables_to_tskit(
     seed: typing.Optional[int] = None,
     parameters: typing.Optional[typing.Dict] = None,
     destructive=False,
-    wrapped=False,
-) -> typing.Union[tskit.TreeSequence, WrappedTreeSequence]:
+) -> tskit.TreeSequence:
     from .._fwdpy11 import gsl_version, pybind11_version
 
     environment = tskit.provenance.get_environment(
@@ -239,8 +236,6 @@ def _dump_tables_to_tskit(
 
     tc.provenances.add_row(json.dumps(provenance))
 
-    if wrapped is True:
-        return WrappedTreeSequence(ts=tc.tree_sequence())
     return tc.tree_sequence()
 
 
