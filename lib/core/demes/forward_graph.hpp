@@ -19,5 +19,10 @@ namespace fwdpy11_core
         // so that this class looks like a complete type
         // at compile time. This is a C++ "gotcha".
         ~ForwardDemesGraph();
+
+        void initialize_model(std::uint32_t);
+        bool iterating_model() const;
+        void iterate_state();
+        std::uint32_t model_end_time() const;
     };
 }
