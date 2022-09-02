@@ -8,7 +8,9 @@ SET(CPPTEST_SOURCES fwdpy11_cpp_tests.cc
     test_MutationDominance.cc
     test_gss_classes.cc
     test_effect_sizes_of_zero.cc
-    test_Sregion_from_mvnorm.cc)
+    test_Sregion_from_mvnorm.cc
+    test_forward_demes_graph.cc
+    forward_demes_graph_fixtures.cc)
 
 add_executable(fwdpy11_cpp_tests ${CPPTEST_SOURCES})
 add_dependencies(fwdpy11_cpp_tests fwdpy11core header)
