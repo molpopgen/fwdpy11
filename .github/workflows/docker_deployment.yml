@@ -1,11 +1,9 @@
 name: Build and deploy Docker image
 
 on:
-  push:
-    branches:
-      - 'main'
   release:
     types: [created]
+  pull_request:
 
 jobs:
   docker:
@@ -40,13 +38,13 @@ jobs:
           file: deployment/docker/Dockerfile
           context: .
       -
-        name: Build and push from main
-        if: github.ref == 'refs/heads/main'
-        id: docker_build_main
+        name: Build image
+        if: github.event_name == 'pull_request'
+        id: docker_build_pull_request
         uses: docker/build-push-action@v2
         with:
-          push: true
-          tags: molpopgen/fwdpy11:latest
+          push: false
+          tags: molpopgen/fwdpy11:stable
           file: deployment/docker/Dockerfile
           context: .
       -
