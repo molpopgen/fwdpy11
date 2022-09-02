@@ -3,12 +3,29 @@
 #include <cstdlib>
 #include <cassert>
 #include <stdexcept>
+#include <sstream>
 #include <core/fp11rust.h>
 #include <core/demes/forward_graph.hpp>
 #include <fwdpy11/discrete_demography/exceptions.hpp>
 
+namespace
+{
+    template <typename T>
+    void
+    throw_if_null(const T *t, std::string filename, int line)
+    {
+        if (t == nullptr)
+            {
+                std::ostringstream o;
+                o << "unexpected NULL pointer: " << filename << ", " << line;
+                throw std::runtime_error(o.str());
+            }
+    }
+}
+
 namespace fwdpy11_core
 {
+
     using deleter = decltype(&demes_forward_graph_deallocate);
     using graph_ptr_t = std::unique_ptr<OpaqueForwardGraph, deleter>;
 
@@ -149,5 +166,30 @@ namespace fwdpy11_core
     ForwardDemesGraph::number_of_demes() const
     {
         return pimpl->number_of_demes;
+    }
+    DemeSizeIterator
+    ForwardDemesGraph::parental_deme_sizes() const
+    {
+        std::int32_t status;
+        auto begin
+            = demes_forward_graph_parental_deme_sizes(pimpl->graph.get(), &status);
+        pimpl->handle_error_code(status);
+        // NOTE: this might be overly strict,
+        // but we keep it for now.
+        throw_if_null(begin, __FILE__, __LINE__);
+        return DemeSizeIterator{begin, begin + number_of_demes()};
+    }
+
+    DemeSizeIterator
+    ForwardDemesGraph::offspring_deme_sizes() const
+    {
+        std::int32_t status;
+        auto begin
+            = demes_forward_graph_offspring_deme_sizes(pimpl->graph.get(), &status);
+        pimpl->handle_error_code(status);
+        // NOTE: this might be overly strict,
+        // but we keep it for now.
+        throw_if_null(begin, __FILE__, __LINE__);
+        return DemeSizeIterator{begin, begin + number_of_demes()};
     }
 }

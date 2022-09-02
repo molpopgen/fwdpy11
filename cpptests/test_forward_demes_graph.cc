@@ -34,23 +34,20 @@ BOOST_FIXTURE_TEST_CASE(single_deme_model_with_burn_in, SingleDemeModel)
     BOOST_REQUIRE_EQUAL(end_time, 11);
     while (g.iterating_model())
         {
-            g.iterate_state();
-            pop.generation += 1;
-        }
-    BOOST_REQUIRE_EQUAL(pop.generation, 10);
-}
-
-BOOST_FIXTURE_TEST_CASE(single_deme_model_with_burn_in_THE_CODE_WE_WANT_TO_WRITE,
-                        SingleDemeModel)
-{
-    fwdpy11_core::ForwardDemesGraph g(yaml, 10);
-    BOOST_REQUIRE_EQUAL(g.number_of_demes(), 1);
-    fwdpy11::DiploidPopulation pop(100, 1.0);
-    g.initialize_model(pop.generation);
-    auto end_time = g.model_end_time();
-    BOOST_REQUIRE_EQUAL(end_time, 11);
-    while (g.iterating_model())
-        {
+            auto num = 0;
+            for (auto p : g.parental_deme_sizes())
+                {
+                    BOOST_REQUIRE_EQUAL(p, 100.0);
+                    num += 1;
+                }
+            BOOST_REQUIRE_EQUAL(num, g.number_of_demes());
+            num = 0;
+            for (auto p : g.offspring_deme_sizes())
+                {
+                    BOOST_REQUIRE_EQUAL(p, 100.0);
+                    num += 1;
+                }
+            BOOST_REQUIRE_EQUAL(num, g.number_of_demes());
             g.iterate_state();
             pop.generation += 1;
         }
