@@ -24,5 +24,6 @@ namespace fwdpy11_core
         bool iterating_model() const;
         void iterate_state();
         std::uint32_t model_end_time() const;
+        std::ptrdiff_t number_of_demes() const;
     };
 }
