@@ -1,3 +1,4 @@
+#include <cstddef>
 #include <cstdint>
 #include <cstdlib>
 #include <cassert>
@@ -14,13 +15,21 @@ namespace fwdpy11_core
     struct ForwardDemesGraph::forward_graph_implementation
     {
         graph_ptr_t graph;
+        std::ptrdiff_t number_of_demes;
 
         forward_graph_implementation(const std::string &yaml, std::uint32_t burnin)
-            : graph(demes_forward_graph_allocate(), &demes_forward_graph_deallocate)
+            : graph(demes_forward_graph_allocate(), &demes_forward_graph_deallocate),
+              number_of_demes{-1}
         {
             auto code = demes_forward_graph_initialize_from_yaml(
                 yaml.c_str(), static_cast<double>(burnin), graph.get());
             handle_error_code(code);
+            number_of_demes = demes_forward_graph_number_of_demes(graph.get());
+            if (number_of_demes < 1)
+                {
+                    throw fwdpy11::discrete_demography::DemographyError(
+                        "number of demes must be >= 1");
+                }
         }
 
         void handle_error_code(std::int32_t code) const;
@@ -135,4 +144,10 @@ namespace fwdpy11_core
                 pimpl->update_internal_state(*t);
             }
     };
+
+    std::ptrdiff_t
+    ForwardDemesGraph::number_of_demes() const
+    {
+        return pimpl->number_of_demes;
+    }
 }
