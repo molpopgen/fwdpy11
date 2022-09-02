@@ -1412,7 +1412,7 @@ def test_invalid_demes_spec_modules():
     for bad in glob.glob("tests/demes-spec/test-cases/invalid/*.yaml"):
         with open(bad, "r") as f:
             yaml = "".join(f.readlines())
-            with pytest.raises(ValueError):
+            with pytest.raises(fwdpy11.DemographyError):
                 _ = fwdpy11._fwdpy11._ForwardDemesGraph(yaml=yaml, burnin=0)
 
 
