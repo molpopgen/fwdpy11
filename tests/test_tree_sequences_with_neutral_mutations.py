@@ -76,8 +76,15 @@ class TestKeepFixations(unittest.TestCase):
         )
         ti = fwdpy11.TreeIterator(self.pop.tables, [i for i in range(2 * self.pop.N)])
         mc = _count_mutations_from_diploids(self.pop)
+        # This assert was added when working
+        # on GitHub isuse 954
+        for m in pop2.tables.mutations:
+            assert m.key < len(pop2.tables.mutations)
         for t in ti:
             for m in t.mutations():
+                # This assert was added when working
+                # on GitHub isuse 954
+                assert m.key < len(pop2.mutations)
                 # Have to skip neutral mutations b/c they won't
                 # end up in mc b/c it is obtained from genomes
                 if pop2.mutations[m.key].neutral is False:
