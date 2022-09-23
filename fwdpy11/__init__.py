@@ -87,6 +87,7 @@ from ._functions import (
     make_data_matrix,
     simplify,
     simplify_tables,
+    _validate_regions,
 )  # NOQA
 
 

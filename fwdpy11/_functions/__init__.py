@@ -8,3 +8,17 @@ from fwdpy11 import GSLrng, DiploidPopulation
 
 def infinite_sites(rng: GSLrng, pop: DiploidPopulation, mu: float) -> int:
     return _infinite_sites(rng, pop, mu)
+
+def _validate_regions(regions, sequence_length):
+    for r in regions:
+        try:
+            if r.beg >= sequence_length or r.end > sequence_length:
+                raise ValueError(f"Region {r} extends beyond the sequence length {sequence_length}")
+        except AttributeError:
+            try:
+                for des in r.des:
+                    if des.beg >= sequence_length or des.end > sequence_length:
+                        raise ValueError(f"Region {des} in {r} extends beyond the sequence length {sequence_length}")
+            except TypeError: # r.des not Iterable
+                if r.des.beg >= sequence_length or r.des.end > sequence_length:
+                    raise ValueError(f"Region {des} in {r} extends beyond the sequence length {sequence_length}")
