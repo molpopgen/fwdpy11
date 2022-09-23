@@ -188,6 +188,10 @@ def evolvets(
         evolve_with_tree_sequences,
     )
 
+    fwdpy11._validate_regions(params.sregions, pop.tables.genome_length)
+    fwdpy11._validate_regions(params.nregions, pop.tables.genome_length)
+    fwdpy11._validate_regions(params.recregions, pop.tables.genome_length)
+
     try:
         # DemographicModelDetails ?
         demographic_model = params.demography.model
