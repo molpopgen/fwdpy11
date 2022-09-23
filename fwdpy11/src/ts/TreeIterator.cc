@@ -237,6 +237,9 @@ class tree_visitor_wrapper
             {
                 ++end_of_range;
             }
+        if (end_of_range > end_of_sites) {
+            throw std::runtime_error("invalid end of site range");
+        }
         return std::make_pair(current_site, end_of_range);
     }
 
@@ -250,6 +253,9 @@ class tree_visitor_wrapper
             {
                 ++current_site;
             }
+        if (current_site > end_of_sites) {
+            throw std::runtime_error("invalid end of site range during mutation iteration");
+        }
         while ((current_site < end_of_sites) && (current_mutation < end_of_mutations)
                && (first_site + current_mutation->site)->position
                       != current_site->position)
@@ -272,6 +278,9 @@ class tree_visitor_wrapper
             {
                 ++end_of_range;
             }
+        if (end_of_range > end_of_mutations) {
+            throw std::runtime_error("invalid end of mutation range");
+        }
         return std::make_pair(current_mutation, end_of_range);
     }
 };
@@ -352,14 +361,14 @@ init_tree_iterator(py::module& m)
             "_sites",
             [](tree_visitor_wrapper& self) {
                 auto rv = self.get_sites_on_current_tree();
-                return py::make_iterator(rv.first, rv.second);
+                return py::make_iterator(std::move(rv.first), std::move(rv.second));
             },
             py::keep_alive<0, 1>())
         .def(
             "_mutations",
             [](tree_visitor_wrapper& self) {
                 auto r = self.get_mutations_on_current_tree();
-                return py::make_iterator(r.first, r.second);
+                return py::make_iterator(std::move(r.first), std::move(r.second));
             },
             py::keep_alive<0, 1>());
 }
