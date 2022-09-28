@@ -6,18 +6,19 @@
 
 namespace fwdpy11_core
 {
-    struct DemeSizeIterator
+    template<typename T>
+    struct ForwardDemesGraphDataIterator
     {
-        const double *first;
-        const double *last;
+        const T *first;
+        const T *last;
 
-        const double *
+        const T *
         begin() const
         {
             return first;
         }
 
-        const double *
+        const T *
         end() const
         {
             return last;
@@ -43,7 +44,7 @@ namespace fwdpy11_core
         void iterate_state();
         std::uint32_t model_end_time() const;
         std::ptrdiff_t number_of_demes() const;
-        DemeSizeIterator parental_deme_sizes() const;
-        DemeSizeIterator offspring_deme_sizes() const;
+        ForwardDemesGraphDataIterator<double> parental_deme_sizes() const;
+        ForwardDemesGraphDataIterator<double> offspring_deme_sizes() const;
     };
 }
