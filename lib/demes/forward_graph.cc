@@ -192,4 +192,28 @@ namespace fwdpy11_core
         throw_if_null(begin, __FILE__, __LINE__);
         return ForwardDemesGraphDataIterator<double>{begin, begin + number_of_demes()};
     }
+
+    ForwardDemesGraphDataIterator<double>
+    ForwardDemesGraph::offspring_selfing_rates() const
+    {
+        std::int32_t status;
+        auto begin = demes_forward_graph_selfing_rates(pimpl->graph.get(), &status);
+        pimpl->handle_error_code(status);
+        // NOTE: this might be overly strict,
+        // but we keep it for now.
+        throw_if_null(begin, __FILE__, __LINE__);
+        return ForwardDemesGraphDataIterator<double>{begin, begin + number_of_demes()};
+    }
+
+    ForwardDemesGraphDataIterator<double>
+    ForwardDemesGraph::offspring_cloning_rates() const
+    {
+        std::int32_t status;
+        auto begin = demes_forward_graph_cloning_rates(pimpl->graph.get(), &status);
+        pimpl->handle_error_code(status);
+        // NOTE: this might be overly strict,
+        // but we keep it for now.
+        throw_if_null(begin, __FILE__, __LINE__);
+        return ForwardDemesGraphDataIterator<double>{begin, begin + number_of_demes()};
+    }
 }
