@@ -46,5 +46,7 @@ namespace fwdpy11_core
         std::ptrdiff_t number_of_demes() const;
         ForwardDemesGraphDataIterator<double> parental_deme_sizes() const;
         ForwardDemesGraphDataIterator<double> offspring_deme_sizes() const;
+        ForwardDemesGraphDataIterator<double> offspring_selfing_rates() const;
+        ForwardDemesGraphDataIterator<double> offspring_cloning_rates() const;
     };
 }

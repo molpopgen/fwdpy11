@@ -48,8 +48,22 @@ BOOST_FIXTURE_TEST_CASE(single_deme_model_with_burn_in, SingleDemeModel)
                     num += 1;
                 }
             BOOST_REQUIRE_EQUAL(num, g.number_of_demes());
-            g.iterate_state();
+            num = 0;
+            for (auto s : g.offspring_selfing_rates())
+                {
+                    BOOST_REQUIRE_EQUAL(s, 0.0);
+                    num += 1;
+                }
+            BOOST_REQUIRE_EQUAL(num, g.number_of_demes());
+            num = 0;
+            for (auto c : g.offspring_cloning_rates())
+                {
+                    BOOST_REQUIRE_EQUAL(c, 0.0);
+                    num += 1;
+                }
+            BOOST_REQUIRE_EQUAL(num, g.number_of_demes());
             pop.generation += 1;
+            g.iterate_state();
         }
     BOOST_REQUIRE_EQUAL(pop.generation, 10);
 }
