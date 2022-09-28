@@ -167,7 +167,7 @@ namespace fwdpy11_core
     {
         return pimpl->number_of_demes;
     }
-    DemeSizeIterator
+    ForwardDemesGraphDataIterator<double>
     ForwardDemesGraph::parental_deme_sizes() const
     {
         std::int32_t status;
@@ -177,10 +177,10 @@ namespace fwdpy11_core
         // NOTE: this might be overly strict,
         // but we keep it for now.
         throw_if_null(begin, __FILE__, __LINE__);
-        return DemeSizeIterator{begin, begin + number_of_demes()};
+        return ForwardDemesGraphDataIterator<double>{begin, begin + number_of_demes()};
     }
 
-    DemeSizeIterator
+    ForwardDemesGraphDataIterator<double>
     ForwardDemesGraph::offspring_deme_sizes() const
     {
         std::int32_t status;
@@ -190,6 +190,6 @@ namespace fwdpy11_core
         // NOTE: this might be overly strict,
         // but we keep it for now.
         throw_if_null(begin, __FILE__, __LINE__);
-        return DemeSizeIterator{begin, begin + number_of_demes()};
+        return ForwardDemesGraphDataIterator<double>{begin, begin + number_of_demes()};
     }
 }
