@@ -414,7 +414,7 @@ def _build_deme_id_to_int_map(dg: demes.Graph) -> Dict:
         assert len(deme.epochs) > 0
         temp.append((deme.epochs[0].start_time, deme.name))
 
-    temp = sorted(temp, key=lambda x: (-x[0], x[1]))
+    temp = sorted(temp, key=lambda x: -x[0])
 
     return {j[1]: i for i, j in enumerate(temp)}
 

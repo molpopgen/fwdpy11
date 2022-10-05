@@ -3,6 +3,14 @@
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+## 0.18.3
+
+Bug fixes:
+
+* Fix error in mapping population names to integer IDs when importing `demes` models.
+  Issue {issue}`990`.
+  PR {pr}`991`.
+
 ## 0.18.2
 
 Back end changes
