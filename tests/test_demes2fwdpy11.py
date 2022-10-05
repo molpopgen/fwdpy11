@@ -1926,3 +1926,21 @@ pulses:
     graph = demes.loads(yaml)
     with pytest.raises(fwdpy11.AmbiguousPulses):
         _ = fwdpy11.discrete_demography.from_demes(graph, burnin=0)
+
+
+def test_deme_sort_order():
+    yaml = """
+description: single deme model
+time_units: generations
+demes:
+ - name: B
+   epochs:
+    - start_size: 100
+ - name: A
+   epochs:
+    - start_size: 100
+"""
+    graph = demes.loads(yaml)
+    model = fwdpy11.discrete_demography.from_demes(graph, burnin=0)
+    assert model.metadata["deme_labels"][0] == "B"
+    assert model.metadata["deme_labels"][1] == "A"
