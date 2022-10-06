@@ -54,7 +54,7 @@ if (CMAKE_BUILD)
 endif()
 add_subdirectory(lib)
 add_subdirectory(rust)
-add_subdirectory(fwdpy11)
+add_subdirectory(cpp)
 
 if(BUILD_PYTHON_UNIT_TESTS)
     add_subdirectory(tests)
