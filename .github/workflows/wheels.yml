@@ -64,7 +64,7 @@ jobs:
           name: macOS-wheel-${{ matrix.python }}
           path: dist
 
-  manylinux2014:
+  manylinux2_28:
     runs-on: ubuntu-latest
     steps:
       - name: Cancel Previous Runs
@@ -97,7 +97,7 @@ jobs:
       - name: Build wheels in docker
         shell: bash
         run: |
-          docker run --rm -v `pwd`:/project -w /project quay.io/pypa/manylinux2014_x86_64 bash .github/workflows/manylinux/buildwheels.sh
+          docker run --rm -v `pwd`:/project -w /project quay.io/pypa/manylinux_2_28_x86_64:2022-10-02-69a0972 bash .github/workflows/manylinux/buildwheels.sh
 
       - name: Upload Wheels
         uses: actions/upload-artifact@v2
@@ -105,9 +105,9 @@ jobs:
           name: linux-wheels
           path: dist/wheelhouse
 
-  manylinux2014_test:
+  manylinux2_28_test:
     runs-on: ubuntu-latest
-    needs: ['manylinux2014']
+    needs: ['manylinux2_28']
     strategy:
       matrix:
         python: [3.7, 3.8, 3.9, "3.10"]
@@ -180,7 +180,7 @@ jobs:
       
   upload_to_PyPI:
     runs-on: ubuntu-latest
-    needs: ['macOS_test', 'manylinux2014_test']
+    needs: ['macOS_test', 'manylinux2_28_test']
     steps:
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.10.0
