@@ -6,8 +6,7 @@
 
 namespace fwdpy11_core
 {
-    template<typename T>
-    struct ForwardDemesGraphDataIterator
+    template <typename T> struct ForwardDemesGraphDataIterator
     {
         const T *first;
         const T *last;
@@ -48,5 +47,7 @@ namespace fwdpy11_core
         ForwardDemesGraphDataIterator<double> offspring_deme_sizes() const;
         ForwardDemesGraphDataIterator<double> offspring_selfing_rates() const;
         ForwardDemesGraphDataIterator<double> offspring_cloning_rates() const;
+        ForwardDemesGraphDataIterator<double>
+        offspring_ancestry_proportions(std::size_t offspring_deme) const;
     };
 }
