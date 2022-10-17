@@ -216,4 +216,17 @@ namespace fwdpy11_core
         throw_if_null(begin, __FILE__, __LINE__);
         return ForwardDemesGraphDataIterator<double>{begin, begin + number_of_demes()};
     }
+
+    ForwardDemesGraphDataIterator<double>
+    ForwardDemesGraph::offspring_ancestry_proportions(std::size_t offspring_deme) const
+    {
+        std::int32_t status;
+        auto begin = demes_forward_graph_ancestry_proportions(offspring_deme, &status,
+                                                              pimpl->graph.get());
+        pimpl->handle_error_code(status);
+        // NOTE: this might be overly strict,
+        // but we keep it for now.
+        throw_if_null(begin, __FILE__, __LINE__);
+        return ForwardDemesGraphDataIterator<double>{begin, begin + number_of_demes()};
+    }
 }
