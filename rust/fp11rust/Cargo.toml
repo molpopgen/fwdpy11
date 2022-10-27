@@ -16,5 +16,5 @@ panic = "abort"
 strip = true
 
 [dependencies]
-demes-forward-capi = "0.2.0"
+demes-forward-capi = "0.3.0"
 libc = "~0.2"
