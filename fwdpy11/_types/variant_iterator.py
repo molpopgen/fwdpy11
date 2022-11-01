@@ -79,7 +79,7 @@ class VariantIterator(ll_VariantIterator):
         if end is not None:
             _end = end
         else:
-            _end = np.finfo(np.float64).max
+            _end = float(np.finfo(np.float64).max)
 
         super(VariantIterator, self).__init__(
             tables,

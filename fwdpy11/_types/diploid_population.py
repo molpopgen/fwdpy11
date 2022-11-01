@@ -1,11 +1,10 @@
-import warnings
 from typing import IO, Dict, Iterable, Iterator, List, Optional, Tuple, Union
 
 import demes
 import fwdpy11._types
 import fwdpy11.tskit_tools._dump_tables_to_tskit
 import numpy as np
-import tskit
+import tskit  # type: ignore
 
 from .._fwdpy11 import DiploidGenotype, DiploidMetadata, ll_DiploidPopulation
 from .model_params import ModelParams
@@ -175,7 +174,7 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
         utimes = np.unique(times)
         return times, utimes
 
-    def deme_sizes(self, as_dict=False) -> Union[np.ndarray, Dict]:
+    def deme_sizes(self, as_dict=False):
         """
         Return the number of individuals in each deme.
 
@@ -200,7 +199,8 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
     def dump_tables_to_tskit(
         self,
         *,
-        model_params: Optional[Union[ModelParams, Dict[str, ModelParams]]] = None,
+        model_params: Optional[Union[ModelParams,
+                                     Dict[str, ModelParams]]] = None,
         demes_graph: Optional[demes.Graph] = None,
         population_metadata: Optional[Dict[int, object]] = None,
         data: Optional[object] = None,
@@ -318,7 +318,7 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
 
     def sample_timepoints(
         self, include_alive=True
-    ) -> Iterator[Tuple[int, np.ndarray, np.recarray]]:
+    ):
         """
         Return an iterator over all sample time points.
         The iterator yields time, nodes, and metadata.

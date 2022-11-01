@@ -20,7 +20,7 @@ import copy
 import typing
 
 import fwdpy11
-import tskit
+import tskit  # type: ignore
 
 TopLevelMetadata = tskit.metadata.MetadataSchema(
     {

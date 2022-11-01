@@ -617,7 +617,7 @@ class mvDES(fwdpy11._fwdpy11._ll_mvDES):
     also determine the order of positional arguments:
 
     :param des: Distributions of effect sizes
-    :type des: list
+    :type des: list or mvDES
     :param means: means marginal gaussian Distributions
     :type means: :class:`numpy.ndarray`
     :param matrix: Variance/covariance matrix
@@ -630,9 +630,8 @@ class mvDES(fwdpy11._fwdpy11._ll_mvDES):
         Refactored to use attrs and inherit from
         low-level C++ class
     """
-
-    des: object
-    means: object
+    des: typing.Union[typing.List, fwdpy11._fwdpy11.Sregion]
+    means: np.ndarray
     matrix: typing.Optional[np.ndarray] = None
 
     def __attrs_post_init__(self):

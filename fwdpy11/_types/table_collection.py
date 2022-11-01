@@ -1,7 +1,7 @@
 from typing import Iterable
 
 import numpy as np
-import scipy.sparse
+import scipy.sparse # type: ignore
 
 from .._fwdpy11 import Edge, MutationRecord, Node, Site, ll_TableCollection
 
@@ -71,6 +71,7 @@ def _position_in_window(pos, window):
 
 
 def _simplify(tables, samples, simplify):
+    import fwdpy11
     if simplify is False:
         return tables, samples
 

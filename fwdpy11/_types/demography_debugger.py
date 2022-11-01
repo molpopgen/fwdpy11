@@ -83,7 +83,7 @@ class _DemographyEvents:
 @dataclass
 class MigrationMatrixEpoch:
     start: int
-    migration_matrix: MigrationMatrix
+    migration_matrix: np.ndarray
 
 
 @dataclass
@@ -171,7 +171,7 @@ class DemographyDebugger(object):
 
     def _build_migration_history(
         self, events: _DemographyEvents
-    ) -> Optional[List[MigrationMatrixEpoch]]:
+    ):
         if events.migmatrix is None:
             return None
 
@@ -192,11 +192,13 @@ class DemographyDebugger(object):
                             f"deme {source} does not exist at generation 1"
                         )
                     if self._size_history.deme_exists_at(dest, 1) is False:
-                        raise ValueError(f"deme {dest} does not exist at generation 1")
+                        raise ValueError(
+                            f"deme {dest} does not exist at generation 1")
 
         rv = []
         if events.set_migration_rates is None:
-            rv.append(MigrationMatrixEpoch(0, current_migmatrix))
+            rv.append(MigrationMatrixEpoch(
+                0, current_migmatrix))
         else:
             times = []
             for m in events.set_migration_rates:
@@ -204,7 +206,7 @@ class DemographyDebugger(object):
                     times.append(m.when)
             times = sorted(times)
             for time in times:
-                destinations = set()
+                destinations = set()  # type: ignore
                 for m in [m for m in events.set_migration_rates if m.when == time]:
                     if m.deme is not None and m.deme < 0:
                         if len(destinations) > 0:
@@ -234,7 +236,8 @@ class DemographyDebugger(object):
                         current_migmatrix[m.deme, :] = np.copy(m.migrates)
                     destinations.add(m.deme)
 
-                rv.append(MigrationMatrixEpoch(time + 1, np.copy(current_migmatrix)))
+                rv.append(MigrationMatrixEpoch(
+                    time + 1, np.copy(current_migmatrix)))
         return rv
 
     def _validate_epochs(self, events: _DemographyEvents):
@@ -246,7 +249,8 @@ class DemographyDebugger(object):
             if epoch.data.ancestors is not None:
                 for a in epoch.data.ancestors:
                     if (
-                        self._size_history.deme_exists_at(a, when_ancestor_must_exist)
+                        self._size_history.deme_exists_at(
+                            a, when_ancestor_must_exist)
                         is False
                     ):
                         raise ValueError(
@@ -265,14 +269,16 @@ class DemographyDebugger(object):
                                 i = j
                                 break
                         if i is not None:
-                            ttl_rate_in = i.migration_matrix[epoch.data.deme, :].sum()
+                            ttl_rate_in = i.migration_matrix[epoch.data.deme, :].sum(
+                            )
                             if not ttl_rate_in > 0:
                                 raise ValueError(
                                     f"the migration rantes into deme {epoch.data.deme} are 0.0 at time {i.start}"
                                 )
             else:
                 if events.migmatrix is None:
-                    raise ValueError("a MigrationMatrix is required for this model.")
+                    raise ValueError(
+                        "a MigrationMatrix is required for this model.")
                 else:
                     # TODO: does migration fix this?
                     if self.migration_history is not None:
