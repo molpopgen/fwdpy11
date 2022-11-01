@@ -138,7 +138,7 @@ ext_modules = [
 
 # Figure out the headers we need to install:
 generated_package_data = {}
-for root, dirnames, filenames in os.walk("fwdpy11/headers"):
+for root, dirnames, filenames in os.walk("headers"):
     if (
         "testsuite" not in root
         and "examples" not in root

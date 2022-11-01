@@ -29,8 +29,8 @@ option(BUILD_CPP_BENCHMARK "Build C++ benchmark program" OFF)
 option(DISABLE_LTO "Disable link-time optimization (LTO)" OFF)
 option(CMAKE_BUILD "Set to ON when building with cmake. Set to off from, e.g., setup.py." ON)
 include_directories(BEFORE
-    ${fwdpy11_SOURCE_DIR}/fwdpy11/headers
-    ${fwdpy11_SOURCE_DIR}/fwdpy11/headers/fwdpp
+    ${fwdpy11_SOURCE_DIR}/headers
+    ${fwdpy11_SOURCE_DIR}/headers/fwdpp
     ${fwdpy11_SOURCE_DIR}/lib)
 message(STATUS "GSL headers in ${GSL_INCLUDE_DIRS}")
 include_directories(BEFORE ${GSL_INCLUDE_DIRS})
