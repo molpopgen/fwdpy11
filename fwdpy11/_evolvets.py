@@ -45,12 +45,15 @@ def evolvets(
     pop: DiploidPopulation,
     params: ModelParams,
     simplification_interval: int,
-    recorder: Optional[Callable[[DiploidPopulation, SampleRecorder], None]] = None,
+    recorder: Optional[Callable[[
+        DiploidPopulation, SampleRecorder], None]] = None,
     *,
-    post_simplification_recorder: Optional[Callable[[DiploidPopulation], None]] = None,
+    post_simplification_recorder: Optional[Callable[[
+        DiploidPopulation], None]] = None,
     suppress_table_indexing: Optional[bool] = None,
     record_gvalue_matrix: bool = False,
-    stopping_criterion: Optional[Callable[[DiploidPopulation, bool], bool]] = None,
+    stopping_criterion: Optional[Callable[[
+        DiploidPopulation, bool], bool]] = None,
     track_mutation_counts: bool = False,
     remove_extinct_variants: bool = True,
     preserve_first_generation: bool = False,
@@ -127,28 +130,36 @@ def evolvets(
         if isinstance(r, fwdpy11.mvDES):
             if isinstance(r.des, list):
                 for rr in r.des:
+                    assert isinstance(rr, fwdpy11.Sregion)  # type: ignore
                     if rr.beg < 0:
                         raise ValueError(f"{r} has begin value < 0.0")
                     if rr.end > pop.tables.genome_length:
                         raise ValueError(
-                            f"{r} has end value >= genome length of {pop.tables.genome_length}"
+                            f"{r} has end value >= genome length"
+                            " of {pop.tables.genome_length}"
                         )
             else:
+                assert isinstance(r, fwdpy11.mvDES), f"{type(r)}"
+                assert isinstance(r.des, fwdpy11.Sregion)  # type: ignore
                 if r.des.beg < 0:
                     raise ValueError(f"{r} has begin value < 0.0")
                 if r.des.end > pop.tables.genome_length:
                     raise ValueError(
-                        f"{r} has end value >= genome length of {pop.tables.genome_length}"
+                        f"{r} has end value >= genome"
+                        " length of {pop.tables.genome_length}"
                     )
         else:
+            assert isinstance(r, fwdpy11.Sregion)  # type: ignore
             if r.beg < 0:
                 raise ValueError(f"{r} has begin value < 0.0")
             if r.end > pop.tables.genome_length:
                 raise ValueError(
-                    f"{r} has end value >= genome length of {pop.tables.genome_length}"
+                    f"{r} has end value >= genome"
+                    " length of {pop.tables.genome_length}"
                 )
 
     for r in params.nregions:
+        assert isinstance(r, fwdpy11.Region)
         if r.beg < 0:
             raise ValueError(f"{r} has begin value < 0.0")
         if r.end > pop.tables.genome_length:
@@ -157,6 +168,8 @@ def evolvets(
             )
 
     for r in params.recregions:
+        assert isinstance(r, fwdpy11.Region) or \
+            isinstance(r, fwdpy11._fwdpy11.GeneticMapUnit)
         if r.beg < 0:
             raise ValueError(f"{r} has begin value < 0.0")
         if r.end > pop.tables.genome_length:
@@ -210,7 +223,8 @@ def evolvets(
             params.rates.neutral_mutation_rate + params.rates.selected_mutation_rate
         )
     mm = MutationRegions.create(pneutral, params.nregions, params.sregions)
-    rm = dispatch_create_GeneticMap(params.rates.recombination_rate, params.recregions)
+    rm = dispatch_create_GeneticMap(
+        params.rates.recombination_rate, params.recregions)
 
     from ._fwdpy11 import SampleRecorder
 

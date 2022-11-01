@@ -75,7 +75,7 @@ class TreeIterator(ll_TreeIterator):
     ):
         _end = end
         if _end is None:
-            _end = np.finfo(np.float64).max
+            _end = float(np.finfo(np.float64).max)
         if ancient_samples is None:
             super(TreeIterator, self).__init__(
                 tables, samples, update_samples, begin, _end

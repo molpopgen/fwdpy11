@@ -30,7 +30,8 @@ import numpy as np
 def gvalue_multiplicative(pop, ind, scaling):
     g = 1.0
     keys = [k for k in pop.haploid_genomes[pop.diploids[ind].first].smutations]
-    keys.extend([k for k in pop.haploid_genomes[pop.diploids[ind].second].smutations])
+    keys.extend(
+        [k for k in pop.haploid_genomes[pop.diploids[ind].second].smutations])
     keys = np.array(keys, dtype=np.uint32)
     key_counts = np.unique(keys, return_counts=True)
 
@@ -62,7 +63,8 @@ class TestMassMigrationsWithCopies(unittest.TestCase):
         self.pop = fwdpy11.DiploidPopulation(100, 1)
         vcv_matrix = np.array([1, 0.99, 0.99, 1.0]).reshape((2, 2))
         mvDES = fwdpy11.mvDES(
-            [fwdpy11.ConstantS(0, 1, 1, 0.1), fwdpy11.ConstantS(0, 1, 1, -0.1)],
+            [fwdpy11.ConstantS(0, 1, 1, 0.1),
+             fwdpy11.ConstantS(0, 1, 1, -0.1)],
             np.zeros(2),
             vcv_matrix,
         )
@@ -118,7 +120,8 @@ class TestMassMigrationsWithCopies(unittest.TestCase):
         for i in self.f.data:
             self.assertEqual(i[2], 1)  # deme == 1
             self.assertTrue(i[1] <= 1.0)  # Mutations are harmful in this deme
-            self.assertEqual(i[0], 2)  # Generation == 2, when mass mig happened
+            # Generation == 2, when mass mig happened
+            self.assertEqual(i[0], 2)
 
 
 class TestMassMigrationsWithMoves(unittest.TestCase):
@@ -136,7 +139,8 @@ class TestMassMigrationsWithMoves(unittest.TestCase):
         self.pop = fwdpy11.DiploidPopulation(100, 1)
         vcv_matrix = np.array([1, 0.99, 0.99, 1.0]).reshape((2, 2))
         mvDES = fwdpy11.mvDES(
-            [fwdpy11.ConstantS(0, 1, 1, 0.1), fwdpy11.ConstantS(0, 1, 1, -0.1)],
+            [fwdpy11.ConstantS(0, 1, 1, 0.1),
+             fwdpy11.ConstantS(0, 1, 1, -0.1)],
             np.zeros(2),
             vcv_matrix,
         )
@@ -199,13 +203,15 @@ class TestMassMigrationsWithMoves(unittest.TestCase):
             self.assertEqual(deme_counts[1][i], self.pop.N // 2)
         for i in self.f.data:
             if i[2] == 0:  # deme 0
-                self.assertTrue(i[1] >= 1.0)  # Mutations are beneficial in this deme
+                # Mutations are beneficial in this deme
+                self.assertTrue(i[1] >= 1.0)
                 self.assertEqual(
                     i[0], 2
                 )  # Generation == 2, when new deme first appeared
             else:
                 self.assertEqual(i[2], 1)
-                self.assertTrue(i[1] <= 2.0)  # Mutations are harmful in this deme
+                # Mutations are harmful in this deme
+                self.assertTrue(i[1] <= 2.0)
 
 
 class TestMultiplicativeWithExpSNoMigration(unittest.TestCase):
@@ -234,15 +240,18 @@ class TestMultiplicativeWithExpSNoMigration(unittest.TestCase):
         n0 = 0
         n1 = 0
         for i, md in enumerate(self.pop.diploid_metadata):
-            ng0 = len(self.pop.haploid_genomes[self.pop.diploids[i].first].smutations)
-            ng1 = len(self.pop.haploid_genomes[self.pop.diploids[i].second].smutations)
+            ng0 = len(
+                self.pop.haploid_genomes[self.pop.diploids[i].first].smutations)
+            ng1 = len(
+                self.pop.haploid_genomes[self.pop.diploids[i].second].smutations)
             if ng0 + ng1 > 0:
                 if md.deme == 0:
                     n0 += 1
                 elif md.deme == 1:
                     n1 += 1
         if n0 == 0 or n1 == 0:
-            self.assertFail("we don't have individuals with mutations in each deme")
+            self.assertFail(
+                "we don't have individuals with mutations in each deme")
 
     def test_it(self):
         gv = np.zeros(self.pop.N)
@@ -296,7 +305,8 @@ class TestGaussianStabilizingSelection(unittest.TestCase):
                 demes = np.unique(nt["deme"][t.samples_below(m.node)])
                 for d in demes:
                     demes_with_muts[d] += 1
-        assert np.all(demes_with_muts > 0), "test requires mutations in both demes"
+        assert np.all(demes_with_muts >
+                      0), "test requires mutations in both demes"
 
     def test_genetic_values(self):
         for m in self.pop.diploid_metadata:
@@ -346,7 +356,8 @@ class TestMultivariateLogNormalS(unittest.TestCase):
                 demes = np.unique(nt["deme"][t.samples_below(m.node)])
                 for d in demes:
                     demes_with_muts[d] += 1
-        assert np.all(demes_with_muts > 0), "test requires mutations in both demes"
+        assert np.all(demes_with_muts >
+                      0), "test requires mutations in both demes"
 
     def test_genetic_values(self):
         for i, m in enumerate(self.pop.diploid_metadata):

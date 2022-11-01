@@ -100,7 +100,7 @@ def data_matrix_from_tables(
     if end is not None:
         _end = end
     else:
-        _end = np.finfo(np.float64).max
+        _end = float(np.finfo(np.float64).max)
     return DataMatrix(
         _data_matrix_from_tables(
             tables,

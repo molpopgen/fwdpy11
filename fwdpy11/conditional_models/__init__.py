@@ -82,7 +82,8 @@ def _right_greater_left(instance, attribute, value):
 
 def _is_polymorphic_frequency(_, attribute, value):
     if not 0.0 < value < 1.0:
-        raise ValueError(f"{attribute.name} must be 0.0 < {attribute.name} < 1.0")
+        raise ValueError(
+            f"{attribute.name} must be 0.0 < {attribute.name} < 1.0")
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -139,7 +140,8 @@ class FrequencyRange:
     """
 
     minimum: float = attr.ib(
-        validator=[attr.validators.instance_of(float), _is_polymorphic_frequency]
+        validator=[attr.validators.instance_of(
+            float), _is_polymorphic_frequency]
     )
     maximum: float = attr.ib(
         validator=[
@@ -216,7 +218,8 @@ class SimulationStatus:
     For examples, see implementations of :class:`GlobalFixation` and :class:`FocalDemeFixation`.
     """
 
-    should_terminate: bool = attr.ib(validator=attr.validators.instance_of(bool))
+    should_terminate: bool = attr.ib(
+        validator=attr.validators.instance_of(bool))
     condition_met: bool = attr.ib(validator=attr.validators.instance_of(bool))
 
 
@@ -239,7 +242,7 @@ class GlobalFixation(object):
     """
 
     def __call__(
-        self, pop: fwdpy11.DiploidPopulation, index: int, key: tuple
+        self, pop, index: int, key: tuple
     ) -> SimulationStatus:
         if pop.mutations[index].key != key:
             # The key has changed, meaning the mutation is
@@ -268,7 +271,7 @@ class FocalDemeFixation:
         validator=[attr.validators.instance_of(int), _non_negative_value]
     )
 
-    def __call__(self, pop: fwdpy11.DiploidPopulation, index, key) -> SimulationStatus:
+    def __call__(self, pop, index, key) -> SimulationStatus:
         deme_sizes = pop.deme_sizes(as_dict=True)
         if pop.mutations[index].key != key:
             # check for a global fixation

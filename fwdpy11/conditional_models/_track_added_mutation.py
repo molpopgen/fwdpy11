@@ -64,11 +64,13 @@ class _MutationPresent:
     when: int = attr.ib(
         validator=[attr.validators.instance_of(int), _non_negative_value]
     )
-    until: typing.Optional[int] = attr.ib(attr.validators.optional(int))
+    until: typing.Optional[int] = attr.ib(
+        attr.validators.optional(int))  # type: ignore
 
     def __attrs_post_init__(self):
         if self.until is None:
-            raise ValueError("until cannot be None if stopping_condition is None")
+            raise ValueError(
+                "until cannot be None if stopping_condition is None")
         if self.until is not None and self.until <= self.when:
             raise ValueError("until must be > when")
 
@@ -79,7 +81,7 @@ class _MutationPresent:
         return False
 
     def __call__(
-        self, pop: fwdpy11.DiploidPopulation, index: int, key: tuple
+        self, pop, index: int, key: tuple
     ) -> SimulationStatus:
         if pop.generation == self.until:
             if pop.mutations[index].key != key and self.is_fixed(pop, key) is False:
@@ -205,7 +207,8 @@ def _get_allele_count_range(
             )
         return _integer_count_details(lo, hi, mutation_parameters.deme, pop)
     else:
-        raise TypeError(f"unsupported type {type(mutation_parameters.frequency)}")
+        raise TypeError(
+            f"unsupported type {type(mutation_parameters.frequency)}")
 
 
 def _copy_pop_and_add_mutation(
@@ -247,10 +250,12 @@ def _copy_pop_and_add_mutation(
             raise ValueError(f"when must be >= 0, got {when}")
 
         pcopy = copy.deepcopy(pop)
-        pre_sweep_pdict = {k: copy.deepcopy(v) for k, v in params.asdict().items()}
+        pre_sweep_pdict = {k: copy.deepcopy(v)
+                           for k, v in params.asdict().items()}
         pre_sweep_pdict["simlen"] = when
         pre_sweep_params = fwdpy11.ModelParams(**pre_sweep_pdict)
-        fwdpy11.evolvets(rng, pcopy, pre_sweep_params, **evolvets_options.asdict())
+        fwdpy11.evolvets(rng, pcopy, pre_sweep_params,
+                         **evolvets_options.asdict())
 
         if sampling_policy == AncientSamplePolicy.DURATION:
             pcopy._record_ancient_samples([i for i in range(pop.N)])
@@ -290,12 +295,7 @@ def _track_added_mutation(
     until: typing.Optional[int] = None,
     max_attempts: typing.Optional[int] = None,
     sampling_policy: typing.Optional[AncientSamplePolicy] = None,
-    stopping_condition: typing.Optional[
-        typing.Callable[
-            [fwdpy11.DiploidPopulation, int, typing.Tuple[float, float, int]],
-            SimulationStatus,
-        ]
-    ] = None,
+    stopping_condition=None,
     evolvets_options: typing.Optional[EvolveOptions] = None,
     return_when_stopping_condition_met: bool = False,
 ) -> ConditionalModelOutput:
@@ -356,7 +356,7 @@ def _track_added_mutation(
         _sampling_policy = sampling_policy
 
     if stopping_condition is None:
-        _stopping_condition = _MutationPresent(when, until)
+       _stopping_condition = _MutationPresent(when, until) # type: ignore
     else:
         _stopping_condition = stopping_condition
 
@@ -394,14 +394,15 @@ def _track_added_mutation(
         evolvets_options_copy = copy.deepcopy(_evolvets_options)
 
         # evolve
+        assert evolvets_options_copy is not None
         fwdpy11.evolvets(
             rng,
             pcopy_loop,
             local_params_copy,
             recorder=recorder,
             stopping_criterion=recorder.monitor,
-            **evolvets_options_copy.asdict(),
-            **internal_options.asdict(),
+            **evolvets_options_copy.asdict(), # type: ignore
+            **internal_options.asdict(), # type: ignore
         )
 
         # The sim ended, so
@@ -417,6 +418,7 @@ def _track_added_mutation(
     if attempt == max_attempts:
         raise OutOfAttempts()
 
+    assert pop_to_return is not None
     return ConditionalModelOutput(
         pop=pop_to_return,
         params=local_params,

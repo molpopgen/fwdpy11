@@ -24,7 +24,7 @@ import demes
 import fwdpy11.tskit_tools
 import fwdpy11.tskit_tools.metadata_schema
 import numpy as np
-import tskit
+import tskit  # type: ignore
 from fwdpy11._types.model_params import ModelParams
 
 
@@ -89,9 +89,12 @@ def _initializeIndividualTable(self, tc):
 
 
 def _dump_mutation_site_and_site_tables(self, tc: tskit.TableCollection) -> None:
-    mpos = np.array([self.mutations[mr.key].pos for mr in self.tables.mutations])
-    ancestral_state = np.zeros(len(self.tables.mutations), dtype=np.int8) + ord("0")
-    ancestral_state_offset = np.arange(len(self.tables.mutations) + 1, dtype=np.uint32)
+    mpos = np.array(
+        [self.mutations[mr.key].pos for mr in self.tables.mutations])
+    ancestral_state = np.zeros(
+        len(self.tables.mutations), dtype=np.int8) + ord("0")
+    ancestral_state_offset = np.arange(
+        len(self.tables.mutations) + 1, dtype=np.uint32)
     tc.sites.set_columns(
         position=mpos,
         ancestral_state=ancestral_state,
@@ -123,14 +126,12 @@ def _dump_mutation_site_and_site_tables(self, tc: tskit.TableCollection) -> None
 def _dump_tables_to_tskit(
     self,
     *,
-    model_params: typing.Optional[
-        typing.Union[ModelParams, typing.Dict[str, ModelParams]]
-    ] = None,
-    demes_graph: typing.Optional[demes.Graph] = None,
-    population_metadata: typing.Optional[typing.Dict[int, object]] = None,
-    data: typing.Optional[object] = None,
-    seed: typing.Optional[int] = None,
-    parameters: typing.Optional[typing.Dict] = None,
+    model_params=None,
+    demes_graph=None,
+    population_metadata=None,
+    data=None,
+    seed=None,
+    parameters=None,
     destructive=False,
 ) -> tskit.TreeSequence:
     from .._fwdpy11 import gsl_version, pybind11_version
@@ -169,7 +170,7 @@ def _dump_tables_to_tskit(
     if model_params is not None:
         try:
             top_level_metadata["model_params"] = str(model_params.asdict())
-        except:
+        except Exception:
             mp = {}
             for key, value in model_params.items():
                 mp[key] = str(value.asdict())
@@ -215,7 +216,6 @@ def _dump_tables_to_tskit(
     if destructive is True:
         self._clear_diploid_metadata()
         self._clear_ancient_sample_metadata()
-        node_view = None
         self.tables._clear_nodes()
 
     _dump_mutation_site_and_site_tables(self, tc)
@@ -231,7 +231,6 @@ def _dump_tables_to_tskit(
         child=edge_view["child"],
     )
     if destructive is True:
-        edge_view = None
         self.tables._clear_edges()
 
     tc.provenances.add_row(json.dumps(provenance))
