@@ -175,6 +175,8 @@ for root, dirnames, filenames in os.walk("headers"):
             except:  # NOQA
                 generated_package_data[replace] = ["*.tcc"]
 
+PKGS = ['fwdpy11.' + i for i in PKGS]
+
 if platform.system() == "Darwin":
     generated_package_data["fwdpy11"] = ["lib*.dylib"]
 else:
