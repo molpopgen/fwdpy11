@@ -19,7 +19,7 @@
 import typing
 
 import attr
-import tskit
+import tskit  # type: ignore
 
 from .._fwdpy11 import Mutation
 from ._flags import (INDIVIDUAL_IS_ALIVE, INDIVIDUAL_IS_FIRST_GENERATION,
@@ -96,7 +96,8 @@ class DiploidMetadata(object):
 
 
 def decode_individual_metadata(
-    ts: tskit.TreeSequence, rows: typing.Optional[typing.Union[int, slice]] = None
+    ts: tskit.TreeSequence,
+    rows=None
 ) -> typing.List[DiploidMetadata]:
     """
     Decodes a :class:`tskit.IndividualTable`.
@@ -104,8 +105,8 @@ def decode_individual_metadata(
     :param ts: A tree sequence
     :type ts: :class:`tskit.TreeSequence`
 
-    :param rows: The rows to decode. If `None`, the entire table is decoded and returned.
-    :type rows: int or slice or numpy.ndarray
+    :param rows: The rows to decode.
+                 If `None`, the entire table is decoded and returned.
 
     :returns: individual metadata
     :rtype: List of :class:`fwdpy11.tskit_tools.DiploidMetadata`
@@ -126,23 +127,17 @@ def decode_individual_metadata(
     """
     rv = []
 
-    if rows is None:
-        _rows = slice(0, ts.num_individuals, 1)
-    else:
-        _rows = rows
-
     try:
-        ind = ts.individual(_rows)
+        ind = ts.individual(rows)
         rv.append(DiploidMetadata.from_table_row(ind))
-    except Exception as _:
-        try:
-            for i in _rows:
-                ind = ts.individual(i)
-                rv.append(DiploidMetadata.from_table_row(ind))
-        except Exception as _:
-            for i in range(_rows.start, _rows.stop, _rows.step):
-                ind = ts.individual(i)
-                rv.append(DiploidMetadata.from_table_row(ind))
+    except Exception:
+        if rows is None:
+            rows = range(0, ts.num_individuals, 1)
+        elif isinstance(rows, slice):
+            rows = range(rows.start, rows.stop, rows.step)
+        for i in rows:
+            ind = ts.individual(i)
+            rv.append(DiploidMetadata.from_table_row(ind))
 
     return rv
 
@@ -176,15 +171,16 @@ def _append_mutation_metadata(ts, site, md, mutations):
 
 
 def decode_mutation_metadata(
-    ts: tskit.TreeSequence, rows: typing.Optional[typing.Union[int, slice]] = None
+    ts: tskit.TreeSequence,
+    rows=None
 ) -> typing.List[typing.Optional[Mutation]]:
     """
     Decodes metadata from a :class:`tskit.MutationTable`.
 
     :param ts: A tree sequence
     :type ts: :class:`tskit.TreeSequence`
-    :param rows: The rows to decode. If `None`, the entire table is decoded and returned.
-    :type rows: int or slice or numpy.ndarray
+    :param rows: The rows to decode.
+                 If `None`, the entire table is decoded and returned.
 
     :returns: Mutations
     :rtype: list
@@ -206,22 +202,16 @@ def decode_mutation_metadata(
 
         Change input from TableCollection to TreeSequence
     """
-    mutations = []
-    if rows is None:
-        _rows = slice(0, ts.num_mutations, 1)
-    else:
-        _rows = rows
-
+    mutations: typing.List = []
     try:
-        m = ts.mutation(_rows)
+        m = ts.mutation(rows)
         _append_mutation_metadata(ts, m.site, m.metadata, mutations)
-    except Exception as _:
-        try:
-            for i in _rows:
-                m = ts.mutation(i)
-                _append_mutation_metadata(ts, m.site, m.metadata, mutations)
-        except Exception as _:
-            for i in range(_rows.start, _rows.stop, _rows.step):
-                m = ts.mutation(i)
-                _append_mutation_metadata(ts, m.site, m.metadata, mutations)
+    except Exception:
+        if rows is None:
+            rows = range(0, ts.num_mutations, 1)
+        elif isinstance(rows, slice):
+            rows = range(rows.start, rows.stop, rows.step)
+        for i in rows:
+            m = ts.mutation(i)
+            _append_mutation_metadata(ts, m.site, m.metadata, mutations)
     return mutations
