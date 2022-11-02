@@ -73,7 +73,8 @@ class CMakeBuild(build_ext):
             self.build_extension(ext)
 
     def build_extension(self, ext):
-        extdir = os.path.abspath(os.path.dirname(self.get_ext_fullpath(ext.name)))
+        extdir = os.path.abspath(os.path.dirname(
+            self.get_ext_fullpath(ext.name)))
         parent = os.path.abspath(os.path.dirname("."))
         cmake_args = [
             "-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=" + extdir,
@@ -88,7 +89,8 @@ class CMakeBuild(build_ext):
 
         if platform.system() == "Windows":
             cmake_args += [
-                "-DCMAKE_LIBRARY_OUTPUT_DIRECTORY_{}={}".format(cfg.upper(), extdir)
+                "-DCMAKE_LIBRARY_OUTPUT_DIRECTORY_{}={}".format(
+                    cfg.upper(), extdir)
             ]
             if sys.maxsize > 2 ** 32:
                 cmake_args += ["-A", "x64"]
@@ -150,7 +152,7 @@ for root, dirnames, filenames in os.walk("headers"):
             # If there's a header file, we add the directory as a package
             if replace not in PKGS:
                 PKGS.append(replace)
-            generated_package_data[replace] = ["*.hh"]
+            generated_package_data["fwdpy11."+replace] = ["*.hh"]
         g = glob.glob(root + "/*.hpp")
         if len(g) > 0:
             replace = root.replace("/", ".")
@@ -158,10 +160,10 @@ for root, dirnames, filenames in os.walk("headers"):
             if replace not in PKGS:
                 PKGS.append(replace)
             try:
-                if "*.hpp" not in generated_package_data[replace]:
-                    generated_package_data[replace].append("*.hpp")
+                if "*.hpp" not in generated_package_data["fwdpy11."+replace]:
+                    generated_package_data["fwdpy11."+replace].append("*.hpp")
             except:  # NOQA
-                generated_package_data[replace] = ["*.hpp"]
+                generated_package_data["fwdpy11."+replace] = ["*.hpp"]
         g = glob.glob(root + "/*.tcc")
         if len(g) > 0:
             replace = root.replace("/", ".")
@@ -170,10 +172,10 @@ for root, dirnames, filenames in os.walk("headers"):
             if replace not in PKGS:
                 PKGS.append(replace)
             try:
-                if "*.tcc" not in generated_package_data[replace]:
-                    generated_package_data[replace].append("*.tcc")
+                if "*.tcc" not in generated_package_data["fwdpy11."+replace]:
+                    generated_package_data["fwdpy11."+replace].append("*.tcc")
             except:  # NOQA
-                generated_package_data[replace] = ["*.tcc"]
+                generated_package_data["fwdpy11."+replace] = ["*.tcc"]
 
 PKGS = ['fwdpy11.' + i for i in PKGS]
 
@@ -181,6 +183,8 @@ if platform.system() == "Darwin":
     generated_package_data["fwdpy11"] = ["lib*.dylib"]
 else:
     generated_package_data["fwdpy11"] = ["lib*.so"]
+
+print(generated_package_data)
 
 setup(
     ext_modules=ext_modules,
