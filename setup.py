@@ -184,8 +184,6 @@ if platform.system() == "Darwin":
 else:
     generated_package_data["fwdpy11"] = ["lib*.so"]
 
-print(generated_package_data)
-
 setup(
     ext_modules=ext_modules,
     cmdclass={"build_ext": CMakeBuild},
