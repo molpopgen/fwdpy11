@@ -219,7 +219,7 @@ the Python-only side in order to promote thread safety.
 The C++ back-end for {class}`fwdpy11.DiploidGeneticValue` is found in the header file
 `<fwdpy11/genetic_values/DiploidGeneticValue.hpp>`:
 
-```{literalinclude} ../../fwdpy11/headers/fwdpy11/genetic_values/DiploidGeneticValue.hpp
+```{literalinclude} ../../headers/fwdpy11/genetic_values/DiploidGeneticValue.hpp
 :language: cpp
 :lines: 19-
 
@@ -245,7 +245,7 @@ Some notes:
 
 The interface class for genetic value to fitness maps is `<fwdpy11/headers/fwdpy11/genetic_value_to_fitness/GeneticValueToFitnessMap.hpp>`:
 
-```{literalinclude} ../../fwdpy11/headers/fwdpy11/genetic_value_to_fitness/GeneticValueToFitnessMap.hpp
+```{literalinclude} ../../headers/fwdpy11/genetic_value_to_fitness/GeneticValueToFitnessMap.hpp
 :language: cpp
 :lines: 19-
 
@@ -253,7 +253,7 @@ The interface class for genetic value to fitness maps is `<fwdpy11/headers/fwdpy
 
 The C++ definition of {class}`fwdpy11.GeneticValueIsTrait` inherits from the above, and is another interface class (because it does not define any of the pure virtual functions):
 
-```{literalinclude} ../../fwdpy11/headers/fwdpy11/genetic_value_to_fitness/GeneticValueIsTrait.hpp
+```{literalinclude} ../../headers/fwdpy11/genetic_value_to_fitness/GeneticValueIsTrait.hpp
 :language: cpp
 :lines: 19-
 
@@ -263,7 +263,7 @@ The three data types `MockDiploidGeneticValueData`, `MockDiploidGeneticValueNois
 and `MockDiploidGeneticValueToFitnessData` map to the following three classes,
 respectively, which hold references to objects from the simulation:
 
-```{literalinclude} ../../fwdpy11/headers/fwdpy11/genetic_value_data/genetic_value_data.hpp
+```{literalinclude} ../../headers/fwdpy11/genetic_value_data/genetic_value_data.hpp
 :language: cpp
 :lines: 19-
 
