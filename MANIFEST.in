@@ -13,3 +13,4 @@ include doc/fwdpy11.doxygen
 include doc/fwdpp.doxygen
 include doc/Makefile
 recursive-include doc *.md *.png
+recursive-include tests *.yaml
