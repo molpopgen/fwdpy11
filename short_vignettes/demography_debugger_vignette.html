@@ -662,7 +662,7 @@ const thebe_selector_output = ".output, .cell_output"
 <p>You may use <a class="reference internal" href="../pages/demographic_models.html#fwdpy11.DemographyDebugger" title="fwdpy11.DemographyDebugger"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DemographyDebugger</span></code></a> to check the validity of demographic models.
 The following code block applies this class to the model we built using <code class="docutils literal notranslate"><span class="pre">demes</span></code> in <a class="reference internal" href="demes_vignette.html#demes-vignette"><span class="std std-ref">an earlier vignette</span></a>.</p>
 <p>For the debugger to do its job, it needs to know the initial sizes of each deme.
-For models generated via <a class="reference internal" href="../pages/functions.html#fwdpy11.discrete_demography.from_demes" title="fwdpy11.discrete_demography.from_demes"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.discrete_demography.from_demes()</span></code></a>, the meta data contains a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> mapping the integer <code class="docutils literal notranslate"><span class="pre">ID</span></code> for each deme to its initial size.
+For models generated via <a class="reference internal" href="../pages/functions.html#fwdpy11.discrete_demography.from_demes" title="fwdpy11.discrete_demography.from_demes"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.discrete_demography.from_demes()</span></code></a>, the meta data contains a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> mapping the integer <code class="docutils literal notranslate"><span class="pre">ID</span></code> for each deme to its initial size.
 We use that <code class="docutils literal notranslate"><span class="pre">dict</span></code> below to get the required list of initial_sizes.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -700,7 +700,7 @@ We use that <code class="docutils literal notranslate"><span class="pre">dict</s
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>DemographyDebugger::report not yet implemented
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/runner/work/fwdpy11/fwdpy11/fwdpy11/_types/demography_debugger.py:301: UserWarning: report generation has not been implemented
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/runner/work/fwdpy11/fwdpy11/fwdpy11/_types/demography_debugger.py:307: UserWarning: report generation has not been implemented
   warnings.warn(&quot;report generation has not been implemented&quot;)
 </pre></div>
 </div>
