@@ -3,12 +3,82 @@
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
-## Next release
+## 0.19.0a0
+
+Bug fixes
+
+* Fix bug in sweep models.
+  The previous implementation chose acceptable branches for mutation placement uniformly.
+  The new method chooses proportionally to branch length.
+  PR {pr}`1020`.
+
+API changes
+
+* Remove deprecated `WrappedTreeSeqeuence`
+  PR {pr}`978`.
+* Add Python-level checks that "regions" don't contain positions extending past the genome ends.
+  PR {pr}`987`.
+
+Dependencies
+
+* Bump pybind11 to 2.10.0
+  PR {pr}`986`.
 
 Build system and CI
 
 * Remove all use of automake/autoconf.
   PR {pr}`971`.
+* Build core library as shared library.
+  PR {pr}`961`.
+* Allow for standalone cmake builds.
+  PR {pr}`966`.
+* Add rust crate `demes-forward-capi` to core lib.
+  PR {pr}`962`.
+  PR {pr}`1001`.
+* Build C++ tests with cmake.
+  PR {pr}`967`.
+* Use `python -m build .` for Ubuntu CI.
+  PR {pr}`970`.
+* Build all C++ targets in one command on Ubuntu CI.
+  PR {pr}`972`.
+* Test docker work flow on CI.
+  PR {pr}`979`.
+* Add cancel actions to all work flows.
+  PR {pr}`982`.
+  PR {pr}`985`.
+* Wheels are now based on `manylinux_2_28`
+  PR {pr}`994`.
+* move `fwdpy11/src` to `cpp/`
+  PR {pr}`996`.
+* Add dependabot for GitHub actions
+  PR {pr}`1002`.
+* Fix warnings from `python -m build .`
+  PR {pr}`1018`.
+
+Back end changes
+
+* Move evolve code to core library.
+  PR {pr}`974`.
+* Clean up implementation of individual and mutation metadata decoding.
+  PR {pr}`1015`.
+* Tidy up a lot of `mypy` errors.
+  PR {pr}`1016`.
+
+Testing
+
+* Remove many C++ files from tests/
+  PR {pr}`976`.
+* Test that we can load YAML files from demes-spec
+  into our rust-based ForwardDemesGraph.
+  PR {pr}`975`.
+* move `fwdpy11.ezparams` module to tests/
+  PR {pr}`977`.
+* Add C++ tests of our new "forward demes graph".
+  PR {pr}`980`.
+  PR {pr}`983`.
+  PR {pr}`984`.
+  PR {pr}`989`.
+  PR {pr}`999`.
 
 ## 0.18.3
 
