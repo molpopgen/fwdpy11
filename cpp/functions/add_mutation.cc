@@ -74,11 +74,13 @@ namespace
         fwdpp::ts::table_index_t node, parent;
         // The sample nodes below node
         std::vector<fwdpp::ts::table_index_t> descendants;
+        double node_time, parent_time;
 
         candidate_node_map(double l, double r, fwdpp::ts::table_index_t n,
                            fwdpp::ts::table_index_t p,
-                           std::vector<fwdpp::ts::table_index_t> d)
-            : left{l}, right{r}, node{n}, parent{p}, descendants{std::move(d)}
+                           std::vector<fwdpp::ts::table_index_t> d, double a, double b)
+            : left{l}, right{r}, node{n}, parent{p},
+              descendants{std::move(d)}, node_time{a}, parent_time{b}
         {
         }
     };
@@ -90,7 +92,7 @@ namespace
     {
         if (mutation_node_parent == fwdpp::ts::NULL_INDEX)
             {
-                return true;
+                return false;
             }
         auto mutation_node_time = node_table[mutation_node].time;
         // Check for easy case where we can assign mutation time == node time
@@ -190,7 +192,11 @@ namespace
                                                             std::max(tree.left, left),
                                                             std::min(tree.right, right),
                                                             n, tree.parents[n],
-                                                            std::move(descendants));
+                                                            std::move(descendants),
+                                                            pop.tables->nodes[n].time,
+                                                            pop.tables
+                                                                ->nodes[tree.parents[n]]
+                                                                .time);
                                                     }
                                             }
                                     }
@@ -326,9 +332,21 @@ add_mutation(const fwdpy11::GSLrng_t& rng, const double left, const double right
             return new_mutation_key;
         }
 
-    // Randomly choose a candidate
-    std::size_t candidate
-        = static_cast<std::size_t>(gsl_ran_flat(rng.get(), 0, candidates.size()));
+    // Randomly choose a candidate proportionally to branch length
+    std::vector<double> candidate_weights;
+    for (auto c : candidates)
+        {
+            if (c.parent_time >= c.node_time)
+                {
+                    throw std::runtime_error(
+                        "invalid parent/child times for candidate branch");
+                }
+            candidate_weights.push_back(c.node_time - c.parent_time);
+        }
+    auto discrete
+        = gsl_ran_discrete_preproc(candidates.size(), candidate_weights.data());
+    std::size_t candidate = gsl_ran_discrete(rng.get(), discrete);
+    gsl_ran_discrete_free(discrete);
 
     auto candidate_data = std::move(candidates[candidate]);
     auto mutation_node_time = generate_mutation_time(
