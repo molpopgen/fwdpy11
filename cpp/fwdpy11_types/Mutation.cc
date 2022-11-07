@@ -12,7 +12,7 @@ Construct a mutations.
 :param pos: Mutation position (float)
 :param s: Effect size (float)
 :param h: Dominance term (float)
-:param g: Origin time (unsigned integer)
+:param g: Origin time (signed integer)
 :param label: Label (16 bit integer)
 
 .. testcode::
@@ -42,7 +42,7 @@ a vector of effects.
 :param pos: Mutation position (float)
 :param s: Effect size (float)
 :param h: Dominance term (float)
-:param g: Origin time (unsigned integer)
+:param g: Origin time (signed integer)
 :param esizes: List of effect sizes (list of float)
 :param heffects: List of heterozygous effects (list of float)
 :param label: Label (16 bit integer)
@@ -57,13 +57,13 @@ init_Mutation(py::module &m)
     // Sugar types
     py::class_<fwdpy11::Mutation, fwdpp::mutation_base>(
         m, "Mutation", "Mutation with effect size and dominance")
-        .def(py::init(
-                 [](double pos, double s, double h, unsigned g, std::uint16_t label) {
-                     return fwdpy11::Mutation(s == 0., pos, s, h, g, label);
-                 }),
+        .def(py::init([](double pos, double s, double h, fwdpy11::mutation_origin_time g,
+                         std::uint16_t label) {
+                 return fwdpy11::Mutation(s == 0., pos, s, h, g, label);
+             }),
              py::arg("pos"), py::arg("s"), py::arg("h"), py::arg("g"), py::arg("label"),
              INIT_DOCSTRING_1)
-        .def(py::init([](double pos, double s, double h, fwdpp::uint_t g,
+        .def(py::init([](double pos, double s, double h, fwdpy11::mutation_origin_time g,
                          py::list esizes, py::list heffects, std::uint16_t label) {
                  std::vector<double> esizes_;
                  std::vector<double> heffects_;
@@ -137,7 +137,7 @@ init_Mutation(py::module &m)
             [](py::tuple p) {
                 return std::unique_ptr<fwdpy11::Mutation>(new fwdpy11::Mutation(
                     p[0].cast<bool>(), p[1].cast<double>(), p[2].cast<double>(),
-                    p[3].cast<double>(), p[4].cast<unsigned>(),
+                    p[3].cast<double>(), p[4].cast<fwdpy11::mutation_origin_time>(),
                     p[5].cast<std::vector<double>>(), p[6].cast<std::vector<double>>(),
                     p[7].cast<std::uint16_t>()));
             }))
@@ -173,4 +173,3 @@ init_Mutation(py::module &m)
             return a == b;
         });
 }
-
