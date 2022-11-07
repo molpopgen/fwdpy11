@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <cmath>
 #include <fwdpy11/types/Mutation.hpp>
 #include <pybind11/stl.h>
 #include <fwdpy11/numpy/array.hpp>
@@ -59,12 +60,29 @@ init_Mutation(py::module &m)
         m, "Mutation", "Mutation with effect size and dominance")
         .def(py::init([](double pos, double s, double h, fwdpy11::mutation_origin_time g,
                          std::uint16_t label) {
+                 if (!std::isfinite(s))
+                     {
+                         throw std::invalid_argument("effect size must be finite");
+                     }
+                 if (!std::isfinite(h))
+                     {
+                         throw std::invalid_argument("dominance must be finite");
+                     }
+                 return fwdpy11::Mutation(s == 0., pos, s, h, g, label);
                  return fwdpy11::Mutation(s == 0., pos, s, h, g, label);
              }),
              py::arg("pos"), py::arg("s"), py::arg("h"), py::arg("g"), py::arg("label"),
              INIT_DOCSTRING_1)
         .def(py::init([](double pos, double s, double h, fwdpy11::mutation_origin_time g,
                          py::list esizes, py::list heffects, std::uint16_t label) {
+                 if (!std::isfinite(s))
+                     {
+                         throw std::invalid_argument("effect size must be finite");
+                     }
+                 if (!std::isfinite(h))
+                     {
+                         throw std::invalid_argument("dominance must be finite");
+                     }
                  std::vector<double> esizes_;
                  std::vector<double> heffects_;
                  for (auto i : esizes)

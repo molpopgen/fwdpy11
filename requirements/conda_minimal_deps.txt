@@ -13,3 +13,4 @@ pytest-xdist
 setuptools_scm
 demes==0.2.0
 rust==1.62.1
+hypothesis

@@ -1,4 +1,4 @@
-//
+
 // Copyright (C) 2017 Kevin Thornton <krthornt@uci.edu>
 //
 // This file is part of fwdpy11.
@@ -25,11 +25,13 @@
 #include <type_traits>
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
+#include <pybind11/stl_bind.h>
 #include <fwdpy11/types/DiploidPopulation.hpp>
 #include <fwdpy11/serialization.hpp>
 #include <fwdpy11/serialization/Mutation.hpp>
 #include <fwdpy11/serialization/Diploid.hpp>
 #include <fwdpy11/numpy/array.hpp>
+#include "fwdpy11/types/Mutation.hpp"
 #include "get_individuals.hpp"
 
 namespace py = pybind11;
@@ -106,6 +108,12 @@ init_DiploidPopulation(py::module& m)
                      }
                  self.record_ancient_samples(individuals);
              })
+        .def("_set_mutations",
+             [](fwdpy11::DiploidPopulation& self,
+                const std::vector<fwdpy11::Mutation>& mutations,
+                const std::vector<std::int32_t>& mutation_nodes) {
+                 self.set_mutations(mutations, mutation_nodes);
+             })
         .def(py::pickle(
             [](const fwdpy11::DiploidPopulation& pop) -> py::object {
                 std::ostringstream o;
@@ -121,7 +129,7 @@ init_DiploidPopulation(py::module& m)
                 return pop;
             }))
         .def("_dump_to_file",
-             [](const fwdpy11::DiploidPopulation& pop, const std::string & filename) {
+             [](const fwdpy11::DiploidPopulation& pop, const std::string& filename) {
                  std::ofstream out(filename.c_str(), std::ios_base::binary);
                  if (!out)
                      {
@@ -132,7 +140,7 @@ init_DiploidPopulation(py::module& m)
              })
         .def_static(
             "_load_from_file",
-            [](const std::string & filename) {
+            [](const std::string& filename) {
                 std::ifstream in(filename.c_str(), std::ios_base::binary);
                 if (!in)
                     {

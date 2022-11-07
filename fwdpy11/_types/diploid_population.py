@@ -60,7 +60,8 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
         return self.__class__(0, 0.0, ll_pop=ll_pop)
 
     @classmethod
-    def create_from_tskit(cls, ts: tskit.TreeSequence):
+    def create_from_tskit(cls, ts: tskit.TreeSequence,
+                          *, transfer_mutations=False):
         """
         Create a new object from an tskit.TreeSequence
 
@@ -85,6 +86,24 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
 
         """
         ll = ll_DiploidPopulation._create_from_tskit(ts)
+        if transfer_mutations is True:
+            import fwdpy11.tskit_tools
+            for mutation in ts.mutations():
+                if not mutation.time.is_integer():
+                    raise ValueError("mutation times cannot contain decimals")
+            mutation_nodes = [i.node for i in ts.mutations()]
+            decoded_md = fwdpy11.tskit_tools.decode_mutation_metadata(ts)
+            for i, j in zip(ts.mutations(), decoded_md):
+                if j is not None:
+                    if i.time != j.g:
+                        raise ValueError(
+                            "metadata origin time != mutation time in tables")
+
+            mvec = fwdpy11._fwdpy11.MutationVector()
+            for i in decoded_md:
+                if i is not None:
+                    mvec.append(i)
+            ll._set_mutations(mvec, mutation_nodes)
         return cls(0, 0.0, ll_pop=ll)
 
     @classmethod
