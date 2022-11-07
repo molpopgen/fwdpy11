@@ -15,10 +15,18 @@
 * The GNU Scientific Library, version 2.3 or later.
 * The development files (headers) required for your Python installation.
   For example, on Ubuntu-based Linux distributions, you need the `libpython3-dev` package.
+* The rust programming language.
+  If you are working in a `conda` environment, install rust through `conda`.
+  If not, see [here](https://www.rust-lang.org/tools/install), or use the appropriate
+  package for your operating system.
+  For example, on Fedora Linux, `sudo dnf install rust` will get you started.
 
-:::{todo}
-Describe dependencies for the C++ test suite
-:::
+The C++ test suite requires:
+
+* [boost](https://www.boost.org).
+  Specifically, the boost test libraries are required.
+  There are many ways to install boost, but `conda` or your OS packages
+  will be the most reliable.
 
 :::{warning}
 `conda` users **must** install all of these dependencies using that system, including the compilers!
@@ -47,14 +55,24 @@ git submodule update
 python3 setup.py build_ext -i
 ```
 
-### Installing from a clone of the source repository
+## Installing from a clone of the source repository
+
+Install the `build` module if you have not:
+
+```{code-block} bash
+python -m pip install build
+```
+
+Then:
 
 ```{code-block} bash
 # from the repository root
-pip install .
+python -m build .
 ```
 
-### Installing from the source distribution at PyPi
+The install the wheel found in `dist/`.
+
+## Installing from the source distribution at PyPi
 
 With all of the dependencies in place, tell `pip` to ignore the binary wheels:
 
@@ -63,19 +81,54 @@ With all of the dependencies in place, tell `pip` to ignore the binary wheels:
 pip install fwdpy11 --no-binary
 ```
 
-### Running the Python test suite
+## Running the Python test suite
 
 ```sh
-python3 -p ptest tests -n 6
+python3 -p pytest tests -n 6
 ```
 
 Replace `6` with a number of threads appropriate for your machine.
 
+## Advanced build methods using cmake
+
+### Building for development
+
+We need to compile in release mode and enable building Python modules required by the test suite:
+
+```{code-block} bash
+cmake -Bbuild -S. -DCMAKE_BUILD_TYPE=Release -DBUILD_PYTHON_UNIT_TESTS=ON
+cmake --build build -j 6
+```
+
+This method can be preferable to the Python commands shown above
+because you get full control over parallelism.
+
 ### Building and running the C++ test suite.
 
-:::{todo}
-Describe building and executing the C++ test suite.
+:::{warning}
+
+The commands in this section build both the Python module and all related libraries
+in debug mode.
+While this is very useful for running the C++ tests, there are side effects!
+For example, the Python tests will become unbearably slow.
+(The build will place the debug-mode Python module in place so that it will be used for the Python tests.)
+Further, the docs will not build because the examples will time out due to the unoptimized build.
+
 :::
+
+```{code-block} bash
+cmake -Bbuild_cpp_tests -S. -DBUILD_CPP_UNIT_TESTS=ON
+cmake --build build_cpp_tests -j 6
+cmake --build build_cpp_tests -t test
+rm -rf build_cpp_tests
+```
+
+It may be useful to force the C++ code into debug mode, which will enable more `assert`
+statements from `fwdpp` and exceptions from the `fwdpy11` code:
+
+```{code-block} bash
+cmake -Bbuild_cpp_tests -S. -DBUILD_CPP_UNIT_TESTS=ON -DCMAKE_CXX_FLAGS="-UNDEBUG -O -g"
+```
 
 ### Enabling compiler command support for developing the C++ code
 
@@ -85,17 +138,14 @@ See [here](https://clang.llvm.org/docs/JSONCompilationDatabase.html) for backgro
 To generate this file, execute the following steps from the root of the source code repository:
 
 ```sh
-mkdir ccomands
-cd ccomands
-cmake .. -DCMAKE_EXPORT_COMPILE_COMMANDS=1
-mv compile_commands.json ..
-cd ..
+cmake -Bccommands . -DCMAKE_EXPORT_COMPILE_COMMANDS=1
+mv ccommands/compile_commands.json ..
 rm -rf ccomands
 ```
 
 Now, language servers supporting `clangd` will have nice error checking and code completion for the C++ code!
 
-### C++ code standards
+## C++ code standards
 
 This is a large topic.
 Briefly,
@@ -113,7 +163,7 @@ Briefly,
 * Virtual functions in derived classes are marked `override`.
   Where appropriate, they are also marked `final`.
 
-### Enabling code profiling
+## Enabling code profiling
 
 By default, fwdpy11 is compiled with aggressive optimizations to help reduce the library size.
 One side effect is that it becomes impossible to accurately profile the code.
@@ -134,7 +184,7 @@ Building the unit test modules is not affected.
 
 :::
 
-### Disabling link-time optimization (LTO)
+## Disabling link-time optimization (LTO)
 
 LTO is enabled by default and reduced the final library size substantially.
 However, it takes a long time and is therefore a drag during development.
