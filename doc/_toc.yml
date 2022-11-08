@@ -43,6 +43,7 @@ parts:
   - file: long_vignettes/tskit_metadata_vignette
 - caption: Longer vignettes - complete examples
   chapters:
+  - file: long_vignettes/import_mutations_from_tskit
   - file: long_vignettes/bgs_vignette
   - file: long_vignettes/gss_vignette
   - file: long_vignettes/pyfreqtracker
