@@ -16,6 +16,7 @@ tskit~=0.5.0
 setuptools_scm
 pytest
 pytest-xdist
+hypothesis==6.56.4
 
 # Docs
 jupyter-book~=0.12.0
