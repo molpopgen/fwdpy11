@@ -74,13 +74,14 @@ namespace
         fwdpp::ts::table_index_t node, parent;
         // The sample nodes below node
         std::vector<fwdpp::ts::table_index_t> descendants;
-        double node_time, parent_time;
+        double node_time, parent_time, tree_span;
 
         candidate_node_map(double l, double r, fwdpp::ts::table_index_t n,
                            fwdpp::ts::table_index_t p,
-                           std::vector<fwdpp::ts::table_index_t> d, double a, double b)
+                           std::vector<fwdpp::ts::table_index_t> d, double a, double b,
+                           double c)
             : left{l}, right{r}, node{n}, parent{p},
-              descendants{std::move(d)}, node_time{a}, parent_time{b}
+              descendants{std::move(d)}, node_time{a}, parent_time{b}, tree_span{c}
         {
         }
     };
@@ -196,7 +197,8 @@ namespace
                                                             pop.tables->nodes[n].time,
                                                             pop.tables
                                                                 ->nodes[tree.parents[n]]
-                                                                .time);
+                                                                .time,
+                                                            tree.right - tree.left);
                                                     }
                                             }
                                     }
@@ -341,7 +343,11 @@ add_mutation(const fwdpy11::GSLrng_t& rng, const double left, const double right
                     throw std::runtime_error(
                         "invalid parent/child times for candidate branch");
                 }
-            candidate_weights.push_back(c.node_time - c.parent_time);
+            if (c.tree_span <= 0.0)
+                {
+                    throw std::runtime_error("invalid tree span of <= 0.0");
+                }
+            candidate_weights.push_back((c.node_time - c.parent_time) * c.tree_span);
         }
     auto discrete
         = gsl_ran_discrete_preproc(candidates.size(), candidate_weights.data());
