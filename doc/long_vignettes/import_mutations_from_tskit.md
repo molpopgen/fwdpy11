@@ -108,15 +108,15 @@ for i in chosen_edges:
     md = {'s': effect_size,
           'h': 1.0,
           'origin': int(time),
+          'label': np.uint16(0),
           # NOTE: always write the
-          # next 3 lines as shown here.
+          # next 2 lines as shown here.
           # The fwdpy11 back end will do
           # the right thing.
           # A future release will provide a
           # nicer API so that you only need
-          # to provide the previous 3 fields.
+          # to provide the previous 2 fields.
           'neutral': 0,
-          'label': np.uint16(0),
           'key': np.uint64(0)
          }
     tables.mutations.add_row(site, edge.child,
