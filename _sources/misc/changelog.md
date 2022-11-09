@@ -3,6 +3,29 @@
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+## 0.19.0a1
+
+New features
+
+* Ability to import tree sequences with mutations from tskit.
+  A new {ref}`vignette <import_mutations_from_tskit_vignette>` describes the procedure.
+  PR {pr}`1026`.
+
+Bug fixes
+
+* Fix bug in sweep models.
+  The fix in PR {pr}`1020` was incomplete.
+  Tree span is now accounted for.
+  PR {pr}`1026`.
+* Fix Python-side constructors in Mutation re: integer types.
+  No previous results were affected.
+  PR {pr}`1023`.
+
+Documentation
+
+* Update developer docs.
+  PR {pr}`1021`.
+
 ## 0.19.0a0
 
 Bug fixes
