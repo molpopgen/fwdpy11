@@ -3,6 +3,13 @@
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+## 0.19.0a2
+
+Documentation
+
+* Rewrite {ref}`vignette <import_mutations_from_tskit_vignette>`.
+  PR {pr}`1026`.
+
 ## 0.19.0a1
 
 New features
