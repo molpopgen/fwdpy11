@@ -112,7 +112,7 @@ def test_import_msprime_mutations(seed, seed2):
 
     ts = tables.tree_sequence()
     pop = fwdpy11.DiploidPopulation.create_from_tskit(
-        ts, transfer_mutations=True)
+        ts, import_mutations=True)
 
     assert len(pop.mutations) == ts.num_mutations
     assert len(pop.tables.sites) == ts.num_sites
@@ -193,4 +193,4 @@ def test_import_msprime_mutations_bad_metadata():
         ts = make_treeseq_with_one_row_containing_bad_metadata(callback)
         with pytest.raises(ValueError):
             _ = fwdpy11.DiploidPopulation.create_from_tskit(
-                ts, transfer_mutations=True)
+                ts, import_mutations=True)

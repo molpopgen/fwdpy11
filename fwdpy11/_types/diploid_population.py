@@ -61,7 +61,7 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
 
     @classmethod
     def create_from_tskit(cls, ts: tskit.TreeSequence,
-                          *, transfer_mutations=False):
+                          *, import_mutations=False):
         """
         Create a new object from an tskit.TreeSequence
 
@@ -86,7 +86,7 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
 
         """
         ll = ll_DiploidPopulation._create_from_tskit(ts)
-        if transfer_mutations is True:
+        if import_mutations is True:
             import fwdpy11.tskit_tools
             for mutation in ts.mutations():
                 if not mutation.time.is_integer():
