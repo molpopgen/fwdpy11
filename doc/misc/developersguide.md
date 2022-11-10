@@ -20,6 +20,11 @@
   If not, see [here](https://www.rust-lang.org/tools/install), or use the appropriate
   package for your operating system.
   For example, on Fedora Linux, `sudo dnf install rust` will get you started.
+* Your rust environment needs `cbingden`:
+
+```{code-block} bash
+cargo install cbindgen
+```
 
 The C++ test suite requires:
 
