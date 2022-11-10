@@ -1,4 +1,4 @@
-FROM ubuntu:focal
+FROM ubuntu:jammy
 
 # Once this image is built:
 # If you have a script $HOME/tmp/foo.py,
@@ -14,6 +14,8 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -qq -y install cmak
   g++ \
   libgsl-dev \
   python3 \
+  python3-dev \
+  python3-venv \
   python3-pip \
   curl \
   && rm -rf /var/lib/apt/lists/* \
@@ -32,6 +34,16 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -qq -y install cmak
   && ls -lhrt
 
 RUN . "$HOME/.cargo/env" \
-  && python3 -m pip install . \
+  && python3 -m venv venv \
+  && . venv/bin/activate \
+  && python -m pip install --upgrade pip \
+  && python -m pip install build \
+  && python -m build . \
+  && deactivate \
+  && python3 -m pip install dist/fwdpy11*.whl \
+  && rm -rf venv \
+  && python3 -m venv /venv \
+  && . /venv/bin/activate \
+  && python3 -m pip install dist/fwdpy11*.whl \
   && cd / \
-  && rm -rf /app
+  && rm -rf /app /root/.cargo
