@@ -19,8 +19,8 @@ namespace fwdpy11
         GeneticMap() = default;
         GeneticMap(const GeneticMap&) = delete;
         GeneticMap(GeneticMap&&) = default;
-        GeneticMap& operator=(const GeneticMap&)=delete;
-        GeneticMap& operator=(GeneticMap&&)=default;
+        GeneticMap& operator=(const GeneticMap&) = delete;
+        GeneticMap& operator=(GeneticMap&&) = default;
         virtual std::vector<double> operator()(const GSLrng_t& rng) const = 0;
     };
 
@@ -39,8 +39,8 @@ namespace fwdpy11
                 }
             if (!weights.empty())
                 {
-                    lookup.reset(gsl_ran_discrete_preproc(weights.size(),
-                                                          weights.data()));
+                    lookup.reset(
+                        gsl_ran_discrete_preproc(weights.size(), weights.data()));
                 }
             else if (rate > 0.0)
                 {
@@ -74,8 +74,7 @@ namespace fwdpy11
     struct GeneralizedGeneticMap : public GeneticMap
     {
         std::vector<std::unique_ptr<fwdpp::genetic_map_unit>> callbacks;
-        GeneralizedGeneticMap(
-            std::vector<std::unique_ptr<fwdpp::genetic_map_unit>> c)
+        GeneralizedGeneticMap(std::vector<std::unique_ptr<fwdpp::genetic_map_unit>> c)
             : callbacks(std::move(c))
         {
         }

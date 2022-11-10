@@ -69,18 +69,24 @@ namespace fwdpy11
             return region.label;
         }
 
+        inline bool
+        valid(double start, double stop) const
+        {
+            return this->region.valid(start, stop);
+        }
+
         virtual std::unique_ptr<Sregion> clone() const = 0;
         virtual std::uint32_t
         operator()(fwdpp::flagged_mutation_queue& /*recycling_bin*/,
                    std::vector<Mutation>& /*mutations*/,
                    std::unordered_multimap<double, std::uint32_t>& /*lookup_table*/,
-                   const std::uint32_t /*generation*/,
-                   const GSLrng_t& /*rng*/) const = 0;
+                   const std::uint32_t /*generation*/, const GSLrng_t& /*rng*/) const
+            = 0;
         // Added in 0.7.0.  We now require that these types
         // are able to return deviates from the relevant cdf_P
         // function.
-        virtual double from_mvnorm(const double /*deviate*/,
-                                   const double /*P*/) const = 0;
+        virtual double from_mvnorm(const double /*deviate*/, const double /*P*/) const
+            = 0;
         virtual double
         generate_dominance(const GSLrng_t& rng, const double esize) const
         {

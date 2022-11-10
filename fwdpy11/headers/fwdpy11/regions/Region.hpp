@@ -16,8 +16,8 @@ namespace fwdpy11
         std::uint16_t label;
         bool coupled;
         Region(double b, double e, double w, bool c, std::uint16_t l)
-            : beg(b), end(e), weight((c == true) ? (end - beg) * w : w),
-              label(l), coupled(c)
+            : beg(b), end(e), weight((c == true) ? (end - beg) * w : w), label(l),
+              coupled(c)
         {
             if (!std::isfinite(beg))
                 {
@@ -37,8 +37,7 @@ namespace fwdpy11
                 }
             if (!(end > beg))
                 {
-                    throw std::invalid_argument(
-                        "end must be greater than beg");
+                    throw std::invalid_argument("end must be greater than beg");
                 }
         }
 
@@ -46,6 +45,14 @@ namespace fwdpy11
         operator()(const GSLrng_t& rng) const
         {
             return gsl_ran_flat(rng.get(), beg, end);
+        }
+
+        inline bool
+        valid(double start, double stop) const
+        {
+            auto beg_ok = beg >= start && beg < stop;
+            auto end_ok = end > start && end <= stop;
+            return beg_ok && end_ok;
         }
     };
 } // namespace fwdpy11

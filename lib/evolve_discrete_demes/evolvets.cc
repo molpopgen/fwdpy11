@@ -228,6 +228,17 @@ evolve_with_tree_sequences(
             // then we reset it back to an unevolved one.
             demography.reset_model_state();
         }
+    for (auto &region : mmodel.regions)
+        {
+            if (!region->valid(0.0, pop.tables->genome_length()))
+                {
+                    std::ostringstream o;
+                    o << "region contains invalid beg and/or end values: "
+                      << region->beg() << ", " << region->end()
+                      << ", genome_length = " << pop.tables->genome_length();
+                    throw std::invalid_argument(o.str().c_str());
+                }
+        }
 
     auto current_demographic_state = demography.get_model_state();
 
@@ -644,4 +655,3 @@ evolve_with_tree_sequences(
         }
     demography.set_model_state(std::move(current_demographic_state));
 }
-
