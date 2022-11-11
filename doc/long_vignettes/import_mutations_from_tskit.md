@@ -49,7 +49,7 @@ for tree in ts.trees(sample_lists=True):
             # times to be compatible with discrete-time
             # forward simulations.  To do so, we filter
             # on branches greater than a generation long.
-            if ptime - ctime > 0.0:
+            if ptime - ctime > 1.0:
                 branch_children.append(node)
                 branch_left_right.append((tree.interval))
                 branch_derived_mut_freq.append(len([i for i in tree.samples(node)])/ts.num_samples)
