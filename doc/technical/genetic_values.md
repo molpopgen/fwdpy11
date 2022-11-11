@@ -273,7 +273,7 @@ respectively, which hold references to objects from the simulation:
 
 This example comes from the test suite:
 
-```{literalinclude} ../../tests/custom_additive.cc
+```{literalinclude} ../../tests_with_cpp/custom_additive.cc
 :language: cpp
 
 ```
@@ -292,7 +292,7 @@ This example is based on {cite}`Doebeli2004-ny` and comes from the `fwdpy11` tes
 
 The low-level details in C++ are:
 
-```{literalinclude} ../../tests/ll_snowdrift.cc
+```{literalinclude} ../../tests_with_cpp/ll_snowdrift.cc
 :language: cpp
 
 ```
@@ -300,7 +300,7 @@ The low-level details in C++ are:
 The user-facing Python class is implemented using `attrs`, which
 is handy because we don't have to write C++ code to pickle/unpickle:
 
-```{literalinclude} ../../tests/snowdrift.py
+```{literalinclude} ../../tests_with_cpp/snowdrift.py
 :language: python
 
 ```
