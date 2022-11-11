@@ -20,39 +20,43 @@
 #include <pybind11/pybind11.h>
 #include <fwdpy11/rng.hpp>
 #include <gsl/gsl_randist.h>
+#include <core/internal/gsl_ran_flat.hpp>
 
 namespace py = pybind11;
 
 void
 init_gsl_random(py::module& m)
 {
-    m.def("gsl_ran_gaussian_ziggurat",
-          [](const fwdpy11::GSLrng_t& rng, const double sd) {
-              return gsl_ran_gaussian_ziggurat(rng.get(), sd);
-          },
-          "Gaussian deviate with mean zero");
+    m.def(
+        "gsl_ran_gaussian_ziggurat",
+        [](const fwdpy11::GSLrng_t& rng, const double sd) {
+            return gsl_ran_gaussian_ziggurat(rng.get(), sd);
+        },
+        "Gaussian deviate with mean zero");
 
-    m.def("gsl_rng_uniform",
-          [](const fwdpy11::GSLrng_t& rng) {
-              return gsl_rng_uniform(rng.get());
-          },
-          "Uniform deviate on interval [0,1)");
+    m.def(
+        "gsl_rng_uniform",
+        [](const fwdpy11::GSLrng_t& rng) { return gsl_rng_uniform(rng.get()); },
+        "Uniform deviate on interval [0,1)");
 
-    m.def("gsl_ran_flat",
-          [](const fwdpy11::GSLrng_t& rng, double a, double b) {
-              return gsl_ran_flat(rng.get(), a, b);
-          },
-          "Unform deviate on interval [a,b)");
+    m.def(
+        "gsl_ran_flat",
+        [](const fwdpy11::GSLrng_t& rng, double a, double b) {
+            return fwdpy11_core::internal::gsl_ran_flat(rng, a, b);
+        },
+        "Unform deviate on interval [a,b)");
 
-    m.def("gsl_ran_poisson",
-          [](const fwdpy11::GSLrng_t& rng, double mean) {
-              return gsl_ran_poisson(rng.get(), mean);
-          },
-          "Poisson deviate parameterized by mean.");
+    m.def(
+        "gsl_ran_poisson",
+        [](const fwdpy11::GSLrng_t& rng, double mean) {
+            return gsl_ran_poisson(rng.get(), mean);
+        },
+        "Poisson deviate parameterized by mean.");
 
-    m.def("gsl_ran_geometric",
-          [](const fwdpy11::GSLrng_t& rng, const double p) {
-              return gsl_ran_geometric(rng.get(), p);
-          },
-          "Geometric distribution parameterized by success probability.");
+    m.def(
+        "gsl_ran_geometric",
+        [](const fwdpy11::GSLrng_t& rng, const double p) {
+            return gsl_ran_geometric(rng.get(), p);
+        },
+        "Geometric distribution parameterized by success probability.");
 }

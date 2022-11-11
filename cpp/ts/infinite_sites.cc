@@ -1,5 +1,6 @@
 #include <cmath>
 #include <algorithm>
+#include <core/internal/gsl_ran_flat.hpp>
 #include <fwdpp/ts/recycling.hpp>
 #include <fwdpp/ts/mutate_tables.hpp>
 #include <fwdpp/ts/count_mutations.hpp>
@@ -20,7 +21,7 @@ namespace
                               const fwdpy11::mutation_origin_time generation)
     {
         const auto uniform
-            = [left, right, &rng]() { return gsl_ran_flat(rng.get(), left, right); };
+            = [left, right, &rng]() { return fwdpy11_core::internal::gsl_ran_flat(rng, left, right); };
         const auto return_zero = []() { return 0.0; };
         const auto return_zero_h = [](const double) { return 0.0; };
         auto key = fwdpy11::infsites_Mutation(recycling_bin, pop.mutations,

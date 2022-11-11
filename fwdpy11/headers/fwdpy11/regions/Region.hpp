@@ -44,7 +44,12 @@ namespace fwdpy11
         inline double
         operator()(const GSLrng_t& rng) const
         {
-            return gsl_ran_flat(rng.get(), beg, end);
+            auto rv = gsl_ran_flat(rng.get(), beg, end);
+            while (rv == end)
+                {
+                    rv = gsl_ran_flat(rng.get(), beg, end);
+                }
+            return rv;
         }
 
         inline bool
