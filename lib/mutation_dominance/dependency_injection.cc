@@ -1,6 +1,7 @@
 #include <cmath>
 #include <stdexcept>
 #include <functional>
+#include <core/internal/gsl_ran_flat.hpp>
 #include <gsl/gsl_randist.h> // FIXME: hide in static lib
 #include <fwdpp/util/validators.hpp>
 #include <fwdpy11/mutation_dominance/MutationDominance.hpp>
@@ -46,7 +47,7 @@ namespace fwdpy11
                 throw std::invalid_argument("hi must be > lo");
             }
         return MutationDominance([lo, hi](const GSLrng_t& rng, const double) {
-            return gsl_ran_flat(rng.get(), lo, hi);
+            return fwdpy11_core::internal::gsl_ran_flat(rng, lo, hi);
         });
     }
 

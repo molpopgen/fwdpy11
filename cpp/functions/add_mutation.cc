@@ -26,6 +26,7 @@
 #include <fwdpy11/rng.hpp>
 #include <fwdpy11/types/DiploidPopulation.hpp>
 #include <fwdpy11/policies/mutation.hpp>
+#include <core/internal/gsl_ran_flat.hpp>
 #include <fwdpp/ts/marginal_tree_functions/nodes.hpp>
 #include <fwdpp/ts/table_collection_functions.hpp>
 #include <fwdpp/ts/marginal_tree_functions/samples.hpp>
@@ -243,8 +244,8 @@ namespace
                 return static_cast<std::int64_t>(std::ceil(mutation_node_time));
             }
         // choose a random time
-        auto candidate_time = gsl_ran_flat(rng.get(), mutation_node_time,
-                                           node_table[mutation_node_parent].time);
+        auto candidate_time = fwdpy11_core::internal::gsl_ran_flat(
+            rng, mutation_node_time, node_table[mutation_node_parent].time);
         if (candidate_time < 0.0)
             {
                 return static_cast<std::int64_t>(std::floor(mutation_node_time));
@@ -386,7 +387,8 @@ add_mutation(const fwdpy11::GSLrng_t& rng, const double left, const double right
         empty, pop.mutations, pop.mut_lookup, false, mutation_node_time,
         // The lambdas will simply transfer input parameters to the new object.
         [&rng, &candidate_data]() {
-            return gsl_ran_flat(rng.get(), candidate_data.left, candidate_data.right);
+            return fwdpy11_core::internal::gsl_ran_flat(rng, candidate_data.left,
+                                                        candidate_data.right);
         },
         [&data]() { return data.effect_size; },
         [&data](double) { return data.dominance; }, [&data]() { return data.esizes; },
