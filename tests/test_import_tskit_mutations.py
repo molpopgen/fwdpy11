@@ -58,8 +58,8 @@ def make_generic_mutation_metadata(origin_time):
             'key': 0}  # fwdpy11 will have to figure out a real key value later.
 
 
-def make_treeseq_with_one_row_containing_bad_metadata(callback):
-    ts = msprime.sim_ancestry(5, population_size=10000)
+def make_treeseq_with_one_row_containing_bad_metadata(seed, callback):
+    ts = msprime.sim_ancestry(5, population_size=10000, random_seed=seed)
 
     tables = ts.tables
 
@@ -168,7 +168,11 @@ def test_import_msprime_mutations(seed, seed2):
                 assert samples == fp11samples
 
 
-def test_import_msprime_mutations_bad_metadata():
+@given(integers(1, int(2**32 - 1)), integers(1, int(2**32 - 1)))
+@settings(deadline=None)
+def test_import_msprime_mutations_bad_metadata(seed1, seed2):
+    np.random.seed(seed1)
+
     def bad_effect_size(md):
         md['s'] = np.nan
 
@@ -179,10 +183,16 @@ def test_import_msprime_mutations_bad_metadata():
     # must equal the mutation's time value
 
     def bad_origin(md):
-        md['origin'] = -1*md['origin']
+        if md['origin'] > 0.0:
+            md['origin'] = -1*md['origin']
+        else:
+            md['origin'] = -1
 
     def bad_origin2(md):
-        md['origin'] = int(0.5*md['origin'])
+        if md['origin'] > 0.0:
+            md['origin'] = int(0.5*md['origin'])
+        else:
+            md['origin'] = -1
 
     # This will not trigger an error:
     # fwdpy11 sets the neutral field based on if effect_size == 0.0
@@ -190,7 +200,7 @@ def test_import_msprime_mutations_bad_metadata():
     #     md['neutral'] = 1
 
     for callback in [bad_effect_size, bad_dominance, bad_origin, bad_origin2]:
-        ts = make_treeseq_with_one_row_containing_bad_metadata(callback)
+        ts = make_treeseq_with_one_row_containing_bad_metadata(seed2, callback)
         with pytest.raises(ValueError):
             _ = fwdpy11.DiploidPopulation.create_from_tskit(
                 ts, import_mutations=True)
