@@ -3,6 +3,37 @@
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+## 0.19.0a3
+
+Deployment
+
+* Update docker base image to `ubuntu:jammy`.
+  PR {pr}`1031`
+* Docker images now installs into a venv rather than globablly.
+  PR {pr}`1031`
+* Fix docker tags so that `latest` means the latest release.
+  PR {pr}`1036`
+
+Documentations
+
+* Document how to build core library in isolation.
+  PR {pr}`1038`
+* Document `cbindgen` requirement for development.
+  PR {pr}`1030`
+
+Back end changes
+
+* C++ back ends of Region/Sregion now validate their coordinates at run time.
+  PR {pr}`1032`
+* Add wrapper to `gsl_ran_flat` to avoid returning max value.
+  PR {pr}`1035`
+
+Testing
+
+* Separate Python tests requiring compiled C++ modules to 
+  another directory.
+  PR {pr}`1037`
+
 ## 0.19.0a2
 
 Documentation
@@ -1521,3 +1552,4 @@ from fwdpy11 import SlocusPop as Spop
 [pybind11]: https://github.com/pybind/pybind11
 
 
+## 0.19.0a2
