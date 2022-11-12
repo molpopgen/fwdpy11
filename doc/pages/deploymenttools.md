@@ -25,16 +25,11 @@ The above is equivalent to:
 docker pull molpopgen/fwdpy11:latest
 ```
 
-To get an image with the latest stable release installed:
+This tag corresponds to the latest release, which may be a pre-release.
 
-```sh
-docker pull molpopgen/fwdpy11:stable
-```
+### The virtual environment
 
-Most people, most of the time, will want to use the `:stable` tag.
-The `:latest` tag is closer to the bleeding edge, containing features added since the latest release and probably a bug or two that we haven't sorted out yet!
-If you need features in the `dev` branch that are not yet merged into `main`, you can build your own images based on the `dev` branch.
-See {ref}`here <sec_building_docker_images>`.
+In the image, `fwdpy11` is installed into a virtual environment located at `/venv`.
 
 #### Extending existing images
 
@@ -46,7 +41,8 @@ FROM molpopgen/fwdpy11:latest
 
 WORKDIR /app
 
-RUN python3 -m pip install matplotlib
+RUN . /venv/bin/activate
+  && python -m pip install matplotlib
 ```
 
 For maximal reproducibility, you may want to "pin" your own images to specific versions of the `fwdpy11` image:
@@ -57,7 +53,8 @@ FROM molpopgen/fwdpy11@sha256:106b32cb879f6f42bd5fc34a4a44ac40371dc66f51a89ee04d
 
 WORKDIR /app
 
-RUN python3 -m pip install matplotlib
+RUN . /venv/bin/activate
+  && python -m pip install matplotlib
 ```
     
 To sleuth out the `sha256` value that you need, simply pull the image:
@@ -84,11 +81,6 @@ docker.io/molpopgen/fwdpy11:latest
 
 The `sha256` info that you need is on the line starting with `Digest:`.
 
-Some notes:
-
-* The `sha256` will differ for the most recent `:latest` and `:stable` `tags`, even if they correspond to the exact same version of `fwdpy11`.
-  This difference is because the `sha256` correspond to a build of an image, and not to the version of `fwdpy11`.
-
 (sec_building_docker_images)=
 
 ### Building images from scratch
@@ -107,7 +99,7 @@ Once this image is built, you may use it to run scripts on your local machine.
 If you have a script `$HOME/tmp/foo.py`, you can run it via:
 
 ```sh
-docker run --rm -v $HOME/tmp:/app IMAGE_NAME python3 /app/foo.py
+docker run --rm -v $HOME/tmp:/app IMAGE_NAME /bin/bash -c ". /venv/bin/activate; python /app/foo.py"
 ```
 
 ## Linux wheel building
@@ -124,7 +116,7 @@ bash deployment/linux_wheels/build_docker_image.sh
 The above command will require `sudo` on some systems.
 On trusted machines, you may wish to add yourself to the `docker` group as described [here](https://docs.docker.com/engine/install/linux-postinstall/).
 
-This work flow builds binary wheels for Python 3.6, 3.7 and 3.8 using [manylinux](https://github.com/pypa/manylinux) 2014.
+This work flow builds binary wheels for Python [manylinux](https://github.com/pypa/manylinux).
 After building and auditing each wheel, the wheels are installed into virtual environments and the `fwdpy11` test suite is run.
 
 ### Extracting the wheels
