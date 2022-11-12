@@ -5,7 +5,47 @@
 :::{note}
 `Docker` commands require `sudo` on most systems.
 On trusted machines, you may wish to add yourself to the `docker` group as described [here](https://docs.docker.com/engine/install/linux-postinstall/).
+
+In general, [podman](https://podman.io) will prove easier to use than `Docker`.
+`podman` is standard on systems like Fedora Linux.
+All commands shown below work with `podman` because that tool can alias the `Docker` commands.
+On Fedora, this aliasing requires `podman-docker` to be installed. (`sudo dnf install podman-docker`).
+
 :::
+
+## Singularity images
+
+HPC systems are moving towards containerization, with more institutional clusters supporting [singularity](https://docs.sylabs.io/guides/3.5/user-guide/introduction.html) images.
+
+These images are simple to build.
+
+To bootstrap a `singularity` image from a `fwdpy11` `Docker` image and install `msprime`, the following file will suffice:
+
+```
+Bootstrap: docker
+From: molpopgen/fwdpy11:latest
+
+%post
+    . /venv/bin/activate
+    python -m pip install msprime
+```
+
+If we call the above file `example.def`, then we can build an image:
+
+```{code-block} bash
+singularity build --fakeroot example.sif example.def
+```
+
+You would execute the previous command on a Linux machine of your own.
+For users of systems like macOS, you could run the Linux installation in a virtual machine.
+
+Once built, you can transfer the image to your cluster to execute jobs.
+
+To run a script in the image, imagine we have a simulation defined in `example.py`:
+
+```{code-block} bash
+singularity exec example.sif bash -c ". /venv/bin/activate; python example.py"
+```
 
 ## Docker images
 
