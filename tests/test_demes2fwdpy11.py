@@ -1782,7 +1782,6 @@ def test_two_demes_migration_rate_changes(two_demes_migration_rate_changes_setup
 
     check_debugger_passes(demog)
 
-    return demog
     pdict = {
         "gvalue": fwdpy11.Multiplicative(2.0),
         "rates": (0, 0, 0),
