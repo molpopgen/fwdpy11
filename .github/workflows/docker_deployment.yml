@@ -39,7 +39,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: true
-          tags: molpopgen/fwdpy11:latest
+          tags: molpopgen/fwdpy11:latest molpopgen/fwdpy11:${{ github.event.release.tag_name }}
           file: deployment/docker/Dockerfile
           context: .
       -
