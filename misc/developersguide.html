@@ -701,6 +701,11 @@ const thebe_selector_output = ".output, .cell_output"
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#building-the-core-library-on-its-own">
+     Building the core library on its own.
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#building-and-running-the-c-test-suite">
      Building and running the C++ test suite.
     </a>
@@ -863,6 +868,11 @@ const thebe_selector_output = ".output, .cell_output"
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#building-the-core-library-on-its-own">
+     Building the core library on its own.
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#building-and-running-the-c-test-suite">
      Building and running the C++ test suite.
     </a>
@@ -980,7 +990,11 @@ If you are working in a <code class="docutils literal notranslate"><span class="
 If not, see <a class="reference external" href="https://www.rust-lang.org/tools/install">here</a>, or use the appropriate
 package for your operating system.
 For example, on Fedora Linux, <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">dnf</span> <span class="pre">install</span> <span class="pre">rust</span></code> will get you started.</p></li>
+<li><p>Your rust environment needs <code class="docutils literal notranslate"><span class="pre">cbingden</span></code>:</p></li>
 </ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cargo install cbindgen
+</pre></div>
+</div>
 <p>The C++ test suite requires:</p>
 <ul class="simple">
 <li><p><a class="reference external" href="https://www.boost.org">boost</a>.
@@ -1055,6 +1069,14 @@ cmake --build build -j <span class="m">6</span>
 </div>
 <p>This method can be preferable to the Python commands shown above
 because you get full control over parallelism.</p>
+</div>
+<div class="section" id="building-the-core-library-on-its-own">
+<h3>Building the core library on its own.<a class="headerlink" href="#building-the-core-library-on-its-own" title="Permalink to this headline">¶</a></h3>
+<p>Doing this is useful for C++-level testing:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cmake -S. -Bbuild -DCMAKE_BUILD_TYPE<span class="o">=</span>Release
+cmake --build build -t fwdpy11core -j <span class="m">6</span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="building-and-running-the-c-test-suite">
 <h3>Building and running the C++ test suite.<a class="headerlink" href="#building-and-running-the-c-test-suite" title="Permalink to this headline">¶</a></h3>

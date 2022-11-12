@@ -20,6 +20,11 @@
   If not, see [here](https://www.rust-lang.org/tools/install), or use the appropriate
   package for your operating system.
   For example, on Fedora Linux, `sudo dnf install rust` will get you started.
+* Your rust environment needs `cbingden`:
+
+```{code-block} bash
+cargo install cbindgen
+```
 
 The C++ test suite requires:
 
@@ -102,6 +107,15 @@ cmake --build build -j 6
 
 This method can be preferable to the Python commands shown above
 because you get full control over parallelism.
+
+### Building the core library on its own.
+
+Doing this is useful for C++-level testing:
+
+```{code-block} bash
+cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release
+cmake --build build -t fwdpy11core -j 6
+```
 
 ### Building and running the C++ test suite.
 

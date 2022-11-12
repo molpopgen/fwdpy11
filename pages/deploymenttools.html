@@ -655,6 +655,11 @@ const thebe_selector_output = ".output, .cell_output"
     <a class="reference internal nav-link" href="#images-from-docker-hub">
      Images from Docker Hub
     </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#the-virtual-environment">
+     The virtual environment
+    </a>
     <ul class="nav section-nav flex-column">
      <li class="toc-h4 nav-item toc-entry">
       <a class="reference internal nav-link" href="#extending-existing-images">
@@ -710,6 +715,11 @@ const thebe_selector_output = ".output, .cell_output"
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#images-from-docker-hub">
      Images from Docker Hub
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#the-virtual-environment">
+     The virtual environment
     </a>
     <ul class="nav section-nav flex-column">
      <li class="toc-h4 nav-item toc-entry">
@@ -767,14 +777,11 @@ On trusted machines, you may wish to add yourself to the <code class="docutils l
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>docker pull molpopgen/fwdpy11:latest
 </pre></div>
 </div>
-<p>To get an image with the latest stable release installed:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>docker pull molpopgen/fwdpy11:stable
-</pre></div>
+<p>This tag corresponds to the latest release, which may be a pre-release.</p>
 </div>
-<p>Most people, most of the time, will want to use the <code class="docutils literal notranslate"><span class="pre">:stable</span></code> tag.
-The <code class="docutils literal notranslate"><span class="pre">:latest</span></code> tag is closer to the bleeding edge, containing features added since the latest release and probably a bug or two that we haven’t sorted out yet!
-If you need features in the <code class="docutils literal notranslate"><span class="pre">dev</span></code> branch that are not yet merged into <code class="docutils literal notranslate"><span class="pre">main</span></code>, you can build your own images based on the <code class="docutils literal notranslate"><span class="pre">dev</span></code> branch.
-See <a class="reference internal" href="#sec-building-docker-images"><span class="std std-ref">here</span></a>.</p>
+<div class="section" id="the-virtual-environment">
+<h3>The virtual environment<a class="headerlink" href="#the-virtual-environment" title="Permalink to this headline">¶</a></h3>
+<p>In the image, <code class="docutils literal notranslate"><span class="pre">fwdpy11</span></code> is installed into a virtual environment located at <code class="docutils literal notranslate"><span class="pre">/venv</span></code>.</p>
 <div class="section" id="extending-existing-images">
 <h4>Extending existing images<a class="headerlink" href="#extending-existing-images" title="Permalink to this headline">¶</a></h4>
 <p>Arguably the best use for the existing images is to create your own reproducible environments from them.
@@ -783,7 +790,8 @@ For example, the following <code class="docutils literal notranslate"><span clas
 
 <span class="n">WORKDIR</span> <span class="o">/</span><span class="n">app</span>
 
-<span class="n">RUN</span> <span class="n">python3</span> <span class="o">-</span><span class="n">m</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">matplotlib</span>
+<span class="n">RUN</span> <span class="o">.</span> <span class="o">/</span><span class="n">venv</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">activate</span>
+  <span class="o">&amp;&amp;</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">matplotlib</span>
 </pre></div>
 </div>
 <p>For maximal reproducibility, you may want to “pin” your own images to specific versions of the <code class="docutils literal notranslate"><span class="pre">fwdpy11</span></code> image:</p>
@@ -791,7 +799,8 @@ For example, the following <code class="docutils literal notranslate"><span clas
 
 <span class="n">WORKDIR</span> <span class="o">/</span><span class="n">app</span>
 
-<span class="n">RUN</span> <span class="n">python3</span> <span class="o">-</span><span class="n">m</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">matplotlib</span>
+<span class="n">RUN</span> <span class="o">.</span> <span class="o">/</span><span class="n">venv</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">activate</span>
+  <span class="o">&amp;&amp;</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">matplotlib</span>
 </pre></div>
 </div>
 <p>To sleuth out the <code class="docutils literal notranslate"><span class="pre">sha256</span></code> value that you need, simply pull the image:</p>
@@ -813,11 +822,6 @@ For example, the following <code class="docutils literal notranslate"><span clas
 </pre></div>
 </div>
 <p>The <code class="docutils literal notranslate"><span class="pre">sha256</span></code> info that you need is on the line starting with <code class="docutils literal notranslate"><span class="pre">Digest:</span></code>.</p>
-<p>Some notes:</p>
-<ul class="simple">
-<li><p>The <code class="docutils literal notranslate"><span class="pre">sha256</span></code> will differ for the most recent <code class="docutils literal notranslate"><span class="pre">:latest</span></code> and <code class="docutils literal notranslate"><span class="pre">:stable</span></code> <code class="docutils literal notranslate"><span class="pre">tags</span></code>, even if they correspond to the exact same version of <code class="docutils literal notranslate"><span class="pre">fwdpy11</span></code>.
-This difference is because the <code class="docutils literal notranslate"><span class="pre">sha256</span></code> correspond to a build of an image, and not to the version of <code class="docutils literal notranslate"><span class="pre">fwdpy11</span></code>.</p></li>
-</ul>
 </div>
 </div>
 <div class="section" id="building-images-from-scratch">
@@ -830,7 +834,7 @@ This difference is because the <code class="docutils literal notranslate"><span 
 <p>The result with be a Docker image named <code class="docutils literal notranslate"><span class="pre">IMAGE_NAME</span></code>.</p>
 <p>Once this image is built, you may use it to run scripts on your local machine.
 If you have a script <code class="docutils literal notranslate"><span class="pre">$HOME/tmp/foo.py</span></code>, you can run it via:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>docker run --rm -v <span class="nv">$HOME</span>/tmp:/app IMAGE_NAME python3 /app/foo.py
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>docker run --rm -v <span class="nv">$HOME</span>/tmp:/app IMAGE_NAME /bin/bash -c <span class="s2">&quot;. /venv/bin/activate; python /app/foo.py&quot;</span>
 </pre></div>
 </div>
 </div>
@@ -845,7 +849,7 @@ Although this work flow <em>could</em> be used to make wheels for each new relea
 </div>
 <p>The above command will require <code class="docutils literal notranslate"><span class="pre">sudo</span></code> on some systems.
 On trusted machines, you may wish to add yourself to the <code class="docutils literal notranslate"><span class="pre">docker</span></code> group as described <a class="reference external" href="https://docs.docker.com/engine/install/linux-postinstall/">here</a>.</p>
-<p>This work flow builds binary wheels for Python 3.6, 3.7 and 3.8 using <a class="reference external" href="https://github.com/pypa/manylinux">manylinux</a> 2014.
+<p>This work flow builds binary wheels for Python <a class="reference external" href="https://github.com/pypa/manylinux">manylinux</a>.
 After building and auditing each wheel, the wheels are installed into virtual environments and the <code class="docutils literal notranslate"><span class="pre">fwdpy11</span></code> test suite is run.</p>
 <div class="section" id="extracting-the-wheels">
 <h3>Extracting the wheels<a class="headerlink" href="#extracting-the-wheels" title="Permalink to this headline">¶</a></h3>
