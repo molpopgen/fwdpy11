@@ -3,6 +3,23 @@
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+## 0.19.0a4
+
+Deployment
+
+* Add a version name tag to releases
+  PR {pr}`1041`
+
+Documentation
+
+* Describe podman and give singularity example in deployment section.
+  PR {pr}`1040`
+
+Testing
+
+* Fix logic error in testing mutation import from tskit.
+  PR {pr}`1039`
+
 ## 0.19.0a3
 
 Deployment
