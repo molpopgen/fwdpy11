@@ -117,6 +117,7 @@ jobs:
       - name: Run Python tests
         run: |
             python -m pytest -n 2 tests
+            python -m pytest -n 2 tests_with_cpp
 
       - name: Build and run examples/plugin
         run: |

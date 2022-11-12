@@ -102,6 +102,7 @@ jobs:
           source ~/.bashrc
           conda activate anaconda-client-env
           python -m pytest -n 4 tests
+          python -m pytest -n 2 tests_with_cpp
 
       - name: Build and run examples/plugin
         run: |

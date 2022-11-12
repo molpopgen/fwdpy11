@@ -57,7 +57,7 @@ add_subdirectory(rust)
 add_subdirectory(cpp)
 
 if(BUILD_PYTHON_UNIT_TESTS)
-    add_subdirectory(tests)
+    add_subdirectory(tests_with_cpp)
 endif(BUILD_PYTHON_UNIT_TESTS)
 if(BUILD_CPP_UNIT_TESTS)
     enable_testing()
