@@ -43,13 +43,23 @@ jobs:
           file: deployment/docker/Dockerfile
           context: .
       -
-        name: Build image
+        name: Build and push latest main branch
+        if: github.ref == 'ref/heads/main' && github.event_name != 'release'
+        id: docker_build_latest_main
+        uses: docker/build-push-action@v3
+        with:
+          push: true
+          tags: molpopgen/fwdpy11:latest
+          file: deployment/docker/Dockerfile
+          context: .
+      -
+        name: Build pull request (no push)
         if: github.event_name == 'pull_request'
         id: docker_build_pull_request
         uses: docker/build-push-action@v3
         with:
           push: false
-          tags: molpopgen/fwdpy11:stable
+          tags: molpopgen/fwdpy11:pull_request
           file: deployment/docker/Dockerfile
           context: .
       -
