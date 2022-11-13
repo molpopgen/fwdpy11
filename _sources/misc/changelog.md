@@ -3,6 +3,19 @@
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+## 0.19.0a5
+
+Deployment
+
+* Add missing , to docker tag names
+  PR {pr}`1042`
+
+Testing
+
+* Remove stray return statement in a test.
+  PR {pr}`1043`
+
+
 ## 0.19.0a4
 
 Deployment
