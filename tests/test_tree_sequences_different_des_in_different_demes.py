@@ -22,7 +22,9 @@
 # Low-level tests of fwdpy11.mvDES itself are in test_regions.py
 
 import unittest
+import pytest
 
+import demes
 import fwdpy11
 import numpy as np
 
@@ -363,6 +365,57 @@ class TestMultivariateLogNormalS(unittest.TestCase):
         for i, m in enumerate(self.pop.diploid_metadata):
             g = gvalue_multiplicative(self.pop, i, 2.0)
             self.assertAlmostEqual(m.g, g)
+
+
+@pytest.mark.parametrize("mvDES",
+                         [fwdpy11.mvDES(fwdpy11.MultivariateGaussianEffects(0, 1, 1, np.identity(2)), np.zeros(2)),
+                          fwdpy11.mvDES(
+                              [fwdpy11.ConstantS(0, 1, 1, 0.1),
+                               fwdpy11.ConstantS(0, 1, 1, -0.1)],
+                              np.zeros(2),
+                              np.identity(2),
+                         )])
+@pytest.mark.parametrize("gvalue", [fwdpy11.Multiplicative(2., ndemes=2), fwdpy11.Additive(2., ndemes=2)])
+def test_invalid_model(mvDES, gvalue):
+    demog = """
+description: trigger exception
+time_units: generations
+demes:
+  - name: ancestor
+    epochs:
+      - start_size: 100
+        end_time: 100
+  - name: A
+    ancestors: [ancestor]
+    epochs:
+      - start_size: 100
+  - name: B
+    ancestors: [ancestor]
+    epochs:
+      - start_size: 100
+  - name: C
+    ancestors: [ancestor]
+    epochs:
+      - start_size: 100
+    """
+
+    g = demes.loads(demog)
+    model = fwdpy11.discrete_demography.from_demes(g, burnin=1)
+    pdict = {
+        "nregions": [],
+        "sregions": [mvDES],
+        "recregions": [fwdpy11.PoissonInterval(0, 1, 1e-2)],
+        "rates": (0, 1, None),
+        "gvalue": gvalue,
+        "demography": model,
+        "simlen": model.metadata["total_simulation_length"],
+        "prune_selected": True,
+    }
+    params = fwdpy11.ModelParams(**pdict)
+    rng = fwdpy11.GSLrng(918273)
+    pop = fwdpy11.DiploidPopulation(100, 1.0)
+    with pytest.raises(ValueError):
+        fwdpy11.evolvets(rng, pop, params, 100)
 
 
 if __name__ == "__main__":
