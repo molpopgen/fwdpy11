@@ -13,6 +13,21 @@ On Fedora, this aliasing requires `podman-docker` to be installed. (`sudo dnf in
 
 :::
 
+## Docker tags and fwdpy11 versions
+
+The policy is:
+
+* The `:latest` tag corresponds to the latest commit to the `main` branch.
+  In general, this will be the same as the latest release as most development happens in a separate branch.
+* Beginning with the 0.19.x series, we also have tags for specific versions/releases.
+  For example, `:v0.19.0` will correspond to that `fwdpy11` version 0.19.0.
+  In general, this will be the same as `:latest` unless we are prepping for a release and/or releasing
+  bug fixes for folks to test.
+* The versioned tags *do not* distinguish stable releases from pre-releases!
+  For example, the latest release could be `v0.19.0` and the latest pre-release
+  is `v0.20.0a0` (alpha release 0 of `v0.20.0`).
+  To guarantee a stable release, peruse the [tags](https://hub.docker.com/r/molpopgen/fwdpy11/tags) at `Docker` hub.
+
 ## Singularity images
 
 HPC systems are moving towards containerization, with more institutional clusters supporting [singularity](https://docs.sylabs.io/guides/3.5/user-guide/introduction.html) images.
@@ -65,7 +80,8 @@ The above is equivalent to:
 docker pull molpopgen/fwdpy11:latest
 ```
 
-This tag corresponds to the latest release, which may be a pre-release.
+This tag corresponds to the latest commit to the main branch.
+See above for details about `fwdpy11` versions and Docker tags.
 
 ### The virtual environment
 
