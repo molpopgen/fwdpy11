@@ -125,10 +125,22 @@ def evolvets(
         which is interpreted as `True`.
 
     """
+    try:
+        # DemographicModelDetails ?
+        demographic_model = params.demography.model
+    except AttributeError:
+        # No, assume it is a DiscreteDemography
+        demographic_model = params.demography
+    except Exception as e:
+        raise e
 
     for r in params.sregions:
         if isinstance(r, fwdpy11.mvDES):
             if isinstance(r.des, list):
+                nd = demographic_model.number_of_demes()
+                if nd > params.gvalue.ndemes:
+                    raise ValueError(f"maxmimum number of demes in model ({nd}) is not compatible with genetic value"
+                                     f" number of demes {params.gvalue.ndemes}")
                 for rr in r.des:
                     assert isinstance(rr, fwdpy11.Sregion)  # type: ignore
                     if rr.beg < 0:
@@ -141,6 +153,10 @@ def evolvets(
             else:
                 assert isinstance(r, fwdpy11.mvDES), f"{type(r)}"
                 assert isinstance(r.des, fwdpy11.Sregion)  # type: ignore
+                nd = demographic_model.number_of_demes()
+                if nd > params.gvalue.ndemes:
+                    raise ValueError(f"maxmimum number of demes in model ({nd}) is not compatible with genetic value"
+                                     f" number of demes {params.gvalue.ndemes}")
                 if r.des.beg < 0:
                     raise ValueError(f"{r} has begin value < 0.0")
                 if r.des.end > pop.tables.genome_length:
@@ -204,15 +220,6 @@ def evolvets(
     fwdpy11._validate_regions(params.sregions, pop.tables.genome_length)
     fwdpy11._validate_regions(params.nregions, pop.tables.genome_length)
     fwdpy11._validate_regions(params.recregions, pop.tables.genome_length)
-
-    try:
-        # DemographicModelDetails ?
-        demographic_model = params.demography.model
-    except AttributeError:
-        # No, assume it is a DiscreteDemography
-        demographic_model = params.demography
-    except Exception as e:
-        raise e
 
     if check_demographic_event_timings:
         _validate_event_timings(demographic_model, pop.generation)

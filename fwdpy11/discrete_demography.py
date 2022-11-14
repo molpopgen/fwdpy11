@@ -222,7 +222,8 @@ class SetExponentialGrowth(fwdpy11._fwdpy11._ll_SetExponentialGrowth):
     G: float = attr.ib()
 
     def __attrs_post_init__(self):
-        super(SetExponentialGrowth, self).__init__(self.when, self.deme, self.G)
+        super(SetExponentialGrowth, self).__init__(
+            self.when, self.deme, self.G)
 
 
 @attr_add_asblack
@@ -355,7 +356,8 @@ class SetMigrationRates(fwdpy11._fwdpy11._ll_SetMigrationRates):
     """
 
     when: int = attr.ib()
-    deme: typing.Optional[int] = attr.ib(converter=_set_migration_rates_convert_deme)
+    deme: typing.Optional[int] = attr.ib(
+        converter=_set_migration_rates_convert_deme)
     migrates: np.ndarray = attr.ib()
 
     def __attrs_post_init__(self):
@@ -369,7 +371,8 @@ class SetMigrationRates(fwdpy11._fwdpy11._ll_SetMigrationRates):
                     self.when, self.deme, self.migrates
                 )
         else:
-            super(SetMigrationRates, self).__init__(self.when, self.migrates.tolist())
+            super(SetMigrationRates, self).__init__(
+                self.when, self.migrates.tolist())
 
     def __getstate__(self):
         return self.asdict()
@@ -379,7 +382,8 @@ class SetMigrationRates(fwdpy11._fwdpy11._ll_SetMigrationRates):
         if self.deme == -1:
             super(SetMigrationRates, self).__init__(self.when, self.migrates)
         else:
-            super(SetMigrationRates, self).__init__(self.when, self.deme, self.migrates)
+            super(SetMigrationRates, self).__init__(
+                self.when, self.deme, self.migrates)
 
     def __eq__(self, other):
         return (
@@ -415,7 +419,8 @@ def _convert_set_deme_sizes(
             if o[i] != N:
                 N = o[i]
                 rv.append(
-                    SetDemeSize(when=i, deme=0, new_size=N, resets_growth_rate=True)
+                    SetDemeSize(when=i, deme=0, new_size=N,
+                                resets_growth_rate=True)
                 )
 
         return rv
@@ -536,6 +541,18 @@ class DiscreteDemography(fwdpy11._fwdpy11._ll_DiscreteDemography):
         ]:
             yield i
 
+    def number_of_demes(self):
+        demes = set()
+        for e in self._timed_events():
+            if e is not None:
+                for i in e:
+                    try:
+                        demes.add(i.deme)
+                    except Exception:
+                        demes.add(i.source)
+                        demes.add(i.destination)
+        return len(demes)
+
 
 def from_demes(
     dg: typing.Union[str, demes.Graph], burnin: int = 10
@@ -627,7 +644,8 @@ class _SortedEvents:
         self.mass_migrations = sorted(
             self.mass_migrations,
             # TODO: compare this to the C++ side sort function.
-            key=lambda x: (x.when, x.source, x.destination, not x.move_individuals),
+            key=lambda x: (x.when, x.source, x.destination,
+                           not x.move_individuals),
         )
 
         self.set_deme_sizes = sorted(
@@ -996,7 +1014,8 @@ def _process_lowlevel_set_deme_sizes(set_deme_sizes, deme_sizes):
                 # There is no previous epoch for this deme,
                 # so we initialize with G = 1.0
                 deme_sizes[event.deme].append(
-                    _DemeSize(event.deme, None, event.when + 1, event.new_size, 1.0)
+                    _DemeSize(event.deme, None, event.when +
+                              1, event.new_size, 1.0)
                 )
 
     return len(set_deme_sizes)
@@ -1009,7 +1028,8 @@ def _process_lowlevel_set_growth_rates(set_growth_rates, deme_sizes):
             or len(deme_sizes[event.deme]) == 0
             or deme_sizes[event.deme][-1].size == 0
         ):
-            raise ValueError(f"Event {event} being applied to a non-existant deme")
+            raise ValueError(
+                f"Event {event} being applied to a non-existant deme")
         if event.when + 1 == deme_sizes[event.deme][-1].when:
             # the rate is concurrent w/another event, so
             # just change the value
@@ -1022,7 +1042,8 @@ def _process_lowlevel_set_growth_rates(set_growth_rates, deme_sizes):
                 deme_sizes[event.deme][-1].growth_parameter,
             )
             deme_sizes[event.deme].append(
-                _DemeSize(event.deme, [event.deme], event.when + 1, N0, event.G)
+                _DemeSize(event.deme, [event.deme],
+                          event.when + 1, N0, event.G)
             )
 
     return len(set_growth_rates)
@@ -1105,7 +1126,8 @@ class _DemeSizeHistory:
         deme_sizes = defaultdict(list)
         for deme, size in initial_sizes.items():
             if deme < 0:
-                raise ValueError(f"all deme indexes must be non-negative, got {deme}")
+                raise ValueError(
+                    f"all deme indexes must be non-negative, got {deme}")
             if size <= 0:
                 raise ValueError(f"deme {deme} size must be > 0, got {size}")
             deme_sizes[deme].append(_DemeSize(deme, [deme], 0, size, 1.0))
@@ -1148,17 +1170,17 @@ class _DemeSizeHistory:
         for k, v in deme_sizes.items():
             assert len(v) > 0
             for a, b in _pairwise(v):
-                itree[a.when : b.when] = _EpochData(
+                itree[a.when: b.when] = _EpochData(
                     k, a.ancestors, a.size, a.growth_parameter
                 )
             if total_simulation_length is not None:
                 if v[-1].when < total_simulation_length and v[-1].size > 0:
-                    itree[v[-1].when : total_simulation_length + 1] = _EpochData(
+                    itree[v[-1].when: total_simulation_length + 1] = _EpochData(
                         k, v[-1].ancestors, v[-1].size, v[-1].growth_parameter
                     )
             else:
                 if v[-1].size > 0:
-                    itree[v[-1].when : int(np.iinfo(np.uint32).max)] = _EpochData(
+                    itree[v[-1].when: int(np.iinfo(np.uint32).max)] = _EpochData(
                         k, v[-1].ancestors, v[-1].size, v[-1].growth_parameter
                     )
         rv = _DemeSizeHistory(itree, None)

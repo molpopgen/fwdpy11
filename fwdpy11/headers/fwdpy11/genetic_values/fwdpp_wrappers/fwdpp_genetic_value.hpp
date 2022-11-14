@@ -55,9 +55,19 @@ namespace fwdpy11
                 return gv(
                     pop.diploids[diploid_index], pop.haploid_genomes, pop.mutations,
                     [deme, this](double& d, const Mutation& mut) {
+                        if (deme >= mut.esizes.size() || deme >= mut.heffects.size())
+                            {
+                                throw std::invalid_argument(
+                                    "deme index is out of range");
+                            }
                         return multi_deme_aa(deme, d, mut);
                     },
                     [deme, this](double& d, const Mutation& mut) {
+                        if (deme >= mut.esizes.size() || deme >= mut.heffects.size())
+                            {
+                                throw std::invalid_argument(
+                                    "deme index is out of range");
+                            }
                         return multi_deme_Aa(deme, d, mut);
                     },
                     starting_value);
@@ -124,4 +134,3 @@ namespace fwdpy11
     };
 } // namespace fwdpy11
 #endif
-
