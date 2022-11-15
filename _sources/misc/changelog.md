@@ -3,6 +3,29 @@
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+## 0.19.0
+
+Differences from the last stable release also include entries
+for all alpha releases listed below
+
+Documentation
+
+* Add new vignettes.
+  See {ref}`here <varying_fitness_conditions_across_demes_intro>`
+  PR {pr}`950`
+
+Bug fix
+
+* Add runtime checks for invalid models where effect sizes
+  vary across demes.
+  PR {pr}`1047`
+
+Testing
+
+* Disable wheel build workflow for PRs
+  PR {pr}`1048`
+
+
 ## 0.19.0a5
 
 Deployment

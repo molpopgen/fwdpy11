@@ -241,6 +241,38 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 <p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
+  Short vignettes - varying fitness conditions across demes
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="varying_fitness_conditions_across_demes_intro.html">
+   Introduction
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="multivariate_gaussian_effect_sizes_across_demes.html">
+   The multivariate Gaussian distribution
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="multivariate_lognormal_effect_sizes.html">
+   The multivariate lognormal distribution
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="custom_multivarate_distributions.html">
+   “Custom” multivariate distributions
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="special_considerations_demes_models.html">
+   Special considerations for demes models
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
   Short vignettes - conditional models
  </span>
 </p>
@@ -707,8 +739,8 @@ const thebe_selector_output = ".output, .cell_output"
 <p>In order to facilitate time-series analyses, you may pass a callable object to <a class="reference internal" href="../pages/functions.html#fwdpy11.evolvets" title="fwdpy11.evolvets"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fwdpy11.evolvets()</span></code></a>.
 The following boiler plate illustrates the requirements for the callable objects in both <code class="docutils literal notranslate"><span class="pre">Python</span></code> and in <code class="docutils literal notranslate"><span class="pre">C++</span></code>:</p>
 <div class="tabbed-set docutils">
-<input checked="checked" id="5866a262-6b4d-4040-94bf-7b8ae77d80e1" name="1c2acf55-fcd4-4f4b-8c75-d45d4a1b6782" type="radio">
-</input><label class="tabbed-label" for="5866a262-6b4d-4040-94bf-7b8ae77d80e1">
+<input checked="checked" id="0f57bd45-86ee-4edb-bf38-44a31f8076b4" name="38fb9ade-3da7-4090-8979-e08c4c1e77de" type="radio">
+</input><label class="tabbed-label" for="0f57bd45-86ee-4edb-bf38-44a31f8076b4">
 python</label><div class="tabbed-content docutils">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Recorder</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pop</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">,</span> <span class="n">sampler</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">SampleRecorder</span><span class="p">):</span>
@@ -716,8 +748,8 @@ python</label><div class="tabbed-content docutils">
 </pre></div>
 </div>
 </div>
-<input id="c6bf15c5-0f7d-4e18-8c52-c9999e67be2b" name="1c2acf55-fcd4-4f4b-8c75-d45d4a1b6782" type="radio">
-</input><label class="tabbed-label" for="c6bf15c5-0f7d-4e18-8c52-c9999e67be2b">
+<input id="c94181cd-6c4c-4fb7-93b3-74dc6605cc42" name="38fb9ade-3da7-4090-8979-e08c4c1e77de" type="radio">
+</input><label class="tabbed-label" for="c94181cd-6c4c-4fb7-93b3-74dc6605cc42">
 c++</label><div class="tabbed-content docutils">
 <div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fwdpy11/evolvets/SampleRecorder.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fwdpy11/types/DiploidPopulation.hpp&gt;</span><span class="cp"></span>

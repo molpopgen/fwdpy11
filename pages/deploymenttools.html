@@ -241,6 +241,38 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 <p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
+  Short vignettes - varying fitness conditions across demes
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/varying_fitness_conditions_across_demes_intro.html">
+   Introduction
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/multivariate_gaussian_effect_sizes_across_demes.html">
+   The multivariate Gaussian distribution
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/multivariate_lognormal_effect_sizes.html">
+   The multivariate lognormal distribution
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/custom_multivarate_distributions.html">
+   “Custom” multivariate distributions
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/special_considerations_demes_models.html">
+   Special considerations for demes models
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
   Short vignettes - conditional models
  </span>
 </p>
@@ -647,6 +679,11 @@ const thebe_selector_output = ".output, .cell_output"
             <nav id="bd-toc-nav" aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#docker-tags-and-fwdpy11-versions">
+   Docker tags and fwdpy11 versions
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#singularity-images">
    Singularity images
   </a>
@@ -713,6 +750,11 @@ const thebe_selector_output = ".output, .cell_output"
                         <nav aria-label="Page">
                             <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#docker-tags-and-fwdpy11-versions">
+   Docker tags and fwdpy11 versions
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#singularity-images">
    Singularity images
   </a>
@@ -778,6 +820,22 @@ On trusted machines, you may wish to add yourself to the <code class="docutils l
 All commands shown below work with <code class="docutils literal notranslate"><span class="pre">podman</span></code> because that tool can alias the <code class="docutils literal notranslate"><span class="pre">Docker</span></code> commands.
 On Fedora, this aliasing requires <code class="docutils literal notranslate"><span class="pre">podman-docker</span></code> to be installed. (<code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">dnf</span> <span class="pre">install</span> <span class="pre">podman-docker</span></code>).</p>
 </div>
+<div class="section" id="docker-tags-and-fwdpy11-versions">
+<h2>Docker tags and fwdpy11 versions<a class="headerlink" href="#docker-tags-and-fwdpy11-versions" title="Permalink to this headline">¶</a></h2>
+<p>The policy is:</p>
+<ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">:latest</span></code> tag corresponds to the latest commit to the <code class="docutils literal notranslate"><span class="pre">main</span></code> branch.
+In general, this will be the same as the latest release as most development happens in a separate branch.</p></li>
+<li><p>Beginning with the 0.19.x series, we also have tags for specific versions/releases.
+For example, <code class="docutils literal notranslate"><span class="pre">:v0.19.0</span></code> will correspond to that <code class="docutils literal notranslate"><span class="pre">fwdpy11</span></code> version 0.19.0.
+In general, this will be the same as <code class="docutils literal notranslate"><span class="pre">:latest</span></code> unless we are prepping for a release and/or releasing
+bug fixes for folks to test.</p></li>
+<li><p>The versioned tags <em>do not</em> distinguish stable releases from pre-releases!
+For example, the latest release could be <code class="docutils literal notranslate"><span class="pre">v0.19.0</span></code> and the latest pre-release
+is <code class="docutils literal notranslate"><span class="pre">v0.20.0a0</span></code> (alpha release 0 of <code class="docutils literal notranslate"><span class="pre">v0.20.0</span></code>).
+To guarantee a stable release, peruse the <a class="reference external" href="https://hub.docker.com/r/molpopgen/fwdpy11/tags">tags</a> at <code class="docutils literal notranslate"><span class="pre">Docker</span></code> hub.</p></li>
+</ul>
+</div>
 <div class="section" id="singularity-images">
 <h2>Singularity images<a class="headerlink" href="#singularity-images" title="Permalink to this headline">¶</a></h2>
 <p>HPC systems are moving towards containerization, with more institutional clusters supporting <a class="reference external" href="https://docs.sylabs.io/guides/3.5/user-guide/introduction.html">singularity</a> images.</p>
@@ -816,7 +874,8 @@ For users of systems like macOS, you could run the Linux installation in a virtu
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>docker pull molpopgen/fwdpy11:latest
 </pre></div>
 </div>
-<p>This tag corresponds to the latest release, which may be a pre-release.</p>
+<p>This tag corresponds to the latest commit to the main branch.
+See above for details about <code class="docutils literal notranslate"><span class="pre">fwdpy11</span></code> versions and Docker tags.</p>
 </div>
 <div class="section" id="the-virtual-environment">
 <h3>The virtual environment<a class="headerlink" href="#the-virtual-environment" title="Permalink to this headline">¶</a></h3>
