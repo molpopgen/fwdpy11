@@ -130,7 +130,17 @@ jobs:
             python setup.py sdist
             python setup.py check
             python -m twine check dist/*.tar.gz
-            rm -rf dist/*.tar.gz
+            # rm -rf dist/*.tar.gz
+
+      - name: Test pip install from sdist in fresh venv
+        working-directory: dist
+        run: |
+            python -m venv venv
+            source venv/bin/activate
+            which python
+            python -m pip install *.tar.gz
+            deactivate
+            rm -rf venv
 
       - name: Test pip install from dist in fresh venv
         run: |

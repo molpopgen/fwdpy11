@@ -7,7 +7,7 @@ on:
     types: [created]
   push:
     branches: [main, dev]
-#   pull_request:
+  # pull_request:
 
 jobs:
   macOS_wheel:
@@ -78,10 +78,10 @@ jobs:
             submodules: true
             fetch-depth: 0
 
-      - name: Set up Python 3.8
+      - name: Set up Python 3.10
         uses: actions/setup-python@v4
         with:
-          python-version: 3.8
+          python-version: "3.10"
 
       - name: Build sdist
         shell: bash
