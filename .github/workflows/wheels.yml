@@ -7,7 +7,7 @@ on:
     types: [created]
   push:
     branches: [main, dev]
-#   pull_request:
+#  pull_request:
 
 jobs:
   macOS_wheel:
@@ -48,6 +48,7 @@ jobs:
       # The following is going to be fragile:
       # 1. The workflow gives a bizzare platform
       #    name to the wheels, macosx_11_0.
+      # 1a. On 19 Nov, 2022, it seems to have changed to macosx_12_0
       # 2. But, the CI totally works on the 10_15 platform
       # 3. The odd platform name means the wheels won't
       #    install on any macosx I can get ahold of.
@@ -56,7 +57,7 @@ jobs:
         run: |
           for i in dist/*.whl; do
             echo $i
-            mv $i $(ls $i | sed 's/macosx_11_0/macosx_10_15/g')
+            mv $i $(ls $i | sed 's/macosx_12_0/macosx_10_15/g')
           done
       - name: Upload Wheels
         uses: actions/upload-artifact@v3
@@ -86,6 +87,7 @@ jobs:
       - name: Build sdist
         shell: bash
         run: |
+          python -m pip install --upgrade pip setuptools
           python setup.py sdist
 
       - name: Upload sdist
@@ -122,10 +124,27 @@ jobs:
         uses: actions/download-artifact@v3.0.1
         with:
           name: linux-wheels
+      - name: Download sdist
+        uses: actions/download-artifact@v3.0.1
+        with:
+          name: sdist
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python }}
+      - name: Install sdist into venv
+        run: |
+          python -m venv sdist_venv
+          source sdist_venv/bin/activate
+          python -m pip install --upgrade pip setuptools
+          python -m pip install *.gz
+          # The cd is to move us away from
+          # the project repo root where the module is not built
+          cd sdist_venv
+          python -c "import fwdpy11;print(fwdpy11.__version__)"
+          deactivate
+          rm -rf sdist_venv
+
       - name: Install wheel and test
         run: |
           python -VV
@@ -194,6 +213,6 @@ jobs:
           cp */*.{whl,gz} dist/.
       - name: Publish distribution to PRODUCTION PyPI
         if: github.event_name == 'release'
-        uses: pypa/gh-action-pypi-publish@master
+        uses: pypa/gh-action-pypi-publish@release/v1
         with:
           password: ${{ secrets.PYPI_UPLOAD }}
