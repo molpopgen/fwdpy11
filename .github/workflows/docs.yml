@@ -40,7 +40,7 @@ jobs:
         with:
           path: |
             ~/.local
-          key: ${{ matrix.python }}-${{ hashFiles('doc/requirements.txt') }}-${{ hashFiles('requirements.txt') }}
+          key: ${{ matrix.python }}-${{ hashFiles('doc/development.txt') }}
 
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
