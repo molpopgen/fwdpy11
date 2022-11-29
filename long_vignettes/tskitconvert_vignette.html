@@ -4,11 +4,13 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>Converting data to tskit format &#8212; fwdpy11 manual</title>
     
-  <link href="../_static/css/theme.css" rel="stylesheet">
-  <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
 
     
   <link rel="stylesheet"
@@ -18,20 +20,16 @@
   <link rel="preload" as="font" type="font/woff2" crossorigin
     href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
 
-    
-      
-
-    
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
     
-  <link rel="preload" as="script" href="../_static/js/index.be7d3bbb2ef33a8344ce.js">
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
 
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
@@ -39,12 +37,13 @@
     <script src="../_static/doctools.js"></script>
     <script src="../_static/clipboard.min.js"></script>
     <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
     <script src="../_static/togglebutton.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
-    <script src="../_static/sphinx-book-theme.d59cb220de22ca1c485ebbdc042f0030.js"></script>
+    <script src="../_static/design-tabs.js"></script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
 const thebe_selector = ".thebe,.cell"
 const thebe_selector_input = "pre"
@@ -62,7 +61,21 @@ const thebe_selector_output = ".output, .cell_output"
     <!-- Google Analytics -->
     
   </head>
-  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
     
     <div class="container-fluid" id="banner"></div>
 
@@ -71,9 +84,10 @@ const thebe_selector_output = ".output, .cell_output"
     <div class="container-xl">
       <div class="row">
           
-<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
-    
-        <div class="navbar-brand-box">
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
     <a class="navbar-brand text-wrap" href="../index.html">
       
       
@@ -86,14 +100,15 @@ const thebe_selector_output = ".output, .cell_output"
   <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
 </form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item active">
-        <ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../intro.html">
-   Introduction
-  </a>
- </li>
-</ul>
-<p aria-level="2" class="caption" role="heading">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Introduction
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
   Installation and setup
  </span>
@@ -594,93 +609,208 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 
     </div>
-</nav> <!-- To handle the deprecated key -->
-
-<div class="navbar_extra_footer">
-  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
-</div>
-
-</div>
-
-
-          
-
-
-          
-<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
-    
-    <div class="topbar container-xl fixed-top">
-    <div class="topbar-contents row">
-        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
-        <div class="col pl-md-4 topbar-main">
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
             
-            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
-                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
-                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
-                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
-                <i class="fas fa-bars"></i>
-                <i class="fas fa-arrow-left"></i>
-                <i class="fas fa-arrow-up"></i>
-            </button>
+            <div class="navbar_extra_footer">
+            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+            </div>
             
-            
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
-            class="fas fa-download"></i></button>
-
-    <div class="dropdown-buttons">
-        <!-- ipynb file if we had a myst markdown file -->
-        <a class="dropdown-buttons"
-            href="../_sources/long_vignettes/tskitconvert_vignette.ipynb"><button type="button"
-                class="btn btn-secondary topbarbtn" title="Download notebook file" data-toggle="tooltip"
-                data-placement="left">.ipynb</button></a>
-        <!-- Download raw file -->
-        <a class="dropdown-buttons" href="../_sources/long_vignettes/tskitconvert_vignette.md"><button type="button"
-                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
-                data-placement="left">.md</button></a>
-        <!-- Download PDF via print -->
-        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
-                onclick="printPdf(this)" data-toggle="tooltip" data-placement="left">.pdf</button>
+        </div>
     </div>
+    <div id="rtd-footer-container"></div>
 </div>
 
-            <!-- Source interaction buttons -->
 
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
-        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
-    <div class="dropdown-buttons sourcebuttons">
-        <a class="repository-button"
-            href="https://github.com/molpopgen/fwdpy11"><button type="button" class="btn btn-secondary topbarbtn"
-                data-toggle="tooltip" data-placement="left" title="Source repository"><i
-                    class="fab fa-github"></i>repository</button></a>
-        <a class="issues-button"
-            href="https://github.com/molpopgen/fwdpy11/issues/new?title=Issue%20on%20page%20%2Flong_vignettes/tskitconvert_vignette.html&body=Your%20issue%20content%20here."><button
-                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
-                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
         
     </div>
+    <div class="header-article__right">
+<div class="menu-dropdown menu-dropdown-launch-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Launch interactive content">
+      <i class="fas fa-rocket"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+    </ul>
+  </div>
 </div>
 
-            <!-- Full screen (wrap in <a> to have style consistency -->
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
 
-<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
-        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
-        title="Fullscreen mode"><i
-            class="fas fa-expand"></i></button></a>
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
 
-            <!-- Launch buttons -->
+</button>
 
-        </div>
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/molpopgen/fwdpy11"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
 
-        <!-- Table of contents -->
-        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
-            
-            <div class="tocsection onthispage pt-5 pb-3">
-                <i class="fas fa-list"></i> Contents
-            </div>
-            <nav id="bd-toc-nav" aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/molpopgen/fwdpy11/issues/new?title=Issue%20on%20page%20%2Flong_vignettes/tskitconvert_vignette.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../_sources/long_vignettes/tskitconvert_vignette.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download notebook file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-code"></i>
+  </span>
+<span class="headerbtn__text-container">.ipynb</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="../_sources/long_vignettes/tskitconvert_vignette.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.md</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#obtaining-a-tskit-tree-sequence">
    Obtaining a
@@ -750,12 +880,11 @@ const thebe_selector_output = ".output, .cell_output"
  </li>
 </ul>
 
-            </nav>
-        </div>
-    </div>
+    </nav>
 </div>
-    <div id="main-content" class="row">
-        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
                 <h1>Converting data to tskit format</h1>
@@ -841,11 +970,12 @@ const thebe_selector_output = ".output, .cell_output"
                     </div>
                 </div>
             </div>
-            
+            <main id="main-content" role="main">
+                
               <div>
                 
-  <div class="tex2jax_ignore mathjax_ignore section" id="converting-data-to-tskit-format">
-<span id="tskitconvert-vignette"></span><h1>Converting data to tskit format<a class="headerlink" href="#converting-data-to-tskit-format" title="Permalink to this headline">¶</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="converting-data-to-tskit-format">
+<span id="tskitconvert-vignette"></span><h1>Converting data to tskit format<a class="headerlink" href="#converting-data-to-tskit-format" title="Permalink to this headline">#</a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The examples in this vignette involve population objects with no ancestry.
@@ -853,8 +983,8 @@ This is intentional, as it keeps the execution times to a minimum while still il
 </div>
 <div class="cell tag_hide-input docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">demes</span>
-<span class="kn">import</span> <span class="nn">fwdpy11</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import demes
+import fwdpy11
 </pre></div>
 </div>
 </div>
@@ -871,11 +1001,11 @@ Much of what you need is found in the docs for <a class="reference external" hre
 The <a class="reference internal" href="tskit_metadata_vignette.html#tskit-metadata-vignette"><span class="std std-ref">next vignette</span></a> covers how to interact with this information.</p></li>
 <li><p>Optionally, top-level metadata are encoded, which is controlled by keyword arguments to <a class="reference internal" href="../pages/types.html#fwdpy11.DiploidPopulation.dump_tables_to_tskit" title="fwdpy11.DiploidPopulation.dump_tables_to_tskit"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.DiploidPopulation.dump_tables_to_tskit()</span></code></a>.</p></li>
 </ol>
-<div class="section" id="obtaining-a-tskit-tree-sequence">
-<h2>Obtaining a <code class="docutils literal notranslate"><span class="pre">tskit</span></code> tree sequence<a class="headerlink" href="#obtaining-a-tskit-tree-sequence" title="Permalink to this headline">¶</a></h2>
+<section id="obtaining-a-tskit-tree-sequence">
+<h2>Obtaining a <code class="docutils literal notranslate"><span class="pre">tskit</span></code> tree sequence<a class="headerlink" href="#obtaining-a-tskit-tree-sequence" title="Permalink to this headline">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>pop = fwdpy11.DiploidPopulation(1000, 1.0)
 </pre></div>
 </div>
 </div>
@@ -883,8 +1013,8 @@ The <a class="reference internal" href="tskit_metadata_vignette.html#tskit-metad
 <p>By default, export to <code class="docutils literal notranslate"><span class="pre">tskit</span></code> returns a <a class="reference external" href="https://tskit.dev/tskit/docs/stable/python-api.html#tskit.TreeSequence" title="(in Python)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tskit.TreeSequence</span></code></a>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ts</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">dump_tables_to_tskit</span><span class="p">()</span>
-<span class="nb">type</span><span class="p">(</span><span class="n">ts</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>ts = pop.dump_tables_to_tskit()
+type(ts)
 </pre></div>
 </div>
 </div>
@@ -901,9 +1031,9 @@ The <a class="reference internal" href="tskit_metadata_vignette.html#tskit-metad
 </div>
 <p>We can also do a lot of analysis using this type.
 However, certain tasks would be easier if this type knew about the metadata generated by <code class="docutils literal notranslate"><span class="pre">fwdpy11</span></code>.</p>
-</div>
-<div class="section" id="metadata">
-<h2>Metadata<a class="headerlink" href="#metadata" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="metadata">
+<h2>Metadata<a class="headerlink" href="#metadata" title="Permalink to this headline">#</a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">tskit</span></code> data model includes <a class="reference external" href="https://tskit.dev/tskit/docs/stable/metadata.html">metadata</a>.
 Metadata means anything not strictly needed for operations on trees/tree sequences.
 Examples may include population names, properties of mutations such as selection coefficients, geographic locations of individuals, etc..
@@ -911,13 +1041,13 @@ These sorts of metadata are included as optional columns in tables.
 See the <code class="docutils literal notranslate"><span class="pre">tskit</span></code> <a class="reference external" href="https://tskit.dev/tskit/docs/stable/data-model.html">data model</a> documentation for more detail.</p>
 <p>Metadata can also include “top-level” information that is stored as metadata for the tree sequence (or <a class="reference external" href="https://tskit.dev/tskit/docs/stable/python-api.html#tskit.TableCollection" title="(in Python)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tskit.TableCollection</span></code></a>) itself.
 Much of this vignette concerns top-level metadata.</p>
-<div class="section" id="metadata-schema">
-<h3>Metadata schema<a class="headerlink" href="#metadata-schema" title="Permalink to this headline">¶</a></h3>
+<section id="metadata-schema">
+<h3>Metadata schema<a class="headerlink" href="#metadata-schema" title="Permalink to this headline">#</a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">tskit</span></code> metadata require a specification, or <em>schema</em>, that is used to validate the metadata contents.</p>
 <p>The top-level metadata schema is:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">tskit_tools</span><span class="o">.</span><span class="n">metadata_schema</span><span class="o">.</span><span class="n">TopLevelMetadata</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>print(fwdpy11.tskit_tools.metadata_schema.TopLevelMetadata)
 </pre></div>
 </div>
 </div>
@@ -961,46 +1091,46 @@ This required field is automatically populated by <a class="reference internal" 
 The remaining fields are filled in by keyword arguments passed to that function.</p>
 <p>Much of what follows concerns filling in this top-level metadata.
 To do this, we use incomplete data (populations with no ancestry) to illustrate the concepts.</p>
-</div>
-</div>
-<div class="section" id="populating-top-level-metadata">
-<h2>Populating top-level metadata<a class="headerlink" href="#populating-top-level-metadata" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="populating-top-level-metadata">
+<h2>Populating top-level metadata<a class="headerlink" href="#populating-top-level-metadata" title="Permalink to this headline">#</a></h2>
 <p>Top-level metadata are an attempt to improve reproducibility.
 However, all of these features are optional.
 Because a simulation project using Python may be very complex, with many local and non-local imports, etc., fully documenting the top-level metadata and/or “provenance” may be impractical.
 In some cases, reproducibility may instead by best managed by a <code class="docutils literal notranslate"><span class="pre">git</span></code> repository where script and <code class="docutils literal notranslate"><span class="pre">Makefile</span></code>/<code class="docutils literal notranslate"><span class="pre">Snakefile</span></code> work flows coexist.</p>
-<div class="section" id="adding-random-number-seeds">
-<h3>Adding random number seeds<a class="headerlink" href="#adding-random-number-seeds" title="Permalink to this headline">¶</a></h3>
+<section id="adding-random-number-seeds">
+<h3>Adding random number seeds<a class="headerlink" href="#adding-random-number-seeds" title="Permalink to this headline">#</a></h3>
 <p>You may add a random number seed to the top-level metadata.
 Doing so is optional because we cannot guarantee that you used this seed to construct a <a class="reference internal" href="../pages/types.html#fwdpy11.GSLrng" title="fwdpy11.GSLrng"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GSLrng</span></code></a> and then immediately run the simulation.
 For example, if you built the <code class="docutils literal notranslate"><span class="pre">rng</span></code> object and then simulated two replicates, the seed is only valid to reproduce the first.
 You do not know the state of the <code class="docutils literal notranslate"><span class="pre">rng</span></code> when the second simulation started.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ts</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">dump_tables_to_tskit</span><span class="p">()</span>
-<span class="k">assert</span> <span class="s2">&quot;seed&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ts</span><span class="o">.</span><span class="n">metadata</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>ts = pop.dump_tables_to_tskit()
+assert &quot;seed&quot; not in ts.metadata
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ts</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">dump_tables_to_tskit</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">54321</span><span class="p">)</span>
-<span class="k">assert</span> <span class="n">ts</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;seed&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">54321</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>ts = pop.dump_tables_to_tskit(seed=54321)
+assert ts.metadata[&quot;seed&quot;] == 54321
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell tag_raises-exception docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ts</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">dump_tables_to_tskit</span><span class="p">(</span><span class="n">seed</span><span class="o">=-</span><span class="mi">4616</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>ts = pop.dump_tables_to_tskit(seed=-4616)
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
 <span class="ne">ValueError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span> <span class="p">[</span><span class="mi">7</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
 <span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">ts</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">dump_tables_to_tskit</span><span class="p">(</span><span class="n">seed</span><span class="o">=-</span><span class="mi">4616</span><span class="p">)</span>
 
 <span class="nn">File ~/work/fwdpy11/fwdpy11/fwdpy11/_types/diploid_population.py:303,</span> in <span class="ni">DiploidPopulation.dump_tables_to_tskit</span><span class="nt">(self, model_params, demes_graph, population_metadata, data, seed, parameters, destructive)</span>
@@ -1039,16 +1169,16 @@ You do not know the state of the <code class="docutils literal notranslate"><spa
 </div>
 </div>
 </div>
-</div>
-<div class="section" id="adding-modelparams-objects">
-<h3>Adding <code class="docutils literal notranslate"><span class="pre">ModelParams</span></code> objects<a class="headerlink" href="#adding-modelparams-objects" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="adding-modelparams-objects">
+<h3>Adding <code class="docutils literal notranslate"><span class="pre">ModelParams</span></code> objects<a class="headerlink" href="#adding-modelparams-objects" title="Permalink to this headline">#</a></h3>
 <p>Another optional top-level metadata item are instances of <a class="reference internal" href="../pages/model_params.html#fwdpy11.ModelParams" title="fwdpy11.ModelParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.ModelParams</span></code></a>.
 Including this is optional for several reasons, but a big one is that this class can be arbitrarily hard to serialize.
 The examples listed below will work with types provided by <code class="docutils literal notranslate"><span class="pre">fwdpy11</span></code> (although we haven’t tested them all!), but user-defined types may be more challenging.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ts</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">dump_tables_to_tskit</span><span class="p">()</span>
-<span class="k">assert</span> <span class="s2">&quot;model_params&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ts</span><span class="o">.</span><span class="n">metadata</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>ts = pop.dump_tables_to_tskit()
+assert &quot;model_params&quot; not in ts.metadata
 </pre></div>
 </div>
 </div>
@@ -1056,17 +1186,17 @@ The examples listed below will work with types provided by <code class="docutils
 <p>Here is an example of Gaussian stabilizing selection around an optimum trait value of <code class="docutils literal notranslate"><span class="pre">0.0</span></code>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pdict</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;nregions&#39;</span><span class="p">:</span> <span class="p">[],</span>
-    <span class="s1">&#39;sregions&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">GaussianS</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.10</span><span class="p">)],</span>
-    <span class="s1">&#39;recregions&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">PoissonInterval</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">1e-3</span><span class="p">)],</span>
-    <span class="s1">&#39;gvalue&#39;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Additive</span><span class="p">(</span><span class="mf">2.</span><span class="p">,</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSS</span><span class="p">(</span><span class="n">optimum</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">VS</span><span class="o">=</span><span class="mf">10.0</span><span class="p">)),</span>
-    <span class="s1">&#39;rates&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1e-3</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-    <span class="s1">&#39;simlen&#39;</span><span class="p">:</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">pop</span><span class="o">.</span><span class="n">N</span><span class="p">,</span>
-    <span class="s1">&#39;prune_selected&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-<span class="p">}</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>pdict = {
+    &#39;nregions&#39;: [],
+    &#39;sregions&#39;: [fwdpy11.GaussianS(0, 1, 1, 0.10)],
+    &#39;recregions&#39;: [fwdpy11.PoissonInterval(0, 1, 1e-3)],
+    &#39;gvalue&#39;: fwdpy11.Additive(2., fwdpy11.GSS(optimum=0.0, VS=10.0)),
+    &#39;rates&#39;: (0.0, 1e-3, None),
+    &#39;simlen&#39;: 10 * pop.N,
+    &#39;prune_selected&#39;: False,
+}
 
-<span class="n">params</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="n">pdict</span><span class="p">)</span>
+params = fwdpy11.ModelParams(**pdict)
 </pre></div>
 </div>
 </div>
@@ -1074,8 +1204,8 @@ The examples listed below will work with types provided by <code class="docutils
 <p>We can pass the <code class="docutils literal notranslate"><span class="pre">params</span></code> object on when exporting the data to <code class="docutils literal notranslate"><span class="pre">tskit</span></code>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ts</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">dump_tables_to_tskit</span><span class="p">(</span><span class="n">model_params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span>
-<span class="k">assert</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="nb">eval</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;model_params&quot;</span><span class="p">]))</span> <span class="o">==</span> <span class="n">params</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>ts = pop.dump_tables_to_tskit(model_params=params)
+assert fwdpy11.ModelParams(**eval(ts.metadata[&quot;model_params&quot;])) == params
 </pre></div>
 </div>
 </div>
@@ -1094,13 +1224,13 @@ and two parameters objects.</p></li>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">copy</span>
-<span class="n">pdict2</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">pdict</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import copy
+pdict2 = copy.deepcopy(pdict)
 
-<span class="n">pdict2</span><span class="p">[</span><span class="s1">&#39;gvalue&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Additive</span><span class="p">(</span><span class="mf">2.</span><span class="p">,</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSS</span><span class="p">(</span><span class="n">optimum</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span> <span class="n">VS</span><span class="o">=</span><span class="mf">10.0</span><span class="p">)),</span>
-<span class="n">pdict2</span><span class="p">[</span><span class="s1">&#39;simlen&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">100</span>
+pdict2[&#39;gvalue&#39;] = fwdpy11.Additive(2., fwdpy11.GSS(optimum=5.0, VS=10.0)),
+pdict2[&#39;simlen&#39;] = 100
 
-<span class="n">params2</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="n">pdict2</span><span class="p">)</span>
+params2 = fwdpy11.ModelParams(**pdict2)
 </pre></div>
 </div>
 </div>
@@ -1108,8 +1238,8 @@ and two parameters objects.</p></li>
 <p>We can pass both objects to <code class="docutils literal notranslate"><span class="pre">tskit</span></code> via a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ts</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">dump_tables_to_tskit</span><span class="p">(</span><span class="n">model_params</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;burnin&#39;</span><span class="p">:</span> <span class="n">params</span><span class="p">,</span> <span class="s1">&#39;adaptation&#39;</span><span class="p">:</span> <span class="n">params2</span><span class="p">})</span>
-<span class="nb">type</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;model_params&quot;</span><span class="p">])</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>ts = pop.dump_tables_to_tskit(model_params={&#39;burnin&#39;: params, &#39;adaptation&#39;: params2})
+type(ts.metadata[&quot;model_params&quot;])
 </pre></div>
 </div>
 </div>
@@ -1121,15 +1251,15 @@ and two parameters objects.</p></li>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">assert</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="nb">eval</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;model_params&quot;</span><span class="p">][</span><span class="s2">&quot;burnin&quot;</span><span class="p">]))</span> <span class="o">==</span> <span class="n">params</span>
-<span class="k">assert</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="nb">eval</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;model_params&quot;</span><span class="p">][</span><span class="s2">&quot;adaptation&quot;</span><span class="p">]))</span> <span class="o">==</span> <span class="n">params2</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>assert fwdpy11.ModelParams(**eval(ts.metadata[&quot;model_params&quot;][&quot;burnin&quot;])) == params
+assert fwdpy11.ModelParams(**eval(ts.metadata[&quot;model_params&quot;][&quot;adaptation&quot;])) == params2
 </pre></div>
 </div>
 </div>
 </div>
-</div>
-<div class="section" id="including-a-demes-graph">
-<h3>Including a <code class="docutils literal notranslate"><span class="pre">demes</span></code> graph<a class="headerlink" href="#including-a-demes-graph" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="including-a-demes-graph">
+<h3>Including a <code class="docutils literal notranslate"><span class="pre">demes</span></code> graph<a class="headerlink" href="#including-a-demes-graph" title="Permalink to this headline">#</a></h3>
 <p>You may include a <a class="reference external" href="https://popsim-consortium.github.io/demes-docs/main/api.html#demes.Graph" title="(in Python)"><code class="xref py py-class docutils literal notranslate"><span class="pre">demes.Graph</span></code></a> in the top-level metadata.
 If you also include a <a class="reference internal" href="../pages/model_params.html#fwdpy11.ModelParams" title="fwdpy11.ModelParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.ModelParams</span></code></a> (see above), including the <code class="docutils literal notranslate"><span class="pre">demes</span></code> graph gives redundant information.
 However, including the graph may be useful if downstream analysis will involve other tools compatible with the <code class="docutils literal notranslate"><span class="pre">deme</span></code> specification.
@@ -1137,68 +1267,68 @@ With the graph as metadata, you can extract it and reconstruct the original <cod
 <p>The following hidden code block defines a function to return a <a class="reference external" href="https://popsim-consortium.github.io/demes-docs/main/api.html#demes.Graph" title="(in Python)"><code class="xref py py-class docutils literal notranslate"><span class="pre">demes.Graph</span></code></a> from <code class="docutils literal notranslate"><span class="pre">YAML</span></code> input stored in a string literal.</p>
 <div class="cell tag_hide-input docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">gutenkunst</span><span class="p">():</span>
-    <span class="kn">import</span> <span class="nn">demes</span>
-    <span class="n">yaml</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">description: The Gutenkunst et al. (2009) OOA model.</span>
-<span class="s2">doi:</span>
-<span class="s2">- https://doi.org/10.1371/journal.pgen.1000695</span>
-<span class="s2">time_units: years</span>
-<span class="s2">generation_time: 25</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def gutenkunst():
+    import demes
+    yaml = &quot;&quot;&quot;
+description: The Gutenkunst et al. (2009) OOA model.
+doi:
+- https://doi.org/10.1371/journal.pgen.1000695
+time_units: years
+generation_time: 25
 
-<span class="s2">demes:</span>
-<span class="s2">- name: ancestral</span>
-<span class="s2">  description: Equilibrium/root population</span>
-<span class="s2">  epochs:</span>
-<span class="s2">  - {end_time: 220e3, start_size: 7300}</span>
-<span class="s2">- name: AMH</span>
-<span class="s2">  description: Anatomically modern humans</span>
-<span class="s2">  ancestors: [ancestral]</span>
-<span class="s2">  epochs:</span>
-<span class="s2">  - {end_time: 140e3, start_size: 12300}</span>
-<span class="s2">- name: OOA</span>
-<span class="s2">  description: Bottleneck out-of-Africa population</span>
-<span class="s2">  ancestors: [AMH]</span>
-<span class="s2">  epochs:</span>
-<span class="s2">  - {end_time: 21.2e3, start_size: 2100}</span>
-<span class="s2">- name: YRI</span>
-<span class="s2">  description: Yoruba in Ibadan, Nigeria</span>
-<span class="s2">  ancestors: [AMH]</span>
-<span class="s2">  epochs:</span>
-<span class="s2">  - start_size: 12300</span>
-<span class="s2">- name: CEU</span>
-<span class="s2">  description: Utah Residents (CEPH) with Northern and Western European Ancestry</span>
-<span class="s2">  ancestors: [OOA]</span>
-<span class="s2">  epochs:</span>
-<span class="s2">  - {start_size: 1000, end_size: 29725}</span>
-<span class="s2">- name: CHB</span>
-<span class="s2">  description: Han Chinese in Beijing, China</span>
-<span class="s2">  ancestors: [OOA]</span>
-<span class="s2">  epochs:</span>
-<span class="s2">  - {start_size: 510, end_size: 54090}</span>
+demes:
+- name: ancestral
+  description: Equilibrium/root population
+  epochs:
+  - {end_time: 220e3, start_size: 7300}
+- name: AMH
+  description: Anatomically modern humans
+  ancestors: [ancestral]
+  epochs:
+  - {end_time: 140e3, start_size: 12300}
+- name: OOA
+  description: Bottleneck out-of-Africa population
+  ancestors: [AMH]
+  epochs:
+  - {end_time: 21.2e3, start_size: 2100}
+- name: YRI
+  description: Yoruba in Ibadan, Nigeria
+  ancestors: [AMH]
+  epochs:
+  - start_size: 12300
+- name: CEU
+  description: Utah Residents (CEPH) with Northern and Western European Ancestry
+  ancestors: [OOA]
+  epochs:
+  - {start_size: 1000, end_size: 29725}
+- name: CHB
+  description: Han Chinese in Beijing, China
+  ancestors: [OOA]
+  epochs:
+  - {start_size: 510, end_size: 54090}
 
-<span class="s2">migrations:</span>
-<span class="s2">- {demes: [YRI, OOA], rate: 25e-5}</span>
-<span class="s2">- {demes: [YRI, CEU], rate: 3e-5}</span>
-<span class="s2">- {demes: [YRI, CHB], rate: 1.9e-5}</span>
-<span class="s2">- {demes: [CEU, CHB], rate: 9.6e-5}</span>
-<span class="s2">&quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">demes</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">yaml</span><span class="p">)</span>
+migrations:
+- {demes: [YRI, OOA], rate: 25e-5}
+- {demes: [YRI, CEU], rate: 3e-5}
+- {demes: [YRI, CHB], rate: 1.9e-5}
+- {demes: [CEU, CHB], rate: 9.6e-5}
+&quot;&quot;&quot;
+    return demes.loads(yaml)
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">graph</span> <span class="o">=</span> <span class="n">gutenkunst</span><span class="p">()</span>
-<span class="n">ts</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">dump_tables_to_tskit</span><span class="p">(</span><span class="n">demes_graph</span><span class="o">=</span><span class="n">graph</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>graph = gutenkunst()
+ts = pop.dump_tables_to_tskit(demes_graph=graph)
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">assert</span> <span class="n">demes</span><span class="o">.</span><span class="n">Graph</span><span class="o">.</span><span class="n">fromdict</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;demes_graph&quot;</span><span class="p">])</span> <span class="o">==</span> <span class="n">graph</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>assert demes.Graph.fromdict(ts.metadata[&quot;demes_graph&quot;]) == graph
 </pre></div>
 </div>
 </div>
@@ -1206,22 +1336,22 @@ With the graph as metadata, you can extract it and reconstruct the original <cod
 <p>Since this is an optional metadata field, accessing it will return <code class="docutils literal notranslate"><span class="pre">None</span></code> if no graph was provided:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ts</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">dump_tables_to_tskit</span><span class="p">()</span>
-<span class="k">assert</span> <span class="s2">&quot;demes_graph&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ts</span><span class="o">.</span><span class="n">metadata</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>ts = pop.dump_tables_to_tskit()
+assert &quot;demes_graph&quot; not in ts.metadata
 </pre></div>
 </div>
 </div>
 </div>
-</div>
-<div class="section" id="user-defined-metadata">
-<h3>User-defined metadata<a class="headerlink" href="#user-defined-metadata" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="user-defined-metadata">
+<h3>User-defined metadata<a class="headerlink" href="#user-defined-metadata" title="Permalink to this headline">#</a></h3>
 <p>It may be useful to store arbitrary data in the output.
 For example, this could be a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> containing information obtained from a <a class="reference internal" href="../short_vignettes/recorders_vignette.html#recorders-vignette"><span class="std std-ref">time series</span></a> analysis of a simulation.</p>
 <p>The simplest situation is to use a <code class="docutils literal notranslate"><span class="pre">dict</span></code> containing simple objects:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ts</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">dump_tables_to_tskit</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">})</span>
-<span class="n">ts</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>ts = pop.dump_tables_to_tskit(data={&#39;x&#39;: 3})
+ts.metadata[&quot;data&quot;]
 </pre></div>
 </div>
 </div>
@@ -1234,15 +1364,15 @@ For example, this could be a <a class="reference external" href="https://docs.py
 <p>Any use of user-defined types will require conversion to string, however:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyData</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>class MyData(object):
+    def __init__(self, x):
+        self.x = x
 
-    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;MyData(x=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="si">}</span><span class="s2">)&quot;</span>
+    def __repr__(self):
+        return f&quot;MyData(x={self.x})&quot;
 
-<span class="c1"># Send in the str representation:</span>
-<span class="n">ts</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">dump_tables_to_tskit</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">MyData</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">77</span><span class="p">)))</span>
+# Send in the str representation:
+ts = pop.dump_tables_to_tskit(data=str(MyData(x=77)))
 </pre></div>
 </div>
 </div>
@@ -1250,7 +1380,7 @@ For example, this could be a <a class="reference external" href="https://docs.py
 <p>Getting the data back out requires an <code class="docutils literal notranslate"><span class="pre">eval</span></code>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">assert</span> <span class="nb">eval</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">x</span> <span class="o">==</span> <span class="mi">77</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>assert eval(ts.metadata[&quot;data&quot;]).x == 77
 </pre></div>
 </div>
 </div>
@@ -1261,17 +1391,17 @@ For example, this could be a <a class="reference external" href="https://docs.py
 The Python import system may make it more difficult to recover data than the examples here would indicate.
 Further, if the data are very large, then other output formats are likely more appropriate.</p>
 </div>
-</div>
-</div>
-<div class="section" id="setting-population-table-metadata">
-<h2>Setting population table metadata<a class="headerlink" href="#setting-population-table-metadata" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="setting-population-table-metadata">
+<h2>Setting population table metadata<a class="headerlink" href="#setting-population-table-metadata" title="Permalink to this headline">#</a></h2>
 <p>You can also set the population table metadata when exporting data.
 Doing so requires a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> mapping the integer label for each population to another <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>.</p>
 <p>For example, let’s create an demographic model from the <code class="docutils literal notranslate"><span class="pre">demes</span></code> graph that used above:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">discrete_demography</span><span class="o">.</span><span class="n">from_demes</span><span class="p">(</span><span class="n">gutenkunst</span><span class="p">())</span>
-<span class="nb">type</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>model = fwdpy11.discrete_demography.from_demes(gutenkunst())
+type(model)
 </pre></div>
 </div>
 </div>
@@ -1284,7 +1414,7 @@ Doing so requires a <a class="reference external" href="https://docs.python.org/
 <p>This object contains a mapping from integer labels to the deme names:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;deme_labels&#39;</span><span class="p">]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>model.metadata[&#39;deme_labels&#39;]
 </pre></div>
 </div>
 </div>
@@ -1297,9 +1427,9 @@ Doing so requires a <a class="reference external" href="https://docs.python.org/
 <p>We can make the required <code class="docutils literal notranslate"><span class="pre">dict</span></code> like this:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pop_md</span> <span class="o">=</span> <span class="p">{}</span>
-<span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;deme_labels&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-    <span class="n">pop_md</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">value</span><span class="p">}</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>pop_md = {}
+for key, value in model.metadata[&#39;deme_labels&#39;].items():
+    pop_md[key] = {&#39;name&#39;: value}
 </pre></div>
 </div>
 </div>
@@ -1307,11 +1437,11 @@ Doing so requires a <a class="reference external" href="https://docs.python.org/
 <p>To actually illustrate the use of this metadata, we need to make sure that our <code class="docutils literal notranslate"><span class="pre">tskit</span></code> output actually has a population table:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># initialize a population with the right number of demes...</span>
-<span class="n">multideme_pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">([</span><span class="mi">100</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">pop_md</span><span class="p">),</span> <span class="mf">1.</span><span class="p">)</span>
-<span class="n">ts</span> <span class="o">=</span> <span class="n">multideme_pop</span><span class="o">.</span><span class="n">dump_tables_to_tskit</span><span class="p">(</span><span class="n">population_metadata</span><span class="o">=</span><span class="n">pop_md</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">pop</span> <span class="ow">in</span> <span class="n">ts</span><span class="o">.</span><span class="n">populations</span><span class="p">():</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">metadata</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># initialize a population with the right number of demes...
+multideme_pop = fwdpy11.DiploidPopulation([100]*len(pop_md), 1.)
+ts = multideme_pop.dump_tables_to_tskit(population_metadata=pop_md)
+for pop in ts.populations():
+    print(pop.metadata)
 </pre></div>
 </div>
 </div>
@@ -1329,8 +1459,8 @@ Doing so requires a <a class="reference external" href="https://docs.python.org/
 <p>We could also easily add the deme description to the metadata from the <code class="docutils literal notranslate"><span class="pre">demes</span></code> graph:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">graph</span> <span class="o">=</span> <span class="n">gutenkunst</span><span class="p">()</span>
-<span class="n">graph</span><span class="o">.</span><span class="n">demes</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>graph = gutenkunst()
+graph.demes
 </pre></div>
 </div>
 </div>
@@ -1347,11 +1477,11 @@ Doing so requires a <a class="reference external" href="https://docs.python.org/
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pop_md</span> <span class="o">=</span> <span class="p">{}</span>
-<span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">deme</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">demes</span><span class="p">):</span>
-    <span class="n">pop_md</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">deme</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="n">deme</span><span class="o">.</span><span class="n">description</span><span class="p">}</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>pop_md = {}
+for i,deme in enumerate(graph.demes):
+    pop_md[i] = {&#39;name&#39;: deme.name, &quot;description&quot;: deme.description}
 
-<span class="n">pop_md</span>
+pop_md
 </pre></div>
 </div>
 </div>
@@ -1367,8 +1497,8 @@ Doing so requires a <a class="reference external" href="https://docs.python.org/
 </div>
 </div>
 </div>
-</div>
-</div>
+</section>
+</section>
 
     <script type="text/x-thebe-config">
     {
@@ -1392,9 +1522,11 @@ Doing so requires a <a class="reference external" href="https://docs.python.org/
 
               </div>
               
-            
-                <!-- Previous / next buttons -->
-<div class='prev-next-area'> 
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
     <a class='left-prev' id="prev-link" href="../short_vignettes/incomplete_sweep.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
@@ -1410,24 +1542,28 @@ Doing so requires a <a class="reference external" href="https://docs.python.org/
     <i class="fas fa-angle-right"></i>
     </a>
 </div>
-            
+            </footer>
         </div>
     </div>
-    <footer class="footer">
-  <p>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Kevin Thornton<br/>
+  
+      &copy; Copyright 2022.<br/>
+</p>
+        </footer>
+    </div>
     
-      By Kevin Thornton<br/>
-    
-        &copy; Copyright 2021.<br/>
-  </p>
-</footer>
-</main>
+</div>
 
 
       </div>
     </div>
   
-  <script src="../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
 
   </body>
 </html>

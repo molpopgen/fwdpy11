@@ -4,11 +4,13 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>Soft selection with discrete demes &#8212; fwdpy11 manual</title>
     
-  <link href="../_static/css/theme.css" rel="stylesheet">
-  <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
 
     
   <link rel="stylesheet"
@@ -18,20 +20,16 @@
   <link rel="preload" as="font" type="font/woff2" crossorigin
     href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
 
-    
-      
-
-    
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
     
-  <link rel="preload" as="script" href="../_static/js/index.be7d3bbb2ef33a8344ce.js">
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
 
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
@@ -39,12 +37,13 @@
     <script src="../_static/doctools.js"></script>
     <script src="../_static/clipboard.min.js"></script>
     <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
     <script src="../_static/togglebutton.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
-    <script src="../_static/sphinx-book-theme.d59cb220de22ca1c485ebbdc042f0030.js"></script>
+    <script src="../_static/design-tabs.js"></script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
 const thebe_selector = ".thebe,.cell"
 const thebe_selector_input = "pre"
@@ -62,7 +61,21 @@ const thebe_selector_output = ".output, .cell_output"
     <!-- Google Analytics -->
     
   </head>
-  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
     
     <div class="container-fluid" id="banner"></div>
 
@@ -71,9 +84,10 @@ const thebe_selector_output = ".output, .cell_output"
     <div class="container-xl">
       <div class="row">
           
-<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
-    
-        <div class="navbar-brand-box">
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
     <a class="navbar-brand text-wrap" href="../index.html">
       
       
@@ -86,14 +100,15 @@ const thebe_selector_output = ".output, .cell_output"
   <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
 </form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item active">
-        <ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../intro.html">
-   Introduction
-  </a>
- </li>
-</ul>
-<p aria-level="2" class="caption" role="heading">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Introduction
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
   Installation and setup
  </span>
@@ -594,93 +609,208 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 
     </div>
-</nav> <!-- To handle the deprecated key -->
-
-<div class="navbar_extra_footer">
-  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
-</div>
-
-</div>
-
-
-          
-
-
-          
-<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
-    
-    <div class="topbar container-xl fixed-top">
-    <div class="topbar-contents row">
-        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
-        <div class="col pl-md-4 topbar-main">
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
             
-            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
-                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
-                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
-                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
-                <i class="fas fa-bars"></i>
-                <i class="fas fa-arrow-left"></i>
-                <i class="fas fa-arrow-up"></i>
-            </button>
+            <div class="navbar_extra_footer">
+            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+            </div>
             
-            
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
-            class="fas fa-download"></i></button>
-
-    <div class="dropdown-buttons">
-        <!-- ipynb file if we had a myst markdown file -->
-        <a class="dropdown-buttons"
-            href="../_sources/pages/softselection.ipynb"><button type="button"
-                class="btn btn-secondary topbarbtn" title="Download notebook file" data-toggle="tooltip"
-                data-placement="left">.ipynb</button></a>
-        <!-- Download raw file -->
-        <a class="dropdown-buttons" href="../_sources/pages/softselection.md"><button type="button"
-                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
-                data-placement="left">.md</button></a>
-        <!-- Download PDF via print -->
-        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
-                onclick="printPdf(this)" data-toggle="tooltip" data-placement="left">.pdf</button>
+        </div>
     </div>
+    <div id="rtd-footer-container"></div>
 </div>
 
-            <!-- Source interaction buttons -->
 
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
-        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
-    <div class="dropdown-buttons sourcebuttons">
-        <a class="repository-button"
-            href="https://github.com/molpopgen/fwdpy11"><button type="button" class="btn btn-secondary topbarbtn"
-                data-toggle="tooltip" data-placement="left" title="Source repository"><i
-                    class="fab fa-github"></i>repository</button></a>
-        <a class="issues-button"
-            href="https://github.com/molpopgen/fwdpy11/issues/new?title=Issue%20on%20page%20%2Fpages/softselection.html&body=Your%20issue%20content%20here."><button
-                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
-                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
         
     </div>
+    <div class="header-article__right">
+<div class="menu-dropdown menu-dropdown-launch-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Launch interactive content">
+      <i class="fas fa-rocket"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+    </ul>
+  </div>
 </div>
 
-            <!-- Full screen (wrap in <a> to have style consistency -->
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
 
-<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
-        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
-        title="Fullscreen mode"><i
-            class="fas fa-expand"></i></button></a>
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
 
-            <!-- Launch buttons -->
+</button>
 
-        </div>
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/molpopgen/fwdpy11"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
 
-        <!-- Table of contents -->
-        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
-            
-            <div class="tocsection onthispage pt-5 pb-3">
-                <i class="fas fa-list"></i> Contents
-            </div>
-            <nav id="bd-toc-nav" aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/molpopgen/fwdpy11/issues/new?title=Issue%20on%20page%20%2Fpages/softselection.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../_sources/pages/softselection.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download notebook file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-code"></i>
+  </span>
+<span class="headerbtn__text-container">.ipynb</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="../_sources/pages/softselection.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.md</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#overview">
    Overview
@@ -785,12 +915,11 @@ const thebe_selector_output = ".output, .cell_output"
  </li>
 </ul>
 
-            </nav>
-        </div>
-    </div>
+    </nav>
 </div>
-    <div id="main-content" class="row">
-        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
                 <h1>Soft selection with discrete demes</h1>
@@ -911,23 +1040,24 @@ const thebe_selector_output = ".output, .cell_output"
                     </div>
                 </div>
             </div>
-            
+            <main id="main-content" role="main">
+                
               <div>
                 
-  <div class="tex2jax_ignore mathjax_ignore section" id="soft-selection-with-discrete-demes">
-<span id="softselection"></span><h1>Soft selection with discrete demes<a class="headerlink" href="#soft-selection-with-discrete-demes" title="Permalink to this headline">¶</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="soft-selection-with-discrete-demes">
+<span id="softselection"></span><h1>Soft selection with discrete demes<a class="headerlink" href="#soft-selection-with-discrete-demes" title="Permalink to this headline">#</a></h1>
 <p>This page describes implementing models of demographic events affecting
 multiple demes.  This functionality was first released in version 0.6.0
 and makes use of low-level types added in 0.5.3.</p>
-<div class="section" id="overview">
-<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">#</a></h2>
 <p>This chapter describes how to generate detailed demographic models of individuals
 evolving withing discrete sub-populations, or demes.</p>
 <p>If you want to skip the details and see basic models provided by <code class="docutils literal notranslate"><span class="pre">fwdpy11</span></code>, then
 see <a class="reference internal" href="demographic_models.html#demographic-models"><span class="std std-ref">The demography debugger</span></a>.</p>
 <p>Once you’ve digested this section, you may want to read <a class="reference internal" href="mvdes.html#mvdes"><span class="std std-ref">Different effect sizes of mutations in different demes</span></a>.</p>
-<div class="section" id="the-model">
-<h3>The model<a class="headerlink" href="#the-model" title="Permalink to this headline">¶</a></h3>
+<section id="the-model">
+<h3>The model<a class="headerlink" href="#the-model" title="Permalink to this headline">#</a></h3>
 <p>The model here is soft selection <span id="id1">[<a class="reference internal" href="../misc/bibliography.html#id14" title="Howard Levene. Genetic equilibrium when more than one ecological niche is available. Am. Nat., 87(836):331–333, September 1953. doi:10.1086/281792.">Lev53</a>]</span>, meaning that the number of
 breeding individuals (“adults”) in each deme is fixed at a certain value.
 A nice overview of this model and how it compares to others in <span id="id2">[<a class="reference internal" href="../misc/bibliography.html#id15" title="J Felsenstein. The theoretical population genetics of variable selection and migration. Annu. Rev. Genet., 10:253–280, 1976. doi:10.1146/annurev.ge.10.120176.001345.">Fel76</a>]</span>.
@@ -943,9 +1073,9 @@ then choose a parent, and then decide if that parent selfs.</p>
 <p>The migration behavior changed in 0.6.2!  (This is mainly a note for
 the developers.)</p>
 </div>
-</div>
-<div class="section" id="the-timings-of-events">
-<h3>The timings of events<a class="headerlink" href="#the-timings-of-events" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="the-timings-of-events">
+<h3>The timings of events<a class="headerlink" href="#the-timings-of-events" title="Permalink to this headline">#</a></h3>
 <p>Below, we discuss various events that may happen.  These event types
 include things like deme size changes, “mass migration” events, etc..
 These events will occur at a certain time in a simulation. That time
@@ -965,33 +1095,33 @@ for details.</p>
 because there are valid modeling reasons to allow them.  For example, you
 may want to evolve for a while and then change some other model parameter
 like the recombination rate, and then keep evolving.</p>
-</div>
-</div>
-<div class="section" id="setting-the-initial-demes-in-a-simulation">
-<span id="soft-sel-deme-setup"></span><h2>Setting the initial demes in a simulation<a class="headerlink" href="#setting-the-initial-demes-in-a-simulation" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="setting-the-initial-demes-in-a-simulation">
+<span id="soft-sel-deme-setup"></span><h2>Setting the initial demes in a simulation<a class="headerlink" href="#setting-the-initial-demes-in-a-simulation" title="Permalink to this headline">#</a></h2>
 <p>At the start of a simulation, you may assign diploids to demes
 when constructing an instance of <a class="reference internal" href="types.html#fwdpy11.DiploidPopulation" title="fwdpy11.DiploidPopulation"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiploidPopulation</span></code></a>.
 For example, to initialize a population with 25 individuals in demes <code class="docutils literal notranslate"><span class="pre">0</span></code> and <code class="docutils literal notranslate"><span class="pre">1</span></code>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fwdpy11</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import fwdpy11
+import numpy as np
 
-<span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">([</span><span class="mi">25</span><span class="p">,</span> <span class="mi">25</span><span class="p">],</span> <span class="mf">1.0</span><span class="p">)</span>
-<span class="n">md</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">diploid_metadata</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">pop</span><span class="o">.</span><span class="n">deme_sizes</span><span class="p">()</span>
-<span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">pop</span><span class="o">.</span><span class="n">diploid_metadata</span><span class="p">:</span>
-    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">m</span><span class="o">.</span><span class="n">nodes</span><span class="p">:</span>
-        <span class="k">assert</span> <span class="n">m</span><span class="o">.</span><span class="n">deme</span> <span class="o">==</span> <span class="n">pop</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">.</span><span class="n">deme</span>
+pop = fwdpy11.DiploidPopulation([25, 25], 1.0)
+md = np.array(pop.diploid_metadata, copy=False)
+pop.deme_sizes()
+for m in pop.diploid_metadata:
+    for n in m.nodes:
+        assert m.deme == pop.tables.nodes[n].deme
 </pre></div>
 </div>
 </div>
 </div>
 <p>Another method involves mass migration events at the beginning of a simulation.
 See <a class="reference internal" href="#massmigrations"><span class="std std-ref">Mass migrations</span></a>.</p>
-</div>
-<div class="section" id="the-discretedemography-class">
-<h2>The DiscreteDemography class<a class="headerlink" href="#the-discretedemography-class" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="the-discretedemography-class">
+<h2>The DiscreteDemography class<a class="headerlink" href="#the-discretedemography-class" title="Permalink to this headline">#</a></h2>
 <p>The demographic events are stored in instances of <a class="reference internal" href="types.html#fwdpy11.DiscreteDemography" title="fwdpy11.DiscreteDemography"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiscreteDemography</span></code></a>.
 These events, whose interface is described below, are passed in <code class="docutils literal notranslate"><span class="pre">list</span></code> objects
 when creating a <a class="reference internal" href="types.html#fwdpy11.DiscreteDemography" title="fwdpy11.DiscreteDemography"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiscreteDemography</span></code></a> instance.</p>
@@ -1000,23 +1130,23 @@ when creating a <a class="reference internal" href="types.html#fwdpy11.DiscreteD
 function that we’ll use repeatedly below:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">setup_and_run_model</span><span class="p">(</span><span class="n">pop</span><span class="p">,</span> <span class="n">ddemog</span><span class="p">,</span> <span class="n">simlen</span><span class="p">,</span> <span class="n">recorder</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">654321</span><span class="p">):</span>
-    <span class="n">pdict</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;nregions&quot;</span><span class="p">:</span> <span class="p">[],</span>
-        <span class="s2">&quot;sregions&quot;</span><span class="p">:</span> <span class="p">[],</span>
-        <span class="s2">&quot;recregions&quot;</span><span class="p">:</span> <span class="p">[],</span>
-        <span class="s2">&quot;rates&quot;</span><span class="p">:</span> <span class="p">(</span>
-            <span class="mi">0</span><span class="p">,</span>
-            <span class="mi">0</span><span class="p">,</span>
-            <span class="mi">0</span><span class="p">,</span>
-        <span class="p">),</span>
-        <span class="s2">&quot;gvalue&quot;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Multiplicative</span><span class="p">(</span><span class="mf">2.0</span><span class="p">),</span>
-        <span class="s2">&quot;demography&quot;</span><span class="p">:</span> <span class="n">ddemog</span><span class="p">,</span>
-        <span class="s2">&quot;simlen&quot;</span><span class="p">:</span> <span class="n">simlen</span><span class="p">,</span>
-    <span class="p">}</span>
-    <span class="n">params</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="n">pdict</span><span class="p">)</span>
-    <span class="n">rng</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSLrng</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
-    <span class="n">fwdpy11</span><span class="o">.</span><span class="n">evolvets</span><span class="p">(</span><span class="n">rng</span><span class="p">,</span> <span class="n">pop</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">recorder</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def setup_and_run_model(pop, ddemog, simlen, recorder=None, seed=654321):
+    pdict = {
+        &quot;nregions&quot;: [],
+        &quot;sregions&quot;: [],
+        &quot;recregions&quot;: [],
+        &quot;rates&quot;: (
+            0,
+            0,
+            0,
+        ),
+        &quot;gvalue&quot;: fwdpy11.Multiplicative(2.0),
+        &quot;demography&quot;: ddemog,
+        &quot;simlen&quot;: simlen,
+    }
+    params = fwdpy11.ModelParams(**pdict)
+    rng = fwdpy11.GSLrng(seed)
+    fwdpy11.evolvets(rng, pop, params, 100, recorder)
 </pre></div>
 </div>
 </div>
@@ -1024,18 +1154,18 @@ function that we’ll use repeatedly below:</p>
 <p>We will also define a simple class to record all deme sizes over time:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">SizeTracker</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>class SizeTracker(object):
+    def __init__(self):
+        self.data = []
 
-    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pop</span><span class="p">,</span> <span class="n">sampler</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">pop</span><span class="o">.</span><span class="n">generation</span><span class="p">,</span> <span class="n">pop</span><span class="o">.</span><span class="n">N</span><span class="p">,</span> <span class="n">pop</span><span class="o">.</span><span class="n">deme_sizes</span><span class="p">()))</span>
+    def __call__(self, pop, sampler):
+        self.data.append((pop.generation, pop.N, pop.deme_sizes()))
 </pre></div>
 </div>
 </div>
 </div>
-<div class="section" id="compatibility-with-previous-versions-of-fwdpy11">
-<h3>Compatibility with previous versions of fwdpy11<a class="headerlink" href="#compatibility-with-previous-versions-of-fwdpy11" title="Permalink to this headline">¶</a></h3>
+<section id="compatibility-with-previous-versions-of-fwdpy11">
+<h3>Compatibility with previous versions of fwdpy11<a class="headerlink" href="#compatibility-with-previous-versions-of-fwdpy11" title="Permalink to this headline">#</a></h3>
 <div class="versionchanged">
 <p><span class="versionmodified changed">Changed in version 0.8.0: </span>You now must specify <code class="docutils literal notranslate"><span class="pre">simlen</span></code> manually.</p>
 </div>
@@ -1044,36 +1174,36 @@ parameterized via a <code class="docutils literal notranslate"><span class="pre"
 to specify the demography using that approach:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">N</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">10</span><span class="p">]</span> <span class="o">*</span> <span class="mi">10</span> <span class="o">+</span> <span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">*</span> <span class="mi">5</span> <span class="o">+</span> <span class="p">[</span><span class="mi">10</span><span class="p">]</span> <span class="o">*</span> <span class="mi">10</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">)</span>
-<span class="n">pdict</span> <span class="o">=</span> <span class="p">{</span>
-   <span class="s2">&quot;nregions&quot;</span><span class="p">:</span> <span class="p">[],</span>
-   <span class="s2">&quot;sregions&quot;</span><span class="p">:</span> <span class="p">[],</span>
-   <span class="s2">&quot;recregions&quot;</span><span class="p">:</span> <span class="p">[],</span>
-   <span class="s2">&quot;rates&quot;</span><span class="p">:</span> <span class="p">(</span>
-       <span class="mi">0</span><span class="p">,</span>
-       <span class="mi">0</span><span class="p">,</span>
-       <span class="mi">0</span><span class="p">,</span>
-   <span class="p">),</span>
-   <span class="s2">&quot;gvalue&quot;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Multiplicative</span><span class="p">(</span><span class="mf">2.0</span><span class="p">),</span>
-   <span class="s2">&quot;demography&quot;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiscreteDemography</span><span class="p">(</span><span class="n">set_deme_sizes</span><span class="o">=</span><span class="n">N</span><span class="p">),</span>
-   <span class="s2">&quot;simlen&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">N</span><span class="p">),</span>
-<span class="p">}</span>
-<span class="n">params</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="n">pdict</span><span class="p">)</span>
-<span class="n">rng</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSLrng</span><span class="p">(</span><span class="mi">654321</span><span class="p">)</span>
-<span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
-<span class="n">fwdpy11</span><span class="o">.</span><span class="n">evolvets</span><span class="p">(</span><span class="n">rng</span><span class="p">,</span> <span class="n">pop</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>N = np.array([10] * 10 + [5] * 5 + [10] * 10, dtype=np.uint32)
+pdict = {
+   &quot;nregions&quot;: [],
+   &quot;sregions&quot;: [],
+   &quot;recregions&quot;: [],
+   &quot;rates&quot;: (
+       0,
+       0,
+       0,
+   ),
+   &quot;gvalue&quot;: fwdpy11.Multiplicative(2.0),
+   &quot;demography&quot;: fwdpy11.DiscreteDemography(set_deme_sizes=N),
+   &quot;simlen&quot;: len(N),
+}
+params = fwdpy11.ModelParams(**pdict)
+rng = fwdpy11.GSLrng(654321)
+pop = fwdpy11.DiploidPopulation(10, 1.0)
+fwdpy11.evolvets(rng, pop, params, 100)
 </pre></div>
 </div>
 </div>
 </div>
-</div>
-</div>
-<div class="section" id="event-types">
-<h2>Event types<a class="headerlink" href="#event-types" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="event-types">
+<h2>Event types<a class="headerlink" href="#event-types" title="Permalink to this headline">#</a></h2>
 <p>The following sub-sections describe the various types of demographic
 events allowed during a simulation.</p>
-<div class="section" id="mass-migrations">
-<span id="massmigrations"></span><h3>Mass migrations<a class="headerlink" href="#mass-migrations" title="Permalink to this headline">¶</a></h3>
+<section id="mass-migrations">
+<span id="massmigrations"></span><h3>Mass migrations<a class="headerlink" href="#mass-migrations" title="Permalink to this headline">#</a></h3>
 <p>Mass migration events represent the “bulk” movement of individuals
 in a single generation.  Such events allow you to model population
 splits, merges, etc..</p>
@@ -1107,8 +1237,8 @@ if the fraction copied is 1.0, then every individual is copied.</p>
 <p>These operations act on proportions of populations rather than on numbers
 of individuals. Multiple events in a single generation are allowed, see
 <a class="reference internal" href="#multiple-mass-migrations"><span class="std std-ref">Multiple mass migrations</span></a>.</p>
-<div class="section" id="setting-the-initial-state-of-a-simulation">
-<h4>Setting the initial state of a simulation<a class="headerlink" href="#setting-the-initial-state-of-a-simulation" title="Permalink to this headline">¶</a></h4>
+<section id="setting-the-initial-state-of-a-simulation">
+<h4>Setting the initial state of a simulation<a class="headerlink" href="#setting-the-initial-state-of-a-simulation" title="Permalink to this headline">#</a></h4>
 <p>Let’s look at an example where we use mass migration events to set up
 “who is where” at the start of a simulation.  Since events happen in
 the <em>parental</em> generation, we can use mass migrations to set up
@@ -1126,11 +1256,11 @@ demes 0 and 50 in deme 1, we have two options:</p>
 <p>Here is the version implemented via a  copy:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
-<span class="n">copy</span> <span class="o">=</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">copy_individuals</span><span class="p">(</span><span class="n">when</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">fraction</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)]</span>
-<span class="n">ddemog</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiscreteDemography</span><span class="p">(</span><span class="n">mass_migrations</span><span class="o">=</span><span class="n">copy</span><span class="p">)</span>
-<span class="n">setup_and_run_model</span><span class="p">(</span><span class="n">pop</span><span class="p">,</span> <span class="n">ddemog</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="n">pop</span><span class="o">.</span><span class="n">deme_sizes</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>pop = fwdpy11.DiploidPopulation(50, 1.0)
+copy = [fwdpy11.copy_individuals(when=0, source=0, destination=1, fraction=1.0)]
+ddemog = fwdpy11.DiscreteDemography(mass_migrations=copy)
+setup_and_run_model(pop, ddemog, 1)
+pop.deme_sizes()
 </pre></div>
 </div>
 </div>
@@ -1143,7 +1273,7 @@ demes 0 and 50 in deme 1, we have two options:</p>
 <p>Here is what our object looks like:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">copy</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>copy[0]
 </pre></div>
 </div>
 </div>
@@ -1156,11 +1286,11 @@ demes 0 and 50 in deme 1, we have two options:</p>
 <p>Here is the version using a move:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
-<span class="n">move</span> <span class="o">=</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">move_individuals</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)]</span>
-<span class="n">ddemog</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiscreteDemography</span><span class="p">(</span><span class="n">mass_migrations</span><span class="o">=</span><span class="n">move</span><span class="p">)</span>
-<span class="n">setup_and_run_model</span><span class="p">(</span><span class="n">pop</span><span class="p">,</span> <span class="n">ddemog</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="n">pop</span><span class="o">.</span><span class="n">deme_sizes</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>pop = fwdpy11.DiploidPopulation(100, 1.0)
+move = [fwdpy11.move_individuals(0, 0, 1, 0.5)]
+ddemog = fwdpy11.DiscreteDemography(mass_migrations=move)
+setup_and_run_model(pop, ddemog, 1)
+pop.deme_sizes()
 </pre></div>
 </div>
 </div>
@@ -1173,7 +1303,7 @@ demes 0 and 50 in deme 1, we have two options:</p>
 <p>For comparison, here is the object specifying the move:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">move</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>move[0]
 </pre></div>
 </div>
 </div>
@@ -1183,9 +1313,9 @@ demes 0 and 50 in deme 1, we have two options:</p>
 </div>
 </div>
 </div>
-</div>
-<div class="section" id="multiple-mass-migrations">
-<span id="id5"></span><h4>Multiple mass migrations<a class="headerlink" href="#multiple-mass-migrations" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="multiple-mass-migrations">
+<span id="id5"></span><h4>Multiple mass migrations<a class="headerlink" href="#multiple-mass-migrations" title="Permalink to this headline">#</a></h4>
 <p>To specify multiple events, simply add more events to your list.
 The events to not have to be sorted in any specific way.  Any sorting
 requirements get handled internally.</p>
@@ -1194,11 +1324,11 @@ need some explaining.   If the events are copies, things will tend to “just
 work”:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
-<span class="n">copy</span> <span class="o">=</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">copy_individuals</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">copy_individuals</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)]</span>
-<span class="n">ddemog</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiscreteDemography</span><span class="p">(</span><span class="n">mass_migrations</span><span class="o">=</span><span class="n">copy</span><span class="p">)</span>
-<span class="n">setup_and_run_model</span><span class="p">(</span><span class="n">pop</span><span class="p">,</span> <span class="n">ddemog</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="n">pop</span><span class="o">.</span><span class="n">deme_sizes</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>pop = fwdpy11.DiploidPopulation(50, 1.0)
+copy = [fwdpy11.copy_individuals(0, 0, 1, 1.0), fwdpy11.copy_individuals(0, 0, 2, 1.0)]
+ddemog = fwdpy11.DiscreteDemography(mass_migrations=copy)
+setup_and_run_model(pop, ddemog, 1)
+pop.deme_sizes()
 </pre></div>
 </div>
 </div>
@@ -1213,16 +1343,16 @@ of the individuals.  Attempting to do so will raise a <code class="docutils lite
 exception:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
-<span class="c1"># Move all of deme 0 into demes 1 and 2,</span>
-<span class="c1"># which means we&#39;re trying to move 200%</span>
-<span class="c1"># of deme 0...</span>
-<span class="n">move</span> <span class="o">=</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">move_individuals</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">move_individuals</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)]</span>
-<span class="c1"># ... which is not allowed</span>
-<span class="k">try</span><span class="p">:</span>
-    <span class="n">ddemog</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiscreteDemography</span><span class="p">(</span><span class="n">mass_migrations</span><span class="o">=</span><span class="n">move</span><span class="p">)</span>
-<span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>pop = fwdpy11.DiploidPopulation(50, 1.0)
+# Move all of deme 0 into demes 1 and 2,
+# which means we&#39;re trying to move 200%
+# of deme 0...
+move = [fwdpy11.move_individuals(0, 0, 1, 1.0), fwdpy11.move_individuals(0, 0, 2, 1.0)]
+# ... which is not allowed
+try:
+    ddemog = fwdpy11.DiscreteDemography(mass_migrations=move)
+except ValueError as e:
+    print(e)
 </pre></div>
 </div>
 </div>
@@ -1232,9 +1362,9 @@ exception:</p>
 </div>
 </div>
 </div>
-</div>
-<div class="section" id="the-rate-of-drift">
-<h4>The rate of drift<a class="headerlink" href="#the-rate-of-drift" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="the-rate-of-drift">
+<h4>The rate of drift<a class="headerlink" href="#the-rate-of-drift" title="Permalink to this headline">#</a></h4>
 <p>Moving versus copying individuals is an important modeling choice.
 When you move individuals from one deme to another, the rate of drift
 changes in the source deme (as its size is reduced).  This reduction
@@ -1242,23 +1372,23 @@ in size is also a sudden bottleneck.</p>
 <p>Copying, on the other hand, does not change the rate of drift in the source
 deme.  However, it does seem to imply some sudden increase in fecundity that
 both came from nowhere and was short-lived.</p>
-</div>
-</div>
-<div class="section" id="instantaneous-deme-size-changes">
-<span id="set-deme-sizes"></span><h3>Instantaneous deme size changes<a class="headerlink" href="#instantaneous-deme-size-changes" title="Permalink to this headline">¶</a></h3>
+</section>
+</section>
+<section id="instantaneous-deme-size-changes">
+<span id="set-deme-sizes"></span><h3>Instantaneous deme size changes<a class="headerlink" href="#instantaneous-deme-size-changes" title="Permalink to this headline">#</a></h3>
 <p>Instantaneous changes in deme size are managed by instances of
 <a class="reference internal" href="types.html#fwdpy11.SetDemeSize" title="fwdpy11.SetDemeSize"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.SetDemeSize</span></code></a>.</p>
 <p>This class is relatively straightforward to use, so let’s dive right in:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">([</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">],</span> <span class="mf">1.0</span><span class="p">)</span>
-<span class="n">dd</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiscreteDemography</span><span class="p">(</span>
-    <span class="n">set_deme_sizes</span><span class="o">=</span><span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">SetDemeSize</span><span class="p">(</span><span class="n">when</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">deme</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">new_size</span><span class="o">=</span><span class="mi">100</span><span class="p">)]</span>
-<span class="p">)</span>
-<span class="n">st</span> <span class="o">=</span> <span class="n">SizeTracker</span><span class="p">()</span>
-<span class="n">setup_and_run_model</span><span class="p">(</span><span class="n">pop</span><span class="p">,</span> <span class="n">dd</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">st</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">st</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>pop = fwdpy11.DiploidPopulation([20, 20], 1.0)
+dd = fwdpy11.DiscreteDemography(
+    set_deme_sizes=[fwdpy11.SetDemeSize(when=5, deme=1, new_size=100)]
+)
+st = SizeTracker()
+setup_and_run_model(pop, dd, 10, st)
+for i in st.data:
+    print(i)
 </pre></div>
 </div>
 </div>
@@ -1280,14 +1410,14 @@ both came from nowhere and was short-lived.</p>
 <p>You may also kill off demes by setting their size to zero:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">([</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">],</span> <span class="mf">1.0</span><span class="p">)</span>
-<span class="n">dd</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiscreteDemography</span><span class="p">(</span>
-    <span class="n">set_deme_sizes</span><span class="o">=</span><span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">SetDemeSize</span><span class="p">(</span><span class="n">when</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">deme</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">new_size</span><span class="o">=</span><span class="mi">0</span><span class="p">)]</span>
-<span class="p">)</span>
-<span class="n">st</span> <span class="o">=</span> <span class="n">SizeTracker</span><span class="p">()</span>
-<span class="n">setup_and_run_model</span><span class="p">(</span><span class="n">pop</span><span class="p">,</span> <span class="n">dd</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="n">st</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">st</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>pop = fwdpy11.DiploidPopulation([20, 20, 20], 1.0)
+dd = fwdpy11.DiscreteDemography(
+    set_deme_sizes=[fwdpy11.SetDemeSize(when=5, deme=1, new_size=0)]
+)
+st = SizeTracker()
+setup_and_run_model(pop, dd, 6, st)
+for i in st.data:
+    print(i)
 </pre></div>
 </div>
 </div>
@@ -1302,22 +1432,22 @@ both came from nowhere and was short-lived.</p>
 </div>
 </div>
 </div>
-</div>
-<div class="section" id="changing-growth-rates">
-<h3>Changing growth rates<a class="headerlink" href="#changing-growth-rates" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="changing-growth-rates">
+<h3>Changing growth rates<a class="headerlink" href="#changing-growth-rates" title="Permalink to this headline">#</a></h3>
 <p>Instances of <a class="reference internal" href="types.html#fwdpy11.SetExponentialGrowth" title="fwdpy11.SetExponentialGrowth"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.SetExponentialGrowth</span></code></a> manage the exponential growth rates per deme.
 Growth rates less than one indicate population decline, greater than one means growth
 and <a class="reference internal" href="types.html#fwdpy11.NOGROWTH" title="fwdpy11.NOGROWTH"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.NOGROWTH</span></code></a> is equal to 1.0 to indicate no growth.</p>
 <p>Let’s look at an example:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">([</span><span class="mi">50</span><span class="p">],</span> <span class="mf">1.0</span><span class="p">)</span>
-<span class="n">g</span> <span class="o">=</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">SetExponentialGrowth</span><span class="p">(</span><span class="n">when</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">deme</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">G</span><span class="o">=</span><span class="mf">1.1</span><span class="p">)]</span>
-<span class="n">dd</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiscreteDemography</span><span class="p">(</span><span class="n">set_growth_rates</span><span class="o">=</span><span class="n">g</span><span class="p">)</span>
-<span class="n">st</span> <span class="o">=</span> <span class="n">SizeTracker</span><span class="p">()</span>
-<span class="n">setup_and_run_model</span><span class="p">(</span><span class="n">pop</span><span class="p">,</span> <span class="n">dd</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="n">st</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">st</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>pop = fwdpy11.DiploidPopulation([50], 1.0)
+g = [fwdpy11.SetExponentialGrowth(when=0, deme=0, G=1.1)]
+dd = fwdpy11.DiscreteDemography(set_growth_rates=g)
+st = SizeTracker()
+setup_and_run_model(pop, dd, 6, st)
+for i in st.data:
+    print(i)
 </pre></div>
 </div>
 </div>
@@ -1337,10 +1467,10 @@ rounding double-precision values to integer values. The function <code class="do
 rules:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">N0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">(</span><span class="mf">50.0</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">6</span><span class="p">):</span>
-   <span class="n">Ni</span> <span class="o">=</span> <span class="n">N0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mf">1.1</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-   <span class="nb">print</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">Ni</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">rint</span><span class="p">(</span><span class="n">Ni</span><span class="p">))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>N0 = np.float64(50.0)
+for i in range(6):
+   Ni = N0 * np.power(1.1, i + 1)
+   print(i + 1, Ni, np.rint(Ni))
 </pre></div>
 </div>
 </div>
@@ -1357,9 +1487,9 @@ rules:</p>
 </div>
 <p>You may need to keep the rounding policy in mind when trying to predict final deme sizes when testing
 or when trying to convert a model from continuous time into discrete time.</p>
-</div>
-<div class="section" id="changing-the-selfing-rate">
-<h3>Changing the selfing rate<a class="headerlink" href="#changing-the-selfing-rate" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="changing-the-selfing-rate">
+<h3>Changing the selfing rate<a class="headerlink" href="#changing-the-selfing-rate" title="Permalink to this headline">#</a></h3>
 <p>Instances of <a class="reference internal" href="types.html#fwdpy11.SetSelfingRate" title="fwdpy11.SetSelfingRate"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.SetSelfingRate</span></code></a> affect the rate of selfing-versus-outcrossing in different
 demes, or to change the rate within a deme over time. The default is that individuals don’t self
 unless they are picked twice as a parent by chance.</p>
@@ -1367,13 +1497,13 @@ unless they are picked twice as a parent by chance.</p>
 type to track parents each generation:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ParentTracker</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>class ParentTracker(object):
+    def __init__(self):
+        self.data = []
 
-    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pop</span><span class="p">,</span> <span class="n">sampler</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">pop</span><span class="o">.</span><span class="n">diploid_metadata</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">i</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">i</span><span class="o">.</span><span class="n">deme</span><span class="p">,</span> <span class="n">i</span><span class="o">.</span><span class="n">parents</span><span class="p">))</span>
+    def __call__(self, pop, sampler):
+        for i in pop.diploid_metadata:
+            self.data.append((i.label, i.deme, i.parents))
 </pre></div>
 </div>
 </div>
@@ -1381,11 +1511,11 @@ type to track parents each generation:</p>
 <p>Let’s run a simulation for a couple of generations:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="mf">1.0</span><span class="p">)</span>
-<span class="n">sr</span> <span class="o">=</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">SetSelfingRate</span><span class="p">(</span><span class="n">when</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">deme</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">S</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)]</span>  <span class="c1"># Deme 1 always selfs</span>
-<span class="n">dd</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiscreteDemography</span><span class="p">(</span><span class="n">set_selfing_rates</span><span class="o">=</span><span class="n">sr</span><span class="p">)</span>
-<span class="n">pt</span> <span class="o">=</span> <span class="n">ParentTracker</span><span class="p">()</span>
-<span class="n">setup_and_run_model</span><span class="p">(</span><span class="n">pop</span><span class="p">,</span> <span class="n">dd</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">pt</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>pop = fwdpy11.DiploidPopulation([5, 5], 1.0)
+sr = [fwdpy11.SetSelfingRate(when=0, deme=1, S=1.0)]  # Deme 1 always selfs
+dd = fwdpy11.DiscreteDemography(set_selfing_rates=sr)
+pt = ParentTracker()
+setup_and_run_model(pop, dd, 2, pt)
 </pre></div>
 </div>
 </div>
@@ -1394,8 +1524,8 @@ type to track parents each generation:</p>
 in deme 1 has the same parent listed twice because they were the product of a selfing event:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">pt</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>for i in pt.data:
+    print(i)
 </pre></div>
 </div>
 </div>
@@ -1426,9 +1556,9 @@ in deme 1 has the same parent listed twice because they were the product of a se
 </div>
 <p>(In the above output, the parent IDs are the indexes of the parental individuals from their
 generation.)</p>
-</div>
-<div class="section" id="migration">
-<span id="id6"></span><h3>Migration<a class="headerlink" href="#migration" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="migration">
+<span id="id6"></span><h3>Migration<a class="headerlink" href="#migration" title="Permalink to this headline">#</a></h3>
 <p>For models with multiple demes, migration between then is managed by an
 instance of <a class="reference internal" href="types.html#fwdpy11.MigrationMatrix" title="fwdpy11.MigrationMatrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.MigrationMatrix</span></code></a>.</p>
 <p>For a migration matrix <code class="docutils literal notranslate"><span class="pre">M</span></code>, the default interpretation of <code class="docutils literal notranslate"><span class="pre">M[i,</span> <span class="pre">j]</span></code> is the
@@ -1442,8 +1572,8 @@ as well as coalescent simulations like <em>msprime</em> <span id="id10">[<a clas
 <p>For example, consider the following matrix:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-<span class="n">m</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>m = np.array([0.9, 0.1, 0.5, 0.5]).reshape(2, 2)
+m
 </pre></div>
 </div>
 </div>
@@ -1458,9 +1588,9 @@ as well as coalescent simulations like <em>msprime</em> <span id="id10">[<a clas
 non-migrants and 10% will be migrants from deme <code class="docutils literal notranslate"><span class="pre">1</span></code>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="p">[</span>
-   <span class="mi">0</span><span class="p">,</span>
-<span class="p">]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>m[
+   0,
+]
 </pre></div>
 </div>
 </div>
@@ -1474,9 +1604,9 @@ non-migrants and 10% will be migrants from deme <code class="docutils literal no
 number of migrant and non-migrant offspring of offspring in deme <code class="docutils literal notranslate"><span class="pre">0</span></code> is:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="p">[</span>
-   <span class="mi">0</span><span class="p">,</span>
-<span class="p">]</span> <span class="o">*</span> <span class="mf">1e3</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>m[
+   0,
+] * 1e3
 </pre></div>
 </div>
 </div>
@@ -1490,9 +1620,9 @@ number of migrant and non-migrant offspring of offspring in deme <code class="do
 due to non-migrants:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="p">[</span>
-   <span class="mi">1</span><span class="p">,</span>
-<span class="p">]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>m[
+   1,
+]
 </pre></div>
 </div>
 </div>
@@ -1505,8 +1635,8 @@ due to non-migrants:</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">numpy</span></code> array is sufficient to construct our demographic model:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">d</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiscreteDemography</span><span class="p">(</span><span class="n">migmatrix</span><span class="o">=</span><span class="n">m</span><span class="p">)</span>
-<span class="n">d</span><span class="o">.</span><span class="n">migmatrix</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>d = fwdpy11.DiscreteDemography(migmatrix=m)
+d.migmatrix
 </pre></div>
 </div>
 </div>
@@ -1521,9 +1651,9 @@ due to non-migrants:</p>
 the following model has no migration events:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define demographic events w/o any migration stuff</span>
-<span class="n">d</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiscreteDemography</span><span class="p">(</span><span class="n">set_deme_sizes</span><span class="o">=</span><span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">SetDemeSize</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">500</span><span class="p">)])</span>
-<span class="n">d</span><span class="o">.</span><span class="n">migmatrix</span> <span class="ow">is</span> <span class="kc">None</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Define demographic events w/o any migration stuff
+d = fwdpy11.DiscreteDemography(set_deme_sizes=[fwdpy11.SetDemeSize(0, 1, 500)])
+d.migmatrix is None
 </pre></div>
 </div>
 </div>
@@ -1536,8 +1666,8 @@ the following model has no migration events:</p>
 <p>In order to specify a model with no initial migration, you may use an identity matrix:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">d</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiscreteDemography</span><span class="p">(</span><span class="n">migmatrix</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
-<span class="n">d</span><span class="o">.</span><span class="n">migmatrix</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>d = fwdpy11.DiscreteDemography(migmatrix=np.identity(2))
+d.migmatrix
 </pre></div>
 </div>
 </div>
@@ -1554,55 +1684,55 @@ To see this in action, we’ll first generate a new type to track if parents of
 offspring in deme 1 are migrants or not:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MigrationTracker</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">N0</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">N0</span> <span class="o">=</span> <span class="n">N0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>class MigrationTracker(object):
+    def __init__(self, N0):
+        self.N0 = N0
+        self.data = []
 
-    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pop</span><span class="p">,</span> <span class="n">sampler</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">pop</span><span class="o">.</span><span class="n">diploid_metadata</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">deme</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="n">p</span> <span class="o">=</span> <span class="p">[]</span>
-                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">i</span><span class="o">.</span><span class="n">parents</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">N0</span><span class="p">:</span>
-                        <span class="n">p</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">j</span><span class="p">,</span> <span class="kc">True</span><span class="p">))</span>
-                    <span class="k">else</span><span class="p">:</span>
-                        <span class="n">p</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">j</span><span class="p">,</span> <span class="kc">False</span><span class="p">))</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">pop</span><span class="o">.</span><span class="n">generation</span><span class="p">,</span> <span class="n">i</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">i</span><span class="o">.</span><span class="n">deme</span><span class="p">,</span> <span class="n">p</span><span class="p">))</span>
+    def __call__(self, pop, sampler):
+        for i in pop.diploid_metadata:
+            if i.deme == 1:
+                p = []
+                for j in i.parents:
+                    if j &lt; self.N0:
+                        p.append((j, True))
+                    else:
+                        p.append((j, False))
+                self.data.append((pop.generation, i.label, i.deme, p))
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># No migration at first</span>
-<span class="n">mm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-<span class="c1"># In generation 3, reset migration rates for deme 1 such</span>
-<span class="c1"># that parents are equally likey from both demes.</span>
-<span class="n">cm</span> <span class="o">=</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">SetMigrationRates</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">])]</span>
-<span class="n">dd</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiscreteDemography</span><span class="p">(</span><span class="n">migmatrix</span><span class="o">=</span><span class="n">mm</span><span class="p">,</span> <span class="n">set_migration_rates</span><span class="o">=</span><span class="n">cm</span><span class="p">)</span>
-<span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span> <span class="mf">1.0</span><span class="p">)</span>
-<span class="n">mt</span> <span class="o">=</span> <span class="n">MigrationTracker</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
-<span class="n">setup_and_run_model</span><span class="p">(</span><span class="n">pop</span><span class="p">,</span> <span class="n">dd</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">mt</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># No migration at first
+mm = np.identity(2)
+# In generation 3, reset migration rates for deme 1 such
+# that parents are equally likey from both demes.
+cm = [fwdpy11.SetMigrationRates(3, 1, [0.5, 0.5])]
+dd = fwdpy11.DiscreteDemography(migmatrix=mm, set_migration_rates=cm)
+pop = fwdpy11.DiploidPopulation([10, 10], 1.0)
+mt = MigrationTracker(10)
+setup_and_run_model(pop, dd, 4, mt)
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">mt</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
-    <span class="n">nmig</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="k">if</span> <span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">i</span><span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
-                <span class="n">nmig</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="k">if</span> <span class="n">i</span><span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
-            <span class="n">nmig</span> <span class="o">+=</span> <span class="mi">1</span>
-    <span class="n">mstring</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">nmig</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">mstring</span> <span class="o">=</span> <span class="s2">&quot;&lt;-  migrant parent&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">nmig</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">nmig</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="n">mstring</span> <span class="o">+=</span> <span class="s2">&quot;s&quot;</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">mstring</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>for i in mt.data:
+    nmig = 0
+    if i[1] &gt; 10:
+        if i[3][0][1] is True:
+                nmig += 1
+        if i[3][1][1] is True:
+            nmig += 1
+    mstring = &quot;&quot;
+    if nmig &gt; 0:
+        mstring = &quot;&lt;-  migrant parent&quot;.format(nmig)
+    if nmig &gt; 1:
+        mstring += &quot;s&quot;
+        print(i, mstring)
 </pre></div>
 </div>
 </div>
@@ -1616,18 +1746,18 @@ offspring in deme 1 are migrants or not:</p>
 </div>
 </div>
 </div>
-<div class="section" id="an-alternative-model-of-migration">
-<h4>An alternative model of migration<a class="headerlink" href="#an-alternative-model-of-migration" title="Permalink to this headline">¶</a></h4>
+<section id="an-alternative-model-of-migration">
+<h4>An alternative model of migration<a class="headerlink" href="#an-alternative-model-of-migration" title="Permalink to this headline">#</a></h4>
 <p>The description of migration rates above implies that migration events are
 independent of of source deme sizes.  To revisit our earlier example:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-<span class="c1"># The is the expected number of parents from demes 0 and 1</span>
-<span class="c1"># to offspring born in deme 0:</span>
-<span class="n">m</span><span class="p">[</span>
-   <span class="mi">0</span><span class="p">,</span>
-<span class="p">]</span> <span class="o">*</span> <span class="mi">1000</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>m = np.array([0.9, 0.1, 0.5, 0.5]).reshape(2, 2)
+# The is the expected number of parents from demes 0 and 1
+# to offspring born in deme 0:
+m[
+   0,
+] * 1000
 </pre></div>
 </div>
 </div>
@@ -1646,12 +1776,12 @@ of being sources of migrant offspring.</p>
 <p>For example:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">deme_sizes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">2000</span><span class="p">])</span>
-<span class="n">m</span>
-<span class="n">md</span> <span class="o">=</span> <span class="n">m</span> <span class="o">*</span> <span class="n">deme_sizes</span>
-<span class="c1"># The following line divides each</span>
-<span class="c1"># row by its sum</span>
-<span class="n">md</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">md</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="kc">None</span><span class="p">]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>deme_sizes = np.array([1000, 2000])
+m
+md = m * deme_sizes
+# The following line divides each
+# row by its sum
+md / np.sum(md, axis=1)[:, None]
 </pre></div>
 </div>
 </div>
@@ -1669,8 +1799,8 @@ about 82% because deme <code class="docutils literal notranslate"><span class="p
 pass <code class="docutils literal notranslate"><span class="pre">True</span></code> as the second parameter:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">M</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">MigrationMatrix</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
-<span class="n">d</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiscreteDemography</span><span class="p">(</span><span class="n">migmatrix</span><span class="o">=</span><span class="n">M</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>M = fwdpy11.MigrationMatrix(m, True)
+d = fwdpy11.DiscreteDemography(migmatrix=M)
 </pre></div>
 </div>
 </div>
@@ -1678,7 +1808,7 @@ pass <code class="docutils literal notranslate"><span class="pre">True</span></c
 <p>This will also work, but is less explicit:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">d</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiscreteDemography</span><span class="p">(</span><span class="n">migmatrix</span><span class="o">=</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="kc">True</span><span class="p">))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>d = fwdpy11.DiscreteDemography(migmatrix=(m, True))
 </pre></div>
 </div>
 </div>
@@ -1688,13 +1818,13 @@ pass <code class="docutils literal notranslate"><span class="pre">True</span></c
 <p>This model of migration will typically give <em>different</em> results
 from diffusion models and coalescent simulations!</p>
 </div>
-</div>
-</div>
-</div>
-<div class="section" id="examples-of-models">
-<span id="migration-and-selfing"></span><h2>Examples of models<a class="headerlink" href="#examples-of-models" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="isolation-with-migration-or-im">
-<h3>Isolation with migration, or “IM”<a class="headerlink" href="#isolation-with-migration-or-im" title="Permalink to this headline">¶</a></h3>
+</section>
+</section>
+</section>
+<section id="examples-of-models">
+<span id="migration-and-selfing"></span><h2>Examples of models<a class="headerlink" href="#examples-of-models" title="Permalink to this headline">#</a></h2>
+<section id="isolation-with-migration-or-im">
+<h3>Isolation with migration, or “IM”<a class="headerlink" href="#isolation-with-migration-or-im" title="Permalink to this headline">#</a></h3>
 <p>Consider two demes that split apart <code class="docutils literal notranslate"><span class="pre">T</span></code> time units ago and then grow to different
 sizes in the present.  After the split, migration occurs between the two demes. The
 demographic model has the following parameters:</p>
@@ -1712,39 +1842,39 @@ First, we will set up the demographic events.  The population with evolve
 for <code class="docutils literal notranslate"><span class="pre">Nanc</span></code> generations before the split.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Nanc</span> <span class="o">=</span> <span class="mi">100</span>
-<span class="n">T</span> <span class="o">=</span> <span class="mf">0.2</span>
-<span class="n">psplit</span> <span class="o">=</span> <span class="mf">0.33</span>
-<span class="n">N0</span><span class="p">,</span> <span class="n">N1</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span>
-<span class="n">m01</span><span class="p">,</span> <span class="n">m10</span> <span class="o">=</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.0267</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>Nanc = 100
+T = 0.2
+psplit = 0.33
+N0, N1 = 2, 3
+m01, m10 = 0.01, 0.0267
 
-<span class="c1"># The split event</span>
-<span class="n">split</span> <span class="o">=</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">move_individuals</span><span class="p">(</span><span class="n">when</span><span class="o">=</span><span class="n">Nanc</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">fraction</span><span class="o">=</span><span class="n">psplit</span><span class="p">)]</span>
-<span class="c1"># Get growth rates and set growth rate changes,</span>
-<span class="c1"># taking care to handle our rounding!</span>
-<span class="n">gens_post_split</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">rint</span><span class="p">(</span><span class="n">Nanc</span> <span class="o">*</span> <span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
-<span class="n">N0split</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">rint</span><span class="p">(</span><span class="n">Nanc</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">psplit</span><span class="p">))</span>
-<span class="n">N0final</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">rint</span><span class="p">(</span><span class="n">N0</span> <span class="o">*</span> <span class="n">Nanc</span><span class="p">)</span>
-<span class="n">N1split</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">rint</span><span class="p">(</span><span class="n">Nanc</span> <span class="o">*</span> <span class="n">psplit</span><span class="p">)</span>
-<span class="n">N1final</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">rint</span><span class="p">(</span><span class="n">N1</span> <span class="o">*</span> <span class="n">Nanc</span><span class="p">)</span>
-<span class="n">G0</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">exponential_growth_rate</span><span class="p">(</span><span class="n">N0split</span><span class="p">,</span> <span class="n">N0final</span><span class="p">,</span> <span class="n">gens_post_split</span><span class="p">)</span>
-<span class="n">G1</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">exponential_growth_rate</span><span class="p">(</span><span class="n">N1split</span><span class="p">,</span> <span class="n">N1final</span><span class="p">,</span> <span class="n">gens_post_split</span><span class="p">)</span>
-<span class="n">growth</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="n">fwdpy11</span><span class="o">.</span><span class="n">SetExponentialGrowth</span><span class="p">(</span><span class="n">Nanc</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">G0</span><span class="p">),</span>
-    <span class="n">fwdpy11</span><span class="o">.</span><span class="n">SetExponentialGrowth</span><span class="p">(</span><span class="n">Nanc</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">G1</span><span class="p">),</span>
-<span class="p">]</span>
+# The split event
+split = [fwdpy11.move_individuals(when=Nanc, source=0, destination=1, fraction=psplit)]
+# Get growth rates and set growth rate changes,
+# taking care to handle our rounding!
+gens_post_split = np.rint(Nanc * T).astype(int)
+N0split = np.rint(Nanc * (1.0 - psplit))
+N0final = np.rint(N0 * Nanc)
+N1split = np.rint(Nanc * psplit)
+N1final = np.rint(N1 * Nanc)
+G0 = fwdpy11.exponential_growth_rate(N0split, N0final, gens_post_split)
+G1 = fwdpy11.exponential_growth_rate(N1split, N1final, gens_post_split)
+growth = [
+    fwdpy11.SetExponentialGrowth(Nanc, 0, G0),
+    fwdpy11.SetExponentialGrowth(Nanc, 1, G1),
+]
 
-<span class="c1"># Set up the migration matrix for two demes, but only</span>
-<span class="c1"># deme zero exists.</span>
-<span class="n">m</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">migration_matrix_single_extant_deme</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-<span class="c1"># The rows of the matrix change at the split:</span>
-<span class="n">cm</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="n">fwdpy11</span><span class="o">.</span><span class="n">SetMigrationRates</span><span class="p">(</span><span class="n">Nanc</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">[</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">m10</span><span class="p">,</span> <span class="n">m10</span><span class="p">]),</span>
-    <span class="n">fwdpy11</span><span class="o">.</span><span class="n">SetMigrationRates</span><span class="p">(</span><span class="n">Nanc</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="n">m01</span><span class="p">,</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">m01</span><span class="p">]),</span>
-<span class="p">]</span>
-<span class="n">d</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiscreteDemography</span><span class="p">(</span>
-    <span class="n">mass_migrations</span><span class="o">=</span><span class="n">split</span><span class="p">,</span> <span class="n">set_growth_rates</span><span class="o">=</span><span class="n">growth</span><span class="p">,</span> <span class="n">set_migration_rates</span><span class="o">=</span><span class="n">cm</span><span class="p">,</span> <span class="n">migmatrix</span><span class="o">=</span><span class="n">m</span>
-<span class="p">)</span>
+# Set up the migration matrix for two demes, but only
+# deme zero exists.
+m = fwdpy11.migration_matrix_single_extant_deme(2, 0)
+# The rows of the matrix change at the split:
+cm = [
+    fwdpy11.SetMigrationRates(Nanc, 0, [1.0 - m10, m10]),
+    fwdpy11.SetMigrationRates(Nanc, 1, [m01, 1.0 - m01]),
+]
+d = fwdpy11.DiscreteDemography(
+    mass_migrations=split, set_growth_rates=growth, set_migration_rates=cm, migmatrix=m
+)
 </pre></div>
 </div>
 </div>
@@ -1757,8 +1887,8 @@ for <code class="docutils literal notranslate"><span class="pre">Nanc</span></co
 <p>Finally, we can run it:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">(</span><span class="n">Nanc</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
-<span class="n">setup_and_run_model</span><span class="p">(</span><span class="n">pop</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">Nanc</span> <span class="o">+</span> <span class="n">gens_post_split</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>pop = fwdpy11.DiploidPopulation(Nanc, 1.0)
+setup_and_run_model(pop, d, Nanc + gens_post_split)
 </pre></div>
 </div>
 </div>
@@ -1766,9 +1896,9 @@ for <code class="docutils literal notranslate"><span class="pre">Nanc</span></co
 <p>Now we check the final population sizes and make sure they are correct:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ds</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">deme_sizes</span><span class="p">()</span>
-<span class="k">assert</span> <span class="n">ds</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">N0final</span>
-<span class="k">assert</span> <span class="n">ds</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">N1final</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>ds = pop.deme_sizes()
+assert ds[1][0] == N0final
+assert ds[1][1] == N1final
 </pre></div>
 </div>
 </div>
@@ -1777,27 +1907,27 @@ for <code class="docutils literal notranslate"><span class="pre">Nanc</span></co
 scratch each time.  For this reason, we provide it in <a class="reference internal" href="demographic_models.html#fwdpy11.demographic_models.IM.two_deme_IM" title="fwdpy11.demographic_models.IM.two_deme_IM"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.demographic_models.IM.two_deme_IM()</span></code></a>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fwdpy11.demographic_models.IM</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import fwdpy11.demographic_models.IM
 
-<span class="n">dmodel</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">demographic_models</span><span class="o">.</span><span class="n">IM</span><span class="o">.</span><span class="n">two_deme_IM</span><span class="p">(</span>
-    <span class="n">Nanc</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">psplit</span><span class="p">,</span> <span class="p">(</span><span class="n">N0</span><span class="p">,</span> <span class="n">N1</span><span class="p">),</span> <span class="p">(</span><span class="n">m01</span><span class="p">,</span> <span class="n">m10</span><span class="p">),</span> <span class="n">burnin</span><span class="o">=</span><span class="mf">1.0</span>
-<span class="p">)</span>
-<span class="n">pop2</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">(</span><span class="n">Nanc</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
-<span class="n">setup_and_run_model</span><span class="p">(</span><span class="n">pop2</span><span class="p">,</span> <span class="n">dmodel</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">dmodel</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">simlen</span><span class="p">)</span>
-<span class="k">assert</span> <span class="n">pop</span><span class="o">.</span><span class="n">generation</span> <span class="o">==</span> <span class="n">pop2</span><span class="o">.</span><span class="n">generation</span>
-<span class="k">assert</span> <span class="n">pop2</span><span class="o">.</span><span class="n">generation</span> <span class="o">==</span> <span class="n">dmodel</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">simlen</span>
-<span class="n">ds2</span> <span class="o">=</span> <span class="n">pop2</span><span class="o">.</span><span class="n">deme_sizes</span><span class="p">()</span>
-<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">array_equal</span><span class="p">(</span><span class="n">ds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ds2</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">array_equal</span><span class="p">(</span><span class="n">ds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">ds2</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+dmodel = fwdpy11.demographic_models.IM.two_deme_IM(
+    Nanc, T, psplit, (N0, N1), (m01, m10), burnin=1.0
+)
+pop2 = fwdpy11.DiploidPopulation(Nanc, 1.0)
+setup_and_run_model(pop2, dmodel.model, dmodel.metadata.simlen)
+assert pop.generation == pop2.generation
+assert pop2.generation == dmodel.metadata.simlen
+ds2 = pop2.deme_sizes()
+assert np.array_equal(ds[0], ds2[0])
+assert np.array_equal(ds[1], ds2[1])
 </pre></div>
 </div>
 </div>
 </div>
 <p>See <a class="reference internal" href="../examples/IM.html#imexample"><span class="std std-ref">Isolation-with-migration (IM)</span></a> for an example of using this function to compare to results
 from diffusion models.</p>
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
 
     <script type="text/x-thebe-config">
     {
@@ -1821,9 +1951,11 @@ from diffusion models.</p>
 
               </div>
               
-            
-                <!-- Previous / next buttons -->
-<div class='prev-next-area'> 
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
     <a class='left-prev' id="prev-link" href="advancedtopics.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
@@ -1839,24 +1971,28 @@ from diffusion models.</p>
     <i class="fas fa-angle-right"></i>
     </a>
 </div>
-            
+            </footer>
         </div>
     </div>
-    <footer class="footer">
-  <p>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Kevin Thornton<br/>
+  
+      &copy; Copyright 2022.<br/>
+</p>
+        </footer>
+    </div>
     
-      By Kevin Thornton<br/>
-    
-        &copy; Copyright 2021.<br/>
-  </p>
-</footer>
-</main>
+</div>
 
 
       </div>
     </div>
   
-  <script src="../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
 
   </body>
 </html>

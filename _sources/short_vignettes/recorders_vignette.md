@@ -17,7 +17,8 @@ kernelspec:
 In order to facilitate time-series analyses, you may pass a callable object to {meth}`fwdpy11.evolvets`.
 The following boiler plate illustrates the requirements for the callable objects in both `Python` and in `C++`:
 
-```{tabbed} python
+````{tab-set}
+```{tab-item} python
 
 :::{code-block} python
 class Recorder(object):
@@ -26,7 +27,7 @@ class Recorder(object):
 :::
 ```
 
-```{tabbed} c++
+```{tab-item} c++
 
 :::{code-block} c++
 #include <fwdpy11/evolvets/SampleRecorder.hpp>
@@ -40,6 +41,7 @@ struct Recorder {
 };
 :::
 ```
+````
 
 The remainder of this vignette will only cover `Python`.
 The arguments to `__call__` are an instance of {class}`fwdpy11.DiploidPopulation` and {class}`fwdpy11.SampleRecorder`, respectively.

@@ -4,11 +4,13 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>Conceptual overview of tree sequence recording &#8212; fwdpy11 manual</title>
     
-  <link href="../_static/css/theme.css" rel="stylesheet">
-  <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
 
     
   <link rel="stylesheet"
@@ -18,20 +20,16 @@
   <link rel="preload" as="font" type="font/woff2" crossorigin
     href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
 
-    
-      
-
-    
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
     
-  <link rel="preload" as="script" href="../_static/js/index.be7d3bbb2ef33a8344ce.js">
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
 
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
@@ -39,12 +37,13 @@
     <script src="../_static/doctools.js"></script>
     <script src="../_static/clipboard.min.js"></script>
     <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
     <script src="../_static/togglebutton.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
-    <script src="../_static/sphinx-book-theme.d59cb220de22ca1c485ebbdc042f0030.js"></script>
+    <script src="../_static/design-tabs.js"></script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
 const thebe_selector = ".thebe,.cell"
 const thebe_selector_input = "pre"
@@ -64,7 +63,21 @@ const thebe_selector_output = ".output, .cell_output"
     <!-- Google Analytics -->
     
   </head>
-  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
     
     <div class="container-fluid" id="banner"></div>
 
@@ -73,9 +86,10 @@ const thebe_selector_output = ".output, .cell_output"
     <div class="container-xl">
       <div class="row">
           
-<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
-    
-        <div class="navbar-brand-box">
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
     <a class="navbar-brand text-wrap" href="../index.html">
       
       
@@ -88,14 +102,15 @@ const thebe_selector_output = ".output, .cell_output"
   <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
 </form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item active">
-        <ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../intro.html">
-   Introduction
-  </a>
- </li>
-</ul>
-<p aria-level="2" class="caption" role="heading">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Introduction
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
   Installation and setup
  </span>
@@ -596,93 +611,208 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 
     </div>
-</nav> <!-- To handle the deprecated key -->
-
-<div class="navbar_extra_footer">
-  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
-</div>
-
-</div>
-
-
-          
-
-
-          
-<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
-    
-    <div class="topbar container-xl fixed-top">
-    <div class="topbar-contents row">
-        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
-        <div class="col pl-md-4 topbar-main">
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
             
-            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
-                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
-                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
-                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
-                <i class="fas fa-bars"></i>
-                <i class="fas fa-arrow-left"></i>
-                <i class="fas fa-arrow-up"></i>
-            </button>
+            <div class="navbar_extra_footer">
+            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+            </div>
             
-            
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
-            class="fas fa-download"></i></button>
-
-    <div class="dropdown-buttons">
-        <!-- ipynb file if we had a myst markdown file -->
-        <a class="dropdown-buttons"
-            href="../_sources/pages/tsoverview.ipynb"><button type="button"
-                class="btn btn-secondary topbarbtn" title="Download notebook file" data-toggle="tooltip"
-                data-placement="left">.ipynb</button></a>
-        <!-- Download raw file -->
-        <a class="dropdown-buttons" href="../_sources/pages/tsoverview.md"><button type="button"
-                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
-                data-placement="left">.md</button></a>
-        <!-- Download PDF via print -->
-        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
-                onclick="printPdf(this)" data-toggle="tooltip" data-placement="left">.pdf</button>
+        </div>
     </div>
+    <div id="rtd-footer-container"></div>
 </div>
 
-            <!-- Source interaction buttons -->
 
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
-        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
-    <div class="dropdown-buttons sourcebuttons">
-        <a class="repository-button"
-            href="https://github.com/molpopgen/fwdpy11"><button type="button" class="btn btn-secondary topbarbtn"
-                data-toggle="tooltip" data-placement="left" title="Source repository"><i
-                    class="fab fa-github"></i>repository</button></a>
-        <a class="issues-button"
-            href="https://github.com/molpopgen/fwdpy11/issues/new?title=Issue%20on%20page%20%2Fpages/tsoverview.html&body=Your%20issue%20content%20here."><button
-                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
-                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
         
     </div>
+    <div class="header-article__right">
+<div class="menu-dropdown menu-dropdown-launch-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Launch interactive content">
+      <i class="fas fa-rocket"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+    </ul>
+  </div>
 </div>
 
-            <!-- Full screen (wrap in <a> to have style consistency -->
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
 
-<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
-        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
-        title="Fullscreen mode"><i
-            class="fas fa-expand"></i></button></a>
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
 
-            <!-- Launch buttons -->
+</button>
 
-        </div>
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/molpopgen/fwdpy11"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
 
-        <!-- Table of contents -->
-        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
-            
-            <div class="tocsection onthispage pt-5 pb-3">
-                <i class="fas fa-list"></i> Contents
-            </div>
-            <nav id="bd-toc-nav" aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/molpopgen/fwdpy11/issues/new?title=Issue%20on%20page%20%2Fpages/tsoverview.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../_sources/pages/tsoverview.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download notebook file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-code"></i>
+  </span>
+<span class="headerbtn__text-container">.ipynb</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="../_sources/pages/tsoverview.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.md</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#trees-and-tables">
    Trees and tables
@@ -700,12 +830,11 @@ const thebe_selector_output = ".output, .cell_output"
  </li>
 </ul>
 
-            </nav>
-        </div>
-    </div>
+    </nav>
 </div>
-    <div id="main-content" class="row">
-        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
                 <h1>Conceptual overview of tree sequence recording</h1>
@@ -739,61 +868,64 @@ const thebe_selector_output = ".output, .cell_output"
                     </div>
                 </div>
             </div>
-            
+            <main id="main-content" role="main">
+                
               <div>
                 
-  <div class="tex2jax_ignore mathjax_ignore section" id="conceptual-overview-of-tree-sequence-recording">
-<span id="tsoverview"></span><h1>Conceptual overview of tree sequence recording<a class="headerlink" href="#conceptual-overview-of-tree-sequence-recording" title="Permalink to this headline">¶</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="conceptual-overview-of-tree-sequence-recording">
+<span id="tsoverview"></span><h1>Conceptual overview of tree sequence recording<a class="headerlink" href="#conceptual-overview-of-tree-sequence-recording" title="Permalink to this headline">#</a></h1>
 <p><code class="docutils literal notranslate"><span class="pre">fwdpy11</span></code> 0.2.0 added support for tree sequence recording (<code class="docutils literal notranslate"><span class="pre">TSR</span></code>),
 which is a method to both speed up forward-time simulations and to
 track the entire genealogical history of the simulation.
 The key reference describing <code class="docutils literal notranslate"><span class="pre">TSR</span></code> is <span id="id1">[<a class="reference internal" href="../misc/bibliography.html#id19" title="Jerome Kelleher, Alison M Etheridge, and Gilean McVean. Efficient coalescent simulation and genealogical analysis for large sample sizes. PLoS Comput. Biol., 12(5):e1004842, May 2016. doi:10.1371/journal.pcbi.1004842.">KEM16</a>]</span>, which in turn relies
 heavily on concepts described in <span id="id2">[<a class="reference internal" href="../misc/bibliography.html#id19" title="Jerome Kelleher, Alison M Etheridge, and Gilean McVean. Efficient coalescent simulation and genealogical analysis for large sample sizes. PLoS Comput. Biol., 12(5):e1004842, May 2016. doi:10.1371/journal.pcbi.1004842.">KEM16</a>]</span>.</p>
 <p>The goal of <code class="docutils literal notranslate"><span class="pre">TSR</span></code> is to track a set of tables that contain the trees describing the ancestry of the population.</p>
-<div class="section" id="trees-and-tables">
-<h2>Trees and tables<a class="headerlink" href="#trees-and-tables" title="Permalink to this headline">¶</a></h2>
+<section id="trees-and-tables">
+<h2>Trees and tables<a class="headerlink" href="#trees-and-tables" title="Permalink to this headline">#</a></h2>
 <p>To start out, let us consider the following tree:</p>
 <div class="cell tag_hide-input docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tskit</span>
-<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">SVG</span>
-<span class="kn">from</span> <span class="nn">myst_nb</span> <span class="kn">import</span> <span class="n">glue</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import tskit
+from IPython.display import SVG
+from myst_nb import glue
 
-<span class="n">tc</span> <span class="o">=</span> <span class="n">tskit</span><span class="o">.</span><span class="n">TableCollection</span><span class="p">(</span><span class="mf">1.</span><span class="p">)</span>
-<span class="n">tc</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">set_columns</span><span class="p">(</span><span class="n">flags</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="mi">4</span><span class="o">+</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mi">3</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mi">4</span><span class="o">+</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
-<span class="n">tc</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">add_row</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">child</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mf">1.</span><span class="p">)</span>
-<span class="n">tc</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">add_row</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">child</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mf">1.</span><span class="p">)</span>
-<span class="n">tc</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">add_row</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">child</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mf">1.</span><span class="p">)</span>
-<span class="n">tc</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">add_row</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">child</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mf">1.</span><span class="p">)</span>
-<span class="n">tc</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">add_row</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">child</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mf">1.</span><span class="p">)</span>
-<span class="n">tc</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">add_row</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">child</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mf">1.</span><span class="p">)</span>
+tc = tskit.TableCollection(1.)
+tc.nodes.set_columns(flags=[1]*4+[0]*3, time=[0]*4+[1,2,3])
+tc.edges.add_row(parent=4, child=0, left=0., right=1.)
+tc.edges.add_row(parent=4, child=1, left=0., right=1.)
+tc.edges.add_row(parent=5, child=2, left=0., right=1.)
+tc.edges.add_row(parent=5, child=3, left=0., right=1.)
+tc.edges.add_row(parent=6, child=4, left=0., right=1.)
+tc.edges.add_row(parent=6, child=5, left=0., right=1.)
 
-<span class="n">ts</span> <span class="o">=</span> <span class="n">tc</span><span class="o">.</span><span class="n">tree_sequence</span><span class="p">()</span>
-<span class="n">glue</span><span class="p">(</span><span class="s2">&quot;example_tree&quot;</span><span class="p">,</span> <span class="n">SVG</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">draw_svg</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mi">500</span><span class="p">))),</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+ts = tc.tree_sequence()
+glue(&quot;example_tree&quot;, SVG(ts.draw_svg(size=(500, 500))), display=False)
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
 </div>
 </div>
-<div class="figure align-default" id="example-tree">
+<figure class="align-default" id="example-tree">
 <div class="cell_output docutils container">
 <img alt="../_images/tsoverview_1_0.svg" src="../_images/tsoverview_1_0.svg" /></div>
-<p class="caption"><span class="caption-number">Fig. 3 </span><span class="caption-text">A tree with seven nodes.</span><a class="headerlink" href="#example-tree" title="Permalink to this image">¶</a></p>
-</div>
+<figcaption>
+<p><span class="caption-number">Fig. 3 </span><span class="caption-text">A tree with seven nodes.</span><a class="headerlink" href="#example-tree" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
 <p>This tree is the “marginal” history of a genomic segment covering the half-open interval <span class="math notranslate nohighlight">\([0, 1)\)</span>.
 In other words, all genomic positions in this interval have the same ancestry, and recombination results in different intervals having different trees.</p>
 <p>Following <span id="id3">[<a class="reference internal" href="../misc/bibliography.html#id19" title="Jerome Kelleher, Alison M Etheridge, and Gilean McVean. Efficient coalescent simulation and genealogical analysis for large sample sizes. PLoS Comput. Biol., 12(5):e1004842, May 2016. doi:10.1371/journal.pcbi.1004842.">KEM16</a>]</span>, we can represent the above tree using two tables:</p>
 <div class="cell tag_hide-input docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import pandas as pd
 
-<span class="n">nodes</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">nodes</span><span class="p">))],</span>
-                      <span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="n">ts</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">time</span><span class="p">})</span>
-<span class="n">edges</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;parent&#39;</span><span class="p">:</span> <span class="n">ts</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">parent</span><span class="p">,</span>
-                      <span class="s1">&#39;child&#39;</span><span class="p">:</span> <span class="n">ts</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">child</span><span class="p">,</span>
-                      <span class="s1">&#39;left&#39;</span><span class="p">:</span> <span class="n">ts</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">left</span><span class="p">,</span>
-                      <span class="s1">&#39;right&#39;</span><span class="p">:</span> <span class="n">ts</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">right</span><span class="p">})</span>
+nodes = pd.DataFrame({&#39;id&#39;: [i for i in range(len(ts.tables.nodes))],
+                      &#39;time&#39;: ts.tables.nodes.time})
+edges = pd.DataFrame({&#39;parent&#39;: ts.tables.edges.parent,
+                      &#39;child&#39;: ts.tables.edges.child,
+                      &#39;left&#39;: ts.tables.edges.left,
+                      &#39;right&#39;: ts.tables.edges.right})
 </pre></div>
 </div>
 </div>
@@ -801,7 +933,7 @@ In other words, all genomic positions in this interval have the same ancestry, a
 <p>First we have the <code class="docutils literal notranslate"><span class="pre">nodes</span></code>:</p>
 <div class="cell tag_hide-input docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nodes</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>nodes
 </pre></div>
 </div>
 </div>
@@ -871,7 +1003,7 @@ In other words, all genomic positions in this interval have the same ancestry, a
 <p>Second, we have the <code class="docutils literal notranslate"><span class="pre">edges</span></code>:</p>
 <div class="cell tag_hide-input docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">edges</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>edges
 </pre></div>
 </div>
 </div>
@@ -959,9 +1091,9 @@ are indexes of the node table.</p></li>
 <li><p>For edges with the same parent, child indexes are sorted in increasing order</p></li>
 <li><p>Finally, edges are sorted by increasing left position.</p></li>
 </ol>
-</div>
-<div class="section" id="relating-an-evolving-population-to-node-and-edge-tables">
-<h2>Relating an evolving population to node and edge tables<a class="headerlink" href="#relating-an-evolving-population-to-node-and-edge-tables" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="relating-an-evolving-population-to-node-and-edge-tables">
+<h2>Relating an evolving population to node and edge tables<a class="headerlink" href="#relating-an-evolving-population-to-node-and-edge-tables" title="Permalink to this headline">#</a></h2>
 <p>Consider the case of a diploid Wright-Fisher population.  There are <span class="math notranslate nohighlight">\(N\)</span> individuals, and
 thus <span class="math notranslate nohighlight">\(2N\)</span> haploid genomes.  Define a genome as all of the genomic intervals inherited from a
 single parent.  Positions along the genome have values from the interval <span class="math notranslate nohighlight">\([0,L)\)</span>, and we do not
@@ -980,72 +1112,72 @@ takes this “messy” node and edge table and returns “simplified” node and
 We implement a Wright-Fisher model for a diploid population without recombination and without selection:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tskit</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import tskit
+import numpy as np
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">wf1</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">ngens</span><span class="p">):</span>
-    <span class="n">tc</span> <span class="o">=</span> <span class="n">tskit</span><span class="o">.</span><span class="n">TableCollection</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
-    <span class="c1"># Add 2N nodes at time = 0.</span>
-    <span class="c1"># These nodes represent the</span>
-    <span class="c1"># initial list of parental</span>
-    <span class="c1"># gametes</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">N</span><span class="p">):</span>
-        <span class="n">tc</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">add_row</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">tskit</span><span class="o">.</span><span class="n">NODE_IS_SAMPLE</span><span class="p">)</span>
-    <span class="n">next_offspring_index</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">tc</span><span class="o">.</span><span class="n">nodes</span><span class="p">)</span>
-    <span class="n">first_parental_index</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="k">for</span> <span class="n">gen</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">ngens</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
-        <span class="k">assert</span> <span class="n">next_offspring_index</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">tc</span><span class="o">.</span><span class="n">nodes</span><span class="p">)</span>
-        <span class="k">assert</span> <span class="n">first_parental_index</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">tc</span><span class="o">.</span><span class="n">nodes</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">N</span>
-        <span class="c1"># Pick 2N parents</span>
-        <span class="n">parents</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">N</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">parent1</span><span class="p">,</span> <span class="n">parent2</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">parents</span><span class="p">[::</span><span class="mi">2</span><span class="p">],</span> <span class="n">parents</span><span class="p">[</span><span class="mi">1</span><span class="p">::</span><span class="mi">2</span><span class="p">]):</span>
-            <span class="c1"># Pick 1 gamete from each parent</span>
-            <span class="n">mendel</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random_sample</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-            <span class="n">g1</span> <span class="o">=</span> <span class="n">first_parental_index</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">parent1</span> <span class="o">+</span> <span class="p">(</span><span class="n">mendel</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="p">)</span>
-            <span class="n">g2</span> <span class="o">=</span> <span class="n">first_parental_index</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">parent2</span> <span class="o">+</span> <span class="p">(</span><span class="n">mendel</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="p">)</span>
-            <span class="c1"># Add nodes for our offspring&#39;s</span>
-            <span class="c1"># two gametes</span>
-            <span class="n">tc</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">add_row</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">gen</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">tskit</span><span class="o">.</span><span class="n">NODE_IS_SAMPLE</span><span class="p">)</span>
-            <span class="n">tc</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">add_row</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">gen</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">tskit</span><span class="o">.</span><span class="n">NODE_IS_SAMPLE</span><span class="p">)</span>
-            <span class="c1"># Add edges reflecting the</span>
-            <span class="c1"># transmission from parental</span>
-            <span class="c1"># nodes to offspring nodes</span>
-            <span class="n">tc</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">add_row</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">g1</span><span class="p">,</span> <span class="n">child</span><span class="o">=</span><span class="n">next_offspring_index</span><span class="p">)</span>
-            <span class="n">tc</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">add_row</span><span class="p">(</span>
-                <span class="n">left</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">g2</span><span class="p">,</span> <span class="n">child</span><span class="o">=</span><span class="n">next_offspring_index</span> <span class="o">+</span> <span class="mi">1</span>
-                <span class="p">)</span>
-            <span class="n">next_offspring_index</span> <span class="o">+=</span> <span class="mi">2</span>
-        <span class="n">first_parental_index</span> <span class="o">+=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">N</span>
-    <span class="k">return</span> <span class="n">tc</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def wf1(N, ngens):
+    tc = tskit.TableCollection(1.0)
+    # Add 2N nodes at time = 0.
+    # These nodes represent the
+    # initial list of parental
+    # gametes
+    for i in range(2 * N):
+        tc.nodes.add_row(time=0, flags=tskit.NODE_IS_SAMPLE)
+    next_offspring_index = len(tc.nodes)
+    first_parental_index = 0
+    for gen in range(1, ngens + 1):
+        assert next_offspring_index == len(tc.nodes)
+        assert first_parental_index == len(tc.nodes) - 2 * N
+        # Pick 2N parents
+        parents = np.random.randint(0, N, 2 * N)
+        for parent1, parent2 in zip(parents[::2], parents[1::2]):
+            # Pick 1 gamete from each parent
+            mendel = np.random.random_sample(2)
+            g1 = first_parental_index + 2 * parent1 + (mendel[0] &lt; 0.5)
+            g2 = first_parental_index + 2 * parent2 + (mendel[1] &lt; 0.5)
+            # Add nodes for our offspring&#39;s
+            # two gametes
+            tc.nodes.add_row(time=gen, flags=tskit.NODE_IS_SAMPLE)
+            tc.nodes.add_row(time=gen, flags=tskit.NODE_IS_SAMPLE)
+            # Add edges reflecting the
+            # transmission from parental
+            # nodes to offspring nodes
+            tc.edges.add_row(left=0.0, right=1.0, parent=g1, child=next_offspring_index)
+            tc.edges.add_row(
+                left=0.0, right=1.0, parent=g2, child=next_offspring_index + 1
+                )
+            next_offspring_index += 2
+        first_parental_index += 2 * N
+    return tc
 </pre></div>
 </div>
 </div>
 </div>
-</div>
-<div class="section" id="tree-sequence-simplification">
-<h2>Tree sequence simplification<a class="headerlink" href="#tree-sequence-simplification" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="tree-sequence-simplification">
+<h2>Tree sequence simplification<a class="headerlink" href="#tree-sequence-simplification" title="Permalink to this headline">#</a></h2>
 <p>Let’s run the simulation for a few generations and look at the resulting tree:</p>
 <div class="cell tag_raises-exception docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
-<span class="n">tc</span> <span class="o">=</span> <span class="n">wf1</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
-<span class="c1"># Before we can get a tree sequence from</span>
-<span class="c1"># the data, we must change direction of</span>
-<span class="c1"># time from foward to backwards to satisty</span>
-<span class="c1"># tskit:</span>
-<span class="n">t</span> <span class="o">=</span> <span class="n">tc</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">time</span>
-<span class="n">t</span> <span class="o">-=</span> <span class="n">tc</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
-<span class="n">t</span> <span class="o">*=</span> <span class="o">-</span><span class="mf">1.0</span>
-<span class="n">tc</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">set_columns</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">t</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">tc</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">flags</span><span class="p">)</span>
-<span class="c1"># Sort the tables:</span>
-<span class="n">tc</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
-<span class="n">ts</span> <span class="o">=</span> <span class="n">tc</span><span class="o">.</span><span class="n">tree_sequence</span><span class="p">()</span>
-<span class="n">SVG</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">draw_svg</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span><span class="mi">500</span><span class="p">)))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>np.random.seed(42)
+tc = wf1(3, 4)
+# Before we can get a tree sequence from
+# the data, we must change direction of
+# time from foward to backwards to satisty
+# tskit:
+t = tc.nodes.time
+t -= tc.nodes.time.max()
+t *= -1.0
+tc.nodes.set_columns(time=t, flags=tc.nodes.flags)
+# Sort the tables:
+tc.sort()
+ts = tc.tree_sequence()
+SVG(ts.draw_svg(size=(500,500)))
 </pre></div>
 </div>
 </div>
@@ -1059,13 +1191,13 @@ Simplification returns the minimal history of a specific set of nodes that we ma
 Here, our sample nodes will be those nodes corresponding to the individuals alive at the end of the simulation.</p>
 <div class="cell tag_raises-exception docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">samples</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">tc</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">time</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-<span class="n">node_map</span> <span class="o">=</span> <span class="n">tc</span><span class="o">.</span><span class="n">simplify</span><span class="p">(</span><span class="n">samples</span><span class="o">=</span><span class="n">samples</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
-<span class="n">ts</span> <span class="o">=</span> <span class="n">tc</span><span class="o">.</span><span class="n">tree_sequence</span><span class="p">()</span>
-<span class="n">tree</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
-<span class="n">imap</span> <span class="o">=</span> <span class="p">{</span><span class="n">node_map</span><span class="p">[</span><span class="n">node</span><span class="p">]:</span> <span class="n">node</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">node_map</span><span class="p">))}</span>
-<span class="n">nl</span> <span class="o">=</span> <span class="p">{</span><span class="n">i</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">imap</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s2">-&gt;</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">tree</span><span class="o">.</span><span class="n">nodes</span><span class="p">()}</span>
-<span class="n">SVG</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">draw_svg</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span><span class="mi">500</span><span class="p">),</span> <span class="n">node_labels</span><span class="o">=</span><span class="n">nl</span><span class="p">))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>samples = np.where(tc.nodes.time == 0)[0]
+node_map = tc.simplify(samples=samples.tolist())
+ts = tc.tree_sequence()
+tree = ts.first()
+imap = {node_map[node]: node for node in range(len(node_map))}
+nl = {i: f&quot;{imap[i]}-&gt;{i}&quot; for i in tree.nodes()}
+SVG(ts.draw_svg(size=(500,500), node_labels=nl))
 </pre></div>
 </div>
 </div>
@@ -1087,8 +1219,8 @@ This feature allows us to keep nodes corresponding to “ancient samples” duri
 We simply mark them as nodes that we want to keep, and the algorithm does the rest.
 See <a class="reference internal" href="../short_vignettes/recorders_vignette.html#ancient-samples-vignette"><span class="std std-ref">here</span></a> for how to do this in a simulation.</p>
 </div>
-</div>
-</div>
+</section>
+</section>
 
     <script type="text/x-thebe-config">
     {
@@ -1112,9 +1244,11 @@ See <a class="reference internal" href="../short_vignettes/recorders_vignette.ht
 
               </div>
               
-            
-                <!-- Previous / next buttons -->
-<div class='prev-next-area'> 
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
     <a class='left-prev' id="prev-link" href="mvdes.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
@@ -1130,24 +1264,28 @@ See <a class="reference internal" href="../short_vignettes/recorders_vignette.ht
     <i class="fas fa-angle-right"></i>
     </a>
 </div>
-            
+            </footer>
         </div>
     </div>
-    <footer class="footer">
-  <p>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Kevin Thornton<br/>
+  
+      &copy; Copyright 2022.<br/>
+</p>
+        </footer>
+    </div>
     
-      By Kevin Thornton<br/>
-    
-        &copy; Copyright 2021.<br/>
-  </p>
-</footer>
-</main>
+</div>
 
 
       </div>
     </div>
   
-  <script src="../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
 
   </body>
 </html>

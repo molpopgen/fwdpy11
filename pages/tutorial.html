@@ -4,11 +4,13 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>Tutorial &#8212; fwdpy11 manual</title>
     
-  <link href="../_static/css/theme.css" rel="stylesheet">
-  <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
 
     
   <link rel="stylesheet"
@@ -18,20 +20,16 @@
   <link rel="preload" as="font" type="font/woff2" crossorigin
     href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
 
-    
-      
-
-    
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
     
-  <link rel="preload" as="script" href="../_static/js/index.be7d3bbb2ef33a8344ce.js">
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
 
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
@@ -39,12 +37,13 @@
     <script src="../_static/doctools.js"></script>
     <script src="../_static/clipboard.min.js"></script>
     <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
     <script src="../_static/togglebutton.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
-    <script src="../_static/sphinx-book-theme.d59cb220de22ca1c485ebbdc042f0030.js"></script>
+    <script src="../_static/design-tabs.js"></script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
 const thebe_selector = ".thebe,.cell"
 const thebe_selector_input = "pre"
@@ -64,7 +63,21 @@ const thebe_selector_output = ".output, .cell_output"
     <!-- Google Analytics -->
     
   </head>
-  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
     
     <div class="container-fluid" id="banner"></div>
 
@@ -73,9 +86,10 @@ const thebe_selector_output = ".output, .cell_output"
     <div class="container-xl">
       <div class="row">
           
-<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
-    
-        <div class="navbar-brand-box">
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
     <a class="navbar-brand text-wrap" href="../index.html">
       
       
@@ -88,14 +102,15 @@ const thebe_selector_output = ".output, .cell_output"
   <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
 </form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item active">
-        <ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../intro.html">
-   Introduction
-  </a>
- </li>
-</ul>
-<p aria-level="2" class="caption" role="heading">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Introduction
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
   Installation and setup
  </span>
@@ -596,93 +611,208 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 
     </div>
-</nav> <!-- To handle the deprecated key -->
-
-<div class="navbar_extra_footer">
-  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
-</div>
-
-</div>
-
-
-          
-
-
-          
-<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
-    
-    <div class="topbar container-xl fixed-top">
-    <div class="topbar-contents row">
-        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
-        <div class="col pl-md-4 topbar-main">
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
             
-            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
-                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
-                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
-                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
-                <i class="fas fa-bars"></i>
-                <i class="fas fa-arrow-left"></i>
-                <i class="fas fa-arrow-up"></i>
-            </button>
+            <div class="navbar_extra_footer">
+            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+            </div>
             
-            
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
-            class="fas fa-download"></i></button>
-
-    <div class="dropdown-buttons">
-        <!-- ipynb file if we had a myst markdown file -->
-        <a class="dropdown-buttons"
-            href="../_sources/pages/tutorial.ipynb"><button type="button"
-                class="btn btn-secondary topbarbtn" title="Download notebook file" data-toggle="tooltip"
-                data-placement="left">.ipynb</button></a>
-        <!-- Download raw file -->
-        <a class="dropdown-buttons" href="../_sources/pages/tutorial.md"><button type="button"
-                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
-                data-placement="left">.md</button></a>
-        <!-- Download PDF via print -->
-        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
-                onclick="printPdf(this)" data-toggle="tooltip" data-placement="left">.pdf</button>
+        </div>
     </div>
+    <div id="rtd-footer-container"></div>
 </div>
 
-            <!-- Source interaction buttons -->
 
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
-        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
-    <div class="dropdown-buttons sourcebuttons">
-        <a class="repository-button"
-            href="https://github.com/molpopgen/fwdpy11"><button type="button" class="btn btn-secondary topbarbtn"
-                data-toggle="tooltip" data-placement="left" title="Source repository"><i
-                    class="fab fa-github"></i>repository</button></a>
-        <a class="issues-button"
-            href="https://github.com/molpopgen/fwdpy11/issues/new?title=Issue%20on%20page%20%2Fpages/tutorial.html&body=Your%20issue%20content%20here."><button
-                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
-                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
         
     </div>
+    <div class="header-article__right">
+<div class="menu-dropdown menu-dropdown-launch-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Launch interactive content">
+      <i class="fas fa-rocket"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+    </ul>
+  </div>
 </div>
 
-            <!-- Full screen (wrap in <a> to have style consistency -->
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
 
-<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
-        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
-        title="Fullscreen mode"><i
-            class="fas fa-expand"></i></button></a>
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
 
-            <!-- Launch buttons -->
+</button>
 
-        </div>
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/molpopgen/fwdpy11"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
 
-        <!-- Table of contents -->
-        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
-            
-            <div class="tocsection onthispage pt-5 pb-3">
-                <i class="fas fa-list"></i> Contents
-            </div>
-            <nav id="bd-toc-nav" aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/molpopgen/fwdpy11/issues/new?title=Issue%20on%20page%20%2Fpages/tutorial.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../_sources/pages/tutorial.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download notebook file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-code"></i>
+  </span>
+<span class="headerbtn__text-container">.ipynb</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="../_sources/pages/tutorial.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.md</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#initializing-a-population">
    Initializing a population
@@ -840,12 +970,11 @@ const thebe_selector_output = ".output, .cell_output"
  </li>
 </ul>
 
-            </nav>
-        </div>
-    </div>
+    </nav>
 </div>
-    <div id="main-content" class="row">
-        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
                 <h1>Tutorial</h1>
@@ -1019,11 +1148,12 @@ const thebe_selector_output = ".output, .cell_output"
                     </div>
                 </div>
             </div>
-            
+            <main id="main-content" role="main">
+                
               <div>
                 
-  <div class="tex2jax_ignore mathjax_ignore section" id="tutorial">
-<span id="id1"></span><h1>Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this headline">¶</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="tutorial">
+<span id="id1"></span><h1>Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this headline">#</a></h1>
 <p>The tutorial is organized around a series of tasks that one
 needs to complete in order to run a simulation.</p>
 <p>Each section covers a topic relevant to parameterizing a simulation.
@@ -1033,8 +1163,8 @@ used to initialize the final model parameters class.</p>
 sections of the documentation.</p>
 <p>For a first-time reader, it is probably best to go top-to-bottom through
 this tutorial.</p>
-<div class="section" id="initializing-a-population">
-<h2>Initializing a population<a class="headerlink" href="#initializing-a-population" title="Permalink to this headline">¶</a></h2>
+<section id="initializing-a-population">
+<h2>Initializing a population<a class="headerlink" href="#initializing-a-population" title="Permalink to this headline">#</a></h2>
 <p>A simulation modifies the contents of instances of <a class="reference internal" href="types.html#fwdpy11.DiploidPopulation" title="fwdpy11.DiploidPopulation"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiploidPopulation</span></code></a>.
 We have two basic ways to initialize a population:</p>
 <ul class="simple">
@@ -1047,12 +1177,12 @@ for how to initialize from <a class="reference external" href="https://tskit.dev
 genome length:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fwdpy11</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import fwdpy11
+import numpy as np
 
-<span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="mf">100.0</span><span class="p">)</span>
-<span class="n">pop</span><span class="o">.</span><span class="n">N</span>
-<span class="n">pop</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">genome_length</span>
+pop = fwdpy11.DiploidPopulation(N=1000, length=100.0)
+pop.N
+pop.tables.genome_length
 </pre></div>
 </div>
 </div>
@@ -1071,9 +1201,9 @@ for a more detailed discussion of relevant data structures.</p>
 <p>To initialize a population with individuals in multiple demes:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="p">[</span><span class="mi">500</span><span class="p">,</span> <span class="mi">500</span><span class="p">],</span> <span class="n">length</span><span class="o">=</span><span class="mf">100.0</span><span class="p">)</span>
-<span class="n">pop</span><span class="o">.</span><span class="n">N</span>
-<span class="n">pop</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">genome_length</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>pop = fwdpy11.DiploidPopulation(N=[500, 500], length=100.0)
+pop.N
+pop.tables.genome_length
 </pre></div>
 </div>
 </div>
@@ -1083,8 +1213,8 @@ for a more detailed discussion of relevant data structures.</p>
 </div>
 </div>
 </div>
-<div class="section" id="looking-at-individual-metadata">
-<h3>Looking at individual metadata<a class="headerlink" href="#looking-at-individual-metadata" title="Permalink to this headline">¶</a></h3>
+<section id="looking-at-individual-metadata">
+<h3>Looking at individual metadata<a class="headerlink" href="#looking-at-individual-metadata" title="Permalink to this headline">#</a></h3>
 <p>Our population size is unchanged, but our population now has 500 individuals
 in each of two demes.  We can verify this by looking at the <code class="docutils literal notranslate"><span class="pre">metadata</span></code> associated
 with each individual.  Individual metadata are instances of
@@ -1092,7 +1222,7 @@ with each individual.  Individual metadata are instances of
 meaning that we can look at the metadata as a <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.recarray.html#numpy.recarray" title="(in NumPy v1.23)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.recarray</span></code></a>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">md</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">diploid_metadata</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>md = np.array(pop.diploid_metadata, copy=False)
 </pre></div>
 </div>
 </div>
@@ -1101,7 +1231,7 @@ meaning that we can look at the metadata as a <a class="reference external" href
 <a class="reference internal" href="types.html#fwdpy11.DiploidMetadata" title="fwdpy11.DiploidMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiploidMetadata</span></code></a>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">md</span><span class="o">.</span><span class="n">dtype</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>md.dtype
 </pre></div>
 </div>
 </div>
@@ -1115,7 +1245,7 @@ meaning that we can look at the metadata as a <a class="reference external" href
 <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.unique.html#numpy.unique" title="(in NumPy v1.23)"><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.unique()</span></code></a>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">md</span><span class="p">[</span><span class="s2">&quot;deme&quot;</span><span class="p">],</span> <span class="n">return_counts</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>np.unique(md[&quot;deme&quot;], return_counts=True)
 </pre></div>
 </div>
 </div>
@@ -1129,10 +1259,10 @@ meaning that we can look at the metadata as a <a class="reference external" href
 was found 500 times.  (The first 500 individuals are in deme <code class="docutils literal notranslate"><span class="pre">0</span></code>,
 followed by 500 in deme <code class="docutils literal notranslate"><span class="pre">1</span></code>.)</p>
 <p>See <a class="reference internal" href="../long_vignettes/tskit_metadata_vignette.html#tskit-metadata-vignette"><span class="std std-ref">here</span></a> for more on individual metadata.</p>
-</div>
-</div>
-<div class="section" id="defining-distributions-of-mutation-effect-sizes">
-<span id="mutationregions"></span><h2>Defining distributions of mutation effect sizes<a class="headerlink" href="#defining-distributions-of-mutation-effect-sizes" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="defining-distributions-of-mutation-effect-sizes">
+<span id="mutationregions"></span><h2>Defining distributions of mutation effect sizes<a class="headerlink" href="#defining-distributions-of-mutation-effect-sizes" title="Permalink to this headline">#</a></h2>
 <p>One of the main reasons to perform forward simulations is to be able
 to model mutations affecting individual fitness. To do so, we need
 to specify both mutation rates and the resulting effect sizes.</p>
@@ -1153,7 +1283,7 @@ a multinomial distribution for generating new mutations.</p>
 the interval <span class="math notranslate nohighlight">\([0, 1)\)</span>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sregions</span> <span class="o">=</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">ConstantS</span><span class="p">(</span><span class="n">beg</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">s</span><span class="o">=-</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>sregions = [fwdpy11.ConstantS(beg=0.0, end=1.0, weight=1.0, s=-0.01, h=0.25)]
 </pre></div>
 </div>
 </div>
@@ -1162,8 +1292,8 @@ the interval <span class="math notranslate nohighlight">\([0, 1)\)</span>:</p>
 with the <code class="docutils literal notranslate"><span class="pre">int</span></code> values getting converted to <code class="docutils literal notranslate"><span class="pre">float</span></code> automatically:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sregions</span> <span class="o">=</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">ConstantS</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">)]</span>
-<span class="n">sregions</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>sregions = [fwdpy11.ConstantS(0, 1, 1, -0.01, 0.25)]
+sregions[0]
 </pre></div>
 </div>
 </div>
@@ -1181,11 +1311,11 @@ may be exponentially-distributed with a mean of <span class="math notranslate no
 <code class="docutils literal notranslate"><span class="pre">fwdpy11</span></code>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># ALPHA = 2Ns</span>
-<span class="n">MEAN_ALPHA</span> <span class="o">=</span> <span class="o">-</span><span class="mi">10</span>
-<span class="n">N</span> <span class="o">=</span> <span class="mi">1000</span>
-<span class="n">sregions</span> <span class="o">=</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">ExpS</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">MEAN_ALPHA</span><span class="p">,</span> <span class="n">scaling</span><span class="o">=</span><span class="mi">2</span> <span class="o">*</span> <span class="n">N</span><span class="p">)]</span>
-<span class="n">sregions</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># ALPHA = 2Ns
+MEAN_ALPHA = -10
+N = 1000
+sregions = [fwdpy11.ExpS(0, 1, 1, MEAN_ALPHA, scaling=2 * N)]
+sregions[0]
 </pre></div>
 </div>
 </div>
@@ -1195,17 +1325,17 @@ may be exponentially-distributed with a mean of <span class="math notranslate no
 </div>
 </div>
 </div>
-<div class="section" id="region-weighting">
-<h3>Region weighting<a class="headerlink" href="#region-weighting" title="Permalink to this headline">¶</a></h3>
+<section id="region-weighting">
+<h3>Region weighting<a class="headerlink" href="#region-weighting" title="Permalink to this headline">#</a></h3>
 <p>When multiple “sregion” objects are used, the default behavior is to multiply
 the input <code class="docutils literal notranslate"><span class="pre">weight</span></code> by <code class="docutils literal notranslate"><span class="pre">end-beg</span></code>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sregions</span> <span class="o">=</span> <span class="p">[</span>
-   <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ExpS</span><span class="p">(</span><span class="n">beg</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">mean</span><span class="o">=-</span><span class="mf">0.2</span><span class="p">),</span>
-   <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ConstantS</span><span class="p">(</span><span class="n">beg</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mf">3.0</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">s</span><span class="o">=-</span><span class="mf">0.1</span><span class="p">),</span>
-<span class="p">]</span>
-<span class="n">sregions</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>sregions = [
+   fwdpy11.ExpS(beg=0.0, end=1.0, weight=1.0, mean=-0.2),
+   fwdpy11.ConstantS(beg=1.0, end=3.0, weight=1.0, s=-0.1),
+]
+sregions
 </pre></div>
 </div>
 </div>
@@ -1221,11 +1351,11 @@ In this example, twice as many mutations will have positions in <span class="mat
 <p>To change the default behavior, one can prevent the coupling between input <code class="docutils literal notranslate"><span class="pre">weight</span></code> and region length:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sregions</span> <span class="o">=</span> <span class="p">[</span>
-   <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ExpS</span><span class="p">(</span><span class="n">beg</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">mean</span><span class="o">=-</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">coupled</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
-   <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ConstantS</span><span class="p">(</span><span class="n">beg</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mf">3.0</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">s</span><span class="o">=-</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">coupled</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
-<span class="p">]</span>
-<span class="n">sregions</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>sregions = [
+   fwdpy11.ExpS(beg=0.0, end=1.0, weight=1.0, mean=-0.2, coupled=False),
+   fwdpy11.ConstantS(beg=1.0, end=3.0, weight=1.0, s=-0.1, coupled=False),
+]
+sregions
 </pre></div>
 </div>
 </div>
@@ -1242,11 +1372,11 @@ Simulations based on the above examples would give the same results if the <code
 Therefore, we can recreate our first example with code like the following:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sregions</span> <span class="o">=</span> <span class="p">[</span>
-   <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ExpS</span><span class="p">(</span><span class="n">beg</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">56.0</span><span class="p">,</span> <span class="n">mean</span><span class="o">=-</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">coupled</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
-   <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ConstantS</span><span class="p">(</span><span class="n">beg</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mf">3.0</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">112.0</span><span class="p">,</span> <span class="n">s</span><span class="o">=-</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">coupled</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
-<span class="p">]</span>
-<span class="n">sregions</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>sregions = [
+   fwdpy11.ExpS(beg=0.0, end=1.0, weight=56.0, mean=-0.2, coupled=False),
+   fwdpy11.ConstantS(beg=1.0, end=3.0, weight=112.0, s=-0.1, coupled=False),
+]
+sregions
 </pre></div>
 </div>
 </div>
@@ -1265,15 +1395,15 @@ because the weights have relative values of 2:1.</p>
 concepts like “coding regions” where the DFE are a weighted mixture
 from multiple distributions, etc.</p>
 </div>
-</div>
-<div class="section" id="setting-the-dominance-of-new-mutations">
-<h3>Setting the dominance of new mutations<a class="headerlink" href="#setting-the-dominance-of-new-mutations" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="setting-the-dominance-of-new-mutations">
+<h3>Setting the dominance of new mutations<a class="headerlink" href="#setting-the-dominance-of-new-mutations" title="Permalink to this headline">#</a></h3>
 <p>The dominance of a new mutation is set by the <code class="docutils literal notranslate"><span class="pre">h</span></code> parameter during
 initialization:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">ExpS</span><span class="p">(</span><span class="n">beg</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">mean</span><span class="o">=-</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
-<span class="n">fwdpy11</span><span class="o">.</span><span class="n">ExpS</span><span class="p">(</span><span class="n">beg</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">mean</span><span class="o">=-</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fwdpy11.ExpS(beg=0.0, end=1.0, weight=1.0, mean=-0.2, h=1.0)
+fwdpy11.ExpS(beg=0.0, end=1.0, weight=1.0, mean=-0.2, h=0.0)
 </pre></div>
 </div>
 </div>
@@ -1283,9 +1413,9 @@ initialization:</p>
 </div>
 </div>
 </div>
-</div>
-<div class="section" id="built-in-distributions-of-effect-sizes">
-<h3>Built-in distributions of effect sizes<a class="headerlink" href="#built-in-distributions-of-effect-sizes" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="built-in-distributions-of-effect-sizes">
+<h3>Built-in distributions of effect sizes<a class="headerlink" href="#built-in-distributions-of-effect-sizes" title="Permalink to this headline">#</a></h3>
 <ul class="simple">
 <li><p><a class="reference internal" href="regiontypes.html#fwdpy11.ConstantS" title="fwdpy11.ConstantS"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.ConstantS</span></code></a></p></li>
 <li><p><a class="reference internal" href="regiontypes.html#fwdpy11.UniformS" title="fwdpy11.UniformS"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.UniformS</span></code></a></p></li>
@@ -1296,14 +1426,14 @@ initialization:</p>
 <li><p><a class="reference internal" href="regiontypes.html#fwdpy11.LogNormalS" title="fwdpy11.LogNormalS"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.LogNormalS</span></code></a></p></li>
 <li><p><a class="reference internal" href="regiontypes.html#fwdpy11.DiscreteDESD" title="fwdpy11.DiscreteDESD"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiscreteDESD</span></code></a></p></li>
 </ul>
-</div>
-<div class="section" id="labelling-mutations-from-different-regions">
-<h3>Labelling mutations from different regions<a class="headerlink" href="#labelling-mutations-from-different-regions" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="labelling-mutations-from-different-regions">
+<h3>Labelling mutations from different regions<a class="headerlink" href="#labelling-mutations-from-different-regions" title="Permalink to this headline">#</a></h3>
 <p>It may be of use to know what region a mutation came from.  To do
 so, give a nonzero value to the <code class="docutils literal notranslate"><span class="pre">label</span></code> argument:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">ConstantS</span><span class="p">(</span><span class="n">beg</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fwdpy11.ConstantS(beg=0.0, end=1.0, weight=1.0, s=1e-3, label=1)
 </pre></div>
 </div>
 </div>
@@ -1321,16 +1451,16 @@ in exceptions.  The following example tries to use a value one larger than
 the maximum allowed:</p>
 <div class="cell tag_raises-exception docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">ConstantS</span><span class="p">(</span>
-    <span class="n">beg</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">iinfo</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">)</span><span class="o">.</span><span class="n">max</span> <span class="o">+</span> <span class="mi">1</span>
-<span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fwdpy11.ConstantS(
+    beg=0.0, end=1.0, weight=1.0, s=1e-3, label=np.iinfo(np.uint16).max + 1
+)
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
 <span class="ne">TypeError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span> <span class="p">[</span><span class="mi">14</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">14</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
 <span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ConstantS</span><span class="p">(</span>
 <span class="g g-Whitespace">      </span><span class="mi">2</span>     <span class="n">beg</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">iinfo</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">)</span><span class="o">.</span><span class="n">max</span> <span class="o">+</span> <span class="mi">1</span>
 <span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="p">)</span>
@@ -1362,14 +1492,14 @@ the maximum allowed:</p>
 </div>
 </div>
 </div>
-</div>
-</div>
-<div class="section" id="modeling-recombination">
-<span id="geneticmaps"></span><h2>Modeling recombination<a class="headerlink" href="#modeling-recombination" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="modeling-recombination">
+<span id="geneticmaps"></span><h2>Modeling recombination<a class="headerlink" href="#modeling-recombination" title="Permalink to this headline">#</a></h2>
 <p>Recombination rates are allowed to vary along genomes in a discrete fashion.  <code class="docutils literal notranslate"><span class="pre">fwdpy11</span></code>
 provides two complementary methods for setting up such variation.</p>
-<div class="section" id="method-1-regions-and-weights">
-<span id="recregions"></span><h3>Method 1: regions and weights<a class="headerlink" href="#method-1-regions-and-weights" title="Permalink to this headline">¶</a></h3>
+<section id="method-1-regions-and-weights">
+<span id="recregions"></span><h3>Method 1: regions and weights<a class="headerlink" href="#method-1-regions-and-weights" title="Permalink to this headline">#</a></h3>
 <p>The method described in this section works in combination with a total overall recombination
 rate.  This rate is the mean of a Poisson distribution and the intervals where recombination
 breakpoints happen are chosen based on their relative weights.  The regions are instances
@@ -1406,15 +1536,15 @@ the “rate per unit” and <span class="math notranslate nohighlight">\(end-beg
 one region twice as long as the other:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fwdpy11</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import fwdpy11
 
-<span class="n">recrate</span> <span class="o">=</span> <span class="mf">1e-3</span>
-<span class="n">recregions</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Region</span><span class="p">(</span><span class="n">beg</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mf">10.0</span> <span class="o">/</span> <span class="mf">3.0</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">1.0</span><span class="p">),</span>
-    <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Region</span><span class="p">(</span><span class="n">beg</span><span class="o">=</span><span class="mf">10.0</span> <span class="o">/</span> <span class="mf">3.0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">1.0</span><span class="p">),</span>
-<span class="p">]</span>
-<span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">recregions</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+recrate = 1e-3
+recregions = [
+    fwdpy11.Region(beg=0.0, end=10.0 / 3.0, weight=1.0),
+    fwdpy11.Region(beg=10.0 / 3.0, end=10, weight=1.0),
+]
+for r in recregions:
+    print(r)
 </pre></div>
 </div>
 </div>
@@ -1440,12 +1570,12 @@ uniformly distributed in <span class="math notranslate nohighlight">\([10/3, 10)
 that the “raw” weights that you input are the exact values used internally:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">recregions</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Region</span><span class="p">(</span><span class="n">beg</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">coupled</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
-    <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Region</span><span class="p">(</span><span class="n">beg</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">coupled</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
-<span class="p">]</span>
-<span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">recregions</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>recregions = [
+    fwdpy11.Region(beg=0, end=5, weight=1, coupled=False),
+    fwdpy11.Region(beg=5, end=10, weight=2, coupled=False),
+]
+for r in recregions:
+    print(r)
 </pre></div>
 </div>
 </div>
@@ -1466,9 +1596,9 @@ it is uniform on <span class="math notranslate nohighlight">\([5, 10)\)</span> w
 <p>In essence, instances of <a class="reference internal" href="regiontypes.html#fwdpy11.Region" title="fwdpy11.Region"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.Region</span></code></a> parameterize a multinomial distribution that is used to
 choose the ranges within which breakpoints are uniformly-distributed.  A limitation of this approach
 is that we cannot model discrete jumps in genetic maps, such as those between chromosomes.</p>
-</div>
-<div class="section" id="method-2-using-genetic-map-classes">
-<span id="geneticmapunit"></span><h3>Method 2: using “genetic map” classes<a class="headerlink" href="#method-2-using-genetic-map-classes" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="method-2-using-genetic-map-classes">
+<span id="geneticmapunit"></span><h3>Method 2: using “genetic map” classes<a class="headerlink" href="#method-2-using-genetic-map-classes" title="Permalink to this headline">#</a></h3>
 <div class="versionadded">
 <p><span class="versionmodified added">New in version 0.3.0.</span></p>
 </div>
@@ -1481,10 +1611,10 @@ where recombination breakpoints are Poisson and binomially distributed.</p>
 use <a class="reference internal" href="regiontypes.html#fwdpy11.PoissonInterval" title="fwdpy11.PoissonInterval"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.PoissonInterval</span></code></a>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">recregions</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="n">fwdpy11</span><span class="o">.</span><span class="n">PoissonInterval</span><span class="p">(</span><span class="n">beg</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">mean</span><span class="o">=</span><span class="mf">2e-3</span> <span class="o">/</span> <span class="mi">3</span><span class="p">),</span>
-    <span class="n">fwdpy11</span><span class="o">.</span><span class="n">PoissonInterval</span><span class="p">(</span><span class="n">beg</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">mean</span><span class="o">=</span><span class="mf">1e-3</span> <span class="o">/</span> <span class="mi">3</span><span class="p">),</span>
-<span class="p">]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>recregions = [
+    fwdpy11.PoissonInterval(beg=0, end=5, mean=2e-3 / 3),
+    fwdpy11.PoissonInterval(beg=5, end=10, mean=1e-3 / 3),
+]
 </pre></div>
 </div>
 </div>
@@ -1498,17 +1628,17 @@ Between each region, a single recombination occurs with probability of
 one-half, meaning that each region is assorting independently (50 <code class="docutils literal notranslate"><span class="pre">cM</span></code> between each region).</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">NLOCI</span> <span class="o">=</span> <span class="mi">4</span>
-<span class="n">LOCUS_LENGTH</span> <span class="o">=</span> <span class="mi">10</span>
-<span class="n">RECRATE_PER_LOCUS</span> <span class="o">=</span> <span class="mf">1e-3</span>
-<span class="n">LOCUS_BOUNDARIES</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="n">LOCUS_LENGTH</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">NLOCI</span> <span class="o">*</span> <span class="n">LOCUS_LENGTH</span><span class="p">,</span> <span class="n">LOCUS_LENGTH</span><span class="p">)</span>
-<span class="p">]</span>
-<span class="n">recregions</span> <span class="o">=</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">PoissonInterval</span><span class="p">(</span><span class="o">*</span><span class="n">i</span><span class="p">,</span> <span class="n">RECRATE_PER_LOCUS</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">LOCUS_BOUNDARIES</span><span class="p">]</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">LOCUS_BOUNDARIES</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
-    <span class="n">recregions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">BinomialPoint</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mf">0.5</span><span class="p">))</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">recregions</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>NLOCI = 4
+LOCUS_LENGTH = 10
+RECRATE_PER_LOCUS = 1e-3
+LOCUS_BOUNDARIES = [
+    (i, i + LOCUS_LENGTH) for i in range(0, NLOCI * LOCUS_LENGTH, LOCUS_LENGTH)
+]
+recregions = [fwdpy11.PoissonInterval(*i, RECRATE_PER_LOCUS) for i in LOCUS_BOUNDARIES]
+for i in LOCUS_BOUNDARIES[:-1]:
+    recregions.append(fwdpy11.BinomialPoint(i[1], 0.5))
+for i in recregions:
+    print(i)
 </pre></div>
 </div>
 </div>
@@ -1530,10 +1660,10 @@ For the examples given above, crossover positions are floating-point values samp
 To restrict positions to integer values, we pass <code class="docutils literal notranslate"><span class="pre">discrete=True</span></code> when creating object instances:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">recregions</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="n">fwdpy11</span><span class="o">.</span><span class="n">PoissonInterval</span><span class="p">(</span><span class="n">beg</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">mean</span><span class="o">=</span><span class="mf">2e-3</span> <span class="o">/</span> <span class="mi">3</span><span class="p">,</span> <span class="n">discrete</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
-    <span class="n">fwdpy11</span><span class="o">.</span><span class="n">PoissonInterval</span><span class="p">(</span><span class="n">beg</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">mean</span><span class="o">=</span><span class="mf">1e-3</span> <span class="o">/</span> <span class="mi">3</span><span class="p">,</span> <span class="n">discrete</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
-<span class="p">]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>recregions = [
+    fwdpy11.PoissonInterval(beg=0, end=5, mean=2e-3 / 3, discrete=True),
+    fwdpy11.PoissonInterval(beg=5, end=10, mean=1e-3 / 3, discrete=True),
+]
 </pre></div>
 </div>
 </div>
@@ -1555,9 +1685,9 @@ See <a class="reference internal" href="../short_vignettes/initpops_vignette.htm
 <li><p><a class="reference internal" href="regiontypes.html#fwdpy11.BinomialPoint" title="fwdpy11.BinomialPoint"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.BinomialPoint</span></code></a></p></li>
 <li><p><a class="reference internal" href="regiontypes.html#fwdpy11.FixedCrossovers" title="fwdpy11.FixedCrossovers"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.FixedCrossovers</span></code></a></p></li>
 </ul>
-</div>
-<div class="section" id="general-comments">
-<h3>General comments<a class="headerlink" href="#general-comments" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="general-comments">
+<h3>General comments<a class="headerlink" href="#general-comments" title="Permalink to this headline">#</a></h3>
 <ul class="simple">
 <li><p>Different <span class="math notranslate nohighlight">\([beg, end)\)</span> intervals may overlap.  The interpretation of such a setup is your problem.</p></li>
 <li><p>The first method, based on <a class="reference internal" href="regiontypes.html#fwdpy11.Region" title="fwdpy11.Region"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.Region</span></code></a> is slightly faster, but less flexible.  More on the flexibility
@@ -1572,10 +1702,10 @@ length of the genome being simulated (<a class="reference internal" href="types.
 <p>Adding neutral mutations to the tables with <a class="reference internal" href="functions.html#fwdpy11.infinite_sites" title="fwdpy11.infinite_sites"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.infinite_sites()</span></code></a> will place
 neutral variants in the non-recombining regions.</p>
 </div>
-</div>
-</div>
-<div class="section" id="modeling-mutations-having-direct-effects-on-fitness">
-<span id="genetic-values"></span><h2>Modeling mutations having direct effects on fitness<a class="headerlink" href="#modeling-mutations-having-direct-effects-on-fitness" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="modeling-mutations-having-direct-effects-on-fitness">
+<span id="genetic-values"></span><h2>Modeling mutations having direct effects on fitness<a class="headerlink" href="#modeling-mutations-having-direct-effects-on-fitness" title="Permalink to this headline">#</a></h2>
 <p>In a typical population-genetic model, mutations have direct effects on fitness.
 Often, this effect is referred to as <code class="docutils literal notranslate"><span class="pre">s</span></code>, or the “selection coefficient”.</p>
 <p>Once we’ve decided on our distributions of effect sizes, we need a way to obtain
@@ -1611,10 +1741,10 @@ when determining the fitness of the mutant homozygote.</p></li>
 <p>The most common values for <code class="docutils literal notranslate"><span class="pre">scaling</span></code> are <code class="docutils literal notranslate"><span class="pre">1.0</span></code> or <code class="docutils literal notranslate"><span class="pre">2.0</span></code>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gvalue</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Multiplicative</span><span class="p">(</span><span class="n">scaling</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
-<span class="n">gvalue</span><span class="o">.</span><span class="n">scaling</span>
-<span class="n">gvalue</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Multiplicative</span><span class="p">(</span><span class="n">scaling</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
-<span class="n">gvalue</span><span class="o">.</span><span class="n">scaling</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>gvalue = fwdpy11.Multiplicative(scaling=1.0)
+gvalue.scaling
+gvalue = fwdpy11.Multiplicative(scaling=2.0)
+gvalue.scaling
 </pre></div>
 </div>
 </div>
@@ -1633,9 +1763,9 @@ in dominant mutations.  However, if <code class="docutils literal notranslate"><
 <code class="docutils literal notranslate"><span class="pre">h</span> <span class="pre">=</span> <span class="pre">1.0</span></code> gives co-dominant mutations.  In both cases,
 <code class="docutils literal notranslate"><span class="pre">h</span> <span class="pre">=</span> <span class="pre">0.0</span></code> generates fully-recessive mutations.</p>
 </div>
-</div>
-<div class="section" id="modeling-mutations-affecting-phenotypes">
-<span id="modeling-quant-traits"></span><h2>Modeling mutations affecting phenotypes<a class="headerlink" href="#modeling-mutations-affecting-phenotypes" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="modeling-mutations-affecting-phenotypes">
+<span id="modeling-quant-traits"></span><h2>Modeling mutations affecting phenotypes<a class="headerlink" href="#modeling-mutations-affecting-phenotypes" title="Permalink to this headline">#</a></h2>
 <p>The previous section discussed setting up a model where a mutation’s
 effect size (<a class="reference internal" href="types.html#fwdpy11.Mutation.s" title="fwdpy11.Mutation.s"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.Mutation.s</span></code></a>) directly affects individual fitness.
 An alternative model is one where mutations affect some abstract “trait”
@@ -1673,9 +1803,9 @@ stabilizing selection with an optimum trait value of <code class="docutils liter
 (inverse) strength of stabilizing selection <code class="docutils literal notranslate"><span class="pre">VS</span> <span class="pre">=</span> <span class="pre">1.0</span></code>, we write:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gvalue</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Additive</span><span class="p">(</span>
-    <span class="n">scaling</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">gvalue_to_fitness</span><span class="o">=</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSS</span><span class="p">(</span><span class="n">optimum</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">VS</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
-<span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>gvalue = fwdpy11.Additive(
+    scaling=2.0, gvalue_to_fitness=fwdpy11.GSS(optimum=0.0, VS=1.0)
+)
 </pre></div>
 </div>
 </div>
@@ -1687,11 +1817,11 @@ See <a class="reference internal" href="gvalue_to_fitness.html#fwdpy11.GSS" titl
 <p>We can also add Gaussian noise to an individual’s trait value:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gvalue</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Additive</span><span class="p">(</span>
-    <span class="n">scaling</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span>
-    <span class="n">gvalue_to_fitness</span><span class="o">=</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSS</span><span class="p">(</span><span class="n">optimum</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">VS</span><span class="o">=</span><span class="mf">2.0</span> <span class="o">/</span> <span class="mf">3.0</span><span class="p">),</span>
-    <span class="n">noise</span><span class="o">=</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">GaussianNoise</span><span class="p">(</span><span class="n">mean</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">sd</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="mf">3.0</span><span class="p">)),</span>
-    <span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>gvalue = fwdpy11.Additive(
+    scaling=2.0,
+    gvalue_to_fitness=fwdpy11.GSS(optimum=0.0, VS=2.0 / 3.0),
+    noise=fwdpy11.GaussianNoise(mean=0.0, sd=np.sqrt(1.0 / 3.0)),
+    )
 </pre></div>
 </div>
 </div>
@@ -1728,22 +1858,22 @@ attributed to <span id="id7">[<a class="reference internal" href="../misc/biblio
 </pre></div>
 </div>
 </div>
-<div class="section" id="changing-the-optimum-phenotype-during-a-simulation">
-<h3>Changing the optimum phenotype during a simulation<a class="headerlink" href="#changing-the-optimum-phenotype-during-a-simulation" title="Permalink to this headline">¶</a></h3>
+<section id="changing-the-optimum-phenotype-during-a-simulation">
+<h3>Changing the optimum phenotype during a simulation<a class="headerlink" href="#changing-the-optimum-phenotype-during-a-simulation" title="Permalink to this headline">#</a></h3>
 <p>The previous example set up a model where the optimum is stable for
 the entire simulation.  We can parameterize a shifting optimum
 using <a class="reference internal" href="gvalue_to_fitness.html#fwdpy11.GSSmo" title="fwdpy11.GSSmo"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GSSmo</span></code></a>.  For example, to shift the optimum from <code class="docutils literal notranslate"><span class="pre">0.0</span></code>
 to <code class="docutils literal notranslate"><span class="pre">1.0</span></code> at generation <code class="docutils literal notranslate"><span class="pre">100</span></code>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">moving_optimum</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSSmo</span><span class="p">(</span>
-    <span class="p">[</span>
-        <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Optimum</span><span class="p">(</span><span class="n">when</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">optimum</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">VS</span><span class="o">=</span><span class="mf">1.0</span><span class="p">),</span>
-        <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Optimum</span><span class="p">(</span><span class="n">when</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">optimum</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">VS</span><span class="o">=</span><span class="mf">1.0</span><span class="p">),</span>
-    <span class="p">]</span>
-<span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>moving_optimum = fwdpy11.GSSmo(
+    [
+        fwdpy11.Optimum(when=0, optimum=0.0, VS=1.0),
+        fwdpy11.Optimum(when=100, optimum=1.0, VS=1.0),
+    ]
+)
 
-<span class="n">gvalue</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Additive</span><span class="p">(</span><span class="n">scaling</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">gvalue_to_fitness</span><span class="o">=</span><span class="n">moving_optimum</span><span class="p">)</span>
+gvalue = fwdpy11.Additive(scaling=2.0, gvalue_to_fitness=moving_optimum)
 </pre></div>
 </div>
 </div>
@@ -1760,21 +1890,21 @@ moving optimum:</p>
 <p>Let’s code it up:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">optima</span> <span class="o">=</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">Optimum</span><span class="p">(</span><span class="n">when</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">optimum</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">VS</span><span class="o">=</span><span class="mf">10.0</span><span class="p">)]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>optima = [fwdpy11.Optimum(when=0, optimum=0.0, VS=10.0)]
 
-<span class="n">last_time</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="n">last_optimum</span> <span class="o">=</span> <span class="mf">0.0</span>
+last_time = 0
+last_optimum = 0.0
 
-<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">666</span><span class="p">)</span>
+np.random.seed(666)
 
-<span class="k">while</span> <span class="n">last_time</span> <span class="o">&lt;</span> <span class="mi">1000</span><span class="p">:</span>
-    <span class="n">last_time</span> <span class="o">+=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">geometric</span><span class="p">(</span><span class="mf">0.01</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
-    <span class="n">last_optimum</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">0.1</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="k">if</span> <span class="n">last_time</span> <span class="o">&lt;</span> <span class="mi">1000</span><span class="p">:</span>
-        <span class="n">optima</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">Optimum</span><span class="p">(</span><span class="n">when</span><span class="o">=</span><span class="n">last_time</span><span class="p">,</span> <span class="n">optimum</span><span class="o">=</span><span class="n">last_optimum</span><span class="p">,</span> <span class="n">VS</span><span class="o">=</span><span class="mf">10.0</span><span class="p">))</span>
+while last_time &lt; 1000:
+    last_time += int(np.random.geometric(0.01, 1)[0])
+    last_optimum += np.random.normal(loc=0.0, scale=np.sqrt(0.1), size=1)[0]
+    if last_time &lt; 1000:
+        optima.append(fwdpy11.Optimum(when=last_time, optimum=last_optimum, VS=10.0))
 
-<span class="n">random_moving_optimum</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSSmo</span><span class="p">(</span><span class="n">optima</span><span class="p">)</span>
-<span class="n">random_moving_optimum</span>
+random_moving_optimum = fwdpy11.GSSmo(optima)
+random_moving_optimum
 </pre></div>
 </div>
 </div>
@@ -1791,10 +1921,10 @@ is very picky about its input. It requires <code class="docutils literal notrans
 raise an exception if the <a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.int64" title="(in NumPy v1.23)"><code class="xref py py-attr docutils literal notranslate"><span class="pre">numpy.int64</span></code></a> from <a class="reference external" href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.geometric.html#numpy.random.geometric" title="(in NumPy v1.23)"><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.random.geometric()</span></code></a>
 gets passed in.</p>
 </div>
-</div>
-</div>
-<div class="section" id="adding-demographic-events-involving-discrete-demes">
-<h2>Adding demographic events involving discrete demes<a class="headerlink" href="#adding-demographic-events-involving-discrete-demes" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="adding-demographic-events-involving-discrete-demes">
+<h2>Adding demographic events involving discrete demes<a class="headerlink" href="#adding-demographic-events-involving-discrete-demes" title="Permalink to this headline">#</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">fwdpy11</span></code> has a flexible interface for demographic models involving multiple
 discrete demes.  A full overview of the <code class="docutils literal notranslate"><span class="pre">API</span></code> is given <a class="reference internal" href="softselection.html#softselection"><span class="std std-ref">here</span></a>.
 This section gives a cursory introduction.</p>
@@ -1808,7 +1938,7 @@ demes</p></li>
 <p>To set this model up, first initialize the population to the ancestral state:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>pop = fwdpy11.DiploidPopulation(100, 1.0)
 </pre></div>
 </div>
 </div>
@@ -1822,9 +1952,9 @@ single ancestral deme, and therefore 100% of its ancestry each generation is
 from itself. Thus, our initial migration matrix looks like:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">migmatrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-<span class="n">migmatrix</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
-<span class="n">migmatrix</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>migmatrix = np.zeros(4).reshape(2, 2)
+migmatrix[0, 0] = 1.0
+migmatrix
 </pre></div>
 </div>
 </div>
@@ -1839,9 +1969,9 @@ from itself. Thus, our initial migration matrix looks like:</p>
 deme <code class="docutils literal notranslate"><span class="pre">1</span></code>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mass_migrations</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="n">fwdpy11</span><span class="o">.</span><span class="n">move_individuals</span><span class="p">(</span><span class="n">when</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">fraction</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
-<span class="p">]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>mass_migrations = [
+    fwdpy11.move_individuals(when=100, source=0, destination=1, fraction=0.5)
+]
 </pre></div>
 </div>
 </div>
@@ -1849,11 +1979,11 @@ deme <code class="docutils literal notranslate"><span class="pre">1</span></code
 <p>We now need to set up our new symmetric migration rates:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">m</span> <span class="o">=</span> <span class="mf">1e-3</span>
-<span class="n">set_migration_rates</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="n">fwdpy11</span><span class="o">.</span><span class="n">SetMigrationRates</span><span class="p">(</span><span class="n">when</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">deme</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">migrates</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span> <span class="o">-</span> <span class="n">m</span><span class="p">,</span> <span class="n">m</span><span class="p">]),</span>
-    <span class="n">fwdpy11</span><span class="o">.</span><span class="n">SetMigrationRates</span><span class="p">(</span><span class="n">when</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">deme</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">migrates</span><span class="o">=</span><span class="p">[</span><span class="n">m</span><span class="p">,</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">m</span><span class="p">]),</span>
-<span class="p">]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>m = 1e-3
+set_migration_rates = [
+    fwdpy11.SetMigrationRates(when=100, deme=0, migrates=[1 - m, m]),
+    fwdpy11.SetMigrationRates(when=100, deme=1, migrates=[m, 1.0 - m]),
+]
 </pre></div>
 </div>
 </div>
@@ -1862,11 +1992,11 @@ deme <code class="docutils literal notranslate"><span class="pre">1</span></code
 an instance of <a class="reference internal" href="types.html#fwdpy11.DiscreteDemography" title="fwdpy11.DiscreteDemography"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiscreteDemography</span></code></a>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dmodel</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiscreteDemography</span><span class="p">(</span>
-    <span class="n">mass_migrations</span><span class="o">=</span><span class="n">mass_migrations</span><span class="p">,</span>
-    <span class="n">migmatrix</span><span class="o">=</span><span class="n">migmatrix</span><span class="p">,</span>
-    <span class="n">set_migration_rates</span><span class="o">=</span><span class="n">set_migration_rates</span><span class="p">,</span>
-<span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>dmodel = fwdpy11.DiscreteDemography(
+    mass_migrations=mass_migrations,
+    migmatrix=migmatrix,
+    set_migration_rates=set_migration_rates,
+)
 </pre></div>
 </div>
 </div>
@@ -1874,7 +2004,7 @@ an instance of <a class="reference internal" href="types.html#fwdpy11.DiscreteDe
 <p>This class has a nice method for pretty-printing via <code class="docutils literal notranslate"><span class="pre">black</span></code>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">dmodel</span><span class="o">.</span><span class="n">asblack</span><span class="p">())</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>print(dmodel.asblack())
 </pre></div>
 </div>
 </div>
@@ -1909,14 +2039,14 @@ an instance of <a class="reference internal" href="types.html#fwdpy11.DiscreteDe
 the attributes are read-only and attempts to modify will raise exceptions:</p>
 <div class="cell tag_raises-exception docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dmodel</span><span class="o">.</span><span class="n">mass_migrations</span> <span class="o">=</span> <span class="kc">None</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>dmodel.mass_migrations = None
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
 <span class="ne">FrozenInstanceError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span> <span class="p">[</span><span class="mi">31</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">31</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
 <span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">dmodel</span><span class="o">.</span><span class="n">mass_migrations</span> <span class="o">=</span> <span class="kc">None</span>
 
 <span class="nn">File ~/.local/lib/python3.8/site-packages/attr/_make.py:642,</span> in <span class="ni">_frozen_setattrs</span><span class="nt">(self, name, value)</span>
@@ -1935,12 +2065,12 @@ the attributes are read-only and attempts to modify will raise exceptions:</p>
 can modify:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">copy</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import copy
 
-<span class="n">dmodel_dict</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">dmodel</span><span class="o">.</span><span class="n">asdict</span><span class="p">())</span>
-<span class="n">dmodel_dict</span><span class="p">[</span><span class="s2">&quot;mass_migrations&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="n">dmodel2</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiscreteDemography</span><span class="p">(</span><span class="o">**</span><span class="n">dmodel_dict</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">dmodel2</span><span class="o">.</span><span class="n">asblack</span><span class="p">())</span>
+dmodel_dict = copy.deepcopy(dmodel.asdict())
+dmodel_dict[&quot;mass_migrations&quot;] = None
+dmodel2 = fwdpy11.DiscreteDemography(**dmodel_dict)
+print(dmodel2.asblack())
 </pre></div>
 </div>
 </div>
@@ -1974,8 +2104,8 @@ happiness, making a deep copy helps here.</p>
 One of them is the common modeling scenario of two recently diverged populations.
 Additionally, we supply some commonly-used models of human demography.
 See <a class="reference internal" href="demographic_models.html#demographic-models"><span class="std std-ref">The demography debugger</span></a> for details.</p>
-<div class="section" id="a-note-of-caution">
-<h3>A note of caution<a class="headerlink" href="#a-note-of-caution" title="Permalink to this headline">¶</a></h3>
+<section id="a-note-of-caution">
+<h3>A note of caution<a class="headerlink" href="#a-note-of-caution" title="Permalink to this headline">#</a></h3>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>Programatically building up demographic models is tedious
@@ -1994,9 +2124,9 @@ a simpler approach in a future release.  There’s a small group of people
 currently hatching a plan to provide a common schema representing demographic
 models of discrete demes.  The hope is that several pieces of software can
 all use these schema.</p>
-</div>
-<div class="section" id="debugging-a-demographic-model">
-<span id="demographydebugger"></span><h3>Debugging a demographic model<a class="headerlink" href="#debugging-a-demographic-model" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="debugging-a-demographic-model">
+<span id="demographydebugger"></span><h3>Debugging a demographic model<a class="headerlink" href="#debugging-a-demographic-model" title="Permalink to this headline">#</a></h3>
 <p>The parameters of a demographic model are checked at run time at two different places:</p>
 <ul class="simple">
 <li><p>Upon object construction.  The various event objects try to make sure that
@@ -2011,14 +2141,14 @@ A more efficient approach to checking your models is to use <a class="reference 
 <p>The class also generates a “report” with a verbal description of the model:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">d</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DemographyDebugger</span><span class="p">(</span>
-    <span class="n">initial_deme_sizes</span><span class="o">=</span><span class="p">[</span><span class="mi">100</span><span class="p">],</span>
-    <span class="n">events</span><span class="o">=</span><span class="n">dmodel</span><span class="p">,</span>
-    <span class="n">simlen</span><span class="o">=</span><span class="mi">150</span><span class="p">,</span>
-    <span class="n">deme_labels</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="s2">&quot;ANCESTRAL&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span> <span class="s2">&quot;DERIVED&quot;</span><span class="p">},</span>
-<span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>d = fwdpy11.DemographyDebugger(
+    initial_deme_sizes=[100],
+    events=dmodel,
+    simlen=150,
+    deme_labels={0: &quot;ANCESTRAL&quot;, 1: &quot;DERIVED&quot;},
+)
 
-<span class="nb">print</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">report</span><span class="p">)</span>
+print(d.report)
 </pre></div>
 </div>
 </div>
@@ -2038,11 +2168,11 @@ the migration rates, then the model considers there to be no ancestry specified 
 deme <code class="docutils literal notranslate"><span class="pre">1</span></code>:</p>
 <div class="cell tag_raises-exception docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">bad_dmodel</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiscreteDemography</span><span class="p">(</span>
-    <span class="n">mass_migrations</span><span class="o">=</span><span class="n">mass_migrations</span><span class="p">,</span> <span class="n">migmatrix</span><span class="o">=</span><span class="n">migmatrix</span>
-<span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">bad_dmodel</span><span class="o">.</span><span class="n">asblack</span><span class="p">())</span>
-<span class="n">d</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DemographyDebugger</span><span class="p">([</span><span class="mi">100</span><span class="p">],</span> <span class="n">bad_dmodel</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="s2">&quot;ANCESTRAL&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span> <span class="s2">&quot;DERIVED&quot;</span><span class="p">})</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>bad_dmodel = fwdpy11.DiscreteDemography(
+    mass_migrations=mass_migrations, migmatrix=migmatrix
+)
+print(bad_dmodel.asblack())
+d = fwdpy11.DemographyDebugger([100], bad_dmodel, 150, {0: &quot;ANCESTRAL&quot;, 1: &quot;DERIVED&quot;})
 </pre></div>
 </div>
 </div>
@@ -2070,7 +2200,7 @@ deme <code class="docutils literal notranslate"><span class="pre">1</span></code
 </div>
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
 <span class="ne">ValueError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span> <span class="p">[</span><span class="mi">34</span><span class="p">],</span> <span class="n">line</span> <span class="mi">5</span>
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">34</span><span class="p">],</span> <span class="n">line</span> <span class="mi">5</span>
 <span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="n">bad_dmodel</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiscreteDemography</span><span class="p">(</span>
 <span class="g g-Whitespace">      </span><span class="mi">2</span>     <span class="n">mass_migrations</span><span class="o">=</span><span class="n">mass_migrations</span><span class="p">,</span> <span class="n">migmatrix</span><span class="o">=</span><span class="n">migmatrix</span>
 <span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="p">)</span>
@@ -2108,7 +2238,7 @@ deme <code class="docutils literal notranslate"><span class="pre">1</span></code
 never gets created since we deleted the mass migration event:</p>
 <div class="cell tag_raises-exception docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">DemographyDebugger</span><span class="p">([</span><span class="mi">100</span><span class="p">],</span> <span class="n">dmodel2</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fwdpy11.DemographyDebugger([100], dmodel2)
 </pre></div>
 </div>
 </div>
@@ -2119,10 +2249,10 @@ never gets created since we deleted the mass migration event:</p>
 </div>
 </div>
 </div>
-</div>
-</div>
-<div class="section" id="setting-up-the-parameters-for-a-simulation">
-<span id="model-params"></span><h2>Setting up the parameters for a simulation<a class="headerlink" href="#setting-up-the-parameters-for-a-simulation" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="setting-up-the-parameters-for-a-simulation">
+<span id="model-params"></span><h2>Setting up the parameters for a simulation<a class="headerlink" href="#setting-up-the-parameters-for-a-simulation" title="Permalink to this headline">#</a></h2>
 <p>Simulation parameters are stored in instances of <a class="reference internal" href="model_params.html#fwdpy11.ModelParams" title="fwdpy11.ModelParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.ModelParams</span></code></a>.
 All of the examples shown above generated objects that we need to store in
 such instances.</p>
@@ -2133,50 +2263,50 @@ initialize a <a class="reference internal" href="model_params.html#fwdpy11.Model
 <p>The following example uses what we discussed above:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sregions</span> <span class="o">=</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">ExpS</span><span class="p">(</span><span class="n">beg</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">mean</span><span class="o">=-</span><span class="mf">0.2</span><span class="p">)]</span>
-<span class="n">recregions</span> <span class="o">=</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">PoissonInterval</span><span class="p">(</span><span class="n">beg</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">mean</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">)]</span>
-<span class="n">migmatrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-<span class="n">migmatrix</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
-<span class="n">mass_migrations</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="n">fwdpy11</span><span class="o">.</span><span class="n">move_individuals</span><span class="p">(</span><span class="n">when</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">fraction</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
-<span class="p">]</span>
-<span class="n">migrate</span> <span class="o">=</span> <span class="mf">1e-3</span>
-<span class="n">set_migration_rates</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="n">fwdpy11</span><span class="o">.</span><span class="n">SetMigrationRates</span><span class="p">(</span><span class="n">when</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">deme</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">migrates</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span> <span class="o">-</span> <span class="n">migrate</span><span class="p">,</span> <span class="n">migrate</span><span class="p">]),</span>
-    <span class="n">fwdpy11</span><span class="o">.</span><span class="n">SetMigrationRates</span><span class="p">(</span><span class="n">when</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">deme</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">migrates</span><span class="o">=</span><span class="p">[</span><span class="n">migrate</span><span class="p">,</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">migrate</span><span class="p">]),</span>
-<span class="p">]</span>
-<span class="n">dmodel</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiscreteDemography</span><span class="p">(</span>
-    <span class="n">mass_migrations</span><span class="o">=</span><span class="n">mass_migrations</span><span class="p">,</span>
-    <span class="n">migmatrix</span><span class="o">=</span><span class="n">migmatrix</span><span class="p">,</span>
-    <span class="n">set_migration_rates</span><span class="o">=</span><span class="n">set_migration_rates</span><span class="p">,</span>
-<span class="p">)</span>
-<span class="n">dbg</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DemographyDebugger</span><span class="p">([</span><span class="mi">100</span><span class="p">],</span> <span class="n">dmodel</span><span class="p">,</span> <span class="mi">150</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>sregions = [fwdpy11.ExpS(beg=0.0, end=1.0, weight=1.0, mean=-0.2)]
+recregions = [fwdpy11.PoissonInterval(beg=0.0, end=0.1, mean=1e-3)]
+migmatrix = np.zeros(4).reshape(2, 2)
+migmatrix[0, 0] = 1.0
+mass_migrations = [
+    fwdpy11.move_individuals(when=100, source=0, destination=1, fraction=0.5)
+]
+migrate = 1e-3
+set_migration_rates = [
+    fwdpy11.SetMigrationRates(when=100, deme=0, migrates=[1 - migrate, migrate]),
+    fwdpy11.SetMigrationRates(when=100, deme=1, migrates=[migrate, 1.0 - migrate]),
+]
+dmodel = fwdpy11.DiscreteDemography(
+    mass_migrations=mass_migrations,
+    migmatrix=migmatrix,
+    set_migration_rates=set_migration_rates,
+)
+dbg = fwdpy11.DemographyDebugger([100], dmodel, 150)
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gvalue</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Additive</span><span class="p">(</span>
-    <span class="n">scaling</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span>
-    <span class="n">gvalue_to_fitness</span><span class="o">=</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSSmo</span><span class="p">(</span>
-        <span class="p">[</span>
-            <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Optimum</span><span class="p">(</span><span class="n">when</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">optimum</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">VS</span><span class="o">=</span><span class="mf">1.0</span><span class="p">),</span>
-            <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Optimum</span><span class="p">(</span><span class="n">when</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">optimum</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">VS</span><span class="o">=</span><span class="mf">1.0</span><span class="p">),</span>
-        <span class="p">]</span>
-    <span class="p">),</span>
-<span class="p">)</span>
-<span class="n">pdict</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;nregions&quot;</span><span class="p">:</span> <span class="p">[],</span>
-    <span class="s2">&quot;sregions&quot;</span><span class="p">:</span> <span class="n">sregions</span><span class="p">,</span>
-    <span class="s2">&quot;recregions&quot;</span><span class="p">:</span> <span class="n">recregions</span><span class="p">,</span>
-    <span class="s2">&quot;rates&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1e-2</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-    <span class="s2">&quot;gvalue&quot;</span><span class="p">:</span> <span class="n">gvalue</span><span class="p">,</span>
-    <span class="s2">&quot;prune_selected&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-    <span class="s2">&quot;simlen&quot;</span><span class="p">:</span> <span class="mi">150</span><span class="p">,</span>
-    <span class="s2">&quot;demography&quot;</span><span class="p">:</span> <span class="n">dmodel</span><span class="p">,</span>
-<span class="p">}</span>
-<span class="n">params</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="n">pdict</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>gvalue = fwdpy11.Additive(
+    scaling=2.0,
+    gvalue_to_fitness=fwdpy11.GSSmo(
+        [
+            fwdpy11.Optimum(when=0, optimum=0.0, VS=1.0),
+            fwdpy11.Optimum(when=100, optimum=1.0, VS=1.0),
+        ]
+    ),
+)
+pdict = {
+    &quot;nregions&quot;: [],
+    &quot;sregions&quot;: sregions,
+    &quot;recregions&quot;: recregions,
+    &quot;rates&quot;: (0.0, 1e-2, None),
+    &quot;gvalue&quot;: gvalue,
+    &quot;prune_selected&quot;: False,
+    &quot;simlen&quot;: 150,
+    &quot;demography&quot;: dmodel,
+}
+params = fwdpy11.ModelParams(**pdict)
 </pre></div>
 </div>
 </div>
@@ -2199,7 +2329,7 @@ next subsection for details.</p></li>
 <p>Let’s take a look at what we just built:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">params</span><span class="o">.</span><span class="n">asblack</span><span class="p">())</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>print(params.asblack())
 </pre></div>
 </div>
 </div>
@@ -2262,8 +2392,8 @@ next subsection for details.</p></li>
 </div>
 </div>
 </div>
-<div class="section" id="mutation-and-recombination-rates">
-<span id="model-params-rate-details"></span><h3>Mutation and recombination rates<a class="headerlink" href="#mutation-and-recombination-rates" title="Permalink to this headline">¶</a></h3>
+<section id="mutation-and-recombination-rates">
+<span id="model-params-rate-details"></span><h3>Mutation and recombination rates<a class="headerlink" href="#mutation-and-recombination-rates" title="Permalink to this headline">#</a></h3>
 <p>In general, the neutral mutation rate should be set to <code class="docutils literal notranslate"><span class="pre">0.0</span></code>.</p>
 <p>The selected mutation rate is a non-negative <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> representing the total mutation
 rate per haploid genome per generation.</p>
@@ -2272,19 +2402,19 @@ rate per haploid genome per generation.</p>
 representing the total recombination rate per meiosis.  If you use instances
 of <a class="reference internal" href="regiontypes.html#fwdpy11.GeneticMapUnit" title="fwdpy11.GeneticMapUnit"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GeneticMapUnit</span></code></a> (see <a class="reference internal" href="#geneticmapunit"><span class="std std-ref">here</span></a>), then use
 <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
-</div>
-</div>
-<div class="section" id="running-a-simulation-with-tree-sequence-recording">
-<span id="evolvets"></span><h2>Running a simulation with tree sequence recording<a class="headerlink" href="#running-a-simulation-with-tree-sequence-recording" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="running-a-simulation-with-tree-sequence-recording">
+<span id="evolvets"></span><h2>Running a simulation with tree sequence recording<a class="headerlink" href="#running-a-simulation-with-tree-sequence-recording" title="Permalink to this headline">#</a></h2>
 <p>To evolve the population with tree sequence recording, we make a call
 to <a class="reference internal" href="functions.html#fwdpy11.evolvets" title="fwdpy11.evolvets"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.evolvets()</span></code></a>.  We also need an instance of <a class="reference internal" href="types.html#fwdpy11.GSLrng" title="fwdpy11.GSLrng"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GSLrng</span></code></a>,
 which is a random number generator.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rng</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSLrng</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
-<span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
-<span class="n">fwdpy11</span><span class="o">.</span><span class="n">evolvets</span><span class="p">(</span><span class="n">rng</span><span class="o">=</span><span class="n">rng</span><span class="p">,</span> <span class="n">pop</span><span class="o">=</span><span class="n">pop</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">simplification_interval</span><span class="o">=</span><span class="mi">25</span><span class="p">)</span>
-<span class="n">pop</span><span class="o">.</span><span class="n">generation</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>rng = fwdpy11.GSLrng(42)
+pop = fwdpy11.DiploidPopulation(100, 1.0)
+fwdpy11.evolvets(rng=rng, pop=pop, params=params, simplification_interval=25)
+pop.generation
 </pre></div>
 </div>
 </div>
@@ -2313,9 +2443,9 @@ for a more complex example.</p>
 </pre></div>
 </div>
 </div>
-</div>
-<div class="section" id="recording-ancient-samples-during-a-simulation">
-<span id="ancient-samples"></span><h2>Recording “ancient samples” during a simulation<a class="headerlink" href="#recording-ancient-samples-during-a-simulation" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="recording-ancient-samples-during-a-simulation">
+<span id="ancient-samples"></span><h2>Recording “ancient samples” during a simulation<a class="headerlink" href="#recording-ancient-samples-during-a-simulation" title="Permalink to this headline">#</a></h2>
 <p>During a simulation, individuals can be marked as “preserved” or
 “remembered”.  This marking means that their nodes in the node
 table and their metadata are maintained, allowing you to retrieve
@@ -2339,19 +2469,19 @@ to record individuals whose fitnesses are in the top <code class="docutils liter
 of those found in deme <code class="docutils literal notranslate"><span class="pre">Y</span></code> every <code class="docutils literal notranslate"><span class="pre">10th</span></code> generation:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">GetTopFitnessess</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">X</span> <span class="o">=</span> <span class="n">X</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Y</span> <span class="o">=</span> <span class="n">Y</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>class GetTopFitnessess(object):
+    def __init__(self, X, Y):
+        self.X = X
+        self.Y = Y
 
-    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pop</span><span class="p">,</span> <span class="n">sampler</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">pop</span><span class="o">.</span><span class="n">generation</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
-            <span class="n">md</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">diploid_metadata</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-            <span class="n">inY</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">md</span><span class="p">[</span><span class="s2">&quot;deme&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">Y</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">w</span> <span class="o">=</span> <span class="n">md</span><span class="p">[</span><span class="s2">&quot;w&quot;</span><span class="p">][</span><span class="n">inY</span><span class="p">]</span>
-            <span class="n">q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Y</span><span class="p">)</span>
-            <span class="n">geqq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">w</span> <span class="o">&gt;=</span> <span class="n">q</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">sampler</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">inY</span><span class="p">[</span><span class="n">geqq</span><span class="p">])</span>
+    def __call__(self, pop, sampler):
+        if pop.generation % 10 == 0.0:
+            md = np.array(pop.diploid_metadata, copy=False)
+            inY = np.where(md[&quot;deme&quot;] == self.Y)[0]
+            w = md[&quot;w&quot;][inY]
+            q = np.quantile(w, self.Y)
+            geqq = np.where(w &gt;= q)[0]
+            sampler.assign(inY[geqq])
 </pre></div>
 </div>
 </div>
@@ -2360,12 +2490,12 @@ of those found in deme <code class="docutils literal notranslate"><span class="p
 where we pass an instance on to <a class="reference internal" href="functions.html#fwdpy11.evolvets" title="fwdpy11.evolvets"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.evolvets()</span></code></a>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rng</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSLrng</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
-<span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
-<span class="n">recorder</span> <span class="o">=</span> <span class="n">GetTopFitnessess</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-<span class="n">fwdpy11</span><span class="o">.</span><span class="n">evolvets</span><span class="p">(</span>
-    <span class="n">rng</span><span class="o">=</span><span class="n">rng</span><span class="p">,</span> <span class="n">pop</span><span class="o">=</span><span class="n">pop</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">simplification_interval</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">recorder</span><span class="o">=</span><span class="n">recorder</span>
-<span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>rng = fwdpy11.GSLrng(42)
+pop = fwdpy11.DiploidPopulation(100, 1.0)
+recorder = GetTopFitnessess(0.5, 0)
+fwdpy11.evolvets(
+    rng=rng, pop=pop, params=params, simplification_interval=25, recorder=recorder
+)
 </pre></div>
 </div>
 </div>
@@ -2373,12 +2503,12 @@ where we pass an instance on to <a class="reference internal" href="functions.ht
 <p>At the end of the simulation, we indeed have metadata from “ancient samples”:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">amd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">ancient_sample_metadata</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span>
-    <span class="n">amd</span><span class="p">[</span>
-        <span class="o">-</span><span class="mi">5</span><span class="p">:,</span>
-    <span class="p">]</span>
-<span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>amd = np.array(pop.ancient_sample_metadata, copy=False)
+print(
+    amd[
+        -5:,
+    ]
+)
 </pre></div>
 </div>
 </div>
@@ -2396,47 +2526,45 @@ where we pass an instance on to <a class="reference internal" href="functions.ht
 <ul class="simple">
 <li><p><a class="reference internal" href="recorders.html#fwdpy11.RandomAncientSamples" title="fwdpy11.RandomAncientSamples"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.RandomAncientSamples</span></code></a></p></li>
 </ul>
-</div>
-<div class="section" id="tracking-features-of-the-population-during-a-simulation">
-<span id="pop-from-tskit"></span><h2>Tracking features of the population during a simulation<a class="headerlink" href="#tracking-features-of-the-population-during-a-simulation" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="tracking-features-of-the-population-during-a-simulation">
+<span id="pop-from-tskit"></span><h2>Tracking features of the population during a simulation<a class="headerlink" href="#tracking-features-of-the-population-during-a-simulation" title="Permalink to this headline">#</a></h2>
 <p>The concept of passing a callable into the simulation has more uses
 than recording ancient samples.  Basically, we can track pretty
 much anything.  The following example tracks the mean genetic value
 in each deme every generation:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">TrackGvalues</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>class TrackGvalues(object):
+    def __init__(self):
+        self.data = []
 
-    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pop</span><span class="p">,</span> <span class="n">sampler</span><span class="p">):</span>
-        <span class="n">md</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">diploid_metadata</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]:</span>
-            <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">md</span><span class="p">[</span><span class="s2">&quot;deme&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">i</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">w</span><span class="p">):</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">pop</span><span class="o">.</span><span class="n">generation</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">md</span><span class="p">[</span><span class="s2">&quot;g&quot;</span><span class="p">][</span><span class="n">w</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()))</span>
+    def __call__(self, pop, sampler):
+        md = np.array(pop.diploid_metadata, copy=False)
+        for i in [0, 1]:
+            w = np.where(md[&quot;deme&quot;] == i)[0]
+            if len(w):
+                self.data.append((pop.generation, i, md[&quot;g&quot;][w].mean()))
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rng</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSLrng</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
-<span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
-<span class="n">tracker</span> <span class="o">=</span> <span class="n">TrackGvalues</span><span class="p">()</span>
-<span class="n">fwdpy11</span><span class="o">.</span><span class="n">evolvets</span><span class="p">(</span>
-    <span class="n">rng</span><span class="o">=</span><span class="n">rng</span><span class="p">,</span> <span class="n">pop</span><span class="o">=</span><span class="n">pop</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">simplification_interval</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">recorder</span><span class="o">=</span><span class="n">tracker</span>
-<span class="p">)</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">tracker</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="o">-</span><span class="mi">5</span><span class="p">:]:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>rng = fwdpy11.GSLrng(42)
+pop = fwdpy11.DiploidPopulation(100, 1.0)
+tracker = TrackGvalues()
+fwdpy11.evolvets(
+    rng=rng, pop=pop, params=params, simplification_interval=25, recorder=tracker
+)
+for i in tracker.data[-5:]:
+    print(i)
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(148, 1, -0.04025600671547646)
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(149, 0, -0.011050844734613895)
+(149, 0, -0.011050844734613895)
 (149, 1, -0.04855647723412074)
 (150, 0, -0.00890522283395959)
 (150, 1, -0.02692623095109998)
@@ -2444,16 +2572,16 @@ in each deme every generation:</p>
 </div>
 </div>
 </div>
-</div>
-<div class="section" id="starting-a-simulation-with-the-output-of-a-coalescent-simulation">
-<span id="starting-from-msprime"></span><h2>Starting a simulation with the output of a coalescent simulation<a class="headerlink" href="#starting-a-simulation-with-the-output-of-a-coalescent-simulation" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="starting-a-simulation-with-the-output-of-a-coalescent-simulation">
+<span id="starting-from-msprime"></span><h2>Starting a simulation with the output of a coalescent simulation<a class="headerlink" href="#starting-a-simulation-with-the-output-of-a-coalescent-simulation" title="Permalink to this headline">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">msprime</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import msprime
 
-<span class="n">ts</span> <span class="o">=</span> <span class="n">msprime</span><span class="o">.</span><span class="n">simulate</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="n">Ne</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">recombination_rate</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">)</span>
-<span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="o">.</span><span class="n">create_from_tskit</span><span class="p">(</span><span class="n">ts</span><span class="p">)</span>
-<span class="n">pop</span><span class="o">.</span><span class="n">N</span>
+ts = msprime.simulate(200, Ne=100, recombination_rate=1e-3)
+pop = fwdpy11.DiploidPopulation.create_from_tskit(ts)
+pop.N
 </pre></div>
 </div>
 </div>
@@ -2466,20 +2594,20 @@ in each deme every generation:</p>
 <p>We can also start from a simulation of multiple demes:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">m</span> <span class="o">=</span> <span class="mf">1e-3</span>
-<span class="n">ts</span> <span class="o">=</span> <span class="n">msprime</span><span class="o">.</span><span class="n">simulate</span><span class="p">(</span>
-    <span class="n">Ne</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
-    <span class="n">recombination_rate</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span>
-    <span class="n">population_configurations</span><span class="o">=</span><span class="p">[</span>
-        <span class="n">msprime</span><span class="o">.</span><span class="n">PopulationConfiguration</span><span class="p">(</span><span class="n">sample_size</span><span class="o">=</span><span class="mi">100</span><span class="p">),</span>
-        <span class="n">msprime</span><span class="o">.</span><span class="n">PopulationConfiguration</span><span class="p">(</span><span class="n">sample_size</span><span class="o">=</span><span class="mi">100</span><span class="p">),</span>
-    <span class="p">],</span>
-    <span class="n">migration_matrix</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
-<span class="p">)</span>
-<span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="o">.</span><span class="n">create_from_tskit</span><span class="p">(</span><span class="n">ts</span><span class="p">)</span>
-<span class="n">pop</span><span class="o">.</span><span class="n">N</span>
-<span class="n">md</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">diploid_metadata</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">md</span><span class="p">[</span><span class="s2">&quot;deme&quot;</span><span class="p">],</span> <span class="n">return_counts</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>m = 1e-3
+ts = msprime.simulate(
+    Ne=100,
+    recombination_rate=1e-3,
+    population_configurations=[
+        msprime.PopulationConfiguration(sample_size=100),
+        msprime.PopulationConfiguration(sample_size=100),
+    ],
+    migration_matrix=np.array([0.0, m, m, 0.0]).reshape(2, 2),
+)
+pop = fwdpy11.DiploidPopulation.create_from_tskit(ts)
+pop.N
+md = np.array(pop.diploid_metadata, copy=False)
+np.unique(md[&quot;deme&quot;], return_counts=True)
 </pre></div>
 </div>
 </div>
@@ -2511,9 +2639,9 @@ outlined <a class="reference external" href="https://msprime.readthedocs.io/en/s
 is not sufficient to get the recombination rates right
 between separate “chromosomes”.</p>
 </div>
-</div>
-<div class="section" id="converting-the-data-to-a-tskit-treesequence">
-<span id="tskittransfer"></span><h2>Converting the data to a <a class="reference external" href="https://tskit.dev/tskit/docs/stable/python-api.html#tskit.TreeSequence" title="(in Python)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tskit.TreeSequence</span></code></a><a class="headerlink" href="#converting-the-data-to-a-tskit-treesequence" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="converting-the-data-to-a-tskit-treesequence">
+<span id="tskittransfer"></span><h2>Converting the data to a <a class="reference external" href="https://tskit.dev/tskit/docs/stable/python-api.html#tskit.TreeSequence" title="(in Python)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tskit.TreeSequence</span></code></a><a class="headerlink" href="#converting-the-data-to-a-tskit-treesequence" title="Permalink to this headline">#</a></h2>
 <p>The tree sequence data structures may be converted to the analogous <code class="docutils literal notranslate"><span class="pre">tskit</span></code>
 objects using <a class="reference internal" href="types.html#fwdpy11.DiploidPopulation.dump_tables_to_tskit" title="fwdpy11.DiploidPopulation.dump_tables_to_tskit"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.DiploidPopulation.dump_tables_to_tskit()</span></code></a>,
 which returns a <a class="reference external" href="https://tskit.dev/tskit/docs/stable/python-api.html#tskit.TreeSequence" title="(in Python)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tskit.TreeSequence</span></code></a>.</p>
@@ -2578,9 +2706,9 @@ For example, if we assume that we encoded the model parameters as shown two list
 <p>It is possible for model parameters to contain <code class="docutils literal notranslate"><span class="pre">numpy</span></code> arrays.  Unfortunately, their
 string representations are not namespace-qualified, meaning that they say <code class="docutils literal notranslate"><span class="pre">array</span></code> rather
 than <code class="docutils literal notranslate"><span class="pre">numpy.array</span></code> or <code class="docutils literal notranslate"><span class="pre">np.array</span></code>. Thus, I made a type alias so that the <code class="docutils literal notranslate"><span class="pre">eval</span></code> would work.</p>
-</div>
-<div class="section" id="saving-the-results-of-a-simulation-to-disk">
-<span id="savingsimstodisk"></span><h2>Saving the results of a simulation to disk<a class="headerlink" href="#saving-the-results-of-a-simulation-to-disk" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="saving-the-results-of-a-simulation-to-disk">
+<span id="savingsimstodisk"></span><h2>Saving the results of a simulation to disk<a class="headerlink" href="#saving-the-results-of-a-simulation-to-disk" title="Permalink to this headline">#</a></h2>
 <p>To dump the output of a simulation to an uncompressed binary file, use
 <a class="reference internal" href="types.html#fwdpy11.DiploidPopulation.dump_to_file" title="fwdpy11.DiploidPopulation.dump_to_file"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.DiploidPopulation.dump_to_file()</span></code></a>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pop</span><span class="o">.</span><span class="n">dump_to_file</span><span class="p">(</span><span class="s2">&quot;pop.bin&quot;</span><span class="p">)</span>
@@ -2613,15 +2741,15 @@ The first can be read back in with <a class="reference external" href="https://d
 but the second <strong>must</strong> be read back in with the
 static function <a class="reference internal" href="types.html#fwdpy11.DiploidPopulation.load_from_pickle_file" title="fwdpy11.DiploidPopulation.load_from_pickle_file"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.DiploidPopulation.load_from_pickle_file()</span></code></a>.</p>
 </div>
-<div class="section" id="outputting-a-tskit-trees-file">
-<h3>Outputting a <code class="docutils literal notranslate"><span class="pre">tskit</span></code> “trees file”<a class="headerlink" href="#outputting-a-tskit-trees-file" title="Permalink to this headline">¶</a></h3>
+<section id="outputting-a-tskit-trees-file">
+<h3>Outputting a <code class="docutils literal notranslate"><span class="pre">tskit</span></code> “trees file”<a class="headerlink" href="#outputting-a-tskit-trees-file" title="Permalink to this headline">#</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ts</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">dump_tables_to_tskit</span><span class="p">()</span>
 <span class="n">ts</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="s2">&quot;treefile.trees&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
 
     <script type="text/x-thebe-config">
     {
@@ -2645,9 +2773,11 @@ static function <a class="reference internal" href="types.html#fwdpy11.DiploidPo
 
               </div>
               
-            
-                <!-- Previous / next buttons -->
-<div class='prev-next-area'> 
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
     <a class='left-prev' id="prev-link" href="definitions.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
@@ -2663,24 +2793,28 @@ static function <a class="reference internal" href="types.html#fwdpy11.DiploidPo
     <i class="fas fa-angle-right"></i>
     </a>
 </div>
-            
+            </footer>
         </div>
     </div>
-    <footer class="footer">
-  <p>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Kevin Thornton<br/>
+  
+      &copy; Copyright 2022.<br/>
+</p>
+        </footer>
+    </div>
     
-      By Kevin Thornton<br/>
-    
-        &copy; Copyright 2021.<br/>
-  </p>
-</footer>
-</main>
+</div>
 
 
       </div>
     </div>
   
-  <script src="../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
 
   </body>
 </html>

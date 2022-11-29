@@ -4,11 +4,13 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>Developer’s guide &#8212; fwdpy11 manual</title>
     
-  <link href="../_static/css/theme.css" rel="stylesheet">
-  <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
 
     
   <link rel="stylesheet"
@@ -18,20 +20,16 @@
   <link rel="preload" as="font" type="font/woff2" crossorigin
     href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
 
-    
-      
-
-    
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
     
-  <link rel="preload" as="script" href="../_static/js/index.be7d3bbb2ef33a8344ce.js">
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
 
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
@@ -39,12 +37,13 @@
     <script src="../_static/doctools.js"></script>
     <script src="../_static/clipboard.min.js"></script>
     <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
     <script src="../_static/togglebutton.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
-    <script src="../_static/sphinx-book-theme.d59cb220de22ca1c485ebbdc042f0030.js"></script>
+    <script src="../_static/design-tabs.js"></script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
 const thebe_selector = ".thebe,.cell"
 const thebe_selector_input = "pre"
@@ -62,7 +61,21 @@ const thebe_selector_output = ".output, .cell_output"
     <!-- Google Analytics -->
     
   </head>
-  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
     
     <div class="container-fluid" id="banner"></div>
 
@@ -71,9 +84,10 @@ const thebe_selector_output = ".output, .cell_output"
     <div class="container-xl">
       <div class="row">
           
-<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
-    
-        <div class="navbar-brand-box">
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
     <a class="navbar-brand text-wrap" href="../index.html">
       
       
@@ -86,14 +100,15 @@ const thebe_selector_output = ".output, .cell_output"
   <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
 </form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item active">
-        <ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../intro.html">
-   Introduction
-  </a>
- </li>
-</ul>
-<p aria-level="2" class="caption" role="heading">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Introduction
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
   Installation and setup
  </span>
@@ -594,90 +609,180 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 
     </div>
-</nav> <!-- To handle the deprecated key -->
-
-<div class="navbar_extra_footer">
-  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
-</div>
-
-</div>
-
-
-          
-
-
-          
-<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
-    
-    <div class="topbar container-xl fixed-top">
-    <div class="topbar-contents row">
-        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
-        <div class="col pl-md-4 topbar-main">
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
             
-            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
-                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
-                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
-                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
-                <i class="fas fa-bars"></i>
-                <i class="fas fa-arrow-left"></i>
-                <i class="fas fa-arrow-up"></i>
-            </button>
-            
-            
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
-            class="fas fa-download"></i></button>
-
-    <div class="dropdown-buttons">
-        <!-- ipynb file if we had a myst markdown file -->
-        
-        <!-- Download raw file -->
-        <a class="dropdown-buttons" href="../_sources/misc/developersguide.md"><button type="button"
-                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
-                data-placement="left">.md</button></a>
-        <!-- Download PDF via print -->
-        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
-                onclick="printPdf(this)" data-toggle="tooltip" data-placement="left">.pdf</button>
-    </div>
-</div>
-
-            <!-- Source interaction buttons -->
-
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
-        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
-    <div class="dropdown-buttons sourcebuttons">
-        <a class="repository-button"
-            href="https://github.com/molpopgen/fwdpy11"><button type="button" class="btn btn-secondary topbarbtn"
-                data-toggle="tooltip" data-placement="left" title="Source repository"><i
-                    class="fab fa-github"></i>repository</button></a>
-        <a class="issues-button"
-            href="https://github.com/molpopgen/fwdpy11/issues/new?title=Issue%20on%20page%20%2Fmisc/developersguide.html&body=Your%20issue%20content%20here."><button
-                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
-                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
-        
-    </div>
-</div>
-
-            <!-- Full screen (wrap in <a> to have style consistency -->
-
-<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
-        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
-        title="Fullscreen mode"><i
-            class="fas fa-expand"></i></button></a>
-
-            <!-- Launch buttons -->
-
-        </div>
-
-        <!-- Table of contents -->
-        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
-            
-            <div class="tocsection onthispage pt-5 pb-3">
-                <i class="fas fa-list"></i> Contents
+            <div class="navbar_extra_footer">
+            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
             </div>
-            <nav id="bd-toc-nav" aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/molpopgen/fwdpy11"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/molpopgen/fwdpy11/issues/new?title=Issue%20on%20page%20%2Fmisc/developersguide.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../_sources/misc/developersguide.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.md</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#working-with-the-source-code-repository">
    Working with the source code repository
@@ -827,12 +932,11 @@ const thebe_selector_output = ".output, .cell_output"
  </li>
 </ul>
 
-            </nav>
-        </div>
-    </div>
+    </nav>
 </div>
-    <div id="main-content" class="row">
-        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
                 <h1>Developer’s guide</h1>
@@ -998,17 +1102,18 @@ const thebe_selector_output = ".output, .cell_output"
                     </div>
                 </div>
             </div>
-            
+            <main id="main-content" role="main">
+                
               <div>
                 
-  <div class="tex2jax_ignore mathjax_ignore section" id="developer-s-guide">
-<span id="developersguide"></span><h1>Developer’s guide<a class="headerlink" href="#developer-s-guide" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="working-with-the-source-code-repository">
-<h2>Working with the source code repository<a class="headerlink" href="#working-with-the-source-code-repository" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="dependencies">
-<h3>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h3>
-<div class="section" id="non-python">
-<h4>non-Python<a class="headerlink" href="#non-python" title="Permalink to this headline">¶</a></h4>
+  <section class="tex2jax_ignore mathjax_ignore" id="developer-s-guide">
+<span id="developersguide"></span><h1>Developer’s guide<a class="headerlink" href="#developer-s-guide" title="Permalink to this headline">#</a></h1>
+<section id="working-with-the-source-code-repository">
+<h2>Working with the source code repository<a class="headerlink" href="#working-with-the-source-code-repository" title="Permalink to this headline">#</a></h2>
+<section id="dependencies">
+<h3>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">#</a></h3>
+<section id="non-python">
+<h4>non-Python<a class="headerlink" href="#non-python" title="Permalink to this headline">#</a></h4>
 <ul class="simple">
 <li><p>A C++ compiler that supports C++14 or later.
 On Linux, <code class="docutils literal notranslate"><span class="pre">gcc</span></code> is preferred, although <code class="docutils literal notranslate"><span class="pre">clang</span></code> is very useful to compare against.
@@ -1040,9 +1145,9 @@ will be the most reliable.</p></li>
 See <a class="reference external" href="https://docs.conda.io/projects/conda-build/en/latest/resources/compiler-tools.html">here</a> for info about <code class="docutils literal notranslate"><span class="pre">conda</span></code> compilers for Linux and for macOS.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">requirements/</span></code> folder of the source code repository contains a list of minimal <code class="docutils literal notranslate"><span class="pre">conda</span></code> dependencies that we use for CI.</p>
 </div>
-</div>
-<div class="section" id="python">
-<h4>Python<a class="headerlink" href="#python" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="python">
+<h4>Python<a class="headerlink" href="#python" title="Permalink to this headline">#</a></h4>
 <p>To reproduce the environments that we use for CI and deployment:</p>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>python3 -m pip install -r requirements/development.txt
 </pre></div>
@@ -1051,19 +1156,19 @@ See <a class="reference external" href="https://docs.conda.io/projects/conda-bui
 <p class="admonition-title">Note</p>
 <p>It may be useful to add <code class="docutils literal notranslate"><span class="pre">--upgrade</span> <span class="pre">--no-cache-dir</span></code> to the above command.</p>
 </div>
-</div>
-</div>
-<div class="section" id="building-the-code">
-<h3>Building the code<a class="headerlink" href="#building-the-code" title="Permalink to this headline">¶</a></h3>
+</section>
+</section>
+<section id="building-the-code">
+<h3>Building the code<a class="headerlink" href="#building-the-code" title="Permalink to this headline">#</a></h3>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>git submodule init
 git submodule update
 python3 setup.py build_ext -i
 </pre></div>
 </div>
-</div>
-</div>
-<div class="section" id="installing-from-a-clone-of-the-source-repository">
-<h2>Installing from a clone of the source repository<a class="headerlink" href="#installing-from-a-clone-of-the-source-repository" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="installing-from-a-clone-of-the-source-repository">
+<h2>Installing from a clone of the source repository<a class="headerlink" href="#installing-from-a-clone-of-the-source-repository" title="Permalink to this headline">#</a></h2>
 <p>Install the <code class="docutils literal notranslate"><span class="pre">build</span></code> module if you have not:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python -m pip install build
 </pre></div>
@@ -1074,26 +1179,26 @@ python -m build .
 </pre></div>
 </div>
 <p>The install the wheel found in <code class="docutils literal notranslate"><span class="pre">dist/</span></code>.</p>
-</div>
-<div class="section" id="installing-from-the-source-distribution-at-pypi">
-<h2>Installing from the source distribution at PyPi<a class="headerlink" href="#installing-from-the-source-distribution-at-pypi" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="installing-from-the-source-distribution-at-pypi">
+<h2>Installing from the source distribution at PyPi<a class="headerlink" href="#installing-from-the-source-distribution-at-pypi" title="Permalink to this headline">#</a></h2>
 <p>With all of the dependencies in place, tell <code class="docutils literal notranslate"><span class="pre">pip</span></code> to ignore the binary wheels:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># from the repository root</span>
 pip install fwdpy11 --no-binary
 </pre></div>
 </div>
-</div>
-<div class="section" id="running-the-python-test-suite">
-<h2>Running the Python test suite<a class="headerlink" href="#running-the-python-test-suite" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="running-the-python-test-suite">
+<h2>Running the Python test suite<a class="headerlink" href="#running-the-python-test-suite" title="Permalink to this headline">#</a></h2>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>python3 -p pytest tests -n <span class="m">6</span>
 </pre></div>
 </div>
 <p>Replace <code class="docutils literal notranslate"><span class="pre">6</span></code> with a number of threads appropriate for your machine.</p>
-</div>
-<div class="section" id="advanced-build-methods-using-cmake">
-<h2>Advanced build methods using cmake<a class="headerlink" href="#advanced-build-methods-using-cmake" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="building-for-development">
-<h3>Building for development<a class="headerlink" href="#building-for-development" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="advanced-build-methods-using-cmake">
+<h2>Advanced build methods using cmake<a class="headerlink" href="#advanced-build-methods-using-cmake" title="Permalink to this headline">#</a></h2>
+<section id="building-for-development">
+<h3>Building for development<a class="headerlink" href="#building-for-development" title="Permalink to this headline">#</a></h3>
 <p>We need to compile in release mode and enable building Python modules required by the test suite:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cmake -Bbuild -S. -DCMAKE_BUILD_TYPE<span class="o">=</span>Release -DBUILD_PYTHON_UNIT_TESTS<span class="o">=</span>ON
 cmake --build build -j <span class="m">6</span>
@@ -1101,17 +1206,17 @@ cmake --build build -j <span class="m">6</span>
 </div>
 <p>This method can be preferable to the Python commands shown above
 because you get full control over parallelism.</p>
-</div>
-<div class="section" id="building-the-core-library-on-its-own">
-<h3>Building the core library on its own.<a class="headerlink" href="#building-the-core-library-on-its-own" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="building-the-core-library-on-its-own">
+<h3>Building the core library on its own.<a class="headerlink" href="#building-the-core-library-on-its-own" title="Permalink to this headline">#</a></h3>
 <p>Doing this is useful for C++-level testing:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cmake -S. -Bbuild -DCMAKE_BUILD_TYPE<span class="o">=</span>Release
 cmake --build build -t fwdpy11core -j <span class="m">6</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="building-and-running-the-c-test-suite">
-<h3>Building and running the C++ test suite.<a class="headerlink" href="#building-and-running-the-c-test-suite" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="building-and-running-the-c-test-suite">
+<h3>Building and running the C++ test suite.<a class="headerlink" href="#building-and-running-the-c-test-suite" title="Permalink to this headline">#</a></h3>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>The commands in this section build both the Python module and all related libraries
@@ -1132,9 +1237,9 @@ statements from <code class="docutils literal notranslate"><span class="pre">fwd
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cmake -Bbuild_cpp_tests -S. -DBUILD_CPP_UNIT_TESTS<span class="o">=</span>ON -DCMAKE_CXX_FLAGS<span class="o">=</span><span class="s2">&quot;-UNDEBUG -O -g&quot;</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="enabling-compiler-command-support-for-developing-the-c-code">
-<h3>Enabling compiler command support for developing the C++ code<a class="headerlink" href="#enabling-compiler-command-support-for-developing-the-c-code" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="enabling-compiler-command-support-for-developing-the-c-code">
+<h3>Enabling compiler command support for developing the C++ code<a class="headerlink" href="#enabling-compiler-command-support-for-developing-the-c-code" title="Permalink to this headline">#</a></h3>
 <p>Many language servers support processing a local file called <code class="docutils literal notranslate"><span class="pre">compile_commands.json</span></code>.
 See <a class="reference external" href="https://clang.llvm.org/docs/JSONCompilationDatabase.html">here</a> for background.</p>
 <p>To generate this file, execute the following steps from the root of the source code repository:</p>
@@ -1144,10 +1249,10 @@ rm -rf ccomands
 </pre></div>
 </div>
 <p>Now, language servers supporting <code class="docutils literal notranslate"><span class="pre">clangd</span></code> will have nice error checking and code completion for the C++ code!</p>
-</div>
-</div>
-<div class="section" id="c-code-standards">
-<h2>C++ code standards<a class="headerlink" href="#c-code-standards" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="c-code-standards">
+<h2>C++ code standards<a class="headerlink" href="#c-code-standards" title="Permalink to this headline">#</a></h2>
 <p>This is a large topic.
 Briefly,</p>
 <ul class="simple">
@@ -1164,9 +1269,9 @@ For abstract base classes, this usually means that the copy constructors and ass
 <li><p>Virtual functions in derived classes are marked <code class="docutils literal notranslate"><span class="pre">override</span></code>.
 Where appropriate, they are also marked <code class="docutils literal notranslate"><span class="pre">final</span></code>.</p></li>
 </ul>
-</div>
-<div class="section" id="enabling-code-profiling">
-<h2>Enabling code profiling<a class="headerlink" href="#enabling-code-profiling" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="enabling-code-profiling">
+<h2>Enabling code profiling<a class="headerlink" href="#enabling-code-profiling" title="Permalink to this headline">#</a></h2>
 <p>By default, fwdpy11 is compiled with aggressive optimizations to help reduce the library size.
 One side effect is that it becomes impossible to accurately profile the code.
 To override these defaults:</p>
@@ -1180,9 +1285,9 @@ This method of building is for developers who need to accurately profile the C++
 Also note that only the main package is affected.
 Building the unit test modules is not affected.</p>
 </div>
-</div>
-<div class="section" id="disabling-link-time-optimization-lto">
-<h2>Disabling link-time optimization (LTO)<a class="headerlink" href="#disabling-link-time-optimization-lto" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="disabling-link-time-optimization-lto">
+<h2>Disabling link-time optimization (LTO)<a class="headerlink" href="#disabling-link-time-optimization-lto" title="Permalink to this headline">#</a></h2>
 <p>LTO is enabled by default and reduced the final library size substantially.
 However, it takes a long time and is therefore a drag during development.
 To disable it:</p>
@@ -1193,8 +1298,8 @@ To disable it:</p>
 <p class="admonition-title">Note</p>
 <p>This option only affects the main package and not the unit tests.</p>
 </div>
-<div class="section" id="enabling-debugging-symbols-in-the-c-code">
-<h3>Enabling debugging symbols in the C++ code<a class="headerlink" href="#enabling-debugging-symbols-in-the-c-code" title="Permalink to this headline">¶</a></h3>
+<section id="enabling-debugging-symbols-in-the-c-code">
+<h3>Enabling debugging symbols in the C++ code<a class="headerlink" href="#enabling-debugging-symbols-in-the-c-code" title="Permalink to this headline">#</a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python setup.py build_ext -i --debug
 </pre></div>
 </div>
@@ -1206,9 +1311,9 @@ First, things will run much more slowly.
 Second, triggering an assertion will cause the Python interpreter to crash.
 These assertions exist as a brute-force method to help developers quickly identify bugs.</p>
 </div>
-</div>
-<div class="section" id="enabling-assertions-in-the-c-code">
-<h3>Enabling assertions in the C++ code<a class="headerlink" href="#enabling-assertions-in-the-c-code" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="enabling-assertions-in-the-c-code">
+<h3>Enabling assertions in the C++ code<a class="headerlink" href="#enabling-assertions-in-the-c-code" title="Permalink to this headline">#</a></h3>
 <p>The fwdpp library code uses C’s assert macros in several places.
 These are disabled by default.
 However, it can be useful to enable them when hacking the code.
@@ -1220,26 +1325,26 @@ To do so, you must manually set your compiler flags with cmake:</p>
 The fwdpp back end also makes extra checks.
 If those fail, <code class="docutils literal notranslate"><span class="pre">abort</span></code> will be called, which will crash the Python interpreter.
 Thus, compiling with this option is a “serious debugging mode only” option.</p>
-</div>
-<div class="section" id="enabling-aggressive-debugging-of-c-stl-templates-using-gcc">
-<h3>Enabling aggressive debugging of C++ STL templates using GCC<a class="headerlink" href="#enabling-aggressive-debugging-of-c-stl-templates-using-gcc" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="enabling-aggressive-debugging-of-c-stl-templates-using-gcc">
+<h3>Enabling aggressive debugging of C++ STL templates using GCC<a class="headerlink" href="#enabling-aggressive-debugging-of-c-stl-templates-using-gcc" title="Permalink to this headline">#</a></h3>
 <p>Use the following flags to enable an “extreme” debugging mode of the C++ standard template library:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">CXXFLAGS</span><span class="o">=</span><span class="s2">&quot;-D_GLIBCXX_CONCEPT_CHECKS -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC&quot;</span> <span class="se">\</span>
    <span class="nv">CPPFLAGS</span><span class="o">=</span><span class="s2">&quot;-D_GLIBCXX_CONCEPT_CHECKS -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC&quot;</span> python3 setup.py build_ext -i
 </pre></div>
 </div>
-</div>
-<div class="section" id="static-analysis-using-clang-tidy">
-<h3>Static analysis using clang-tidy<a class="headerlink" href="#static-analysis-using-clang-tidy" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="static-analysis-using-clang-tidy">
+<h3>Static analysis using clang-tidy<a class="headerlink" href="#static-analysis-using-clang-tidy" title="Permalink to this headline">#</a></h3>
 <p>It is sometimes useful to go through the code and to a “static” analysis to look for problems.
 The clang-tidy tool is especially useful.</p>
 <p>For example:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>find fwdpy11/src/ -name <span class="s1">&#39;*.cc&#39;</span> <span class="p">|</span> xargs clang-tidy -p ./compile_commands.json -checks<span class="o">=</span><span class="s2">&quot;all&quot;</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="static-analysis-using-cppcheck">
-<h3>Static analysis using cppcheck<a class="headerlink" href="#static-analysis-using-cppcheck" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="static-analysis-using-cppcheck">
+<h3>Static analysis using cppcheck<a class="headerlink" href="#static-analysis-using-cppcheck" title="Permalink to this headline">#</a></h3>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The JSON file may containt too many backslashes, causing cppcheck to fail.
@@ -1248,14 +1353,14 @@ Use <code class="docutils literal notranslate"><span class="pre">sed</span></cod
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cppcheck --project<span class="o">=</span>compile_commands.json --enable<span class="o">=</span><span class="s2">&quot;all&quot;</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="code-formatting-style">
-<h3>Code formatting style<a class="headerlink" href="#code-formatting-style" title="Permalink to this headline">¶</a></h3>
-</div>
-<div class="section" id="python-code-standards">
-<h3>Python code standards<a class="headerlink" href="#python-code-standards" title="Permalink to this headline">¶</a></h3>
-<div class="section" id="id1">
-<h4>Code formatting style<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="code-formatting-style">
+<h3>Code formatting style<a class="headerlink" href="#code-formatting-style" title="Permalink to this headline">#</a></h3>
+</section>
+<section id="python-code-standards">
+<h3>Python code standards<a class="headerlink" href="#python-code-standards" title="Permalink to this headline">#</a></h3>
+<section id="id1">
+<h4>Code formatting style<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h4>
 <p>The formatting style is <a class="reference external" href="https://black.readthedocs.io/en/stable/">black</a> with a line length of 89, which is specified in the <code class="docutils literal notranslate"><span class="pre">.flake8</span></code> file that is part of the source repository.</p>
 <p>The beauty of formatting with <code class="docutils literal notranslate"><span class="pre">black</span></code> is that you can just write all your Python code and then format at the end.
 For example, with <code class="docutils literal notranslate"><span class="pre">vim</span></code> or <code class="docutils literal notranslate"><span class="pre">neovim</span></code>, you may use the plugin from the <a class="reference external" href="https://black.readthedocs.io/en/stable/">black</a> repository and the following <code class="docutils literal notranslate"><span class="pre">normal</span></code> mode command to auto-format your code:</p>
@@ -1290,17 +1395,17 @@ For example, with <code class="docutils literal notranslate"><span class="pre">v
 <p class="admonition-title">Note</p>
 <p>In the future, we may rely entirely on <code class="docutils literal notranslate"><span class="pre">black</span></code> to sort includes as <code class="docutils literal notranslate"><span class="pre">black/isort</span></code> compatibility evolves.</p>
 </div>
-</div>
-</div>
-</div>
-<div class="section" id="writing-documentation">
-<h2>Writing documentation<a class="headerlink" href="#writing-documentation" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+</section>
+<section id="writing-documentation">
+<h2>Writing documentation<a class="headerlink" href="#writing-documentation" title="Permalink to this headline">#</a></h2>
 <p>We use <a class="reference external" href="https://www.jupyterbook.org">jupyter book</a> to write the manual.
 This tool uses a flavor of markdown called <code class="docutils literal notranslate"><span class="pre">MYsT</span></code>.
 At the moment, there aren’t many tools available to do things like auto-format code, etc..</p>
 <p>The dependencies for the documentation are described above.</p>
-<div class="section" id="building-the-documentation">
-<h3>Building the documentation<a class="headerlink" href="#building-the-documentation" title="Permalink to this headline">¶</a></h3>
+<section id="building-the-documentation">
+<h3>Building the documentation<a class="headerlink" href="#building-the-documentation" title="Permalink to this headline">#</a></h3>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> doc
 make 
 </pre></div>
@@ -1311,18 +1416,18 @@ make
 </pre></div>
 </div>
 <p>Remember to <code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">..</span></code> to get out of the <code class="docutils literal notranslate"><span class="pre">doc/</span></code> folder and get back to the repository root when you’re done.</p>
-</div>
-<div class="section" id="docstrings-in-c-code">
-<h3>Docstrings in C++ code<a class="headerlink" href="#docstrings-in-c-code" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="docstrings-in-c-code">
+<h3>Docstrings in C++ code<a class="headerlink" href="#docstrings-in-c-code" title="Permalink to this headline">#</a></h3>
 <p>We are moving away from docstrings in C++ code.
 Where possible, we prefer to either have a Python class inherit from a <code class="docutils literal notranslate"><span class="pre">pybind11</span></code> class.
 Alternately, encapsulation of the <code class="docutils literal notranslate"><span class="pre">pybind11</span></code> class in a Python class is a possibility.
 Then, the Python classes contain the docstrings.</p>
 <p>For functions, we apply the same idea, defining a Python function that calls the low-level C++ function.</p>
 <p>Although this is a bit more work, it provides better support for tools like <code class="docutils literal notranslate"><span class="pre">mypy</span></code>, <code class="docutils literal notranslate"><span class="pre">jedi</span></code>, etc..</p>
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
 
     <script type="text/x-thebe-config">
     {
@@ -1346,9 +1451,11 @@ Then, the Python classes contain the docstrings.</p>
 
               </div>
               
-            
-                <!-- Previous / next buttons -->
-<div class='prev-next-area'> 
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
     <a class='left-prev' id="prev-link" href="deprecated.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
@@ -1364,24 +1471,28 @@ Then, the Python classes contain the docstrings.</p>
     <i class="fas fa-angle-right"></i>
     </a>
 </div>
-            
+            </footer>
         </div>
     </div>
-    <footer class="footer">
-  <p>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Kevin Thornton<br/>
+  
+      &copy; Copyright 2022.<br/>
+</p>
+        </footer>
+    </div>
     
-      By Kevin Thornton<br/>
-    
-        &copy; Copyright 2021.<br/>
-  </p>
-</footer>
-</main>
+</div>
 
 
       </div>
     </div>
   
-  <script src="../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
 
   </body>
 </html>

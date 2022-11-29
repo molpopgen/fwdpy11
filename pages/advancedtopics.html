@@ -4,11 +4,13 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>Advanced topics &#8212; fwdpy11 manual</title>
     
-  <link href="../_static/css/theme.css" rel="stylesheet">
-  <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
 
     
   <link rel="stylesheet"
@@ -18,20 +20,16 @@
   <link rel="preload" as="font" type="font/woff2" crossorigin
     href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
 
-    
-      
-
-    
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
     
-  <link rel="preload" as="script" href="../_static/js/index.be7d3bbb2ef33a8344ce.js">
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
 
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
@@ -39,12 +37,13 @@
     <script src="../_static/doctools.js"></script>
     <script src="../_static/clipboard.min.js"></script>
     <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
     <script src="../_static/togglebutton.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
-    <script src="../_static/sphinx-book-theme.d59cb220de22ca1c485ebbdc042f0030.js"></script>
+    <script src="../_static/design-tabs.js"></script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
 const thebe_selector = ".thebe,.cell"
 const thebe_selector_input = "pre"
@@ -64,7 +63,21 @@ const thebe_selector_output = ".output, .cell_output"
     <!-- Google Analytics -->
     
   </head>
-  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
     
     <div class="container-fluid" id="banner"></div>
 
@@ -73,9 +86,10 @@ const thebe_selector_output = ".output, .cell_output"
     <div class="container-xl">
       <div class="row">
           
-<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
-    
-        <div class="navbar-brand-box">
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
     <a class="navbar-brand text-wrap" href="../index.html">
       
       
@@ -88,14 +102,15 @@ const thebe_selector_output = ".output, .cell_output"
   <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
 </form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item active">
-        <ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../intro.html">
-   Introduction
-  </a>
- </li>
-</ul>
-<p aria-level="2" class="caption" role="heading">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Introduction
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
   Installation and setup
  </span>
@@ -596,93 +611,208 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 
     </div>
-</nav> <!-- To handle the deprecated key -->
-
-<div class="navbar_extra_footer">
-  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
-</div>
-
-</div>
-
-
-          
-
-
-          
-<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
-    
-    <div class="topbar container-xl fixed-top">
-    <div class="topbar-contents row">
-        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
-        <div class="col pl-md-4 topbar-main">
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
             
-            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
-                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
-                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
-                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
-                <i class="fas fa-bars"></i>
-                <i class="fas fa-arrow-left"></i>
-                <i class="fas fa-arrow-up"></i>
-            </button>
+            <div class="navbar_extra_footer">
+            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+            </div>
             
-            
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
-            class="fas fa-download"></i></button>
-
-    <div class="dropdown-buttons">
-        <!-- ipynb file if we had a myst markdown file -->
-        <a class="dropdown-buttons"
-            href="../_sources/pages/advancedtopics.ipynb"><button type="button"
-                class="btn btn-secondary topbarbtn" title="Download notebook file" data-toggle="tooltip"
-                data-placement="left">.ipynb</button></a>
-        <!-- Download raw file -->
-        <a class="dropdown-buttons" href="../_sources/pages/advancedtopics.md"><button type="button"
-                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
-                data-placement="left">.md</button></a>
-        <!-- Download PDF via print -->
-        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
-                onclick="printPdf(this)" data-toggle="tooltip" data-placement="left">.pdf</button>
+        </div>
     </div>
+    <div id="rtd-footer-container"></div>
 </div>
 
-            <!-- Source interaction buttons -->
 
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
-        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
-    <div class="dropdown-buttons sourcebuttons">
-        <a class="repository-button"
-            href="https://github.com/molpopgen/fwdpy11"><button type="button" class="btn btn-secondary topbarbtn"
-                data-toggle="tooltip" data-placement="left" title="Source repository"><i
-                    class="fab fa-github"></i>repository</button></a>
-        <a class="issues-button"
-            href="https://github.com/molpopgen/fwdpy11/issues/new?title=Issue%20on%20page%20%2Fpages/advancedtopics.html&body=Your%20issue%20content%20here."><button
-                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
-                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
         
     </div>
+    <div class="header-article__right">
+<div class="menu-dropdown menu-dropdown-launch-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Launch interactive content">
+      <i class="fas fa-rocket"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+    </ul>
+  </div>
 </div>
 
-            <!-- Full screen (wrap in <a> to have style consistency -->
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
 
-<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
-        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
-        title="Fullscreen mode"><i
-            class="fas fa-expand"></i></button></a>
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
 
-            <!-- Launch buttons -->
+</button>
 
-        </div>
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/molpopgen/fwdpy11"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
 
-        <!-- Table of contents -->
-        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
-            
-            <div class="tocsection onthispage pt-5 pb-3">
-                <i class="fas fa-list"></i> Contents
-            </div>
-            <nav id="bd-toc-nav" aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/molpopgen/fwdpy11/issues/new?title=Issue%20on%20page%20%2Fpages/advancedtopics.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../_sources/pages/advancedtopics.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download notebook file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-code"></i>
+  </span>
+<span class="headerbtn__text-container">.ipynb</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="../_sources/pages/advancedtopics.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.md</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#executing-multiple-replicates-in-parallel-using-concurrent-futures">
    Executing multiple replicates in parallel using
@@ -836,12 +966,11 @@ const thebe_selector_output = ".output, .cell_output"
  </li>
 </ul>
 
-            </nav>
-        </div>
-    </div>
+    </nav>
 </div>
-    <div id="main-content" class="row">
-        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
                 <h1>Advanced topics</h1>
@@ -1011,13 +1140,14 @@ const thebe_selector_output = ".output, .cell_output"
                     </div>
                 </div>
             </div>
-            
+            <main id="main-content" role="main">
+                
               <div>
                 
-  <div class="tex2jax_ignore mathjax_ignore section" id="advanced-topics">
-<span id="advancedtopics"></span><h1>Advanced topics<a class="headerlink" href="#advanced-topics" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="executing-multiple-replicates-in-parallel-using-concurrent-futures">
-<h2>Executing multiple replicates in parallel using <code class="docutils literal notranslate"><span class="pre">concurrent.futures</span></code><a class="headerlink" href="#executing-multiple-replicates-in-parallel-using-concurrent-futures" title="Permalink to this headline">¶</a></h2>
+  <section class="tex2jax_ignore mathjax_ignore" id="advanced-topics">
+<span id="advancedtopics"></span><h1>Advanced topics<a class="headerlink" href="#advanced-topics" title="Permalink to this headline">#</a></h1>
+<section id="executing-multiple-replicates-in-parallel-using-concurrent-futures">
+<h2>Executing multiple replicates in parallel using <code class="docutils literal notranslate"><span class="pre">concurrent.futures</span></code><a class="headerlink" href="#executing-multiple-replicates-in-parallel-using-concurrent-futures" title="Permalink to this headline">#</a></h2>
 <p>You have many options when it comes to running many replicates of a model.
 For example, you could write a single Python script plus a shell script
 that your local cluster understands, sending your simulation to hundreds
@@ -1045,9 +1175,9 @@ process, keep it simple!</p></li>
 <a class="reference external" href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.randint.html#numpy.random.randint" title="(in NumPy v1.23)"><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.random.randint()</span></code></a> after calling
 <a class="reference external" href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.seed.html#numpy.random.seed" title="(in NumPy v1.23)"><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.random.seed()</span></code></a> using a user-provided seed.</p></li>
 </ul>
-</div>
-<div class="section" id="how-long-to-run-the-simulation">
-<span id="howlongtorun"></span><h2>How long to run the simulation<a class="headerlink" href="#how-long-to-run-the-simulation" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="how-long-to-run-the-simulation">
+<span id="howlongtorun"></span><h2>How long to run the simulation<a class="headerlink" href="#how-long-to-run-the-simulation" title="Permalink to this headline">#</a></h2>
 <p>Deciding how long to run a simulation depends on whether or not
 a “burn in” phase is required to get the model to statistical
 equilibrium.  For example, if you want to get the steady-state
@@ -1092,9 +1222,9 @@ population size of your population (<em>e.g.</em> in the absence of selection).<
 trees” issue mentioned above.  We could just simulate much longer
 to get rid of this problem, but it is simply easier to start
 with a tree sequence from <code class="docutils literal notranslate"><span class="pre">msprime</span></code> (see <a class="reference internal" href="tutorial.html#starting-from-msprime"><span class="std std-ref">here</span></a>).</p>
-</div>
-<div class="section" id="the-eyre-walker-model-of-complex-traits">
-<span id="eyre-walker"></span><h2>The “Eyre-Walker” model of complex traits<a class="headerlink" href="#the-eyre-walker-model-of-complex-traits" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="the-eyre-walker-model-of-complex-traits">
+<span id="eyre-walker"></span><h2>The “Eyre-Walker” model of complex traits<a class="headerlink" href="#the-eyre-walker-model-of-complex-traits" title="Permalink to this headline">#</a></h2>
 <p><span id="id3">[<a class="reference internal" href="../misc/bibliography.html#id23" title="Adam Eyre-Walker. Evolution in health and medicine sackler colloquium: genetic architecture of a complex trait and its implications for fitness and genome-wide association studies. Proc. Natl. Acad. Sci. U. S. A., 107 Suppl 1:1752–1756, January 2010. doi:10.1073/pnas.0906182107.">EW10</a>]</span> describes a model relating mutations with
 fitness effect <span class="math notranslate nohighlight">\(S = |2Ns|\)</span> to <span class="math notranslate nohighlight">\(z\)</span>, their effect on
 a phenotype/trait according to <span class="math notranslate nohighlight">\(z = \delta S^\tau(1+\epsilon)\)</span>.
@@ -1110,27 +1240,27 @@ We’ll run a small population for a few generations.  This model will be nowher
 near equilibrium, but we’re just using it as an example:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fwdpy11</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import fwdpy11
+import numpy as np
 
-<span class="n">N</span> <span class="o">=</span> <span class="mi">1000</span>
-<span class="n">sregions</span> <span class="o">=</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">ExpS</span><span class="p">(</span><span class="n">beg</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">mean</span><span class="o">=-</span><span class="mi">20</span><span class="p">,</span> <span class="n">scaling</span><span class="o">=</span><span class="mi">2</span> <span class="o">*</span> <span class="n">N</span><span class="p">)]</span>
-<span class="n">recregions</span> <span class="o">=</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">PoissonInterval</span><span class="p">(</span><span class="n">beg</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">mean</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">)]</span>
-<span class="n">gvalue</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Multiplicative</span><span class="p">(</span><span class="n">scaling</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
-<span class="n">pdict</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;nregions&quot;</span><span class="p">:</span> <span class="p">[],</span>
-    <span class="s2">&quot;sregions&quot;</span><span class="p">:</span> <span class="n">sregions</span><span class="p">,</span>
-    <span class="s2">&quot;recregions&quot;</span><span class="p">:</span> <span class="n">recregions</span><span class="p">,</span>
-    <span class="s2">&quot;rates&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1e-3</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-    <span class="s2">&quot;gvalue&quot;</span><span class="p">:</span> <span class="n">gvalue</span><span class="p">,</span>
-    <span class="s2">&quot;prune_selected&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-    <span class="s2">&quot;simlen&quot;</span><span class="p">:</span> <span class="mi">150</span><span class="p">,</span>
-<span class="p">}</span>
-<span class="n">params</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="n">pdict</span><span class="p">)</span>
-<span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
-<span class="n">rng</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSLrng</span><span class="p">(</span><span class="mi">54321</span><span class="p">)</span>
-<span class="n">fwdpy11</span><span class="o">.</span><span class="n">evolvets</span><span class="p">(</span><span class="n">rng</span><span class="p">,</span> <span class="n">pop</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">mutations</span><span class="p">))</span>
+N = 1000
+sregions = [fwdpy11.ExpS(beg=0.0, end=1.0, weight=1.0, mean=-20, scaling=2 * N)]
+recregions = [fwdpy11.PoissonInterval(beg=0.0, end=0.1, mean=1e-3)]
+gvalue = fwdpy11.Multiplicative(scaling=2.0)
+pdict = {
+    &quot;nregions&quot;: [],
+    &quot;sregions&quot;: sregions,
+    &quot;recregions&quot;: recregions,
+    &quot;rates&quot;: (0.0, 1e-3, None),
+    &quot;gvalue&quot;: gvalue,
+    &quot;prune_selected&quot;: False,
+    &quot;simlen&quot;: 150,
+}
+params = fwdpy11.ModelParams(**pdict)
+pop = fwdpy11.DiploidPopulation(N, 1.0)
+rng = fwdpy11.GSLrng(54321)
+fwdpy11.evolvets(rng, pop, params, 100)
+print(len(pop.tables.mutations))
 </pre></div>
 </div>
 </div>
@@ -1143,13 +1273,13 @@ near equilibrium, but we’re just using it as an example:</p>
 <p>Define a function relating <span class="math notranslate nohighlight">\(S\)</span> to <span class="math notranslate nohighlight">\(z\)</span>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">getz</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">sigma</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="p">:</span>
-        <span class="n">delta</span> <span class="o">=</span> <span class="mi">1</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">delta</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
-    <span class="n">epsilon</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">sigma</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="k">return</span> <span class="n">delta</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">S</span><span class="p">),</span> <span class="n">tau</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">epsilon</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def getz(S, tau, sigma):
+    if np.random.uniform() &lt; 0.5:
+        delta = 1
+    else:
+        delta = -1
+    epsilon = np.random.normal(loc=0, scale=sigma, size=1)[0]
+    return delta * np.power(np.abs(S), tau) * (1.0 + epsilon)
 </pre></div>
 </div>
 </div>
@@ -1157,13 +1287,13 @@ near equilibrium, but we’re just using it as an example:</p>
 <p>Apply the function and look at the results:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">101010</span><span class="p">)</span>
-<span class="n">zvals</span> <span class="o">=</span> <span class="p">{}</span>
-<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">mutations</span><span class="p">):</span>
-    <span class="n">zvals</span><span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">getz</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">N</span> <span class="o">*</span> <span class="n">pop</span><span class="o">.</span><span class="n">mutations</span><span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">s</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>np.random.seed(101010)
+zvals = {}
+for i, m in enumerate(pop.tables.mutations):
+    zvals[m.key] = getz(2 * N * pop.mutations[m.key].s, 0.5, 1.0)
 
-<span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">zvals</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">mutations</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">s</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+for k, v in zvals.items():
+    print(pop.mutations[k].s, v)
 </pre></div>
 </div>
 </div>
@@ -1189,18 +1319,18 @@ near equilibrium, but we’re just using it as an example:</p>
 strictly additive model:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">phenotypes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">N</span><span class="p">)</span>
-<span class="n">node_to_individual</span> <span class="o">=</span> <span class="p">{}</span>
-<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">diploid_metadata</span><span class="p">):</span>
-    <span class="k">assert</span> <span class="n">j</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">node_to_individual</span>
-    <span class="k">assert</span> <span class="n">j</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">node_to_individual</span>
-    <span class="n">node_to_individual</span><span class="p">[</span><span class="n">j</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="n">i</span>
-    <span class="n">node_to_individual</span><span class="p">[</span><span class="n">j</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="n">i</span>
-<span class="n">ti</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">TreeIterator</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">tables</span><span class="p">,</span> <span class="n">pop</span><span class="o">.</span><span class="n">alive_nodes</span><span class="p">,</span> <span class="n">update_samples</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">ti</span><span class="p">:</span>
-    <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">t</span><span class="o">.</span><span class="n">mutations</span><span class="p">():</span>
-        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">t</span><span class="o">.</span><span class="n">samples_below</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">node</span><span class="p">):</span>
-            <span class="n">phenotypes</span><span class="p">[</span><span class="n">node_to_individual</span><span class="p">[</span><span class="n">n</span><span class="p">]]</span> <span class="o">+=</span> <span class="n">zvals</span><span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">key</span><span class="p">]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>phenotypes = np.zeros(pop.N)
+node_to_individual = {}
+for i, j in enumerate(pop.diploid_metadata):
+    assert j.nodes[0] not in node_to_individual
+    assert j.nodes[1] not in node_to_individual
+    node_to_individual[j.nodes[0]] = i
+    node_to_individual[j.nodes[1]] = i
+ti = fwdpy11.TreeIterator(pop.tables, pop.alive_nodes, update_samples=True)
+for t in ti:
+    for m in t.mutations():
+        for n in t.samples_below(m.node):
+            phenotypes[node_to_individual[n]] += zvals[m.key]
 </pre></div>
 </div>
 </div>
@@ -1208,7 +1338,7 @@ strictly additive model:</p>
 <p>The trait value distribution is:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">phenotypes</span><span class="p">,</span> <span class="n">return_counts</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>np.unique(phenotypes, return_counts=True)
 </pre></div>
 </div>
 </div>
@@ -1225,8 +1355,8 @@ strictly additive model:</p>
 <p>The mean trait value and the genetic variance are:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">phenotypes</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
-<span class="n">phenotypes</span><span class="o">.</span><span class="n">var</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>phenotypes.mean()
+phenotypes.var()
 </pre></div>
 </div>
 </div>
@@ -1239,11 +1369,11 @@ strictly additive model:</p>
 <p>For our final trick, let’s store them in the individual metadata:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">md</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">diploid_metadata</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">md</span><span class="p">[</span><span class="s2">&quot;g&quot;</span><span class="p">][:]</span> <span class="o">=</span> <span class="n">phenotypes</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>md = np.array(pop.diploid_metadata, copy=False)
+md[&quot;g&quot;][:] = phenotypes
 
-<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">md</span><span class="p">[</span><span class="s2">&quot;g&quot;</span><span class="p">][:</span><span class="mi">5</span><span class="p">],</span> <span class="n">phenotypes</span><span class="p">[:</span><span class="mi">5</span><span class="p">]):</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
+for i, j in zip(md[&quot;g&quot;][:5], phenotypes[:5]):
+    print(i, j)
 </pre></div>
 </div>
 </div>
@@ -1289,19 +1419,19 @@ suddenly stop affecting the trait once they hit some critical frequency.
 Presumably, the same variants would affect the trait again should they drift to
 a frequency below <span class="math notranslate nohighlight">\(x\)</span> if the simulation is run a bit longer.</p></li>
 </ul>
-</div>
-<div class="section" id="writing-genetic-value-classes-in-python">
-<span id="gvalues-python"></span><h2>Writing genetic value classes in Python<a class="headerlink" href="#writing-genetic-value-classes-in-python" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="writing-genetic-value-classes-in-python">
+<span id="gvalues-python"></span><h2>Writing genetic value classes in Python<a class="headerlink" href="#writing-genetic-value-classes-in-python" title="Permalink to this headline">#</a></h2>
 <p>Version <code class="docutils literal notranslate"><span class="pre">0.9.0</span></code> added the ability to write custom genetic value types in
 Python.  Such classes are useful for prototyping new models
 and/or generating example models for teaching/illustrating concepts.</p>
 <div class="versionadded">
 <p><span class="versionmodified added">New in version 0.9.0.</span></p>
 </div>
-<div class="section" id="concepts">
-<h3>Concepts<a class="headerlink" href="#concepts" title="Permalink to this headline">¶</a></h3>
-<div class="section" id="the-dimensionality-of-a-model">
-<span id="python-genetic-value-dimensions"></span><h4>The “dimensionality” of a model<a class="headerlink" href="#the-dimensionality-of-a-model" title="Permalink to this headline">¶</a></h4>
+<section id="concepts">
+<h3>Concepts<a class="headerlink" href="#concepts" title="Permalink to this headline">#</a></h3>
+<section id="the-dimensionality-of-a-model">
+<span id="python-genetic-value-dimensions"></span><h4>The “dimensionality” of a model<a class="headerlink" href="#the-dimensionality-of-a-model" title="Permalink to this headline">#</a></h4>
 <p><code class="docutils literal notranslate"><span class="pre">fwdpy11</span></code> supports both univariate and multivariate trait simulations.
 Thus, a genetic value implicitly has a dimensionality. For the
 case of a standard population-genetic simulation where mutations
@@ -1331,9 +1461,9 @@ values.</p>
 <p>Update for multi-dimensional genetic values once we get documentation
 in place for simulations of Gaussian stabilizing selection with pleiotropy.</p>
 </div>
-</div>
-<div class="section" id="supporting-time-dependent-models">
-<span id="python-genetic-value-update-desc"></span><h4>Supporting time-dependent models<a class="headerlink" href="#supporting-time-dependent-models" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="supporting-time-dependent-models">
+<span id="python-genetic-value-update-desc"></span><h4>Supporting time-dependent models<a class="headerlink" href="#supporting-time-dependent-models" title="Permalink to this headline">#</a></h4>
 <p>Genetic value methods may have dynamic states that depend on some
 state of the population.  For example, something may change once
 <code class="docutils literal notranslate"><span class="pre">pop.generation</span> <span class="pre">&gt;</span> <span class="pre">x</span></code>.</p>
@@ -1347,10 +1477,10 @@ the following signature:</p>
 above. A concrete example is shown <a class="reference internal" href="#python-gvalue-to-fitness"><span class="std std-ref">below</span></a>,
 in an example class called <code class="docutils literal notranslate"><span class="pre">PyGSSRandomOptimum</span></code>.  That example does not
 use any information from <code class="docutils literal notranslate"><span class="pre">pop</span></code> to update its state.</p>
-</div>
-</div>
-<div class="section" id="performance">
-<h3>Performance<a class="headerlink" href="#performance" title="Permalink to this headline">¶</a></h3>
+</section>
+</section>
+<section id="performance">
+<h3>Performance<a class="headerlink" href="#performance" title="Permalink to this headline">#</a></h3>
 <p>It will be hard to get “awesome” performance with Python genetic
 value classes.  The culprit are abstract methods that get called
 once per offspring.  That’s simply a lot of Python/C++ boundary
@@ -1368,7 +1498,7 @@ type.</p>
 <p><code class="docutils literal notranslate"><span class="pre">fwdpy11</span></code> provides the following helper functions to improve efficiency:</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="fwdpy11.strict_additive_effects">
-<span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">strict_additive_effects</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.strict_additive_effects" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">strict_additive_effects</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.strict_additive_effects" title="Permalink to this definition">#</a></dt>
 <dd><p>This function computes the sum of effect sizes in a
 diploid genome, ignoring dominance.  The return value
 is an offset from zero, so add 1.0 to convert to a
@@ -1383,7 +1513,7 @@ fitness if needed.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fwdpy11.additive_effects">
-<span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">additive_effects</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.additive_effects" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">additive_effects</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.additive_effects" title="Permalink to this definition">#</a></dt>
 <dd><p>This function computes the sum of effect sizes in a
 diploid genome, accounting for dominance.  The return value
 is an offset from zero, so add 1.0 to convert to a
@@ -1412,19 +1542,19 @@ fitness if needed.</p>
 </div>
 <p>The second function uses C++ code from <code class="docutils literal notranslate"><span class="pre">fwdpp</span></code> to do the calculation
 accounting for dominance effects.</p>
-</div>
-<div class="section" id="technical-issues">
-<h3>Technical issues<a class="headerlink" href="#technical-issues" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="technical-issues">
+<h3>Technical issues<a class="headerlink" href="#technical-issues" title="Permalink to this headline">#</a></h3>
 <p>This section discusses some important technicalities.</p>
-<div class="section" id="abstract-base-classes">
-<h4>Abstract base classes<a class="headerlink" href="#abstract-base-classes" title="Permalink to this headline">¶</a></h4>
+<section id="abstract-base-classes">
+<h4>Abstract base classes<a class="headerlink" href="#abstract-base-classes" title="Permalink to this headline">#</a></h4>
 <p>In object oriented lingo, the <code class="docutils literal notranslate"><span class="pre">fwdpy11</span></code> base classes here are <em>abstract
 base classes</em> or <code class="docutils literal notranslate"><span class="pre">ABCs</span></code>.  This means that they simply describe a required
 interface.  When you inherit from an ABC, you must fill in the details
 of that interface.</p>
-</div>
-<div class="section" id="initializing-the-super-class">
-<h4>Initializing the super class<a class="headerlink" href="#initializing-the-super-class" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="initializing-the-super-class">
+<h4>Initializing the super class<a class="headerlink" href="#initializing-the-super-class" title="Permalink to this headline">#</a></h4>
 <p>When writing object-oriented code, it is important that a derived
 class properly initialize the base class.  In Python, base
 classes are often called <code class="docutils literal notranslate"><span class="pre">superclasses</span></code> and derived classes are
@@ -1432,27 +1562,27 @@ classes are often called <code class="docutils literal notranslate"><span class=
 <p>The idiomatic approach in <code class="docutils literal notranslate"><span class="pre">Python</span> <span class="pre">3</span></code> is:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Base</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-   <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-       <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="s2">&quot;I am a Base&quot;</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>class Base(object):
+   def __init__(self):
+       self.b = &quot;I am a Base&quot;
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Derived</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
-   <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-       <span class="bp">self</span><span class="o">.</span><span class="n">d</span> <span class="o">=</span> <span class="s2">&quot;I am a Derived&quot;</span>
-       <span class="nb">super</span><span class="p">(</span><span class="n">Derived</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>class Derived(Base):
+   def __init__(self):
+       self.d = &quot;I am a Derived&quot;
+       super(Derived, self).__init__()
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">d</span> <span class="o">=</span> <span class="n">Derived</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">b</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>d = Derived()
+print(d.b)
 </pre></div>
 </div>
 </div>
@@ -1476,9 +1606,9 @@ things will fall apart due to differences between Python’s MRO and C++’s mec
 <p>The source of this quote is the <code class="docutils literal notranslate"><span class="pre">pybind11</span></code> manual section on
 <a class="reference external" href="https://pybind11.readthedocs.io/en/stable/advanced/classes.html">Classes</a>.</p>
 <p>The examples that follow take their advice.</p>
-</div>
-<div class="section" id="attrs">
-<h4><code class="docutils literal notranslate"><span class="pre">attrs</span></code><a class="headerlink" href="#attrs" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="attrs">
+<h4><code class="docutils literal notranslate"><span class="pre">attrs</span></code><a class="headerlink" href="#attrs" title="Permalink to this headline">#</a></h4>
 <p>The <a class="reference external" href="https://www.attrs.org">attrs</a> package provides a library
 of convenient class decorators that significantly reduce the amount
 of “boiler plate” code needed to write Python
@@ -1488,15 +1618,15 @@ and it seems difficult for a derived class to also use slots and properly
 initialize the base.</p>
 <p>Other than this caveat regarding slots, we enthusiastically recommend
 <code class="docutils literal notranslate"><span class="pre">attrs</span></code>.</p>
-</div>
-<div class="section" id="custom-decorators">
-<h4>Custom decorators<a class="headerlink" href="#custom-decorators" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="custom-decorators">
+<h4>Custom decorators<a class="headerlink" href="#custom-decorators" title="Permalink to this headline">#</a></h4>
 <p>Speaking of decorators, we provide several that make writing genetic
 value types a bit easier.  You will see concrete examples using them
 later.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="fwdpy11.custom_genetic_value_decorators.genetic_value_is_trait_default_clone">
-<span class="sig-prename descclassname"><span class="pre">&#64;</span></span><span class="sig-prename descclassname"><span class="pre">fwdpy11.custom_genetic_value_decorators.</span></span><span class="sig-name descname"><span class="pre">genetic_value_is_trait_default_clone</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ndim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.custom_genetic_value_decorators.genetic_value_is_trait_default_clone" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">&#64;</span></span><span class="sig-prename descclassname"><span class="pre">fwdpy11.custom_genetic_value_decorators.</span></span><span class="sig-name descname"><span class="pre">genetic_value_is_trait_default_clone</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ndim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.custom_genetic_value_decorators.genetic_value_is_trait_default_clone" title="Permalink to this definition">#</a></dt>
 <dd><p>This decorator is a <em>class</em> that adds the ability
 for custom types to be passed to classes derived from
 :class:<code class="docutils literal notranslate"><span class="pre">fwdpy11.DiploidGeneticValue</span></code>.</p>
@@ -1517,7 +1647,7 @@ The default is ``ndim=1``.
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fwdpy11.custom_genetic_value_decorators.genetic_value_noise_default_clone">
-<span class="sig-prename descclassname"><span class="pre">&#64;</span></span><span class="sig-prename descclassname"><span class="pre">fwdpy11.custom_genetic_value_decorators.</span></span><span class="sig-name descname"><span class="pre">genetic_value_noise_default_clone</span></span><a class="headerlink" href="#fwdpy11.custom_genetic_value_decorators.genetic_value_noise_default_clone" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">&#64;</span></span><span class="sig-prename descclassname"><span class="pre">fwdpy11.custom_genetic_value_decorators.</span></span><span class="sig-name descname"><span class="pre">genetic_value_noise_default_clone</span></span><a class="headerlink" href="#fwdpy11.custom_genetic_value_decorators.genetic_value_noise_default_clone" title="Permalink to this definition">#</a></dt>
 <dd><p>This is the analog to
 :attr:<code class="docutils literal notranslate"><span class="pre">fwdpy11.custom_genetic_value_decorators.genetic_value_is_trait_default_clone</span></code>
 for noise objects inheriting from :class:<code class="docutils literal notranslate"><span class="pre">fwdpy11.GeneticValueNoise</span></code>.</p>
@@ -1526,7 +1656,7 @@ for noise objects inheriting from :class:<code class="docutils literal notransla
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fwdpy11.custom_genetic_value_decorators.default_update">
-<span class="sig-prename descclassname"><span class="pre">&#64;</span></span><span class="sig-prename descclassname"><span class="pre">fwdpy11.custom_genetic_value_decorators.</span></span><span class="sig-name descname"><span class="pre">default_update</span></span><a class="headerlink" href="#fwdpy11.custom_genetic_value_decorators.default_update" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">&#64;</span></span><span class="sig-prename descclassname"><span class="pre">fwdpy11.custom_genetic_value_decorators.</span></span><span class="sig-name descname"><span class="pre">default_update</span></span><a class="headerlink" href="#fwdpy11.custom_genetic_value_decorators.default_update" title="Permalink to this definition">#</a></dt>
 <dd><p>This decorator adds the following function to <code class="docutils literal notranslate"><span class="pre">cls</span></code>,
 which is a no-op function:</p>
 <p>.. code-block:: python</p>
@@ -1541,10 +1671,10 @@ implementation of this no-op.
 </div>
 </dd></dl>
 
-</div>
-</div>
-<div class="section" id="genetic-value-to-fitness-maps">
-<span id="python-gvalue-to-fitness"></span><h3>Genetic value to fitness maps<a class="headerlink" href="#genetic-value-to-fitness-maps" title="Permalink to this headline">¶</a></h3>
+</section>
+</section>
+<section id="genetic-value-to-fitness-maps">
+<span id="python-gvalue-to-fitness"></span><h3>Genetic value to fitness maps<a class="headerlink" href="#genetic-value-to-fitness-maps" title="Permalink to this headline">#</a></h3>
 <p>Here, one derives a new class from <a class="reference internal" href="gvalue_to_fitness.html#fwdpy11.GeneticValueIsTrait" title="fwdpy11.GeneticValueIsTrait"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GeneticValueIsTrait</span></code></a>.
 The basic form of such a class is:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fwdpy11</span>
@@ -1633,12 +1763,12 @@ so that results are reproducible.)</p>
         <span class="bp">self</span><span class="o">.</span><span class="n">optima</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">pop</span><span class="o">.</span><span class="n">generation</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">opt</span><span class="p">))</span>
 </pre></div>
 </div>
-<div class="section" id="the-data-type">
-<h4>The data type<a class="headerlink" href="#the-data-type" title="Permalink to this headline">¶</a></h4>
+<section id="the-data-type">
+<h4>The data type<a class="headerlink" href="#the-data-type" title="Permalink to this headline">#</a></h4>
 <p>The type passed into the <code class="docutils literal notranslate"><span class="pre">__call__</span></code> function is:</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="fwdpy11.DiploidGeneticValueToFitnessData">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">DiploidGeneticValueToFitnessData</span></span><a class="headerlink" href="#fwdpy11.DiploidGeneticValueToFitnessData" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">DiploidGeneticValueToFitnessData</span></span><a class="headerlink" href="#fwdpy11.DiploidGeneticValueToFitnessData" title="Permalink to this definition">#</a></dt>
 <dd><p>.. versionadded:: 0.9.0</p>
 <p>This class supports the buffer protocol, which exposes the
 genetic values array.  The most efficient access will
@@ -1668,10 +1798,10 @@ and this value.
 </div>
 </dd></dl>
 
-</div>
-</div>
-<div class="section" id="genetic-value-noise">
-<h3>Genetic value “noise”<a class="headerlink" href="#genetic-value-noise" title="Permalink to this headline">¶</a></h3>
+</section>
+</section>
+<section id="genetic-value-noise">
+<h3>Genetic value “noise”<a class="headerlink" href="#genetic-value-noise" title="Permalink to this headline">#</a></h3>
 <p>A custom “noise” class inherits from <a class="reference internal" href="gvaluenoise.html#fwdpy11.GeneticValueNoise" title="fwdpy11.GeneticValueNoise"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GeneticValueNoise</span></code></a>.
 A minimal implementation has the following form:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@fwdpy11</span><span class="o">.</span><span class="n">custom_genetic_value_decorators</span><span class="o">.</span><span class="n">genetic_value_noise_default_clone</span>
@@ -1703,11 +1833,11 @@ and standard deviation <code class="docutils literal notranslate"><span class="p
 </pre></div>
 </div>
 <p>See <a class="reference internal" href="gslrandom.html#fwdpy11.gsl_ran_gaussian_ziggurat" title="fwdpy11.gsl_ran_gaussian_ziggurat"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.gsl_ran_gaussian_ziggurat()</span></code></a> for details on that function.</p>
-<div class="section" id="id10">
-<h4>The data type<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h4>
+<section id="id10">
+<h4>The data type<a class="headerlink" href="#id10" title="Permalink to this headline">#</a></h4>
 <dl class="py class">
 <dt class="sig sig-object py" id="fwdpy11.DiploidGeneticValueNoiseData">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">DiploidGeneticValueNoiseData</span></span><a class="headerlink" href="#fwdpy11.DiploidGeneticValueNoiseData" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">DiploidGeneticValueNoiseData</span></span><a class="headerlink" href="#fwdpy11.DiploidGeneticValueNoiseData" title="Permalink to this definition">#</a></dt>
 <dd><p>.. versionadded:: 0.9.0</p>
 <p>Instances of this class have the following attributes:</p>
 <p>.. py:attribute:: rng</p>
@@ -1739,16 +1869,16 @@ and this value.
 </div>
 </dd></dl>
 
-</div>
-</div>
-<div class="section" id="new-genetic-value-models">
-<h3>New genetic value models<a class="headerlink" href="#new-genetic-value-models" title="Permalink to this headline">¶</a></h3>
-<div class="section" id="the-abstract-base-class">
-<h4>The abstract base class<a class="headerlink" href="#the-abstract-base-class" title="Permalink to this headline">¶</a></h4>
+</section>
+</section>
+<section id="new-genetic-value-models">
+<h3>New genetic value models<a class="headerlink" href="#new-genetic-value-models" title="Permalink to this headline">#</a></h3>
+<section id="the-abstract-base-class">
+<h4>The abstract base class<a class="headerlink" href="#the-abstract-base-class" title="Permalink to this headline">#</a></h4>
 <p>The ABC type is <a class="reference internal" href="#fwdpy11.PyDiploidGeneticValue" title="fwdpy11.PyDiploidGeneticValue"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.PyDiploidGeneticValue</span></code></a>:</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="fwdpy11.PyDiploidGeneticValue">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">PyDiploidGeneticValue</span></span><a class="headerlink" href="#fwdpy11.PyDiploidGeneticValue" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">PyDiploidGeneticValue</span></span><a class="headerlink" href="#fwdpy11.PyDiploidGeneticValue" title="Permalink to this definition">#</a></dt>
 <dd><p>.. py:method:: <strong>init</strong>()</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>:param ndim:
 :type ndim: int
@@ -1803,9 +1933,9 @@ and this value.
 </div>
 </dd></dl>
 
-</div>
-<div class="section" id="outline-of-user-defined-classes">
-<h4>Outline of user-defined classes<a class="headerlink" href="#outline-of-user-defined-classes" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="outline-of-user-defined-classes">
+<h4>Outline of user-defined classes<a class="headerlink" href="#outline-of-user-defined-classes" title="Permalink to this headline">#</a></h4>
 <p>The form of a custom genetic value type inherits from the ABC
 described above and would look something like this:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyGeneticValueObject</span><span class="p">(</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">PyDiploidGeneticValue</span><span class="p">):</span>
@@ -1820,9 +1950,9 @@ described above and would look something like this:</p>
         <span class="k">pass</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="method-requirements">
-<h4>Method requirements<a class="headerlink" href="#method-requirements" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="method-requirements">
+<h4>Method requirements<a class="headerlink" href="#method-requirements" title="Permalink to this headline">#</a></h4>
 <p><a class="reference internal" href="#fwdpy11.PyDiploidGeneticValue" title="fwdpy11.PyDiploidGeneticValue"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.PyDiploidGeneticValue</span></code></a> <em>does</em> provide a default <code class="docutils literal notranslate"><span class="pre">update</span></code>
 function that updates the genetic-value-to-fitness-map and noise objects.</p>
 <p>If your model can allow a no-op <code class="docutils literal notranslate"><span class="pre">update</span></code> function, you may apply
@@ -1852,9 +1982,9 @@ future, we may provide read-write access to that field, which
 would constitute an API change.  However, the path of least
 resistance in the short term was to implement the current approach.</p>
 </div>
-</div>
-<div class="section" id="example-strictly-additive-effects-on-a-trait">
-<h4>Example: strictly additive effects on a trait<a class="headerlink" href="#example-strictly-additive-effects-on-a-trait" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="example-strictly-additive-effects-on-a-trait">
+<h4>Example: strictly additive effects on a trait<a class="headerlink" href="#example-strictly-additive-effects-on-a-trait" title="Permalink to this headline">#</a></h4>
 <p>Here is an example of a strict additive model of a trait,
 taken from the test suite. You’ll notice that we are accessing
 arrays on the <code class="docutils literal notranslate"><span class="pre">C++</span></code> using Python <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#memoryview" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">memoryview</span></code></a> objects.
@@ -1903,20 +2033,20 @@ most explicit approach is probably to use <a class="reference external" href="ht
 </div>
 <p>For additive cases like this, though, you’ll get better performance
 with <a class="reference internal" href="#fwdpy11.additive_effects" title="fwdpy11.additive_effects"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.additive_effects()</span></code></a>.</p>
-</div>
-<div class="section" id="more-complex-scenarios-such-as-social-interactions">
-<span id="more-complex-gvalue-models"></span><h4>More complex scenarios (such as social interactions)<a class="headerlink" href="#more-complex-scenarios-such-as-social-interactions" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="more-complex-scenarios-such-as-social-interactions">
+<span id="more-complex-gvalue-models"></span><h4>More complex scenarios (such as social interactions)<a class="headerlink" href="#more-complex-scenarios-such-as-social-interactions" title="Permalink to this headline">#</a></h4>
 <p>Some models are not easily implemented with the genetic value +
 genetic value to fitness map + noise trio of types defined here.
 The reason has to do with how these types are applied during a simulation,
 which is described in more detail <a class="reference internal" href="../technical/genetic_values.html#gvalue-technical-details"><span class="std std-ref">here</span></a>, and
 in <a class="reference internal" href="../technical/genetic_values.html#gvalue-simulation-behavior"><span class="std std-ref">this section</span></a> specifically.</p>
-</div>
-<div class="section" id="the-data-types">
-<h4>The data types<a class="headerlink" href="#the-data-types" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="the-data-types">
+<h4>The data types<a class="headerlink" href="#the-data-types" title="Permalink to this headline">#</a></h4>
 <dl class="py class">
 <dt class="sig sig-object py" id="fwdpy11.PyDiploidGeneticValueData">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">PyDiploidGeneticValueData</span></span><a class="headerlink" href="#fwdpy11.PyDiploidGeneticValueData" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">PyDiploidGeneticValueData</span></span><a class="headerlink" href="#fwdpy11.PyDiploidGeneticValueData" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <div class="versionadded">
@@ -1928,38 +2058,38 @@ be via a <a class="reference external" href="https://docs.python.org/3/library/s
 <p>Instances of this class have the following attributes:</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="rng">
-<span class="sig-name descname"><span class="pre">rng</span></span><a class="headerlink" href="#rng" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">rng</span></span><a class="headerlink" href="#rng" title="Permalink to this definition">#</a></dt>
 <dd><p>The simulation’s random number generation, an
 instance of <a class="reference internal" href="types.html#fwdpy11.GSLrng" title="fwdpy11.GSLrng"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GSLrng</span></code></a></p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pop">
-<span class="sig-name descname"><span class="pre">pop</span></span><a class="headerlink" href="#pop" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">pop</span></span><a class="headerlink" href="#pop" title="Permalink to this definition">#</a></dt>
 <dd><p>The population, an instance of <a class="reference internal" href="types.html#fwdpy11.DiploidPopulation" title="fwdpy11.DiploidPopulation"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiploidPopulation</span></code></a></p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="offspring_metadata">
-<span class="sig-name descname"><span class="pre">offspring_metadata</span></span><a class="headerlink" href="#offspring_metadata" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">offspring_metadata</span></span><a class="headerlink" href="#offspring_metadata" title="Permalink to this definition">#</a></dt>
 <dd><p>The offspring’s <a class="reference internal" href="types.html#fwdpy11.DiploidMetadata" title="fwdpy11.DiploidMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiploidMetadata</span></code></a></p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="parent1_metadata">
-<span class="sig-name descname"><span class="pre">parent1_metadata</span></span><a class="headerlink" href="#parent1_metadata" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">parent1_metadata</span></span><a class="headerlink" href="#parent1_metadata" title="Permalink to this definition">#</a></dt>
 <dd><p>The first parent’s <a class="reference internal" href="types.html#fwdpy11.DiploidMetadata" title="fwdpy11.DiploidMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiploidMetadata</span></code></a></p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="parent2_metadata">
-<span class="sig-name descname"><span class="pre">parent2_metadata</span></span><a class="headerlink" href="#parent2_metadata" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">parent2_metadata</span></span><a class="headerlink" href="#parent2_metadata" title="Permalink to this definition">#</a></dt>
 <dd><p>The second parent’s <a class="reference internal" href="types.html#fwdpy11.DiploidMetadata" title="fwdpy11.DiploidMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiploidMetadata</span></code></a></p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="offspring_metadata_index">
-<span class="sig-name descname"><span class="pre">offspring_metadata_index</span></span><a class="headerlink" href="#offspring_metadata_index" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">offspring_metadata_index</span></span><a class="headerlink" href="#offspring_metadata_index" title="Permalink to this definition">#</a></dt>
 <dd><p>A 64 bit integer that gives the location (index) of
 <code class="docutils literal notranslate"><span class="pre">offspring_metadata</span></code> in <a class="reference internal" href="types.html#fwdpy11.DiploidPopulation.diploid_metadata" title="fwdpy11.DiploidPopulation.diploid_metadata"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.DiploidPopulation.diploid_metadata</span></code></a>.
 This index is useful in the event of mass migrations via copies,
@@ -1967,11 +2097,11 @@ which can cause a mismatch between <a class="reference internal" href="types.htm
 and this value.</p>
 </dd></dl>
 
-</div>
-</div>
-</div>
-<div class="section" id="subtleties-of-starting-finishing-tree-sequences-using-msprime">
-<span id="msprime-subtleties"></span><h2>Subtleties of starting/finishing tree sequences using <code class="docutils literal notranslate"><span class="pre">msprime</span></code><a class="headerlink" href="#subtleties-of-starting-finishing-tree-sequences-using-msprime" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+</section>
+<section id="subtleties-of-starting-finishing-tree-sequences-using-msprime">
+<span id="msprime-subtleties"></span><h2>Subtleties of starting/finishing tree sequences using <code class="docutils literal notranslate"><span class="pre">msprime</span></code><a class="headerlink" href="#subtleties-of-starting-finishing-tree-sequences-using-msprime" title="Permalink to this headline">#</a></h2>
 <p>Some care is required starting a simulation from a tree sequence (see <a class="reference internal" href="../short_vignettes/initpops_vignette.html#precapitation"><span class="std std-ref">here</span></a>) or finishing a simulation with one (see <a class="reference internal" href="../short_vignettes/recapitation.html#recapitation"><span class="std std-ref">here</span></a>).</p>
 <p>If simulating with discrete recombination positions (see <a class="reference internal" href="tutorial.html#geneticmapunit"><span class="std std-ref">here</span></a>), it may be important to realize that the current stable releases of <code class="docutils literal notranslate"><span class="pre">msprime</span></code> model continuous recombination breakpoints.
 A future <code class="docutils literal notranslate"><span class="pre">msprime</span></code> release will support discretized positions.</p>
@@ -1985,8 +2115,8 @@ A more general example, for a genome of length <code class="docutils literal not
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">recombination_rate</span> <span class="o">=</span> <span class="n">rho</span> <span class="o">/</span> <span class="n">Ne</span> <span class="o">/</span> <span class="mi">4</span> <span class="o">/</span> <span class="n">L</span>
 </pre></div>
 </div>
-</div>
-</div>
+</section>
+</section>
 
     <script type="text/x-thebe-config">
     {
@@ -2010,9 +2140,11 @@ A more general example, for a genome of length <code class="docutils literal not
 
               </div>
               
-            
-                <!-- Previous / next buttons -->
-<div class='prev-next-area'> 
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
     <a class='left-prev' id="prev-link" href="tutorial.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
@@ -2028,24 +2160,28 @@ A more general example, for a genome of length <code class="docutils literal not
     <i class="fas fa-angle-right"></i>
     </a>
 </div>
-            
+            </footer>
         </div>
     </div>
-    <footer class="footer">
-  <p>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Kevin Thornton<br/>
+  
+      &copy; Copyright 2022.<br/>
+</p>
+        </footer>
+    </div>
     
-      By Kevin Thornton<br/>
-    
-        &copy; Copyright 2021.<br/>
-  </p>
-</footer>
-</main>
+</div>
 
 
       </div>
     </div>
   
-  <script src="../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
 
   </body>
 </html>

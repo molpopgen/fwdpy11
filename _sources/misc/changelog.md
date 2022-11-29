@@ -3,6 +3,18 @@
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+## 0.19.1
+
+Dependencies
+
+* Bump jupyter-book to 0.13.1
+  PR {pr}`1052`
+
+Deployment
+
+* Fix source dist generation during wheel building
+  PR {pr}`1051`
+
 ## 0.19.0
 
 Differences from the last stable release also include entries
