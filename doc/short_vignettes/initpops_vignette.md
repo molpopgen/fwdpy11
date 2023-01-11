@@ -145,7 +145,6 @@ assert ds[0] == 50
 assert ds[1] == 150
 ```
 
-### Limitations and caveats
+### Importing msprime tree sequences with mutations.
 
-* Mutations from `msprime` are ignored.
-* See {ref}`msprime-subtleties` for more information.
+* See {ref}`import_mutations_from_tskit_vignette` for more information.
