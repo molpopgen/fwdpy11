@@ -20,6 +20,7 @@ hypothesis==6.56.4
 
 # Docs
 jupyter-book~=0.13.1
+jsonschema[format-nongpl]
 matplotlib
 pandas
 sphinx-issues
