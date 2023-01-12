@@ -3,6 +3,21 @@
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+## 0.19.2
+
+Documentation
+
+* Add link between vignettes regarding
+  importing tree sequences from tskit.
+  PR {pr}`1054`.
+* Force notebooks to be executed during doc builds.
+  PR {pr}`1058`.
+
+Testing/CI
+
+* Docs workflow updated to run with Python 3.10.
+  PR {pr}`1056`.
+
 ## 0.19.1
 
 Dependencies
