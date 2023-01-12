@@ -817,25 +817,25 @@ title="Print to PDF"
 <span id="workingexample-fitness-vignette"></span><h1>Working example - parameters for simulating direct effects on fitness<a class="headerlink" href="#working-example-parameters-for-simulating-direct-effects-on-fitness" title="Permalink to this headline">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import fwdpy11
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fwdpy11</span>
 
-N = 1000
-mu_neutral = 0.0
-mu_selected = 1e-3
-rho = 1000.
-alpha = -50
+<span class="n">N</span> <span class="o">=</span> <span class="mi">1000</span>
+<span class="n">mu_neutral</span> <span class="o">=</span> <span class="mf">0.0</span>
+<span class="n">mu_selected</span> <span class="o">=</span> <span class="mf">1e-3</span>
+<span class="n">rho</span> <span class="o">=</span> <span class="mf">1000.</span>
+<span class="n">alpha</span> <span class="o">=</span> <span class="o">-</span><span class="mi">50</span>
 
-p = {
-    &quot;nregions&quot;: [],
-    &quot;gvalue&quot;: fwdpy11.Multiplicative(2.0),
-    &quot;sregions&quot;: [fwdpy11.ExpS(0, 1., 1, mean=alpha/(2 * N))],
-    &quot;recregions&quot;: [fwdpy11.PoissonInterval(0, 1., rho / float(4 * N))],
-    &quot;rates&quot;: (mu_neutral, mu_selected, None),
-    &quot;prune_selected&quot;: True,
-    &quot;demography&quot;: fwdpy11.DiscreteDemography(),
-    &quot;simlen&quot;: 10 * N,
-}
-params = fwdpy11.ModelParams(**p)
+<span class="n">p</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;nregions&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="s2">&quot;gvalue&quot;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Multiplicative</span><span class="p">(</span><span class="mf">2.0</span><span class="p">),</span>
+    <span class="s2">&quot;sregions&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">ExpS</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">mean</span><span class="o">=</span><span class="n">alpha</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">N</span><span class="p">))],</span>
+    <span class="s2">&quot;recregions&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">PoissonInterval</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="n">rho</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">N</span><span class="p">))],</span>
+    <span class="s2">&quot;rates&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">mu_neutral</span><span class="p">,</span> <span class="n">mu_selected</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="s2">&quot;prune_selected&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="s2">&quot;demography&quot;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiscreteDemography</span><span class="p">(),</span>
+    <span class="s2">&quot;simlen&quot;</span><span class="p">:</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">N</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="n">params</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="n">p</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -843,7 +843,7 @@ params = fwdpy11.ModelParams(**p)
 <p>Let’s take a look at what he have:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>print(params.asblack())
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">params</span><span class="o">.</span><span class="n">asblack</span><span class="p">())</span>
 </pre></div>
 </div>
 </div>

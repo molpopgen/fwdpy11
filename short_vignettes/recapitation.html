@@ -822,21 +822,21 @@ In order for recapitation to work correctly, we must pass <code class="docutils 
 <p>First, we’ll simulate a population for 10 generations:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import fwdpy11
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fwdpy11</span>
 
-pop = fwdpy11.DiploidPopulation(100, 1000.0)
+<span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mf">1000.0</span><span class="p">)</span>
 
-pdict = {&quot;rates&quot;: (0.0, 0.0, 0.0),
-         &quot;gvalue&quot;: fwdpy11.Multiplicative(2.),
-         &quot;simlen&quot;: 10,
-        }
-params = fwdpy11.ModelParams(**pdict)
-rng = fwdpy11.GSLrng(54321)
+<span class="n">pdict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;rates&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+         <span class="s2">&quot;gvalue&quot;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Multiplicative</span><span class="p">(</span><span class="mf">2.</span><span class="p">),</span>
+         <span class="s2">&quot;simlen&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+        <span class="p">}</span>
+<span class="n">params</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="n">pdict</span><span class="p">)</span>
+<span class="n">rng</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSLrng</span><span class="p">(</span><span class="mi">54321</span><span class="p">)</span>
 
-# We must preserve the founder generation:
-fwdpy11.evolvets(rng, pop, params, 100, preserve_first_generation=True)
+<span class="c1"># We must preserve the founder generation:</span>
+<span class="n">fwdpy11</span><span class="o">.</span><span class="n">evolvets</span><span class="p">(</span><span class="n">rng</span><span class="p">,</span> <span class="n">pop</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">preserve_first_generation</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-assert pop.generation == 10
+<span class="k">assert</span> <span class="n">pop</span><span class="o">.</span><span class="n">generation</span> <span class="o">==</span> <span class="mi">10</span>
 </pre></div>
 </div>
 </div>
@@ -844,16 +844,16 @@ assert pop.generation == 10
 <p>Now we use <code class="docutils literal notranslate"><span class="pre">msprime</span></code> to coalesce the founder generation roots back to a common ancestor:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import msprime
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">msprime</span>
 
-# Convert to tskit format
-ts = pop.dump_tables_to_tskit()
+<span class="c1"># Convert to tskit format</span>
+<span class="n">ts</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">dump_tables_to_tskit</span><span class="p">()</span>
 
-num_roots_pre_recapitation = ts.first().num_roots
+<span class="n">num_roots_pre_recapitation</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">first</span><span class="p">()</span><span class="o">.</span><span class="n">num_roots</span>
 
-recapitated_ts = msprime.simulate(from_ts=ts)
+<span class="n">recapitated_ts</span> <span class="o">=</span> <span class="n">msprime</span><span class="o">.</span><span class="n">simulate</span><span class="p">(</span><span class="n">from_ts</span><span class="o">=</span><span class="n">ts</span><span class="p">)</span>
 
-print(num_roots_pre_recapitation, recapitated_ts.first().num_roots)
+<span class="nb">print</span><span class="p">(</span><span class="n">num_roots_pre_recapitation</span><span class="p">,</span> <span class="n">recapitated_ts</span><span class="o">.</span><span class="n">first</span><span class="p">()</span><span class="o">.</span><span class="n">num_roots</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>

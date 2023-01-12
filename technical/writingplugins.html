@@ -914,10 +914,10 @@ There are several examples of custom genetic value objects in the unit tests.</p
 <p>You can find the location of the installed header files using Python:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import fwdpy11
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fwdpy11</span>
 
-print(fwdpy11.get_includes())
-print(fwdpy11.get_fwdpp_includes())
+<span class="nb">print</span><span class="p">(</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">get_includes</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">get_fwdpp_includes</span><span class="p">())</span>
 </pre></div>
 </div>
 </div>
@@ -931,13 +931,13 @@ print(fwdpy11.get_fwdpp_includes())
 <p>The above is useful for generating a functioning <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> file.  Note that you will have
 to join the output with the proper compiler flags indicating include paths (typically <code class="docutils literal notranslate"><span class="pre">-I</span></code>).</p>
 <p>If using a <code class="docutils literal notranslate"><span class="pre">Makefile</span></code>, it is handy to get the above info via the shell, which is done as follows:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3 -m fwdpy11 --includes
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>-m<span class="w"> </span>fwdpy11<span class="w"> </span>--includes
 </pre></div>
 </div>
 <p>The above command prepends the paths with <code class="docutils literal notranslate"><span class="pre">-I</span></code>.  If that is not desired,
 you may get the paths separately for <code class="docutils literal notranslate"><span class="pre">fwdpp</span></code> and <code class="docutils literal notranslate"><span class="pre">fwdpy11</span></code>:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3 -m fwdpy11 --fwdpp_headers
-python3 -m fwdpy11 --fwdpy11_headers
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>-m<span class="w"> </span>fwdpy11<span class="w"> </span>--fwdpp_headers
+python3<span class="w"> </span>-m<span class="w"> </span>fwdpy11<span class="w"> </span>--fwdpy11_headers
 </pre></div>
 </div>
 </section>
@@ -978,7 +978,7 @@ target_link_libraries(gvalue_recorder PRIVATE GSL::gsl GSL::gslcblas)
 <section id="mako-headers-for-cppimport">
 <h2>Mako headers for cppimport<a class="headerlink" href="#mako-headers-for-cppimport" title="Permalink to this headline">#</a></h2>
 <p>Extensions using <a class="reference external" href="https://github.com/tbenthompson/cppimport">cppimport</a> require <code class="docutils literal notranslate"><span class="pre">mako</span></code> headers to guide compilation.  You make get a minimal header via the shell:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3 -m fwdpy11 --mako
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>-m<span class="w"> </span>fwdpy11<span class="w"> </span>--mako
 </pre></div>
 </div>
 </section>

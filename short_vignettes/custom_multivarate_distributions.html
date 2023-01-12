@@ -817,10 +817,10 @@ title="Print to PDF"
 <span id="custom-multivariate-distributions-vignette"></span><h1>“Custom” multivariate distributions<a class="headerlink" href="#custom-multivariate-distributions" title="Permalink to this headline">#</a></h1>
 <div class="cell tag_hide-input docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import demes
-import demesdraw
-import fwdpy11
-import numpy as np
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">demes</span>
+<span class="kn">import</span> <span class="nn">demesdraw</span>
+<span class="kn">import</span> <span class="nn">fwdpy11</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 </pre></div>
 </div>
 </div>
@@ -844,33 +844,33 @@ Gaussian</p></li>
 The details can be viewed by expanding the “click to show” button below”.</p>
 <div class="cell tag_hide-input docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>yaml = &quot;&quot;&quot;
-description: Island model forever
-time_units: generations
-demes:
-  - name: A
-    epochs:
-     - start_size: 100
-  - name: B
-    epochs:
-     - start_size: 100
-migrations:
-  - demes: [A, B]
-    rate: 0.10
-&quot;&quot;&quot;
-g = demes.loads(yaml)
-model = fwdpy11.discrete_demography.from_demes(g, burnin=1)
-initial_sizes = [v for v in model.metadata[&quot;initial_sizes&quot;].values()]
-pdict = {
-    &quot;nregions&quot;: [],
-    &quot;recregions&quot;: [],
-    &quot;sregions&quot;: None, # Will get filled in below
-    &quot;rates&quot;: (0, 5e-3, None),
-    &quot;demography&quot;: model,
-    &quot;simlen&quot;: model.metadata[&quot;total_simulation_length&quot;],
-    &quot;gvalue&quot;: fwdpy11.Multiplicative(ndemes=2, scaling=2),
-}
-rng = fwdpy11.GSLrng(123512)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">yaml</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">description: Island model forever</span>
+<span class="s2">time_units: generations</span>
+<span class="s2">demes:</span>
+<span class="s2">  - name: A</span>
+<span class="s2">    epochs:</span>
+<span class="s2">     - start_size: 100</span>
+<span class="s2">  - name: B</span>
+<span class="s2">    epochs:</span>
+<span class="s2">     - start_size: 100</span>
+<span class="s2">migrations:</span>
+<span class="s2">  - demes: [A, B]</span>
+<span class="s2">    rate: 0.10</span>
+<span class="s2">&quot;&quot;&quot;</span>
+<span class="n">g</span> <span class="o">=</span> <span class="n">demes</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">yaml</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">discrete_demography</span><span class="o">.</span><span class="n">from_demes</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">burnin</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">initial_sizes</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;initial_sizes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
+<span class="n">pdict</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;nregions&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="s2">&quot;recregions&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="s2">&quot;sregions&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="c1"># Will get filled in below</span>
+    <span class="s2">&quot;rates&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">5e-3</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="s2">&quot;demography&quot;</span><span class="p">:</span> <span class="n">model</span><span class="p">,</span>
+    <span class="s2">&quot;simlen&quot;</span><span class="p">:</span> <span class="n">model</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;total_simulation_length&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;gvalue&quot;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Multiplicative</span><span class="p">(</span><span class="n">ndemes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">scaling</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span>
+<span class="p">}</span>
+<span class="n">rng</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSLrng</span><span class="p">(</span><span class="mi">123512</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -879,17 +879,17 @@ rng = fwdpy11.GSLrng(123512)
 with a high correlation across demes:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>mvdes = fwdpy11.mvDES(
-    [fwdpy11.ExpS(0, 1, 1, -0.5)] * 2,
-    np.zeros(2),
-    np.matrix([1, 0.9, 0.9, 1]).reshape((2, 2)),
-)
-pdict[&quot;sregions&quot;] = [mvdes]
-params = fwdpy11.ModelParams(**pdict)
-pop = fwdpy11.DiploidPopulation(initial_sizes, 1.0)
-fwdpy11.evolvets(rng, pop, params, 10)
-for i in pop.tables.mutations:
-    print(pop.mutations[i.key].esizes)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mvdes</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">mvDES</span><span class="p">(</span>
+    <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">ExpS</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">)]</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">matrix</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span>
+<span class="p">)</span>
+<span class="n">pdict</span><span class="p">[</span><span class="s2">&quot;sregions&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">mvdes</span><span class="p">]</span>
+<span class="n">params</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="n">pdict</span><span class="p">)</span>
+<span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">(</span><span class="n">initial_sizes</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+<span class="n">fwdpy11</span><span class="o">.</span><span class="n">evolvets</span><span class="p">(</span><span class="n">rng</span><span class="p">,</span> <span class="n">pop</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">pop</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">mutations</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">mutations</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">esizes</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -908,17 +908,17 @@ two distributions have means with opposite signs and the magnitudes of the
 marginal deviates negatively covary:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>mvdes = fwdpy11.mvDES(
-    [fwdpy11.ExpS(0, 1, 1, -0.5), fwdpy11.GammaS(0, 1, 1, mean=0.1, shape_parameter=1)],
-    np.zeros(2),
-    np.matrix([1, -0.9, -0.9, 1]).reshape((2, 2)),
-)
-pdict[&quot;sregions&quot;] = [mvdes]
-params = fwdpy11.ModelParams(**pdict)
-pop = fwdpy11.DiploidPopulation(initial_sizes, 1.0)
-fwdpy11.evolvets(rng, pop, params, 10)
-for i in pop.tables.mutations:
-    print(pop.mutations[i.key].esizes)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mvdes</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">mvDES</span><span class="p">(</span>
+    <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">ExpS</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">),</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GammaS</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">mean</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">shape_parameter</span><span class="o">=</span><span class="mi">1</span><span class="p">)],</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">matrix</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.9</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.9</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span>
+<span class="p">)</span>
+<span class="n">pdict</span><span class="p">[</span><span class="s2">&quot;sregions&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">mvdes</span><span class="p">]</span>
+<span class="n">params</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="n">pdict</span><span class="p">)</span>
+<span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">(</span><span class="n">initial_sizes</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+<span class="n">fwdpy11</span><span class="o">.</span><span class="n">evolvets</span><span class="p">(</span><span class="n">rng</span><span class="p">,</span> <span class="n">pop</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">pop</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">mutations</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">mutations</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">esizes</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -955,18 +955,18 @@ for i in pop.tables.mutations:
 <p>The type <a class="reference internal" href="../pages/regiontypes.html#fwdpy11.ConstantS" title="fwdpy11.ConstantS"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.ConstantS</span></code></a> has intuitive behavior:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>mvdes = fwdpy11.mvDES(
-    [fwdpy11.ExpS(0, 1, 1, -0.5), fwdpy11.ConstantS(0, 1, 1, -0.1)],
-    np.zeros(2),
-    np.matrix([1, -0.9, -0.9, 1]).reshape((2, 2)),
-)
-pdict[&quot;sregions&quot;] = [mvdes]
-params = fwdpy11.ModelParams(**pdict)
-pop = fwdpy11.DiploidPopulation(initial_sizes, 1.0)
-rng = fwdpy11.GSLrng(1010)
-fwdpy11.evolvets(rng, pop, params, 10)
-for i in pop.tables.mutations:
-    print(pop.mutations[i.key].esizes)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mvdes</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">mvDES</span><span class="p">(</span>
+    <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">ExpS</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">),</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ConstantS</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.1</span><span class="p">)],</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">matrix</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.9</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.9</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span>
+<span class="p">)</span>
+<span class="n">pdict</span><span class="p">[</span><span class="s2">&quot;sregions&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">mvdes</span><span class="p">]</span>
+<span class="n">params</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="n">pdict</span><span class="p">)</span>
+<span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">(</span><span class="n">initial_sizes</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+<span class="n">rng</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSLrng</span><span class="p">(</span><span class="mi">1010</span><span class="p">)</span>
+<span class="n">fwdpy11</span><span class="o">.</span><span class="n">evolvets</span><span class="p">(</span><span class="n">rng</span><span class="p">,</span> <span class="n">pop</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">pop</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">mutations</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">mutations</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">esizes</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>

@@ -823,7 +823,7 @@ ancestral population size, respectively, and migration
 between demes is asymmetric.</span><a class="headerlink" href="#id2" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3 IM.py --Nref <span class="m">1000</span> --N0 <span class="m">2</span> --N1 <span class="m">3</span> --split <span class="m">0</span>.5 -T <span class="m">0</span>.3 --migrate <span class="m">2</span>.0 <span class="m">0</span>.5  --seed <span class="nv">$RANDOM</span> --nreps <span class="m">64</span> --theta <span class="m">100</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>IM.py<span class="w"> </span>--Nref<span class="w"> </span><span class="m">1000</span><span class="w"> </span>--N0<span class="w"> </span><span class="m">2</span><span class="w"> </span>--N1<span class="w"> </span><span class="m">3</span><span class="w"> </span>--split<span class="w"> </span><span class="m">0</span>.5<span class="w"> </span>-T<span class="w"> </span><span class="m">0</span>.3<span class="w"> </span>--migrate<span class="w"> </span><span class="m">2</span>.0<span class="w"> </span><span class="m">0</span>.5<span class="w">  </span>--seed<span class="w"> </span><span class="nv">$RANDOM</span><span class="w"> </span>--nreps<span class="w"> </span><span class="m">64</span><span class="w"> </span>--theta<span class="w"> </span><span class="m">100</span>
 </pre></div>
 </div>
 <figure class="align-default" id="id3">
@@ -840,7 +840,7 @@ but there’s still some noise in the “real” <code class="docutils literal n
 size is rather small (15 diploids per deme).</span><a class="headerlink" href="#id3" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3 IM.py --Nref <span class="m">1000</span> --N0 <span class="m">2</span> --N1 <span class="m">3</span> --split <span class="m">0</span>.5 -T <span class="m">0</span>.3 --migrate <span class="m">2</span>.0 <span class="m">0</span>.5  --seed <span class="nv">$RANDOM</span> --nreps <span class="m">512</span> --theta <span class="m">1</span> --gamma -5
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>IM.py<span class="w"> </span>--Nref<span class="w"> </span><span class="m">1000</span><span class="w"> </span>--N0<span class="w"> </span><span class="m">2</span><span class="w"> </span>--N1<span class="w"> </span><span class="m">3</span><span class="w"> </span>--split<span class="w"> </span><span class="m">0</span>.5<span class="w"> </span>-T<span class="w"> </span><span class="m">0</span>.3<span class="w"> </span>--migrate<span class="w"> </span><span class="m">2</span>.0<span class="w"> </span><span class="m">0</span>.5<span class="w">  </span>--seed<span class="w"> </span><span class="nv">$RANDOM</span><span class="w"> </span>--nreps<span class="w"> </span><span class="m">512</span><span class="w"> </span>--theta<span class="w"> </span><span class="m">1</span><span class="w"> </span>--gamma<span class="w"> </span>-5
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#</span>
@@ -958,7 +958,7 @@ size is rather small (15 diploids per deme).</span><a class="headerlink" href="#
 
 
 <span class="k">def</span> <span class="nf">IM_moments</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">ns</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="mf">0.5</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Expected FS for IM model with selection</span>
 
 <span class="sd">    ns: sample sizes, given as [ns1, ns2]</span>
@@ -1014,7 +1014,7 @@ size is rather small (15 diploids per deme).</span><a class="headerlink" href="#
 
 
 <span class="k">def</span> <span class="nf">build_demography</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Returns the demography, the simulation length, and the</span>
 <span class="sd">    final total size in each deme.</span>
 
@@ -1047,7 +1047,7 @@ size is rather small (15 diploids per deme).</span><a class="headerlink" href="#
 
 
 <span class="k">def</span> <span class="nf">build_parameters_dict</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Returns sim params and the final sizes</span>
 <span class="sd">    in each deme</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -1079,7 +1079,7 @@ size is rather small (15 diploids per deme).</span><a class="headerlink" href="#
 
 
 <span class="k">def</span> <span class="nf">full_joint_fs</span><span class="p">(</span><span class="n">pop</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get the marginal SFS per deme.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">nt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">nodes</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>

@@ -822,21 +822,21 @@ title="Print to PDF"
 See <a class="reference internal" href="../short_vignettes/recorders_vignette.html#recorders-vignette"><span class="std std-ref">Recording data during a simulation</span></a> for details.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import numpy as np
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-class Recorder(object):
-    def __init__(self, start):
-        self.generation = []
-        self.gbar = []
-        self.wbar = []
-        self.start = start    
+<span class="k">class</span> <span class="nc">Recorder</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generation</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gbar</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wbar</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start</span> <span class="o">=</span> <span class="n">start</span>    
         
-    def __call__(self, pop, sampler):
-        if pop.generation &gt; self.start:
-            self.generation.append(pop.generation)
-            md=np.array(pop.diploid_metadata, copy=False)
-            self.gbar.append(md[&#39;g&#39;].mean())
-            self.wbar.append(md[&#39;w&#39;].mean())
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pop</span><span class="p">,</span> <span class="n">sampler</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">pop</span><span class="o">.</span><span class="n">generation</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">generation</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">generation</span><span class="p">)</span>
+            <span class="n">md</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">diploid_metadata</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gbar</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">md</span><span class="p">[</span><span class="s1">&#39;g&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">wbar</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">md</span><span class="p">[</span><span class="s1">&#39;w&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
 </pre></div>
 </div>
 </div>
@@ -848,36 +848,36 @@ Then, we shift the optimum to 1 and evolve another 200 generations.
 We set our <code class="docutils literal notranslate"><span class="pre">Recorder</span></code> type defined above to start tracking things after the initial “burn in”.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import fwdpy11
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fwdpy11</span>
 
-pop = fwdpy11.DiploidPopulation(500, 1.0)
+<span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
 
-rng = fwdpy11.GSLrng(54321)
+<span class="n">rng</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSLrng</span><span class="p">(</span><span class="mi">54321</span><span class="p">)</span>
 
-GSSmo = fwdpy11.GSSmo(
-    [
-        fwdpy11.Optimum(when=0, optimum=0.0, VS=1.0),
-        fwdpy11.Optimum(when=10 * pop.N, optimum=1.0, VS=1.0),
-    ]
-)
+<span class="n">GSSmo</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSSmo</span><span class="p">(</span>
+    <span class="p">[</span>
+        <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Optimum</span><span class="p">(</span><span class="n">when</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">optimum</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">VS</span><span class="o">=</span><span class="mf">1.0</span><span class="p">),</span>
+        <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Optimum</span><span class="p">(</span><span class="n">when</span><span class="o">=</span><span class="mi">10</span> <span class="o">*</span> <span class="n">pop</span><span class="o">.</span><span class="n">N</span><span class="p">,</span> <span class="n">optimum</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">VS</span><span class="o">=</span><span class="mf">1.0</span><span class="p">),</span>
+    <span class="p">]</span>
+<span class="p">)</span>
 
-rho = 1000.
+<span class="n">rho</span> <span class="o">=</span> <span class="mf">1000.</span>
 
-p = {
-    &quot;nregions&quot;: [],
-    &quot;gvalue&quot;: fwdpy11.Additive(2.0, GSSmo),
-    &quot;sregions&quot;: [fwdpy11.GaussianS(0, 1., 1, 0.1)],
-    &quot;recregions&quot;: [fwdpy11.PoissonInterval(0, 1., rho / float(4 * pop.N))],
-    &quot;rates&quot;: (0.0, 1e-3, None),
-    # Keep mutations at frequency 1 in the pop if they affect fitness.
-    &quot;prune_selected&quot;: False,
-    &quot;demography&quot;: fwdpy11.DiscreteDemography(),
-    &quot;simlen&quot;: 10 * pop.N + 200,
-}
-params = fwdpy11.ModelParams(**p)
+<span class="n">p</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;nregions&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="s2">&quot;gvalue&quot;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Additive</span><span class="p">(</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">GSSmo</span><span class="p">),</span>
+    <span class="s2">&quot;sregions&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">GaussianS</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)],</span>
+    <span class="s2">&quot;recregions&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">PoissonInterval</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="n">rho</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">pop</span><span class="o">.</span><span class="n">N</span><span class="p">))],</span>
+    <span class="s2">&quot;rates&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1e-3</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="c1"># Keep mutations at frequency 1 in the pop if they affect fitness.</span>
+    <span class="s2">&quot;prune_selected&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="s2">&quot;demography&quot;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiscreteDemography</span><span class="p">(),</span>
+    <span class="s2">&quot;simlen&quot;</span><span class="p">:</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">pop</span><span class="o">.</span><span class="n">N</span> <span class="o">+</span> <span class="mi">200</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="n">params</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="n">p</span><span class="p">)</span>
 
-r = Recorder(start=10 * pop.N)
-fwdpy11.evolvets(rng, pop, params, 100, recorder=r, suppress_table_indexing=True)
+<span class="n">r</span> <span class="o">=</span> <span class="n">Recorder</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="mi">10</span> <span class="o">*</span> <span class="n">pop</span><span class="o">.</span><span class="n">N</span><span class="p">)</span>
+<span class="n">fwdpy11</span><span class="o">.</span><span class="n">evolvets</span><span class="p">(</span><span class="n">rng</span><span class="p">,</span> <span class="n">pop</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">recorder</span><span class="o">=</span><span class="n">r</span><span class="p">,</span> <span class="n">suppress_table_indexing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -885,15 +885,15 @@ fwdpy11.evolvets(rng, pop, params, 100, recorder=r, suppress_table_indexing=True
 <p>Finally, let’s plot the results:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import matplotlib.pyplot as plt
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 
-f, ax = plt.subplots()
-ax.plot(r.generation, r.gbar, label=&quot;Mean trait value&quot;)
-ax.plot(r.generation, r.wbar, label=&quot;Mean fitness&quot;)
-ax.set_xlabel(&quot;Generation&quot;)
-ax.set_ylabel(&quot;Value&quot;)
-plt.legend()
-plt.show()
+<span class="n">f</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">generation</span><span class="p">,</span> <span class="n">r</span><span class="o">.</span><span class="n">gbar</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Mean trait value&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">generation</span><span class="p">,</span> <span class="n">r</span><span class="o">.</span><span class="n">wbar</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Mean fitness&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Generation&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Value&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>

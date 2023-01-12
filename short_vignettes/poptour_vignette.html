@@ -937,34 +937,34 @@ Feel free to expand it to take a look–the details will make sense once you hav
 The simulation done here is taken from <a class="reference internal" href="../long_vignettes/gss_vignette.html#gss-vignette"><span class="std std-ref">another vignette</span></a>.</p>
 <div class="cell tag_hide-input docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import fwdpy11
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fwdpy11</span>
 
-pop = fwdpy11.DiploidPopulation(500, 1.0)
+<span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
 
-rng = fwdpy11.GSLrng(54321)
+<span class="n">rng</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSLrng</span><span class="p">(</span><span class="mi">54321</span><span class="p">)</span>
 
-GSSmo = fwdpy11.GSSmo(
-    [
-        fwdpy11.Optimum(when=0, optimum=0.0, VS=1.0),
-        fwdpy11.Optimum(when=10 * pop.N, optimum=1.0, VS=1.0),
-    ]
-)
+<span class="n">GSSmo</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSSmo</span><span class="p">(</span>
+    <span class="p">[</span>
+        <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Optimum</span><span class="p">(</span><span class="n">when</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">optimum</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">VS</span><span class="o">=</span><span class="mf">1.0</span><span class="p">),</span>
+        <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Optimum</span><span class="p">(</span><span class="n">when</span><span class="o">=</span><span class="mi">10</span> <span class="o">*</span> <span class="n">pop</span><span class="o">.</span><span class="n">N</span><span class="p">,</span> <span class="n">optimum</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">VS</span><span class="o">=</span><span class="mf">1.0</span><span class="p">),</span>
+    <span class="p">]</span>
+<span class="p">)</span>
 
-rho = 1000.
+<span class="n">rho</span> <span class="o">=</span> <span class="mf">1000.</span>
 
-p = {
-    &quot;nregions&quot;: [],
-    &quot;gvalue&quot;: fwdpy11.Additive(2.0, GSSmo),
-    &quot;sregions&quot;: [fwdpy11.GaussianS(0, 1., 1, 0.1)],
-    &quot;recregions&quot;: [fwdpy11.PoissonInterval(0, 1., rho / float(4 * pop.N))],
-    &quot;rates&quot;: (0.0, 1e-3, None),
-    &quot;prune_selected&quot;: False,
-    &quot;demography&quot;: fwdpy11.DiscreteDemography(),
-    &quot;simlen&quot;: 10 * pop.N + 200,
-}
-params = fwdpy11.ModelParams(**p)
+<span class="n">p</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;nregions&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="s2">&quot;gvalue&quot;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Additive</span><span class="p">(</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">GSSmo</span><span class="p">),</span>
+    <span class="s2">&quot;sregions&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">GaussianS</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)],</span>
+    <span class="s2">&quot;recregions&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">PoissonInterval</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="n">rho</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">pop</span><span class="o">.</span><span class="n">N</span><span class="p">))],</span>
+    <span class="s2">&quot;rates&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1e-3</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="s2">&quot;prune_selected&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="s2">&quot;demography&quot;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiscreteDemography</span><span class="p">(),</span>
+    <span class="s2">&quot;simlen&quot;</span><span class="p">:</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">pop</span><span class="o">.</span><span class="n">N</span> <span class="o">+</span> <span class="mi">200</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="n">params</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="n">p</span><span class="p">)</span>
 
-fwdpy11.evolvets(rng, pop, params, 100, suppress_table_indexing=True)
+<span class="n">fwdpy11</span><span class="o">.</span><span class="n">evolvets</span><span class="p">(</span><span class="n">rng</span><span class="p">,</span> <span class="n">pop</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">suppress_table_indexing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -973,8 +973,8 @@ fwdpy11.evolvets(rng, pop, params, 100, suppress_table_indexing=True)
 <h2>Basic properties<a class="headerlink" href="#basic-properties" title="Permalink to this headline">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>print(f&quot;Total number of diploids = {pop.N}&quot;)
-print(f&quot;Current generation = {pop.generation}&quot;)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Total number of diploids = </span><span class="si">{</span><span class="n">pop</span><span class="o">.</span><span class="n">N</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Current generation = </span><span class="si">{</span><span class="n">pop</span><span class="o">.</span><span class="n">generation</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -992,16 +992,16 @@ Current generation = 5200
 These objects do not have nice representations in Python:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>[i for i in pop.mutations[:5]]
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">pop</span><span class="o">.</span><span class="n">mutations</span><span class="p">[:</span><span class="mi">5</span><span class="p">]]</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&lt;fwdpy11._fwdpy11.Mutation at 0x7ff4409a7e30&gt;,
- &lt;fwdpy11._fwdpy11.Mutation at 0x7ff4641cb4b0&gt;,
- &lt;fwdpy11._fwdpy11.Mutation at 0x7ff4641cb430&gt;,
- &lt;fwdpy11._fwdpy11.Mutation at 0x7ff4641cb570&gt;,
- &lt;fwdpy11._fwdpy11.Mutation at 0x7ff4641cb6b0&gt;]
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&lt;fwdpy11._fwdpy11.Mutation at 0x7ffa0882e0f0&gt;,
+ &lt;fwdpy11._fwdpy11.Mutation at 0x7ffa0882f330&gt;,
+ &lt;fwdpy11._fwdpy11.Mutation at 0x7ffa0882ce70&gt;,
+ &lt;fwdpy11._fwdpy11.Mutation at 0x7ffa0882d9f0&gt;,
+ &lt;fwdpy11._fwdpy11.Mutation at 0x7ffa0882e330&gt;]
 </pre></div>
 </div>
 </div>
@@ -1009,8 +1009,8 @@ These objects do not have nice representations in Python:</p>
 <p>So, let’s just look at the fields of the first mutation:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>m = pop.mutations[0]
-print(f&quot;position = {m.pos}\neffect_size = {m.s}\ndominance = {m.h}\norigin time = {m.g}&quot;)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">m</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">mutations</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;position = </span><span class="si">{</span><span class="n">m</span><span class="o">.</span><span class="n">pos</span><span class="si">}</span><span class="se">\n</span><span class="s2">effect_size = </span><span class="si">{</span><span class="n">m</span><span class="o">.</span><span class="n">s</span><span class="si">}</span><span class="se">\n</span><span class="s2">dominance = </span><span class="si">{</span><span class="n">m</span><span class="o">.</span><span class="n">h</span><span class="si">}</span><span class="se">\n</span><span class="s2">origin time = </span><span class="si">{</span><span class="n">m</span><span class="o">.</span><span class="n">g</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1032,7 +1032,7 @@ They are stored in <code class="docutils literal notranslate"><span class="pre">
 Diploids store the indexes of their individual genomes, which we describe below.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>[i for i in pop.diploids[:5]]
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">pop</span><span class="o">.</span><span class="n">diploids</span><span class="p">[:</span><span class="mi">5</span><span class="p">]]</span>
 </pre></div>
 </div>
 </div>
@@ -1051,12 +1051,12 @@ Diploids store the indexes of their individual genomes, which we describe below.
 <h2>Diploid meta data<a class="headerlink" href="#diploid-meta-data" title="Permalink to this headline">#</a></h2>
 <p>Diploid individuals have associated data, stored in <a class="reference internal" href="../pages/types.html#fwdpy11.DiploidPopulation.diploid_metadata" title="fwdpy11.DiploidPopulation.diploid_metadata"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.DiploidPopulation.diploid_metadata</span></code></a>.
 The meta data are instances of <a class="reference internal" href="../pages/types.html#fwdpy11.DiploidMetadata" title="fwdpy11.DiploidMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiploidMetadata</span></code></a>.
-That class is also a <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v1.23)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.dtype</span></code></a>, allowing us to access the raw data efficiently as a <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.recarray.html#numpy.recarray" title="(in NumPy v1.23)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.recarray</span></code></a>:</p>
+That class is also a <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v1.24)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.dtype</span></code></a>, allowing us to access the raw data efficiently as a <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.recarray.html#numpy.recarray" title="(in NumPy v1.24)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.recarray</span></code></a>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import numpy as np
-md = np.array(pop.diploid_metadata, copy=False)
-md[:5]
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="n">md</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">diploid_metadata</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">md</span><span class="p">[:</span><span class="mi">5</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
@@ -1075,7 +1075,7 @@ md[:5]
 <p>The record arrays allow efficient calculation of important quantities:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>print(f&quot;Mean trait value = {md[&#39;g&#39;].mean():0.4f}.\nMean fitness = {md[&#39;w&#39;].mean():0.4f}&quot;)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Mean trait value = </span><span class="si">{</span><span class="n">md</span><span class="p">[</span><span class="s1">&#39;g&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">0.4f</span><span class="si">}</span><span class="s2">.</span><span class="se">\n</span><span class="s2">Mean fitness = </span><span class="si">{</span><span class="n">md</span><span class="p">[</span><span class="s1">&#39;w&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">0.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1098,18 +1098,18 @@ These objects contain indexes to mutations.
 Let’s look at the effect sizes and origin times of mutations in the first non-empty genome:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def mut_info(pop, i):
-    rv = False
-    for m in pop.haploid_genomes[i].smutations:
-        print(f&quot;effect size = {pop.mutations[m].s:0.4f}, origin time = {pop.mutations[m].g}&quot;)
-        rv = True
-    return rv
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">mut_info</span><span class="p">(</span><span class="n">pop</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+    <span class="n">rv</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">pop</span><span class="o">.</span><span class="n">haploid_genomes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">smutations</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;effect size = </span><span class="si">{</span><span class="n">pop</span><span class="o">.</span><span class="n">mutations</span><span class="p">[</span><span class="n">m</span><span class="p">]</span><span class="o">.</span><span class="n">s</span><span class="si">:</span><span class="s2">0.4f</span><span class="si">}</span><span class="s2">, origin time = </span><span class="si">{</span><span class="n">pop</span><span class="o">.</span><span class="n">mutations</span><span class="p">[</span><span class="n">m</span><span class="p">]</span><span class="o">.</span><span class="n">g</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">rv</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">return</span> <span class="n">rv</span>
     
-for i in pop.diploids:
-    if mut_info(pop, i.first) is True:
-        break
-    elif mut_info(pop, i.second) is True:
-        break
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">pop</span><span class="o">.</span><span class="n">diploids</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">mut_info</span><span class="p">(</span><span class="n">pop</span><span class="p">,</span> <span class="n">i</span><span class="o">.</span><span class="n">first</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="k">break</span>
+    <span class="k">elif</span> <span class="n">mut_info</span><span class="p">(</span><span class="n">pop</span><span class="p">,</span> <span class="n">i</span><span class="o">.</span><span class="n">second</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="k">break</span>
 </pre></div>
 </div>
 </div>
@@ -1136,7 +1136,7 @@ effect size = 0.0115, origin time = 1539
 <h2>Tables<a class="headerlink" href="#tables" title="Permalink to this headline">#</a></h2>
 <p>A population contains an instance of <a class="reference internal" href="../pages/types.html#fwdpy11.TableCollection" title="fwdpy11.TableCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.TableCollection</span></code></a> which is used to represent the genetic ancestry of the sample using the methods described in <span id="id1">[<a class="reference internal" href="../misc/bibliography.html#id10" title="Jerome Kelleher, Kevin R Thornton, Jaime Ashander, and Peter L Ralph. Efficient pedigree recording for fast population genetics simulation. PLoS Comput. Biol., 14(11):e1006581, November 2018. doi:10.1371/journal.pcbi.1006581.">KTAR18</a>]</span>.</p>
 <p>The table contents are described in the class documentation.
-All tables can be accessed either as Python objects or as <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.recarray.html#numpy.recarray" title="(in NumPy v1.23)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.recarray</span></code></a> objects as we say above for diploid meta data.</p>
+All tables can be accessed either as Python objects or as <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.recarray.html#numpy.recarray" title="(in NumPy v1.24)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.recarray</span></code></a> objects as we say above for diploid meta data.</p>
 </section>
 </section>
 

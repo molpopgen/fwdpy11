@@ -854,39 +854,39 @@ title="Print to PDF"
 <span id="workingexample-trait-vignette"></span><h1>Working example - parameters for the simulation of a trait<a class="headerlink" href="#working-example-parameters-for-the-simulation-of-a-trait" title="Permalink to this headline">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import fwdpy11
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fwdpy11</span>
 
-N = 1000
-rho = 1000.0
-mu_neutral = 0.0
-mu_selected = 1e-3
+<span class="n">N</span> <span class="o">=</span> <span class="mi">1000</span>
+<span class="n">rho</span> <span class="o">=</span> <span class="mf">1000.0</span>
+<span class="n">mu_neutral</span> <span class="o">=</span> <span class="mf">0.0</span>
+<span class="n">mu_selected</span> <span class="o">=</span> <span class="mf">1e-3</span>
 
-GSSmo = fwdpy11.GSSmo(
-    [
-        fwdpy11.Optimum(when=0, optimum=0.0, VS=1.0),
-        fwdpy11.Optimum(when=10 * N, optimum=1.0, VS=1.0),
-    ]
-)
+<span class="n">GSSmo</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSSmo</span><span class="p">(</span>
+    <span class="p">[</span>
+        <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Optimum</span><span class="p">(</span><span class="n">when</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">optimum</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">VS</span><span class="o">=</span><span class="mf">1.0</span><span class="p">),</span>
+        <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Optimum</span><span class="p">(</span><span class="n">when</span><span class="o">=</span><span class="mi">10</span> <span class="o">*</span> <span class="n">N</span><span class="p">,</span> <span class="n">optimum</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">VS</span><span class="o">=</span><span class="mf">1.0</span><span class="p">),</span>
+    <span class="p">]</span>
+<span class="p">)</span>
 
-p = {
-    &quot;nregions&quot;: [],
-    &quot;gvalue&quot;: fwdpy11.Additive(2.0, GSSmo),
-    &quot;sregions&quot;: [fwdpy11.GaussianS(0, 1., 1, 0.1)],
-    &quot;recregions&quot;: [fwdpy11.PoissonInterval(0, 1., rho / float(4 * N))],
-    &quot;rates&quot;: (mu_neutral, mu_selected, None),
-    # Keep mutations at frequency 1 in the pop if they affect fitness.
-    &quot;prune_selected&quot;: False,
-    &quot;demography&quot;: fwdpy11.DiscreteDemography(),
-    &quot;simlen&quot;: 10 * N + 200,
-}
-params = fwdpy11.ModelParams(**p)
+<span class="n">p</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;nregions&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="s2">&quot;gvalue&quot;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Additive</span><span class="p">(</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">GSSmo</span><span class="p">),</span>
+    <span class="s2">&quot;sregions&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">GaussianS</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)],</span>
+    <span class="s2">&quot;recregions&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">PoissonInterval</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="n">rho</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">N</span><span class="p">))],</span>
+    <span class="s2">&quot;rates&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">mu_neutral</span><span class="p">,</span> <span class="n">mu_selected</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="c1"># Keep mutations at frequency 1 in the pop if they affect fitness.</span>
+    <span class="s2">&quot;prune_selected&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="s2">&quot;demography&quot;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiscreteDemography</span><span class="p">(),</span>
+    <span class="s2">&quot;simlen&quot;</span><span class="p">:</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">N</span> <span class="o">+</span> <span class="mi">200</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="n">params</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="n">p</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>print(params.asblack())
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">params</span><span class="o">.</span><span class="n">asblack</span><span class="p">())</span>
 </pre></div>
 </div>
 </div>
@@ -948,10 +948,10 @@ Let’s see the second in action.
 We’ll change the simulation length.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>temp_dict = params.asdict()
-temp_dict[&quot;simlen&quot;] *= 2
-params = fwdpy11.ModelParams(**temp_dict)
-print(params.simlen)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">temp_dict</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">asdict</span><span class="p">()</span>
+<span class="n">temp_dict</span><span class="p">[</span><span class="s2">&quot;simlen&quot;</span><span class="p">]</span> <span class="o">*=</span> <span class="mi">2</span>
+<span class="n">params</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="n">temp_dict</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">params</span><span class="o">.</span><span class="n">simlen</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>

@@ -865,14 +865,14 @@ frequency spectra, or <code class="docutils literal notranslate"><span class="pr
 <p>We have to define some conventions:</p>
 <ul class="simple">
 <li><p>A sample list is a list of node indexes.  The node indexes
-are stored in a <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.23)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a> with <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v1.23)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.dtype</span></code></a>
+are stored in a <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a> with <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v1.24)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.dtype</span></code></a>
 <code class="docutils literal notranslate"><span class="pre">numpy.int32</span></code>.</p></li>
 <li><p>We support <code class="docutils literal notranslate"><span class="pre">fs</span></code> calculated from multiple lists of samples.</p></li>
 <li><p>An <code class="docutils literal notranslate"><span class="pre">fs</span></code> always contains the zero and fixed bins.  Thus, for
 a sample of <code class="docutils literal notranslate"><span class="pre">n</span></code> nodes, there are <code class="docutils literal notranslate"><span class="pre">n</span> <span class="pre">+</span> <span class="pre">1</span></code> entries in the <code class="docutils literal notranslate"><span class="pre">fs</span></code>.
 The first and last values are for frequencies zero and <code class="docutils literal notranslate"><span class="pre">n</span></code>, respectively.
 Singletons start in bin <code class="docutils literal notranslate"><span class="pre">1</span></code>, etc..</p></li>
-<li><p>An <code class="docutils literal notranslate"><span class="pre">fs</span></code> from a single sample list is represented by a <a class="reference external" href="https://numpy.org/doc/stable/reference/maskedarray.baseclass.html#numpy.ma.MaskedArray" title="(in NumPy v1.23)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ma.MaskedArray</span></code></a>,
+<li><p>An <code class="docutils literal notranslate"><span class="pre">fs</span></code> from a single sample list is represented by a <a class="reference external" href="https://numpy.org/doc/stable/reference/maskedarray.baseclass.html#numpy.ma.MaskedArray" title="(in NumPy v1.24)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ma.MaskedArray</span></code></a>,
 object with the zero and fixed bins masked.</p></li>
 <li><p>An <code class="docutils literal notranslate"><span class="pre">fs</span></code> from more than one sample list is stored in a <code class="docutils literal notranslate"><span class="pre">scipy.sparse.coo_matrix</span></code> sparse
 matrix.</p></li>
@@ -887,26 +887,26 @@ for neutral and non-neutral mutations.  See
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import fwdpy11
-import msprime
-import numpy as np
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fwdpy11</span>
+<span class="kn">import</span> <span class="nn">msprime</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-rng = fwdpy11.GSLrng(4321678)
-config = [msprime.PopulationConfiguration(500), msprime.PopulationConfiguration(500)]
-ts = msprime.simulate(
-    population_configurations=config,
-    Ne=500.0,
-    random_seed=777,
-    migration_matrix=np.array([0, 0.1, 0.1, 0]).reshape(2, 2),
-    recombination_rate=0.25,
-)
+<span class="n">rng</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSLrng</span><span class="p">(</span><span class="mi">4321678</span><span class="p">)</span>
+<span class="n">config</span> <span class="o">=</span> <span class="p">[</span><span class="n">msprime</span><span class="o">.</span><span class="n">PopulationConfiguration</span><span class="p">(</span><span class="mi">500</span><span class="p">),</span> <span class="n">msprime</span><span class="o">.</span><span class="n">PopulationConfiguration</span><span class="p">(</span><span class="mi">500</span><span class="p">)]</span>
+<span class="n">ts</span> <span class="o">=</span> <span class="n">msprime</span><span class="o">.</span><span class="n">simulate</span><span class="p">(</span>
+    <span class="n">population_configurations</span><span class="o">=</span><span class="n">config</span><span class="p">,</span>
+    <span class="n">Ne</span><span class="o">=</span><span class="mf">500.0</span><span class="p">,</span>
+    <span class="n">random_seed</span><span class="o">=</span><span class="mi">777</span><span class="p">,</span>
+    <span class="n">migration_matrix</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+    <span class="n">recombination_rate</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span>
+<span class="p">)</span>
 
-pop = fwdpy11.DiploidPopulation.create_from_tskit(ts)
-md = np.array(pop.diploid_metadata, copy=False)
-np.unique(md[&quot;deme&quot;], return_counts=True)
+<span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="o">.</span><span class="n">create_from_tskit</span><span class="p">(</span><span class="n">ts</span><span class="p">)</span>
+<span class="n">md</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">diploid_metadata</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">md</span><span class="p">[</span><span class="s2">&quot;deme&quot;</span><span class="p">],</span> <span class="n">return_counts</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-nmuts = fwdpy11.infinite_sites(rng, pop, 0.1)
-nmuts
+<span class="n">nmuts</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">infinite_sites</span><span class="p">(</span><span class="n">rng</span><span class="p">,</span> <span class="n">pop</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
+<span class="n">nmuts</span>
 </pre></div>
 </div>
 </div>
@@ -920,10 +920,10 @@ nmuts
 First, let’s get the lists of nodes from the two demes in our population:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>nodes = np.array(pop.tables.nodes, copy=False)
-alive_nodes = pop.alive_nodes
-deme0_nodes = alive_nodes[np.where(nodes[&quot;deme&quot;][alive_nodes] == 0)[0]]
-deme1_nodes = alive_nodes[np.where(nodes[&quot;deme&quot;][alive_nodes] == 1)[0]]
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nodes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">nodes</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">alive_nodes</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">alive_nodes</span>
+<span class="n">deme0_nodes</span> <span class="o">=</span> <span class="n">alive_nodes</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;deme&quot;</span><span class="p">][</span><span class="n">alive_nodes</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]]</span>
+<span class="n">deme1_nodes</span> <span class="o">=</span> <span class="n">alive_nodes</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;deme&quot;</span><span class="p">][</span><span class="n">alive_nodes</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]]</span>
 </pre></div>
 </div>
 </div>
@@ -931,7 +931,7 @@ deme1_nodes = alive_nodes[np.where(nodes[&quot;deme&quot;][alive_nodes] == 1)[0]
 <p>Get an <code class="docutils literal notranslate"><span class="pre">fs</span></code> from nodes found only in deme 0:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>pop.tables.fs([deme0_nodes[:10]])
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pop</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">fs</span><span class="p">([</span><span class="n">deme0_nodes</span><span class="p">[:</span><span class="mi">10</span><span class="p">]])</span>
 </pre></div>
 </div>
 </div>
@@ -948,8 +948,8 @@ deme1_nodes = alive_nodes[np.where(nodes[&quot;deme&quot;][alive_nodes] == 1)[0]
 <p>Get a joint <code class="docutils literal notranslate"><span class="pre">fs</span></code> from nodes from each deme:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fs = pop.tables.fs([deme0_nodes[:10], deme1_nodes[50:55]])
-fs
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fs</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">fs</span><span class="p">([</span><span class="n">deme0_nodes</span><span class="p">[:</span><span class="mi">10</span><span class="p">],</span> <span class="n">deme1_nodes</span><span class="p">[</span><span class="mi">50</span><span class="p">:</span><span class="mi">55</span><span class="p">]])</span>
+<span class="n">fs</span>
 </pre></div>
 </div>
 </div>
@@ -960,10 +960,10 @@ fs
 </div>
 </div>
 </div>
-<p>Obtain the full <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.23)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a> for the joint <code class="docutils literal notranslate"><span class="pre">fs</span></code>:</p>
+<p>Obtain the full <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a> for the joint <code class="docutils literal notranslate"><span class="pre">fs</span></code>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>np.asarray(fs.todense())
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">fs</span><span class="o">.</span><span class="n">todense</span><span class="p">())</span>
 </pre></div>
 </div>
 </div>
@@ -994,8 +994,8 @@ fs
 <p>We can use standard array operations to get the marginal <code class="docutils literal notranslate"><span class="pre">fs</span></code> from our joint <code class="docutils literal notranslate"><span class="pre">fs</span></code> as a <code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>np.asarray(fs.sum(axis=1).flatten())[0]
-np.asarray(fs.sum(axis=0).flatten())[0]
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">fs</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">fs</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
@@ -1009,11 +1009,11 @@ np.asarray(fs.sum(axis=0).flatten())[0]
 in which case a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> is returned, keyed by sample list index:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fs = pop.tables.fs([deme0_nodes[:10], deme1_nodes[50:55]], marginalize=True)
-for key, value in fs.items():
-    print(key)
-    print(value)
-    print(value.data)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fs</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">fs</span><span class="p">([</span><span class="n">deme0_nodes</span><span class="p">[:</span><span class="mi">10</span><span class="p">],</span> <span class="n">deme1_nodes</span><span class="p">[</span><span class="mi">50</span><span class="p">:</span><span class="mi">55</span><span class="p">]],</span> <span class="n">marginalize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">fs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1031,16 +1031,16 @@ for key, value in fs.items():
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Marginalizing in this way preserves the convention that the 1-d <code class="docutils literal notranslate"><span class="pre">fs</span></code>
-objects are instances of <a class="reference external" href="https://numpy.org/doc/stable/reference/maskedarray.baseclass.html#numpy.ma.MaskedArray" title="(in NumPy v1.23)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ma.MaskedArray</span></code></a>.</p>
+objects are instances of <a class="reference external" href="https://numpy.org/doc/stable/reference/maskedarray.baseclass.html#numpy.ma.MaskedArray" title="(in NumPy v1.24)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ma.MaskedArray</span></code></a>.</p>
 </div>
 <p>To see how the <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> keying works, let’s flip the sample lists:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fs = pop.tables.fs([deme1_nodes[50:55], deme0_nodes[:10]], marginalize=True)
-for key, value in fs.items():
-    print(key)
-    print(value)
-    print(value.data)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fs</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">fs</span><span class="p">([</span><span class="n">deme1_nodes</span><span class="p">[</span><span class="mi">50</span><span class="p">:</span><span class="mi">55</span><span class="p">],</span> <span class="n">deme0_nodes</span><span class="p">[:</span><span class="mi">10</span><span class="p">]],</span> <span class="n">marginalize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">fs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1059,7 +1059,7 @@ for key, value in fs.items():
 the <code class="docutils literal notranslate"><span class="pre">fs</span></code> is the sum across windows:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>pop.tables.fs([deme0_nodes[:10]], windows=[(0.1, 0.2), (0.8, 0.9)])
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pop</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">fs</span><span class="p">([</span><span class="n">deme0_nodes</span><span class="p">[:</span><span class="mi">10</span><span class="p">]],</span> <span class="n">windows</span><span class="o">=</span><span class="p">[(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">)])</span>
 </pre></div>
 </div>
 </div>
@@ -1076,9 +1076,9 @@ the <code class="docutils literal notranslate"><span class="pre">fs</span></code
 <p>You can get the <code class="docutils literal notranslate"><span class="pre">fs</span></code> separately by window, too:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>pop.tables.fs(
-    [deme0_nodes[:10]], windows=[(0.1, 0.2), (0.8, 0.9)], separate_windows=True
-)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pop</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">fs</span><span class="p">(</span>
+    <span class="p">[</span><span class="n">deme0_nodes</span><span class="p">[:</span><span class="mi">10</span><span class="p">]],</span> <span class="n">windows</span><span class="o">=</span><span class="p">[(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">)],</span> <span class="n">separate_windows</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1102,12 +1102,12 @@ by window.  In this case, the return value is a <a class="reference external" hr
 the <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> for each window:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>pop.tables.fs(
-    [deme0_nodes[:10], deme1_nodes[:20]],
-    windows=[(0.1, 0.2), (0.8, 0.9)],
-    marginalize=True,
-    separate_windows=True,
-)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pop</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">fs</span><span class="p">(</span>
+    <span class="p">[</span><span class="n">deme0_nodes</span><span class="p">[:</span><span class="mi">10</span><span class="p">],</span> <span class="n">deme1_nodes</span><span class="p">[:</span><span class="mi">20</span><span class="p">]],</span>
+    <span class="n">windows</span><span class="o">=</span><span class="p">[(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">)],</span>
+    <span class="n">marginalize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">separate_windows</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
 </pre></div>
 </div>
 </div>

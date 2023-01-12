@@ -873,12 +873,12 @@ The first region, spanning <span class="math notranslate nohighlight">\([0, 5)\)
 The second region, spanning [5, 10), has half as many crossovers per generation.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import fwdpy11
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fwdpy11</span>
 
-recregions = [
-    fwdpy11.PoissonInterval(beg=0, end=5, mean=2e-3),
-    fwdpy11.PoissonInterval(beg=5, end=10, mean=1e-3),
-]
+<span class="n">recregions</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">fwdpy11</span><span class="o">.</span><span class="n">PoissonInterval</span><span class="p">(</span><span class="n">beg</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">mean</span><span class="o">=</span><span class="mf">2e-3</span><span class="p">),</span>
+    <span class="n">fwdpy11</span><span class="o">.</span><span class="n">PoissonInterval</span><span class="p">(</span><span class="n">beg</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">mean</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">),</span>
+<span class="p">]</span>
 </pre></div>
 </div>
 </div>
@@ -891,17 +891,17 @@ Between each region, a single recombination occurs with probability of
 one-half, meaning that each region is assorting independently (50 <code class="docutils literal notranslate"><span class="pre">cM</span></code> between each region).</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>NLOCI = 4
-LOCUS_LENGTH = 10
-RECRATE_PER_LOCUS = 1e-3
-LOCUS_BOUNDARIES = [
-    (i, i + LOCUS_LENGTH) for i in range(0, NLOCI * LOCUS_LENGTH, LOCUS_LENGTH)
-]
-recregions = [fwdpy11.PoissonInterval(*i, RECRATE_PER_LOCUS) for i in LOCUS_BOUNDARIES]
-for i in LOCUS_BOUNDARIES[:-1]:
-    recregions.append(fwdpy11.BinomialPoint(i[1], 0.5))
-for i in recregions:
-    print(i)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">NLOCI</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="n">LOCUS_LENGTH</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">RECRATE_PER_LOCUS</span> <span class="o">=</span> <span class="mf">1e-3</span>
+<span class="n">LOCUS_BOUNDARIES</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="n">LOCUS_LENGTH</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">NLOCI</span> <span class="o">*</span> <span class="n">LOCUS_LENGTH</span><span class="p">,</span> <span class="n">LOCUS_LENGTH</span><span class="p">)</span>
+<span class="p">]</span>
+<span class="n">recregions</span> <span class="o">=</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">PoissonInterval</span><span class="p">(</span><span class="o">*</span><span class="n">i</span><span class="p">,</span> <span class="n">RECRATE_PER_LOCUS</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">LOCUS_BOUNDARIES</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">LOCUS_BOUNDARIES</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+    <span class="n">recregions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">BinomialPoint</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mf">0.5</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">recregions</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -923,10 +923,10 @@ For the examples given above, crossover positions are floating-point values samp
 To restrict positions to integer values, we pass <code class="docutils literal notranslate"><span class="pre">discrete=True</span></code> when creating object instances:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>recregions = [
-    fwdpy11.PoissonInterval(beg=0, end=5, mean=2e-3, discrete=True),
-    fwdpy11.PoissonInterval(beg=5, end=10, mean=1e-3, discrete=True),
-]
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">recregions</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">fwdpy11</span><span class="o">.</span><span class="n">PoissonInterval</span><span class="p">(</span><span class="n">beg</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">mean</span><span class="o">=</span><span class="mf">2e-3</span><span class="p">,</span> <span class="n">discrete</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+    <span class="n">fwdpy11</span><span class="o">.</span><span class="n">PoissonInterval</span><span class="p">(</span><span class="n">beg</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">mean</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">discrete</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+<span class="p">]</span>
 </pre></div>
 </div>
 </div>

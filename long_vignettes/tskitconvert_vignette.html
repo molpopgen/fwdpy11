@@ -983,8 +983,8 @@ This is intentional, as it keeps the execution times to a minimum while still il
 </div>
 <div class="cell tag_hide-input docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import demes
-import fwdpy11
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">demes</span>
+<span class="kn">import</span> <span class="nn">fwdpy11</span>
 </pre></div>
 </div>
 </div>
@@ -1005,7 +1005,7 @@ The <a class="reference internal" href="tskit_metadata_vignette.html#tskit-metad
 <h2>Obtaining a <code class="docutils literal notranslate"><span class="pre">tskit</span></code> tree sequence<a class="headerlink" href="#obtaining-a-tskit-tree-sequence" title="Permalink to this headline">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>pop = fwdpy11.DiploidPopulation(1000, 1.0)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1013,8 +1013,8 @@ The <a class="reference internal" href="tskit_metadata_vignette.html#tskit-metad
 <p>By default, export to <code class="docutils literal notranslate"><span class="pre">tskit</span></code> returns a <a class="reference external" href="https://tskit.dev/tskit/docs/stable/python-api.html#tskit.TreeSequence" title="(in Python)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tskit.TreeSequence</span></code></a>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>ts = pop.dump_tables_to_tskit()
-type(ts)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ts</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">dump_tables_to_tskit</span><span class="p">()</span>
+<span class="nb">type</span><span class="p">(</span><span class="n">ts</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1047,7 +1047,7 @@ Much of this vignette concerns top-level metadata.</p>
 <p>The top-level metadata schema is:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>print(fwdpy11.tskit_tools.metadata_schema.TopLevelMetadata)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">tskit_tools</span><span class="o">.</span><span class="n">metadata_schema</span><span class="o">.</span><span class="n">TopLevelMetadata</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1107,23 +1107,23 @@ For example, if you built the <code class="docutils literal notranslate"><span c
 You do not know the state of the <code class="docutils literal notranslate"><span class="pre">rng</span></code> when the second simulation started.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>ts = pop.dump_tables_to_tskit()
-assert &quot;seed&quot; not in ts.metadata
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ts</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">dump_tables_to_tskit</span><span class="p">()</span>
+<span class="k">assert</span> <span class="s2">&quot;seed&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ts</span><span class="o">.</span><span class="n">metadata</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>ts = pop.dump_tables_to_tskit(seed=54321)
-assert ts.metadata[&quot;seed&quot;] == 54321
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ts</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">dump_tables_to_tskit</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">54321</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">ts</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;seed&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">54321</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell tag_raises-exception docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>ts = pop.dump_tables_to_tskit(seed=-4616)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ts</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">dump_tables_to_tskit</span><span class="p">(</span><span class="n">seed</span><span class="o">=-</span><span class="mi">4616</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1140,7 +1140,7 @@ assert ts.metadata[&quot;seed&quot;] == 54321
    <span class="p">(</span><span class="o">...</span><span class="p">)</span>
 <span class="g g-Whitespace">    </span><span class="mi">228</span>     <span class="n">destructive</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 <span class="g g-Whitespace">    </span><span class="mi">229</span> <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">tskit</span><span class="o">.</span><span class="n">TreeSequence</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">230</span>     <span class="sd">&quot;&quot;&quot;</span>
+<span class="g g-Whitespace">    </span><span class="mi">230</span><span class="w">     </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="g g-Whitespace">    </span><span class="mi">231</span><span class="sd">     Dump the population&#39;s TableCollection into</span>
 <span class="g g-Whitespace">    </span><span class="mi">232</span><span class="sd">     an tskit TreeSequence</span>
 <span class="sd">   (...)</span>
@@ -1177,8 +1177,8 @@ Including this is optional for several reasons, but a big one is that this class
 The examples listed below will work with types provided by <code class="docutils literal notranslate"><span class="pre">fwdpy11</span></code> (although we haven’t tested them all!), but user-defined types may be more challenging.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>ts = pop.dump_tables_to_tskit()
-assert &quot;model_params&quot; not in ts.metadata
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ts</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">dump_tables_to_tskit</span><span class="p">()</span>
+<span class="k">assert</span> <span class="s2">&quot;model_params&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ts</span><span class="o">.</span><span class="n">metadata</span>
 </pre></div>
 </div>
 </div>
@@ -1186,17 +1186,17 @@ assert &quot;model_params&quot; not in ts.metadata
 <p>Here is an example of Gaussian stabilizing selection around an optimum trait value of <code class="docutils literal notranslate"><span class="pre">0.0</span></code>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>pdict = {
-    &#39;nregions&#39;: [],
-    &#39;sregions&#39;: [fwdpy11.GaussianS(0, 1, 1, 0.10)],
-    &#39;recregions&#39;: [fwdpy11.PoissonInterval(0, 1, 1e-3)],
-    &#39;gvalue&#39;: fwdpy11.Additive(2., fwdpy11.GSS(optimum=0.0, VS=10.0)),
-    &#39;rates&#39;: (0.0, 1e-3, None),
-    &#39;simlen&#39;: 10 * pop.N,
-    &#39;prune_selected&#39;: False,
-}
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pdict</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;nregions&#39;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="s1">&#39;sregions&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">GaussianS</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.10</span><span class="p">)],</span>
+    <span class="s1">&#39;recregions&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">PoissonInterval</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">1e-3</span><span class="p">)],</span>
+    <span class="s1">&#39;gvalue&#39;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Additive</span><span class="p">(</span><span class="mf">2.</span><span class="p">,</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSS</span><span class="p">(</span><span class="n">optimum</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">VS</span><span class="o">=</span><span class="mf">10.0</span><span class="p">)),</span>
+    <span class="s1">&#39;rates&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1e-3</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="s1">&#39;simlen&#39;</span><span class="p">:</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">pop</span><span class="o">.</span><span class="n">N</span><span class="p">,</span>
+    <span class="s1">&#39;prune_selected&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">}</span>
 
-params = fwdpy11.ModelParams(**pdict)
+<span class="n">params</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="n">pdict</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1204,8 +1204,8 @@ params = fwdpy11.ModelParams(**pdict)
 <p>We can pass the <code class="docutils literal notranslate"><span class="pre">params</span></code> object on when exporting the data to <code class="docutils literal notranslate"><span class="pre">tskit</span></code>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>ts = pop.dump_tables_to_tskit(model_params=params)
-assert fwdpy11.ModelParams(**eval(ts.metadata[&quot;model_params&quot;])) == params
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ts</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">dump_tables_to_tskit</span><span class="p">(</span><span class="n">model_params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="nb">eval</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;model_params&quot;</span><span class="p">]))</span> <span class="o">==</span> <span class="n">params</span>
 </pre></div>
 </div>
 </div>
@@ -1224,13 +1224,13 @@ and two parameters objects.</p></li>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import copy
-pdict2 = copy.deepcopy(pdict)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">copy</span>
+<span class="n">pdict2</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">pdict</span><span class="p">)</span>
 
-pdict2[&#39;gvalue&#39;] = fwdpy11.Additive(2., fwdpy11.GSS(optimum=5.0, VS=10.0)),
-pdict2[&#39;simlen&#39;] = 100
+<span class="n">pdict2</span><span class="p">[</span><span class="s1">&#39;gvalue&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Additive</span><span class="p">(</span><span class="mf">2.</span><span class="p">,</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSS</span><span class="p">(</span><span class="n">optimum</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span> <span class="n">VS</span><span class="o">=</span><span class="mf">10.0</span><span class="p">)),</span>
+<span class="n">pdict2</span><span class="p">[</span><span class="s1">&#39;simlen&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">100</span>
 
-params2 = fwdpy11.ModelParams(**pdict2)
+<span class="n">params2</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="n">pdict2</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1238,8 +1238,8 @@ params2 = fwdpy11.ModelParams(**pdict2)
 <p>We can pass both objects to <code class="docutils literal notranslate"><span class="pre">tskit</span></code> via a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>ts = pop.dump_tables_to_tskit(model_params={&#39;burnin&#39;: params, &#39;adaptation&#39;: params2})
-type(ts.metadata[&quot;model_params&quot;])
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ts</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">dump_tables_to_tskit</span><span class="p">(</span><span class="n">model_params</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;burnin&#39;</span><span class="p">:</span> <span class="n">params</span><span class="p">,</span> <span class="s1">&#39;adaptation&#39;</span><span class="p">:</span> <span class="n">params2</span><span class="p">})</span>
+<span class="nb">type</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;model_params&quot;</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -1251,8 +1251,8 @@ type(ts.metadata[&quot;model_params&quot;])
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>assert fwdpy11.ModelParams(**eval(ts.metadata[&quot;model_params&quot;][&quot;burnin&quot;])) == params
-assert fwdpy11.ModelParams(**eval(ts.metadata[&quot;model_params&quot;][&quot;adaptation&quot;])) == params2
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">assert</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="nb">eval</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;model_params&quot;</span><span class="p">][</span><span class="s2">&quot;burnin&quot;</span><span class="p">]))</span> <span class="o">==</span> <span class="n">params</span>
+<span class="k">assert</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="nb">eval</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;model_params&quot;</span><span class="p">][</span><span class="s2">&quot;adaptation&quot;</span><span class="p">]))</span> <span class="o">==</span> <span class="n">params2</span>
 </pre></div>
 </div>
 </div>
@@ -1267,68 +1267,68 @@ With the graph as metadata, you can extract it and reconstruct the original <cod
 <p>The following hidden code block defines a function to return a <a class="reference external" href="https://popsim-consortium.github.io/demes-docs/main/api.html#demes.Graph" title="(in Python)"><code class="xref py py-class docutils literal notranslate"><span class="pre">demes.Graph</span></code></a> from <code class="docutils literal notranslate"><span class="pre">YAML</span></code> input stored in a string literal.</p>
 <div class="cell tag_hide-input docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def gutenkunst():
-    import demes
-    yaml = &quot;&quot;&quot;
-description: The Gutenkunst et al. (2009) OOA model.
-doi:
-- https://doi.org/10.1371/journal.pgen.1000695
-time_units: years
-generation_time: 25
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">gutenkunst</span><span class="p">():</span>
+    <span class="kn">import</span> <span class="nn">demes</span>
+    <span class="n">yaml</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">description: The Gutenkunst et al. (2009) OOA model.</span>
+<span class="s2">doi:</span>
+<span class="s2">- https://doi.org/10.1371/journal.pgen.1000695</span>
+<span class="s2">time_units: years</span>
+<span class="s2">generation_time: 25</span>
 
-demes:
-- name: ancestral
-  description: Equilibrium/root population
-  epochs:
-  - {end_time: 220e3, start_size: 7300}
-- name: AMH
-  description: Anatomically modern humans
-  ancestors: [ancestral]
-  epochs:
-  - {end_time: 140e3, start_size: 12300}
-- name: OOA
-  description: Bottleneck out-of-Africa population
-  ancestors: [AMH]
-  epochs:
-  - {end_time: 21.2e3, start_size: 2100}
-- name: YRI
-  description: Yoruba in Ibadan, Nigeria
-  ancestors: [AMH]
-  epochs:
-  - start_size: 12300
-- name: CEU
-  description: Utah Residents (CEPH) with Northern and Western European Ancestry
-  ancestors: [OOA]
-  epochs:
-  - {start_size: 1000, end_size: 29725}
-- name: CHB
-  description: Han Chinese in Beijing, China
-  ancestors: [OOA]
-  epochs:
-  - {start_size: 510, end_size: 54090}
+<span class="s2">demes:</span>
+<span class="s2">- name: ancestral</span>
+<span class="s2">  description: Equilibrium/root population</span>
+<span class="s2">  epochs:</span>
+<span class="s2">  - {end_time: 220e3, start_size: 7300}</span>
+<span class="s2">- name: AMH</span>
+<span class="s2">  description: Anatomically modern humans</span>
+<span class="s2">  ancestors: [ancestral]</span>
+<span class="s2">  epochs:</span>
+<span class="s2">  - {end_time: 140e3, start_size: 12300}</span>
+<span class="s2">- name: OOA</span>
+<span class="s2">  description: Bottleneck out-of-Africa population</span>
+<span class="s2">  ancestors: [AMH]</span>
+<span class="s2">  epochs:</span>
+<span class="s2">  - {end_time: 21.2e3, start_size: 2100}</span>
+<span class="s2">- name: YRI</span>
+<span class="s2">  description: Yoruba in Ibadan, Nigeria</span>
+<span class="s2">  ancestors: [AMH]</span>
+<span class="s2">  epochs:</span>
+<span class="s2">  - start_size: 12300</span>
+<span class="s2">- name: CEU</span>
+<span class="s2">  description: Utah Residents (CEPH) with Northern and Western European Ancestry</span>
+<span class="s2">  ancestors: [OOA]</span>
+<span class="s2">  epochs:</span>
+<span class="s2">  - {start_size: 1000, end_size: 29725}</span>
+<span class="s2">- name: CHB</span>
+<span class="s2">  description: Han Chinese in Beijing, China</span>
+<span class="s2">  ancestors: [OOA]</span>
+<span class="s2">  epochs:</span>
+<span class="s2">  - {start_size: 510, end_size: 54090}</span>
 
-migrations:
-- {demes: [YRI, OOA], rate: 25e-5}
-- {demes: [YRI, CEU], rate: 3e-5}
-- {demes: [YRI, CHB], rate: 1.9e-5}
-- {demes: [CEU, CHB], rate: 9.6e-5}
-&quot;&quot;&quot;
-    return demes.loads(yaml)
+<span class="s2">migrations:</span>
+<span class="s2">- {demes: [YRI, OOA], rate: 25e-5}</span>
+<span class="s2">- {demes: [YRI, CEU], rate: 3e-5}</span>
+<span class="s2">- {demes: [YRI, CHB], rate: 1.9e-5}</span>
+<span class="s2">- {demes: [CEU, CHB], rate: 9.6e-5}</span>
+<span class="s2">&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">demes</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">yaml</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>graph = gutenkunst()
-ts = pop.dump_tables_to_tskit(demes_graph=graph)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">graph</span> <span class="o">=</span> <span class="n">gutenkunst</span><span class="p">()</span>
+<span class="n">ts</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">dump_tables_to_tskit</span><span class="p">(</span><span class="n">demes_graph</span><span class="o">=</span><span class="n">graph</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>assert demes.Graph.fromdict(ts.metadata[&quot;demes_graph&quot;]) == graph
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">assert</span> <span class="n">demes</span><span class="o">.</span><span class="n">Graph</span><span class="o">.</span><span class="n">fromdict</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;demes_graph&quot;</span><span class="p">])</span> <span class="o">==</span> <span class="n">graph</span>
 </pre></div>
 </div>
 </div>
@@ -1336,8 +1336,8 @@ ts = pop.dump_tables_to_tskit(demes_graph=graph)
 <p>Since this is an optional metadata field, accessing it will return <code class="docutils literal notranslate"><span class="pre">None</span></code> if no graph was provided:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>ts = pop.dump_tables_to_tskit()
-assert &quot;demes_graph&quot; not in ts.metadata
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ts</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">dump_tables_to_tskit</span><span class="p">()</span>
+<span class="k">assert</span> <span class="s2">&quot;demes_graph&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ts</span><span class="o">.</span><span class="n">metadata</span>
 </pre></div>
 </div>
 </div>
@@ -1350,8 +1350,8 @@ For example, this could be a <a class="reference external" href="https://docs.py
 <p>The simplest situation is to use a <code class="docutils literal notranslate"><span class="pre">dict</span></code> containing simple objects:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>ts = pop.dump_tables_to_tskit(data={&#39;x&#39;: 3})
-ts.metadata[&quot;data&quot;]
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ts</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">dump_tables_to_tskit</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">})</span>
+<span class="n">ts</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
@@ -1364,15 +1364,15 @@ ts.metadata[&quot;data&quot;]
 <p>Any use of user-defined types will require conversion to string, however:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>class MyData(object):
-    def __init__(self, x):
-        self.x = x
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyData</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
 
-    def __repr__(self):
-        return f&quot;MyData(x={self.x})&quot;
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;MyData(x=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="si">}</span><span class="s2">)&quot;</span>
 
-# Send in the str representation:
-ts = pop.dump_tables_to_tskit(data=str(MyData(x=77)))
+<span class="c1"># Send in the str representation:</span>
+<span class="n">ts</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">dump_tables_to_tskit</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">MyData</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">77</span><span class="p">)))</span>
 </pre></div>
 </div>
 </div>
@@ -1380,7 +1380,7 @@ ts = pop.dump_tables_to_tskit(data=str(MyData(x=77)))
 <p>Getting the data back out requires an <code class="docutils literal notranslate"><span class="pre">eval</span></code>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>assert eval(ts.metadata[&quot;data&quot;]).x == 77
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">assert</span> <span class="nb">eval</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">x</span> <span class="o">==</span> <span class="mi">77</span>
 </pre></div>
 </div>
 </div>
@@ -1400,8 +1400,8 @@ Doing so requires a <a class="reference external" href="https://docs.python.org/
 <p>For example, let’s create an demographic model from the <code class="docutils literal notranslate"><span class="pre">demes</span></code> graph that used above:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>model = fwdpy11.discrete_demography.from_demes(gutenkunst())
-type(model)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">discrete_demography</span><span class="o">.</span><span class="n">from_demes</span><span class="p">(</span><span class="n">gutenkunst</span><span class="p">())</span>
+<span class="nb">type</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1414,7 +1414,7 @@ type(model)
 <p>This object contains a mapping from integer labels to the deme names:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>model.metadata[&#39;deme_labels&#39;]
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;deme_labels&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
@@ -1427,9 +1427,9 @@ type(model)
 <p>We can make the required <code class="docutils literal notranslate"><span class="pre">dict</span></code> like this:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>pop_md = {}
-for key, value in model.metadata[&#39;deme_labels&#39;].items():
-    pop_md[key] = {&#39;name&#39;: value}
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pop_md</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;deme_labels&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="n">pop_md</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">value</span><span class="p">}</span>
 </pre></div>
 </div>
 </div>
@@ -1437,11 +1437,11 @@ for key, value in model.metadata[&#39;deme_labels&#39;].items():
 <p>To actually illustrate the use of this metadata, we need to make sure that our <code class="docutils literal notranslate"><span class="pre">tskit</span></code> output actually has a population table:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># initialize a population with the right number of demes...
-multideme_pop = fwdpy11.DiploidPopulation([100]*len(pop_md), 1.)
-ts = multideme_pop.dump_tables_to_tskit(population_metadata=pop_md)
-for pop in ts.populations():
-    print(pop.metadata)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># initialize a population with the right number of demes...</span>
+<span class="n">multideme_pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">([</span><span class="mi">100</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">pop_md</span><span class="p">),</span> <span class="mf">1.</span><span class="p">)</span>
+<span class="n">ts</span> <span class="o">=</span> <span class="n">multideme_pop</span><span class="o">.</span><span class="n">dump_tables_to_tskit</span><span class="p">(</span><span class="n">population_metadata</span><span class="o">=</span><span class="n">pop_md</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">pop</span> <span class="ow">in</span> <span class="n">ts</span><span class="o">.</span><span class="n">populations</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">metadata</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1459,8 +1459,8 @@ for pop in ts.populations():
 <p>We could also easily add the deme description to the metadata from the <code class="docutils literal notranslate"><span class="pre">demes</span></code> graph:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>graph = gutenkunst()
-graph.demes
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">graph</span> <span class="o">=</span> <span class="n">gutenkunst</span><span class="p">()</span>
+<span class="n">graph</span><span class="o">.</span><span class="n">demes</span>
 </pre></div>
 </div>
 </div>
@@ -1477,11 +1477,11 @@ graph.demes
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>pop_md = {}
-for i,deme in enumerate(graph.demes):
-    pop_md[i] = {&#39;name&#39;: deme.name, &quot;description&quot;: deme.description}
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pop_md</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">deme</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">demes</span><span class="p">):</span>
+    <span class="n">pop_md</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">deme</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="n">deme</span><span class="o">.</span><span class="n">description</span><span class="p">}</span>
 
-pop_md
+<span class="n">pop_md</span>
 </pre></div>
 </div>
 </div>

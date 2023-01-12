@@ -825,90 +825,90 @@ hits a frequency :math:<code class="docutils literal notranslate"><span class="p
 </ul>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import fwdpy11
-import numpy as np
-import msprime
-import fwdpy11.conditional_models
-import fwdpy11.tskit_tools
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fwdpy11</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">msprime</span>
+<span class="kn">import</span> <span class="nn">fwdpy11.conditional_models</span>
+<span class="kn">import</span> <span class="nn">fwdpy11.tskit_tools</span>
 
 
-class IncompleteSweep(object):
-    def __call__(
-        self, pop: fwdpy11.DiploidPopulation, index: int, key: tuple
-    ) -&gt; fwdpy11.conditional_models.SimulationStatus:
-        if pop.mutations[index].key != key:
-            # it is fixed or lost, neither of 
-            # which we want
-            return fwdpy11.conditional_models.SimulationStatus(False, False)
-        if pop.mcounts[index] == 0:
-            return fwdpy11.conditional_models.SimulationStatus(True, False)
+<span class="k">class</span> <span class="nc">IncompleteSweep</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">pop</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">tuple</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">conditional_models</span><span class="o">.</span><span class="n">SimulationStatus</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">pop</span><span class="o">.</span><span class="n">mutations</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">key</span> <span class="o">!=</span> <span class="n">key</span><span class="p">:</span>
+            <span class="c1"># it is fixed or lost, neither of </span>
+            <span class="c1"># which we want</span>
+            <span class="k">return</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">conditional_models</span><span class="o">.</span><span class="n">SimulationStatus</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">pop</span><span class="o">.</span><span class="n">mcounts</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">conditional_models</span><span class="o">.</span><span class="n">SimulationStatus</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
         
-        # Terminate the first time we see the 
-        # variant get about a freq of 0.25
-        if pop.mcounts[index] / 2 / pop.N &gt;= 0.25:
-            return fwdpy11.conditional_models.SimulationStatus(False, True)
-        # make sure there&#39;s a valid return value
-        return fwdpy11.conditional_models.SimulationStatus(False, False)
+        <span class="c1"># Terminate the first time we see the </span>
+        <span class="c1"># variant get about a freq of 0.25</span>
+        <span class="k">if</span> <span class="n">pop</span><span class="o">.</span><span class="n">mcounts</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">/</span> <span class="n">pop</span><span class="o">.</span><span class="n">N</span> <span class="o">&gt;=</span> <span class="mf">0.25</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">conditional_models</span><span class="o">.</span><span class="n">SimulationStatus</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="c1"># make sure there&#39;s a valid return value</span>
+        <span class="k">return</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">conditional_models</span><span class="o">.</span><span class="n">SimulationStatus</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
 
-L = 10000.0
-ttl_rec_rate = 1e-5*L
+<span class="n">L</span> <span class="o">=</span> <span class="mf">10000.0</span>
+<span class="n">ttl_rec_rate</span> <span class="o">=</span> <span class="mf">1e-5</span><span class="o">*</span><span class="n">L</span>
 
-def setup(prune_selected=False):
-    # Dropping mutations requires existing
-    # ancestry, which we can get either
-    # from a burn-in or from msprime.
-    initial_ts = msprime.sim_ancestry(
-        samples=500,
-        population_size=500,
-        # In msprime, recombination rates are per &quot;unit&quot; (&quot;base pair&quot;)
-        recombination_rate=ttl_rec_rate/L,
-        random_seed=43215,
-        sequence_length=L,
-    )
+<span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="n">prune_selected</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="c1"># Dropping mutations requires existing</span>
+    <span class="c1"># ancestry, which we can get either</span>
+    <span class="c1"># from a burn-in or from msprime.</span>
+    <span class="n">initial_ts</span> <span class="o">=</span> <span class="n">msprime</span><span class="o">.</span><span class="n">sim_ancestry</span><span class="p">(</span>
+        <span class="n">samples</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
+        <span class="n">population_size</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
+        <span class="c1"># In msprime, recombination rates are per &quot;unit&quot; (&quot;base pair&quot;)</span>
+        <span class="n">recombination_rate</span><span class="o">=</span><span class="n">ttl_rec_rate</span><span class="o">/</span><span class="n">L</span><span class="p">,</span>
+        <span class="n">random_seed</span><span class="o">=</span><span class="mi">43215</span><span class="p">,</span>
+        <span class="n">sequence_length</span><span class="o">=</span><span class="n">L</span><span class="p">,</span>
+    <span class="p">)</span>
 
-    # Build the pop from msprime output
-    pop = fwdpy11.DiploidPopulation.create_from_tskit(initial_ts)
+    <span class="c1"># Build the pop from msprime output</span>
+    <span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="o">.</span><span class="n">create_from_tskit</span><span class="p">(</span><span class="n">initial_ts</span><span class="p">)</span>
 
-    # Set up basic model parameters
-    pdict = {
-        # Here, the rec rate is number of events per region, not per &quot;base pair&quot;!
-        &quot;recregions&quot;: [fwdpy11.PoissonInterval(0, int(L), ttl_rec_rate, discrete=True)],
-        &quot;gvalue&quot;: fwdpy11.Multiplicative(2.0),
-        &quot;rates&quot;: (0, 0, None),
-        &quot;prune_selected&quot;: False,
-        &quot;simlen&quot;: 200,
-    }
-    params = fwdpy11.ModelParams(**pdict)
+    <span class="c1"># Set up basic model parameters</span>
+    <span class="n">pdict</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="c1"># Here, the rec rate is number of events per region, not per &quot;base pair&quot;!</span>
+        <span class="s2">&quot;recregions&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">PoissonInterval</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">L</span><span class="p">),</span> <span class="n">ttl_rec_rate</span><span class="p">,</span> <span class="n">discrete</span><span class="o">=</span><span class="kc">True</span><span class="p">)],</span>
+        <span class="s2">&quot;gvalue&quot;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Multiplicative</span><span class="p">(</span><span class="mf">2.0</span><span class="p">),</span>
+        <span class="s2">&quot;rates&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+        <span class="s2">&quot;prune_selected&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;simlen&quot;</span><span class="p">:</span> <span class="mi">200</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="n">pdict</span><span class="p">)</span>
 
-    return pop, params
+    <span class="k">return</span> <span class="n">pop</span><span class="p">,</span> <span class="n">params</span>
 
-ALPHA = 1000.0
-rng = fwdpy11.GSLrng(12345)
-pop, params = setup()
-mutation_data = fwdpy11.conditional_models.NewMutationParameters(
-    frequency=fwdpy11.conditional_models.AlleleCount(1),
-    data=fwdpy11.NewMutationData(effect_size=ALPHA / 2 / pop.N, dominance=1),
-    position=fwdpy11.conditional_models.PositionRange(left=L/2-1, right=L/2+1),
-)
-output = fwdpy11.conditional_models.selective_sweep(
-    rng, 
-    pop,
-    params,
-    mutation_data,
-    IncompleteSweep(),
-    # NOTE: this is key flag!
-    # The default is False, which will 
-    # keep simulating until params.simlen,
-    # at which point the mutation may be fixed.
-    return_when_stopping_condition_met = True
-)
+<span class="n">ALPHA</span> <span class="o">=</span> <span class="mf">1000.0</span>
+<span class="n">rng</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSLrng</span><span class="p">(</span><span class="mi">12345</span><span class="p">)</span>
+<span class="n">pop</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="n">setup</span><span class="p">()</span>
+<span class="n">mutation_data</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">conditional_models</span><span class="o">.</span><span class="n">NewMutationParameters</span><span class="p">(</span>
+    <span class="n">frequency</span><span class="o">=</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">conditional_models</span><span class="o">.</span><span class="n">AlleleCount</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">NewMutationData</span><span class="p">(</span><span class="n">effect_size</span><span class="o">=</span><span class="n">ALPHA</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">/</span> <span class="n">pop</span><span class="o">.</span><span class="n">N</span><span class="p">,</span> <span class="n">dominance</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+    <span class="n">position</span><span class="o">=</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">conditional_models</span><span class="o">.</span><span class="n">PositionRange</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="n">L</span><span class="o">/</span><span class="mi">2</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="n">L</span><span class="o">/</span><span class="mi">2</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span>
+<span class="p">)</span>
+<span class="n">output</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">conditional_models</span><span class="o">.</span><span class="n">selective_sweep</span><span class="p">(</span>
+    <span class="n">rng</span><span class="p">,</span> 
+    <span class="n">pop</span><span class="p">,</span>
+    <span class="n">params</span><span class="p">,</span>
+    <span class="n">mutation_data</span><span class="p">,</span>
+    <span class="n">IncompleteSweep</span><span class="p">(),</span>
+    <span class="c1"># NOTE: this is key flag!</span>
+    <span class="c1"># The default is False, which will </span>
+    <span class="c1"># keep simulating until params.simlen,</span>
+    <span class="c1"># at which point the mutation may be fixed.</span>
+    <span class="n">return_when_stopping_condition_met</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="p">)</span>
 
 
-print(output.pop.mutations[output.mutation_index])
+<span class="nb">print</span><span class="p">(</span><span class="n">output</span><span class="o">.</span><span class="n">pop</span><span class="o">.</span><span class="n">mutations</span><span class="p">[</span><span class="n">output</span><span class="o">.</span><span class="n">mutation_index</span><span class="p">])</span>
 
-ts = output.pop.dump_tables_to_tskit()
-print(&quot;genotype table of resultant sweep&quot;)
-print(ts.genotype_matrix())
+<span class="n">ts</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">pop</span><span class="o">.</span><span class="n">dump_tables_to_tskit</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;genotype table of resultant sweep&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">genotype_matrix</span><span class="p">())</span>
 </pre></div>
 </div>
 </div>

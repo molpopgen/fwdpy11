@@ -822,25 +822,25 @@ For models generated via <a class="reference internal" href="../pages/functions.
 We use that <code class="docutils literal notranslate"><span class="pre">dict</span></code> below to get the required list of initial_sizes.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import demes
-import fwdpy11
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">demes</span>
+<span class="kn">import</span> <span class="nn">fwdpy11</span>
 
-builder = demes.Builder(description=&quot;test demography&quot;, time_units=&quot;generations&quot;)
-builder.add_deme(
-    name=&quot;deme&quot;,
-    epochs=[
-        dict(start_size=1000, end_time=100),
-        dict(start_size=2000, end_time=0),
-    ],
-)
+<span class="n">builder</span> <span class="o">=</span> <span class="n">demes</span><span class="o">.</span><span class="n">Builder</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;test demography&quot;</span><span class="p">,</span> <span class="n">time_units</span><span class="o">=</span><span class="s2">&quot;generations&quot;</span><span class="p">)</span>
+<span class="n">builder</span><span class="o">.</span><span class="n">add_deme</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;deme&quot;</span><span class="p">,</span>
+    <span class="n">epochs</span><span class="o">=</span><span class="p">[</span>
+        <span class="nb">dict</span><span class="p">(</span><span class="n">start_size</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">end_time</span><span class="o">=</span><span class="mi">100</span><span class="p">),</span>
+        <span class="nb">dict</span><span class="p">(</span><span class="n">start_size</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">end_time</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+    <span class="p">],</span>
+<span class="p">)</span>
 
-graph = builder.resolve()
+<span class="n">graph</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
 
-demog = fwdpy11.discrete_demography.from_demes(graph)
+<span class="n">demog</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">discrete_demography</span><span class="o">.</span><span class="n">from_demes</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
 
-initial_sizes = [demog.metadata[&quot;initial_sizes&quot;][i] for i in sorted(demog.metadata[&quot;initial_sizes&quot;].keys())]
+<span class="n">initial_sizes</span> <span class="o">=</span> <span class="p">[</span><span class="n">demog</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;initial_sizes&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">demog</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;initial_sizes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())]</span>
 
-dbg = fwdpy11.DemographyDebugger(initial_sizes, demog.model)
+<span class="n">dbg</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DemographyDebugger</span><span class="p">(</span><span class="n">initial_sizes</span><span class="p">,</span> <span class="n">demog</span><span class="o">.</span><span class="n">model</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -848,7 +848,7 @@ dbg = fwdpy11.DemographyDebugger(initial_sizes, demog.model)
 <p>The <code class="docutils literal notranslate"><span class="pre">dbg</span></code> variable also contains a “report” describing the model:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>print(dbg.report)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">dbg</span><span class="o">.</span><span class="n">report</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>

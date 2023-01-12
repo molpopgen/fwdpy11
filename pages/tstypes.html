@@ -950,54 +950,54 @@ recombination rates.  First, let’s get a tree sequence using the linear-time a
 which involves repeated swapping of the IDs of potential ancestors until the MRCA is reached.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import tskit
-import numpy as np
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tskit</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-# The following makes use of the Kirk Lohmueller seed.
-np.random.seed(101 * 405 * 10 * 110)
+<span class="c1"># The following makes use of the Kirk Lohmueller seed.</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">101</span> <span class="o">*</span> <span class="mi">405</span> <span class="o">*</span> <span class="mi">10</span> <span class="o">*</span> <span class="mi">110</span><span class="p">)</span>
 
-tc = tskit.TableCollection(1)
+<span class="n">tc</span> <span class="o">=</span> <span class="n">tskit</span><span class="o">.</span><span class="n">TableCollection</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
-nsam = 10
+<span class="n">nsam</span> <span class="o">=</span> <span class="mi">10</span>
 
-for i in range(nsam):
-    tc.nodes.add_row(time=0, flags=1)
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nsam</span><span class="p">):</span>
+    <span class="n">tc</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">add_row</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
-    nodes = np.arange(2 * nsam - 1, dtype=np.int32)
-    time = 0.0
+    <span class="n">nodes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">nsam</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+    <span class="n">time</span> <span class="o">=</span> <span class="mf">0.0</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># The citation for this algorithm is
-# Hudson, Richard R. 1990.
-# “Gene Genealogies and the Coalescent Process.”
-# Oxford Surveys in Evolutionary Biology 7 (1): 44.
-n = nsam
-while n &gt; 1:
-    rcoal = (n * (n - 1)) / 2.0
-    tcoal = np.random.exponential(1.0 / rcoal)
-    time += tcoal
-    tc.nodes.add_row(time=time)
-    ancestor = 2 * nsam - n
-    p = np.random.choice(n, 1)[0]
-    tc.edges.add_row(left=0.0, right=1.0, parent=ancestor, child=nodes[p])
-    nodes[p] = nodes[n - 1]
-    p = np.random.choice(n - 1, 1)[0]
-    tc.edges.add_row(left=0.0, right=1.0, parent=ancestor, child=nodes[p])
-    nodes[p] = nodes[2 * nsam - n]
-    n -= 1
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># The citation for this algorithm is</span>
+<span class="c1"># Hudson, Richard R. 1990.</span>
+<span class="c1"># “Gene Genealogies and the Coalescent Process.”</span>
+<span class="c1"># Oxford Surveys in Evolutionary Biology 7 (1): 44.</span>
+<span class="n">n</span> <span class="o">=</span> <span class="n">nsam</span>
+<span class="k">while</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+    <span class="n">rcoal</span> <span class="o">=</span> <span class="p">(</span><span class="n">n</span> <span class="o">*</span> <span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span> <span class="o">/</span> <span class="mf">2.0</span>
+    <span class="n">tcoal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">exponential</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">rcoal</span><span class="p">)</span>
+    <span class="n">time</span> <span class="o">+=</span> <span class="n">tcoal</span>
+    <span class="n">tc</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">add_row</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">time</span><span class="p">)</span>
+    <span class="n">ancestor</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">nsam</span> <span class="o">-</span> <span class="n">n</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">tc</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">add_row</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">ancestor</span><span class="p">,</span> <span class="n">child</span><span class="o">=</span><span class="n">nodes</span><span class="p">[</span><span class="n">p</span><span class="p">])</span>
+    <span class="n">nodes</span><span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="o">=</span> <span class="n">nodes</span><span class="p">[</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">tc</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">add_row</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">ancestor</span><span class="p">,</span> <span class="n">child</span><span class="o">=</span><span class="n">nodes</span><span class="p">[</span><span class="n">p</span><span class="p">])</span>
+    <span class="n">nodes</span><span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="o">=</span> <span class="n">nodes</span><span class="p">[</span><span class="mi">2</span> <span class="o">*</span> <span class="n">nsam</span> <span class="o">-</span> <span class="n">n</span><span class="p">]</span>
+    <span class="n">n</span> <span class="o">-=</span> <span class="mi">1</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>tc.sort()
-ts = tc.tree_sequence()
-print(ts.first().draw(format=&quot;unicode&quot;))
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tc</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+<span class="n">ts</span> <span class="o">=</span> <span class="n">tc</span><span class="o">.</span><span class="n">tree_sequence</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">first</span><span class="p">()</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="s2">&quot;unicode&quot;</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -1035,26 +1035,26 @@ about a forward simulation.  Further, we can describe the branches leading to th
 may look at the leaf counts attribute of a marginal tree:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Let&#39;s store our
-# tree in a variable now
-t = ts.first()
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Let&#39;s store our</span>
+<span class="c1"># tree in a variable now</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def get_leaf_counts(tree, i):
-    return len([j for j in tree.leaves(i)])
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_leaf_counts</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">len</span><span class="p">([</span><span class="n">j</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">tree</span><span class="o">.</span><span class="n">leaves</span><span class="p">(</span><span class="n">i</span><span class="p">)])</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Map node ids to their leaf counts using a dict
-lcmap = {i: &quot;&quot;.format(get_leaf_counts(t, i)) for i in range(len(ts.tables.nodes))}
-print(t.draw(format=&quot;unicode&quot;, node_labels=lcmap))
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Map node ids to their leaf counts using a dict</span>
+<span class="n">lcmap</span> <span class="o">=</span> <span class="p">{</span><span class="n">i</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">get_leaf_counts</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">i</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">nodes</span><span class="p">))}</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="s2">&quot;unicode&quot;</span><span class="p">,</span> <span class="n">node_labels</span><span class="o">=</span><span class="n">lcmap</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -1088,7 +1088,7 @@ print(t.draw(format=&quot;unicode&quot;, node_labels=lcmap))
 <p>Let’s take another look at our tree, labelled with node ids:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>print(t.draw(format=&quot;unicode&quot;))
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="s2">&quot;unicode&quot;</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -1120,16 +1120,16 @@ print(t.draw(format=&quot;unicode&quot;, node_labels=lcmap))
 these the left and right children, respectively, of node 15.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def get_children(tree, i):
-    lc = tree.left_child(i)
-    rc = tree.right_child(i)
-    if lc == tskit.NULL and rc == tskit.NULL:
-        return &quot;-&gt;NULL&quot;.format(i)
-    return &quot;-&gt;&quot;.format(i) + str((lc, rc))
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_children</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+    <span class="n">lc</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">left_child</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="n">rc</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">right_child</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">lc</span> <span class="o">==</span> <span class="n">tskit</span><span class="o">.</span><span class="n">NULL</span> <span class="ow">and</span> <span class="n">rc</span> <span class="o">==</span> <span class="n">tskit</span><span class="o">.</span><span class="n">NULL</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;-&gt;NULL&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s2">&quot;-&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="nb">str</span><span class="p">((</span><span class="n">lc</span><span class="p">,</span> <span class="n">rc</span><span class="p">))</span>
 
 
-cmap = {i: get_children(t, i) for i in range(len(ts.tables.nodes))}
-print(t.draw(format=&quot;unicode&quot;, node_labels=cmap))
+<span class="n">cmap</span> <span class="o">=</span> <span class="p">{</span><span class="n">i</span><span class="p">:</span> <span class="n">get_children</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">nodes</span><span class="p">))}</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="s2">&quot;unicode&quot;</span><span class="p">,</span> <span class="n">node_labels</span><span class="o">=</span><span class="n">cmap</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -1160,20 +1160,20 @@ print(t.draw(format=&quot;unicode&quot;, node_labels=cmap))
 <p>Likewise, we may look at the sibling relationships amongst nodes:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def get_sibs(tree, i):
-    ls = tree.left_sib(i)
-    rs = tree.right_sib(i)
-    if ls == tskit.NULL and rs == tskit.NULL:
-        return &quot;-&gt;NULL&quot;.format(i)
-    return &quot;-&gt;&quot;.format(i) + str((ls, rs))
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_sibs</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+    <span class="n">ls</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">left_sib</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="n">rs</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">right_sib</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">ls</span> <span class="o">==</span> <span class="n">tskit</span><span class="o">.</span><span class="n">NULL</span> <span class="ow">and</span> <span class="n">rs</span> <span class="o">==</span> <span class="n">tskit</span><span class="o">.</span><span class="n">NULL</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;-&gt;NULL&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s2">&quot;-&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="nb">str</span><span class="p">((</span><span class="n">ls</span><span class="p">,</span> <span class="n">rs</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>smap = {i: get_sibs(t, i) for i in range(len(ts.tables.nodes))}
-print(t.draw(format=&quot;unicode&quot;, node_labels=smap))
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">smap</span> <span class="o">=</span> <span class="p">{</span><span class="n">i</span><span class="p">:</span> <span class="n">get_sibs</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">nodes</span><span class="p">))}</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="s2">&quot;unicode&quot;</span><span class="p">,</span> <span class="n">node_labels</span><span class="o">=</span><span class="n">smap</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -1211,19 +1211,19 @@ By convention, the value -1 is taken as a NULL value, signifying that there are 
 <p>We can look directly at what theses arrays look like in our tree:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>nnodes = len(ts.tables.nodes)
-# First, let&#39;s write down our node ids:
-print([i for i in range(nnodes)])
-# Now, get the parents of each node, moving &quot;up&quot; the tree
-print([t.parent(i) for i in range(nnodes)])
-# The left child list allows moving &quot;down left&quot; along a tree
-print([t.left_child(i) for i in range(nnodes)])
-# The right child list allows moving &quot;down right&quot; along a tree
-print([t.right_child(i) for i in range(nnodes)])
-# The left sib list allows moving &quot;left&quot; along a tree
-print([t.left_sib(i) for i in range(nnodes)])
-# The right sib list allows moving &quot;right&quot; along a tree
-print([t.right_sib(i) for i in range(nnodes)])
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nnodes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">nodes</span><span class="p">)</span>
+<span class="c1"># First, let&#39;s write down our node ids:</span>
+<span class="nb">print</span><span class="p">([</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nnodes</span><span class="p">)])</span>
+<span class="c1"># Now, get the parents of each node, moving &quot;up&quot; the tree</span>
+<span class="nb">print</span><span class="p">([</span><span class="n">t</span><span class="o">.</span><span class="n">parent</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nnodes</span><span class="p">)])</span>
+<span class="c1"># The left child list allows moving &quot;down left&quot; along a tree</span>
+<span class="nb">print</span><span class="p">([</span><span class="n">t</span><span class="o">.</span><span class="n">left_child</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nnodes</span><span class="p">)])</span>
+<span class="c1"># The right child list allows moving &quot;down right&quot; along a tree</span>
+<span class="nb">print</span><span class="p">([</span><span class="n">t</span><span class="o">.</span><span class="n">right_child</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nnodes</span><span class="p">)])</span>
+<span class="c1"># The left sib list allows moving &quot;left&quot; along a tree</span>
+<span class="nb">print</span><span class="p">([</span><span class="n">t</span><span class="o">.</span><span class="n">left_sib</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nnodes</span><span class="p">)])</span>
+<span class="c1"># The right sib list allows moving &quot;right&quot; along a tree</span>
+<span class="nb">print</span><span class="p">([</span><span class="n">t</span><span class="o">.</span><span class="n">right_sib</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nnodes</span><span class="p">)])</span>
 </pre></div>
 </div>
 </div>

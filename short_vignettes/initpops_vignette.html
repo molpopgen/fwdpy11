@@ -846,8 +846,8 @@ title="Print to PDF"
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#limitations-and-caveats">
-     Limitations and caveats
+    <a class="reference internal nav-link" href="#importing-msprime-tree-sequences-with-mutations">
+     Importing msprime tree sequences with mutations.
     </a>
    </li>
   </ul>
@@ -904,8 +904,8 @@ title="Print to PDF"
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#limitations-and-caveats">
-     Limitations and caveats
+    <a class="reference internal nav-link" href="#importing-msprime-tree-sequences-with-mutations">
+     Importing msprime tree sequences with mutations.
     </a>
    </li>
   </ul>
@@ -929,9 +929,9 @@ title="Print to PDF"
 <p>To initialize a <a class="reference internal" href="../pages/types.html#fwdpy11.DiploidPopulation" title="fwdpy11.DiploidPopulation"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiploidPopulation</span></code></a> with <span class="math notranslate nohighlight">\(N = 100\)</span> diploids and a genome length of <span class="math notranslate nohighlight">\(1000\)</span>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import fwdpy11
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fwdpy11</span>
 
-pop = fwdpy11.DiploidPopulation(100, 1000.0)
+<span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mf">1000.0</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -939,7 +939,7 @@ pop = fwdpy11.DiploidPopulation(100, 1000.0)
 <p>We can access these fields:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>print(f&quot;N = {pop.N}, L = {pop.tables.genome_length}&quot;)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;N = </span><span class="si">{</span><span class="n">pop</span><span class="o">.</span><span class="n">N</span><span class="si">}</span><span class="s2">, L = </span><span class="si">{</span><span class="n">pop</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">genome_length</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -956,7 +956,7 @@ pop = fwdpy11.DiploidPopulation(100, 1000.0)
 <p>To initialize <span class="math notranslate nohighlight">\(N = 100\)</span> with two demes of sizes 25 and 50, respectively, and the same genome length as above:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>pop = fwdpy11.DiploidPopulation([25, 75], 1000.0)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">([</span><span class="mi">25</span><span class="p">,</span> <span class="mi">75</span><span class="p">],</span> <span class="mf">1000.0</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -964,7 +964,7 @@ pop = fwdpy11.DiploidPopulation(100, 1000.0)
 <p>The overall <span class="math notranslate nohighlight">\(N\)</span> is the same:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>print(f&quot;N = {pop.N}&quot;)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;N = </span><span class="si">{</span><span class="n">pop</span><span class="o">.</span><span class="n">N</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -976,12 +976,12 @@ pop = fwdpy11.DiploidPopulation(100, 1000.0)
 </div>
 <p>The deme labels are reflected in the individual meta data.
 The meta data are a list of instance of <a class="reference internal" href="../pages/types.html#fwdpy11.DiploidMetadata" title="fwdpy11.DiploidMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiploidMetadata</span></code></a>.
-That class is also a <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v1.23)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.dtype</span></code></a>, allowing us to access the raw data efficiently as a <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.recarray.html#numpy.recarray" title="(in NumPy v1.23)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.recarray</span></code></a>:</p>
+That class is also a <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v1.24)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.dtype</span></code></a>, allowing us to access the raw data efficiently as a <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.recarray.html#numpy.recarray" title="(in NumPy v1.24)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.recarray</span></code></a>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import numpy as np
-md = np.array(pop.diploid_metadata, copy=False)
-np.unique(md[&#39;deme&#39;], return_counts=True)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="n">md</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">diploid_metadata</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">md</span><span class="p">[</span><span class="s1">&#39;deme&#39;</span><span class="p">],</span> <span class="n">return_counts</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -994,10 +994,10 @@ np.unique(md[&#39;deme&#39;], return_counts=True)
 <p>The individuals are intuitively ordered:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>print(np.where(md[&#39;deme&#39;] == 0)[0].min(),
-      np.where(md[&#39;deme&#39;] == 0)[0].max(),
-      np.where(md[&#39;deme&#39;] == 1)[0].min(),
-      np.where(md[&#39;deme&#39;] == 1)[0].max())
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">md</span><span class="p">[</span><span class="s1">&#39;deme&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span>
+      <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">md</span><span class="p">[</span><span class="s1">&#39;deme&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span>
+      <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">md</span><span class="p">[</span><span class="s1">&#39;deme&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span>
+      <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">md</span><span class="p">[</span><span class="s1">&#39;deme&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
 </pre></div>
 </div>
 </div>
@@ -1019,25 +1019,25 @@ np.unique(md[&#39;deme&#39;], return_counts=True)
 <h3>A single deme<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import msprime
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">msprime</span>
 
-N = 100
-L = 1000.0
+<span class="n">N</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">L</span> <span class="o">=</span> <span class="mf">1000.0</span>
 
-ts = msprime.sim_ancestry(N, population_size = N, sequence_length=L, recombination_rate = 1e-3, random_seed = 42)
-pop = fwdpy11.DiploidPopulation.create_from_tskit(ts)
-assert pop.N == 100
-assert pop.tables.genome_length == L
+<span class="n">ts</span> <span class="o">=</span> <span class="n">msprime</span><span class="o">.</span><span class="n">sim_ancestry</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">population_size</span> <span class="o">=</span> <span class="n">N</span><span class="p">,</span> <span class="n">sequence_length</span><span class="o">=</span><span class="n">L</span><span class="p">,</span> <span class="n">recombination_rate</span> <span class="o">=</span> <span class="mf">1e-3</span><span class="p">,</span> <span class="n">random_seed</span> <span class="o">=</span> <span class="mi">42</span><span class="p">)</span>
+<span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="o">.</span><span class="n">create_from_tskit</span><span class="p">(</span><span class="n">ts</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">pop</span><span class="o">.</span><span class="n">N</span> <span class="o">==</span> <span class="mi">100</span>
+<span class="k">assert</span> <span class="n">pop</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">genome_length</span> <span class="o">==</span> <span class="n">L</span>
 </pre></div>
 </div>
 </div>
 </div>
 <p>Now, our tables have some data in them.
 Edges are stored as a list of <a class="reference internal" href="../pages/types.html#fwdpy11.Edge" title="fwdpy11.Edge"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.Edge</span></code></a> and nodes as a list of <a class="reference internal" href="../pages/types.html#fwdpy11.Node" title="fwdpy11.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.Node</span></code></a>.
-As with meta data, these are <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v1.23)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.dtype</span></code></a>s:</p>
+As with meta data, these are <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v1.24)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.dtype</span></code></a>s:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>np.array(pop.tables.edges, copy=False)[:10]
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">edges</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)[:</span><span class="mi">10</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
@@ -1054,7 +1054,7 @@ As with meta data, these are <a class="reference external" href="https://numpy.o
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>np.array(pop.tables.nodes, copy=False)[:10]
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">nodes</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)[:</span><span class="mi">10</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
@@ -1073,49 +1073,48 @@ As with meta data, these are <a class="reference external" href="https://numpy.o
 The simplest way to do this is to use <a class="reference external" href="https://popsim-consortium.github.io/demes-spec-docs/main/tutorial.html">demes</a> to specify the model:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import demes
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">demes</span>
 
-model_yaml = &quot;&quot;&quot;
-description:
-  Example from the fwdpy11 manual
-time_units: generations
-demes:
-  - name: deme0
-    epochs:
-      - start_size: 50
-        end_time: 0
-  - name: deme1
-    epochs:
-      - start_size: 150
-        end_time: 0
-migrations:
-  - demes: [deme0, deme1]
-    rate: 0.1    
-&quot;&quot;&quot;
+<span class="n">model_yaml</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">description:</span>
+<span class="s2">  Example from the fwdpy11 manual</span>
+<span class="s2">time_units: generations</span>
+<span class="s2">demes:</span>
+<span class="s2">  - name: deme0</span>
+<span class="s2">    epochs:</span>
+<span class="s2">      - start_size: 50</span>
+<span class="s2">        end_time: 0</span>
+<span class="s2">  - name: deme1</span>
+<span class="s2">    epochs:</span>
+<span class="s2">      - start_size: 150</span>
+<span class="s2">        end_time: 0</span>
+<span class="s2">migrations:</span>
+<span class="s2">  - demes: [deme0, deme1]</span>
+<span class="s2">    rate: 0.1    </span>
+<span class="s2">&quot;&quot;&quot;</span>
 
-graph = demes.loads(model_yaml)
+<span class="n">graph</span> <span class="o">=</span> <span class="n">demes</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">model_yaml</span><span class="p">)</span>
 
-demography = msprime.Demography.from_demes(graph)
-ts = msprime.sim_ancestry(
-    samples={0: 50, 1: 150},
-    demography=demography,
-    sequence_length=100,
-    recombination_rate=1e-3)
-pop = fwdpy11.DiploidPopulation.create_from_tskit(ts)
-assert pop.N == 200
-ds = pop.deme_sizes(as_dict=True)
-assert ds[0] == 50
-assert ds[1] == 150
+<span class="n">demography</span> <span class="o">=</span> <span class="n">msprime</span><span class="o">.</span><span class="n">Demography</span><span class="o">.</span><span class="n">from_demes</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
+<span class="n">ts</span> <span class="o">=</span> <span class="n">msprime</span><span class="o">.</span><span class="n">sim_ancestry</span><span class="p">(</span>
+    <span class="n">samples</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span> <span class="mi">150</span><span class="p">},</span>
+    <span class="n">demography</span><span class="o">=</span><span class="n">demography</span><span class="p">,</span>
+    <span class="n">sequence_length</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+    <span class="n">recombination_rate</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">)</span>
+<span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="o">.</span><span class="n">create_from_tskit</span><span class="p">(</span><span class="n">ts</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">pop</span><span class="o">.</span><span class="n">N</span> <span class="o">==</span> <span class="mi">200</span>
+<span class="n">ds</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">deme_sizes</span><span class="p">(</span><span class="n">as_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">ds</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">50</span>
+<span class="k">assert</span> <span class="n">ds</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">150</span>
 </pre></div>
 </div>
 </div>
 </div>
 </section>
-<section id="limitations-and-caveats">
-<h3>Limitations and caveats<a class="headerlink" href="#limitations-and-caveats" title="Permalink to this headline">#</a></h3>
+<section id="importing-msprime-tree-sequences-with-mutations">
+<h3>Importing msprime tree sequences with mutations.<a class="headerlink" href="#importing-msprime-tree-sequences-with-mutations" title="Permalink to this headline">#</a></h3>
 <ul class="simple">
-<li><p>Mutations from <code class="docutils literal notranslate"><span class="pre">msprime</span></code> are ignored.</p></li>
-<li><p>See <a class="reference internal" href="../pages/advancedtopics.html#msprime-subtleties"><span class="std std-ref">Subtleties of starting/finishing tree sequences using msprime</span></a> for more information.</p></li>
+<li><p>See <a class="reference internal" href="../long_vignettes/import_mutations_from_tskit.html#import-mutations-from-tskit-vignette"><span class="std std-ref">Importing mutations from tskit</span></a> for more information.</p></li>
 </ul>
 </section>
 </section>

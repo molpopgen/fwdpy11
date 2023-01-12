@@ -933,38 +933,38 @@ A main goal of this vignette is to describe how to access data from the forward 
 We will simulate the following demographic model:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>yaml=&quot;&quot;&quot;
-description: Two deme model with migration and size changes.
-time_units: generations
-demes:
-- name: ancestral
-  description: ancestral deme, two epochs
-  epochs:
-  - {end_time: 50, start_size: 100}
-- name: deme1
-  description: child 1
-  epochs:
-  - {start_size: 25, end_size: 25, end_time: 0}
-  ancestors: [ancestral]
-- name: deme2
-  description: child 2
-  epochs:
-  - {start_size: 75, end_size: 75, end_time: 0}
-  ancestors: [ancestral]
-migrations:
-- {demes: [deme1, deme2], rate: 1e-3}
-&quot;&quot;&quot;
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">yaml</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">description: Two deme model with migration and size changes.</span>
+<span class="s2">time_units: generations</span>
+<span class="s2">demes:</span>
+<span class="s2">- name: ancestral</span>
+<span class="s2">  description: ancestral deme, two epochs</span>
+<span class="s2">  epochs:</span>
+<span class="s2">  - {end_time: 50, start_size: 100}</span>
+<span class="s2">- name: deme1</span>
+<span class="s2">  description: child 1</span>
+<span class="s2">  epochs:</span>
+<span class="s2">  - {start_size: 25, end_size: 25, end_time: 0}</span>
+<span class="s2">  ancestors: [ancestral]</span>
+<span class="s2">- name: deme2</span>
+<span class="s2">  description: child 2</span>
+<span class="s2">  epochs:</span>
+<span class="s2">  - {start_size: 75, end_size: 75, end_time: 0}</span>
+<span class="s2">  ancestors: [ancestral]</span>
+<span class="s2">migrations:</span>
+<span class="s2">- {demes: [deme1, deme2], rate: 1e-3}</span>
+<span class="s2">&quot;&quot;&quot;</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import demes
-import demesdraw
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">demes</span>
+<span class="kn">import</span> <span class="nn">demesdraw</span>
 
-graph = demes.loads(yaml)
-demesdraw.tubes(graph);
+<span class="n">graph</span> <span class="o">=</span> <span class="n">demes</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">yaml</span><span class="p">)</span>
+<span class="n">demesdraw</span><span class="o">.</span><span class="n">tubes</span><span class="p">(</span><span class="n">graph</span><span class="p">);</span>
 </pre></div>
 </div>
 </div>
@@ -978,9 +978,9 @@ demesdraw.tubes(graph);
 <h2>The forward simulation parameters<a class="headerlink" href="#the-forward-simulation-parameters" title="Permalink to this headline">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import fwdpy11
-import msprime
-import numpy as np
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fwdpy11</span>
+<span class="kn">import</span> <span class="nn">msprime</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 </pre></div>
 </div>
 </div>
@@ -988,13 +988,13 @@ import numpy as np
 <p>We will record all individuals in the entire (meta) population after a specific time:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>class Recorder(object):
-    def __init__(self, when):
-        self.when = when
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Recorder</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">when</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">when</span> <span class="o">=</span> <span class="n">when</span>
 
-    def __call__(self, pop, sampler):
-        if pop.generation &gt;= self.when:
-            sampler.assign(np.arange(pop.N))
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pop</span><span class="p">,</span> <span class="n">sampler</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">pop</span><span class="o">.</span><span class="n">generation</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">when</span><span class="p">:</span>
+            <span class="n">sampler</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">N</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -1002,10 +1002,10 @@ import numpy as np
 <p>Set up some general parameters about the “genome”:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>RHO = 1000. # 4 * ancestral N * r
-L = 1000 # Genome length
-Nref = graph.demes[0].epochs[0].start_size # Ancestral population size
-RECRATE = RHO / 4 / Nref
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">RHO</span> <span class="o">=</span> <span class="mf">1000.</span> <span class="c1"># 4 * ancestral N * r</span>
+<span class="n">L</span> <span class="o">=</span> <span class="mi">1000</span> <span class="c1"># Genome length</span>
+<span class="n">Nref</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">demes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">epochs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">start_size</span> <span class="c1"># Ancestral population size</span>
+<span class="n">RECRATE</span> <span class="o">=</span> <span class="n">RHO</span> <span class="o">/</span> <span class="mi">4</span> <span class="o">/</span> <span class="n">Nref</span>
 </pre></div>
 </div>
 </div>
@@ -1024,14 +1024,14 @@ However, we cannot use an off-diagonal value exactly equal to 1, else the Choles
 Our solution is to use off-diagonal values very very close to 1:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>vcov = np.identity(3)
-vcov[0,1] = 1-np.finfo(np.float64).eps
-vcov[1,0] = 1-np.finfo(np.float64).eps
-mvdes = fwdpy11.mvDES(
-        fwdpy11.LogNormalS.mv(0, L, 1, scaling=-2*Nref),
-        np.zeros(3),
-        vcov,
-    )
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">vcov</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">vcov</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">finfo</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span><span class="o">.</span><span class="n">eps</span>
+<span class="n">vcov</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">finfo</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span><span class="o">.</span><span class="n">eps</span>
+<span class="n">mvdes</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">mvDES</span><span class="p">(</span>
+        <span class="n">fwdpy11</span><span class="o">.</span><span class="n">LogNormalS</span><span class="o">.</span><span class="n">mv</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">scaling</span><span class="o">=-</span><span class="mi">2</span><span class="o">*</span><span class="n">Nref</span><span class="p">),</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span>
+        <span class="n">vcov</span><span class="p">,</span>
+    <span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1040,7 +1040,7 @@ mvdes = fwdpy11.mvDES(
 We will generate the model from a <a class="reference external" href="https://popsim-consortium.github.io/demes-docs/main/api.html#demes.Graph" title="(in Python)"><code class="xref py py-class docutils literal notranslate"><span class="pre">demes.Graph</span></code></a>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>demog = fwdpy11.discrete_demography.from_demes(graph, burnin=1)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">demog</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">discrete_demography</span><span class="o">.</span><span class="n">from_demes</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">burnin</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1048,17 +1048,17 @@ We will generate the model from a <a class="reference external" href="https://po
 <p>Set up the parameters dictionary:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>pdict = {
-    &#39;nregions&#39;: [],
-    &#39;sregions&#39;: [mvdes],
-    &#39;recregions&#39;: [fwdpy11.PoissonInterval(0, L, RECRATE, discrete=True)],
-    &#39;rates&#39;: (0., 1e-3, None),
-    &#39;gvalue&#39;: fwdpy11.Multiplicative(ndemes=3, scaling=2.0),
-    &#39;demography&#39;: demog,
-    &#39;simlen&#39;: demog.metadata[&#39;total_simulation_length&#39;],
-    }
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pdict</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;nregions&#39;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="s1">&#39;sregions&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">mvdes</span><span class="p">],</span>
+    <span class="s1">&#39;recregions&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">PoissonInterval</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="n">RECRATE</span><span class="p">,</span> <span class="n">discrete</span><span class="o">=</span><span class="kc">True</span><span class="p">)],</span>
+    <span class="s1">&#39;rates&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1e-3</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="s1">&#39;gvalue&#39;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Multiplicative</span><span class="p">(</span><span class="n">ndemes</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">scaling</span><span class="o">=</span><span class="mf">2.0</span><span class="p">),</span>
+    <span class="s1">&#39;demography&#39;</span><span class="p">:</span> <span class="n">demog</span><span class="p">,</span>
+    <span class="s1">&#39;simlen&#39;</span><span class="p">:</span> <span class="n">demog</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;total_simulation_length&#39;</span><span class="p">],</span>
+    <span class="p">}</span>
 
-params = fwdpy11.ModelParams(**pdict)
+<span class="n">params</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="n">pdict</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1066,29 +1066,29 @@ params = fwdpy11.ModelParams(**pdict)
 <p>Finally, we initialize a population using output from <code class="docutils literal notranslate"><span class="pre">msprime</span></code>, evolve it, and convert the data to <code class="docutils literal notranslate"><span class="pre">tskit</span></code> format:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>initial_history = msprime.sim_ancestry(
-    samples = 2 * Nref,
-    population_size = Nref,
-    random_seed = 12345,
-    recombination_rate = RECRATE / L,
-    discrete_genome = True,
-    sequence_length = L,
-    model = [
-        msprime.DiscreteTimeWrightFisher(duration=int(0.1 * Nref)),
-        msprime.StandardCoalescent(),
-    ],
-)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">initial_history</span> <span class="o">=</span> <span class="n">msprime</span><span class="o">.</span><span class="n">sim_ancestry</span><span class="p">(</span>
+    <span class="n">samples</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">Nref</span><span class="p">,</span>
+    <span class="n">population_size</span> <span class="o">=</span> <span class="n">Nref</span><span class="p">,</span>
+    <span class="n">random_seed</span> <span class="o">=</span> <span class="mi">12345</span><span class="p">,</span>
+    <span class="n">recombination_rate</span> <span class="o">=</span> <span class="n">RECRATE</span> <span class="o">/</span> <span class="n">L</span><span class="p">,</span>
+    <span class="n">discrete_genome</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">sequence_length</span> <span class="o">=</span> <span class="n">L</span><span class="p">,</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">msprime</span><span class="o">.</span><span class="n">DiscreteTimeWrightFisher</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="mf">0.1</span> <span class="o">*</span> <span class="n">Nref</span><span class="p">)),</span>
+        <span class="n">msprime</span><span class="o">.</span><span class="n">StandardCoalescent</span><span class="p">(),</span>
+    <span class="p">],</span>
+<span class="p">)</span>
 
-pop = fwdpy11.DiploidPopulation.create_from_tskit(initial_history)
+<span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="o">.</span><span class="n">create_from_tskit</span><span class="p">(</span><span class="n">initial_history</span><span class="p">)</span>
 
-rng = fwdpy11.GSLrng(54321)
+<span class="n">rng</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSLrng</span><span class="p">(</span><span class="mi">54321</span><span class="p">)</span>
 
-fwdpy11.evolvets(rng, pop, params,
-                 recorder=Recorder(when=demog.metadata[&quot;burnin_time&quot;] + 1),
-                 simplification_interval=100,
-                 suppress_table_indexing=True)
+<span class="n">fwdpy11</span><span class="o">.</span><span class="n">evolvets</span><span class="p">(</span><span class="n">rng</span><span class="p">,</span> <span class="n">pop</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span>
+                 <span class="n">recorder</span><span class="o">=</span><span class="n">Recorder</span><span class="p">(</span><span class="n">when</span><span class="o">=</span><span class="n">demog</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;burnin_time&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
+                 <span class="n">simplification_interval</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+                 <span class="n">suppress_table_indexing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-ts = pop.dump_tables_to_tskit(demes_graph=graph)
+<span class="n">ts</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">dump_tables_to_tskit</span><span class="p">(</span><span class="n">demes_graph</span><span class="o">=</span><span class="n">graph</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1100,8 +1100,8 @@ ts = pop.dump_tables_to_tskit(demes_graph=graph)
 <p>By default, the metadata decode as a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>for m in ts.mutations():
-    print(m.metadata)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">ts</span><span class="o">.</span><span class="n">mutations</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">metadata</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1120,8 +1120,8 @@ ts = pop.dump_tables_to_tskit(demes_graph=graph)
 <p>We can call <a class="reference internal" href="../pages/tskit_tools.html#fwdpy11.tskit_tools.decode_mutation_metadata" title="fwdpy11.tskit_tools.decode_mutation_metadata"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.tskit_tools.decode_mutation_metadata()</span></code></a> to convert the <code class="docutils literal notranslate"><span class="pre">dict</span></code> to a <a class="reference internal" href="../pages/types.html#fwdpy11.Mutation" title="fwdpy11.Mutation"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.Mutation</span></code></a>.  Thus function returns a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> because it can be accessed using a <a class="reference external" href="https://docs.python.org/3/library/functions.html#slice" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">slice</span></code></a>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>m = fwdpy11.tskit_tools.decode_mutation_metadata(ts, 0)
-type(m[0])
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">m</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">tskit_tools</span><span class="o">.</span><span class="n">decode_mutation_metadata</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="nb">type</span><span class="p">(</span><span class="n">m</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -1134,8 +1134,8 @@ type(m[0])
 <p>With no arguments, all metadata are converted to the <code class="docutils literal notranslate"><span class="pre">Mutation</span></code> type:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>for m in fwdpy11.tskit_tools.decode_mutation_metadata(ts):
-    print(m.esizes)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">tskit_tools</span><span class="o">.</span><span class="n">decode_mutation_metadata</span><span class="p">(</span><span class="n">ts</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">esizes</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1164,9 +1164,9 @@ When we add mutations to the tree sequence with <a class="reference external" hr
 We will apply a binary, infinite-site model to add neutral mutations:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>tscopy = msprime.sim_mutations(ts.tables.tree_sequence(), rate=RECRATE / L, model=msprime.BinaryMutationModel(), discrete_genome=False, random_seed=615243)
-print(&quot;Our original number of mutations =&quot;, ts.num_mutations)
-print(&quot;Our new number of mutations =&quot;, tscopy.num_mutations)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tscopy</span> <span class="o">=</span> <span class="n">msprime</span><span class="o">.</span><span class="n">sim_mutations</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">tree_sequence</span><span class="p">(),</span> <span class="n">rate</span><span class="o">=</span><span class="n">RECRATE</span> <span class="o">/</span> <span class="n">L</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">msprime</span><span class="o">.</span><span class="n">BinaryMutationModel</span><span class="p">(),</span> <span class="n">discrete_genome</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">random_seed</span><span class="o">=</span><span class="mi">615243</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Our original number of mutations =&quot;</span><span class="p">,</span> <span class="n">ts</span><span class="o">.</span><span class="n">num_mutations</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Our new number of mutations =&quot;</span><span class="p">,</span> <span class="n">tscopy</span><span class="o">.</span><span class="n">num_mutations</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1179,14 +1179,14 @@ Our new number of mutations = 33747
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>metadata_is_none = 0
-for i in tscopy.mutations():
-    if i.metadata is None:
-        metadata_is_none += 1
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">metadata_is_none</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">tscopy</span><span class="o">.</span><span class="n">mutations</span><span class="p">():</span>
+    <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">metadata</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">metadata_is_none</span> <span class="o">+=</span> <span class="mi">1</span>
 
-assert metadata_is_none == tscopy.num_mutations - ts.num_mutations
-# mut be true because we asked for an &quot;infinite-sites&quot; mutation scheme
-assert metadata_is_none == tscopy.num_sites - ts.num_mutations
+<span class="k">assert</span> <span class="n">metadata_is_none</span> <span class="o">==</span> <span class="n">tscopy</span><span class="o">.</span><span class="n">num_mutations</span> <span class="o">-</span> <span class="n">ts</span><span class="o">.</span><span class="n">num_mutations</span>
+<span class="c1"># mut be true because we asked for an &quot;infinite-sites&quot; mutation scheme</span>
+<span class="k">assert</span> <span class="n">metadata_is_none</span> <span class="o">==</span> <span class="n">tscopy</span><span class="o">.</span><span class="n">num_sites</span> <span class="o">-</span> <span class="n">ts</span><span class="o">.</span><span class="n">num_mutations</span>
 </pre></div>
 </div>
 </div>
@@ -1198,8 +1198,8 @@ assert metadata_is_none == tscopy.num_sites - ts.num_mutations
 <p>As with mutations, individual metadata automatically decode to <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>print(ts.individual(0).metadata)
-print(type(ts.individual(0).metadata))
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">individual</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">metadata</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">individual</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">metadata</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -1214,7 +1214,7 @@ print(type(ts.individual(0).metadata))
 As with mutation metadata, <a class="reference internal" href="../pages/tskit_tools.html#fwdpy11.tskit_tools.decode_individual_metadata" title="fwdpy11.tskit_tools.decode_individual_metadata"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.tskit_tools.decode_individual_metadata()</span></code></a> returns a list:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fwdpy11.tskit_tools.decode_individual_metadata(ts, 0)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">tskit_tools</span><span class="o">.</span><span class="n">decode_individual_metadata</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1226,7 +1226,7 @@ As with mutation metadata, <a class="reference internal" href="../pages/tskit_to
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>print(type(fwdpy11.tskit_tools.decode_individual_metadata(ts, 0)[0]))
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">tskit_tools</span><span class="o">.</span><span class="n">decode_individual_metadata</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]))</span>
 </pre></div>
 </div>
 </div>
@@ -1245,19 +1245,19 @@ See <a class="reference internal" href="../pages/tskit_tools.html#tskit-tools"><
 Use <a class="reference internal" href="../pages/tskit_tools.html#fwdpy11.tskit_tools.iterate_timepoints_with_individuals" title="fwdpy11.tskit_tools.iterate_timepoints_with_individuals"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.tskit_tools.iterate_timepoints_with_individuals()</span></code></a> to automate iterating over each time point:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import pandas as pd
-pd.set_option(&quot;display.max_rows&quot;, 11)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s2">&quot;display.max_rows&quot;</span><span class="p">,</span> <span class="mi">11</span><span class="p">)</span>
 
-times = []
-num_nodes = []
-len_metadata = []
-for time, nodes, metadata in fwdpy11.tskit_tools.iterate_timepoints_with_individuals(ts, decode_metadata=True):
-    times.append(time)
-    num_nodes.append(len(nodes))
-    len_metadata.append(len(metadata))
+<span class="n">times</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">num_nodes</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">len_metadata</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">time</span><span class="p">,</span> <span class="n">nodes</span><span class="p">,</span> <span class="n">metadata</span> <span class="ow">in</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">tskit_tools</span><span class="o">.</span><span class="n">iterate_timepoints_with_individuals</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">decode_metadata</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">times</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+    <span class="n">num_nodes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">nodes</span><span class="p">))</span>
+    <span class="n">len_metadata</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">metadata</span><span class="p">))</span>
 
-df = pd.DataFrame({&quot;time&quot;: times, &quot;num_nodes&quot;: num_nodes, &quot;num_metadata_objects&quot;: len_metadata})
-df
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">times</span><span class="p">,</span> <span class="s2">&quot;num_nodes&quot;</span><span class="p">:</span> <span class="n">num_nodes</span><span class="p">,</span> <span class="s2">&quot;num_metadata_objects&quot;</span><span class="p">:</span> <span class="n">len_metadata</span><span class="p">})</span>
+<span class="n">df</span>
 </pre></div>
 </div>
 </div>

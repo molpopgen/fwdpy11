@@ -904,7 +904,7 @@ This vignette uses low-level <a class="reference external" href="https://www.sql
 However, using <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> to key <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>s of frequencies risks running out of memory.</p>
 <p>This vignette reimplements the previous method using much more powerful techniques:</p>
 <ul class="simple">
-<li><p>Instead of the <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>, we record data into fixed-length <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.23)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a> objects.</p></li>
+<li><p>Instead of the <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>, we record data into fixed-length <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a> objects.</p></li>
 <li><p>During the simulation, we preserve all individuals of each generation as ancient samples.<br />
 See <a class="reference internal" href="../short_vignettes/recorders_vignette.html#recorders-vignette"><span class="std std-ref">here</span></a> for background.
 The trick is that we will only keep these ancient samples until the table collection is simplified!</p></li>
@@ -917,12 +917,12 @@ We will take advantage of the <a class="reference external" href="http://pandas.
 <p>We will need the following imports:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import attr
-import sqlite3 
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">attr</span>
+<span class="kn">import</span> <span class="nn">sqlite3</span> 
 
-import fwdpy11
-import numpy as np
-import pandas as pd
+<span class="kn">import</span> <span class="nn">fwdpy11</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 </pre></div>
 </div>
 </div>
@@ -935,9 +935,9 @@ This class is trivial (see <a class="reference internal" href="../short_vignette
 <h2>Helper types<a class="headerlink" href="#helper-types" title="Permalink to this headline">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>class SampleEveryone(object):
-    def __call__(self, pop, sampler):
-        sampler.assign(np.arange(pop.N, dtype=np.uint32))
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">SampleEveryone</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pop</span><span class="p">,</span> <span class="n">sampler</span><span class="p">):</span>
+        <span class="n">sampler</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">N</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -949,60 +949,60 @@ In order to shorten the code, we define a <code class="docutils literal notransl
 The definition of this class is shown below, and you may click to see it.</p>
 <div class="cell tag_hide-input docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>@attr.s(auto_attribs=True, kw_only=True)
-class TableBuffer(object):
-    max_records: int
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@attr</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="n">auto_attribs</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">TableBuffer</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="n">max_records</span><span class="p">:</span> <span class="nb">int</span>
 
-    def __attrs_post_init__(self):
-        self.num_records = 0
-        self.generation = np.zeros(self.max_records, dtype=np.uint32)
-        self.origin_time = np.zeros(self.max_records, dtype=np.uint32)
-        self.position = np.zeros(self.max_records, dtype=np.float64)
-        self.frequency = np.zeros(self.max_records, dtype=np.float64)
-        self.effect_size = np.zeros(self.max_records, dtype=np.float64)
+    <span class="k">def</span> <span class="nf">__attrs_post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_records</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generation</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_records</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">origin_time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_records</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_records</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">frequency</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_records</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">effect_size</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_records</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
 
-    def update(
-        self,
-        conn,
-        *,
-        generation,
-        origin_time,
-        position,
-        frequency,
-        effect_size,
-    ):
-        self.generation[self.num_records] = generation
-        self.origin_time[self.num_records] = origin_time
-        self.position[self.num_records] = position
-        self.frequency[self.num_records] = frequency
-        self.effect_size[self.num_records] = effect_size
-        self.num_records += 1
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">conn</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">generation</span><span class="p">,</span>
+        <span class="n">origin_time</span><span class="p">,</span>
+        <span class="n">position</span><span class="p">,</span>
+        <span class="n">frequency</span><span class="p">,</span>
+        <span class="n">effect_size</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generation</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">num_records</span><span class="p">]</span> <span class="o">=</span> <span class="n">generation</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">origin_time</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">num_records</span><span class="p">]</span> <span class="o">=</span> <span class="n">origin_time</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">num_records</span><span class="p">]</span> <span class="o">=</span> <span class="n">position</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">frequency</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">num_records</span><span class="p">]</span> <span class="o">=</span> <span class="n">frequency</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">effect_size</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">num_records</span><span class="p">]</span> <span class="o">=</span> <span class="n">effect_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_records</span> <span class="o">+=</span> <span class="mi">1</span>
 
-        if self.num_records == self.max_records:
-            self._flush_buffer(conn)
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_records</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_records</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_flush_buffer</span><span class="p">(</span><span class="n">conn</span><span class="p">)</span>
 
-    def _flush_buffer(self, conn):
-        if self.num_records == 0:
-            return
+    <span class="k">def</span> <span class="nf">_flush_buffer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">conn</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_records</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span>
 
-        df = pd.DataFrame(
-            {
-                &quot;generation&quot;: self.generation[: self.num_records],
-                &quot;origin_time&quot;: self.origin_time[: self.num_records],
-                &quot;position&quot;: self.position[: self.num_records],
-                &quot;frequency&quot;: self.frequency[: self.num_records],
-                &quot;effect_size&quot;: self.effect_size[: self.num_records],
-            }
-        )
-        df.to_sql(
-            &quot;trajectories_temp&quot;,
-            conn,
-            if_exists=&quot;append&quot;,
-            index=False,
-            method=&quot;multi&quot;,
-            chunksize=25000,
-        )
-        self.num_records = 0
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;generation&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">generation</span><span class="p">[:</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_records</span><span class="p">],</span>
+                <span class="s2">&quot;origin_time&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">origin_time</span><span class="p">[:</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_records</span><span class="p">],</span>
+                <span class="s2">&quot;position&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[:</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_records</span><span class="p">],</span>
+                <span class="s2">&quot;frequency&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">frequency</span><span class="p">[:</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_records</span><span class="p">],</span>
+                <span class="s2">&quot;effect_size&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">effect_size</span><span class="p">[:</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_records</span><span class="p">],</span>
+            <span class="p">}</span>
+        <span class="p">)</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">to_sql</span><span class="p">(</span>
+            <span class="s2">&quot;trajectories_temp&quot;</span><span class="p">,</span>
+            <span class="n">conn</span><span class="p">,</span>
+            <span class="n">if_exists</span><span class="o">=</span><span class="s2">&quot;append&quot;</span><span class="p">,</span>
+            <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">method</span><span class="o">=</span><span class="s2">&quot;multi&quot;</span><span class="p">,</span>
+            <span class="n">chunksize</span><span class="o">=</span><span class="mi">25000</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_records</span> <span class="o">=</span> <span class="mi">0</span>
 </pre></div>
 </div>
 </div>
@@ -1011,16 +1011,16 @@ class TableBuffer(object):
 We will use them to not record the frequencies of fixed mutations over and over again, as well as to record when a mutation did reach fixation.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>@attr.s(auto_attribs=True, kw_only=True, frozen=True)
-class MutationKey(object):
-    origin_time: int
-    position: float
-    effect_size: float
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@attr</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="n">auto_attribs</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">MutationKey</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="n">origin_time</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">position</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">effect_size</span><span class="p">:</span> <span class="nb">float</span>
 
 
-@attr.s(auto_attribs=True, kw_only=True, frozen=True)
-class FixationRecord(object):
-    fixation_time: int
+<span class="nd">@attr</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="n">auto_attribs</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">FixationRecord</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="n">fixation_time</span><span class="p">:</span> <span class="nb">int</span>
 </pre></div>
 </div>
 </div>
@@ -1053,140 +1053,140 @@ Thus, to avoid double counting, we do <strong>not</strong> process the currently
 To make sure that we do, eventually, get all mutations counted, we need to call our <code class="docutils literal notranslate"><span class="pre">count_em_up</span></code> function at the end of the simulation for final tallying.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>@attr.s(auto_attribs=True)
-class CountMutations(object):
-    &quot;&quot;&quot;
-    This is run only in generations where simplification happens.
-    Tables are indexed and &quot;ready to roll&quot; for analysis.
-    &quot;&quot;&quot;
-    max_records: int
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@attr</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="n">auto_attribs</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">CountMutations</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This is run only in generations where simplification happens.</span>
+<span class="sd">    Tables are indexed and &quot;ready to roll&quot; for analysis.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">max_records</span><span class="p">:</span> <span class="nb">int</span>
 
-    def __attrs_post_init__(self):
-        self.buffer = TableBuffer(max_records=self.max_records)
-        self.num_records = 0
-        self.fixations: typing.Dict = dict()
-        self.conn = sqlite3.connect(&quot;:memory:&quot;)
+    <span class="k">def</span> <span class="nf">__attrs_post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span> <span class="o">=</span> <span class="n">TableBuffer</span><span class="p">(</span><span class="n">max_records</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">max_records</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_records</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fixations</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">&quot;:memory:&quot;</span><span class="p">)</span>
 
-    def _dump_fixations(self):
-        origin_time = []
-        effect_size = []
-        position = []
-        fixation_times = []
-        for k, v in self.fixations.items():
-            origin_time.append(k.origin_time)
-            effect_size.append(k.effect_size)
-            position.append(k.position)
-            fixation_times.append(v.fixation_time)
+    <span class="k">def</span> <span class="nf">_dump_fixations</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">origin_time</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">effect_size</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">position</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">fixation_times</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fixations</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">origin_time</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">origin_time</span><span class="p">)</span>
+            <span class="n">effect_size</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">effect_size</span><span class="p">)</span>
+            <span class="n">position</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">position</span><span class="p">)</span>
+            <span class="n">fixation_times</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">fixation_time</span><span class="p">)</span>
 
-        df = pd.DataFrame(
-            {
-                &quot;origin_time&quot;: origin_time,
-                &quot;effect_size&quot;: effect_size,
-                &quot;position&quot;: position,
-                &quot;fixation_time&quot;: fixation_times,
-            }
-        )
-        df.to_sql(&quot;fixations_temp&quot;, self.conn, if_exists=&quot;replace&quot;, index=False)
-        self.fixations = dict()
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;origin_time&quot;</span><span class="p">:</span> <span class="n">origin_time</span><span class="p">,</span>
+                <span class="s2">&quot;effect_size&quot;</span><span class="p">:</span> <span class="n">effect_size</span><span class="p">,</span>
+                <span class="s2">&quot;position&quot;</span><span class="p">:</span> <span class="n">position</span><span class="p">,</span>
+                <span class="s2">&quot;fixation_time&quot;</span><span class="p">:</span> <span class="n">fixation_times</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">)</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">to_sql</span><span class="p">(</span><span class="s2">&quot;fixations_temp&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="p">,</span> <span class="n">if_exists</span><span class="o">=</span><span class="s2">&quot;replace&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fixations</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
 
-    def _dump_remaining_data(self):
-        self.buffer._flush_buffer(self.conn)
-        self._dump_fixations()
+    <span class="k">def</span> <span class="nf">_dump_remaining_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span><span class="o">.</span><span class="n">_flush_buffer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dump_fixations</span><span class="p">()</span>
 
-    def finalize_database(self):
-        &quot;&quot;&quot;
-        Be sure to call this at the end of a simulation!
-        &quot;&quot;&quot;
-        self._dump_remaining_data()
-        self.conn.execute(
-            &quot;create table mutations (origin_time int, position real, effect_size real, id integer primary key autoincrement)&quot;
-        )
-        self.conn.commit()
-        self.conn.execute(
-            &quot;&quot;&quot;
-            insert into mutations select origin_time, position, effect_size, NULL
-            from
-            trajectories_temp
-            group by origin_time, position, effect_size
-            &quot;&quot;&quot;
-        )
-        self.conn.commit()
-        self.conn.execute(
-            &quot;&quot;&quot;
-            create table trajectories
-            as
-            select mutations.id, trajectories_temp.generation,
-            trajectories_temp.frequency
-            from
-            trajectories_temp
-            left join mutations
-            on trajectories_temp.origin_time == mutations.origin_time
-            and trajectories_temp.position == mutations.position
-            and trajectories_temp.effect_size == mutations.effect_size
-            &quot;&quot;&quot;
-        )
-        self.conn.execute(&quot;drop table trajectories_temp&quot;)
-        self.conn.execute(
-            &quot;&quot;&quot;
-            create table fixations
-            as
-            select mutations.id, fixations_temp.fixation_time
-            from fixations_temp
-            left join mutations
-            on fixations_temp.origin_time == mutations.origin_time
-            and fixations_temp.position == mutations.position
-            and fixations_temp.effect_size == mutations.effect_size
-            &quot;&quot;&quot;
-        )
-        self.conn.execute(&quot;drop table fixations_temp&quot;)
-        self.conn.commit()
+    <span class="k">def</span> <span class="nf">finalize_database</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Be sure to call this at the end of a simulation!</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dump_remaining_data</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+            <span class="s2">&quot;create table mutations (origin_time int, position real, effect_size real, id integer primary key autoincrement)&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            insert into mutations select origin_time, position, effect_size, NULL</span>
+<span class="sd">            from</span>
+<span class="sd">            trajectories_temp</span>
+<span class="sd">            group by origin_time, position, effect_size</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            create table trajectories</span>
+<span class="sd">            as</span>
+<span class="sd">            select mutations.id, trajectories_temp.generation,</span>
+<span class="sd">            trajectories_temp.frequency</span>
+<span class="sd">            from</span>
+<span class="sd">            trajectories_temp</span>
+<span class="sd">            left join mutations</span>
+<span class="sd">            on trajectories_temp.origin_time == mutations.origin_time</span>
+<span class="sd">            and trajectories_temp.position == mutations.position</span>
+<span class="sd">            and trajectories_temp.effect_size == mutations.effect_size</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;drop table trajectories_temp&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            create table fixations</span>
+<span class="sd">            as</span>
+<span class="sd">            select mutations.id, fixations_temp.fixation_time</span>
+<span class="sd">            from fixations_temp</span>
+<span class="sd">            left join mutations</span>
+<span class="sd">            on fixations_temp.origin_time == mutations.origin_time</span>
+<span class="sd">            and fixations_temp.position == mutations.position</span>
+<span class="sd">            and fixations_temp.effect_size == mutations.effect_size</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;drop table fixations_temp&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
 
-        # indexes speed up cross-table analysis
-        self.conn.execute(&quot;create index traj_id_index on trajectories(id)&quot;)
-        self.conn.execute(&quot;create index fixation_id_index on fixations(id)&quot;)
-        self.conn.execute(&quot;create index mutation_id_index on mutations(id)&quot;)
-        self.conn.execute(&quot;vacuum&quot;)
-        self.conn.commit()
+        <span class="c1"># indexes speed up cross-table analysis</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;create index traj_id_index on trajectories(id)&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;create index fixation_id_index on fixations(id)&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;create index mutation_id_index on mutations(id)&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;vacuum&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
 
-    def count_em_up(self, pop, *, include_alive):
-        &quot;&quot;&quot;
-        We implement the mechanics of __call__ separately,
-        so that they may be re-used to process alive nodes
-        when evolvets returns.
-        &quot;&quot;&quot;
-        for generation, nodes, metadata in pop.sample_timepoints(
-            include_alive=include_alive
-        ):
-            # non-owning view
-            w = metadata[&quot;w&quot;][:]
-            tables, idmap = fwdpy11.simplify_tables(pop.tables, nodes)
-            tv = fwdpy11.TreeIterator(tables, idmap[nodes])
-            for t in tv:
-                for m in t.mutations():
-                    key = MutationKey(
-                        origin_time=pop.mutations[m.key].g,
-                        position=pop.mutations[m.key].pos,
-                        effect_size=pop.mutations[m.key].s,
-                    )
-                    if key not in self.fixations:
-                        s = t.leaf_counts(m.node)
-                        assert s &gt; 0
-                        freq = s / (2.0 * pop.N)
-                        if freq == 1.0:
-                            self.fixations[key] = FixationRecord(
-                                fixation_time=generation
-                            )
-                        self.buffer.update(
-                            self.conn,
-                            generation=generation,
-                            origin_time=key.origin_time,
-                            position=key.position,
-                            frequency=freq,
-                            effect_size=key.effect_size,
-                        )
+    <span class="k">def</span> <span class="nf">count_em_up</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pop</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">include_alive</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        We implement the mechanics of __call__ separately,</span>
+<span class="sd">        so that they may be re-used to process alive nodes</span>
+<span class="sd">        when evolvets returns.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">generation</span><span class="p">,</span> <span class="n">nodes</span><span class="p">,</span> <span class="n">metadata</span> <span class="ow">in</span> <span class="n">pop</span><span class="o">.</span><span class="n">sample_timepoints</span><span class="p">(</span>
+            <span class="n">include_alive</span><span class="o">=</span><span class="n">include_alive</span>
+        <span class="p">):</span>
+            <span class="c1"># non-owning view</span>
+            <span class="n">w</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;w&quot;</span><span class="p">][:]</span>
+            <span class="n">tables</span><span class="p">,</span> <span class="n">idmap</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">simplify_tables</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">tables</span><span class="p">,</span> <span class="n">nodes</span><span class="p">)</span>
+            <span class="n">tv</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">TreeIterator</span><span class="p">(</span><span class="n">tables</span><span class="p">,</span> <span class="n">idmap</span><span class="p">[</span><span class="n">nodes</span><span class="p">])</span>
+            <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tv</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">t</span><span class="o">.</span><span class="n">mutations</span><span class="p">():</span>
+                    <span class="n">key</span> <span class="o">=</span> <span class="n">MutationKey</span><span class="p">(</span>
+                        <span class="n">origin_time</span><span class="o">=</span><span class="n">pop</span><span class="o">.</span><span class="n">mutations</span><span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">g</span><span class="p">,</span>
+                        <span class="n">position</span><span class="o">=</span><span class="n">pop</span><span class="o">.</span><span class="n">mutations</span><span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span>
+                        <span class="n">effect_size</span><span class="o">=</span><span class="n">pop</span><span class="o">.</span><span class="n">mutations</span><span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">s</span><span class="p">,</span>
+                    <span class="p">)</span>
+                    <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fixations</span><span class="p">:</span>
+                        <span class="n">s</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">leaf_counts</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">node</span><span class="p">)</span>
+                        <span class="k">assert</span> <span class="n">s</span> <span class="o">&gt;</span> <span class="mi">0</span>
+                        <span class="n">freq</span> <span class="o">=</span> <span class="n">s</span> <span class="o">/</span> <span class="p">(</span><span class="mf">2.0</span> <span class="o">*</span> <span class="n">pop</span><span class="o">.</span><span class="n">N</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">freq</span> <span class="o">==</span> <span class="mf">1.0</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">fixations</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">FixationRecord</span><span class="p">(</span>
+                                <span class="n">fixation_time</span><span class="o">=</span><span class="n">generation</span>
+                            <span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="p">,</span>
+                            <span class="n">generation</span><span class="o">=</span><span class="n">generation</span><span class="p">,</span>
+                            <span class="n">origin_time</span><span class="o">=</span><span class="n">key</span><span class="o">.</span><span class="n">origin_time</span><span class="p">,</span>
+                            <span class="n">position</span><span class="o">=</span><span class="n">key</span><span class="o">.</span><span class="n">position</span><span class="p">,</span>
+                            <span class="n">frequency</span><span class="o">=</span><span class="n">freq</span><span class="p">,</span>
+                            <span class="n">effect_size</span><span class="o">=</span><span class="n">key</span><span class="o">.</span><span class="n">effect_size</span><span class="p">,</span>
+                        <span class="p">)</span>
 
-    def __call__(self, pop):
-        self.count_em_up(pop, include_alive=False)
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pop</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">count_em_up</span><span class="p">(</span><span class="n">pop</span><span class="p">,</span> <span class="n">include_alive</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1200,30 +1200,30 @@ The differences are:</p>
 </ul>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>pdict = {
-    # Add a region for neutral mutations:
-    &quot;nregions&quot;: [fwdpy11.Region(0, 1, 1)],
-    &quot;sregions&quot;: [fwdpy11.ExpS(beg=0, end=1, weight=1, mean=0.2)],
-    &quot;recregions&quot;: [fwdpy11.PoissonInterval(0, 1, 1e-2)],
-    &quot;gvalue&quot;: [fwdpy11.Multiplicative(2.0)],
-    # Add a mutation rate for neutral mutations:
-    &quot;rates&quot;: (5e-3, 1e-3, None),
-    &quot;simlen&quot;: 100,
-}
-params = fwdpy11.ModelParams(**pdict)
-pop = fwdpy11.DiploidPopulation(100, 1.0)
-rng = fwdpy11.GSLrng(54321)
-recorder = SampleEveryone()
-counter=CountMutations(max_records=100)
-fwdpy11.evolvets(
-    rng,
-    pop,
-    params,
-    100,  # Simplify every 100 generations
-    recorder,
-    suppress_table_indexing=False,
-    post_simplification_recorder=counter
-)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pdict</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="c1"># Add a region for neutral mutations:</span>
+    <span class="s2">&quot;nregions&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">Region</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)],</span>
+    <span class="s2">&quot;sregions&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">ExpS</span><span class="p">(</span><span class="n">beg</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">mean</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)],</span>
+    <span class="s2">&quot;recregions&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">PoissonInterval</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">1e-2</span><span class="p">)],</span>
+    <span class="s2">&quot;gvalue&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">Multiplicative</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)],</span>
+    <span class="c1"># Add a mutation rate for neutral mutations:</span>
+    <span class="s2">&quot;rates&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">5e-3</span><span class="p">,</span> <span class="mf">1e-3</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="s2">&quot;simlen&quot;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="n">params</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="n">pdict</span><span class="p">)</span>
+<span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+<span class="n">rng</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSLrng</span><span class="p">(</span><span class="mi">54321</span><span class="p">)</span>
+<span class="n">recorder</span> <span class="o">=</span> <span class="n">SampleEveryone</span><span class="p">()</span>
+<span class="n">counter</span><span class="o">=</span><span class="n">CountMutations</span><span class="p">(</span><span class="n">max_records</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">fwdpy11</span><span class="o">.</span><span class="n">evolvets</span><span class="p">(</span>
+    <span class="n">rng</span><span class="p">,</span>
+    <span class="n">pop</span><span class="p">,</span>
+    <span class="n">params</span><span class="p">,</span>
+    <span class="mi">100</span><span class="p">,</span>  <span class="c1"># Simplify every 100 generations</span>
+    <span class="n">recorder</span><span class="p">,</span>
+    <span class="n">suppress_table_indexing</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">post_simplification_recorder</span><span class="o">=</span><span class="n">counter</span>
+<span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1231,10 +1231,10 @@ fwdpy11.evolvets(
 <p>As mentioned earlier, we have to run a couple of extra functions now to make sure we process all of our data:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Get data from the final generation
-counter.count_em_up(pop, include_alive=True)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get data from the final generation</span>
+<span class="n">counter</span><span class="o">.</span><span class="n">count_em_up</span><span class="p">(</span><span class="n">pop</span><span class="p">,</span> <span class="n">include_alive</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-counter.finalize_database()
+<span class="n">counter</span><span class="o">.</span><span class="n">finalize_database</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -1243,10 +1243,10 @@ counter.finalize_database()
 Our approach here is not optimal and we discuss alternatives below.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>traj = pd.read_sql(&#39;select * from trajectories&#39;, counter.conn)
-mut = pd.read_sql(&#39;select * from mutations&#39;, counter.conn)
-df = pd.merge(traj, mut, how=&#39;left&#39;, on=[&#39;id&#39;])
-df[&#39;neutral&#39;] = [i == 0.0 for i in df.effect_size]
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">traj</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="s1">&#39;select * from trajectories&#39;</span><span class="p">,</span> <span class="n">counter</span><span class="o">.</span><span class="n">conn</span><span class="p">)</span>
+<span class="n">mut</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="s1">&#39;select * from mutations&#39;</span><span class="p">,</span> <span class="n">counter</span><span class="o">.</span><span class="n">conn</span><span class="p">)</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">traj</span><span class="p">,</span> <span class="n">mut</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">])</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;neutral&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="o">==</span> <span class="mf">0.0</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">effect_size</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
@@ -1254,20 +1254,20 @@ df[&#39;neutral&#39;] = [i == 0.0 for i in df.effect_size]
 <p>Finally, let us plot our output:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import matplotlib.pyplot as plt
-f, ax = plt.subplots()
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="n">f</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
 
-for n, g in df.groupby([&#39;id&#39;, &#39;neutral&#39;]):
-    if len(g.index) &gt;= 10:
-        linestyle = &#39;-&#39;
-        alpha=1.0
-        if n[1] is True:
-            linestyle=&#39;--&#39;
-        else:
-            alpha=0.5
-        ax.plot(g.generation, g.frequency, linestyle=linestyle, alpha=alpha)
-ax.set_xlabel(&quot;Time (generation)&quot;)
-ax.set_ylabel(&quot;Frequency&quot;);
+<span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;neutral&#39;</span><span class="p">]):</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">index</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">10</span><span class="p">:</span>
+        <span class="n">linestyle</span> <span class="o">=</span> <span class="s1">&#39;-&#39;</span>
+        <span class="n">alpha</span><span class="o">=</span><span class="mf">1.0</span>
+        <span class="k">if</span> <span class="n">n</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">generation</span><span class="p">,</span> <span class="n">g</span><span class="o">.</span><span class="n">frequency</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="n">linestyle</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Time (generation)&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Frequency&quot;</span><span class="p">);</span>
 </pre></div>
 </div>
 </div>

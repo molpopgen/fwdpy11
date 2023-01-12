@@ -819,10 +819,10 @@ title="Print to PDF"
 <span id="multivariate-lognormal-effect-sizes-vignette"></span><h1>The multivariate lognormal distribution<a class="headerlink" href="#the-multivariate-lognormal-distribution" title="Permalink to this headline">#</a></h1>
 <div class="cell tag_hide-input docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import demes
-import demesdraw
-import fwdpy11
-import numpy as np
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">demes</span>
+<span class="kn">import</span> <span class="nn">demesdraw</span>
+<span class="kn">import</span> <span class="nn">fwdpy11</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 </pre></div>
 </div>
 </div>
@@ -838,9 +838,9 @@ identity matrix as a covariance matrix used to specify the multivariate
 Gaussian kernel.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>mvdes = fwdpy11.mvDES(
-    fwdpy11.LogNormalS.mv(0, 1, 1, scaling=-200), np.zeros(2), np.identity(2)
-)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mvdes</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">mvDES</span><span class="p">(</span>
+    <span class="n">fwdpy11</span><span class="o">.</span><span class="n">LogNormalS</span><span class="o">.</span><span class="n">mv</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">scaling</span><span class="o">=-</span><span class="mi">200</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -855,23 +855,23 @@ To model deleterious mutations/effect sizes &lt; 0, use the
 We will simulate a demographic model of migration happening into the infinite past of two equal-sized demes:</p>
 <div class="cell tag_hide-input docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>yaml = &quot;&quot;&quot;
-description: Island model forever
-time_units: generations
-demes:
-  - name: A
-    epochs:
-     - start_size: 100
-  - name: B
-    epochs:
-     - start_size: 100
-migrations:
-  - demes: [A, B]
-    rate: 0.10
-&quot;&quot;&quot;
-g = demes.loads(yaml)
-model = fwdpy11.discrete_demography.from_demes(g, burnin=1)
-demesdraw.tubes(g);
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">yaml</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">description: Island model forever</span>
+<span class="s2">time_units: generations</span>
+<span class="s2">demes:</span>
+<span class="s2">  - name: A</span>
+<span class="s2">    epochs:</span>
+<span class="s2">     - start_size: 100</span>
+<span class="s2">  - name: B</span>
+<span class="s2">    epochs:</span>
+<span class="s2">     - start_size: 100</span>
+<span class="s2">migrations:</span>
+<span class="s2">  - demes: [A, B]</span>
+<span class="s2">    rate: 0.10</span>
+<span class="s2">&quot;&quot;&quot;</span>
+<span class="n">g</span> <span class="o">=</span> <span class="n">demes</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">yaml</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">discrete_demography</span><span class="o">.</span><span class="n">from_demes</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">burnin</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">demesdraw</span><span class="o">.</span><span class="n">tubes</span><span class="p">(</span><span class="n">g</span><span class="p">);</span>
 </pre></div>
 </div>
 </div>
@@ -881,22 +881,22 @@ demesdraw.tubes(g);
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>pdict = {
-    &quot;nregions&quot;: [],
-    &quot;recregions&quot;: [],
-    &quot;sregions&quot;: [mvdes],
-    &quot;rates&quot;: (0, 5e-3, None),
-    &quot;demography&quot;: model,
-    &quot;simlen&quot;: model.metadata[&quot;total_simulation_length&quot;],
-    &quot;gvalue&quot;: fwdpy11.Multiplicative(ndemes=2, scaling=2),
-}
-params = fwdpy11.ModelParams(**pdict)
-# TODO: update this once we have a function to pull the sizes
-# automatically from demes-derived models:
-pop = fwdpy11.DiploidPopulation([v for v in model.metadata[&quot;initial_sizes&quot;].values()], 1.0)
-rng = fwdpy11.GSLrng(42)
-fwdpy11.evolvets(rng, pop, params, 10)
-assert len(pop.tables.mutations) &gt; 0
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pdict</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;nregions&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="s2">&quot;recregions&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="s2">&quot;sregions&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">mvdes</span><span class="p">],</span>
+    <span class="s2">&quot;rates&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">5e-3</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="s2">&quot;demography&quot;</span><span class="p">:</span> <span class="n">model</span><span class="p">,</span>
+    <span class="s2">&quot;simlen&quot;</span><span class="p">:</span> <span class="n">model</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;total_simulation_length&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;gvalue&quot;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Multiplicative</span><span class="p">(</span><span class="n">ndemes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">scaling</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span>
+<span class="p">}</span>
+<span class="n">params</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="n">pdict</span><span class="p">)</span>
+<span class="c1"># TODO: update this once we have a function to pull the sizes</span>
+<span class="c1"># automatically from demes-derived models:</span>
+<span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">([</span><span class="n">v</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;initial_sizes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()],</span> <span class="mf">1.0</span><span class="p">)</span>
+<span class="n">rng</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSLrng</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">fwdpy11</span><span class="o">.</span><span class="n">evolvets</span><span class="p">(</span><span class="n">rng</span><span class="p">,</span> <span class="n">pop</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">mutations</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span>
 </pre></div>
 </div>
 </div>
@@ -904,8 +904,8 @@ assert len(pop.tables.mutations) &gt; 0
 <p>Now, let’s print out the effect sizes in demes 0 and 1, respectively:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>for i in pop.tables.mutations:
-    print(pop.mutations[i.key].esizes)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">pop</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">mutations</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">mutations</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">esizes</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>

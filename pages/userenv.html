@@ -852,11 +852,11 @@ title="Print to PDF"
 <h2>Linux and macOS<a class="headerlink" href="#linux-and-macos" title="Permalink to this headline">#</a></h2>
 <p>For those using 64-bit Linux systems and macOS on Intel chips, <code class="docutils literal notranslate"><span class="pre">fwdpy11</span></code> can be installed directly from <a class="reference external" href="https://pypy.org">PyPi</a> with no need to compile anything.
 The recommended procedure is to install into a virtual environment:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir ~/venvs
-python3 -m venv ~/venvs/fwdpy11
-<span class="nb">source</span> activate ~/venvs/fwdpy11/bin/activate
-python -m pip install --upgrade pip
-pip install fwpdy11
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir<span class="w"> </span>~/venvs
+python3<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>~/venvs/fwdpy11
+<span class="nb">source</span><span class="w"> </span>activate<span class="w"> </span>~/venvs/fwdpy11/bin/activate
+python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>--upgrade<span class="w"> </span>pip
+pip<span class="w"> </span>install<span class="w"> </span>fwpdy11
 </pre></div>
 </div>
 <div class="admonition note">
@@ -876,15 +876,15 @@ For most people, <code class="docutils literal notranslate"><span class="pre">mi
 <li><p>Set up the channel order following instructions <a class="reference external" href="http://bioconda.github.io/user/install.html#set-up-channels">here</a>.
 At the time of this writing, the channel order is:</p></li>
 </ol>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda config --add channels defaults
-conda config --add channels bioconda
-conda config --add channels conda-forge
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>config<span class="w"> </span>--add<span class="w"> </span>channels<span class="w"> </span>defaults
+conda<span class="w"> </span>config<span class="w"> </span>--add<span class="w"> </span>channels<span class="w"> </span>bioconda
+conda<span class="w"> </span>config<span class="w"> </span>--add<span class="w"> </span>channels<span class="w"> </span>conda-forge
 </pre></div>
 </div>
 <ol class="simple">
 <li><p>Finally, we can install:</p></li>
 </ol>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda install fwdpy11
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>install<span class="w"> </span>fwdpy11
 </pre></div>
 </div>
 <div class="admonition note">
@@ -911,19 +911,19 @@ We will try to keep this up to date.</p>
 Doing so requires some care.
 Currently, <code class="docutils literal notranslate"><span class="pre">conda-forge</span></code>, the channel from which <code class="docutils literal notranslate"><span class="pre">bioconda</span></code> pulls dependencies, builds for Python versions not supported by <code class="docutils literal notranslate"><span class="pre">bioconda</span></code>.
 Thus, building an environment like this will often lead to failure:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda create -n myenv -y
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>myenv<span class="w"> </span>-y
 </pre></div>
 </div>
 <p>The problem here is that installing dependencies that are <em>not</em> from <code class="docutils literal notranslate"><span class="pre">bioconda</span></code> is likely to pull in Python 3.9, leaving you unable to install <code class="docutils literal notranslate"><span class="pre">bioconda</span></code> packages.
 (Currently, <code class="docutils literal notranslate"><span class="pre">bioconda</span></code> only supports up to Python 3.8.)</p>
 <p>Unfortunately, creating a new environment based on Python 3.8 will also lead to failure:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda create -n myenv <span class="nv">python</span><span class="o">=</span><span class="m">3</span>.8 -y
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>myenv<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.8<span class="w"> </span>-y
 </pre></div>
 </div>
 <p>The problem here is that the Python 3.8 build will be upgraded compared to what came with <code class="docutils literal notranslate"><span class="pre">miniconda</span></code>.
 For reasons that we are unable to understand, this upgrade leads to run-time problems in some instances.</p>
 <p>Thus, the safest thing to do is to clone your <code class="docutils literal notranslate"><span class="pre">base</span></code>:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda create -n myenv --clone base
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>myenv<span class="w"> </span>--clone<span class="w"> </span>base
 </pre></div>
 </div>
 <p>Now, <code class="docutils literal notranslate"><span class="pre">myenv</span></code> is an exact copy of <code class="docutils literal notranslate"><span class="pre">base</span></code>, and you can <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">install</span> <span class="pre">fwdpy11</span></code> successfully.

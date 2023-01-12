@@ -1129,7 +1129,7 @@ package for your operating system.
 For example, on Fedora Linux, <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">dnf</span> <span class="pre">install</span> <span class="pre">rust</span></code> will get you started.</p></li>
 <li><p>Your rust environment needs <code class="docutils literal notranslate"><span class="pre">cbingden</span></code>:</p></li>
 </ul>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cargo install cbindgen
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cargo<span class="w"> </span>install<span class="w"> </span>cbindgen
 </pre></div>
 </div>
 <p>The C++ test suite requires:</p>
@@ -1149,7 +1149,7 @@ See <a class="reference external" href="https://docs.conda.io/projects/conda-bui
 <section id="python">
 <h4>Python<a class="headerlink" href="#python" title="Permalink to this headline">#</a></h4>
 <p>To reproduce the environments that we use for CI and deployment:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>python3 -m pip install -r requirements/development.txt
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements/development.txt
 </pre></div>
 </div>
 <div class="admonition note">
@@ -1160,9 +1160,9 @@ See <a class="reference external" href="https://docs.conda.io/projects/conda-bui
 </section>
 <section id="building-the-code">
 <h3>Building the code<a class="headerlink" href="#building-the-code" title="Permalink to this headline">#</a></h3>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>git submodule init
-git submodule update
-python3 setup.py build_ext -i
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>submodule<span class="w"> </span>init
+git<span class="w"> </span>submodule<span class="w"> </span>update
+python3<span class="w"> </span>setup.py<span class="w"> </span>build_ext<span class="w"> </span>-i
 </pre></div>
 </div>
 </section>
@@ -1170,12 +1170,12 @@ python3 setup.py build_ext -i
 <section id="installing-from-a-clone-of-the-source-repository">
 <h2>Installing from a clone of the source repository<a class="headerlink" href="#installing-from-a-clone-of-the-source-repository" title="Permalink to this headline">#</a></h2>
 <p>Install the <code class="docutils literal notranslate"><span class="pre">build</span></code> module if you have not:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python -m pip install build
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>build
 </pre></div>
 </div>
 <p>Then:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># from the repository root</span>
-python -m build .
+python<span class="w"> </span>-m<span class="w"> </span>build<span class="w"> </span>.
 </pre></div>
 </div>
 <p>The install the wheel found in <code class="docutils literal notranslate"><span class="pre">dist/</span></code>.</p>
@@ -1184,13 +1184,13 @@ python -m build .
 <h2>Installing from the source distribution at PyPi<a class="headerlink" href="#installing-from-the-source-distribution-at-pypi" title="Permalink to this headline">#</a></h2>
 <p>With all of the dependencies in place, tell <code class="docutils literal notranslate"><span class="pre">pip</span></code> to ignore the binary wheels:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># from the repository root</span>
-pip install fwdpy11 --no-binary
+pip<span class="w"> </span>install<span class="w"> </span>fwdpy11<span class="w"> </span>--no-binary
 </pre></div>
 </div>
 </section>
 <section id="running-the-python-test-suite">
 <h2>Running the Python test suite<a class="headerlink" href="#running-the-python-test-suite" title="Permalink to this headline">#</a></h2>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>python3 -p pytest tests -n <span class="m">6</span>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>-p<span class="w"> </span>pytest<span class="w"> </span>tests<span class="w"> </span>-n<span class="w"> </span><span class="m">6</span>
 </pre></div>
 </div>
 <p>Replace <code class="docutils literal notranslate"><span class="pre">6</span></code> with a number of threads appropriate for your machine.</p>
@@ -1200,8 +1200,8 @@ pip install fwdpy11 --no-binary
 <section id="building-for-development">
 <h3>Building for development<a class="headerlink" href="#building-for-development" title="Permalink to this headline">#</a></h3>
 <p>We need to compile in release mode and enable building Python modules required by the test suite:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cmake -Bbuild -S. -DCMAKE_BUILD_TYPE<span class="o">=</span>Release -DBUILD_PYTHON_UNIT_TESTS<span class="o">=</span>ON
-cmake --build build -j <span class="m">6</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cmake<span class="w"> </span>-Bbuild<span class="w"> </span>-S.<span class="w"> </span>-DCMAKE_BUILD_TYPE<span class="o">=</span>Release<span class="w"> </span>-DBUILD_PYTHON_UNIT_TESTS<span class="o">=</span>ON
+cmake<span class="w"> </span>--build<span class="w"> </span>build<span class="w"> </span>-j<span class="w"> </span><span class="m">6</span>
 </pre></div>
 </div>
 <p>This method can be preferable to the Python commands shown above
@@ -1210,8 +1210,8 @@ because you get full control over parallelism.</p>
 <section id="building-the-core-library-on-its-own">
 <h3>Building the core library on its own.<a class="headerlink" href="#building-the-core-library-on-its-own" title="Permalink to this headline">#</a></h3>
 <p>Doing this is useful for C++-level testing:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cmake -S. -Bbuild -DCMAKE_BUILD_TYPE<span class="o">=</span>Release
-cmake --build build -t fwdpy11core -j <span class="m">6</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cmake<span class="w"> </span>-S.<span class="w"> </span>-Bbuild<span class="w"> </span>-DCMAKE_BUILD_TYPE<span class="o">=</span>Release
+cmake<span class="w"> </span>--build<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>fwdpy11core<span class="w"> </span>-j<span class="w"> </span><span class="m">6</span>
 </pre></div>
 </div>
 </section>
@@ -1226,15 +1226,15 @@ For example, the Python tests will become unbearably slow.
 (The build will place the debug-mode Python module in place so that it will be used for the Python tests.)
 Further, the docs will not build because the examples will time out due to the unoptimized build.</p>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cmake -Bbuild_cpp_tests -S. -DBUILD_CPP_UNIT_TESTS<span class="o">=</span>ON
-cmake --build build_cpp_tests -j <span class="m">6</span>
-cmake --build build_cpp_tests -t <span class="nb">test</span>
-rm -rf build_cpp_tests
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cmake<span class="w"> </span>-Bbuild_cpp_tests<span class="w"> </span>-S.<span class="w"> </span>-DBUILD_CPP_UNIT_TESTS<span class="o">=</span>ON
+cmake<span class="w"> </span>--build<span class="w"> </span>build_cpp_tests<span class="w"> </span>-j<span class="w"> </span><span class="m">6</span>
+cmake<span class="w"> </span>--build<span class="w"> </span>build_cpp_tests<span class="w"> </span>-t<span class="w"> </span><span class="nb">test</span>
+rm<span class="w"> </span>-rf<span class="w"> </span>build_cpp_tests
 </pre></div>
 </div>
 <p>It may be useful to force the C++ code into debug mode, which will enable more <code class="docutils literal notranslate"><span class="pre">assert</span></code>
 statements from <code class="docutils literal notranslate"><span class="pre">fwdpp</span></code> and exceptions from the <code class="docutils literal notranslate"><span class="pre">fwdpy11</span></code> code:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cmake -Bbuild_cpp_tests -S. -DBUILD_CPP_UNIT_TESTS<span class="o">=</span>ON -DCMAKE_CXX_FLAGS<span class="o">=</span><span class="s2">&quot;-UNDEBUG -O -g&quot;</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cmake<span class="w"> </span>-Bbuild_cpp_tests<span class="w"> </span>-S.<span class="w"> </span>-DBUILD_CPP_UNIT_TESTS<span class="o">=</span>ON<span class="w"> </span>-DCMAKE_CXX_FLAGS<span class="o">=</span><span class="s2">&quot;-UNDEBUG -O -g&quot;</span>
 </pre></div>
 </div>
 </section>
@@ -1243,9 +1243,9 @@ statements from <code class="docutils literal notranslate"><span class="pre">fwd
 <p>Many language servers support processing a local file called <code class="docutils literal notranslate"><span class="pre">compile_commands.json</span></code>.
 See <a class="reference external" href="https://clang.llvm.org/docs/JSONCompilationDatabase.html">here</a> for background.</p>
 <p>To generate this file, execute the following steps from the root of the source code repository:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>cmake -Bccommands . -DCMAKE_EXPORT_COMPILE_COMMANDS<span class="o">=</span><span class="m">1</span>
-mv ccommands/compile_commands.json ..
-rm -rf ccomands
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>cmake<span class="w"> </span>-Bccommands<span class="w"> </span>.<span class="w"> </span>-DCMAKE_EXPORT_COMPILE_COMMANDS<span class="o">=</span><span class="m">1</span>
+mv<span class="w"> </span>ccommands/compile_commands.json<span class="w"> </span>..
+rm<span class="w"> </span>-rf<span class="w"> </span>ccomands
 </pre></div>
 </div>
 <p>Now, language servers supporting <code class="docutils literal notranslate"><span class="pre">clangd</span></code> will have nice error checking and code completion for the C++ code!</p>
@@ -1275,7 +1275,7 @@ Where appropriate, they are also marked <code class="docutils literal notranslat
 <p>By default, fwdpy11 is compiled with aggressive optimizations to help reduce the library size.
 One side effect is that it becomes impossible to accurately profile the code.
 To override these defaults:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python setup.py build_ext -i --enable-profiling
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>setup.py<span class="w"> </span>build_ext<span class="w"> </span>-i<span class="w"> </span>--enable-profiling
 </pre></div>
 </div>
 <div class="admonition note">
@@ -1291,7 +1291,7 @@ Building the unit test modules is not affected.</p>
 <p>LTO is enabled by default and reduced the final library size substantially.
 However, it takes a long time and is therefore a drag during development.
 To disable it:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python setup.py build_ext -i --disable_lto
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>setup.py<span class="w"> </span>build_ext<span class="w"> </span>-i<span class="w"> </span>--disable_lto
 </pre></div>
 </div>
 <div class="admonition note">
@@ -1300,7 +1300,7 @@ To disable it:</p>
 </div>
 <section id="enabling-debugging-symbols-in-the-c-code">
 <h3>Enabling debugging symbols in the C++ code<a class="headerlink" href="#enabling-debugging-symbols-in-the-c-code" title="Permalink to this headline">#</a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python setup.py build_ext -i --debug
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>setup.py<span class="w"> </span>build_ext<span class="w"> </span>-i<span class="w"> </span>--debug
 </pre></div>
 </div>
 <p>Debug mode disables all compiler optimizations, allows C-like assertions, and generated debug symbols.</p>
@@ -1318,7 +1318,7 @@ These assertions exist as a brute-force method to help developers quickly identi
 These are disabled by default.
 However, it can be useful to enable them when hacking the code.
 To do so, you must manually set your compiler flags with cmake:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cmake . -DCMAKE_CXX_FLAGS<span class="o">=</span><span class="s2">&quot;-UNDEBUG -O2 -g&quot;</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cmake<span class="w"> </span>.<span class="w"> </span>-DCMAKE_CXX_FLAGS<span class="o">=</span><span class="s2">&quot;-UNDEBUG -O2 -g&quot;</span>
 </pre></div>
 </div>
 <p>When compiling this way, fwdpy11 makes some extra checks that will throw <code class="docutils literal notranslate"><span class="pre">RuntimeError</span></code> if they fail.
@@ -1329,8 +1329,8 @@ Thus, compiling with this option is a “serious debugging mode only” option.<
 <section id="enabling-aggressive-debugging-of-c-stl-templates-using-gcc">
 <h3>Enabling aggressive debugging of C++ STL templates using GCC<a class="headerlink" href="#enabling-aggressive-debugging-of-c-stl-templates-using-gcc" title="Permalink to this headline">#</a></h3>
 <p>Use the following flags to enable an “extreme” debugging mode of the C++ standard template library:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">CXXFLAGS</span><span class="o">=</span><span class="s2">&quot;-D_GLIBCXX_CONCEPT_CHECKS -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC&quot;</span> <span class="se">\</span>
-   <span class="nv">CPPFLAGS</span><span class="o">=</span><span class="s2">&quot;-D_GLIBCXX_CONCEPT_CHECKS -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC&quot;</span> python3 setup.py build_ext -i
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">CXXFLAGS</span><span class="o">=</span><span class="s2">&quot;-D_GLIBCXX_CONCEPT_CHECKS -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">   </span><span class="nv">CPPFLAGS</span><span class="o">=</span><span class="s2">&quot;-D_GLIBCXX_CONCEPT_CHECKS -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC&quot;</span><span class="w"> </span>python3<span class="w"> </span>setup.py<span class="w"> </span>build_ext<span class="w"> </span>-i
 </pre></div>
 </div>
 </section>
@@ -1339,7 +1339,7 @@ Thus, compiling with this option is a “serious debugging mode only” option.<
 <p>It is sometimes useful to go through the code and to a “static” analysis to look for problems.
 The clang-tidy tool is especially useful.</p>
 <p>For example:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>find fwdpy11/src/ -name <span class="s1">&#39;*.cc&#39;</span> <span class="p">|</span> xargs clang-tidy -p ./compile_commands.json -checks<span class="o">=</span><span class="s2">&quot;all&quot;</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>find<span class="w"> </span>fwdpy11/src/<span class="w"> </span>-name<span class="w"> </span><span class="s1">&#39;*.cc&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>xargs<span class="w"> </span>clang-tidy<span class="w"> </span>-p<span class="w"> </span>./compile_commands.json<span class="w"> </span>-checks<span class="o">=</span><span class="s2">&quot;all&quot;</span>
 </pre></div>
 </div>
 </section>
@@ -1350,7 +1350,7 @@ The clang-tidy tool is especially useful.</p>
 <p>The JSON file may containt too many backslashes, causing cppcheck to fail.
 Use <code class="docutils literal notranslate"><span class="pre">sed</span></code>/editor of choice to fix.</p>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cppcheck --project<span class="o">=</span>compile_commands.json --enable<span class="o">=</span><span class="s2">&quot;all&quot;</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cppcheck<span class="w"> </span>--project<span class="o">=</span>compile_commands.json<span class="w"> </span>--enable<span class="o">=</span><span class="s2">&quot;all&quot;</span>
 </pre></div>
 </div>
 </section>
@@ -1370,7 +1370,7 @@ For example, with <code class="docutils literal notranslate"><span class="pre">v
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>At the time of this writing (April 11, 2020), <code class="docutils literal notranslate"><span class="pre">vim/nvim</span></code> integration with <code class="docutils literal notranslate"><span class="pre">black</span></code> requires installing <code class="docutils literal notranslate"><span class="pre">black</span></code> from the GitHub repo and not from PyPi or conda.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip3 install git+git://github.com/psf/black
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip3<span class="w"> </span>install<span class="w"> </span>git+git://github.com/psf/black
 </pre></div>
 </div>
 </div>
@@ -1384,7 +1384,7 @@ For example, with <code class="docutils literal notranslate"><span class="pre">v
 <p>Other than line length, all <code class="docutils literal notranslate"><span class="pre">black</span></code> parameters used are the defaults!</p>
 </div>
 <p>In addition to <code class="docutils literal notranslate"><span class="pre">black</span></code>, <code class="docutils literal notranslate"><span class="pre">import</span></code> statements should be sorted using <a class="reference external" href="https://github.com/timothycrosley/isort">isort</a>:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>isort file.py
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>isort<span class="w"> </span>file.py
 </pre></div>
 </div>
 <p>Or, in <code class="docutils literal notranslate"><span class="pre">vim/neovim</span></code>:</p>
@@ -1406,13 +1406,13 @@ At the moment, there aren’t many tools available to do things like auto-format
 <p>The dependencies for the documentation are described above.</p>
 <section id="building-the-documentation">
 <h3>Building the documentation<a class="headerlink" href="#building-the-documentation" title="Permalink to this headline">#</a></h3>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> doc
-make 
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>doc
+make<span class="w"> </span>
 </pre></div>
 </div>
 <p>Then, point your browser to <code class="docutils literal notranslate"><span class="pre">_build/html/index.html</span></code>.</p>
 <p>To remove the manual:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>make clean
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>clean
 </pre></div>
 </div>
 <p>Remember to <code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">..</span></code> to get out of the <code class="docutils literal notranslate"><span class="pre">doc/</span></code> folder and get back to the repository root when you’re done.</p>

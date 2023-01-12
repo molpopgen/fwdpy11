@@ -885,21 +885,21 @@ heavily on concepts described in <span id="id2">[<a class="reference internal" h
 <p>To start out, let us consider the following tree:</p>
 <div class="cell tag_hide-input docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import tskit
-from IPython.display import SVG
-from myst_nb import glue
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tskit</span>
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">SVG</span>
+<span class="kn">from</span> <span class="nn">myst_nb</span> <span class="kn">import</span> <span class="n">glue</span>
 
-tc = tskit.TableCollection(1.)
-tc.nodes.set_columns(flags=[1]*4+[0]*3, time=[0]*4+[1,2,3])
-tc.edges.add_row(parent=4, child=0, left=0., right=1.)
-tc.edges.add_row(parent=4, child=1, left=0., right=1.)
-tc.edges.add_row(parent=5, child=2, left=0., right=1.)
-tc.edges.add_row(parent=5, child=3, left=0., right=1.)
-tc.edges.add_row(parent=6, child=4, left=0., right=1.)
-tc.edges.add_row(parent=6, child=5, left=0., right=1.)
+<span class="n">tc</span> <span class="o">=</span> <span class="n">tskit</span><span class="o">.</span><span class="n">TableCollection</span><span class="p">(</span><span class="mf">1.</span><span class="p">)</span>
+<span class="n">tc</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">set_columns</span><span class="p">(</span><span class="n">flags</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="mi">4</span><span class="o">+</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mi">3</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mi">4</span><span class="o">+</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+<span class="n">tc</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">add_row</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">child</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mf">1.</span><span class="p">)</span>
+<span class="n">tc</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">add_row</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">child</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mf">1.</span><span class="p">)</span>
+<span class="n">tc</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">add_row</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">child</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mf">1.</span><span class="p">)</span>
+<span class="n">tc</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">add_row</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">child</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mf">1.</span><span class="p">)</span>
+<span class="n">tc</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">add_row</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">child</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mf">1.</span><span class="p">)</span>
+<span class="n">tc</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">add_row</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">child</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mf">1.</span><span class="p">)</span>
 
-ts = tc.tree_sequence()
-glue(&quot;example_tree&quot;, SVG(ts.draw_svg(size=(500, 500))), display=False)
+<span class="n">ts</span> <span class="o">=</span> <span class="n">tc</span><span class="o">.</span><span class="n">tree_sequence</span><span class="p">()</span>
+<span class="n">glue</span><span class="p">(</span><span class="s2">&quot;example_tree&quot;</span><span class="p">,</span> <span class="n">SVG</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">draw_svg</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mi">500</span><span class="p">))),</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -918,14 +918,14 @@ In other words, all genomic positions in this interval have the same ancestry, a
 <p>Following <span id="id3">[<a class="reference internal" href="../misc/bibliography.html#id19" title="Jerome Kelleher, Alison M Etheridge, and Gilean McVean. Efficient coalescent simulation and genealogical analysis for large sample sizes. PLoS Comput. Biol., 12(5):e1004842, May 2016. doi:10.1371/journal.pcbi.1004842.">KEM16</a>]</span>, we can represent the above tree using two tables:</p>
 <div class="cell tag_hide-input docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import pandas as pd
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
-nodes = pd.DataFrame({&#39;id&#39;: [i for i in range(len(ts.tables.nodes))],
-                      &#39;time&#39;: ts.tables.nodes.time})
-edges = pd.DataFrame({&#39;parent&#39;: ts.tables.edges.parent,
-                      &#39;child&#39;: ts.tables.edges.child,
-                      &#39;left&#39;: ts.tables.edges.left,
-                      &#39;right&#39;: ts.tables.edges.right})
+<span class="n">nodes</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">nodes</span><span class="p">))],</span>
+                      <span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="n">ts</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">time</span><span class="p">})</span>
+<span class="n">edges</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;parent&#39;</span><span class="p">:</span> <span class="n">ts</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">parent</span><span class="p">,</span>
+                      <span class="s1">&#39;child&#39;</span><span class="p">:</span> <span class="n">ts</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">child</span><span class="p">,</span>
+                      <span class="s1">&#39;left&#39;</span><span class="p">:</span> <span class="n">ts</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">left</span><span class="p">,</span>
+                      <span class="s1">&#39;right&#39;</span><span class="p">:</span> <span class="n">ts</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">right</span><span class="p">})</span>
 </pre></div>
 </div>
 </div>
@@ -933,7 +933,7 @@ edges = pd.DataFrame({&#39;parent&#39;: ts.tables.edges.parent,
 <p>First we have the <code class="docutils literal notranslate"><span class="pre">nodes</span></code>:</p>
 <div class="cell tag_hide-input docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>nodes
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nodes</span>
 </pre></div>
 </div>
 </div>
@@ -1003,7 +1003,7 @@ edges = pd.DataFrame({&#39;parent&#39;: ts.tables.edges.parent,
 <p>Second, we have the <code class="docutils literal notranslate"><span class="pre">edges</span></code>:</p>
 <div class="cell tag_hide-input docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>edges
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">edges</span>
 </pre></div>
 </div>
 </div>
@@ -1112,48 +1112,48 @@ takes this “messy” node and edge table and returns “simplified” node and
 We implement a Wright-Fisher model for a diploid population without recombination and without selection:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import tskit
-import numpy as np
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tskit</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def wf1(N, ngens):
-    tc = tskit.TableCollection(1.0)
-    # Add 2N nodes at time = 0.
-    # These nodes represent the
-    # initial list of parental
-    # gametes
-    for i in range(2 * N):
-        tc.nodes.add_row(time=0, flags=tskit.NODE_IS_SAMPLE)
-    next_offspring_index = len(tc.nodes)
-    first_parental_index = 0
-    for gen in range(1, ngens + 1):
-        assert next_offspring_index == len(tc.nodes)
-        assert first_parental_index == len(tc.nodes) - 2 * N
-        # Pick 2N parents
-        parents = np.random.randint(0, N, 2 * N)
-        for parent1, parent2 in zip(parents[::2], parents[1::2]):
-            # Pick 1 gamete from each parent
-            mendel = np.random.random_sample(2)
-            g1 = first_parental_index + 2 * parent1 + (mendel[0] &lt; 0.5)
-            g2 = first_parental_index + 2 * parent2 + (mendel[1] &lt; 0.5)
-            # Add nodes for our offspring&#39;s
-            # two gametes
-            tc.nodes.add_row(time=gen, flags=tskit.NODE_IS_SAMPLE)
-            tc.nodes.add_row(time=gen, flags=tskit.NODE_IS_SAMPLE)
-            # Add edges reflecting the
-            # transmission from parental
-            # nodes to offspring nodes
-            tc.edges.add_row(left=0.0, right=1.0, parent=g1, child=next_offspring_index)
-            tc.edges.add_row(
-                left=0.0, right=1.0, parent=g2, child=next_offspring_index + 1
-                )
-            next_offspring_index += 2
-        first_parental_index += 2 * N
-    return tc
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">wf1</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">ngens</span><span class="p">):</span>
+    <span class="n">tc</span> <span class="o">=</span> <span class="n">tskit</span><span class="o">.</span><span class="n">TableCollection</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
+    <span class="c1"># Add 2N nodes at time = 0.</span>
+    <span class="c1"># These nodes represent the</span>
+    <span class="c1"># initial list of parental</span>
+    <span class="c1"># gametes</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">N</span><span class="p">):</span>
+        <span class="n">tc</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">add_row</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">tskit</span><span class="o">.</span><span class="n">NODE_IS_SAMPLE</span><span class="p">)</span>
+    <span class="n">next_offspring_index</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">tc</span><span class="o">.</span><span class="n">nodes</span><span class="p">)</span>
+    <span class="n">first_parental_index</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">gen</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">ngens</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="n">next_offspring_index</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">tc</span><span class="o">.</span><span class="n">nodes</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">first_parental_index</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">tc</span><span class="o">.</span><span class="n">nodes</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">N</span>
+        <span class="c1"># Pick 2N parents</span>
+        <span class="n">parents</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">N</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">parent1</span><span class="p">,</span> <span class="n">parent2</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">parents</span><span class="p">[::</span><span class="mi">2</span><span class="p">],</span> <span class="n">parents</span><span class="p">[</span><span class="mi">1</span><span class="p">::</span><span class="mi">2</span><span class="p">]):</span>
+            <span class="c1"># Pick 1 gamete from each parent</span>
+            <span class="n">mendel</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random_sample</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">g1</span> <span class="o">=</span> <span class="n">first_parental_index</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">parent1</span> <span class="o">+</span> <span class="p">(</span><span class="n">mendel</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="p">)</span>
+            <span class="n">g2</span> <span class="o">=</span> <span class="n">first_parental_index</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">parent2</span> <span class="o">+</span> <span class="p">(</span><span class="n">mendel</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="p">)</span>
+            <span class="c1"># Add nodes for our offspring&#39;s</span>
+            <span class="c1"># two gametes</span>
+            <span class="n">tc</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">add_row</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">gen</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">tskit</span><span class="o">.</span><span class="n">NODE_IS_SAMPLE</span><span class="p">)</span>
+            <span class="n">tc</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">add_row</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">gen</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">tskit</span><span class="o">.</span><span class="n">NODE_IS_SAMPLE</span><span class="p">)</span>
+            <span class="c1"># Add edges reflecting the</span>
+            <span class="c1"># transmission from parental</span>
+            <span class="c1"># nodes to offspring nodes</span>
+            <span class="n">tc</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">add_row</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">g1</span><span class="p">,</span> <span class="n">child</span><span class="o">=</span><span class="n">next_offspring_index</span><span class="p">)</span>
+            <span class="n">tc</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">add_row</span><span class="p">(</span>
+                <span class="n">left</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">g2</span><span class="p">,</span> <span class="n">child</span><span class="o">=</span><span class="n">next_offspring_index</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="p">)</span>
+            <span class="n">next_offspring_index</span> <span class="o">+=</span> <span class="mi">2</span>
+        <span class="n">first_parental_index</span> <span class="o">+=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">N</span>
+    <span class="k">return</span> <span class="n">tc</span>
 </pre></div>
 </div>
 </div>
@@ -1164,20 +1164,20 @@ import numpy as np
 <p>Let’s run the simulation for a few generations and look at the resulting tree:</p>
 <div class="cell tag_raises-exception docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>np.random.seed(42)
-tc = wf1(3, 4)
-# Before we can get a tree sequence from
-# the data, we must change direction of
-# time from foward to backwards to satisty
-# tskit:
-t = tc.nodes.time
-t -= tc.nodes.time.max()
-t *= -1.0
-tc.nodes.set_columns(time=t, flags=tc.nodes.flags)
-# Sort the tables:
-tc.sort()
-ts = tc.tree_sequence()
-SVG(ts.draw_svg(size=(500,500)))
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">tc</span> <span class="o">=</span> <span class="n">wf1</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="c1"># Before we can get a tree sequence from</span>
+<span class="c1"># the data, we must change direction of</span>
+<span class="c1"># time from foward to backwards to satisty</span>
+<span class="c1"># tskit:</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">tc</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">time</span>
+<span class="n">t</span> <span class="o">-=</span> <span class="n">tc</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+<span class="n">t</span> <span class="o">*=</span> <span class="o">-</span><span class="mf">1.0</span>
+<span class="n">tc</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">set_columns</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">t</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">tc</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">flags</span><span class="p">)</span>
+<span class="c1"># Sort the tables:</span>
+<span class="n">tc</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+<span class="n">ts</span> <span class="o">=</span> <span class="n">tc</span><span class="o">.</span><span class="n">tree_sequence</span><span class="p">()</span>
+<span class="n">SVG</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">draw_svg</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span><span class="mi">500</span><span class="p">)))</span>
 </pre></div>
 </div>
 </div>
@@ -1191,13 +1191,13 @@ Simplification returns the minimal history of a specific set of nodes that we ma
 Here, our sample nodes will be those nodes corresponding to the individuals alive at the end of the simulation.</p>
 <div class="cell tag_raises-exception docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>samples = np.where(tc.nodes.time == 0)[0]
-node_map = tc.simplify(samples=samples.tolist())
-ts = tc.tree_sequence()
-tree = ts.first()
-imap = {node_map[node]: node for node in range(len(node_map))}
-nl = {i: f&quot;{imap[i]}-&gt;{i}&quot; for i in tree.nodes()}
-SVG(ts.draw_svg(size=(500,500), node_labels=nl))
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">samples</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">tc</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">time</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">node_map</span> <span class="o">=</span> <span class="n">tc</span><span class="o">.</span><span class="n">simplify</span><span class="p">(</span><span class="n">samples</span><span class="o">=</span><span class="n">samples</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+<span class="n">ts</span> <span class="o">=</span> <span class="n">tc</span><span class="o">.</span><span class="n">tree_sequence</span><span class="p">()</span>
+<span class="n">tree</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+<span class="n">imap</span> <span class="o">=</span> <span class="p">{</span><span class="n">node_map</span><span class="p">[</span><span class="n">node</span><span class="p">]:</span> <span class="n">node</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">node_map</span><span class="p">))}</span>
+<span class="n">nl</span> <span class="o">=</span> <span class="p">{</span><span class="n">i</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">imap</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s2">-&gt;</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">tree</span><span class="o">.</span><span class="n">nodes</span><span class="p">()}</span>
+<span class="n">SVG</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">draw_svg</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span><span class="mi">500</span><span class="p">),</span> <span class="n">node_labels</span><span class="o">=</span><span class="n">nl</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>

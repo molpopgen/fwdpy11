@@ -830,13 +830,13 @@ every N generations for the first 9N generations of a simulation:</p>
 
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import fwdpy11
-import numpy as np
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fwdpy11</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-N = 1000
-seed = 42
-samplesize = 10
-r = fwdpy11.RandomAncientSamples(seed, samplesize, np.arange(0, 10*N, N))
+<span class="n">N</span> <span class="o">=</span> <span class="mi">1000</span>
+<span class="n">seed</span> <span class="o">=</span> <span class="mi">42</span>
+<span class="n">samplesize</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">r</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">RandomAncientSamples</span><span class="p">(</span><span class="n">seed</span><span class="p">,</span> <span class="n">samplesize</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="o">*</span><span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -877,11 +877,11 @@ via a numpy array with dtype uint32:</p>
 <dd><p>Add a list of individuals to the list of samples.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>samples</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.23)"><em>numpy.ndarray</em></a>) – Array of individual indexes</p>
+<dd class="field-odd"><p><strong>samples</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><em>numpy.ndarray</em></a>) – Array of individual indexes</p>
 </dd>
 </dl>
-<p>The <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v1.23)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.dtype</span></code></a> of <code class="docutils literal notranslate"><span class="pre">samples</span></code> must be
-<a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.uint32" title="(in NumPy v1.23)"><code class="xref py py-attr docutils literal notranslate"><span class="pre">numpy.uint32</span></code></a>.</p>
+<p>The <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v1.24)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.dtype</span></code></a> of <code class="docutils literal notranslate"><span class="pre">samples</span></code> must be
+<a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.uint32" title="(in NumPy v1.24)"><code class="xref py py-attr docutils literal notranslate"><span class="pre">numpy.uint32</span></code></a>.</p>
 </dd></dl>
 
 <p>The following is essentially pseudocode to illustrate the process:</p>
@@ -889,10 +889,10 @@ via a numpy array with dtype uint32:</p>
 
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import fwdpy11
-s = fwdpy11.SampleRecorder()
-s.add_sample(10)
-s.assign(np.arange(10, dtype=np.uint32))
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fwdpy11</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">SampleRecorder</span><span class="p">()</span>
+<span class="n">s</span><span class="o">.</span><span class="n">add_sample</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">s</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>

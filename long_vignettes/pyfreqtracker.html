@@ -907,29 +907,29 @@ The value will be the count of the mutation each generation.</p></li>
 </ul>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import typing
-import attr
-import fwdpy11
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">typing</span>
+<span class="kn">import</span> <span class="nn">attr</span>
+<span class="kn">import</span> <span class="nn">fwdpy11</span>
 
 
-@attr.s(auto_attribs=True)
-class PyFreqTracker(object):
-    burnin_time: int
-    trajectories: typing.Dict = attr.ib(default=attr.Factory(dict))
+<span class="nd">@attr</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="n">auto_attribs</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">PyFreqTracker</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="n">burnin_time</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">trajectories</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Dict</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="n">attr</span><span class="o">.</span><span class="n">Factory</span><span class="p">(</span><span class="nb">dict</span><span class="p">))</span>
 
-    def __call__(
-        self, pop: fwdpy11.DiploidPopulation, sampler: fwdpy11.SampleRecorder
-    ) -&gt; None:
-        if pop.generation &gt; self.burnin_time:
-            for c, m in zip(pop.mcounts, pop.mutations):
-                if c &gt; 0 and c &lt;= 2 * pop.N:
-                    k = (m.g, m.pos, m.s)
-                    if k in self.trajectories:
-                        # Make sure that we only record a fixation once.
-                        if self.trajectories[k][-1] &lt; 2 * pop.N:
-                            self.trajectories[k].append(c)
-                    else:
-                        self.trajectories[k] = [c]
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">pop</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">,</span> <span class="n">sampler</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">SampleRecorder</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">pop</span><span class="o">.</span><span class="n">generation</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">burnin_time</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">c</span><span class="p">,</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">mcounts</span><span class="p">,</span> <span class="n">pop</span><span class="o">.</span><span class="n">mutations</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">c</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">c</span> <span class="o">&lt;=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">pop</span><span class="o">.</span><span class="n">N</span><span class="p">:</span>
+                    <span class="n">k</span> <span class="o">=</span> <span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">g</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">s</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">trajectories</span><span class="p">:</span>
+                        <span class="c1"># Make sure that we only record a fixation once.</span>
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">trajectories</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">pop</span><span class="o">.</span><span class="n">N</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">trajectories</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">trajectories</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
@@ -937,27 +937,27 @@ class PyFreqTracker(object):
 <p>Now, let’s simulate a model of a high rate of recurrent hitch-hiking:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>pdict = {
-    &quot;nregions&quot;: [],
-    &quot;sregions&quot;: [fwdpy11.ExpS(beg=0, end=1, weight=1, mean=0.2)],
-    &quot;recregions&quot;: [fwdpy11.PoissonInterval(0, 1, 1e-2)],
-    &quot;gvalue&quot;: [fwdpy11.Multiplicative(2.0)],
-    &quot;rates&quot;: (0.0, 1e-3, None),
-    &quot;simlen&quot;: 100,
-}
-params = fwdpy11.ModelParams(**pdict)
-pop = fwdpy11.DiploidPopulation(100, 1.0)
-rng = fwdpy11.GSLrng(42)
-recorder = PyFreqTracker(0)
-fwdpy11.evolvets(
-    rng,
-    pop,
-    params,
-    10,
-    recorder,
-    track_mutation_counts=True,
-    suppress_table_indexing=False,
-)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pdict</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;nregions&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="s2">&quot;sregions&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">ExpS</span><span class="p">(</span><span class="n">beg</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">mean</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)],</span>
+    <span class="s2">&quot;recregions&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">PoissonInterval</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">1e-2</span><span class="p">)],</span>
+    <span class="s2">&quot;gvalue&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">Multiplicative</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)],</span>
+    <span class="s2">&quot;rates&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1e-3</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="s2">&quot;simlen&quot;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="n">params</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="n">pdict</span><span class="p">)</span>
+<span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+<span class="n">rng</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSLrng</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">recorder</span> <span class="o">=</span> <span class="n">PyFreqTracker</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">fwdpy11</span><span class="o">.</span><span class="n">evolvets</span><span class="p">(</span>
+    <span class="n">rng</span><span class="p">,</span>
+    <span class="n">pop</span><span class="p">,</span>
+    <span class="n">params</span><span class="p">,</span>
+    <span class="mi">10</span><span class="p">,</span>
+    <span class="n">recorder</span><span class="p">,</span>
+    <span class="n">track_mutation_counts</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">suppress_table_indexing</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -979,26 +979,26 @@ This recipe is written in anticipation of that change.</p>
 However, there are good reasons to convert things into common formats for analysis, such as the <a class="reference external" href="https://pandas.pydata.org">pandas</a> data frame:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import typing
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">typing</span>
 
-import numpy as np
-import pandas as pd
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
 
-def traj2df(trajectories: typing.Dict, N: int) -&gt; pd.DataFrame:
-    dfs = []
-    for key, value in trajectories.items():
-        df = pd.DataFrame(
-            {
-                &quot;generation&quot;: np.arange(len(value), dtype=np.uint32) + key[0],
-                &quot;frequency&quot;: np.array(value) / (2 * N),
-                &quot;origin_time&quot;: [key[0]] * len(value),
-                &quot;position&quot;: [key[1]] * len(value),
-                &quot;effect_size&quot;: [key[2]] * len(value),
-            }
-        )
-        dfs.append(df)
-    return pd.concat(dfs)
+<span class="k">def</span> <span class="nf">traj2df</span><span class="p">(</span><span class="n">trajectories</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Dict</span><span class="p">,</span> <span class="n">N</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="n">dfs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">trajectories</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;generation&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">)</span> <span class="o">+</span> <span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="s2">&quot;frequency&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">N</span><span class="p">),</span>
+                <span class="s2">&quot;origin_time&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">),</span>
+                <span class="s2">&quot;position&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">key</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">),</span>
+                <span class="s2">&quot;effect_size&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">key</span><span class="p">[</span><span class="mi">2</span><span class="p">]]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">),</span>
+            <span class="p">}</span>
+        <span class="p">)</span>
+        <span class="n">dfs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">dfs</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1009,35 +1009,35 @@ def traj2df(trajectories: typing.Dict, N: int) -&gt; pd.DataFrame:
 <p>Here is a function to plot all trajectories, eliminating those with sojourn times <span class="math notranslate nohighlight">\(&lt; minlen\)</span> generations.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import matplotlib.pyplot as plt
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 
-def plot_traj_df(
-    df: pd.DataFrame, *, minlen: int, selected_alpha=1.0, neutral_alpha=1.0
-) -&gt; typing.Tuple:
-    if minlen &lt; 0:
-        raise ValueError(f&quot;minlen must be non-negative, got {minlen}&quot;)
-    f, ax = plt.subplots()
-    for n, g in df.groupby([&quot;origin_time&quot;, &quot;position&quot;, &quot;effect_size&quot;]):
-        if len(g.index) &gt;= minlen:
-            if g.effect_size[0] == 0.0:
-                ax.plot(g.generation, g.frequency, linestyle=&quot;--&quot;, alpha=neutral_alpha)
-            else:
-                ax.plot(g.generation, g.frequency, alpha=selected_alpha)
-    ax.set_xlabel(&quot;Time (generation)&quot;)
-    ax.set_ylabel(&quot;Frequency&quot;)
+<span class="k">def</span> <span class="nf">plot_traj_df</span><span class="p">(</span>
+    <span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">minlen</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">selected_alpha</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">neutral_alpha</span><span class="o">=</span><span class="mf">1.0</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Tuple</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">minlen</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;minlen must be non-negative, got </span><span class="si">{</span><span class="n">minlen</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">f</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;origin_time&quot;</span><span class="p">,</span> <span class="s2">&quot;position&quot;</span><span class="p">,</span> <span class="s2">&quot;effect_size&quot;</span><span class="p">]):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">index</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">minlen</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">g</span><span class="o">.</span><span class="n">effect_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">generation</span><span class="p">,</span> <span class="n">g</span><span class="o">.</span><span class="n">frequency</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">neutral_alpha</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">generation</span><span class="p">,</span> <span class="n">g</span><span class="o">.</span><span class="n">frequency</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">selected_alpha</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Time (generation)&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Frequency&quot;</span><span class="p">)</span>
 
-    return f, ax
+    <span class="k">return</span> <span class="n">f</span><span class="p">,</span> <span class="n">ax</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell tag_hide-input tag_remove-output docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from myst_nb import glue
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">myst_nb</span> <span class="kn">import</span> <span class="n">glue</span>
 
-df = traj2df(recorder.trajectories, pop.N)
-f, ax = plot_traj_df(df, minlen=10)
-glue(&quot;pyfreqtrackfig&quot;, f, display=False)
+<span class="n">df</span> <span class="o">=</span> <span class="n">traj2df</span><span class="p">(</span><span class="n">recorder</span><span class="o">.</span><span class="n">trajectories</span><span class="p">,</span> <span class="n">pop</span><span class="o">.</span><span class="n">N</span><span class="p">)</span>
+<span class="n">f</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plot_traj_df</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">minlen</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">glue</span><span class="p">(</span><span class="s2">&quot;pyfreqtrackfig&quot;</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1062,28 +1062,28 @@ The solution is:</p>
 </ul>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>pdict = {
-    # Add a region for neutral mutations:
-    &quot;nregions&quot;: [fwdpy11.Region(0, 1, 1)],
-    &quot;sregions&quot;: [fwdpy11.ExpS(beg=0, end=1, weight=1, mean=0.2)],
-    &quot;recregions&quot;: [fwdpy11.PoissonInterval(0, 1, 1e-2)],
-    &quot;gvalue&quot;: [fwdpy11.Multiplicative(2.0)],
-    # Add a mutation rate for neutral mutations:
-    &quot;rates&quot;: (5e-3, 1e-3, None),
-    &quot;simlen&quot;: 100,
-}
-params = fwdpy11.ModelParams(**pdict)
-pop = fwdpy11.DiploidPopulation(100, 1.0)
-rng = fwdpy11.GSLrng(54321)
-recorder = PyFreqTracker(0)
-fwdpy11.evolvets(
-    rng,
-    pop,
-    params,
-    1,  # Simplify every generation
-    recorder,
-    suppress_table_indexing=False,
-)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pdict</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="c1"># Add a region for neutral mutations:</span>
+    <span class="s2">&quot;nregions&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">Region</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)],</span>
+    <span class="s2">&quot;sregions&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">ExpS</span><span class="p">(</span><span class="n">beg</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">mean</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)],</span>
+    <span class="s2">&quot;recregions&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">PoissonInterval</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">1e-2</span><span class="p">)],</span>
+    <span class="s2">&quot;gvalue&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">Multiplicative</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)],</span>
+    <span class="c1"># Add a mutation rate for neutral mutations:</span>
+    <span class="s2">&quot;rates&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">5e-3</span><span class="p">,</span> <span class="mf">1e-3</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="s2">&quot;simlen&quot;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="n">params</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="n">pdict</span><span class="p">)</span>
+<span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+<span class="n">rng</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSLrng</span><span class="p">(</span><span class="mi">54321</span><span class="p">)</span>
+<span class="n">recorder</span> <span class="o">=</span> <span class="n">PyFreqTracker</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">fwdpy11</span><span class="o">.</span><span class="n">evolvets</span><span class="p">(</span>
+    <span class="n">rng</span><span class="p">,</span>
+    <span class="n">pop</span><span class="p">,</span>
+    <span class="n">params</span><span class="p">,</span>
+    <span class="mi">1</span><span class="p">,</span>  <span class="c1"># Simplify every generation</span>
+    <span class="n">recorder</span><span class="p">,</span>
+    <span class="n">suppress_table_indexing</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1093,9 +1093,9 @@ fwdpy11.evolvets(
 We will reduce the opacity of selected variants to make the neutral ones pop a bit more:</p>
 <div class="cell tag_hide-input tag_remove-output docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>df = traj2df(recorder.trajectories, pop.N)
-fn, ax = plot_traj_df(df, minlen=10, selected_alpha=0.50)
-glue(&quot;pyfreqtrackfigneutral&quot;, fn, display=False)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">traj2df</span><span class="p">(</span><span class="n">recorder</span><span class="o">.</span><span class="n">trajectories</span><span class="p">,</span> <span class="n">pop</span><span class="o">.</span><span class="n">N</span><span class="p">)</span>
+<span class="n">fn</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plot_traj_df</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">minlen</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">selected_alpha</span><span class="o">=</span><span class="mf">0.50</span><span class="p">)</span>
+<span class="n">glue</span><span class="p">(</span><span class="s2">&quot;pyfreqtrackfigneutral&quot;</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>

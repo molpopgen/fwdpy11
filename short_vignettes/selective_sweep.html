@@ -878,51 +878,51 @@ title="Print to PDF"
 <span id="id1"></span><h1>Selective sweeps<a class="headerlink" href="#selective-sweeps" title="Permalink to this headline">#</a></h1>
 <div class="cell tag_hide-input docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import fwdpy11
-import numpy as np
-import msprime
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fwdpy11</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">msprime</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import fwdpy11.conditional_models
-import fwdpy11.tskit_tools
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fwdpy11.conditional_models</span>
+<span class="kn">import</span> <span class="nn">fwdpy11.tskit_tools</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell tag_hide-input docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def setup(prune_selected=False):
-    # Dropping mutations requires existing
-    # ancestry, which we can get either
-    # from a burn-in or from msprime.
-    initial_ts = msprime.sim_ancestry(
-        samples=500,
-        population_size=500,
-        recombination_rate=1e-4,
-        random_seed=43215,
-        sequence_length=10000.0,
-    )
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="n">prune_selected</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="c1"># Dropping mutations requires existing</span>
+    <span class="c1"># ancestry, which we can get either</span>
+    <span class="c1"># from a burn-in or from msprime.</span>
+    <span class="n">initial_ts</span> <span class="o">=</span> <span class="n">msprime</span><span class="o">.</span><span class="n">sim_ancestry</span><span class="p">(</span>
+        <span class="n">samples</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
+        <span class="n">population_size</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
+        <span class="n">recombination_rate</span><span class="o">=</span><span class="mf">1e-4</span><span class="p">,</span>
+        <span class="n">random_seed</span><span class="o">=</span><span class="mi">43215</span><span class="p">,</span>
+        <span class="n">sequence_length</span><span class="o">=</span><span class="mf">10000.0</span><span class="p">,</span>
+    <span class="p">)</span>
 
-    # Build the pop from msprime output
-    pop = fwdpy11.DiploidPopulation.create_from_tskit(initial_ts)
+    <span class="c1"># Build the pop from msprime output</span>
+    <span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="o">.</span><span class="n">create_from_tskit</span><span class="p">(</span><span class="n">initial_ts</span><span class="p">)</span>
 
-    # Set up basic model parameters
-    pdict = {
-        &quot;recregions&quot;: [fwdpy11.PoissonInterval(0, 10000, 1e-4, discrete=True)],
-        # Here, 2 means that fitness is multiplicative
-        # over 1, 1+hs, 1+2s.
-        &quot;gvalue&quot;: fwdpy11.Multiplicative(2.0),
-        &quot;rates&quot;: (0, 0, None),
-        &quot;prune_selected&quot;: False,
-        &quot;simlen&quot;: 200,
-    }
-    params = fwdpy11.ModelParams(**pdict)
+    <span class="c1"># Set up basic model parameters</span>
+    <span class="n">pdict</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;recregions&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">PoissonInterval</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10000</span><span class="p">,</span> <span class="mf">1e-4</span><span class="p">,</span> <span class="n">discrete</span><span class="o">=</span><span class="kc">True</span><span class="p">)],</span>
+        <span class="c1"># Here, 2 means that fitness is multiplicative</span>
+        <span class="c1"># over 1, 1+hs, 1+2s.</span>
+        <span class="s2">&quot;gvalue&quot;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Multiplicative</span><span class="p">(</span><span class="mf">2.0</span><span class="p">),</span>
+        <span class="s2">&quot;rates&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+        <span class="s2">&quot;prune_selected&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;simlen&quot;</span><span class="p">:</span> <span class="mi">200</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="n">pdict</span><span class="p">)</span>
 
-    return pop, params
+    <span class="k">return</span> <span class="n">pop</span><span class="p">,</span> <span class="n">params</span>
 </pre></div>
 </div>
 </div>
@@ -931,54 +931,54 @@ import fwdpy11.tskit_tools
 <h2>From a new mutation<a class="headerlink" href="#from-a-new-mutation" title="Permalink to this headline">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>ALPHA = 1000.0
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ALPHA</span> <span class="o">=</span> <span class="mf">1000.0</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>rng = fwdpy11.GSLrng(12345)
-pop, params = setup()
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rng</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSLrng</span><span class="p">(</span><span class="mi">12345</span><span class="p">)</span>
+<span class="n">pop</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="n">setup</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>mutation_data = fwdpy11.conditional_models.NewMutationParameters(
-    frequency=fwdpy11.conditional_models.AlleleCount(1),
-    data=fwdpy11.NewMutationData(effect_size=ALPHA / 2 / pop.N, dominance=1),
-    position=fwdpy11.conditional_models.PositionRange(left=0.49, right=0.51),
-)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mutation_data</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">conditional_models</span><span class="o">.</span><span class="n">NewMutationParameters</span><span class="p">(</span>
+    <span class="n">frequency</span><span class="o">=</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">conditional_models</span><span class="o">.</span><span class="n">AlleleCount</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">NewMutationData</span><span class="p">(</span><span class="n">effect_size</span><span class="o">=</span><span class="n">ALPHA</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">/</span> <span class="n">pop</span><span class="o">.</span><span class="n">N</span><span class="p">,</span> <span class="n">dominance</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+    <span class="n">position</span><span class="o">=</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">conditional_models</span><span class="o">.</span><span class="n">PositionRange</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="mf">0.49</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mf">0.51</span><span class="p">),</span>
+<span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>output = fwdpy11.conditional_models.selective_sweep(
-    rng, 
-    pop,
-    params,
-    mutation_data,
-    fwdpy11.conditional_models.GlobalFixation()
-)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">output</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">conditional_models</span><span class="o">.</span><span class="n">selective_sweep</span><span class="p">(</span>
+    <span class="n">rng</span><span class="p">,</span> 
+    <span class="n">pop</span><span class="p">,</span>
+    <span class="n">params</span><span class="p">,</span>
+    <span class="n">mutation_data</span><span class="p">,</span>
+    <span class="n">fwdpy11</span><span class="o">.</span><span class="n">conditional_models</span><span class="o">.</span><span class="n">GlobalFixation</span><span class="p">()</span>
+<span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>assert output.pop.generation == params.simlen
-assert pop.generation == 0
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">assert</span> <span class="n">output</span><span class="o">.</span><span class="n">pop</span><span class="o">.</span><span class="n">generation</span> <span class="o">==</span> <span class="n">params</span><span class="o">.</span><span class="n">simlen</span>
+<span class="k">assert</span> <span class="n">pop</span><span class="o">.</span><span class="n">generation</span> <span class="o">==</span> <span class="mi">0</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>print(output.pop.mutations[output.mutation_index])
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">output</span><span class="o">.</span><span class="n">pop</span><span class="o">.</span><span class="n">mutations</span><span class="p">[</span><span class="n">output</span><span class="o">.</span><span class="n">mutation_index</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -990,8 +990,8 @@ assert pop.generation == 0
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>for fixation, time in zip(output.pop.fixations, output.pop.fixation_times):
-    print(fixation, time)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">fixation</span><span class="p">,</span> <span class="n">time</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">output</span><span class="o">.</span><span class="n">pop</span><span class="o">.</span><span class="n">fixations</span><span class="p">,</span> <span class="n">output</span><span class="o">.</span><span class="n">pop</span><span class="o">.</span><span class="n">fixation_times</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">fixation</span><span class="p">,</span> <span class="n">time</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1003,7 +1003,7 @@ assert pop.generation == 0
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>FIXATION_TIME = output.pop.fixation_times[0]
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">FIXATION_TIME</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">pop</span><span class="o">.</span><span class="n">fixation_times</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
@@ -1012,40 +1012,40 @@ assert pop.generation == 0
 <h3>Recording the generation when fixation happened<a class="headerlink" href="#recording-the-generation-when-fixation-happened" title="Permalink to this headline">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>rng = fwdpy11.GSLrng(12345)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rng</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSLrng</span><span class="p">(</span><span class="mi">12345</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>output = fwdpy11.conditional_models.selective_sweep(
-    rng, 
-    pop,
-    params,
-    mutation_data,
-    fwdpy11.conditional_models.GlobalFixation(),
-    sampling_policy=fwdpy11.conditional_models.AncientSamplePolicy.COMPLETION,
-)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">output</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">conditional_models</span><span class="o">.</span><span class="n">selective_sweep</span><span class="p">(</span>
+    <span class="n">rng</span><span class="p">,</span> 
+    <span class="n">pop</span><span class="p">,</span>
+    <span class="n">params</span><span class="p">,</span>
+    <span class="n">mutation_data</span><span class="p">,</span>
+    <span class="n">fwdpy11</span><span class="o">.</span><span class="n">conditional_models</span><span class="o">.</span><span class="n">GlobalFixation</span><span class="p">(),</span>
+    <span class="n">sampling_policy</span><span class="o">=</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">conditional_models</span><span class="o">.</span><span class="n">AncientSamplePolicy</span><span class="o">.</span><span class="n">COMPLETION</span><span class="p">,</span>
+<span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>assert len(output.pop.ancient_sample_nodes) == 2 * output.pop.N
-assert output.pop.fixation_times[output.mutation_index] == FIXATION_TIME
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">output</span><span class="o">.</span><span class="n">pop</span><span class="o">.</span><span class="n">ancient_sample_nodes</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">output</span><span class="o">.</span><span class="n">pop</span><span class="o">.</span><span class="n">N</span>
+<span class="k">assert</span> <span class="n">output</span><span class="o">.</span><span class="n">pop</span><span class="o">.</span><span class="n">fixation_times</span><span class="p">[</span><span class="n">output</span><span class="o">.</span><span class="n">mutation_index</span><span class="p">]</span> <span class="o">==</span> <span class="n">FIXATION_TIME</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>node_array = np.array(output.pop.tables.nodes, copy=False)
-ancient_sample_node_times = \
-    node_array[&quot;time&quot;][output.pop.ancient_sample_nodes]
-assert np.all([ancient_sample_node_times == \
-    output.pop.fixation_times[output.mutation_index]])
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">node_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">output</span><span class="o">.</span><span class="n">pop</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">nodes</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">ancient_sample_node_times</span> <span class="o">=</span> \
+    <span class="n">node_array</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">][</span><span class="n">output</span><span class="o">.</span><span class="n">pop</span><span class="o">.</span><span class="n">ancient_sample_nodes</span><span class="p">]</span>
+<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">([</span><span class="n">ancient_sample_node_times</span> <span class="o">==</span> \
+    <span class="n">output</span><span class="o">.</span><span class="n">pop</span><span class="o">.</span><span class="n">fixation_times</span><span class="p">[</span><span class="n">output</span><span class="o">.</span><span class="n">mutation_index</span><span class="p">]])</span>
 </pre></div>
 </div>
 </div>

@@ -889,56 +889,56 @@ This method of specifying models uses a <code class="docutils literal notranslat
 <section id="yaml-file-input">
 <h2>YAML file input<a class="headerlink" href="#yaml-file-input" title="Permalink to this headline">#</a></h2>
 <p>The following <code class="docutils literal notranslate"><span class="pre">YAML</span></code> specifies the human out-of-Africa model from <span id="id1">[<a class="reference internal" href="../misc/bibliography.html#id24" title="Ryan N Gutenkunst, Ryan D Hernandez, Scott H Williamson, and Carlos D Bustamante. Inferring the joint demographic history of multiple populations from multidimensional SNP frequency data. PLoS Genet., 5(10):e1000695, October 2009. doi:10.1371/journal.pgen.1000695.">GHWB09</a>]</span>:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">The Gutenkunst et al. (2009) OOA model.</span><span class="w"></span>
-<span class="nt">doi</span><span class="p">:</span><span class="w"></span>
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://doi.org/10.1371/journal.pgen.1000695</span><span class="w"></span>
-<span class="nt">time_units</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">years</span><span class="w"></span>
-<span class="nt">generation_time</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">25</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">The Gutenkunst et al. (2009) OOA model.</span>
+<span class="nt">doi</span><span class="p">:</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://doi.org/10.1371/journal.pgen.1000695</span>
+<span class="nt">time_units</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">years</span>
+<span class="nt">generation_time</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">25</span>
 
-<span class="nt">demes</span><span class="p">:</span><span class="w"></span>
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ancestral</span><span class="w"></span>
-<span class="w">  </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Equilibrium/root population</span><span class="w"></span>
-<span class="w">  </span><span class="nt">epochs</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">end_time</span><span class="p">:</span><span class="w"> </span><span class="nv">220e3</span><span class="p p-Indicator">,</span><span class="nt"> start_size</span><span class="p">:</span><span class="w"> </span><span class="nv">7300</span><span class="p p-Indicator">}</span><span class="w"></span>
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">AMH</span><span class="w"></span>
-<span class="w">  </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Anatomically modern humans</span><span class="w"></span>
-<span class="w">  </span><span class="nt">ancestors</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">ancestral</span><span class="p p-Indicator">]</span><span class="w"></span>
-<span class="w">  </span><span class="nt">epochs</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">end_time</span><span class="p">:</span><span class="w"> </span><span class="nv">140e3</span><span class="p p-Indicator">,</span><span class="nt"> start_size</span><span class="p">:</span><span class="w"> </span><span class="nv">12300</span><span class="p p-Indicator">}</span><span class="w"></span>
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">OOA</span><span class="w"></span>
-<span class="w">  </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Bottleneck out-of-Africa population</span><span class="w"></span>
-<span class="w">  </span><span class="nt">ancestors</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">AMH</span><span class="p p-Indicator">]</span><span class="w"></span>
-<span class="w">  </span><span class="nt">epochs</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">end_time</span><span class="p">:</span><span class="w"> </span><span class="nv">21.2e3</span><span class="p p-Indicator">,</span><span class="nt"> start_size</span><span class="p">:</span><span class="w"> </span><span class="nv">2100</span><span class="p p-Indicator">}</span><span class="w"></span>
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">YRI</span><span class="w"></span>
-<span class="w">  </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Yoruba in Ibadan, Nigeria</span><span class="w"></span>
-<span class="w">  </span><span class="nt">ancestors</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">AMH</span><span class="p p-Indicator">]</span><span class="w"></span>
-<span class="w">  </span><span class="nt">epochs</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">start_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">12300</span><span class="w"></span>
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CEU</span><span class="w"></span>
-<span class="w">  </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Utah Residents (CEPH) with Northern and Western European Ancestry</span><span class="w"></span>
-<span class="w">  </span><span class="nt">ancestors</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">OOA</span><span class="p p-Indicator">]</span><span class="w"></span>
-<span class="w">  </span><span class="nt">epochs</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">start_size</span><span class="p">:</span><span class="w"> </span><span class="nv">1000</span><span class="p p-Indicator">,</span><span class="nt"> end_size</span><span class="p">:</span><span class="w"> </span><span class="nv">29725</span><span class="p p-Indicator">}</span><span class="w"></span>
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CHB</span><span class="w"></span>
-<span class="w">  </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Han Chinese in Beijing, China</span><span class="w"></span>
-<span class="w">  </span><span class="nt">ancestors</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">OOA</span><span class="p p-Indicator">]</span><span class="w"></span>
-<span class="w">  </span><span class="nt">epochs</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">start_size</span><span class="p">:</span><span class="w"> </span><span class="nv">510</span><span class="p p-Indicator">,</span><span class="nt"> end_size</span><span class="p">:</span><span class="w"> </span><span class="nv">54090</span><span class="p p-Indicator">}</span><span class="w"></span>
+<span class="nt">demes</span><span class="p">:</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ancestral</span>
+<span class="w">  </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Equilibrium/root population</span>
+<span class="w">  </span><span class="nt">epochs</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">end_time</span><span class="p">:</span><span class="w"> </span><span class="nv">220e3</span><span class="p p-Indicator">,</span><span class="nt"> start_size</span><span class="p">:</span><span class="w"> </span><span class="nv">7300</span><span class="p p-Indicator">}</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">AMH</span>
+<span class="w">  </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Anatomically modern humans</span>
+<span class="w">  </span><span class="nt">ancestors</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">ancestral</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">epochs</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">end_time</span><span class="p">:</span><span class="w"> </span><span class="nv">140e3</span><span class="p p-Indicator">,</span><span class="nt"> start_size</span><span class="p">:</span><span class="w"> </span><span class="nv">12300</span><span class="p p-Indicator">}</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">OOA</span>
+<span class="w">  </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Bottleneck out-of-Africa population</span>
+<span class="w">  </span><span class="nt">ancestors</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">AMH</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">epochs</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">end_time</span><span class="p">:</span><span class="w"> </span><span class="nv">21.2e3</span><span class="p p-Indicator">,</span><span class="nt"> start_size</span><span class="p">:</span><span class="w"> </span><span class="nv">2100</span><span class="p p-Indicator">}</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">YRI</span>
+<span class="w">  </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Yoruba in Ibadan, Nigeria</span>
+<span class="w">  </span><span class="nt">ancestors</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">AMH</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">epochs</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">start_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">12300</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CEU</span>
+<span class="w">  </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Utah Residents (CEPH) with Northern and Western European Ancestry</span>
+<span class="w">  </span><span class="nt">ancestors</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">OOA</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">epochs</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">start_size</span><span class="p">:</span><span class="w"> </span><span class="nv">1000</span><span class="p p-Indicator">,</span><span class="nt"> end_size</span><span class="p">:</span><span class="w"> </span><span class="nv">29725</span><span class="p p-Indicator">}</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CHB</span>
+<span class="w">  </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Han Chinese in Beijing, China</span>
+<span class="w">  </span><span class="nt">ancestors</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">OOA</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">epochs</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">start_size</span><span class="p">:</span><span class="w"> </span><span class="nv">510</span><span class="p p-Indicator">,</span><span class="nt"> end_size</span><span class="p">:</span><span class="w"> </span><span class="nv">54090</span><span class="p p-Indicator">}</span>
 
-<span class="nt">migrations</span><span class="p">:</span><span class="w"></span>
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">demes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">YRI</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">OOA</span><span class="p p-Indicator">],</span><span class="nt"> rate</span><span class="p">:</span><span class="w"> </span><span class="nv">25e-5</span><span class="p p-Indicator">}</span><span class="w"></span>
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">demes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">YRI</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">CEU</span><span class="p p-Indicator">],</span><span class="nt"> rate</span><span class="p">:</span><span class="w"> </span><span class="nv">3e-5</span><span class="p p-Indicator">}</span><span class="w"></span>
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">demes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">YRI</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">CHB</span><span class="p p-Indicator">],</span><span class="nt"> rate</span><span class="p">:</span><span class="w"> </span><span class="nv">1.9e-5</span><span class="p p-Indicator">}</span><span class="w"></span>
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">demes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">CEU</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">CHB</span><span class="p p-Indicator">],</span><span class="nt"> rate</span><span class="p">:</span><span class="w"> </span><span class="nv">9.6e-5</span><span class="p p-Indicator">}</span><span class="w"></span>
+<span class="nt">migrations</span><span class="p">:</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">demes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">YRI</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">OOA</span><span class="p p-Indicator">],</span><span class="nt"> rate</span><span class="p">:</span><span class="w"> </span><span class="nv">25e-5</span><span class="p p-Indicator">}</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">demes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">YRI</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">CEU</span><span class="p p-Indicator">],</span><span class="nt"> rate</span><span class="p">:</span><span class="w"> </span><span class="nv">3e-5</span><span class="p p-Indicator">}</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">demes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">YRI</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">CHB</span><span class="p p-Indicator">],</span><span class="nt"> rate</span><span class="p">:</span><span class="w"> </span><span class="nv">1.9e-5</span><span class="p p-Indicator">}</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">demes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">CEU</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">CHB</span><span class="p p-Indicator">],</span><span class="nt"> rate</span><span class="p">:</span><span class="w"> </span><span class="nv">9.6e-5</span><span class="p p-Indicator">}</span>
 </pre></div>
 </div>
 <p>We can generate demographic models directly from these <code class="docutils literal notranslate"><span class="pre">YAML</span></code> files using <a class="reference internal" href="../pages/functions.html#fwdpy11.discrete_demography.from_demes" title="fwdpy11.discrete_demography.from_demes"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.discrete_demography.from_demes()</span></code></a>, which handles the conversion to the low-level objects described <a class="reference internal" href="../pages/softselection.html#softselection"><span class="std std-ref">here</span></a>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import fwdpy11
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fwdpy11</span>
 
-model = fwdpy11.discrete_demography.from_demes(&quot;gutenkunst_ooa.yml&quot;)
+<span class="n">model</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">discrete_demography</span><span class="o">.</span><span class="n">from_demes</span><span class="p">(</span><span class="s2">&quot;gutenkunst_ooa.yml&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -952,7 +952,7 @@ There are important options concerning the run time of the simulation, etc.</p>
 To extract the simulation length to generate the <code class="docutils literal notranslate"><span class="pre">simlen</span></code> parameter of your <a class="reference internal" href="../pages/model_params.html#fwdpy11.ModelParams" title="fwdpy11.ModelParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.ModelParams</span></code></a> instance:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>model.metadata[&quot;total_simulation_length&quot;]
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;total_simulation_length&quot;</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
@@ -965,7 +965,7 @@ To extract the simulation length to generate the <code class="docutils literal n
 <p>If we print the <code class="docutils literal notranslate"><span class="pre">model</span></code> object, we will see how much logic we’d have had to use in order to implement this model using the low-level object <code class="docutils literal notranslate"><span class="pre">API</span></code>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>print(model.asblack())
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">asblack</span><span class="p">())</span>
 </pre></div>
 </div>
 </div>
@@ -1148,22 +1148,22 @@ In general, we feel that the <code class="docutils literal notranslate"><span cl
 But, for example:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import demes
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">demes</span>
 
-builder = demes.Builder(description=&quot;test demography&quot;, time_units=&quot;generations&quot;)
-builder.add_deme(
-    name=&quot;deme&quot;,
-    epochs=[
-        dict(start_size=1000, end_time=100),
-        dict(start_size=2000, end_time=0),
-    ],
-)
+<span class="n">builder</span> <span class="o">=</span> <span class="n">demes</span><span class="o">.</span><span class="n">Builder</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;test demography&quot;</span><span class="p">,</span> <span class="n">time_units</span><span class="o">=</span><span class="s2">&quot;generations&quot;</span><span class="p">)</span>
+<span class="n">builder</span><span class="o">.</span><span class="n">add_deme</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;deme&quot;</span><span class="p">,</span>
+    <span class="n">epochs</span><span class="o">=</span><span class="p">[</span>
+        <span class="nb">dict</span><span class="p">(</span><span class="n">start_size</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">end_time</span><span class="o">=</span><span class="mi">100</span><span class="p">),</span>
+        <span class="nb">dict</span><span class="p">(</span><span class="n">start_size</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">end_time</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+    <span class="p">],</span>
+<span class="p">)</span>
 
-graph = builder.resolve()
+<span class="n">graph</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
 
-model = fwdpy11.discrete_demography.from_demes(graph)
+<span class="n">model</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">discrete_demography</span><span class="o">.</span><span class="n">from_demes</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
 
-print(model.asblack())
+<span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">asblack</span><span class="p">())</span>
 </pre></div>
 </div>
 </div>
@@ -1211,9 +1211,9 @@ We recommend that you use this information so that the initial deme size(s) in y
 The value returned contains the initial size of each deme in the model:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>model = fwdpy11.discrete_demography.from_demes(&quot;gutenkunst_ooa.yml&quot;)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">discrete_demography</span><span class="o">.</span><span class="n">from_demes</span><span class="p">(</span><span class="s2">&quot;gutenkunst_ooa.yml&quot;</span><span class="p">)</span>
 
-print(model.metadata[&#39;initial_sizes&#39;])
+<span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;initial_sizes&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -1226,9 +1226,9 @@ print(model.metadata[&#39;initial_sizes&#39;])
 <p>Given that, a sorted list comprehension does the job:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>initial_sizes= [model.metadata[&#39;initial_sizes&#39;][i] for i in sorted(model.metadata[&#39;initial_sizes&#39;].keys())]
-pop = fwdpy11.DiploidPopulation(initial_sizes, 1000.)
-print(pop.deme_sizes())
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">initial_sizes</span><span class="o">=</span> <span class="p">[</span><span class="n">model</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;initial_sizes&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;initial_sizes&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())]</span>
+<span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">(</span><span class="n">initial_sizes</span><span class="p">,</span> <span class="mf">1000.</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">deme_sizes</span><span class="p">())</span>
 </pre></div>
 </div>
 </div>

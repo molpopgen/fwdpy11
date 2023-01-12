@@ -796,7 +796,7 @@ title="Print to PDF"
 generated this image.</span><a class="headerlink" href="#id1" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3 examples/discrete_demography/localadaptation.py -N <span class="m">5000</span> --rho <span class="m">10000</span> --mu <span class="m">0</span>.005 --sigma <span class="m">0</span>.10 --migrates 1e-4 1e-4 --plotfile localadaptation.png
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>examples/discrete_demography/localadaptation.py<span class="w"> </span>-N<span class="w"> </span><span class="m">5000</span><span class="w"> </span>--rho<span class="w"> </span><span class="m">10000</span><span class="w"> </span>--mu<span class="w"> </span><span class="m">0</span>.005<span class="w"> </span>--sigma<span class="w"> </span><span class="m">0</span>.10<span class="w"> </span>--migrates<span class="w"> </span>1e-4<span class="w"> </span>1e-4<span class="w"> </span>--plotfile<span class="w"> </span>localadaptation.png
 </pre></div>
 </div>
 <p>The script below executes the following simulation:</p>
@@ -863,7 +863,7 @@ using <code class="docutils literal notranslate"><span class="pre">matplotlib</s
 
 
 <span class="k">def</span> <span class="nf">make_parser</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Create a command-line interface to the script.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span>
@@ -917,7 +917,7 @@ using <code class="docutils literal notranslate"><span class="pre">matplotlib</s
 
 
 <span class="k">def</span> <span class="nf">validate_arguments</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Validate input arguments.</span>
 <span class="sd">    Note: this is likely incomplete.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -955,7 +955,7 @@ using <code class="docutils literal notranslate"><span class="pre">matplotlib</s
 
 
 <span class="k">class</span> <span class="nc">Recorder</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    fwdpy11 allows you to define objects that record data</span>
 <span class="sd">    from populations during simulation.  Such objects must</span>
 <span class="sd">    be callable, and the easiest way to do things is to</span>
@@ -1008,7 +1008,7 @@ using <code class="docutils literal notranslate"><span class="pre">matplotlib</s
 
 
 <span class="k">def</span> <span class="nf">runsim</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Run the simulation.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">args</span><span class="o">.</span><span class="n">popsize</span><span class="p">,</span> <span class="n">GENOME_LENGTH</span><span class="p">)</span>
