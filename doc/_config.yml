@@ -8,7 +8,7 @@ author: Kevin Thornton
 # Force re-execution of notebooks on each build.
 # See https://jupyterbook.org/content/execute.html
 execute:
-  execute_notebooks: cache
+  execute_notebooks: force
 
 # Add a bibtex file so that we can create citations
 bibtex_bibfiles:
