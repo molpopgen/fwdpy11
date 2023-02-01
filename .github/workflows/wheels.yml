@@ -121,11 +121,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Download wheels
-        uses: actions/download-artifact@v3.0.1
+        uses: actions/download-artifact@v3.0.2
         with:
           name: linux-wheels
       - name: Download sdist
-        uses: actions/download-artifact@v3.0.1
+        uses: actions/download-artifact@v3.0.2
         with:
           name: sdist
       - name: Set up Python
@@ -173,7 +173,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Download wheels
-        uses: actions/download-artifact@v3.0.1
+        uses: actions/download-artifact@v3.0.2
         with:
           name: macOS-wheel-${{ matrix.python }}
       - name: Set up Python ${{ matrix.python }}
@@ -206,7 +206,7 @@ jobs:
         with:
           access_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Download all
-        uses: actions/download-artifact@v3.0.1
+        uses: actions/download-artifact@v3.0.2
       - name: Move to dist
         run: |
           mkdir dist
