@@ -11,6 +11,27 @@
 #include <fwdpy11/gsl/gsl_error_handler_wrapper.hpp>
 #include <fwdpy11/samplers.hpp>
 
+struct evolve_with_tree_sequences_options
+{
+    // NOTE: this is the complement of what a user will input, which is "prune_selected"
+    bool preserve_selected_fixations;
+    bool suppress_edge_table_indexing;
+    bool record_gvalue_matrix;
+    bool track_mutation_counts_during_sim;
+    bool remove_extinct_mutations_at_finish;
+    bool reset_treeseqs_to_alive_nodes_after_simplification;
+    bool preserve_first_generation;
+
+    evolve_with_tree_sequences_options()
+        : preserve_selected_fixations(false), suppress_edge_table_indexing(false),
+          record_gvalue_matrix(false), track_mutation_counts_during_sim(false),
+          remove_extinct_mutations_at_finish(true),
+          reset_treeseqs_to_alive_nodes_after_simplification(false),
+          preserve_first_generation(false)
+    {
+    }
+};
+
 void evolve_with_tree_sequences(
     const fwdpy11::GSLrng_t &rng, fwdpy11::DiploidPopulation &pop,
     fwdpy11::SampleRecorder &sr, const unsigned simplification_interval,
@@ -24,11 +45,5 @@ void evolve_with_tree_sequences(
     fwdpy11::DiploidPopulation_sample_recorder recorder,
     std::function<bool(const fwdpy11::DiploidPopulation &, const bool)>
         &stopping_criteron,
-    // NOTE: this is the complement of what a user will input, which is "prune_selected"
-    const bool preserve_selected_fixations, const bool suppress_edge_table_indexing,
-    bool record_genotype_matrix, const bool track_mutation_counts_during_sim,
-    const bool remove_extinct_mutations_at_finish,
-    const bool reset_treeseqs_to_alive_nodes_after_simplification,
-    const bool preserve_first_generation,
-    const fwdpy11::DiploidPopulation_temporal_sampler &post_simplification_recorder);
-
+    const fwdpy11::DiploidPopulation_temporal_sampler &post_simplification_recorder,
+    evolve_with_tree_sequences_options options);
