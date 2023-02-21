@@ -29,5 +29,26 @@ namespace py = pybind11;
 void
 init_evolve_with_tree_sequences(py::module &m)
 {
+    py::class_<evolve_with_tree_sequences_options>(m,
+                                                   "_evolve_with_tree_sequences_options")
+        .def(py::init<>())
+        .def_readwrite("preserve_selected_fixations",
+                       &evolve_with_tree_sequences_options::preserve_selected_fixations)
+        .def_readwrite("suppress_edge_table_indexing",
+                       &evolve_with_tree_sequences_options::suppress_edge_table_indexing)
+        .def_readwrite("record_gvalue_matrix",
+                       &evolve_with_tree_sequences_options::record_gvalue_matrix)
+        .def_readwrite(
+            "track_mutation_counts_during_sim",
+            &evolve_with_tree_sequences_options::track_mutation_counts_during_sim)
+        .def_readwrite(
+            "remove_extinct_mutations_at_finish",
+            &evolve_with_tree_sequences_options::remove_extinct_mutations_at_finish)
+        .def_readwrite("reset_treeseqs_to_alive_nodes_after_simplification",
+                       &evolve_with_tree_sequences_options::
+                           reset_treeseqs_to_alive_nodes_after_simplification)
+        .def_readwrite("preserve_first_generation",
+                       &evolve_with_tree_sequences_options::preserve_first_generation);
+
     m.def("evolve_with_tree_sequences", &evolve_with_tree_sequences);
 }

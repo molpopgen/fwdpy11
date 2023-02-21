@@ -233,7 +233,7 @@ def evolvets(
     rm = dispatch_create_GeneticMap(
         params.rates.recombination_rate, params.recregions)
 
-    from ._fwdpy11 import SampleRecorder
+    from ._fwdpy11 import SampleRecorder, _evolve_with_tree_sequences_options
 
     sr = SampleRecorder()
     from ._fwdpy11 import _dgvalue_pointer_vector
@@ -241,6 +241,16 @@ def evolvets(
     _suppress_table_indexing = suppress_table_indexing
     if _suppress_table_indexing is None:
         _suppress_table_indexing is True
+
+    options = _evolve_with_tree_sequences_options()
+
+    options.preserve_selected_fixations = params.prune_selected is False
+    options.suppress_edge_table_indexing = _suppress_table_indexing
+    options.record_gvalue_matrix = record_gvalue_matrix
+    options.track_mutation_counts_during_sim = track_mutation_counts
+    options.remove_extinct_mutations_at_finish = remove_extinct_variants
+    options.reset_treeseqs_to_alive_nodes_after_simplification = reset_treeseqs_after_simplify
+    options.preserve_first_generation = preserve_first_generation
 
     gvpointers = _dgvalue_pointer_vector(params.gvalue)
     evolve_with_tree_sequences(
@@ -257,12 +267,6 @@ def evolvets(
         gvpointers,
         recorder,
         stopping_criterion,
-        params.prune_selected is False,
-        _suppress_table_indexing,
-        record_gvalue_matrix,
-        track_mutation_counts,
-        remove_extinct_variants,
-        reset_treeseqs_after_simplify,
-        preserve_first_generation,
         post_simplification_recorder,
+        options,
     )

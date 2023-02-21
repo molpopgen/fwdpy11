@@ -158,13 +158,8 @@ evolve_with_tree_sequences(
     fwdpy11::DiploidPopulation_sample_recorder recorder,
     std::function<bool(const fwdpy11::DiploidPopulation &, const bool)>
         &stopping_criteron,
-    // NOTE: this is the complement of what a user will input, which is "prune_selected"
-    const bool preserve_selected_fixations, const bool suppress_edge_table_indexing,
-    bool record_genotype_matrix, const bool track_mutation_counts_during_sim,
-    const bool remove_extinct_mutations_at_finish,
-    const bool reset_treeseqs_to_alive_nodes_after_simplification,
-    const bool preserve_first_generation,
-    const fwdpy11::DiploidPopulation_temporal_sampler &post_simplification_recorder)
+    const fwdpy11::DiploidPopulation_temporal_sampler &post_simplification_recorder,
+    evolve_with_tree_sequences_options options)
 {
     fwdpy11::gsl_scoped_convert_error_to_exception gsl_error_scope_guard;
 
@@ -210,7 +205,7 @@ evolve_with_tree_sequences(
     const bool simulating_neutral_variants = (mu_neutral > 0.0) ? true : false;
     if (simulating_neutral_variants)
         {
-            if (track_mutation_counts_during_sim)
+            if (options.track_mutation_counts_during_sim)
                 {
                     if (simplification_interval != 1)
                         {
@@ -305,7 +300,7 @@ evolve_with_tree_sequences(
     std::vector<double> new_diploid_gvalues;
     calculate_diploid_fitness(rng, pop, genetics.gvalue, deme_to_gvalue_map,
                               offspring_metadata, new_diploid_gvalues,
-                              record_genotype_matrix);
+                              options.record_gvalue_matrix);
     pop.genetic_value_matrix.swap(new_diploid_gvalues);
     pop.diploid_metadata.swap(offspring_metadata);
 
@@ -393,7 +388,7 @@ evolve_with_tree_sequences(
     std::uint32_t last_preserved_generation = std::numeric_limits<std::uint32_t>::max();
     decltype(pop.mcounts) last_preserved_generation_counts;
     pop.fill_alive_nodes();
-    if (preserve_first_generation)
+    if (options.preserve_first_generation)
         {
             if (pop.generation != 0)
                 {
@@ -460,7 +455,7 @@ evolve_with_tree_sequences(
             pop.diploid_metadata.swap(offspring_metadata);
             calculate_diploid_fitness(rng, pop, genetics.gvalue, deme_to_gvalue_map,
                                       offspring_metadata, new_diploid_gvalues,
-                                      record_genotype_matrix);
+                                      options.record_gvalue_matrix);
             pop.genetic_value_matrix.swap(new_diploid_gvalues);
             // TODO: abstract out these steps into a "cleanup_pop" function
             pop.diploid_metadata.swap(offspring_metadata);
@@ -468,12 +463,13 @@ evolve_with_tree_sequences(
 
             if (gen % simplification_interval == 0.0)
                 {
-                    simplification(preserve_selected_fixations,
-                                   suppress_edge_table_indexing,
-                                   reset_treeseqs_to_alive_nodes_after_simplification,
-                                   post_simplification_recorder, *simplifier_state,
-                                   simplification_output, *new_edge_buffer,
-                                   alive_at_last_simplification, pop);
+                    simplification(
+                        options.preserve_selected_fixations,
+                        options.suppress_edge_table_indexing,
+                        options.reset_treeseqs_to_alive_nodes_after_simplification,
+                        post_simplification_recorder, *simplifier_state,
+                        simplification_output, *new_edge_buffer,
+                        alive_at_last_simplification, pop);
                     simplified = true;
                 }
             else
@@ -487,9 +483,10 @@ evolve_with_tree_sequences(
                     throw std::runtime_error("range error for node labels");
                 }
             next_index = pop.tables->num_nodes();
-            if (track_mutation_counts_during_sim)
+            if (options.track_mutation_counts_during_sim)
                 {
-                    track_mutation_counts(pop, simplified, suppress_edge_table_indexing);
+                    track_mutation_counts(pop, simplified,
+                                          options.suppress_edge_table_indexing);
                 }
 
             // The user may now analyze the pop'n and record ancient samples
@@ -497,19 +494,19 @@ evolve_with_tree_sequences(
 
             if (simplified)
                 {
-                    if (suppress_edge_table_indexing == false)
+                    if (options.suppress_edge_table_indexing == false)
                         {
                             // Behavior change in 0.5.3: set all fixation counts to 0
                             // to flag for recycling if possible.
                             // NOTE: this may slow things down a touch?
-                            if (preserve_selected_fixations == false)
+                            if (options.preserve_selected_fixations == false)
                                 {
                                     // b/c neutral mutations not in genomes!
                                     fwdpp::ts::remove_fixations_from_haploid_genomes(
                                         pop.haploid_genomes, pop.mutations, pop.mcounts,
                                         pop.mcounts_from_preserved_nodes,
                                         2 * pop.diploids.size(),
-                                        preserve_selected_fixations);
+                                        options.preserve_selected_fixations);
                                 }
                             for (auto &i : simplification_output.preserved_mutations)
                                 {
@@ -517,7 +514,7 @@ evolve_with_tree_sequences(
                                         && pop.mcounts_from_preserved_nodes[i] == 0)
                                         {
                                             if (pop.mutations[i].neutral
-                                                || !preserve_selected_fixations)
+                                                || !options.preserve_selected_fixations)
                                                 {
                                                     // flag variant for recycling
                                                     pop.mcounts[i] = 0;
@@ -567,18 +564,21 @@ evolve_with_tree_sequences(
 
             if (current_demographic_state.will_go_globally_extinct() == true)
                 {
-                    simplification(preserve_selected_fixations,
-                                   suppress_edge_table_indexing,
-                                   reset_treeseqs_to_alive_nodes_after_simplification,
-                                   post_simplification_recorder, *simplifier_state,
-                                   simplification_output, *new_edge_buffer,
-                                   alive_at_last_simplification, pop);
+                    simplification(
+                        options.preserve_selected_fixations,
+                        options.suppress_edge_table_indexing,
+                        options.reset_treeseqs_to_alive_nodes_after_simplification,
+                        post_simplification_recorder, *simplifier_state,
+                        simplification_output, *new_edge_buffer,
+                        alive_at_last_simplification, pop);
                     simplifier_state.reset(nullptr);
                     new_edge_buffer.reset(nullptr);
                     final_population_cleanup(
-                        suppress_edge_table_indexing, preserve_selected_fixations,
-                        remove_extinct_mutations_at_finish, simulating_neutral_variants,
-                        reset_treeseqs_to_alive_nodes_after_simplification,
+                        options.suppress_edge_table_indexing,
+                        options.preserve_selected_fixations,
+                        options.remove_extinct_mutations_at_finish,
+                        simulating_neutral_variants,
+                        options.reset_treeseqs_to_alive_nodes_after_simplification,
                         last_preserved_generation, last_preserved_generation_counts,
                         pop);
                     std::ostringstream o;
@@ -625,26 +625,27 @@ evolve_with_tree_sequences(
 
     if (!simplified)
         {
-            simplification(preserve_selected_fixations, suppress_edge_table_indexing,
-                           reset_treeseqs_to_alive_nodes_after_simplification,
+            simplification(options.preserve_selected_fixations,
+                           options.suppress_edge_table_indexing,
+                           options.reset_treeseqs_to_alive_nodes_after_simplification,
                            post_simplification_recorder, *simplifier_state,
                            simplification_output, *new_edge_buffer,
                            alive_at_last_simplification, pop);
-            if (!preserve_selected_fixations)
+            if (!options.preserve_selected_fixations)
                 {
                     fwdpp::ts::remove_fixations_from_haploid_genomes(
                         pop.haploid_genomes, pop.mutations, pop.mcounts,
                         pop.mcounts_from_preserved_nodes, 2 * pop.diploids.size(),
-                        preserve_selected_fixations);
+                        options.preserve_selected_fixations);
                 }
         }
     simplifier_state.reset(nullptr);
     new_edge_buffer.reset(nullptr);
     final_population_cleanup(
-        suppress_edge_table_indexing, preserve_selected_fixations,
-        remove_extinct_mutations_at_finish, simulating_neutral_variants,
-        reset_treeseqs_to_alive_nodes_after_simplification, last_preserved_generation,
-        last_preserved_generation_counts, pop);
+        options.suppress_edge_table_indexing, options.preserve_selected_fixations,
+        options.remove_extinct_mutations_at_finish, simulating_neutral_variants,
+        options.reset_treeseqs_to_alive_nodes_after_simplification,
+        last_preserved_generation, last_preserved_generation_counts, pop);
     if (pop.tables->edges.size() != pop.tables->input_left.size()
         || pop.tables->edges.size() != pop.tables->output_right.size())
         {

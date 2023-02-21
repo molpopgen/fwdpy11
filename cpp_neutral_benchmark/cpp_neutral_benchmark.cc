@@ -17,7 +17,7 @@
 
 namespace po = boost::program_options;
 
-// The next several structs are copied from 
+// The next several structs are copied from
 // the Python library C++ code. They are needed
 // to define how Multiplicative works.
 
@@ -182,13 +182,15 @@ simulate(const command_line_options& options)
     RecordNothing record_nothing;
     fwdpy11::SampleRecorder sample_recorder;
 
-    bool preserve_selected_fixations = false;
-    bool suppress_edge_table_indexing = !options.index_edge_table_during_sim;
-    bool record_genotype_matrix = false;
-    bool track_mutation_counts_during_sim = false;
-    bool remove_extinct_mutations_at_finish = true;
-    bool reset_treeseqs_to_alive_nodes_after_simplification = false;
-    bool preserve_first_generation = false;
+    evolve_with_tree_sequences_options tsoptions;
+
+    tsoptions.preserve_selected_fixations = false;
+    tsoptions.suppress_edge_table_indexing = !options.index_edge_table_during_sim;
+    tsoptions.record_gvalue_matrix = false;
+    tsoptions.track_mutation_counts_during_sim = false;
+    tsoptions.remove_extinct_mutations_at_finish = true;
+    tsoptions.reset_treeseqs_to_alive_nodes_after_simplification = false;
+    tsoptions.preserve_first_generation = false;
     std::function<bool(const fwdpy11::DiploidPopulation&, const bool)> stopping_criteron
         = [](const fwdpy11::DiploidPopulation& pop, const bool simplified) {
               return no_stopping(pop, simplified);
@@ -199,11 +201,7 @@ simulate(const command_line_options& options)
         options.nsteps, 0., 0., mmodel, genetic_map, gvalue_pointers,
         [](const fwdpy11::DiploidPopulation& /*pop*/, fwdpy11::SampleRecorder& /*sr*/) {
         },
-        stopping_criteron, preserve_selected_fixations, suppress_edge_table_indexing,
-        record_genotype_matrix, track_mutation_counts_during_sim,
-        remove_extinct_mutations_at_finish,
-        reset_treeseqs_to_alive_nodes_after_simplification, preserve_first_generation,
-        record_nothing);
+        stopping_criteron, record_nothing, tsoptions);
     std::cout << pop.generation << ' ' << pop.N << ' ' << pop.tables->edges.size() << ' '
               << pop.tables->nodes.size() << '\n';
 }
