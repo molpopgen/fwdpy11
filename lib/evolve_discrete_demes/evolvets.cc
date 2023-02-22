@@ -730,6 +730,10 @@ evolve_with_tree_sequences_refactor(
                 }
         }
 
+    // TODO: here, we need to simply set the model
+    // to the value of pop.generation, which means
+    // that pop.generation is a parental generation
+    // (which has always been true for fwdpy11).
     if (pop.generation == 0)
         {
             // If we have an already-initialized model state,
@@ -748,22 +752,30 @@ evolve_with_tree_sequences_refactor(
                 }
         }
 
+    // TODO: this goes away
     auto current_demographic_state = demography.get_model_state();
 
+    // TODO: this is replaced by calling update_state
+    // on the ForwardGraph
     current_demographic_state.initialize(pop);
+
+    // TODO: this changes to graph.number_of_demes() > 0
     if (current_demographic_state.maxdemes <= 0)
         {
             throw std::runtime_error("maxdemes must be > 0");
         }
     if (gvalue_pointers.genetic_values.size()
+        // TODO: this changes to graph.number_of_demes()
         > static_cast<std::size_t>(current_demographic_state.maxdemes))
         {
             throw std::invalid_argument(
                 "list of genetic values is longer than maxdemes");
         }
+    // TODO: this changes to graph.number_of_demes()
     if (static_cast<std::size_t>(current_demographic_state.maxdemes) > 1
         && gvalue_pointers.genetic_values.size() > 1
         && gvalue_pointers.genetic_values.size()
+               // TODO: this changes to graph.number_of_demes()
                < static_cast<std::size_t>(current_demographic_state.maxdemes))
         {
             throw std::invalid_argument("too few genetic value objects");
@@ -794,6 +806,11 @@ evolve_with_tree_sequences_refactor(
     auto genetics = fwdpp::make_genetic_parameters(gvalue_pointers.genetic_values,
                                                    std::move(bound_mmodel),
                                                    std::move(bound_rmodel));
+    // NOTE: this could be a bit tricky!
+    // A demes model gives ids according to order
+    // in the graph.
+    // We may need an API to allow a Python-side
+    // mapping of deme name -> genetic value object.
     std::vector<std::size_t> deme_to_gvalue_map(current_demographic_state.maxdemes, 0);
     if (genetics.gvalue.size() > 1)
         {
@@ -811,6 +828,8 @@ evolve_with_tree_sequences_refactor(
     std::vector<fwdpy11::DiploidMetadata> offspring_metadata(pop.diploid_metadata);
     std::vector<fwdpy11::DiploidGenotype> offspring;
     std::vector<double> new_diploid_gvalues;
+
+    // NOTE: this API is likely to break.
     calculate_diploid_fitness(rng, pop, genetics.gvalue, deme_to_gvalue_map,
                               offspring_metadata, new_diploid_gvalues,
                               options.record_gvalue_matrix);
@@ -819,11 +838,16 @@ evolve_with_tree_sequences_refactor(
 
     ddemog::multideme_fitness_lookups<std::uint32_t> fitness_lookup{
         current_demographic_state.maxdemes};
+
+    // NOTE: this goes away and is replaced by ancestry
+    // proportions per offspring deme.
     ddemog::migration_lookup miglookup{current_demographic_state.maxdemes,
                                        current_demographic_state.M.empty()};
 
+    // TODO: this entire if/else may not be necessary?
     if (pop.generation == 0)
         {
+            // NOTE: the next 3 function calls all change
             current_demographic_state.early(rng, pop.generation, pop.diploid_metadata);
             current_demographic_state.late(rng, pop.generation, miglookup,
                                            pop.diploid_metadata);
@@ -847,6 +871,11 @@ evolve_with_tree_sequences_refactor(
                 current_demographic_state.M);
         }
 
+    // TODO: check that we can have all deme sizes be zero with a demes model?
+    // The specification says that a deme size has an exclusive minimum of zerol.
+    // So, no -- this cannot happen.
+    // Demes go extinct after their last epoch (forwards in time) has run out
+    // and the simulation is otherwise continuing.
     if (current_demographic_state.will_go_globally_extinct() == true)
         {
             std::ostringstream o;
@@ -854,6 +883,7 @@ evolve_with_tree_sequences_refactor(
             throw ddemog::GlobalExtinction(o.str());
         }
 
+    // TODO:  Do we have sufficient test coverage through here?
     if (!pop.mutations.empty())
         {
             // It is possible that pop already has a tree sequence
@@ -934,10 +964,10 @@ evolve_with_tree_sequences_refactor(
     for (std::uint32_t gen = 0; gen < simlen && !stopping_criteron_met; ++gen)
         {
             ++pop.generation;
-            fwdpy11::evolve_generation_ts(rng, pop, genetics, current_demographic_state,
-                                          fitness_lookup, miglookup, pop.generation,
-                                          *new_edge_buffer, offspring,
-                                          offspring_metadata, next_index);
+            fwdpy11::evolve_generation_ts_refactor(
+                rng, pop, genetics, current_demographic_state, fitness_lookup, miglookup,
+                pop.generation, *new_edge_buffer, offspring, offspring_metadata,
+                next_index);
             // TODO: abstract out these steps into a "cleanup_pop" function
             // NOTE: by swapping the diploids here, it is not possible
             // for genetics.value to make use of parental genotype information.
@@ -950,6 +980,7 @@ evolve_with_tree_sequences_refactor(
             // for a bit more context.
             pop.diploids.swap(offspring);
 
+            // NOTE: this is a no-op
             current_demographic_state.early(rng, pop.generation, offspring_metadata);
 
             // NOTE: the two swaps of the metadata ensure
@@ -1067,14 +1098,26 @@ evolve_with_tree_sequences_refactor(
                         }
                 }
 
+            // NOTE: this is where the model state is getting updated
+            // We will replace this with updating the state of the
+            // ForwardGraph.
             current_demographic_state.late(rng, pop.generation, miglookup,
                                            pop.diploid_metadata);
+
+            // NOTE: API change needed
+            // Easy mode: overload this function to accept a new type.
             fitness_lookup.update(current_demographic_state.fitness_bookmark);
+            // NOTE: new function needed:
+            // If a pop has nonzero ancestry from a deme, but that
+            // parental deme has no individuals, throw an exception.
             ddemog::validate_parental_state(
                 pop.generation, fitness_lookup,
                 current_demographic_state.current_deme_parameters,
                 current_demographic_state.M);
 
+            // NOTE: this may be irrelevant -- see comment above about
+            // whether or not this is even possible.
+            // See above -- this block will likely just go away entirely.
             if (current_demographic_state.will_go_globally_extinct() == true)
                 {
                     simplification(
@@ -1167,5 +1210,7 @@ evolve_with_tree_sequences_refactor(
               << __LINE__;
             throw std::runtime_error(o.str());
         }
+
+    // This is irrelevant -- yay!
     demography.set_model_state(std::move(current_demographic_state));
 }
