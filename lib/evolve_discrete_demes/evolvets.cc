@@ -656,3 +656,516 @@ evolve_with_tree_sequences(
         }
     demography.set_model_state(std::move(current_demographic_state));
 }
+
+void
+evolve_with_tree_sequences_refactor(
+    const fwdpy11::GSLrng_t &rng, fwdpy11::DiploidPopulation &pop,
+    fwdpy11::SampleRecorder &sr, const unsigned simplification_interval,
+    ddemog::DiscreteDemography &demography, const std::uint32_t simlen,
+    const double mu_neutral, const double mu_selected,
+    const fwdpy11::MutationRegions &mmodel, const fwdpy11::GeneticMap &rmodel,
+    // NOTE: gvalue_pointers is a change in 0.6.0,
+    // and the object holds non-const bare pointers
+    // to objects owned by Python.
+    fwdpy11::dgvalue_pointer_vector_ &gvalue_pointers,
+    fwdpy11::DiploidPopulation_sample_recorder recorder,
+    std::function<bool(const fwdpy11::DiploidPopulation &, const bool)>
+        &stopping_criteron,
+    const fwdpy11::DiploidPopulation_temporal_sampler &post_simplification_recorder,
+    evolve_with_tree_sequences_options options)
+{
+    fwdpy11::gsl_scoped_convert_error_to_exception gsl_error_scope_guard;
+
+    if (gvalue_pointers.genetic_values.empty())
+        {
+            throw std::invalid_argument("empty list of genetic values");
+        }
+    //validate the input params
+    if (pop.tables->genome_length() == std::numeric_limits<double>::max())
+        {
+            throw std::invalid_argument(
+                "Population is not initialized with tree sequence support");
+        }
+    if (!std::isfinite(mu_selected))
+        {
+            throw std::invalid_argument("selected mutation rate is not finite");
+        }
+    if (mu_selected < 0.0)
+        {
+            throw std::invalid_argument("selected mutation rate must be non-negative");
+        }
+    if (!std::isfinite(mu_neutral))
+        {
+            throw std::invalid_argument("neutral mutation rate is not finite");
+        }
+    if (mu_neutral < 0.0)
+        {
+            throw std::invalid_argument("neutral mutation rate must be non-negative");
+        }
+    if (mu_neutral + mu_selected > 0.0 && mmodel.weights.empty())
+        {
+            throw std::invalid_argument(
+                "nonzero mutation rate incompatible with empty regions");
+        }
+    if (!simlen)
+        {
+            throw std::invalid_argument("simulation length must be > 0");
+        }
+    if (pop.tables->nodes.empty())
+        {
+            throw std::invalid_argument("node table is not initialized");
+        }
+    const bool simulating_neutral_variants = (mu_neutral > 0.0) ? true : false;
+    if (simulating_neutral_variants)
+        {
+            if (options.track_mutation_counts_during_sim)
+                {
+                    if (simplification_interval != 1)
+                        {
+                            throw std::invalid_argument(
+                                "when track_mutation_counts is True and simulating "
+                                "neutral mutations, the simplification interval must be "
+                                "1");
+                        }
+                }
+        }
+
+    if (pop.generation == 0)
+        {
+            // If we have an already-initialized model state,
+            // then we reset it back to an unevolved one.
+            demography.reset_model_state();
+        }
+    for (auto &region : mmodel.regions)
+        {
+            if (!region->valid(0.0, pop.tables->genome_length()))
+                {
+                    std::ostringstream o;
+                    o << "region contains invalid beg and/or end values: "
+                      << region->beg() << ", " << region->end()
+                      << ", genome_length = " << pop.tables->genome_length();
+                    throw std::invalid_argument(o.str().c_str());
+                }
+        }
+
+    auto current_demographic_state = demography.get_model_state();
+
+    current_demographic_state.initialize(pop);
+    if (current_demographic_state.maxdemes <= 0)
+        {
+            throw std::runtime_error("maxdemes must be > 0");
+        }
+    if (gvalue_pointers.genetic_values.size()
+        > static_cast<std::size_t>(current_demographic_state.maxdemes))
+        {
+            throw std::invalid_argument(
+                "list of genetic values is longer than maxdemes");
+        }
+    if (static_cast<std::size_t>(current_demographic_state.maxdemes) > 1
+        && gvalue_pointers.genetic_values.size() > 1
+        && gvalue_pointers.genetic_values.size()
+               < static_cast<std::size_t>(current_demographic_state.maxdemes))
+        {
+            throw std::invalid_argument("too few genetic value objects");
+        }
+
+    double total_mutation_rate = mu_neutral + mu_selected;
+    const auto bound_mmodel = [&rng, &mmodel, &pop, total_mutation_rate](
+                                  fwdpp::flagged_mutation_queue &recycling_bin,
+                                  std::vector<fwdpy11::Mutation> &mutations) {
+        std::vector<fwdpp::uint_t> rv;
+        unsigned nmuts = gsl_ran_poisson(rng.get(), total_mutation_rate);
+        for (unsigned i = 0; i < nmuts; ++i)
+            {
+                std::size_t x = gsl_ran_discrete(rng.get(), mmodel.lookup.get());
+                auto key = mmodel.regions[x]->operator()(
+                    recycling_bin, mutations, pop.mut_lookup, pop.generation, rng);
+                rv.push_back(key);
+            }
+        std::sort(begin(rv), end(rv),
+                  [&mutations](const fwdpp::uint_t a, const fwdpp::uint_t b) {
+                      return mutations[a].pos < mutations[b].pos;
+                  });
+        return rv;
+    };
+
+    const auto bound_rmodel = [&rng, &rmodel]() { return rmodel(rng); };
+
+    auto genetics = fwdpp::make_genetic_parameters(gvalue_pointers.genetic_values,
+                                                   std::move(bound_mmodel),
+                                                   std::move(bound_rmodel));
+    std::vector<std::size_t> deme_to_gvalue_map(current_demographic_state.maxdemes, 0);
+    if (genetics.gvalue.size() > 1)
+        {
+            std::iota(begin(deme_to_gvalue_map), end(deme_to_gvalue_map), 0);
+        }
+    // A stateful fitness model will need its data up-to-date,
+    // so we must call update(...) prior to calculating fitness,
+    // else bad stuff like segfaults could happen.
+    for (auto &i : genetics.gvalue)
+        {
+            i->update(pop);
+            i->gv2w->update(pop);
+            i->noise_fxn->update(pop);
+        }
+    std::vector<fwdpy11::DiploidMetadata> offspring_metadata(pop.diploid_metadata);
+    std::vector<fwdpy11::DiploidGenotype> offspring;
+    std::vector<double> new_diploid_gvalues;
+    calculate_diploid_fitness(rng, pop, genetics.gvalue, deme_to_gvalue_map,
+                              offspring_metadata, new_diploid_gvalues,
+                              options.record_gvalue_matrix);
+    pop.genetic_value_matrix.swap(new_diploid_gvalues);
+    pop.diploid_metadata.swap(offspring_metadata);
+
+    ddemog::multideme_fitness_lookups<std::uint32_t> fitness_lookup{
+        current_demographic_state.maxdemes};
+    ddemog::migration_lookup miglookup{current_demographic_state.maxdemes,
+                                       current_demographic_state.M.empty()};
+
+    if (pop.generation == 0)
+        {
+            current_demographic_state.early(rng, pop.generation, pop.diploid_metadata);
+            current_demographic_state.late(rng, pop.generation, miglookup,
+                                           pop.diploid_metadata);
+            fitness_lookup.update(current_demographic_state.fitness_bookmark);
+            ddemog::validate_parental_state(
+                pop.generation, fitness_lookup,
+                current_demographic_state.current_deme_parameters,
+                current_demographic_state.M);
+        }
+    else
+        {
+            build_migration_lookup(
+                pop.generation, current_demographic_state.M,
+                current_demographic_state.current_deme_parameters.current_deme_sizes,
+                current_demographic_state.current_deme_parameters.next_deme_sizes,
+                miglookup);
+            fitness_lookup.update(current_demographic_state.fitness_bookmark);
+            ddemog::validate_parental_state(
+                pop.generation, fitness_lookup,
+                current_demographic_state.current_deme_parameters,
+                current_demographic_state.M);
+        }
+
+    if (current_demographic_state.will_go_globally_extinct() == true)
+        {
+            std::ostringstream o;
+            o << "extinction at time " << pop.generation;
+            throw ddemog::GlobalExtinction(o.str());
+        }
+
+    if (!pop.mutations.empty())
+        {
+            // It is possible that pop already has a tree sequence
+            // containing neutral variants not in haploid_genome objects.
+            // To correctly handle this case, we build the recycling bin
+            // from any elements in pop.mutations not in the mutation table.
+            if (!pop.tables->nodes.empty())
+                {
+                    std::vector<std::size_t> indexes(pop.mutations.size());
+                    std::iota(begin(indexes), end(indexes), 0);
+                    for (auto &m : pop.tables->mutations)
+                        {
+                            indexes[m.key] = std::numeric_limits<std::size_t>::max();
+                        }
+                    std::queue<std::size_t> can_recycle;
+                    for (auto i : indexes)
+                        {
+                            if (i != std::numeric_limits<std::size_t>::max())
+                                {
+                                    can_recycle.push(i);
+                                }
+                        }
+                    genetics.mutation_recycling_bin
+                        = fwdpp::flagged_mutation_queue(std::move(can_recycle));
+                }
+            else // Assume there are no tree sequence data
+                {
+                    // Then we assume pop exists in an "already simulated"
+                    // state and is properly-book-kept
+                    genetics.mutation_recycling_bin = fwdpp::ts::make_mut_queue(
+                        pop.mcounts, pop.mcounts_from_preserved_nodes);
+                }
+        }
+
+    fwdpp::ts::table_index_t next_index = pop.tables->nodes.size();
+    bool simplified = false;
+    auto simplifier_state
+        = std::make_unique<decltype(fwdpp::ts::make_simplifier_state(*pop.tables))>(
+            fwdpp::ts::make_simplifier_state(*pop.tables));
+    auto new_edge_buffer
+        = std::make_unique<fwdpp::ts::edge_buffer>(fwdpp::ts::edge_buffer{});
+    bool stopping_criteron_met = false;
+    std::pair<std::vector<fwdpp::ts::table_index_t>, std::vector<std::size_t>>
+        simplification_rv;
+    std::uint32_t last_preserved_generation = std::numeric_limits<std::uint32_t>::max();
+    decltype(pop.mcounts) last_preserved_generation_counts;
+    pop.fill_alive_nodes();
+    if (options.preserve_first_generation)
+        {
+            if (pop.generation != 0)
+                {
+                    throw std::invalid_argument(
+                        "cannot preserve first generation when pop.generation != 0");
+                }
+            if (pop.tables->edges.empty() == false)
+                {
+                    throw std::invalid_argument("cannot preserve first generation when "
+                                                "the edge table is not empty");
+                }
+            std::vector<std::uint32_t> individuals;
+            for (const auto &md : pop.diploid_metadata)
+                {
+                    individuals.push_back(md.label);
+                }
+            pop.record_ancient_samples(individuals);
+            pop.update_ancient_sample_genetic_value_matrix(
+                individuals, genetics.gvalue[0]->total_dim);
+            track_ancestral_counts(individuals, &last_preserved_generation,
+                                   last_preserved_generation_counts, pop);
+        }
+
+    std::vector<fwdpp::ts::table_index_t> alive_at_last_simplification(pop.alive_nodes);
+    new_edge_buffer->reset(alive_at_last_simplification.size());
+
+    clear_edge_table_indexes(*pop.tables);
+    fwdpp::ts::simplify_tables_output simplification_output;
+    pop.is_simulating = true;
+    for (std::uint32_t gen = 0; gen < simlen && !stopping_criteron_met; ++gen)
+        {
+            ++pop.generation;
+            fwdpy11::evolve_generation_ts(rng, pop, genetics, current_demographic_state,
+                                          fitness_lookup, miglookup, pop.generation,
+                                          *new_edge_buffer, offspring,
+                                          offspring_metadata, next_index);
+            // TODO: abstract out these steps into a "cleanup_pop" function
+            // NOTE: by swapping the diploids here, it is not possible
+            // for genetics.value to make use of parental genotype information.
+            // Although mutations that went extinct this generation still
+            // exist in pop, we are limited in our ability to pass down
+            // "indirect" genetic effects for more than one generation
+            // due to the possibility of recycling.  It is likely
+            // that an explicity pedigree structure would be required
+            // to make these models "nice".  See GitHub issue 372
+            // for a bit more context.
+            pop.diploids.swap(offspring);
+
+            current_demographic_state.early(rng, pop.generation, offspring_metadata);
+
+            // NOTE: the two swaps of the metadata ensure
+            // that the update loop below passes the correct
+            // metadata on, and that we then have the
+            // metadata in the expected places for
+            // calculate_diploid_fitness
+            pop.diploid_metadata.swap(offspring_metadata);
+            // TODO: deal with random effects
+            for (auto &i : genetics.gvalue)
+                {
+                    i->update(pop);
+                    i->gv2w->update(pop);
+                    i->noise_fxn->update(pop);
+                }
+            pop.diploid_metadata.swap(offspring_metadata);
+            calculate_diploid_fitness(rng, pop, genetics.gvalue, deme_to_gvalue_map,
+                                      offspring_metadata, new_diploid_gvalues,
+                                      options.record_gvalue_matrix);
+            pop.genetic_value_matrix.swap(new_diploid_gvalues);
+            // TODO: abstract out these steps into a "cleanup_pop" function
+            pop.diploid_metadata.swap(offspring_metadata);
+            pop.N = static_cast<std::uint32_t>(pop.diploids.size());
+
+            if (gen % simplification_interval == 0.0)
+                {
+                    simplification(
+                        options.preserve_selected_fixations,
+                        options.suppress_edge_table_indexing,
+                        options.reset_treeseqs_to_alive_nodes_after_simplification,
+                        post_simplification_recorder, *simplifier_state,
+                        simplification_output, *new_edge_buffer,
+                        alive_at_last_simplification, pop);
+                    simplified = true;
+                }
+            else
+                {
+                    simplified = false;
+                    clear_edge_table_indexes(*pop.tables);
+                }
+            if (pop.tables->num_nodes()
+                >= std::numeric_limits<fwdpp::ts::table_index_t>::max() - 1)
+                {
+                    throw std::runtime_error("range error for node labels");
+                }
+            next_index = pop.tables->num_nodes();
+            if (options.track_mutation_counts_during_sim)
+                {
+                    track_mutation_counts(pop, simplified,
+                                          options.suppress_edge_table_indexing);
+                }
+
+            // The user may now analyze the pop'n and record ancient samples
+            recorder(pop, sr);
+
+            if (simplified)
+                {
+                    if (options.suppress_edge_table_indexing == false)
+                        {
+                            // Behavior change in 0.5.3: set all fixation counts to 0
+                            // to flag for recycling if possible.
+                            // NOTE: this may slow things down a touch?
+                            if (options.preserve_selected_fixations == false)
+                                {
+                                    // b/c neutral mutations not in genomes!
+                                    fwdpp::ts::remove_fixations_from_haploid_genomes(
+                                        pop.haploid_genomes, pop.mutations, pop.mcounts,
+                                        pop.mcounts_from_preserved_nodes,
+                                        2 * pop.diploids.size(),
+                                        options.preserve_selected_fixations);
+                                }
+                            for (auto &i : simplification_output.preserved_mutations)
+                                {
+                                    if (pop.mcounts[i] == 2 * pop.diploids.size()
+                                        && pop.mcounts_from_preserved_nodes[i] == 0)
+                                        {
+                                            if (pop.mutations[i].neutral
+                                                || !options.preserve_selected_fixations)
+                                                {
+                                                    // flag variant for recycling
+                                                    pop.mcounts[i] = 0;
+                                                    // flag item for removal from return value,
+                                                    // as mutation is no longer considered "preserved"
+                                                    i = std::numeric_limits<
+                                                        std::size_t>::max();
+                                                }
+                                        }
+                                }
+                            simplification_output.preserved_mutations.erase(
+                                std::remove(
+                                    begin(simplification_output.preserved_mutations),
+                                    end(simplification_output.preserved_mutations),
+                                    std::numeric_limits<std::size_t>::max()),
+                                end(simplification_output.preserved_mutations));
+                            if (simulating_neutral_variants)
+                                {
+                                    genetics.mutation_recycling_bin
+                                        = fwdpp::ts::make_mut_queue(
+                                            simplification_output.preserved_mutations,
+                                            pop.mutations.size());
+                                }
+                            else
+                                {
+                                    genetics.mutation_recycling_bin
+                                        = fwdpp::ts::make_mut_queue(
+                                            pop.mcounts,
+                                            pop.mcounts_from_preserved_nodes);
+                                }
+                        }
+                    else
+                        {
+                            genetics.mutation_recycling_bin = fwdpp::ts::make_mut_queue(
+                                simplification_output.preserved_mutations,
+                                pop.mutations.size());
+                        }
+                }
+
+            current_demographic_state.late(rng, pop.generation, miglookup,
+                                           pop.diploid_metadata);
+            fitness_lookup.update(current_demographic_state.fitness_bookmark);
+            ddemog::validate_parental_state(
+                pop.generation, fitness_lookup,
+                current_demographic_state.current_deme_parameters,
+                current_demographic_state.M);
+
+            if (current_demographic_state.will_go_globally_extinct() == true)
+                {
+                    simplification(
+                        options.preserve_selected_fixations,
+                        options.suppress_edge_table_indexing,
+                        options.reset_treeseqs_to_alive_nodes_after_simplification,
+                        post_simplification_recorder, *simplifier_state,
+                        simplification_output, *new_edge_buffer,
+                        alive_at_last_simplification, pop);
+                    simplifier_state.reset(nullptr);
+                    new_edge_buffer.reset(nullptr);
+                    final_population_cleanup(
+                        options.suppress_edge_table_indexing,
+                        options.preserve_selected_fixations,
+                        options.remove_extinct_mutations_at_finish,
+                        simulating_neutral_variants,
+                        options.reset_treeseqs_to_alive_nodes_after_simplification,
+                        last_preserved_generation, last_preserved_generation_counts,
+                        pop);
+                    std::ostringstream o;
+                    o << "extinction at time " << pop.generation;
+                    throw ddemog::GlobalExtinction(o.str());
+                }
+
+            // TODO: deal with the result of the recorder populating sr
+            if (!sr.samples.empty())
+                {
+                    pop.record_ancient_samples(sr.samples);
+                    pop.update_ancient_sample_genetic_value_matrix(
+                        sr.samples, genetics.gvalue[0]->total_dim);
+                    track_ancestral_counts(sr.samples, &last_preserved_generation,
+                                           last_preserved_generation_counts, pop);
+                    // Finally, clear the input
+                    sr.samples.clear();
+                }
+            stopping_criteron_met = stopping_criteron(pop, simplified);
+        }
+
+    // NOTE: if pop.preserved_sample_nodes overlaps with samples,
+    // then simplification throws an error. But, since it is annoying
+    // for a user to have to remember not to do that, we filter the list
+    // here
+    pop.fill_alive_nodes();
+    std::sort(begin(pop.alive_nodes), end(pop.alive_nodes));
+    pop.fill_preserved_nodes();
+    auto itr = std::remove_if(
+        begin(pop.preserved_sample_nodes), end(pop.preserved_sample_nodes),
+        [&pop](const fwdpp::ts::table_index_t l) {
+            return std::binary_search(begin(pop.alive_nodes), end(pop.alive_nodes), l);
+        });
+    pop.preserved_sample_nodes.erase(itr, end(pop.preserved_sample_nodes));
+    pop.alive_nodes.clear();
+    pop.preserved_sample_nodes.clear();
+    pop.ancient_sample_metadata.erase(
+        std::remove_if(begin(pop.ancient_sample_metadata),
+                       end(pop.ancient_sample_metadata),
+                       [&pop](const auto &md) {
+                           return pop.tables->nodes[md.nodes[0]].time == pop.generation;
+                       }),
+        end(pop.ancient_sample_metadata));
+
+    if (!simplified)
+        {
+            simplification(options.preserve_selected_fixations,
+                           options.suppress_edge_table_indexing,
+                           options.reset_treeseqs_to_alive_nodes_after_simplification,
+                           post_simplification_recorder, *simplifier_state,
+                           simplification_output, *new_edge_buffer,
+                           alive_at_last_simplification, pop);
+            if (!options.preserve_selected_fixations)
+                {
+                    fwdpp::ts::remove_fixations_from_haploid_genomes(
+                        pop.haploid_genomes, pop.mutations, pop.mcounts,
+                        pop.mcounts_from_preserved_nodes, 2 * pop.diploids.size(),
+                        options.preserve_selected_fixations);
+                }
+        }
+    simplifier_state.reset(nullptr);
+    new_edge_buffer.reset(nullptr);
+    final_population_cleanup(
+        options.suppress_edge_table_indexing, options.preserve_selected_fixations,
+        options.remove_extinct_mutations_at_finish, simulating_neutral_variants,
+        options.reset_treeseqs_to_alive_nodes_after_simplification,
+        last_preserved_generation, last_preserved_generation_counts, pop);
+    if (pop.tables->edges.size() != pop.tables->input_left.size()
+        || pop.tables->edges.size() != pop.tables->output_right.size())
+        {
+            std::ostringstream o;
+            o << "edge table is not indexed " << strip_unix_path(__FILE__) << ", line "
+              << __LINE__;
+            throw std::runtime_error(o.str());
+        }
+    demography.set_model_state(std::move(current_demographic_state));
+}
