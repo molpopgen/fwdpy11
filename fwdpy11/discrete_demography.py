@@ -19,6 +19,7 @@
 
 import itertools
 import typing
+import warnings
 from collections import defaultdict
 from dataclasses import dataclass
 
@@ -87,6 +88,8 @@ class MassMigration(fwdpy11._fwdpy11._ll_MassMigration):
     resets_growth_rate: bool = attr.ib(default=True)
 
     def __attrs_post_init__(self):
+        warnings.warn(
+            f"{self.__class__} is deprecated and will be removed soon", DeprecationWarning)
         super(MassMigration, self).__init__(
             self.when,
             self.source,
@@ -120,6 +123,8 @@ def move_individuals(
 
     :rtype: :class:`fwdpy11.MassMigration`
     """
+    warnings.warn(
+        "move_individuals is deprecated and will be removed soon", DeprecationWarning)
     return MassMigration(when, source, destination, fraction, True, resets_growth_rate)
 
 
@@ -146,6 +151,8 @@ def copy_individuals(
 
     :rtype: :class:`fwdpy11.MassMigration`
     """
+    warnings.warn(
+        "copy_individuals is deprecated and will be removed soon", DeprecationWarning)
     return MassMigration(when, source, destination, fraction, False, resets_growth_rate)
 
 
@@ -185,6 +192,8 @@ class SetDemeSize(fwdpy11._fwdpy11._ll_SetDemeSize):
     resets_growth_rate: bool = attr.ib(default=True)
 
     def __attrs_post_init__(self):
+        warnings.warn(
+            f"{self.__class__} is deprecated and will be removed soon", DeprecationWarning)
         super(SetDemeSize, self).__init__(
             self.when, self.deme, self.new_size, self.resets_growth_rate
         )
@@ -222,6 +231,8 @@ class SetExponentialGrowth(fwdpy11._fwdpy11._ll_SetExponentialGrowth):
     G: float = attr.ib()
 
     def __attrs_post_init__(self):
+        warnings.warn(
+            f"{self.__class__} is deprecated and will be removed soon", DeprecationWarning)
         super(SetExponentialGrowth, self).__init__(
             self.when, self.deme, self.G)
 
@@ -258,6 +269,8 @@ class SetSelfingRate(fwdpy11._fwdpy11._ll_SetSelfingRate):
     S: float = attr.ib()
 
     def __attrs_post_init__(self):
+        warnings.warn(
+            f"{self.__class__} is deprecated and will be removed soon", DeprecationWarning)
         super(SetSelfingRate, self).__init__(self.when, self.deme, self.S)
 
     def __getstate__(self):
@@ -298,6 +311,8 @@ class MigrationMatrix(fwdpy11._fwdpy11._ll_MigrationMatrix):
     scaled: bool = attr.ib(default=False)
 
     def __attrs_post_init__(self):
+        warnings.warn(
+            f"{self.__class__} is deprecated and will be removed soon", DeprecationWarning)
         super(MigrationMatrix, self).__init__(self.migmatrix, self.scaled)
 
     def __eq__(self, other):
@@ -361,6 +376,8 @@ class SetMigrationRates(fwdpy11._fwdpy11._ll_SetMigrationRates):
     migrates: np.ndarray = attr.ib()
 
     def __attrs_post_init__(self):
+        warnings.warn(
+            f"{self.__class__} is deprecated and will be removed soon", DeprecationWarning)
         if self.deme >= 0:
             try:
                 super(SetMigrationRates, self).__init__(
