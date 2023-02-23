@@ -869,8 +869,8 @@ title="Print to PDF"
 <p>In order to facilitate time-series analyses, you may pass a callable object to <a class="reference internal" href="../pages/functions.html#fwdpy11.evolvets" title="fwdpy11.evolvets"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fwdpy11.evolvets()</span></code></a>.
 The following boiler plate illustrates the requirements for the callable objects in both <code class="docutils literal notranslate"><span class="pre">Python</span></code> and in <code class="docutils literal notranslate"><span class="pre">C++</span></code>:</p>
 <div class="sd-tab-set docutils">
-<input checked="checked" id="0decd205-1e26-46da-a1f0-24d1f0736a98" name="6c78d4d3-6138-4f74-b726-e32d2a870d50" type="radio">
-</input><label class="sd-tab-label" for="0decd205-1e26-46da-a1f0-24d1f0736a98">
+<input checked="checked" id="6dd93925-8d1a-4f9a-80cf-f79c8e654aef" name="dc3ce03e-5ae4-4aca-8a51-8bdfc63be49b" type="radio">
+</input><label class="sd-tab-label" for="6dd93925-8d1a-4f9a-80cf-f79c8e654aef">
 python</label><div class="sd-tab-content docutils">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Recorder</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pop</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">,</span> <span class="n">sampler</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">SampleRecorder</span><span class="p">):</span>
@@ -878,8 +878,8 @@ python</label><div class="sd-tab-content docutils">
 </pre></div>
 </div>
 </div>
-<input id="338a7459-8483-4a7a-a4d9-ba2401bc9053" name="6c78d4d3-6138-4f74-b726-e32d2a870d50" type="radio">
-</input><label class="sd-tab-label" for="338a7459-8483-4a7a-a4d9-ba2401bc9053">
+<input id="f8716080-11fe-4956-a2e1-dd38178cb28c" name="dc3ce03e-5ae4-4aca-8a51-8bdfc63be49b" type="radio">
+</input><label class="sd-tab-label" for="f8716080-11fe-4956-a2e1-dd38178cb28c">
 c++</label><div class="sd-tab-content docutils">
 <div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fwdpy11/evolvets/SampleRecorder.hpp&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fwdpy11/types/DiploidPopulation.hpp&gt;</span>
@@ -1092,7 +1092,7 @@ Analyzing each time point separately is a common operation made easier by <a cla
             mode: "python"
         },
         kernelOptions: {
-            kernelName: "python3",
+            name: "python3",
             path: "./short_vignettes"
         },
         predefinedOutput: true

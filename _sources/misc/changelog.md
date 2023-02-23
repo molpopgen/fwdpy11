@@ -3,6 +3,24 @@
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+## 0.19.3
+
+Deprecations
+
+* The low-level Python API for defining demographic events
+  is now deprecated and will raise warnings.
+  No action has to be taken yet.
+  There is no replacement API to migrate to.
+  PR {pr}`1064`.
+    
+Back end changes
+
+* Prepare to refactor C++ code to evolve directly from `demes` graphs.
+  PR {pr}`1063`.
+  PR {pr}`1067`.
+* Boolean flags affecting simulation behavior collected into `struct`.
+  PR {pr}`1061`.
+
 ## 0.19.2
 
 Documentation

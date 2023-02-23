@@ -912,7 +912,7 @@ The trick is that we will only keep these ancient samples until the table collec
 We use the <code class="docutils literal notranslate"><span class="pre">post_simplification_recorder</span></code> argument to <a class="reference internal" href="../pages/functions.html#fwdpy11.evolvets" title="fwdpy11.evolvets"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.evolvets()</span></code></a>, passing in a class that gets frequencies from the tree sequences.
 Once our callback is finished, the ancient samples are purged.</p></li>
 <li><p>When the <code class="docutils literal notranslate"><span class="pre">numpy</span></code> arrays get full, we transfer their data to a relational database using the <a class="reference external" href="https://docs.python.org/3/library/sqlite3.html#module-sqlite3" title="(in Python v3.11)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sqlite3</span></code></a> module that is built in to the Python language.
-We will take advantage of the <a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v1.5.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a> function <a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.to_sql.html#pandas.DataFrame.to_sql" title="(in pandas v1.5.2)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pandas.DataFrame.to_sql()</span></code></a>, which can transfer in-memory data to <code class="docutils literal notranslate"><span class="pre">SQL</span></code> databases via a convenient <code class="docutils literal notranslate"><span class="pre">API</span></code>.</p></li>
+We will take advantage of the <a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v1.5.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a> function <a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.to_sql.html#pandas.DataFrame.to_sql" title="(in pandas v1.5.3)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pandas.DataFrame.to_sql()</span></code></a>, which can transfer in-memory data to <code class="docutils literal notranslate"><span class="pre">SQL</span></code> databases via a convenient <code class="docutils literal notranslate"><span class="pre">API</span></code>.</p></li>
 </ul>
 <p>We will need the following imports:</p>
 <div class="cell docutils container">
@@ -945,7 +945,7 @@ This class is trivial (see <a class="reference internal" href="../short_vignette
 <p>The second class will be a callable that gets executed immediately after simplification.
 This type is responsible for processing trees, getting data into <code class="docutils literal notranslate"><span class="pre">numpy</span></code> arrays, and transferring the data to the database.</p>
 <p>This class has a lot of responsibilities.
-In order to shorten the code, we define a <code class="docutils literal notranslate"><span class="pre">TableBuffer</span></code> class that holds the <code class="docutils literal notranslate"><span class="pre">numpy</span></code> arrays and handles the mechanics of calling <a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.to_sql.html#pandas.DataFrame.to_sql" title="(in pandas v1.5.2)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pandas.DataFrame.to_sql()</span></code></a>.
+In order to shorten the code, we define a <code class="docutils literal notranslate"><span class="pre">TableBuffer</span></code> class that holds the <code class="docutils literal notranslate"><span class="pre">numpy</span></code> arrays and handles the mechanics of calling <a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.to_sql.html#pandas.DataFrame.to_sql" title="(in pandas v1.5.3)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pandas.DataFrame.to_sql()</span></code></a>.
 The definition of this class is shown below, and you may click to see it.</p>
 <div class="cell tag_hide-input docutils container">
 <div class="cell_input docutils container">
@@ -1239,7 +1239,7 @@ The differences are:</p>
 </div>
 </div>
 </div>
-<p>We are going to use <a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_sql.html#pandas.read_sql" title="(in pandas v1.5.2)"><code class="xref py py-func docutils literal notranslate"><span class="pre">pandas.read_sql()</span></code></a> to pull data from our database into <a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v1.5.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a> objects.
+<p>We are going to use <a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_sql.html#pandas.read_sql" title="(in pandas v1.5.3)"><code class="xref py py-func docutils literal notranslate"><span class="pre">pandas.read_sql()</span></code></a> to pull data from our database into <a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v1.5.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a> objects.
 Our approach here is not optimal and we discuss alternatives below.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1323,7 +1323,7 @@ You can plot the output using <code class="docutils literal notranslate"><span c
             mode: "python"
         },
         kernelOptions: {
-            kernelName: "python3",
+            name: "python3",
             path: "./long_vignettes"
         },
         predefinedOutput: true
