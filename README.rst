@@ -5,19 +5,6 @@ This is the README for fwdpy11_, which is a Python package for forward-time popu
 fwdpp_ as its C++ back-end.
 
 
-.. image:: https://anaconda.org/bioconda/fwdpy11/badges/license.svg
-        :target: https://anaconda.org/bioconda/fwdpy11
-
-.. image:: https://anaconda.org/bioconda/fwdpy11/badges/installer/conda.svg
-        :target: https://conda.anaconda.org/bioconda
-
-.. image:: https://anaconda.org/bioconda/fwdpy11/badges/version.svg   
-	:target: https://anaconda.org/bioconda/fwdpy11
-
-.. image:: https://anaconda.org/bioconda/fwdpy11/badges/platforms.svg   
-        :target: https://anaconda.org/bioconda/fwdpy11
-
-
 Build status
 -----------------------
 
@@ -36,6 +23,15 @@ Development:
 
 .. image:: https://github.com/molpopgen/fwdpy11/workflows/UbuntuStressTest/badge.svg?branch=dev
     :target: https://github.com/molpopgen/fwdpy11/workflows/UbuntuStressTest/badge.svg?branch=dev
+
+Conda status
+-----------------------
+
+.. image:: https://anaconda.org/bioconda/fwdpy11/badges/version.svg   
+	:target: https://anaconda.org/bioconda/fwdpy11
+
+.. image:: https://anaconda.org/bioconda/fwdpy11/badges/platforms.svg   
+        :target: https://anaconda.org/bioconda/fwdpy11
 
 Miscellaneous
 -----------------------
