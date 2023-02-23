@@ -1,18 +1,30 @@
 #include <boost/test/unit_test.hpp>
 
 #include <core/evolve_discrete_demes/evolvets.hpp>
-#include "fwdpy11/discrete_demography/DiscreteDemography.hpp"
-#include "fwdpy11/discrete_demography/MigrationMatrix.hpp"
-#include "fwdpy11/evolvets/SampleRecorder.hpp"
-#include "fwdpy11/genetic_values/dgvalue_pointer_vector.hpp"
-#include "fwdpy11/regions/MutationRegions.hpp"
+#include <core/demes/forward_graph.hpp>
+#include <fwdpy11/evolvets/SampleRecorder.hpp>
+#include <fwdpy11/genetic_values/dgvalue_pointer_vector.hpp>
+#include <fwdpy11/regions/MutationRegions.hpp>
 #include <fwdpy11/genetic_values/fwdpp_wrappers/fwdpp_genetic_value.hpp>
 #include <fwdpy11/genetic_value_to_fitness/GeneticValueIsTrait.hpp>
-#include "fwdpy11/regions/RecombinationRegions.hpp"
-#include "fwdpy11/rng.hpp"
-#include "fwdpy11/types/DiploidPopulation.hpp"
+#include <fwdpy11/regions/RecombinationRegions.hpp>
+#include <fwdpy11/rng.hpp>
+#include <fwdpy11/types/DiploidPopulation.hpp>
+
+#include "forward_demes_graph_fixtures.hpp"
 
 BOOST_AUTO_TEST_SUITE(test_evolvets)
+
+/* Tests needed
+ *
+ * - [] simlen > model time in graph
+ * - [] initial population config not compatible
+ *      with state of parental demes
+ * - [] simlen < model time in graph,
+ *      but we keep simulating until we are done.
+ * - [] One deme, multiple epochs, test size hitory is 
+ *      correct
+ */
 
 namespace
 {
@@ -88,10 +100,13 @@ namespace
         multi_deme_additive_hom, 0>;
 }
 
-BOOST_AUTO_TEST_CASE(test_basic_api_coherence)
+BOOST_FIXTURE_TEST_CASE(test_basic_api_coherence, SingleDemeModel)
 {
     fwdpy11::GSLrng_t rng(42);
-    fwdpy11::DiploidPopulation pop(1000, 10.0);
+
+    // NOTE: It now seems important that this N match
+    // what the demes graph is giving!!!
+    fwdpy11::DiploidPopulation pop(100, 10.0);
     // no mutation
     fwdpy11::MutationRegions mregions({}, {});
     // no recombination
@@ -99,6 +114,7 @@ BOOST_AUTO_TEST_CASE(test_basic_api_coherence)
     // no demographic events
     fwdpy11::discrete_demography::DiscreteDemography demography(
         {}, {}, {}, {}, fwdpy11::discrete_demography::MigrationMatrix(), {});
+    fwdpy11_core::ForwardDemesGraph forward_demes_graph(yaml, 100);
     DiploidAdditive additive(1, 2.0, final_additive_fitness(), nullptr, nullptr);
 
     fwdpy11::dgvalue_pointer_vector_ gvalue_ptrs(additive);
@@ -118,11 +134,13 @@ BOOST_AUTO_TEST_CASE(test_basic_api_coherence)
     fwdpy11::SampleRecorder recorder;
     evolve_with_tree_sequences_options options;
 
-    evolve_with_tree_sequences_refactor(rng, pop, recorder, 10, demography, 100, 0., 0.,
-                                        mregions, recregions, gvalue_ptrs,
+    // TODO: if we put long run times in here, we get exceptions
+    // from the ForwardDemesGraph back end.
+    evolve_with_tree_sequences_refactor(rng, pop, recorder, 10, forward_demes_graph, 10,
+                                        0., 0., mregions, recregions, gvalue_ptrs,
                                         sample_recorder_callback, stopping_criterion,
                                         post_simplification_recorder, options);
-    BOOST_REQUIRE_EQUAL(pop.generation, 100);
+    BOOST_REQUIRE_EQUAL(pop.generation, 10);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

@@ -54,6 +54,7 @@ namespace fwdpy11_core
         void initialize_time_iteration();
         const double *iterate();
         bool offspring_demes_exist() const;
+        bool in_error_state() const;
         void update_internal_state(double time);
     };
 
@@ -113,6 +114,13 @@ namespace fwdpy11_core
         return rv;
     }
 
+    bool
+    ForwardDemesGraph::forward_graph_implementation::in_error_state() const
+    {
+        auto rv = demes_forward_graph_is_error_state(graph.get());
+        return rv;
+    }
+
     void
     ForwardDemesGraph::forward_graph_implementation::update_internal_state(double time)
     {
@@ -150,6 +158,12 @@ namespace fwdpy11_core
     ForwardDemesGraph::iterating_model() const
     {
         return pimpl->offspring_demes_exist();
+    };
+
+    bool
+    ForwardDemesGraph::in_error_state() const
+    {
+        return pimpl->in_error_state();
     };
 
     void

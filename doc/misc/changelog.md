@@ -3,6 +3,13 @@
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+## 0.XX.Y
+
+Back end changes
+
+* Use demes models directly for evolving populations.
+  PR {pr}`1069`.
+
 ## 0.19.3
 
 Deprecations

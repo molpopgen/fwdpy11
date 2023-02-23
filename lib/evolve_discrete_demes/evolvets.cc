@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <fwdpp/simparams.hpp>
 #include <fwdpp/ts/simplify_tables.hpp>
 #include <fwdpp/ts/simplify_tables_output.hpp>
@@ -8,6 +9,11 @@
 #include <fwdpy11/gsl/gsl_error_handler_wrapper.hpp>
 #include <fwdpy11/evolvets/evolve_generation_ts.hpp>
 #include <fwdpy11/evolvets/simplify_tables.hpp>
+
+#include <core/demes/forward_graph.hpp>
+
+#include "fwdpy11/discrete_demography/exceptions.hpp"
+#include "fwdpy11/discrete_demography/simulation/multideme_fitness_bookmark.hpp"
 #include "util.hpp"
 #include "diploid_pop_fitness.hpp"
 #include "index_and_count_mutations.hpp"
@@ -661,7 +667,7 @@ void
 evolve_with_tree_sequences_refactor(
     const fwdpy11::GSLrng_t &rng, fwdpy11::DiploidPopulation &pop,
     fwdpy11::SampleRecorder &sr, const unsigned simplification_interval,
-    ddemog::DiscreteDemography &demography, const std::uint32_t simlen,
+    fwdpy11_core::ForwardDemesGraph &demography, const std::uint32_t simlen,
     const double mu_neutral, const double mu_selected,
     const fwdpy11::MutationRegions &mmodel, const fwdpy11::GeneticMap &rmodel,
     // NOTE: gvalue_pointers is a change in 0.6.0,
@@ -674,6 +680,7 @@ evolve_with_tree_sequences_refactor(
     const fwdpy11::DiploidPopulation_temporal_sampler &post_simplification_recorder,
     evolve_with_tree_sequences_options options)
 {
+    // FIXME: the pop's state must match what is expected by the ForwardDemesGraph!
     fwdpy11::gsl_scoped_convert_error_to_exception gsl_error_scope_guard;
 
     if (gvalue_pointers.genetic_values.empty())
@@ -734,12 +741,13 @@ evolve_with_tree_sequences_refactor(
     // to the value of pop.generation, which means
     // that pop.generation is a parental generation
     // (which has always been true for fwdpy11).
-    if (pop.generation == 0)
-        {
-            // If we have an already-initialized model state,
-            // then we reset it back to an unevolved one.
-            demography.reset_model_state();
-        }
+    //if (pop.generation == 0)
+    //    {
+    //        // If we have an already-initialized model state,
+    //        // then we reset it back to an unevolved one.
+    //        demography.reset_model_state();
+    //    }
+
     for (auto &region : mmodel.regions)
         {
             if (!region->valid(0.0, pop.tables->genome_length()))
@@ -753,30 +761,44 @@ evolve_with_tree_sequences_refactor(
         }
 
     // TODO: this goes away
-    auto current_demographic_state = demography.get_model_state();
+    //auto current_demographic_state = demography.get_model_state();
 
     // TODO: this is replaced by calling update_state
     // on the ForwardGraph
-    current_demographic_state.initialize(pop);
+    //current_demographic_state.initialize(pop);
+    demography.initialize_model(pop.generation);
 
-    // TODO: this changes to graph.number_of_demes() > 0
-    if (current_demographic_state.maxdemes <= 0)
+    if (demography.number_of_demes() <= 0)
         {
             throw std::runtime_error("maxdemes must be > 0");
         }
+    // NOTE: the else block may be unnecessary but we will keep
+    // it for now.
+    else
+        {
+            auto parental_deme_sizes = demography.parental_deme_sizes();
+            auto num_extant_parental_demes = std::count_if(
+                std::begin(parental_deme_sizes), std::end(parental_deme_sizes),
+                [](auto a) { return a > 0.0; });
+            if (num_extant_parental_demes == 0)
+                {
+                    throw fwdpy11::discrete_demography::DemographyError(
+                        "all parental deme sizes are zero");
+                }
+        }
+
+    // NOTE: should this be != instead of > ??
     if (gvalue_pointers.genetic_values.size()
-        // TODO: this changes to graph.number_of_demes()
-        > static_cast<std::size_t>(current_demographic_state.maxdemes))
+        > static_cast<std::size_t>(demography.number_of_demes()))
         {
             throw std::invalid_argument(
                 "list of genetic values is longer than maxdemes");
         }
     // TODO: this changes to graph.number_of_demes()
-    if (static_cast<std::size_t>(current_demographic_state.maxdemes) > 1
+    if (static_cast<std::size_t>(demography.number_of_demes()) > 1
         && gvalue_pointers.genetic_values.size() > 1
         && gvalue_pointers.genetic_values.size()
-               // TODO: this changes to graph.number_of_demes()
-               < static_cast<std::size_t>(current_demographic_state.maxdemes))
+               < static_cast<std::size_t>(demography.number_of_demes()))
         {
             throw std::invalid_argument("too few genetic value objects");
         }
@@ -811,7 +833,7 @@ evolve_with_tree_sequences_refactor(
     // in the graph.
     // We may need an API to allow a Python-side
     // mapping of deme name -> genetic value object.
-    std::vector<std::size_t> deme_to_gvalue_map(current_demographic_state.maxdemes, 0);
+    std::vector<std::size_t> deme_to_gvalue_map(demography.number_of_demes(), 0);
     if (genetics.gvalue.size() > 1)
         {
             std::iota(begin(deme_to_gvalue_map), end(deme_to_gvalue_map), 0);
@@ -837,51 +859,56 @@ evolve_with_tree_sequences_refactor(
     pop.diploid_metadata.swap(offspring_metadata);
 
     ddemog::multideme_fitness_lookups<std::uint32_t> fitness_lookup{
-        current_demographic_state.maxdemes};
+        static_cast<std::int32_t>(demography.number_of_demes())};
+
+    ddemog::multideme_fitness_bookmark fitness_bookmark;
+
+    fitness_bookmark.update(demography.parental_deme_sizes(), pop.diploid_metadata);
+    fitness_lookup.update(fitness_bookmark);
 
     // NOTE: this goes away and is replaced by ancestry
     // proportions per offspring deme.
-    ddemog::migration_lookup miglookup{current_demographic_state.maxdemes,
-                                       current_demographic_state.M.empty()};
+    // ddemog::migration_lookup miglookup{current_demographic_state.maxdemes,
+    //                                    current_demographic_state.M.empty()};
 
     // TODO: this entire if/else may not be necessary?
-    if (pop.generation == 0)
-        {
-            // NOTE: the next 3 function calls all change
-            current_demographic_state.early(rng, pop.generation, pop.diploid_metadata);
-            current_demographic_state.late(rng, pop.generation, miglookup,
-                                           pop.diploid_metadata);
-            fitness_lookup.update(current_demographic_state.fitness_bookmark);
-            ddemog::validate_parental_state(
-                pop.generation, fitness_lookup,
-                current_demographic_state.current_deme_parameters,
-                current_demographic_state.M);
-        }
-    else
-        {
-            build_migration_lookup(
-                pop.generation, current_demographic_state.M,
-                current_demographic_state.current_deme_parameters.current_deme_sizes,
-                current_demographic_state.current_deme_parameters.next_deme_sizes,
-                miglookup);
-            fitness_lookup.update(current_demographic_state.fitness_bookmark);
-            ddemog::validate_parental_state(
-                pop.generation, fitness_lookup,
-                current_demographic_state.current_deme_parameters,
-                current_demographic_state.M);
-        }
+    // if (pop.generation == 0)
+    //     {
+    //         // NOTE: the next 3 function calls all change
+    //         current_demographic_state.early(rng, pop.generation, pop.diploid_metadata);
+    //         current_demographic_state.late(rng, pop.generation, miglookup,
+    //                                        pop.diploid_metadata);
+    //         fitness_lookup.update(current_demographic_state.fitness_bookmark);
+    //         ddemog::validate_parental_state(
+    //             pop.generation, fitness_lookup,
+    //             current_demographic_state.current_deme_parameters,
+    //             current_demographic_state.M);
+    //     }
+    // else
+    //     {
+    //         build_migration_lookup(
+    //             pop.generation, current_demographic_state.M,
+    //             current_demographic_state.current_deme_parameters.current_deme_sizes,
+    //             current_demographic_state.current_deme_parameters.next_deme_sizes,
+    //             miglookup);
+    //         fitness_lookup.update(current_demographic_state.fitness_bookmark);
+    //         ddemog::validate_parental_state(
+    //             pop.generation, fitness_lookup,
+    //             current_demographic_state.current_deme_parameters,
+    //             current_demographic_state.M);
+    //     }
 
     // TODO: check that we can have all deme sizes be zero with a demes model?
     // The specification says that a deme size has an exclusive minimum of zerol.
     // So, no -- this cannot happen.
     // Demes go extinct after their last epoch (forwards in time) has run out
     // and the simulation is otherwise continuing.
-    if (current_demographic_state.will_go_globally_extinct() == true)
-        {
-            std::ostringstream o;
-            o << "extinction at time " << pop.generation;
-            throw ddemog::GlobalExtinction(o.str());
-        }
+    //if (current_demographic_state.will_go_globally_extinct() == true)
+    //    {
+    //        std::ostringstream o;
+    //        o << "extinction at time " << pop.generation;
+    //        throw ddemog::GlobalExtinction(o.str());
+    //    }
 
     // TODO:  Do we have sufficient test coverage through here?
     if (!pop.mutations.empty())
@@ -963,9 +990,14 @@ evolve_with_tree_sequences_refactor(
     pop.is_simulating = true;
     for (std::uint32_t gen = 0; gen < simlen && !stopping_criteron_met; ++gen)
         {
+            if (demography.in_error_state())
+                {
+                    throw std::runtime_error("forward graph is in an error state");
+                }
             ++pop.generation;
             fwdpy11::evolve_generation_ts_refactor(
-                rng, pop, genetics, current_demographic_state, fitness_lookup, miglookup,
+                rng, pop, genetics, demography, fitness_lookup,
+                fitness_bookmark, // miglookup,
                 pop.generation, *new_edge_buffer, offspring, offspring_metadata,
                 next_index);
             // TODO: abstract out these steps into a "cleanup_pop" function
@@ -981,7 +1013,7 @@ evolve_with_tree_sequences_refactor(
             pop.diploids.swap(offspring);
 
             // NOTE: this is a no-op
-            current_demographic_state.early(rng, pop.generation, offspring_metadata);
+            // current_demographic_state.early(rng, pop.generation, offspring_metadata);
 
             // NOTE: the two swaps of the metadata ensure
             // that the update loop below passes the correct
@@ -1101,46 +1133,48 @@ evolve_with_tree_sequences_refactor(
             // NOTE: this is where the model state is getting updated
             // We will replace this with updating the state of the
             // ForwardGraph.
-            current_demographic_state.late(rng, pop.generation, miglookup,
-                                           pop.diploid_metadata);
+            //current_demographic_state.late(rng, pop.generation, miglookup,
+            //                               pop.diploid_metadata);
+            // FIXME: this is where our exception is happening
+            // in the test suite?
+            demography.iterate_state();
 
             // NOTE: API change needed
-            // Easy mode: overload this function to accept a new type.
-            fitness_lookup.update(current_demographic_state.fitness_bookmark);
+            // Easy mode: have one of these types locally
+            fitness_bookmark.update(demography.parental_deme_sizes(),
+                                    pop.diploid_metadata);
+            fitness_lookup.update(fitness_bookmark);
             // NOTE: new function needed:
             // If a pop has nonzero ancestry from a deme, but that
             // parental deme has no individuals, throw an exception.
-            ddemog::validate_parental_state(
-                pop.generation, fitness_lookup,
-                current_demographic_state.current_deme_parameters,
-                current_demographic_state.M);
+            ddemog::validate_parental_state(pop.generation, fitness_lookup, demography);
 
             // NOTE: this may be irrelevant -- see comment above about
             // whether or not this is even possible.
             // See above -- this block will likely just go away entirely.
-            if (current_demographic_state.will_go_globally_extinct() == true)
-                {
-                    simplification(
-                        options.preserve_selected_fixations,
-                        options.suppress_edge_table_indexing,
-                        options.reset_treeseqs_to_alive_nodes_after_simplification,
-                        post_simplification_recorder, *simplifier_state,
-                        simplification_output, *new_edge_buffer,
-                        alive_at_last_simplification, pop);
-                    simplifier_state.reset(nullptr);
-                    new_edge_buffer.reset(nullptr);
-                    final_population_cleanup(
-                        options.suppress_edge_table_indexing,
-                        options.preserve_selected_fixations,
-                        options.remove_extinct_mutations_at_finish,
-                        simulating_neutral_variants,
-                        options.reset_treeseqs_to_alive_nodes_after_simplification,
-                        last_preserved_generation, last_preserved_generation_counts,
-                        pop);
-                    std::ostringstream o;
-                    o << "extinction at time " << pop.generation;
-                    throw ddemog::GlobalExtinction(o.str());
-                }
+            // if (current_demographic_state.will_go_globally_extinct() == true)
+            //     {
+            //         simplification(
+            //             options.preserve_selected_fixations,
+            //             options.suppress_edge_table_indexing,
+            //             options.reset_treeseqs_to_alive_nodes_after_simplification,
+            //             post_simplification_recorder, *simplifier_state,
+            //             simplification_output, *new_edge_buffer,
+            //             alive_at_last_simplification, pop);
+            //         simplifier_state.reset(nullptr);
+            //         new_edge_buffer.reset(nullptr);
+            //         final_population_cleanup(
+            //             options.suppress_edge_table_indexing,
+            //             options.preserve_selected_fixations,
+            //             options.remove_extinct_mutations_at_finish,
+            //             simulating_neutral_variants,
+            //             options.reset_treeseqs_to_alive_nodes_after_simplification,
+            //             last_preserved_generation, last_preserved_generation_counts,
+            //             pop);
+            //         std::ostringstream o;
+            //         o << "extinction at time " << pop.generation;
+            //         throw ddemog::GlobalExtinction(o.str());
+            //     }
 
             // TODO: deal with the result of the recorder populating sr
             if (!sr.samples.empty())
@@ -1212,5 +1246,5 @@ evolve_with_tree_sequences_refactor(
         }
 
     // This is irrelevant -- yay!
-    demography.set_model_state(std::move(current_demographic_state));
+    // demography.set_model_state(std::move(current_demographic_state));
 }
