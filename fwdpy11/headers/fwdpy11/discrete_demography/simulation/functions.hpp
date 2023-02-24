@@ -289,50 +289,61 @@ namespace fwdpy11
             const multideme_fitness_lookups<std::uint32_t>& fitnesses,
             const fwdpy11_core::ForwardDemesGraph& demography)
         {
-            auto offspring_deme_sizes = demography.offspring_deme_sizes();
-            auto parental_deme_sizes = demography.parental_deme_sizes();
-
-            std::size_t offspring_deme = 0;
-            for (auto size = std::begin(offspring_deme_sizes);
-                 size != std::end(offspring_deme_sizes); ++size, ++offspring_deme)
+            if (demography.iterating_model())
                 {
-                    if (*size > 0.0)
+                    auto offspring_deme_sizes = demography.offspring_deme_sizes();
+                    auto parental_deme_sizes = demography.parental_deme_sizes();
+
+                    std::size_t offspring_deme = 0;
+                    for (auto size = std::begin(offspring_deme_sizes);
+                         size != std::end(offspring_deme_sizes);
+                         ++size, ++offspring_deme)
                         {
-                            // offspring deme exists
-                            auto ancestry_proportions
-                                = demography.offspring_ancestry_proportions(
-                                    offspring_deme);
-                            std::uint32_t parental_deme = 0;
-                            for (auto prop = std::begin(ancestry_proportions);
-                                 prop != std::end(ancestry_proportions);
-                                 ++prop, ++parental_deme)
+                            if (*size > 0.0)
                                 {
-                                    if (*prop > 0.0)
+                                    // offspring deme exists
+                                    auto ancestry_proportions
+                                        = demography.offspring_ancestry_proportions(
+                                            offspring_deme);
+                                    std::uint32_t parental_deme = 0;
+                                    for (auto prop = std::begin(ancestry_proportions);
+                                         prop != std::end(ancestry_proportions);
+                                         ++prop, ++parental_deme)
                                         {
-                                            auto parental_deme_size
-                                                = *(std::begin(parental_deme_sizes)
-                                                    + parental_deme);
-                                            if (parental_deme_size == 0.0)
+                                            if (*prop > 0.0)
                                                 {
-                                                    std::ostringstream o;
-                                                    o << "deme " << offspring_deme
-                                                      << " has ancestry from deme "
-                                                      << parental_deme << " at time "
-                                                      << generation
-                                                      << " but the parental deme size "
-                                                         "is 0";
-                                                    throw DemographyError(o.str());
-                                                }
-                                            if (fitnesses.lookups[parental_deme]
-                                                == nullptr)
-                                                {
-                                                    std::ostringstream o;
-                                                    o << "fitness lookup table for "
-                                                         "parental deme "
-                                                      << parental_deme
-                                                      << " is empty at time "
-                                                      << generation;
-                                                    throw DemographyError(o.str());
+                                                    auto parental_deme_size = *(
+                                                        std::begin(parental_deme_sizes)
+                                                        + parental_deme);
+                                                    if (parental_deme_size == 0.0)
+                                                        {
+                                                            std::ostringstream o;
+                                                            o << "deme "
+                                                              << offspring_deme
+                                                              << " has ancestry from "
+                                                                 "deme "
+                                                              << parental_deme
+                                                              << " at time "
+                                                              << generation
+                                                              << " but the parental "
+                                                                 "deme size "
+                                                                 "is 0";
+                                                            throw DemographyError(
+                                                                o.str());
+                                                        }
+                                                    if (fitnesses.lookups[parental_deme]
+                                                        == nullptr)
+                                                        {
+                                                            std::ostringstream o;
+                                                            o << "fitness lookup table "
+                                                                 "for "
+                                                                 "parental deme "
+                                                              << parental_deme
+                                                              << " is empty at time "
+                                                              << generation;
+                                                            throw DemographyError(
+                                                                o.str());
+                                                        }
                                                 }
                                         }
                                 }

@@ -988,7 +988,9 @@ evolve_with_tree_sequences_refactor(
     clear_edge_table_indexes(*pop.tables);
     fwdpp::ts::simplify_tables_output simplification_output;
     pop.is_simulating = true;
-    for (std::uint32_t gen = 0; gen < simlen && !stopping_criteron_met; ++gen)
+    for (std::uint32_t gen = 0; pop.generation < demography.model_end_time() - 1
+                                && gen < simlen && !stopping_criteron_met;
+         ++gen)
         {
             if (demography.in_error_state())
                 {
