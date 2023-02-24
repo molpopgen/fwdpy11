@@ -95,6 +95,9 @@ namespace fwdpy11
                             {
                                 // NOTE: the size of the i-th deme's
                                 // fitness array is starts[i]-stops[i]
+                                //
+                                // FIXME: this is the cause of the segfault
+                                // in testing
                                 lookups[i].reset(gsl_ran_discrete_preproc(
                                     fitness_bookmark.stops[i]
                                         - fitness_bookmark.starts[i],
@@ -117,6 +120,15 @@ namespace fwdpy11
                     {
                         throw EmptyDeme("parental deme is empty");
                     }
+                auto o = gsl_ran_discrete(rng.get(), lookups[deme].get());
+                return fitness_bookmark.individuals[fitness_bookmark.starts[deme] + o];
+            }
+
+            T
+            get_parent(const GSLrng_t& rng,
+                       const multideme_fitness_bookmark& fitness_bookmark,
+                       const std::int32_t deme) const
+            {
                 auto o = gsl_ran_discrete(rng.get(), lookups[deme].get());
                 return fitness_bookmark.individuals[fitness_bookmark.starts[deme] + o];
             }

@@ -11,6 +11,8 @@
 #include <fwdpy11/gsl/gsl_error_handler_wrapper.hpp>
 #include <fwdpy11/samplers.hpp>
 
+#include <core/demes/forward_graph.hpp>
+
 struct evolve_with_tree_sequences_options
 {
     // NOTE: this is the complement of what a user will input, which is "prune_selected"
@@ -53,7 +55,7 @@ void evolve_with_tree_sequences(
 void evolve_with_tree_sequences_refactor(
     const fwdpy11::GSLrng_t &rng, fwdpy11::DiploidPopulation &pop,
     fwdpy11::SampleRecorder &sr, const unsigned simplification_interval,
-    fwdpy11::discrete_demography::DiscreteDemography &demography,
+    fwdpy11_core::ForwardDemesGraph &demography,
     const std::uint32_t simlen, const double mu_neutral, const double mu_selected,
     const fwdpy11::MutationRegions &mmodel, const fwdpy11::GeneticMap &rmodel,
     // NOTE: gvalue_pointers is a change in 0.6.0,
