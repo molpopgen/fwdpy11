@@ -9,6 +9,7 @@ Back end changes
 
 * Use demes models directly for evolving populations.
   PR {pr}`1069`.
+  PR {pr}`1070`.
 
 ## 0.19.3
 
