@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <cstdint>
 #include <fwdpp/simparams.hpp>
 #include <fwdpp/ts/simplify_tables.hpp>
 #include <fwdpp/ts/simplify_tables_output.hpp>
@@ -14,6 +15,7 @@
 
 #include "fwdpy11/discrete_demography/exceptions.hpp"
 #include "fwdpy11/discrete_demography/simulation/multideme_fitness_bookmark.hpp"
+#include "fwdpy11/types/Diploid.hpp"
 #include "util.hpp"
 #include "diploid_pop_fitness.hpp"
 #include "index_and_count_mutations.hpp"
@@ -25,6 +27,7 @@
 #include "runtime_checks.hpp"
 
 #include <core/evolve_discrete_demes/evolvets.hpp>
+#include <sstream>
 
 namespace ddemog = fwdpy11::discrete_demography;
 
@@ -664,6 +667,43 @@ evolve_with_tree_sequences(
 }
 
 void
+check_initial_deme_sizes(const std::vector<fwdpy11::DiploidMetadata> &metadata,
+                         const fwdpy11_core::ForwardDemesGraph &demography)
+{
+    auto parental_deme_sizes = demography.parental_deme_sizes();
+    auto num_extant_parental_demes
+        = std::count_if(std::begin(parental_deme_sizes), std::end(parental_deme_sizes),
+                        [](auto a) { return a > 0.0; });
+    if (num_extant_parental_demes == 0)
+        {
+            throw fwdpy11::discrete_demography::DemographyError(
+                "all parental deme sizes are zero");
+        }
+    std::vector<std::uint32_t> current_deme_sizes(demography.number_of_demes(), 0);
+    for (const auto &md : metadata)
+        {
+            if (md.deme >= demography.number_of_demes() || md.deme < 0)
+                {
+                    throw ddemog::DemographyError("individual has invalid deme");
+                }
+            current_deme_sizes[md.deme] += 1;
+        }
+    std::size_t i = 0;
+    for (auto psize : parental_deme_sizes)
+        {
+            auto intsize = static_cast<std::uint32_t>(psize);
+            if (intsize != current_deme_sizes[i])
+                {
+                    std::ostringstream o;
+                    o << "initial size of deme " << i << " is " << current_deme_sizes[i]
+                      << " but the required size is " << intsize;
+                    throw ddemog::DemographyError(o.str());
+                }
+            ++i;
+        }
+}
+
+void
 evolve_with_tree_sequences_refactor(
     const fwdpy11::GSLrng_t &rng, fwdpy11::DiploidPopulation &pop,
     fwdpy11::SampleRecorder &sr, const unsigned simplification_interval,
@@ -772,20 +812,7 @@ evolve_with_tree_sequences_refactor(
         {
             throw std::runtime_error("maxdemes must be > 0");
         }
-    // NOTE: the else block may be unnecessary but we will keep
-    // it for now.
-    else
-        {
-            auto parental_deme_sizes = demography.parental_deme_sizes();
-            auto num_extant_parental_demes = std::count_if(
-                std::begin(parental_deme_sizes), std::end(parental_deme_sizes),
-                [](auto a) { return a > 0.0; });
-            if (num_extant_parental_demes == 0)
-                {
-                    throw fwdpy11::discrete_demography::DemographyError(
-                        "all parental deme sizes are zero");
-                }
-        }
+    check_initial_deme_sizes(pop.diploid_metadata, demography);
 
     // NOTE: should this be != instead of > ??
     if (gvalue_pointers.genetic_values.size()
