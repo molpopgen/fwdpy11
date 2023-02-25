@@ -800,6 +800,12 @@ evolve_with_tree_sequences_refactor(
                 }
         }
 
+    if (pop.generation >= demography.model_end_time())
+        {
+            throw ddemog::DemographyError(
+                "current time of population is past the end of the model");
+        }
+
     // TODO: this goes away
     //auto current_demographic_state = demography.get_model_state();
 

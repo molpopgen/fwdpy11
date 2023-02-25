@@ -221,4 +221,22 @@ BOOST_FIXTURE_TEST_CASE(test_initial_pop_size_invalid, common_setup)
     BOOST_REQUIRE_EQUAL(pop.generation, 0);
 }
 
+BOOST_FIXTURE_TEST_CASE(test_generation_time_past_end_of_model, common_setup)
+{
+    auto model = SingleDemeModel();
+    fwdpy11_core::ForwardDemesGraph forward_demes_graph(model.yaml, 10);
+
+    // The model is only set to simulate 10 generations
+    pop.generation = 11;
+    BOOST_CHECK_THROW(
+        {
+            evolve_with_tree_sequences_refactor(
+                rng, pop, recorder, 10, forward_demes_graph, 10, 0., 0., mregions,
+                recregions, gvalue_ptrs, sample_recorder_callback, stopping_criterion,
+                post_simplification_recorder, options);
+        },
+        fwdpy11::discrete_demography::DemographyError);
+    BOOST_REQUIRE_EQUAL(pop.generation, 11);
+}
+
 BOOST_AUTO_TEST_SUITE_END()
