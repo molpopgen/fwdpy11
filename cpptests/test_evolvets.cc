@@ -1,7 +1,9 @@
+#include <boost/test/tools/old/interface.hpp>
 #include <boost/test/unit_test.hpp>
 
 #include <core/evolve_discrete_demes/evolvets.hpp>
 #include <core/demes/forward_graph.hpp>
+#include <cstdint>
 #include <fwdpy11/evolvets/SampleRecorder.hpp>
 #include <fwdpy11/genetic_values/dgvalue_pointer_vector.hpp>
 #include <fwdpy11/regions/MutationRegions.hpp>
@@ -12,17 +14,20 @@
 #include <fwdpy11/types/DiploidPopulation.hpp>
 
 #include "forward_demes_graph_fixtures.hpp"
+#include "fwdpy11/discrete_demography/exceptions.hpp"
 
 BOOST_AUTO_TEST_SUITE(test_evolvets)
 
 /* Tests needed
  *
  * - [X] simlen > model time in graph
+ * - [X] initial population config not compatible
+ *       with state of parental demes for single deme models.
  * - [] initial population config not compatible
- *      with state of parental demes
+ *       with state of parental demes for multi deme models.
  * - [] simlen < model time in graph,
  *      but we keep simulating until we are done.
- * - [] One deme, multiple epochs, test size hitory is 
+ * - [] One deme, multiple epochs, test size history is 
  *      correct
  */
 
@@ -157,6 +162,63 @@ BOOST_FIXTURE_TEST_CASE(test_simlen_longer_than_model_length, common_setup)
                                         sample_recorder_callback, stopping_criterion,
                                         post_simplification_recorder, options);
     BOOST_REQUIRE_EQUAL(pop.generation, 10);
+}
+
+BOOST_FIXTURE_TEST_CASE(test_invalid_deme_metadata, common_setup)
+{
+    auto model = SingleDemeModel();
+    fwdpy11_core::ForwardDemesGraph forward_demes_graph(model.yaml, 10);
+
+    // Make some of the individuals in deme 1 but all must be in deme 0
+    // b/c that is the model
+    for (std::size_t i = 0; i < pop.diploid_metadata.size(); ++i)
+        {
+            if (i % 2 == 0)
+                {
+                    pop.diploid_metadata[i].deme = 1;
+                }
+        }
+
+    BOOST_CHECK_THROW(
+        {
+            evolve_with_tree_sequences_refactor(
+                rng, pop, recorder, 10, forward_demes_graph, 10, 0., 0., mregions,
+                recregions, gvalue_ptrs, sample_recorder_callback, stopping_criterion,
+                post_simplification_recorder, options);
+        },
+        fwdpy11::discrete_demography::DemographyError);
+    // pop hasn't evolved!
+    BOOST_REQUIRE_EQUAL(pop.generation, 0);
+}
+
+BOOST_FIXTURE_TEST_CASE(test_initial_pop_size_invalid, common_setup)
+{
+    // The demes model specifies N = 100.
+    // Here, we will start with a different N.
+    // This is a hard error!
+    // We test values ~100 because TDD found cases of memory errors
+    // when N >> the correct N but things can pass when N =~ the
+    // correct N. Gotta love UB :).
+    std::vector<std::uint32_t> initial_popsizes{50, 99, 101, 200};
+    for (auto initial_n : initial_popsizes)
+        {
+            // reset the fixture
+            pop = fwdpy11::DiploidPopulation(initial_n, 10.0);
+            auto model = SingleDemeModel();
+            fwdpy11_core::ForwardDemesGraph forward_demes_graph(model.yaml, 10);
+
+            BOOST_CHECK_THROW(
+                {
+                    evolve_with_tree_sequences_refactor(
+                        rng, pop, recorder, 10, forward_demes_graph, 10, 0., 0.,
+                        mregions, recregions, gvalue_ptrs, sample_recorder_callback,
+                        stopping_criterion, post_simplification_recorder, options);
+                },
+                // TODO: is this the type that we want?
+                fwdpy11::discrete_demography::DemographyError);
+        }
+    // pop hasn't evolved!
+    BOOST_REQUIRE_EQUAL(pop.generation, 0);
 }
 
 BOOST_AUTO_TEST_SUITE_END()
