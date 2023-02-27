@@ -8,4 +8,10 @@ struct SingleDemeModel
     SingleDemeModel();
 };
 
+struct TwoDemePerpetualIslandModel
+{
+    std::string yaml;
+    TwoDemePerpetualIslandModel();
+};
+
 

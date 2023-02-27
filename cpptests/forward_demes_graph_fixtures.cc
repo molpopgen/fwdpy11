@@ -19,6 +19,25 @@ demes:
    - start_size: 200
 )";
 
+const char* two_deme_perpetual_island_model = R"(
+time_units: generations
+demes:
+ - name: A
+   epochs:
+   - start_size: 100
+ - name: B
+   epochs:
+   - start_size: 100
+migrations:
+ - demes: [A, B]
+   rate: 1e-1
+)";
+
 SingleDemeModel::SingleDemeModel() : yaml(single_deme_model)
+{
+}
+
+TwoDemePerpetualIslandModel::TwoDemePerpetualIslandModel()
+    : yaml(two_deme_perpetual_island_model)
 {
 }
