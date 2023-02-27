@@ -23,7 +23,7 @@ BOOST_AUTO_TEST_SUITE(test_evolvets)
  * - [X] simlen > model time in graph
  * - [X] initial population config not compatible
  *       with state of parental demes for single deme models.
- * - [] initial population config not compatible
+ * - [X] initial population config not compatible
  *       with state of parental demes for multi deme models.
  * - [] simlen < model time in graph,
  *      but we keep simulating until we are done.
@@ -151,6 +151,31 @@ BOOST_FIXTURE_TEST_CASE(test_basic_api_coherence, common_setup)
     BOOST_REQUIRE_EQUAL(pop.generation, 10);
 }
 
+BOOST_FIXTURE_TEST_CASE(test_basic_api_coherence_two_deme_perpetual_island_model,
+                        common_setup)
+{
+    auto model = TwoDemePerpetualIslandModel();
+
+    // over-write the fixture so that the initial pop is okay
+    pop = fwdpy11::DiploidPopulation({100, 100}, 10.0);
+    fwdpy11_core::ForwardDemesGraph forward_demes_graph(model.yaml, 10);
+
+    // TODO: if we put long run times in here, we get exceptions
+    // from the ForwardDemesGraph back end.
+    evolve_with_tree_sequences_refactor(rng, pop, recorder, 10, forward_demes_graph, 10,
+                                        0., 0., mregions, recregions, gvalue_ptrs,
+                                        sample_recorder_callback, stopping_criterion,
+                                        post_simplification_recorder, options);
+    BOOST_REQUIRE_EQUAL(pop.generation, 10);
+    std::vector<unsigned> ndemes{0, 0};
+    for (const auto& dip : pop.diploid_metadata)
+        {
+            ndemes[dip.deme]++;
+        }
+    BOOST_REQUIRE_EQUAL(ndemes[0], 100);
+    BOOST_REQUIRE_EQUAL(ndemes[1], 100);
+}
+
 BOOST_FIXTURE_TEST_CASE(test_simlen_longer_than_model_length, common_setup)
 {
     auto model = SingleDemeModel();
@@ -219,6 +244,62 @@ BOOST_FIXTURE_TEST_CASE(test_initial_pop_size_invalid, common_setup)
         }
     // pop hasn't evolved!
     BOOST_REQUIRE_EQUAL(pop.generation, 0);
+}
+
+BOOST_FIXTURE_TEST_CASE(test_initial_pop_size_invalid_island_model, common_setup)
+{
+    {
+        // The demes model specifies N = [100, 100].
+        // Here, we will start with N for one deme
+        // This is a hard error!
+        // We test values ~100 because TDD found cases of memory errors
+        // when N >> the correct N but things can pass when N =~ the
+        // correct N. Gotta love UB :).
+        std::vector<std::uint32_t> initial_popsizes{50, 99, 101, 200};
+        for (auto initial_n : initial_popsizes)
+            {
+                // reset the fixture
+                pop = fwdpy11::DiploidPopulation(initial_n, 10.0);
+                auto model = TwoDemePerpetualIslandModel();
+                fwdpy11_core::ForwardDemesGraph forward_demes_graph(model.yaml, 10);
+
+                BOOST_CHECK_THROW(
+                    {
+                        evolve_with_tree_sequences_refactor(
+                            rng, pop, recorder, 10, forward_demes_graph, 10, 0., 0.,
+                            mregions, recregions, gvalue_ptrs, sample_recorder_callback,
+                            stopping_criterion, post_simplification_recorder, options);
+                    },
+                    // TODO: is this the type that we want?
+                    fwdpy11::discrete_demography::DemographyError);
+            }
+        // pop hasn't evolved!
+        BOOST_REQUIRE_EQUAL(pop.generation, 0);
+    }
+
+    {
+        std::vector<std::vector<std::uint32_t>> initial_popsizes{
+            {100, 0}, {0, 100}, {10, 100}, {100, 99, 1}};
+        for (auto initial_n : initial_popsizes)
+            {
+                // reset the fixture
+                pop = fwdpy11::DiploidPopulation(initial_n, 10.0);
+                auto model = TwoDemePerpetualIslandModel();
+                fwdpy11_core::ForwardDemesGraph forward_demes_graph(model.yaml, 10);
+
+                BOOST_CHECK_THROW(
+                    {
+                        evolve_with_tree_sequences_refactor(
+                            rng, pop, recorder, 10, forward_demes_graph, 10, 0., 0.,
+                            mregions, recregions, gvalue_ptrs, sample_recorder_callback,
+                            stopping_criterion, post_simplification_recorder, options);
+                    },
+                    // TODO: is this the type that we want?
+                    fwdpy11::discrete_demography::DemographyError);
+            }
+        // pop hasn't evolved!
+        BOOST_REQUIRE_EQUAL(pop.generation, 0);
+    }
 }
 
 BOOST_FIXTURE_TEST_CASE(test_generation_time_past_end_of_model, common_setup)
