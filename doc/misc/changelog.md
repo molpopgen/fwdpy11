@@ -15,6 +15,7 @@ Back end changes
   PR {pr}`1073`.
   PR {pr}`1074`.
   PR {pr}`1075`.
+  PR {pr}`1076`.
 
 ## 0.19.3
 
