@@ -29,6 +29,7 @@ from ._demography import *  # NOQA
 from ._dev import *  # NOQA
 from ._fwdpy11 import *  # NOQA
 from .discrete_demography import (  # NOQA
+    ForwardDemesGraph,
     DiscreteDemography,
     MassMigration,
     move_individuals,

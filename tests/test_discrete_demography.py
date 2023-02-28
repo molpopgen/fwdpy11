@@ -23,6 +23,7 @@ import unittest
 from dataclasses import dataclass
 
 import attr
+import demes
 import fwdpy11
 import intervaltree
 import numpy as np
@@ -1405,25 +1406,24 @@ def test_deme_size_history_bad_models(payload: Payload):
         )
 
 
-# NOTE: this tests internal implementation details.
-# This test should be deleted once a public API
-# is in place
 def test_invalid_demes_spec_modules():
     for bad in glob.glob("tests/demes-spec/test-cases/invalid/*.yaml"):
         with open(bad, "r") as f:
             yaml = "".join(f.readlines())
+            # NOTE: cannot test these YAML with demes.Graph b/c
+            # they cannot create a valid Graph.
             with pytest.raises(fwdpy11.DemographyError):
-                _ = fwdpy11._fwdpy11._ForwardDemesGraph(yaml=yaml, burnin=0)
+                _ = fwdpy11.ForwardDemesGraph(yaml=yaml, burnin=0)
 
 
-# NOTE: this tests internal implementation details.
-# This test should be deleted once a public API
-# is in place
 def test_valid_demes_spec_modules():
     for good in glob.glob("tests/demes-spec/test-cases/valid/*.yaml"):
         with open(good, "r") as f:
             yaml = "".join(f.readlines())
-            _ = fwdpy11._fwdpy11._ForwardDemesGraph(yaml=yaml, burnin=0)
+            _ = fwdpy11.ForwardDemesGraph(yaml=yaml, burnin=0)
+            _ = fwdpy11.ForwardDemesGraph.from_demes(demes.loads(yaml), burnin=0)
+            with pytest.raises(TypeError):
+                _ = fwdpy11.ForwardDemesGraph(yaml=yaml, burnin=-1)
 
 
 if __name__ == "__main__":

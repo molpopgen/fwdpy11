@@ -29,6 +29,11 @@ Performance
   PR {pr}`1087`.
   Issue {issue}`1082`.
 
+Python API
+
+* Add :class:`fwdpy11.ForwardDemesGraph`.
+  PR {pr}`1077`.
+
 Back end changes
 
 * Develop infrastructure to use demes models directly for evolving populations.
