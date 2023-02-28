@@ -6,6 +6,7 @@
 #include <core/evolve_discrete_demes/evolvets.hpp>
 #include <core/demes/forward_graph.hpp>
 #include <cstdint>
+#include <exception>
 #include <fwdpy11/evolvets/SampleRecorder.hpp>
 #include <fwdpy11/genetic_values/dgvalue_pointer_vector.hpp>
 #include <fwdpy11/regions/MutationRegions.hpp>
@@ -14,9 +15,12 @@
 #include <fwdpy11/regions/RecombinationRegions.hpp>
 #include <fwdpy11/rng.hpp>
 #include <fwdpy11/types/DiploidPopulation.hpp>
+#include <stdexcept>
 
 #include "forward_demes_graph_fixtures.hpp"
+#include "fwdpp/ts/simplification/simplification.hpp"
 #include "fwdpy11/discrete_demography/exceptions.hpp"
+#include "fwdpy11/discrete_demography/simulation/functions.hpp"
 
 BOOST_AUTO_TEST_SUITE(test_evolvets)
 
@@ -177,6 +181,91 @@ struct common_setup_with_sample_history_recording : public common_setup
     }
 };
 
+struct ancestry_proportions
+{
+    std::uint32_t generation;
+    std::int32_t offspring_deme;
+    std::int32_t parent_deme;
+    std::uint32_t num_parents;
+};
+
+// NOTE: efficiency is out the window here.
+struct common_setup_with_ancestry_tracking : public common_setup
+{
+    std::vector<ancestry_proportions> ancestry;
+    // parent id -> parent deme
+    std::unordered_map<std::size_t, std::int32_t> parents;
+    common_setup_with_ancestry_tracking() : common_setup(), ancestry(), parents()
+    {
+        this->sample_recorder_callback = [this](const fwdpy11::DiploidPopulation& pop,
+                                                fwdpy11::SampleRecorder&) {
+            std::vector<ancestry_proportions> current_ancestry;
+            for (auto& md : pop.diploid_metadata)
+                {
+                    for (auto p : md.parents)
+                        {
+                            if (parents.find(p) == std::end(parents))
+                                {
+                                    throw std::runtime_error("parent not found");
+                                }
+                        }
+                    if (parents[md.parents[0]] != parents[md.parents[1]])
+                        {
+                            throw std::runtime_error("parents from different demes");
+                        }
+                    auto parent_deme = parents[md.parents[0]];
+                    auto iter = std::find_if(std::begin(current_ancestry),
+                                             std::end(current_ancestry),
+                                             [md, parent_deme](const auto& x) {
+                                                 return x.offspring_deme == md.deme
+                                                        && x.parent_deme == parent_deme;
+                                             });
+                    if (iter == std::end(current_ancestry))
+                        {
+                            current_ancestry.push_back(ancestry_proportions{
+                                pop.generation, md.deme, parent_deme, 1});
+                        }
+                    else
+                        {
+                            iter->num_parents++;
+                        }
+                }
+            for (auto& a : current_ancestry)
+                {
+                    ancestry.push_back(a);
+                }
+            this->update_parents(pop);
+        };
+    }
+
+    void
+    update_parents(const fwdpy11::DiploidPopulation& pop)
+    {
+        parents.clear();
+        for (auto& md : pop.diploid_metadata)
+            {
+                parents.emplace(md.label, md.deme);
+            }
+    }
+};
+
+bool
+validate_ancestry(const std::vector<ancestry_proportions>& ancestry,
+                  std::uint32_t generation, std::int32_t offspring_deme,
+                  std::int32_t parent_deme, std::function<bool(std::uint32_t)> condition)
+{
+    for (auto& a : ancestry)
+        {
+            if (a.generation == generation && a.offspring_deme == offspring_deme
+                && a.parent_deme == parent_deme)
+                {
+                    BOOST_REQUIRE(condition(a.num_parents));
+                    return true;
+                }
+        }
+    return false;
+}
+
 BOOST_FIXTURE_TEST_CASE(test_basic_api_coherence, common_setup)
 {
     auto model = SingleDemeModel();
@@ -326,7 +415,6 @@ BOOST_FIXTURE_TEST_CASE(test_initial_pop_size_invalid_island_model, common_setup
                 pop = fwdpy11::DiploidPopulation(initial_n, 10.0);
                 auto model = TwoDemePerpetualIslandModel();
                 fwdpy11_core::ForwardDemesGraph forward_demes_graph(model.yaml, 10);
-
                 BOOST_CHECK_THROW(
                     {
                         evolve_with_tree_sequences_refactor(
@@ -450,6 +538,82 @@ BOOST_FIXTURE_TEST_CASE(test_size_history_two_demes_unequal_merge,
     BOOST_REQUIRE_EQUAL(size_history[2].size(), 25);
     BOOST_REQUIRE(std::all_of(std::begin(size_history[2]), std::end(size_history[2]),
                               [](const auto& i) { return i.first >= 35 - 25 + 1; }));
+}
+
+BOOST_FIXTURE_TEST_CASE(test_ancestry_proportions_from_pulse_with_burnin,
+                        common_setup_with_ancestry_tracking)
+{
+    auto model = VeryRecentPulseTwoGenerationsAgo();
+    fwdpy11_core::ForwardDemesGraph forward_demes_graph(model.yaml, 10);
+    BOOST_REQUIRE_EQUAL(forward_demes_graph.number_of_demes(), 2);
+    pop = fwdpy11::DiploidPopulation({50, 50}, 1.);
+    update_parents(pop);
+    evolve_with_tree_sequences_refactor(rng, pop, recorder, 10, forward_demes_graph, 60,
+                                        0., 0., mregions, recregions, gvalue_ptrs,
+                                        sample_recorder_callback, stopping_criterion,
+                                        post_simplification_recorder, options);
+    BOOST_REQUIRE_EQUAL(pop.generation, 12);
+
+    auto condition = [](std::uint32_t a) { return a == 50; };
+
+    // pre-pulse
+    for (std::uint32_t g = 1; g < 11; ++g)
+        {
+            auto found = validate_ancestry(this->ancestry, g, 0, 0, condition);
+            BOOST_REQUIRE(found);
+            found = validate_ancestry(this->ancestry, g, 1, 1, condition);
+            BOOST_REQUIRE(found);
+        }
+    auto found = validate_ancestry(this->ancestry, 11, 0, 1, condition);
+    BOOST_REQUIRE(found);
+    found = validate_ancestry(this->ancestry, 11, 1, 0, condition);
+    BOOST_REQUIRE(found);
+    found = validate_ancestry(this->ancestry, 12, 0, 0, condition);
+    BOOST_REQUIRE(found);
+    found = validate_ancestry(this->ancestry, 12, 1, 1, condition);
+    BOOST_REQUIRE(found);
+}
+
+BOOST_FIXTURE_TEST_CASE(test_ancestry_with_extreme_migration_until_one_generation_ago,
+                        common_setup_with_ancestry_tracking)
+{
+    auto model = ExtremeMigrationUntilOneGenerationAgo();
+    fwdpy11_core::ForwardDemesGraph forward_demes_graph(model.yaml, 10);
+    BOOST_REQUIRE_EQUAL(forward_demes_graph.number_of_demes(), 2);
+    pop = fwdpy11::DiploidPopulation({1000, 1000}, 1.);
+    update_parents(pop);
+    evolve_with_tree_sequences_refactor(rng, pop, recorder, 10, forward_demes_graph, 60,
+                                        0., 0., mregions, recregions, gvalue_ptrs,
+                                        sample_recorder_callback, stopping_criterion,
+                                        post_simplification_recorder, options);
+    BOOST_REQUIRE_EQUAL(pop.generation, 10);
+
+    auto validate_complete_ancestry = [](std::uint32_t p) { return p == 1000; };
+
+    auto validate_partial_ancestry = [](std::uint32_t p) { return p > 0 && p < 1000; };
+
+    // NOTE: at the deme sizes in this model
+    // and migration rates reflecting 50% migrant
+    // ancestry each generation, is is very unlikely
+    // to not observe some ancestry each generation
+    // in each combo tested below.
+    for (std::uint32_t g = 1; g < 10; ++g)
+        {
+            for (std::int32_t i = 0; i < 2; ++i)
+                {
+                    for (std::int32_t j = 0; j < 2; ++j)
+                        {
+                            auto found = validate_ancestry(ancestry, g, i, j,
+                                                           validate_partial_ancestry);
+                            BOOST_REQUIRE(found);
+                        }
+                }
+        }
+    auto found = validate_ancestry(ancestry, 10, 0, 0, validate_complete_ancestry);
+    BOOST_REQUIRE(found);
+
+    found = validate_ancestry(ancestry, 10, 1, 1, validate_complete_ancestry);
+    BOOST_REQUIRE(found);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

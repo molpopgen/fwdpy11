@@ -31,3 +31,14 @@ struct TwoDemesUnequalMerge
     std::string yaml;
     TwoDemesUnequalMerge();
 };
+
+struct VeryRecentPulseTwoGenerationsAgo
+{
+    std::string yaml;
+    VeryRecentPulseTwoGenerationsAgo();
+};
+
+struct ExtremeMigrationUntilOneGenerationAgo {
+    std::string yaml;
+    ExtremeMigrationUntilOneGenerationAgo();
+};

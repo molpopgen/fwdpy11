@@ -69,6 +69,41 @@ demes:
    - start_size: 50
 )";
 
+const char* very_recent_pulse_two_generations_ago = R"(
+time_units: generations
+demes:
+ - name: A
+   epochs:
+   - start_size: 50
+ - name: B
+   epochs:
+   - start_size: 50
+pulses:
+ - sources: [A]
+   dest: B
+   proportions: [1.0]
+   time: 2
+ - sources: [B]
+   dest: A
+   proportions: [1.0]
+   time: 2
+)";
+
+const char* extreme_migration_until_one_generation_ago = R"(
+time_units: generations
+demes:
+ - name: A
+   epochs:
+   - start_size: 1000
+ - name: B
+   epochs:
+   - start_size: 1000
+migrations:
+ - demes: [A, B]
+   rate: 0.5
+   end_time: 1
+)";
+
 SingleDemeModel::SingleDemeModel() : yaml(single_deme_model)
 {
 }
@@ -90,5 +125,15 @@ TwoDemePerpetualIslandModelWithSizeChangeAndExtinction::
 }
 
 TwoDemesUnequalMerge::TwoDemesUnequalMerge() : yaml(two_demes_unequal_merge)
+{
+}
+
+VeryRecentPulseTwoGenerationsAgo::VeryRecentPulseTwoGenerationsAgo()
+    : yaml(very_recent_pulse_two_generations_ago)
+{
+}
+
+ExtremeMigrationUntilOneGenerationAgo::ExtremeMigrationUntilOneGenerationAgo()
+    : yaml(extreme_migration_until_one_generation_ago)
 {
 }
