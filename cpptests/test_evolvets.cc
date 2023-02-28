@@ -22,8 +22,6 @@
 #include "fwdpy11/discrete_demography/exceptions.hpp"
 #include "fwdpy11/discrete_demography/simulation/functions.hpp"
 
-BOOST_AUTO_TEST_SUITE(test_evolvets)
-
 /* Tests needed
  *
  * - [X] simlen > model time in graph
@@ -31,8 +29,8 @@ BOOST_AUTO_TEST_SUITE(test_evolvets)
  *       with state of parental demes for single deme models.
  * - [X] initial population config not compatible
  *       with state of parental demes for multi deme models.
- * - [] simlen < model time in graph,
- *      but we keep simulating until we are done.
+ * - [X] simlen < model time in graph,
+ *       but we keep simulating until we are done.
  * - [X] One deme, multiple epochs, test size history is 
  *      correct
  */
@@ -265,6 +263,8 @@ validate_ancestry(const std::vector<ancestry_proportions>& ancestry,
         }
     return false;
 }
+
+BOOST_AUTO_TEST_SUITE(test_evolvets)
 
 BOOST_FIXTURE_TEST_CASE(test_basic_api_coherence, common_setup)
 {
@@ -586,6 +586,63 @@ BOOST_FIXTURE_TEST_CASE(test_ancestry_with_extreme_migration_until_one_generatio
                                         0., 0., mregions, recregions, gvalue_ptrs,
                                         sample_recorder_callback, stopping_criterion,
                                         post_simplification_recorder, options);
+    BOOST_REQUIRE_EQUAL(pop.generation, 10);
+
+    auto validate_complete_ancestry = [](std::uint32_t p) { return p == 1000; };
+
+    auto validate_partial_ancestry = [](std::uint32_t p) { return p > 0 && p < 1000; };
+
+    // NOTE: at the deme sizes in this model
+    // and migration rates reflecting 50% migrant
+    // ancestry each generation, is is very unlikely
+    // to not observe some ancestry each generation
+    // in each combo tested below.
+    for (std::uint32_t g = 1; g < 10; ++g)
+        {
+            for (std::int32_t i = 0; i < 2; ++i)
+                {
+                    for (std::int32_t j = 0; j < 2; ++j)
+                        {
+                            auto found = validate_ancestry(ancestry, g, i, j,
+                                                           validate_partial_ancestry);
+                            BOOST_REQUIRE(found);
+                        }
+                }
+        }
+    auto found = validate_ancestry(ancestry, 10, 0, 0, validate_complete_ancestry);
+    BOOST_REQUIRE(found);
+
+    found = validate_ancestry(ancestry, 10, 1, 1, validate_complete_ancestry);
+    BOOST_REQUIRE(found);
+}
+
+BOOST_AUTO_TEST_SUITE_END()
+
+BOOST_AUTO_TEST_SUITE(test_evolvets_start_stop_start)
+
+// Tests of repeatedly entering in to the same model
+BOOST_FIXTURE_TEST_CASE(
+    test_ancestry_with_extreme_migration_until_one_generation_ago_start_stop,
+    common_setup_with_ancestry_tracking)
+{
+    // NOTE: this is a copy-paste of a test from above.
+    // The only difference is that we call into the
+    // evolve function for one generation at a time.
+    auto model = ExtremeMigrationUntilOneGenerationAgo();
+    fwdpy11_core::ForwardDemesGraph forward_demes_graph(model.yaml, 10);
+    BOOST_REQUIRE_EQUAL(forward_demes_graph.number_of_demes(), 2);
+    pop = fwdpy11::DiploidPopulation({1000, 1000}, 1.);
+    update_parents(pop);
+    auto last_generation = pop.generation;
+    for (std::size_t i = 0; i < 10; ++i)
+        {
+            evolve_with_tree_sequences_refactor(
+                rng, pop, recorder, 10, forward_demes_graph, 1, 0., 0., mregions,
+                recregions, gvalue_ptrs, sample_recorder_callback, stopping_criterion,
+                post_simplification_recorder, options);
+            BOOST_REQUIRE_EQUAL(pop.generation, last_generation + 1);
+            last_generation += 1;
+        }
     BOOST_REQUIRE_EQUAL(pop.generation, 10);
 
     auto validate_complete_ancestry = [](std::uint32_t p) { return p == 1000; };
