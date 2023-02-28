@@ -70,7 +70,7 @@ def pdict(request):
         "recregions": [fwdpy11.PoissonInterval(0, 1, 1e-2)],
         "gvalue": [fwdpy11.Multiplicative(2.0)],
         "rates": request.param["rates"],
-        "demography": fwdpy11.DiscreteDemography(),
+        "demography": None,
     }
     return pd
 

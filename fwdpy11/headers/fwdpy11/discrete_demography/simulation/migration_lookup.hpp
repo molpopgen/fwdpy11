@@ -23,7 +23,6 @@
 #include <cstdint>
 #include <vector>
 #include <fwdpp/gsl_discrete.hpp>
-#include "../MigrationMatrix.hpp"
 
 namespace fwdpy11
 {

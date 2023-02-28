@@ -18,6 +18,7 @@
 #
 
 from typing import Callable, Optional
+import warnings
 
 import fwdpy11
 
@@ -25,19 +26,19 @@ from ._fwdpy11 import GSLrng, SampleRecorder
 from ._types import DiploidPopulation, ModelParams
 
 
-def _validate_event_timings(demography: fwdpy11.DiscreteDemography, generation: int):
-    too_early = []
-    for i in demography._timed_events():
-        if i is not None:
-            for j in i:
-                if j.when < generation:
-                    too_early.append(j)
-    if len(too_early) > 0:
-        import warnings
-
-        msg = "The following demographic events are registered to occur "
-        msg += f"before the current generation, which is {generation}: {too_early}"
-        warnings.warn(msg)
+# def _validate_event_timings(demography: fwdpy11.DiscreteDemography, generation: int):
+#     too_early = []
+#     for i in demography._timed_events():
+#         if i is not None:
+#             for j in i:
+#                 if j.when < generation:
+#                     too_early.append(j)
+#     if len(too_early) > 0:
+#         import warnings
+#
+#         msg = "The following demographic events are registered to occur "
+#         msg += f"before the current generation, which is {generation}: {too_early}"
+#         warnings.warn(msg)
 
 
 def evolvets(
@@ -57,7 +58,6 @@ def evolvets(
     track_mutation_counts: bool = False,
     remove_extinct_variants: bool = True,
     preserve_first_generation: bool = False,
-    check_demographic_event_timings: bool = True,
 ):
     """
     Evolve a population with tree sequence recording
@@ -86,11 +86,6 @@ def evolvets(
                                       tree sequence "recapitation". See
                                       :ref:`recapitation`.
     :type preserve_first_generation: bool
-    :param check_demographic_event_timings: (True) If ``True``, then issue
-                                            warnings if demographic events
-                                            will occur prior to the current
-                                            generation of the population.
-    :type check_demographic_event_timings: bool
 
     The recording of genetic values into :attr:`fwdpy11.DiploidPopulation.genetic_values`
     is suppressed by default.  First, it is redundant with
@@ -124,15 +119,33 @@ def evolvets(
         `suppress_table_indexing` default changed to `None`,
         which is interpreted as `True`.
 
+    .. versionchanged: 0.20.0
+
+        * Back-end refactored to use demes models directly.
+        * Will define a default demographic model using
+          :func:`fwdpy11.DemesForwardGraph.tubes` if the
+          input model is `None`.
+        * Remove option `check_demographic_event_timings`
+
     """
-    try:
-        # DemographicModelDetails ?
-        demographic_model = params.demography.model
-    except AttributeError:
-        # No, assume it is a DiscreteDemography
-        demographic_model = params.demography
-    except Exception as e:
-        raise e
+    if params.demography is not None:
+        try:
+            # DemographicModelDetails ?
+            demographic_model = params.demography.model
+        except AttributeError:
+            # No, assume it is a DiscreteDemography
+            demographic_model = params.demography
+        except Exception as e:
+            raise e
+    else:
+        # Build a default model of "tubes"
+        from fwdpy11 import ForwardDemesGraph
+        sizes = pop.deme_sizes()[1].tolist()
+        msg = "Applying a default demographic model "
+        msg += f"where deme sizes are {sizes} "
+        msg += f"and the burn-in length is 10*{sum(sizes)}"
+        warnings.warn(msg)
+        demographic_model = ForwardDemesGraph.tubes(sizes, 10)
 
     for r in params.sregions:
         if isinstance(r, fwdpy11.mvDES):
@@ -223,9 +236,6 @@ def evolvets(
     fwdpy11._validate_regions(params.sregions, pop.tables.genome_length)
     fwdpy11._validate_regions(params.nregions, pop.tables.genome_length)
     fwdpy11._validate_regions(params.recregions, pop.tables.genome_length)
-
-    if check_demographic_event_timings:
-        _validate_event_timings(demographic_model, pop.generation)
 
     pneutral = 0.0
     if params.rates.neutral_mutation_rate + params.rates.selected_mutation_rate > 0.0:

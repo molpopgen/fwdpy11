@@ -1,10 +1,22 @@
+import demes
 import fwdpy11
 import gvalue_recorder
 
 N = 1000
 
+yaml = """
+time_units: generations
+demes:
+ - name: pop
+   epochs:
+    - start_size: 1000
+"""
+
+graph = demes.loads(yaml)
+demography = fwdpy11.discrete_demography.from_demes(graph, 1)
+
 pdict = {
-    "demography": fwdpy11.DiscreteDemography(),
+    "demography": demography,
     "simlen": 100,
     "nregions": [],
     "sregions": [fwdpy11.GaussianS(0, 1, 1, 0.25)],

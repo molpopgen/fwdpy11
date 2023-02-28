@@ -23,28 +23,9 @@
 namespace py = pybind11;
 
 void init_discrete_demography_exceptions(py::module&);
-void init_MigrationMatrix(py::module&);
-
-void init_MassMigration(py::module&);
-void init_SetDemeSize(py::module&);
-void init_SetExponentialGrowth(py::module&);
-void init_SetSelfingRate(py::module&);
-void init_SetMigrationRate(py::module&);
-void init_DiscreteDemography(py::module&);
 
 void
 init_discrete_demography(py::module& m)
 {
-    m.attr("NOGROWTH") = py::float_(fwdpy11::discrete_demography::NOGROWTH);
-
-    // Concrete classes & functions now
     init_discrete_demography_exceptions(m);
-    init_MigrationMatrix(m);
-
-    init_MassMigration(m);
-    init_SetDemeSize(m);
-    init_SetExponentialGrowth(m);
-    init_SetSelfingRate(m);
-    init_SetMigrationRate(m);
-    init_DiscreteDemography(m);
 }

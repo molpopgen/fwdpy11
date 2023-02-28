@@ -273,10 +273,10 @@ BOOST_FIXTURE_TEST_CASE(test_basic_api_coherence, common_setup)
 
     // TODO: if we put long run times in here, we get exceptions
     // from the ForwardDemesGraph back end.
-    evolve_with_tree_sequences_refactor(rng, pop, recorder, 10, forward_demes_graph, 10,
-                                        0., 0., mregions, recregions, gvalue_ptrs,
-                                        sample_recorder_callback, stopping_criterion,
-                                        post_simplification_recorder, options);
+    evolve_with_tree_sequences(rng, pop, recorder, 10, forward_demes_graph, 10, 0., 0.,
+                               mregions, recregions, gvalue_ptrs,
+                               sample_recorder_callback, stopping_criterion,
+                               post_simplification_recorder, options);
     BOOST_REQUIRE_EQUAL(pop.generation, 10);
 }
 
@@ -291,10 +291,10 @@ BOOST_FIXTURE_TEST_CASE(test_basic_api_coherence_two_deme_perpetual_island_model
 
     // TODO: if we put long run times in here, we get exceptions
     // from the ForwardDemesGraph back end.
-    evolve_with_tree_sequences_refactor(rng, pop, recorder, 10, forward_demes_graph, 10,
-                                        0., 0., mregions, recregions, gvalue_ptrs,
-                                        sample_recorder_callback, stopping_criterion,
-                                        post_simplification_recorder, options);
+    evolve_with_tree_sequences(rng, pop, recorder, 10, forward_demes_graph, 10, 0., 0.,
+                               mregions, recregions, gvalue_ptrs,
+                               sample_recorder_callback, stopping_criterion,
+                               post_simplification_recorder, options);
     BOOST_REQUIRE_EQUAL(pop.generation, 10);
     std::vector<unsigned> ndemes{0, 0};
     for (const auto& dip : pop.diploid_metadata)
@@ -311,10 +311,10 @@ BOOST_FIXTURE_TEST_CASE(test_simlen_longer_than_model_length, common_setup)
     fwdpy11_core::ForwardDemesGraph forward_demes_graph(model.yaml, 10);
 
     // Here, simlen = 100, but the graph only has 10 generations of births in it.
-    evolve_with_tree_sequences_refactor(rng, pop, recorder, 10, forward_demes_graph, 100,
-                                        0., 0., mregions, recregions, gvalue_ptrs,
-                                        sample_recorder_callback, stopping_criterion,
-                                        post_simplification_recorder, options);
+    evolve_with_tree_sequences(rng, pop, recorder, 10, forward_demes_graph, 100, 0., 0.,
+                               mregions, recregions, gvalue_ptrs,
+                               sample_recorder_callback, stopping_criterion,
+                               post_simplification_recorder, options);
     BOOST_REQUIRE_EQUAL(pop.generation, 10);
 }
 
@@ -335,10 +335,10 @@ BOOST_FIXTURE_TEST_CASE(test_invalid_deme_metadata, common_setup)
 
     BOOST_CHECK_THROW(
         {
-            evolve_with_tree_sequences_refactor(
-                rng, pop, recorder, 10, forward_demes_graph, 10, 0., 0., mregions,
-                recregions, gvalue_ptrs, sample_recorder_callback, stopping_criterion,
-                post_simplification_recorder, options);
+            evolve_with_tree_sequences(rng, pop, recorder, 10, forward_demes_graph, 10,
+                                       0., 0., mregions, recregions, gvalue_ptrs,
+                                       sample_recorder_callback, stopping_criterion,
+                                       post_simplification_recorder, options);
         },
         fwdpy11::discrete_demography::DemographyError);
     // pop hasn't evolved!
@@ -363,7 +363,7 @@ BOOST_FIXTURE_TEST_CASE(test_initial_pop_size_invalid, common_setup)
 
             BOOST_CHECK_THROW(
                 {
-                    evolve_with_tree_sequences_refactor(
+                    evolve_with_tree_sequences(
                         rng, pop, recorder, 10, forward_demes_graph, 10, 0., 0.,
                         mregions, recregions, gvalue_ptrs, sample_recorder_callback,
                         stopping_criterion, post_simplification_recorder, options);
@@ -394,7 +394,7 @@ BOOST_FIXTURE_TEST_CASE(test_initial_pop_size_invalid_island_model, common_setup
 
                 BOOST_CHECK_THROW(
                     {
-                        evolve_with_tree_sequences_refactor(
+                        evolve_with_tree_sequences(
                             rng, pop, recorder, 10, forward_demes_graph, 10, 0., 0.,
                             mregions, recregions, gvalue_ptrs, sample_recorder_callback,
                             stopping_criterion, post_simplification_recorder, options);
@@ -417,7 +417,7 @@ BOOST_FIXTURE_TEST_CASE(test_initial_pop_size_invalid_island_model, common_setup
                 fwdpy11_core::ForwardDemesGraph forward_demes_graph(model.yaml, 10);
                 BOOST_CHECK_THROW(
                     {
-                        evolve_with_tree_sequences_refactor(
+                        evolve_with_tree_sequences(
                             rng, pop, recorder, 10, forward_demes_graph, 10, 0., 0.,
                             mregions, recregions, gvalue_ptrs, sample_recorder_callback,
                             stopping_criterion, post_simplification_recorder, options);
@@ -439,10 +439,10 @@ BOOST_FIXTURE_TEST_CASE(test_generation_time_past_end_of_model, common_setup)
     pop.generation = 11;
     BOOST_CHECK_THROW(
         {
-            evolve_with_tree_sequences_refactor(
-                rng, pop, recorder, 10, forward_demes_graph, 10, 0., 0., mregions,
-                recregions, gvalue_ptrs, sample_recorder_callback, stopping_criterion,
-                post_simplification_recorder, options);
+            evolve_with_tree_sequences(rng, pop, recorder, 10, forward_demes_graph, 10,
+                                       0., 0., mregions, recregions, gvalue_ptrs,
+                                       sample_recorder_callback, stopping_criterion,
+                                       post_simplification_recorder, options);
         },
         fwdpy11::discrete_demography::DemographyError);
     BOOST_REQUIRE_EQUAL(pop.generation, 11);
@@ -453,10 +453,10 @@ BOOST_FIXTURE_TEST_CASE(test_size_history_single_deme_model_one_size_change,
 {
     auto model = SingleDemeModelOneSizeChange();
     fwdpy11_core::ForwardDemesGraph forward_demes_graph(model.yaml, 10);
-    evolve_with_tree_sequences_refactor(rng, pop, recorder, 10, forward_demes_graph, 60,
-                                        0., 0., mregions, recregions, gvalue_ptrs,
-                                        sample_recorder_callback, stopping_criterion,
-                                        post_simplification_recorder, options);
+    evolve_with_tree_sequences(rng, pop, recorder, 10, forward_demes_graph, 60, 0., 0.,
+                               mregions, recregions, gvalue_ptrs,
+                               sample_recorder_callback, stopping_criterion,
+                               post_simplification_recorder, options);
     BOOST_REQUIRE_EQUAL(pop.generation, 60);
     BOOST_REQUIRE_EQUAL(size_history.size(), 1);
     for (auto& x : size_history)
@@ -484,10 +484,10 @@ BOOST_FIXTURE_TEST_CASE(
     auto model = TwoDemePerpetualIslandModelWithSizeChangeAndExtinction();
     pop = fwdpy11::DiploidPopulation({100, 100}, 10.);
     fwdpy11_core::ForwardDemesGraph forward_demes_graph(model.yaml, 10);
-    evolve_with_tree_sequences_refactor(rng, pop, recorder, 10, forward_demes_graph, 60,
-                                        0., 0., mregions, recregions, gvalue_ptrs,
-                                        sample_recorder_callback, stopping_criterion,
-                                        post_simplification_recorder, options);
+    evolve_with_tree_sequences(rng, pop, recorder, 10, forward_demes_graph, 60, 0., 0.,
+                               mregions, recregions, gvalue_ptrs,
+                               sample_recorder_callback, stopping_criterion,
+                               post_simplification_recorder, options);
     BOOST_REQUIRE_EQUAL(pop.generation, 60);
     BOOST_REQUIRE_EQUAL(size_history.size(), 2);
     BOOST_REQUIRE(std::all_of(std::begin(pop.diploid_metadata),
@@ -515,10 +515,10 @@ BOOST_FIXTURE_TEST_CASE(test_size_history_two_demes_unequal_merge,
     auto model = TwoDemesUnequalMerge();
     pop = fwdpy11::DiploidPopulation({100, 75}, 10.);
     fwdpy11_core::ForwardDemesGraph forward_demes_graph(model.yaml, 10);
-    evolve_with_tree_sequences_refactor(rng, pop, recorder, 10, forward_demes_graph, 60,
-                                        0., 0., mregions, recregions, gvalue_ptrs,
-                                        sample_recorder_callback, stopping_criterion,
-                                        post_simplification_recorder, options);
+    evolve_with_tree_sequences(rng, pop, recorder, 10, forward_demes_graph, 60, 0., 0.,
+                               mregions, recregions, gvalue_ptrs,
+                               sample_recorder_callback, stopping_criterion,
+                               post_simplification_recorder, options);
     BOOST_REQUIRE_EQUAL(pop.generation, 35);
     BOOST_REQUIRE_EQUAL(size_history.size(), 3);
 
@@ -540,6 +540,40 @@ BOOST_FIXTURE_TEST_CASE(test_size_history_two_demes_unequal_merge,
                               [](const auto& i) { return i.first >= 35 - 25 + 1; }));
 }
 
+// NOTE: upstream has more extensive tests of correctness
+BOOST_FIXTURE_TEST_CASE(test_linear_size_change_history,
+                        common_setup_with_sample_history_recording)
+{
+    auto model = LinearSizeChange();
+    fwdpy11_core::ForwardDemesGraph forward_demes_graph(model.yaml, 10);
+    evolve_with_tree_sequences(rng, pop, recorder, 10, forward_demes_graph, 60, 0., 0.,
+                               mregions, recregions, gvalue_ptrs,
+                               sample_recorder_callback, stopping_criterion,
+                               post_simplification_recorder, options);
+    BOOST_REQUIRE_EQUAL(pop.generation, 30);
+    BOOST_REQUIRE_EQUAL(pop.N, 55);
+
+    BOOST_REQUIRE_EQUAL(size_history[0][9].second, 100);
+    // this is wrong: need to calc slope, etc..
+    double slope = (200. - 100.) / 10.;
+    BOOST_REQUIRE_EQUAL(size_history[0][10].second, static_cast<unsigned>(100. + slope));
+    BOOST_REQUIRE_EQUAL(size_history[0][15].second,
+                        static_cast<unsigned>(100. + 6. * slope));
+    BOOST_REQUIRE_EQUAL(size_history[0][18].first, 19);
+    BOOST_REQUIRE_EQUAL(size_history[0][18].second,
+                        static_cast<unsigned>(100. + 9. * slope));
+    BOOST_REQUIRE_EQUAL(size_history[0][19].first, 20);
+    BOOST_REQUIRE_EQUAL(size_history[0][19].second,
+                        static_cast<unsigned>(100. + 10. * slope));
+    // Pop size is flat at post-growth size
+    // for rest of model
+    for (unsigned i = 21; i < 31; ++i)
+        {
+            BOOST_REQUIRE_EQUAL(size_history[0][i - 1].first, i);
+            BOOST_REQUIRE_EQUAL(size_history[0][i - 1].second, 55);
+        }
+}
+
 BOOST_FIXTURE_TEST_CASE(test_ancestry_proportions_from_pulse_with_burnin,
                         common_setup_with_ancestry_tracking)
 {
@@ -548,29 +582,29 @@ BOOST_FIXTURE_TEST_CASE(test_ancestry_proportions_from_pulse_with_burnin,
     BOOST_REQUIRE_EQUAL(forward_demes_graph.number_of_demes(), 2);
     pop = fwdpy11::DiploidPopulation({50, 50}, 1.);
     update_parents(pop);
-    evolve_with_tree_sequences_refactor(rng, pop, recorder, 10, forward_demes_graph, 60,
-                                        0., 0., mregions, recregions, gvalue_ptrs,
-                                        sample_recorder_callback, stopping_criterion,
-                                        post_simplification_recorder, options);
+    evolve_with_tree_sequences(rng, pop, recorder, 10, forward_demes_graph, 60, 0., 0.,
+                               mregions, recregions, gvalue_ptrs,
+                               sample_recorder_callback, stopping_criterion,
+                               post_simplification_recorder, options);
     BOOST_REQUIRE_EQUAL(pop.generation, 12);
 
     auto condition = [](std::uint32_t a) { return a == 50; };
 
     // pre-pulse
-    for (std::uint32_t g = 1; g < 11; ++g)
+    for (std::uint32_t g = 1; g < 10; ++g)
         {
             auto found = validate_ancestry(this->ancestry, g, 0, 0, condition);
             BOOST_REQUIRE(found);
             found = validate_ancestry(this->ancestry, g, 1, 1, condition);
             BOOST_REQUIRE(found);
         }
-    auto found = validate_ancestry(this->ancestry, 11, 0, 1, condition);
+    auto found = validate_ancestry(this->ancestry, 10, 0, 1, condition);
     BOOST_REQUIRE(found);
-    found = validate_ancestry(this->ancestry, 11, 1, 0, condition);
+    found = validate_ancestry(this->ancestry, 10, 1, 0, condition);
     BOOST_REQUIRE(found);
-    found = validate_ancestry(this->ancestry, 12, 0, 0, condition);
+    found = validate_ancestry(this->ancestry, 11, 0, 0, condition);
     BOOST_REQUIRE(found);
-    found = validate_ancestry(this->ancestry, 12, 1, 1, condition);
+    found = validate_ancestry(this->ancestry, 11, 1, 1, condition);
     BOOST_REQUIRE(found);
 }
 
@@ -582,10 +616,10 @@ BOOST_FIXTURE_TEST_CASE(test_ancestry_with_extreme_migration_until_one_generatio
     BOOST_REQUIRE_EQUAL(forward_demes_graph.number_of_demes(), 2);
     pop = fwdpy11::DiploidPopulation({1000, 1000}, 1.);
     update_parents(pop);
-    evolve_with_tree_sequences_refactor(rng, pop, recorder, 10, forward_demes_graph, 60,
-                                        0., 0., mregions, recregions, gvalue_ptrs,
-                                        sample_recorder_callback, stopping_criterion,
-                                        post_simplification_recorder, options);
+    evolve_with_tree_sequences(rng, pop, recorder, 10, forward_demes_graph, 60, 0., 0.,
+                               mregions, recregions, gvalue_ptrs,
+                               sample_recorder_callback, stopping_criterion,
+                               post_simplification_recorder, options);
     BOOST_REQUIRE_EQUAL(pop.generation, 10);
 
     auto validate_complete_ancestry = [](std::uint32_t p) { return p == 1000; };
@@ -636,10 +670,10 @@ BOOST_FIXTURE_TEST_CASE(
     auto last_generation = pop.generation;
     for (std::size_t i = 0; i < 10; ++i)
         {
-            evolve_with_tree_sequences_refactor(
-                rng, pop, recorder, 10, forward_demes_graph, 1, 0., 0., mregions,
-                recregions, gvalue_ptrs, sample_recorder_callback, stopping_criterion,
-                post_simplification_recorder, options);
+            evolve_with_tree_sequences(rng, pop, recorder, 10, forward_demes_graph, 1,
+                                       0., 0., mregions, recregions, gvalue_ptrs,
+                                       sample_recorder_callback, stopping_criterion,
+                                       post_simplification_recorder, options);
             BOOST_REQUIRE_EQUAL(pop.generation, last_generation + 1);
             last_generation += 1;
         }

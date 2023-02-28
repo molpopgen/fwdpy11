@@ -200,7 +200,7 @@ pdict = {'nregions': [], 'sregions': [],
          'gvalue': fwdpy11.Additive(scaling=2, 
                                      gvalue_to_fitness=fwdpy11.GSS(optimum=1.0, VS=1.0)),
          'simlen': 100,
-         'demography': fwdpy11.DiscreteDemography(),
+         'demography': None,
          'prune_selected': False
          }
 params = fwdpy11.ModelParams(**pdict)
