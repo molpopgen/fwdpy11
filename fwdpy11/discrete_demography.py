@@ -39,6 +39,45 @@ from .class_decorators import (
 )
 
 
+@attr.s(repr_ns="fwdpy11")
+class ForwardDemesGraph(fwdpy11._fwdpy11._ForwardDemesGraph):
+    """
+    A forward-in-time representation of a `demes.Graph`
+
+    :param yaml: The string representation of a demes model.
+    :type yaml: str
+    :param burnin: The number of generations of evolution to occur before the
+                   events in the `yaml` take place.
+    :type burnin: int
+
+    A more general method for construction is :meth:`fwdpy11.ForwardDemesGraph.from_demes`.
+
+    .. versionadded:: 0.20.0
+    """
+    yaml: str = attr.ib()
+    burnin: int = attr.ib()
+
+    def __attrs_post_init__(self):
+        super(ForwardDemesGraph, self).__init__(self.yaml, self.burnin)
+
+    @classmethod
+    def from_demes(cls, model: typing.Union[str, demes.Graph], burnin: int):
+        """
+        Build from a demes graph.
+
+        :param model: A `demes` model.
+        :type model: str or demes.Graph
+        :param burnin: The number of generations of evolution to occur before the
+                       events in the `yaml` take place.
+        :type burnin: int
+        """
+        if isinstance(model, str) is False:
+            yaml = str(model)
+        else:
+            yaml = model
+        return cls(yaml, burnin)
+
+
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
@@ -70,7 +109,7 @@ class MassMigration(fwdpy11._fwdpy11._ll_MassMigration):
     .. note::
 
         It is a bit simpler to construct instances of this class
-        using :func:`fwdpy11.move_individuals` or :func:`fwdpy11.copy_individuals`.
+        using :afunc:`fwdpy11.move_individuals` or :func:`fwdpy11.copy_individuals`.
 
     .. versionadded:: 0.5.3
 
