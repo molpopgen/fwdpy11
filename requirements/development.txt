@@ -7,7 +7,7 @@ numpy
 scipy
 attrs
 black
-demes~=0.2.0
+demes~=0.2.2
 
 #below are for building package
 #and running tests

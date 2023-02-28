@@ -5,6 +5,11 @@ updates to latest `fwdpp` version, etc.
 
 ## 0.XX.Y
 
+Python API
+
+* Add :class:`fwdpy11.ForwardDemesGraph`.
+  PR {pr}`1077`.
+
 Back end changes
 
 * Use demes models directly for evolving populations.
