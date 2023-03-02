@@ -103,3 +103,13 @@ BOOST_FIXTURE_TEST_CASE(single_deme_model_with_burn_in_invalid_ancestry_request,
 }
 
 BOOST_AUTO_TEST_SUITE_END()
+
+BOOST_AUTO_TEST_SUITE(test_forward_demes_graph_with_bad_models)
+
+BOOST_FIXTURE_TEST_CASE(test_bad_epoch_rounding_02, BadEpochRounding02)
+{
+    BOOST_REQUIRE_THROW({ fwdpy11_core::ForwardDemesGraph g(yaml, 10); },
+                        fwdpy11::discrete_demography::DemographyError);
+}
+
+BOOST_AUTO_TEST_SUITE_END()
