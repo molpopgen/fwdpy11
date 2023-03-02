@@ -16,5 +16,5 @@ panic = "abort"
 strip = true
 
 [dependencies]
-demes-forward-capi = "0.3.0"
+demes-forward-capi = {version="0.3.1-alpha.0", git="https://github.com/molpopgen/demes-rs"}
 libc = "~0.2"

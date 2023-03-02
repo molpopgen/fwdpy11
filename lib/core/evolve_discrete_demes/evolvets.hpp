@@ -34,29 +34,29 @@ struct evolve_with_tree_sequences_options
     }
 };
 
-void evolve_with_tree_sequences(
-    const fwdpy11::GSLrng_t &rng, fwdpy11::DiploidPopulation &pop,
-    fwdpy11::SampleRecorder &sr, const unsigned simplification_interval,
-    fwdpy11::discrete_demography::DiscreteDemography &demography,
-    const std::uint32_t simlen, const double mu_neutral, const double mu_selected,
-    const fwdpy11::MutationRegions &mmodel, const fwdpy11::GeneticMap &rmodel,
-    // NOTE: gvalue_pointers is a change in 0.6.0,
-    // and the object holds non-const bare pointers
-    // to objects owned by Python.
-    fwdpy11::dgvalue_pointer_vector_ &gvalue_pointers,
-    fwdpy11::DiploidPopulation_sample_recorder recorder,
-    std::function<bool(const fwdpy11::DiploidPopulation &, const bool)>
-        &stopping_criteron,
-    const fwdpy11::DiploidPopulation_temporal_sampler &post_simplification_recorder,
-    evolve_with_tree_sequences_options options);
+//void evolve_with_tree_sequences(
+//    const fwdpy11::GSLrng_t &rng, fwdpy11::DiploidPopulation &pop,
+//    fwdpy11::SampleRecorder &sr, const unsigned simplification_interval,
+//    fwdpy11::discrete_demography::DiscreteDemography &demography,
+//    const std::uint32_t simlen, const double mu_neutral, const double mu_selected,
+//    const fwdpy11::MutationRegions &mmodel, const fwdpy11::GeneticMap &rmodel,
+//    // NOTE: gvalue_pointers is a change in 0.6.0,
+//    // and the object holds non-const bare pointers
+//    // to objects owned by Python.
+//    fwdpy11::dgvalue_pointer_vector_ &gvalue_pointers,
+//    fwdpy11::DiploidPopulation_sample_recorder recorder,
+//    std::function<bool(const fwdpy11::DiploidPopulation &, const bool)>
+//        &stopping_criteron,
+//    const fwdpy11::DiploidPopulation_temporal_sampler &post_simplification_recorder,
+//    evolve_with_tree_sequences_options options);
 
 // NOTE: this function will only exist as long as it takes
 // to refactor replacing DiscreteDemography with ForwargGraph
-void evolve_with_tree_sequences_refactor(
+void evolve_with_tree_sequences(
     const fwdpy11::GSLrng_t &rng, fwdpy11::DiploidPopulation &pop,
     fwdpy11::SampleRecorder &sr, const unsigned simplification_interval,
-    fwdpy11_core::ForwardDemesGraph &demography,
-    const std::uint32_t simlen, const double mu_neutral, const double mu_selected,
+    fwdpy11_core::ForwardDemesGraph &demography, const std::uint32_t simlen,
+    const double mu_neutral, const double mu_selected,
     const fwdpy11::MutationRegions &mmodel, const fwdpy11::GeneticMap &rmodel,
     // NOTE: gvalue_pointers is a change in 0.6.0,
     // and the object holds non-const bare pointers
