@@ -23,6 +23,7 @@ import attr
 from fwdpy11.class_decorators import (attr_add_asblack, attr_class_pickle,
                                       attr_class_to_from_dict,
                                       attr_class_to_from_dict_no_recurse)
+from ..discrete_demography import ForwardDemesGraph
 
 
 @attr_add_asblack
@@ -69,7 +70,7 @@ class DemographicModelDetails(object):
     also determine the order of positional arguments:
 
     :param model: The demographic model parameters
-    :type model: object
+    :type model: fwdpy11.ForwardDemesGraph
     :param name: The name of the model
     :type name: str
     :param source: The source of the model
@@ -83,8 +84,7 @@ class DemographicModelDetails(object):
 
     .. versionadded:: 0.8.0
     """
-
-    model: object
+    model: ForwardDemesGraph
     name: str
     source: typing.Dict
     parameters: object

@@ -9,19 +9,6 @@ import numpy as np
 import pytest
 
 
-def check_valid_demography(cls):
-    def _valid_fwdpy11_demography(self):
-        try:
-            _ = fwdpy11.DemographyDebugger(
-                [100] * len(self.demog.metadata["initial_sizes"]), self.demog
-            )
-        except Exception as e:
-            self.fail(f"unexpected exception, {e}")
-
-    cls.test_validity = _valid_fwdpy11_demography
-    return cls
-
-
 def run_model_round_trip(cls):
     def _test_evolvets_roundtrip(self):
         _ = evolve_demes_model(self.demog)
@@ -37,17 +24,17 @@ def resolve_and_run(b: demes.Builder, burnin: int = 1):
         demog.metadata["initial_sizes"][i]
         for i in demog.metadata["initial_sizes"].keys()
     ]
-    fwdpy11.DemographyDebugger(initial_sizes, demog)
     evolve_demes_model(demog)
 
 
 @run_model_round_trip
-@check_valid_demography
 class TestNoEvents(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        self.b = demes.Builder(description="test demography", time_units="generations")
-        self.b.add_deme(name="deme", epochs=[dict(start_size=1000, end_time=0)])
+        self.b = demes.Builder(
+            description="test demography", time_units="generations")
+        self.b.add_deme(name="deme", epochs=[
+                        dict(start_size=1000, end_time=0)])
 
         self.g = self.b.resolve()
         self.demog = fwdpy11.discrete_demography.from_demes(self.g, 1)
@@ -55,8 +42,10 @@ class TestNoEvents(unittest.TestCase):
 
 class TestBadBurnin(unittest.TestCase):
     def test_burnin_inputs(self):
-        self.b = demes.Builder(description="test demography", time_units="generations")
-        self.b.add_deme(name="deme", epochs=[dict(start_size=1000, end_time=0)])
+        self.b = demes.Builder(
+            description="test demography", time_units="generations")
+        self.b.add_deme(name="deme", epochs=[
+                        dict(start_size=1000, end_time=0)])
 
         self.g = self.b.resolve()
         with pytest.raises(ValueError):
@@ -66,7 +55,6 @@ class TestBadBurnin(unittest.TestCase):
 
 
 @run_model_round_trip
-@check_valid_demography
 class TestLoadGraph(unittest.TestCase):
     @classmethod
     def setUpClass(self):
@@ -75,19 +63,19 @@ class TestLoadGraph(unittest.TestCase):
 
 
 @run_model_round_trip
-@check_valid_demography
 class TestLoadYAML(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        self.demog = fwdpy11.discrete_demography.from_demes("tests/test_demog.yaml", 1)
+        self.demog = fwdpy11.discrete_demography.from_demes(
+            "tests/test_demog.yaml", 1)
 
 
 @run_model_round_trip
-@check_valid_demography
 class TestTwoEpoch(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        self.b = demes.Builder(description="test demography", time_units="generations")
+        self.b = demes.Builder(
+            description="test demography", time_units="generations")
         self.b.add_deme(
             name="deme",
             epochs=[
@@ -98,17 +86,8 @@ class TestTwoEpoch(unittest.TestCase):
         self.g = self.b.resolve()
         self.demog = fwdpy11.discrete_demography.from_demes(self.g, 1)
 
-    def test_size_change_params(self):
-        self.assertEqual(len(self.demog.model.set_deme_sizes), 1)
-        self.assertEqual(
-            self.demog.model.set_deme_sizes[0].when,
-            self.demog.metadata["burnin_time"],
-        )
-        self.assertEqual(self.demog.model.set_deme_sizes[0].new_size, 2000)
-
 
 @run_model_round_trip
-@check_valid_demography
 class TestNonGenerationUnits(unittest.TestCase):
     @classmethod
     def setUpClass(self):
@@ -125,24 +104,13 @@ class TestNonGenerationUnits(unittest.TestCase):
         self.g = self.b.resolve()
         self.demog = fwdpy11.discrete_demography.from_demes(self.g, 1)
 
-    def test_conversion_to_generations(self):
-        self.assertEqual(
-            self.demog.model.set_deme_sizes[0].when,
-            self.demog.metadata["burnin_time"],
-        )
-        self.assertEqual(
-            self.demog.metadata["total_simulation_length"],
-            self.demog.metadata["burnin_time"] + 250 // 25,
-        )
-        self.assertEqual(self.demog.model.set_deme_sizes[0].new_size, 100)
-
 
 @run_model_round_trip
-@check_valid_demography
 class TestSelfingShift(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        self.b = demes.Builder(description="test demography", time_units="generations")
+        self.b = demes.Builder(
+            description="test demography", time_units="generations")
         self.b.add_deme(
             name="Selfer",
             epochs=[
@@ -153,25 +121,13 @@ class TestSelfingShift(unittest.TestCase):
         self.g = self.b.resolve()
         self.demog = fwdpy11.discrete_demography.from_demes(self.g, 1)
 
-    def test_selfing_parameters(self):
-        pass
-        # FIXME: this test relies on internal sorting orders of data,
-        # which are not required for correctness
-        # self.assertEqual(self.demog.model.set_selfing_rates[0].when, 0)
-        # self.assertEqual(self.demog.model.set_selfing_rates[0].S, 0.0)
-        # self.assertEqual(
-        #     self.demog.model.set_selfing_rates[1].when,
-        #     self.demog.metadata["burnin_time"] + 1,
-        # )
-        # self.assertTrue(self.demog.model.set_selfing_rates[1].S == 0.2)
-
 
 @run_model_round_trip
-@check_valid_demography
 class TestSelfing(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        self.b = demes.Builder(description="test demography", time_units="generations")
+        self.b = demes.Builder(
+            description="test demography", time_units="generations")
         self.b.add_deme(
             name="Selfer",
             epochs=[dict(start_size=1000, end_time=0)],
@@ -180,18 +136,15 @@ class TestSelfing(unittest.TestCase):
         self.g = self.b.resolve()
         self.demog = fwdpy11.discrete_demography.from_demes(self.g, 1)
 
-    def test_single_pop_selfing(self):
-        self.assertTrue(self.demog.model.set_selfing_rates[0].when == 0)
-        self.assertTrue(self.demog.model.set_selfing_rates[0].S == 0.5)
-
 
 @run_model_round_trip
-@check_valid_demography
 class TestSplit(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        self.b = demes.Builder(description="test demography", time_units="generations")
-        self.b.add_deme(name="Ancestor", epochs=[dict(start_size=1000, end_time=200)])
+        self.b = demes.Builder(
+            description="test demography", time_units="generations")
+        self.b.add_deme(name="Ancestor", epochs=[
+                        dict(start_size=1000, end_time=200)])
         self.b.add_deme(
             "Deme1", epochs=[dict(start_size=100, end_time=0)], ancestors=["Ancestor"]
         )
@@ -201,40 +154,15 @@ class TestSplit(unittest.TestCase):
         self.g = self.b.resolve()
         self.demog = fwdpy11.discrete_demography.from_demes(self.g, 1)
 
-    def test_size_changes(self):
-        self.assertEqual(len(self.demog.model.set_deme_sizes), 3)
-
-        check_debugger_passes(self.demog)
-
-        # NOTE: commented these out as they test internal sort order and not
-        # the model validity
-        # self.assertTrue(self.demog.model.set_deme_sizes[0].deme == 1)
-        # self.assertTrue(self.demog.model.set_deme_sizes[0].new_size == 100)
-        # self.assertTrue(
-        #     self.demog.model.set_deme_sizes[0].when
-        #     == self.demog.metadata["burnin_time"]
-        # )
-        # self.assertTrue(self.demog.model.set_deme_sizes[1].deme == 2)
-        # self.assertTrue(self.demog.model.set_deme_sizes[1].new_size == 100)
-        # self.assertTrue(
-        #     self.demog.model.set_deme_sizes[1].when
-        #     == self.demog.metadata["burnin_time"]
-        # )
-        # self.assertTrue(self.demog.model.set_deme_sizes[2].deme == 0)
-        # self.assertTrue(self.demog.model.set_deme_sizes[2].new_size == 0)
-        # self.assertTrue(
-        #     self.demog.model.set_deme_sizes[2].when
-        #     == self.demog.metadata["burnin_time"]
-        # )
-
 
 @run_model_round_trip
-@check_valid_demography
 class TestSplitMigration(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        self.b = demes.Builder(description="test demography", time_units="generations")
-        self.b.add_deme(name="Ancestor", epochs=[dict(start_size=1000, end_time=200)])
+        self.b = demes.Builder(
+            description="test demography", time_units="generations")
+        self.b.add_deme(name="Ancestor", epochs=[
+                        dict(start_size=1000, end_time=200)])
         self.b.add_deme(
             "Deme1", epochs=[dict(start_size=100, end_time=0)], ancestors=["Ancestor"]
         )
@@ -248,12 +176,13 @@ class TestSplitMigration(unittest.TestCase):
 
 
 @run_model_round_trip
-@check_valid_demography
 class TestSplitSymmetricMigration(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        self.b = demes.Builder(description="test demography", time_units="generations")
-        self.b.add_deme(name="Ancestor", epochs=[dict(start_size=1000, end_time=200)])
+        self.b = demes.Builder(
+            description="test demography", time_units="generations")
+        self.b.add_deme(name="Ancestor", epochs=[
+                        dict(start_size=1000, end_time=200)])
         self.b.add_deme(
             "Deme1", epochs=[dict(start_size=100, end_time=0)], ancestors=["Ancestor"]
         )
@@ -266,12 +195,13 @@ class TestSplitSymmetricMigration(unittest.TestCase):
 
 
 @run_model_round_trip
-@check_valid_demography
 class TestSplitAsymmetricMigration(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        self.b = demes.Builder(description="test demography", time_units="generations")
-        self.b.add_deme(name="Ancestor", epochs=[dict(start_size=1000, end_time=200)])
+        self.b = demes.Builder(
+            description="test demography", time_units="generations")
+        self.b.add_deme(name="Ancestor", epochs=[
+                        dict(start_size=1000, end_time=200)])
         self.b.add_deme(
             "Deme1", epochs=[dict(start_size=100, end_time=0)], ancestors=["Ancestor"]
         )
@@ -285,12 +215,13 @@ class TestSplitAsymmetricMigration(unittest.TestCase):
 
 
 @run_model_round_trip
-@check_valid_demography
 class TestSplitThreeWay(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        self.b = demes.Builder(description="test demography", time_units="generations")
-        self.b.add_deme(name="Ancestor", epochs=[dict(start_size=1000, end_time=200)])
+        self.b = demes.Builder(
+            description="test demography", time_units="generations")
+        self.b.add_deme(name="Ancestor", epochs=[
+                        dict(start_size=1000, end_time=200)])
         self.b.add_deme(
             "Deme1", epochs=[dict(start_size=100, end_time=0)], ancestors=["Ancestor"]
         )
@@ -305,12 +236,13 @@ class TestSplitThreeWay(unittest.TestCase):
 
 
 @run_model_round_trip
-@check_valid_demography
 class TestSplitThreeWayMigration(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        self.b = demes.Builder(description="test demography", time_units="generations")
-        self.b.add_deme(name="Ancestor", epochs=[dict(start_size=1000, end_time=200)])
+        self.b = demes.Builder(
+            description="test demography", time_units="generations")
+        self.b.add_deme(name="Ancestor", epochs=[
+                        dict(start_size=1000, end_time=200)])
         self.b.add_deme(
             "Deme1", epochs=[dict(start_size=100, end_time=0)], ancestors=["Ancestor"]
         )
@@ -326,12 +258,13 @@ class TestSplitThreeWayMigration(unittest.TestCase):
 
 
 @run_model_round_trip
-@check_valid_demography
 class TestBranch(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        self.b = demes.Builder(description="test branch", time_units="generations")
-        self.b.add_deme(name="Ancestor", epochs=[dict(start_size=1000, end_time=0)])
+        self.b = demes.Builder(description="test branch",
+                               time_units="generations")
+        self.b.add_deme(name="Ancestor", epochs=[
+                        dict(start_size=1000, end_time=0)])
         self.b.add_deme(
             "Deme1",
             epochs=[dict(start_size=100, end_time=0)],
@@ -343,12 +276,13 @@ class TestBranch(unittest.TestCase):
 
 
 @run_model_round_trip
-@check_valid_demography
 class TestBranchMigration(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        self.b = demes.Builder(description="test branch", time_units="generations")
-        self.b.add_deme(name="Ancestor", epochs=[dict(start_size=1000, end_time=0)])
+        self.b = demes.Builder(description="test branch",
+                               time_units="generations")
+        self.b.add_deme(name="Ancestor", epochs=[
+                        dict(start_size=1000, end_time=0)])
         self.b.add_deme(
             "Deme1",
             epochs=[dict(start_size=100, end_time=0)],
@@ -412,12 +346,13 @@ def test_three_deme_sequential_branches(
 
 
 @run_model_round_trip
-@check_valid_demography
 class TestMultipleBranches(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        self.b = demes.Builder(description="test branch", time_units="generations")
-        self.b.add_deme(name="Ancestor", epochs=[dict(start_size=1000, end_time=0)])
+        self.b = demes.Builder(description="test branch",
+                               time_units="generations")
+        self.b.add_deme(name="Ancestor", epochs=[
+                        dict(start_size=1000, end_time=0)])
         self.b.add_deme(
             "Deme1",
             epochs=[dict(start_size=100, end_time=0)],
@@ -441,12 +376,13 @@ class TestMultipleBranches(unittest.TestCase):
 
 
 @run_model_round_trip
-@check_valid_demography
 class TestMultipleBranchesWithMigration(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        self.b = demes.Builder(description="test branch", time_units="generations")
-        self.b.add_deme(name="Ancestor", epochs=[dict(start_size=1000, end_time=0)])
+        self.b = demes.Builder(description="test branch",
+                               time_units="generations")
+        self.b.add_deme(name="Ancestor", epochs=[
+                        dict(start_size=1000, end_time=0)])
         self.b.add_deme(
             "Deme1",
             epochs=[dict(start_size=100, end_time=0)],
@@ -475,7 +411,6 @@ class TestMultipleBranchesWithMigration(unittest.TestCase):
 
 
 @run_model_round_trip
-@check_valid_demography
 class TestSplitsBranches(unittest.TestCase):
     @classmethod
     def setUpClass(self):
@@ -498,13 +433,14 @@ class TestSplitsBranches(unittest.TestCase):
 
 
 @run_model_round_trip
-@check_valid_demography
 class TestIslandModel(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         self.b = demes.Builder(description="island", time_units="generations")
-        self.b.add_deme(name="Island1", epochs=[dict(start_size=100, end_time=0)])
-        self.b.add_deme(name="Island2", epochs=[dict(start_size=200, end_time=0)])
+        self.b.add_deme(name="Island1", epochs=[
+                        dict(start_size=100, end_time=0)])
+        self.b.add_deme(name="Island2", epochs=[
+                        dict(start_size=200, end_time=0)])
         self.b.add_migration(source="Island1", dest="Island2", rate=0.01)
         self.b.add_migration(source="Island2", dest="Island1", rate=0.02)
         self.g = self.b.resolve()
@@ -515,18 +451,19 @@ class TestIslandModel(unittest.TestCase):
             self.demog.metadata["burnin_time"]
             == sum(self.demog.metadata["initial_sizes"].values()) * 2
         )
-        self.assertTrue(len(self.demog.model.set_migration_rates) == 0)
 
 
 @run_model_round_trip
-@check_valid_demography
 class TestIslandModelRateChange(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         self.b = demes.Builder(description="island", time_units="generations")
-        self.b.add_deme(name="Island1", epochs=[dict(start_size=100, end_time=0)])
-        self.b.add_deme(name="Island2", epochs=[dict(start_size=200, end_time=0)])
-        self.b.add_migration(source="Island1", dest="Island2", rate=0.01, end_time=500)
+        self.b.add_deme(name="Island1", epochs=[
+                        dict(start_size=100, end_time=0)])
+        self.b.add_deme(name="Island2", epochs=[
+                        dict(start_size=200, end_time=0)])
+        self.b.add_migration(
+            source="Island1", dest="Island2", rate=0.01, end_time=500)
         self.b.add_migration(source="Island2", dest="Island1", rate=0.02)
         self.b.add_migration(
             source="Island1", dest="Island2", rate=0.05, start_time=500
@@ -540,9 +477,6 @@ class TestIslandModelRateChange(unittest.TestCase):
             == sum(self.demog.metadata["initial_sizes"].values()) * 2
         )
 
-    def test_num_mig_rate_changes(self):
-        self.assertTrue(len(self.demog.model.set_migration_rates) == 1)
-
     def test_total_sim_length(self):
         self.assertEqual(
             self.demog.metadata["total_simulation_length"],
@@ -551,14 +485,14 @@ class TestIslandModelRateChange(unittest.TestCase):
 
 
 @run_model_round_trip
-@check_valid_demography
 class TestTwoPopMerger(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         self.b = demes.Builder(
             description="split then merger", time_units="generations"
         )
-        self.b.add_deme(name="Ancestral", epochs=[dict(start_size=1000, end_time=1000)])
+        self.b.add_deme(name="Ancestral", epochs=[
+                        dict(start_size=1000, end_time=1000)])
         self.b.add_deme(
             name="Parent1",
             epochs=[dict(start_size=500, end_time=500)],
@@ -585,19 +519,16 @@ class TestTwoPopMerger(unittest.TestCase):
             self.demog.metadata["burnin_time"] + 1000,
         )
 
-    def test_num_size_changes(self):
-        self.assertEqual(len(self.demog.model.set_deme_sizes), 6)
-
 
 @run_model_round_trip
-@check_valid_demography
 class TestFourWayMerger(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         self.b = demes.Builder(
             description="split then merger", time_units="generations"
         )
-        self.b.add_deme(name="Ancestral", epochs=[dict(start_size=1000, end_time=1000)])
+        self.b.add_deme(name="Ancestral", epochs=[
+                        dict(start_size=1000, end_time=1000)])
         self.b.add_deme(
             name="A",
             epochs=[dict(start_size=500, end_time=700)],
@@ -636,19 +567,18 @@ class TestFourWayMerger(unittest.TestCase):
             self.demog.metadata["burnin_time"] + 1000,
         )
 
-    def test_num_size_changes(self):
-        self.assertTrue(len(self.demog.model.set_deme_sizes), 14)
-
 
 @run_model_round_trip
-@check_valid_demography
 class TestPulseMigration(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         self.b = demes.Builder(description="pulse", time_units="generations")
-        self.b.add_deme(name="deme1", epochs=[dict(start_size=100, end_time=0)])
-        self.b.add_deme(name="deme2", epochs=[dict(start_size=100, end_time=0)])
-        self.b.add_pulse(sources=["deme1"], dest="deme2", time=100, proportions=[0.2])
+        self.b.add_deme(name="deme1", epochs=[
+                        dict(start_size=100, end_time=0)])
+        self.b.add_deme(name="deme2", epochs=[
+                        dict(start_size=100, end_time=0)])
+        self.b.add_pulse(sources=["deme1"], dest="deme2",
+                         time=100, proportions=[0.2])
         self.g = self.b.resolve()
         self.demog = fwdpy11.discrete_demography.from_demes(self.g, 1)
 
@@ -657,34 +587,6 @@ class TestPulseMigration(unittest.TestCase):
             self.demog.metadata["total_simulation_length"],
             self.demog.metadata["burnin_time"] + 100,
         )
-
-    def test_pulse_migration_matrix(self):
-        self.assertTrue(len(self.demog.model.set_migration_rates) == 2)
-        self.assertEqual(
-            self.demog.model.set_migration_rates[0].when,
-            self.demog.metadata["burnin_time"],
-        )
-        self.assertEqual(
-            self.demog.model.set_migration_rates[1].when,
-            self.demog.metadata["burnin_time"] + 1,
-        )
-        self.assertTrue(self.demog.model.set_migration_rates[0].deme == 1)
-        self.assertTrue(self.demog.model.set_migration_rates[1].deme == 1)
-        self.assertTrue(
-            np.all(self.demog.model.set_migration_rates[0].migrates == [0.2, 0.8])
-        )
-        self.assertTrue(
-            np.all(self.demog.model.set_migration_rates[1].migrates == [0, 1])
-        )
-
-
-def check_debugger_passes(demog):
-    try:
-        _ = fwdpy11.DemographyDebugger(
-            [100] * len(demog.metadata["initial_sizes"]), demog
-        )
-    except:
-        raise "unexpected exception"
 
 
 def evolve_demes_model(demog) -> fwdpy11.DiploidPopulation:
@@ -755,12 +657,7 @@ def three_way_continuous_migration_pairwise(
     ],
 )
 def test_three_way_continuous_migration_pairwise(graph):
-    demog = fwdpy11.discrete_demography.from_demes(graph, 1)
-    check_debugger_passes(demog)
-    assert np.all(
-        demog.model.migmatrix.M
-        == np.array([[0.8, 0.1, 0.1], [0.1, 0.8, 0.1], [0.1, 0.1, 0.8]])
-    )
+    _ = fwdpy11.discrete_demography.from_demes(graph, 1)
 
 
 @pytest.mark.parametrize(
@@ -784,7 +681,6 @@ def test_three_way_continuous_migration_pairwise(graph):
 )
 def test_evolve_three_way_continuous_migration_pairwise(graph):
     demog = fwdpy11.discrete_demography.from_demes(graph, 1)
-    check_debugger_passes(demog)
     pop = evolve_demes_model(demog)
     assert pop.generation == demog.metadata["total_simulation_length"]
 
@@ -803,29 +699,21 @@ def multiple_migrations_delayed():
 
 @pytest.mark.parametrize("graph", [multiple_migrations_delayed()])
 def test_multiple_migrations_delayed(graph):
-    demog = fwdpy11.discrete_demography.from_demes(graph, 1)
-    check_debugger_passes(demog)
-    assert np.all(
-        demog.model.migmatrix.M
-        == np.array([[0.9, 0.1, 0], [0.1, 0.8, 0.1], [0, 0.1, 0.9]])
-    )
-    assert len(demog.model.set_migration_rates) == 2
-
-    for set_mig in demog.model.set_migration_rates:
-        assert set_mig.deme in [0, 2]
-        if set_mig.deme == 0:
-            assert np.all(set_mig.migrates == np.array([0.8, 0.1, 0.1]))
-        elif set_mig.deme == 2:
-            assert np.all(set_mig.migrates == np.array([0.1, 0.1, 0.8]))
+    _ = fwdpy11.discrete_demography.from_demes(graph, 1)
 
 
 def splits_with_migrations():
-    b = demes.Builder(description="splits with migration", time_units="generations")
+    b = demes.Builder(description="splits with migration",
+                      time_units="generations")
     b.add_deme(name="A", epochs=[dict(start_size=100, end_time=100)])
-    b.add_deme(name="B", ancestors=["A"], epochs=[dict(start_size=100, end_time=0)])
-    b.add_deme(name="C", ancestors=["A"], epochs=[dict(start_size=100, end_time=50)])
-    b.add_deme(name="D", ancestors=["C"], epochs=[dict(start_size=100, end_time=0)])
-    b.add_deme(name="E", ancestors=["C"], epochs=[dict(start_size=100, end_time=0)])
+    b.add_deme(name="B", ancestors=["A"], epochs=[
+               dict(start_size=100, end_time=0)])
+    b.add_deme(name="C", ancestors=["A"], epochs=[
+               dict(start_size=100, end_time=50)])
+    b.add_deme(name="D", ancestors=["C"], epochs=[
+               dict(start_size=100, end_time=0)])
+    b.add_deme(name="E", ancestors=["C"], epochs=[
+               dict(start_size=100, end_time=0)])
     b.add_migration(demes=["B", "C"], rate=0.1)
     b.add_migration(demes=["B", "D"], rate=0.1)
     b.add_migration(demes=["B", "E"], rate=0.1)
@@ -836,11 +724,7 @@ def splits_with_migrations():
 
 @pytest.mark.parametrize("graph", [splits_with_migrations()])
 def test_splits_with_migrations(graph):
-    demog = fwdpy11.discrete_demography.from_demes(graph, 1)
-    check_debugger_passes(demog)
-    M = np.zeros(25).reshape(5, 5)
-    M[0, 0] = 1
-    assert np.all(demog.model.migmatrix.M == M)
+    _ = fwdpy11.discrete_demography.from_demes(graph, 1)
 
 
 def yaml_migration_1():
@@ -931,7 +815,6 @@ migrations:
 def test_yamls_with_migration(data):
     g = demes.loads(data)
     demog = fwdpy11.discrete_demography.from_demes(g, 1)
-    check_debugger_passes(demog)
 
 
 def test_split_model_population_size_history(two_deme_split_with_ancestral_size_change):
@@ -955,7 +838,8 @@ def test_split_model_population_size_history(two_deme_split_with_ancestral_size_
         def __call__(self, pop, _):
             for key, value in pop.deme_sizes(as_dict=True).items():
                 if key not in self.sizes:
-                    self.sizes[key] = [DemeSizeAtTime(when=pop.generation, size=value)]
+                    self.sizes[key] = [DemeSizeAtTime(
+                        when=pop.generation, size=value)]
                 else:
                     self.sizes[key].append(
                         DemeSizeAtTime(when=pop.generation, size=value)
@@ -1020,9 +904,11 @@ def test_evolve_population_in_two_stages(
     pdict["simlen"] = model.metadata["total_simulation_length"] - when
     params = fwdpy11.ModelParams(**pdict)
 
-    fwdpy11.evolvets(rng, pop, params, 100, check_demographic_event_timings=False)
+    fwdpy11.evolvets(rng, pop, params, 100,
+                     check_demographic_event_timings=False)
 
-    counts = np.unique(np.array(pop.diploid_metadata)["deme"], return_counts=True)
+    counts = np.unique(np.array(pop.diploid_metadata)
+                       ["deme"], return_counts=True)
     assert counts[1][0] == 500
     assert counts[1][1] == 200
 
@@ -1049,9 +935,11 @@ def test_evolve_population_in_two_stages_with_deepcopy(
     pdict2["simlen"] = model.metadata["total_simulation_length"] - when
     params2 = fwdpy11.ModelParams(**pdict2)
 
-    fwdpy11.evolvets(rng, pop, params2, 100, check_demographic_event_timings=False)
+    fwdpy11.evolvets(rng, pop, params2, 100,
+                     check_demographic_event_timings=False)
 
-    counts = np.unique(np.array(pop.diploid_metadata)["deme"], return_counts=True)
+    counts = np.unique(np.array(pop.diploid_metadata)
+                       ["deme"], return_counts=True)
     assert counts[1][0] == 500, f"{counts}"
     assert counts[1][1] == 200, f"{counts}"
 
@@ -1133,7 +1021,8 @@ demes:
             assert len(deme_sizes[0]) == 1
             for key, value in pop.deme_sizes(as_dict=True).items():
                 if key not in self.sizes:
-                    self.sizes[key] = [DemeSizeAtTime(when=pop.generation, size=value)]
+                    self.sizes[key] = [DemeSizeAtTime(
+                        when=pop.generation, size=value)]
                 else:
                     self.sizes[key].append(
                         DemeSizeAtTime(when=pop.generation, size=value)
@@ -1184,7 +1073,8 @@ demes:
             assert len(deme_sizes[0]) == 1
             for key, value in pop.deme_sizes(as_dict=True).items():
                 if key not in self.sizes:
-                    self.sizes[key] = [DemeSizeAtTime(when=pop.generation, size=value)]
+                    self.sizes[key] = [DemeSizeAtTime(
+                        when=pop.generation, size=value)]
                 else:
                     self.sizes[key].append(
                         DemeSizeAtTime(when=pop.generation, size=value)
@@ -1285,7 +1175,8 @@ class InfoTracker:
 
         for deme, size in deme_sizes.items():
             self.data.append(
-                TrackedInfo(pop.generation, deme, selfed_by_deme[deme], size, pop.N)
+                TrackedInfo(pop.generation, deme,
+                            selfed_by_deme[deme], size, pop.N)
             )
 
         self.pedigree(pop)
@@ -1310,6 +1201,7 @@ def set_selfing_rate_generation_1():
     - name: derived
       ancestors: [ancestor]
       epochs:
+        - {end_time: 1, selfing_rate: 0.0, start_size: 100}
         - {end_time: 0, selfing_rate: 1.0, start_size: 100}
     """
 
@@ -1709,8 +1601,6 @@ def multiple_pulse_source_setup():
     g = b.resolve()
     demog = fwdpy11.discrete_demography.from_demes(g, 10)
 
-    check_debugger_passes(demog)
-
     return demog
 
 
@@ -1719,17 +1609,6 @@ def test_multiple_pulse_source(multiple_pulse_source_setup):
     assert (
         demog.metadata["total_simulation_length"] == demog.metadata["burnin_time"] + 100
     )
-
-    assert len(demog.model.set_migration_rates) == 2
-
-    expected_ancestry_proportions = [
-        np.array([0.2, 0.25, 0.55]),
-        np.array([0.0, 0.0, 1.0]),
-    ]
-
-    for i, m in enumerate(demog.model.set_migration_rates):
-        assert m.deme == 2
-        assert np.all(m.migrates == expected_ancestry_proportions[i])
 
 
 @pytest.fixture
@@ -1780,8 +1659,6 @@ def test_two_demes_migration_rate_changes(two_demes_migration_rate_changes_setup
         two_demes_migration_rate_changes_setup, 1
     )
 
-    check_debugger_passes(demog)
-
     pdict = {
         "gvalue": fwdpy11.Multiplicative(2.0),
         "rates": (0, 0, 0),
@@ -1821,7 +1698,8 @@ def test_split_with_existence_n_way_migration():
     b = demes.Builder(time_units="generations")
     b.add_deme(name="anc", epochs=[dict(start_size=100, end_time=200)])
     b.add_deme(name="A", ancestors=["anc"], epochs=[dict(start_size=100)])
-    b.add_deme(name="B", ancestors=["anc"], epochs=[dict(start_size=100, end_time=100)])
+    b.add_deme(name="B", ancestors=["anc"], epochs=[
+               dict(start_size=100, end_time=100)])
     b.add_deme(name="C", ancestors=["B"], epochs=[dict(start_size=100)])
     b.add_deme(name="D", ancestors=["B"], epochs=[dict(start_size=100)])
     b.add_deme(name="E", ancestors=["B"], epochs=[dict(start_size=100)])
@@ -1832,7 +1710,8 @@ def test_split_with_existence_n_way_migration():
 def test_non_integer_size_change():
     b = demes.Builder()
     b.add_deme("A", epochs=[{"start_size": 100}])
-    b.add_deme("B", ancestors=["A"], start_time=10, epochs=[{"start_size": 100.5}])
+    b.add_deme("B", ancestors=["A"], start_time=10,
+               epochs=[{"start_size": 100.5}])
     g = b.resolve()
 
     _ = fwdpy11.discrete_demography.from_demes(g)
@@ -1867,7 +1746,7 @@ def test_very_short_epoch():
     )
     g = b.resolve()
 
-    with pytest.raises(ValueError):
+    with pytest.raises(fwdpy11.DemographyError):
         _ = fwdpy11.discrete_demography.from_demes(g)
 
 
@@ -1883,7 +1762,7 @@ demes:
   - {end_time: 0, start_size: 4}
 """
     graph = demes.loads(yaml)
-    with pytest.raises(ValueError):
+    with pytest.raises(fwdpy11.DemographyError):
         _ = fwdpy11.discrete_demography.from_demes(graph, burnin=0)
 
 
@@ -1894,11 +1773,11 @@ demes:
 - name: bad
   epochs:
   - {end_time: 1.5, start_size: 1}
-  - {end_time: 0.5, start_size: 2}
+  - {end_time: 0.4, start_size: 2}
   - {end_time: 0, start_size: 3}
 """
     graph = demes.loads(yaml)
-    with pytest.raises(ValueError):
+    with pytest.raises(fwdpy11.DemographyError):
         _ = fwdpy11.discrete_demography.from_demes(graph, burnin=0)
 
 

@@ -25,19 +25,19 @@ from ._fwdpy11 import GSLrng, SampleRecorder
 from ._types import DiploidPopulation, ModelParams
 
 
-def _validate_event_timings(demography: fwdpy11.DiscreteDemography, generation: int):
-    too_early = []
-    for i in demography._timed_events():
-        if i is not None:
-            for j in i:
-                if j.when < generation:
-                    too_early.append(j)
-    if len(too_early) > 0:
-        import warnings
-
-        msg = "The following demographic events are registered to occur "
-        msg += f"before the current generation, which is {generation}: {too_early}"
-        warnings.warn(msg)
+# def _validate_event_timings(demography: fwdpy11.DiscreteDemography, generation: int):
+#     too_early = []
+#     for i in demography._timed_events():
+#         if i is not None:
+#             for j in i:
+#                 if j.when < generation:
+#                     too_early.append(j)
+#     if len(too_early) > 0:
+#         import warnings
+#
+#         msg = "The following demographic events are registered to occur "
+#         msg += f"before the current generation, which is {generation}: {too_early}"
+#         warnings.warn(msg)
 
 
 def evolvets(
@@ -223,9 +223,6 @@ def evolvets(
     fwdpy11._validate_regions(params.sregions, pop.tables.genome_length)
     fwdpy11._validate_regions(params.nregions, pop.tables.genome_length)
     fwdpy11._validate_regions(params.recregions, pop.tables.genome_length)
-
-    if check_demographic_event_timings:
-        _validate_event_timings(demographic_model, pop.generation)
 
     pneutral = 0.0
     if params.rates.neutral_mutation_rate + params.rates.selected_mutation_rate > 0.0:

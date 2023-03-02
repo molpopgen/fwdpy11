@@ -12,6 +12,7 @@ from .. import class_decorators
 from .._demography import exponential_growth_rate
 from ..demographic_models import DemographicModelCitation, DemographicModelDetails
 from ..discrete_demography import (
+    ForwardDemesGraph,
     _DemeSizeHistory,
     DiscreteDemography,
     MassMigration,
@@ -51,9 +52,9 @@ def demography_from_demes(
     if burnin < 0:
         raise ValueError("Burn in factor must be non-negative")
 
-    _validate_pulses(g)
+    fg = ForwardDemesGraph.from_demes(g, burnin)
 
-    demography = _build_from_deme_graph(g, burnin, source)
+    demography = _build_from_foward_demes_graph(fg, burnin, source)
     return demography
 
 
@@ -72,53 +73,48 @@ def _validate_pulses(graph: demes.Graph):
             dests.add(p.dest)
 
 
-def _build_from_deme_graph(
-    dg: demes.Graph, burnin: int, source: Optional[Dict] = None
+def _build_from_foward_demes_graph(
+    fg: ForwardDemesGraph, burnin: int, source: Optional[Dict] = None
 ) -> DemographicModelDetails:
     """
     The workhorse.
     """
-    # dg must be in generations - replaces time_converter
-    dg = dg.in_generations()
-
-    # get classified discrete demographic events
-    dg_events = dg.discrete_demographic_events()
-
-    idmap = _build_deme_id_to_int_map(dg)
-    initial_sizes = _get_initial_deme_sizes(dg, idmap)
-    Nref = _get_ancestral_population_size(dg)
+    idmap = _build_deme_id_to_int_map(fg.graph)
+    initial_sizes = _get_initial_deme_sizes(fg.graph, idmap)
+    Nref = _get_ancestral_population_size(fg.graph)
 
     burnin_generation = int(np.rint(burnin * Nref))
-    model_times = _ModelTimes.from_demes_graph(dg, burnin_generation)
-
-    events = _Fwdpy11Events(idmap=idmap)
+    model_times = _ModelTimes.from_demes_graph(fg.graph, burnin_generation)
 
     # TODO: size_history now contains model_times, so passing
     # the latter into functions is redundant.
     # We should clean this up later.
-    size_history = _DemeSizeHistory.from_demes_graph(dg, burnin, idmap, model_times)
-    assert size_history.model_times is not None
+    # size_history = _DemeSizeHistory.from_demes_graph(
+    #     dg, burnin, idmap, model_times)
+    # assert size_history.model_times is not None
 
-    _set_initial_migration_matrix(dg, idmap, events, size_history)
-    _process_all_epochs(dg, idmap, model_times, events, size_history)
-    _process_migrations(dg, idmap, model_times, events, size_history)
-    _process_pulses(dg, idmap, model_times, events, size_history)
-    _process_admixtures(dg, dg_events, idmap, model_times, events, size_history)
-    _process_mergers(dg, dg_events, idmap, model_times, events, size_history)
-    _process_splits(dg, dg_events, idmap, model_times, events, size_history)
-    _process_branches(dg, dg_events, idmap, model_times, events, size_history)
+    # _set_initial_migration_matrix(dg, idmap, events, size_history)
+    # _process_all_epochs(dg, idmap, model_times, events, size_history)
+    # _process_migrations(dg, idmap, model_times, events, size_history)
+    # _process_pulses(dg, idmap, model_times, events, size_history)
+    # _process_admixtures(dg, dg_events, idmap,
+    #                     model_times, events, size_history)
+    # _process_mergers(dg, dg_events, idmap, model_times, events, size_history)
+    # _process_splits(dg, dg_events, idmap, model_times, events, size_history)
+    # _process_branches(dg, dg_events, idmap, model_times, events, size_history)
 
-    if dg.doi != "None":
-        doi = dg.doi
+    if fg.graph.doi != "None":
+        doi = fg.graph.doi
     else:
         doi = None
 
     return DemographicModelDetails(
-        model=events.build_model(size_history),
-        name=dg.description,
+        model=fg,
+        name=fg.graph.description,
         source=source,
         parameters=None,
-        citation=DemographicModelCitation(DOI=doi, full_citation=None, metadata=None),
+        citation=DemographicModelCitation(
+            DOI=doi, full_citation=None, metadata=None),
         metadata={
             "deme_labels": {j: i for i, j in idmap.items()},
             "initial_sizes": initial_sizes,
@@ -140,7 +136,8 @@ class _ModelTimes(object):
     model_start_time: demes.demes.Time
     model_end_time: demes.demes.Time
     model_duration: int = attr.ib(validator=attr.validators.instance_of(int))
-    burnin_generation: int = attr.ib(validator=attr.validators.instance_of(int))
+    burnin_generation: int = attr.ib(
+        validator=attr.validators.instance_of(int))
 
     @staticmethod
     def from_demes_graph(dg: demes.Graph, burnin_generation: int) -> "_ModelTimes":
@@ -173,7 +170,8 @@ class _ModelTimes(object):
             mig_starts = [
                 m.start_time for m in dg.migrations if m.start_time != math.inf
             ]
-            mig_ends = [m.end_time for m in dg.migrations if m.start_time == math.inf]
+            mig_ends = [
+                m.end_time for m in dg.migrations if m.start_time == math.inf]
             pulse_times = [p.time for p in dg.pulses]
             # The forward-time model with start with a generation 0,
             # which is the earliest end point of a deme with start time
@@ -222,8 +220,10 @@ class _MigrationRateChange(object):
     destination: int = attr.ib(
         validator=[demes.demes.non_negative, attr.validators.instance_of(int)]
     )
-    rate_change: float = attr.ib(validator=[attr.validators.instance_of(float)])
-    from_deme_graph: bool = attr.ib(validator=attr.validators.instance_of(bool))
+    rate_change: float = attr.ib(
+        validator=[attr.validators.instance_of(float)])
+    from_deme_graph: bool = attr.ib(
+        validator=attr.validators.instance_of(bool))
 
 
 @class_decorators.attr_class_to_from_dict_no_recurse
@@ -344,7 +344,8 @@ class _Fwdpy11Events(object):
         ]
         while m < len(self.migration_rate_changes):
             # Gather all migration rate changes that occur at a given time
-            self._update_changes_at_m(changes_at_m, self.migration_rate_changes[m])
+            self._update_changes_at_m(
+                changes_at_m, self.migration_rate_changes[m])
             mm = m + 1
 
             while (
@@ -352,7 +353,8 @@ class _Fwdpy11Events(object):
                 and self.migration_rate_changes[mm].when
                 == self.migration_rate_changes[m].when
             ):
-                self._update_changes_at_m(changes_at_m, self.migration_rate_changes[mm])
+                self._update_changes_at_m(
+                    changes_at_m, self.migration_rate_changes[mm])
                 mm += 1
 
             # Update M_cont and M_mass from these migration rate changes that occur
@@ -362,7 +364,8 @@ class _Fwdpy11Events(object):
             )
 
             # Set up the new migration matrix due to this collection of rate changes
-            new_migmatrix = self._migration_matrix_from_partition(M_cont, M_mass)
+            new_migmatrix = self._migration_matrix_from_partition(
+                M_cont, M_mass)
             # For any rows that don't match, we add a fwdpy11.SetMigrationRate for
             # that deme (rows that don't change don't need migration rates updated)
             for i in range(len(self.idmap)):
@@ -464,7 +467,8 @@ def _get_ancestral_population_size(dg: demes.Graph) -> int:
         ]
     )
     if rv == 0:
-        raise RuntimeError("could not determinine ancestral metapopulation size")
+        raise RuntimeError(
+            "could not determinine ancestral metapopulation size")
     return rv
 
 
@@ -534,12 +538,14 @@ def _process_epoch(
             ]
         ):
             events.set_selfing_rates.append(
-                SetSelfingRate(when=when, deme=idmap[deme_id], S=e.selfing_rate)
+                SetSelfingRate(
+                    when=when, deme=idmap[deme_id], S=e.selfing_rate)
             )
 
     if e.cloning_rate is not None:
         if e.cloning_rate > 0.0:
-            raise ValueError("fwdpy11 does not currently support cloning rates > 0.")
+            raise ValueError(
+                "fwdpy11 does not currently support cloning rates > 0.")
 
     if e.start_time != math.inf:
         assert size_history.deme_exists_at(idmap[deme_id], when + 1)
