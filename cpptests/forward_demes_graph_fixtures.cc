@@ -104,6 +104,16 @@ migrations:
    end_time: 1
 )";
 
+const char* bad_epoch_rounding_02 = R"(
+time_units: generations
+demes:
+- name: bad
+  epochs:
+  - {end_time: 1.5, start_size: 1}
+  - {end_time: 0.4, start_size: 2}
+  - {end_time: 0, start_size: 3}
+)";
+
 SingleDemeModel::SingleDemeModel() : yaml(single_deme_model)
 {
 }
@@ -135,5 +145,9 @@ VeryRecentPulseTwoGenerationsAgo::VeryRecentPulseTwoGenerationsAgo()
 
 ExtremeMigrationUntilOneGenerationAgo::ExtremeMigrationUntilOneGenerationAgo()
     : yaml(extreme_migration_until_one_generation_ago)
+{
+}
+
+BadEpochRounding02::BadEpochRounding02() : yaml(bad_epoch_rounding_02)
 {
 }

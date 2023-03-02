@@ -1,5 +1,6 @@
 #pragma once
 
+#include <exception>
 #include <string>
 
 struct SingleDemeModel
@@ -38,7 +39,14 @@ struct VeryRecentPulseTwoGenerationsAgo
     VeryRecentPulseTwoGenerationsAgo();
 };
 
-struct ExtremeMigrationUntilOneGenerationAgo {
+struct ExtremeMigrationUntilOneGenerationAgo
+{
     std::string yaml;
     ExtremeMigrationUntilOneGenerationAgo();
+};
+
+struct BadEpochRounding02
+{
+    std::string yaml;
+    BadEpochRounding02();
 };
