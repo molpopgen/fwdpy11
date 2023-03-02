@@ -1,6 +1,3 @@
-set(DISCRETE_DEMOGRAPHY_SOURCES
-    discrete_demography/SetDemeSize.cc)
-
 set(MUTATION_DOMINANCE_SOURCES mutation_dominance/dependency_injection.cc)
 
 set(DEMES_SOURCES
@@ -18,7 +15,7 @@ set(EVOLVE_DISCRETE_DEMES_SOURCES
     evolve_discrete_demes/runtime_checks.cc
     evolve_discrete_demes/util.cc)
 
-set(ALL_SOURCES ${DISCRETE_DEMOGRAPHY_SOURCES}
+set(ALL_SOURCES
     ${MUTATION_DOMINANCE_SOURCES}
     ${DEMES_SOURCES}
     ${EVOLVE_DISCRETE_DEMES_SOURCES})

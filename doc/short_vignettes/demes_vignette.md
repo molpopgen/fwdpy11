@@ -38,7 +38,7 @@ The following `YAML` specifies the human out-of-Africa model from {cite}`Gutenku
 :language: yaml
 ```
 
-We can generate demographic models directly from these `YAML` files using {func}`fwdpy11.discrete_demography.from_demes`, which handles the conversion to the low-level objects described {ref}`here <softselection>`:
+We can generate demographic models directly from these `YAML` files using {func}`fwdpy11.discrete_demography.from_demes`. 
 
 ```{code-cell} python
 import fwdpy11

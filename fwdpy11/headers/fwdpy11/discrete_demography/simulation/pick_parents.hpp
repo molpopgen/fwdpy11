@@ -23,7 +23,6 @@
 #include <cstdint>
 #include <sstream>
 #include "../../rng.hpp"
-#include "../MigrationMatrix.hpp"
 #include "core/demes/forward_graph.hpp"
 #include "fwdpp/gsl_discrete.hpp"
 #include "migration_lookup.hpp"
@@ -47,51 +46,6 @@ namespace fwdpy11
             {
             }
         };
-
-        inline parent_data
-        pick_parents(const GSLrng_t& rng, const std::int32_t offspring_deme,
-                     const migration_lookup& miglookup,
-                     const current_deme_sizes_vector& current_deme_sizes,
-                     const selfing_rates_vector& selfing_rates,
-                     const multideme_fitness_bookmark& fitness_bookmark,
-                     const multideme_fitness_lookups<std::uint32_t>& wlookups)
-        {
-            if (miglookup.null_migmatrix) // Model has no migration
-                {
-                    auto p1 = wlookups.get_parent(rng, current_deme_sizes,
-                                                  fitness_bookmark, offspring_deme);
-                    if (selfing_rates.get()[offspring_deme] > 0.
-                        && gsl_rng_uniform(rng.get())
-                               <= selfing_rates.get()[offspring_deme])
-                        {
-                            return {p1, p1, offspring_deme, offspring_deme,
-                                    mating_event_type::selfing};
-                        }
-                    auto p2 = wlookups.get_parent(rng, current_deme_sizes,
-                                                  fitness_bookmark, offspring_deme);
-                    return {p1, p2, offspring_deme, offspring_deme,
-                            mating_event_type::outcrossing};
-                }
-            if (miglookup.lookups[offspring_deme] == nullptr)
-                {
-                    std::ostringstream o;
-                    o << "parental deme lookup is NULL for deme " << offspring_deme;
-                    throw DemographyError(o.str());
-                }
-            std::int32_t pdeme = static_cast<std::int32_t>(
-                gsl_ran_discrete(rng.get(), miglookup.lookups[offspring_deme].get()));
-
-            auto p1
-                = wlookups.get_parent(rng, current_deme_sizes, fitness_bookmark, pdeme);
-            if (selfing_rates.get()[pdeme] > 0.
-                && gsl_rng_uniform(rng.get()) <= selfing_rates.get()[pdeme])
-                {
-                    return {p1, p1, pdeme, pdeme, mating_event_type::selfing};
-                }
-            auto p2
-                = wlookups.get_parent(rng, current_deme_sizes, fitness_bookmark, pdeme);
-            return {p1, p2, pdeme, pdeme, mating_event_type::outcrossing};
-        }
 
         inline parent_data
         pick_parents(const GSLrng_t& rng, const std::int32_t offspring_deme,

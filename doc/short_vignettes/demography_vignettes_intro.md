@@ -4,12 +4,10 @@
 
 ## Discrete demes and Wright-Fisher life cycles
 
-`fwdpy11` supports two methods to define demographic models involving discrete demes.
-The first method uses Python code and a low-level, object-oriented `API`.
-You will find detailed documentation for this approach {ref}`here <softselection>`.
+Demographic models of discrete demes are declared according to the `demes specification <https://popsim-consortium.github.io/demes-spec-docs/main/tutorial.html>`.
+See {class}`fwdpy11.ForwardDemesGraph` and {func}`fwdpy11.discrete_demography.from_demes` for details.
 
-A simpler method is to specify the demographic model via a `YAML` file and build a model using {func}`fwdpy11.discrete_demography.from_demes`.
-This approach is described in a later vignette and is the recommended method because it will be the least error-prone.
+Please cite the `demes` paper {cite}`Gower2022-xx` when using `fwdpy11`.
 
 ## A note of caution
 

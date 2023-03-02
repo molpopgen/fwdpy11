@@ -18,6 +18,7 @@
 #
 
 from typing import Callable, Optional
+import warnings
 
 import fwdpy11
 
@@ -124,15 +125,32 @@ def evolvets(
         `suppress_table_indexing` default changed to `None`,
         which is interpreted as `True`.
 
+    .. versionchanged: 0.20.0
+
+        * Back-end refactored to use demes models directly.
+        * Will define a default demographic model using
+          :func:`fwdpy11.DemesForwardGraph.tubes` if the
+          input model is `None`.
+
     """
-    try:
-        # DemographicModelDetails ?
-        demographic_model = params.demography.model
-    except AttributeError:
-        # No, assume it is a DiscreteDemography
-        demographic_model = params.demography
-    except Exception as e:
-        raise e
+    if params.demography is not None:
+        try:
+            # DemographicModelDetails ?
+            demographic_model = params.demography.model
+        except AttributeError:
+            # No, assume it is a DiscreteDemography
+            demographic_model = params.demography
+        except Exception as e:
+            raise e
+    else:
+        # Build a default model of "tubes"
+        from fwdpy11 import ForwardDemesGraph
+        sizes = pop.deme_sizes()[1].tolist()
+        msg = "Applying a default demographic model "
+        msg += f"where deme sizes are {sizes} "
+        msg += f"and the burn-in length is 10*{sum(sizes)}"
+        warnings.warn(msg)
+        demographic_model = ForwardDemesGraph.tubes(sizes, 10)
 
     for r in params.sregions:
         if isinstance(r, fwdpy11.mvDES):

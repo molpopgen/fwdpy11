@@ -77,13 +77,6 @@ set(EVOLVE_POPULATION_SOURCES evolve_population/init.cc
     evolve_population/no_stopping.cc)
 
 set(DISCRETE_DEMOGRAPHY_SOURCES discrete_demography/init.cc
-    discrete_demography/MigrationMatrix.cc
-    discrete_demography/MassMigration.cc
-    discrete_demography/SetDemeSize.cc
-    discrete_demography/SetExponentialGrowth.cc
-    discrete_demography/SetSelfingRate.cc
-    discrete_demography/SetMigrationRates.cc
-    discrete_demography/DiscreteDemography.cc
     discrete_demography/exceptions.cc)
 
 set (ARRAY_PROXY_SOURCES array_proxies/init.cc)

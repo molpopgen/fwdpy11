@@ -1,11 +1,5 @@
 SET(CPPTEST_SOURCES
     fwdpy11_cpp_tests.cc
-    test_discrete_demography_stable_sorting_of_events.cc
-    test_lowlevel_demographic_events.cc
-    test_lowlevel_discrete_demography_bad_models.cc
-    test_lowlevel_discrete_demography_objects.cc
-    discrete_demography_roundtrips.cc
-    discrete_demography_util.cc
     test_MutationDominance.cc
     test_gss_classes.cc
     test_effect_sizes_of_zero.cc

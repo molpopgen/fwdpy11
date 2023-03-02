@@ -39,6 +39,7 @@
 #include <fwdpp/ts/recording/diploid_offspring.hpp>
 #include <fwdpp/ts/recording/edge_buffer.hpp>
 #include <fwdpp/ts/recording/mutations.hpp>
+#include <fwdpy11/types/Diploid.hpp>
 #include <fwdpy11/discrete_demography/simulation.hpp>
 
 namespace fwdpy11
