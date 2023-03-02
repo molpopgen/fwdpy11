@@ -1,3 +1,4 @@
+#include "core/demes/forward_graph.hpp"
 #include <iostream>
 #include <vector>
 #include <fwdpy11/types/DiploidPopulation.hpp>
@@ -8,7 +9,6 @@
 #include <fwdpy11/regions/RecombinationRegions.hpp>
 #include <fwdpy11/regions/GeneticMapUnit.hpp>
 #include <fwdpy11/regions/MutationRegions.hpp>
-#include <fwdpy11/discrete_demography/DiscreteDemography.hpp>
 #include <fwdpy11/evolvets/SampleRecorder.hpp>
 #include <fwdpy11/evolvets/recorders.hpp>
 #include <fwdpy11/rng.hpp>
@@ -166,13 +166,14 @@ simulate(const command_line_options& options)
 
     fwdpy11::MutationRegions mmodel({}, {});
 
-    fwdpy11::discrete_demography::DiscreteDemography demography(
-        std::vector<fwdpy11::discrete_demography::MassMigration>{},
-        std::vector<fwdpy11::discrete_demography::SetExponentialGrowth>{},
-        std::vector<fwdpy11::discrete_demography::SetDemeSize>{},
-        std::vector<fwdpy11::discrete_demography::SetSelfingRate>{},
-        fwdpy11::discrete_demography::MigrationMatrix{},
-        std::vector<fwdpy11::discrete_demography::SetMigrationRates>{});
+    std::ostringstream o;
+    o << "time_units: generations\n";
+    o << "demes:\n"
+      << " - name: A\n"
+      << "   epochs:\n"
+      << "    - start_size: " << options.N << '\n';
+
+    fwdpy11_core::ForwardDemesGraph forward_demes_graph(o.str(), options.nsteps);
 
     DiploidMultiplicative fitness(1, 2., final_multiplicative_fitness(), nullptr,
                                   nullptr);
@@ -197,7 +198,7 @@ simulate(const command_line_options& options)
           };
 
     evolve_with_tree_sequences(
-        rng, pop, sample_recorder, options.simplification_interval, demography,
+        rng, pop, sample_recorder, options.simplification_interval, forward_demes_graph,
         options.nsteps, 0., 0., mmodel, genetic_map, gvalue_pointers,
         [](const fwdpy11::DiploidPopulation& /*pop*/, fwdpy11::SampleRecorder& /*sr*/) {
         },

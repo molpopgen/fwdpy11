@@ -40,25 +40,44 @@ from .class_decorators import (
 
 
 @attr.s(repr_ns="fwdpy11")
+@attr_class_pickle_with_super
+@attr_class_to_from_dict
 class ForwardDemesGraph(fwdpy11._fwdpy11._ForwardDemesGraph):
     """
     A forward-in-time representation of a `demes.Graph`
 
     :param yaml: The string representation of a demes model.
     :type yaml: str
+    :param graph: The Python demes graph.
+    :type graph: demes.Graph
     :param burnin: The number of generations of evolution to occur before the
                    events in the `yaml` take place.
     :type burnin: int
 
-    A more general method for construction is :meth:`fwdpy11.ForwardDemesGraph.from_demes`.
+    The recommended method for construction is :meth:`fwdpy11.ForwardDemesGraph.from_demes`.
 
     .. versionadded:: 0.20.0
     """
     yaml: str = attr.ib()
+    graph: demes.Graph = attr.ib()
     burnin: int = attr.ib()
 
     def __attrs_post_init__(self):
         super(ForwardDemesGraph, self).__init__(self.yaml, self.burnin)
+
+    def _validate_pulses(graph: demes.Graph):
+        from fwdpy11 import AmbiguousPulses
+
+        unique_pulse_times = set([np.rint(p.time) for p in graph.pulses])
+        for time in unique_pulse_times:
+            pulses = [p for p in graph.pulses if np.rint(p.time) == time]
+            dests = set()
+            for p in pulses:
+                if p.dest in dests:
+                    raise AmbiguousPulses(
+                        f"multiple pulse events into deme {p.dest} at time {time}"
+                    )
+                dests.add(p.dest)
 
     @classmethod
     def from_demes(cls, model: typing.Union[str, demes.Graph], burnin: int):
@@ -67,15 +86,24 @@ class ForwardDemesGraph(fwdpy11._fwdpy11._ForwardDemesGraph):
 
         :param model: A `demes` model.
         :type model: str or demes.Graph
-        :param burnin: The number of generations of evolution to occur before the
-                       events in the `yaml` take place.
+        :param burnin: The number of generations of evolution to occur before
+                       the events in the `yaml` take place.
+                       The value will be `burnin` times the total ancestral
+                       population size.
         :type burnin: int
         """
+
+        from ._functions.import_demes import _get_ancestral_population_size
         if isinstance(model, str) is False:
             yaml = str(model)
+            graph = model
         else:
             yaml = model
-        return cls(yaml, burnin)
+            graph = demes.loads(yaml)
+        cls._validate_pulses(graph)
+        Nref = _get_ancestral_population_size(graph)
+        burnin_time = int(np.rint(burnin*Nref))
+        return cls(yaml, graph, burnin_time)
 
 
 @attr_add_asblack
