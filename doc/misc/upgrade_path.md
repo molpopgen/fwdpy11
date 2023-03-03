@@ -19,10 +19,11 @@ The fix is to use tree sequence recording.
 
 ## 0.8.0
 
-* {class}`fwdpy11.DiscreteDemography` can no longer be initialized with a `numpy` array as a positional
+* `fwdpy11.DiscreteDemography` can no longer be initialized with a `numpy` array as a positional
   argument. Now, pass it as the value to the `set_deme_sizes` keyword argument.
-* Initialization of {class}`fwdpy11.SetMigrationRates` has changed for the case
-  of resetting the entire migration matrix. See {ref}`here <migration>`.
+* Initialization of :w
+ `fwdpy11.SetMigrationRates` has changed for the case
+  of resetting the entire migration matrix. See `here <migration>`.
 * The `shape` `kwarg` to initialize a {class}`fwdpy11.GammaS` has been
   renamed `shape_parameter`.
 * The `matrix` `kwarg` to initialize a {class}`fwdpy11.MultivariateGaussianEffects`

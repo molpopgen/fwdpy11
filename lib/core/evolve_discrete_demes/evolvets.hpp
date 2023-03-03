@@ -7,7 +7,6 @@
 #include <fwdpy11/evolvets/sample_recorder_types.hpp>
 #include <fwdpy11/regions/MutationRegions.hpp>
 #include <fwdpy11/regions/RecombinationRegions.hpp>
-#include <fwdpy11/discrete_demography/DiscreteDemography.hpp>
 #include <fwdpy11/gsl/gsl_error_handler_wrapper.hpp>
 #include <fwdpy11/samplers.hpp>
 

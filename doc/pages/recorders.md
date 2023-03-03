@@ -15,8 +15,7 @@ kernelspec:
 # Time series analysis
 
 fwdpy11 allows populations to be analyzed during the course of a simulation.  Any valid callable type
-may be used.  The most useful such type will be a class defining `__call__` to update member data, as
-was done in {ref}`tutorial`.
+may be used.  The most useful such type will be a class defining `__call__` to update member data.
 
 There are built-in types to handle common scenarios:
 
@@ -79,8 +78,8 @@ s.assign(np.arange(10, dtype=np.uint32))
 ```
 
 The important thing to keep in mind is that user-defined callable
-types can do essentially *anything*.  For example, in {ref}`tutorial`,
-summaries of trait variation were also recorded.  When recording samples
+types can do essentially *anything*.  
+When recording samples
 to preserve, "anything goes".  For example, you could pick samples with the top `x` and
 the lowest `y` fitnesses.  You could pick individuals based on their genetic load, whether or
 not they carry a specific variant, etc..  It is up to you.
