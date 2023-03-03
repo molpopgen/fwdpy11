@@ -41,7 +41,9 @@ def runsim(N, R, U, nsam, seed):
             fwdpy11.Region(0, 1.0 / 3.0, 1),
             fwdpy11.Region(2.0 / 3.0, 1.0, 1),
         ],
-        "demography": fwdpy11.DiscreteDemography(),
+        # Evolve a single deme of size N for 20*N 
+        # generations
+        "demography": fwdpy11.ForwardDemesGraph.tubes([N], 20),
         "simlen": 20 * N,
     }
     params = fwdpy11.ModelParams(**pdict)
