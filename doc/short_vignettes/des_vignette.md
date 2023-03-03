@@ -21,7 +21,7 @@ The lists of objects described here are passed to the `sregions` parameter when 
 One of the main reasons to perform forward simulations is to be able to model mutations affecting individual fitness.
 To do so, we need to specify both mutation rates and the resulting effect sizes.
 
-`fwdpy11` works by specifying an overall mutation rate to variants affecting fitness (see {ref}`here <model-params>`).
+`fwdpy11` works by specifying an overall mutation rate to variants affecting fitness.
 Given that a mutation occurs, we need to specify its "effect size".
 
 `fwdpy11` chooses the effect size of a new mutation by first determining what *region* is mutated and then generating a mutation from the distribution of effect size associated with that region.

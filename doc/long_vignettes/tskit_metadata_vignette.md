@@ -143,8 +143,8 @@ Finally, we initialize a population using output from `msprime`, evolve it, and 
 
 ```{code-cell}
 initial_history = msprime.sim_ancestry(
-    samples = 2 * Nref,
-    population_size = Nref,
+    samples = Nref,
+    population_size = Nref/2,
     random_seed = 12345,
     recombination_rate = RECRATE / L,
     discrete_genome = True,

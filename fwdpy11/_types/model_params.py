@@ -16,10 +16,13 @@
 # You should have received a copy of the GNU General Public License
 # along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 #
+
+import typing
 import warnings
 
 import attr
 import fwdpy11
+import fwdpy11.demographic_models
 import numpy as np
 from fwdpy11.class_decorators import (attr_add_asblack,
                                       attr_class_to_from_dict_no_recurse)
@@ -57,9 +60,11 @@ class MutationAndRecombinationRates(object):
     @selected_mutation_rate.validator
     def validate_individual_rate(self, attribute, value):
         if not np.isfinite(value):
-            raise ValueError(f"{attribute} must be finite, but we got {value} instead")
+            raise ValueError(
+                f"{attribute} must be finite, but we got {value} instead")
         if value < 0.0:
-            raise ValueError(f"{attribute} must be >= 0.0, but we got {value} instead")
+            raise ValueError(
+                f"{attribute} must be >= 0.0, but we got {value} instead")
 
     @recombination_rate.validator
     def validate_recombination_rate(self, attribute, value):
@@ -89,14 +94,6 @@ def _convert_rates(value):
         return MutationAndRecombinationRates(**value)
 
 
-def _convert_demography(o):
-    try:
-        o.items()
-        return fwdpy11.DiscreteDemography(**o)
-    except AttributeError:
-        return o
-
-
 @attr_add_asblack
 @attr_class_to_from_dict_no_recurse
 @attr.s(kw_only=True, frozen=True, slots=True, repr_ns="fwdpy11")
@@ -120,7 +117,7 @@ class ModelParams(object):
                   See below for more details.
     :type rates: list or fwdpy11.MutationAndRecombinationRates
     :param demography: The demographic model to simulate
-    :type demography: fwdpy11.DiscreteDemography
+    :type demography: object
     :param simlen: The number of time steps to evolve
     :type simlen: int
     :param prune_selected: If ``True``, remove selected fixations from
@@ -139,7 +136,7 @@ class ModelParams(object):
         are instances of :class:`fwdpy11.Region`. However,
         if they are instead instances of :class:`fwdpy11.GeneticMapUnit`,
         then the final element in ``rates`` must be ``None``.
-        See the :ref:`section <geneticmaps>` on setting
+        See the :ref:`section <geneticmaps_vignette>` on setting
         recombination rates for details.
 
 
@@ -151,7 +148,7 @@ class ModelParams(object):
 
     .. versionchanged:: 0.6.0
 
-        Updated to support :class:`fwdpy11.DiscreteDemography`
+        Updated to support `fwdpy11.DiscreteDemography`
 
     .. versionchanged:: 0.8.0
 
@@ -169,9 +166,9 @@ class ModelParams(object):
     recregions = attr.ib(factory=list)
     rates: MutationAndRecombinationRates = attr.ib(converter=_convert_rates)
     gvalue = attr.ib(default=None)
-    demography = attr.ib(
-        default=fwdpy11.DiscreteDemography(), converter=_convert_demography
-    )
+    demography: typing.Optional[typing.Union[fwdpy11.ForwardDemesGraph,
+                                             fwdpy11.demographic_models.DemographicModelDetails]] = attr.ib(
+        default=None)
     simlen: int = attr.ib(converter=int, default=0)
     prune_selected: bool = attr.ib(default=True)
 
@@ -257,7 +254,10 @@ class ModelParams(object):
 
     @demography.validator
     def validate_demography(self, attribute, value):
-        if isinstance(value, fwdpy11.DiscreteDemography):
+        if value is None:
+            return
+
+        if isinstance(value, fwdpy11.ForwardDemesGraph):
             return
 
         if isinstance(value, fwdpy11.demographic_models.DemographicModelDetails):
@@ -267,4 +267,5 @@ class ModelParams(object):
     @simlen.validator
     def validate_simlen(self, attribute, value):
         if value <= 0:
-            raise ValueError(f"{attribute} must be >= 0, but we got {value} instead")
+            raise ValueError(
+                f"{attribute} must be >= 0, but we got {value} instead")
