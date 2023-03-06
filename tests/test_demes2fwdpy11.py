@@ -1746,7 +1746,7 @@ def test_very_short_epoch():
     )
     g = b.resolve()
 
-    with pytest.raises(fwdpy11.DemographyError):
+    with pytest.raises(ValueError):
         _ = fwdpy11.discrete_demography.from_demes(g)
 
 
@@ -1762,7 +1762,7 @@ demes:
   - {end_time: 0, start_size: 4}
 """
     graph = demes.loads(yaml)
-    with pytest.raises(fwdpy11.DemographyError):
+    with pytest.raises(ValueError):
         _ = fwdpy11.discrete_demography.from_demes(graph, burnin=0)
 
 
@@ -1777,7 +1777,7 @@ demes:
   - {end_time: 0, start_size: 3}
 """
     graph = demes.loads(yaml)
-    with pytest.raises(fwdpy11.DemographyError):
+    with pytest.raises(ValueError):
         _ = fwdpy11.discrete_demography.from_demes(graph, burnin=0)
 
 
@@ -1802,7 +1802,7 @@ pulses:
    time: 25
 """
     graph = demes.loads(yaml)
-    with pytest.raises(fwdpy11.AmbiguousPulses):
+    with pytest.warns(UserWarning):
         _ = fwdpy11.discrete_demography.from_demes(graph, burnin=0)
 
 
