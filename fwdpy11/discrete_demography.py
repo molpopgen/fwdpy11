@@ -109,13 +109,18 @@ class ForwardDemesGraph(fwdpy11._fwdpy11._ForwardDemesGraph):
         return cls(yaml, graph, burnin_time)
 
     @classmethod
-    def tubes(cls, sizes: typing.List[int], burnin: int):
+    def tubes(cls, sizes: typing.List[int], burnin: int, *,
+              burnin_is_exact: typing.Optional[bool] = None):
         total_popsize = sum(sizes)
         builder = demes.Builder()
         for i, j in enumerate(sizes):
             builder.add_deme(f"deme{i}", epochs=[dict(start_size=j)])
         graph = builder.resolve()
-        return cls.from_demes(graph, burnin * total_popsize)
+        if burnin_is_exact is not None and burnin is True:
+            burnin_length = burnin
+        else:
+            burnin_length = burnin * total_popsize
+        return cls.from_demes(graph, burnin_length)
 
 
 def from_demes(
