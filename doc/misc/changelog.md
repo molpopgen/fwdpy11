@@ -3,11 +3,17 @@
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
-## 0.XX.Y
+## 0.19.4
+
+Performance
+
+* Greatly improve the performance of recombination maps.
+  PR {pr}`1087`.
+  Issue {issue}`1082`.
 
 Back end changes
 
-* Use demes models directly for evolving populations.
+* Develop infrastructure to use demes models directly for evolving populations.
   PR {pr}`1069`.
   PR {pr}`1070`.
   PR {pr}`1071`.
