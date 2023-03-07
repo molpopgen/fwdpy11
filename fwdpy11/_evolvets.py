@@ -184,8 +184,10 @@ def evolvets(
             )
 
     for r in params.recregions:
-        assert isinstance(r, fwdpy11.Region) or \
-            isinstance(r, fwdpy11._fwdpy11.GeneticMapUnit)
+        assert isinstance(r, fwdpy11._fwdpy11.PoissonCrossoverGenerator) or \
+            isinstance(
+                r, fwdpy11._fwdpy11.NonPoissonCrossoverGenerator) or \
+            isinstance(r, fwdpy11.Region), f"{type(r)}"
         if r.beg < 0:
             raise ValueError(f"{r} has begin value < 0.0")
         if r.end > pop.tables.genome_length:
@@ -214,6 +216,7 @@ def evolvets(
     from ._fwdpy11 import (
         MutationRegions,
         dispatch_create_GeneticMap,
+        dispatch_create_GeneticMap_non_Region,
         evolve_with_tree_sequences,
     )
 
@@ -230,8 +233,16 @@ def evolvets(
             params.rates.neutral_mutation_rate + params.rates.selected_mutation_rate
         )
     mm = MutationRegions.create(pneutral, params.nregions, params.sregions)
-    rm = dispatch_create_GeneticMap(
-        params.rates.recombination_rate, params.recregions)
+
+    if all([isinstance(i, fwdpy11.Region) for i in params.recregions]):
+        rm = dispatch_create_GeneticMap(
+            params.rates.recombination_rate, params.recregions)
+    else:
+        poisson = [i for i in params.recregions if isinstance(
+            i, fwdpy11._fwdpy11.PoissonCrossoverGenerator)]
+        non_poisson = [i for i in params.recregions if isinstance(
+            i, fwdpy11._fwdpy11.NonPoissonCrossoverGenerator)]
+        rm = dispatch_create_GeneticMap_non_Region(poisson, non_poisson)
 
     from ._fwdpy11 import SampleRecorder, _evolve_with_tree_sequences_options
 
