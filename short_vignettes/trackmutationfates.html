@@ -1000,6 +1000,61 @@ Let’s record all generations of its existence as ancient samples:</p>
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">RuntimeError</span><span class="g g-Whitespace">                              </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">10</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">output</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">conditional_models</span><span class="o">.</span><span class="n">track_added_mutation</span><span class="p">(</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span>     <span class="n">rng</span><span class="p">,</span> 
+<span class="g g-Whitespace">      </span><span class="mi">3</span>     <span class="n">pop</span><span class="p">,</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span>     <span class="n">params</span><span class="p">,</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span>     <span class="n">mutation_data</span><span class="p">,</span>
+<span class="g g-Whitespace">      </span><span class="mi">6</span>     <span class="n">when</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+<span class="g g-Whitespace">      </span><span class="mi">7</span>     <span class="n">until</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span>
+<span class="g g-Whitespace">      </span><span class="mi">8</span>     <span class="n">sampling_policy</span><span class="o">=</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">conditional_models</span><span class="o">.</span><span class="n">AncientSamplePolicy</span><span class="o">.</span><span class="n">DURATION</span><span class="p">,</span>
+<span class="g g-Whitespace">      </span><span class="mi">9</span> <span class="p">)</span>
+
+<span class="nn">File ~/work/fwdpy11/fwdpy11/fwdpy11/conditional_models/_track_added_mutation.py:398,</span> in <span class="ni">_track_added_mutation</span><span class="nt">(rng, pop, params, mutation_parameters, when, until, max_attempts, sampling_policy, stopping_condition, evolvets_options, return_when_stopping_condition_met)</span>
+<span class="g g-Whitespace">    </span><span class="mi">396</span> <span class="c1"># evolve</span>
+<span class="g g-Whitespace">    </span><span class="mi">397</span> <span class="k">assert</span> <span class="n">evolvets_options_copy</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+<span class="ne">--&gt; </span><span class="mi">398</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">evolvets</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">399</span>     <span class="n">rng</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">400</span>     <span class="n">pcopy_loop</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">401</span>     <span class="n">local_params_copy</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">402</span>     <span class="n">recorder</span><span class="o">=</span><span class="n">recorder</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">403</span>     <span class="n">stopping_criterion</span><span class="o">=</span><span class="n">recorder</span><span class="o">.</span><span class="n">monitor</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">404</span>     <span class="o">**</span><span class="n">evolvets_options_copy</span><span class="o">.</span><span class="n">asdict</span><span class="p">(),</span> <span class="c1"># type: ignore</span>
+<span class="g g-Whitespace">    </span><span class="mi">405</span>     <span class="o">**</span><span class="n">internal_options</span><span class="o">.</span><span class="n">asdict</span><span class="p">(),</span> <span class="c1"># type: ignore</span>
+<span class="g g-Whitespace">    </span><span class="mi">406</span> <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">408</span> <span class="c1"># The sim ended, so</span>
+<span class="g g-Whitespace">    </span><span class="mi">409</span> <span class="c1"># check if condition was satisfied or not</span>
+<span class="g g-Whitespace">    </span><span class="mi">410</span> <span class="k">if</span> <span class="n">recorder</span><span class="o">.</span><span class="n">monitor</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">condition_met</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+
+<span class="nn">File ~/work/fwdpy11/fwdpy11/fwdpy11/_evolvets.py:267,</span> in <span class="ni">evolvets</span><span class="nt">(rng, pop, params, simplification_interval, recorder, post_simplification_recorder, suppress_table_indexing, record_gvalue_matrix, stopping_criterion, track_mutation_counts, remove_extinct_variants, preserve_first_generation, check_demographic_event_timings)</span>
+<span class="g g-Whitespace">    </span><span class="mi">264</span> <span class="n">options</span><span class="o">.</span><span class="n">preserve_first_generation</span> <span class="o">=</span> <span class="n">preserve_first_generation</span>
+<span class="g g-Whitespace">    </span><span class="mi">266</span> <span class="n">gvpointers</span> <span class="o">=</span> <span class="n">_dgvalue_pointer_vector</span><span class="p">(</span><span class="n">params</span><span class="o">.</span><span class="n">gvalue</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">267</span> <span class="n">evolve_with_tree_sequences</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">268</span>     <span class="n">rng</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">269</span>     <span class="n">pop</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">270</span>     <span class="n">sr</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">271</span>     <span class="n">simplification_interval</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">272</span>     <span class="n">demographic_model</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">273</span>     <span class="n">params</span><span class="o">.</span><span class="n">simlen</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">274</span>     <span class="n">params</span><span class="o">.</span><span class="n">rates</span><span class="o">.</span><span class="n">neutral_mutation_rate</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">275</span>     <span class="n">params</span><span class="o">.</span><span class="n">rates</span><span class="o">.</span><span class="n">selected_mutation_rate</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">276</span>     <span class="n">mm</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">277</span>     <span class="n">rm</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">278</span>     <span class="n">gvpointers</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">279</span>     <span class="n">recorder</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">280</span>     <span class="n">stopping_criterion</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">281</span>     <span class="n">post_simplification_recorder</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">282</span>     <span class="n">options</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">283</span> <span class="p">)</span>
+
+<span class="ne">RuntimeError</span>: mutation table is inconsistent with count vectors: evolvets.cc, line 99
+</pre></div>
+</div>
+</div>
 </div>
 <p>Now, our mutation is present in nodes in our tree sequence.
 Let’s try to print it again:</p>
@@ -1009,11 +1064,6 @@ Let’s try to print it again:</p>
     <span class="nb">print</span><span class="p">(</span><span class="n">output</span><span class="o">.</span><span class="n">pop</span><span class="o">.</span><span class="n">mutations</span><span class="p">[</span><span class="n">output</span><span class="o">.</span><span class="n">mutation_index</span><span class="p">])</span>
 <span class="k">except</span> <span class="ne">IndexError</span> <span class="k">as</span> <span class="n">_</span><span class="p">:</span>
     <span class="n">output</span><span class="o">.</span><span class="n">mutation_index</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;mutation </span><span class="si">{</span><span class="n">output</span><span class="o">.</span><span class="n">mutation_index</span><span class="si">}</span><span class="s2"> is no longer in the population!&quot;</span><span class="p">)</span> 
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Mutation[position:0.493168, effect size:-0.010000, dominance:1.000000, origin time:3, label:0]
 </pre></div>
 </div>
 </div>
@@ -1027,22 +1077,6 @@ Let’s try to print it again:</p>
     <span class="k">for</span> <span class="n">tree</span> <span class="ow">in</span> <span class="n">tree_itr</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">mutation</span> <span class="ow">in</span> <span class="n">tree</span><span class="o">.</span><span class="n">mutations</span><span class="p">():</span>
             <span class="nb">print</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">tree</span><span class="o">.</span><span class="n">leaf_counts</span><span class="p">(</span><span class="n">mutation</span><span class="o">.</span><span class="n">node</span><span class="p">),</span> <span class="n">mutation</span><span class="o">.</span><span class="n">key</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>3.0 1000
-3.0 1 0
-4.0 1000
-4.0 1 0
-5.0 1000
-5.0 1 0
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>6.0 1000
-6.0 2 0
-7.0 1000
-7.0 2 0
 </pre></div>
 </div>
 </div>

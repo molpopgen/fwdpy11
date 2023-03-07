@@ -997,11 +997,11 @@ These objects do not have nice representations in Python:</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&lt;fwdpy11._fwdpy11.Mutation at 0x7fec3d6e5030&gt;,
- &lt;fwdpy11._fwdpy11.Mutation at 0x7fec3d6e47b0&gt;,
- &lt;fwdpy11._fwdpy11.Mutation at 0x7fec3d6e79f0&gt;,
- &lt;fwdpy11._fwdpy11.Mutation at 0x7fec04ef19b0&gt;,
- &lt;fwdpy11._fwdpy11.Mutation at 0x7fec04ef1530&gt;]
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&lt;fwdpy11._fwdpy11.Mutation at 0x7fbeb4b34e30&gt;,
+ &lt;fwdpy11._fwdpy11.Mutation at 0x7fbeb4b34a30&gt;,
+ &lt;fwdpy11._fwdpy11.Mutation at 0x7fbeb4b34730&gt;,
+ &lt;fwdpy11._fwdpy11.Mutation at 0x7fbeb4b35530&gt;,
+ &lt;fwdpy11._fwdpy11.Mutation at 0x7fbeb4b34970&gt;]
 </pre></div>
 </div>
 </div>
@@ -1015,10 +1015,10 @@ These objects do not have nice representations in Python:</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>position = 0.4431572693865746
-effect_size = 0.10946401078096415
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>position = 0.6483045711647719
+effect_size = 0.023315680999283495
 dominance = 1.0
-origin time = 5020
+origin time = 5102
 </pre></div>
 </div>
 </div>
@@ -1037,11 +1037,11 @@ Diploids store the indexes of their individual genomes, which we describe below.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[DiploidGenotype(first=562, second=41),
- DiploidGenotype(first=338, second=0),
- DiploidGenotype(first=550, second=289),
- DiploidGenotype(first=633, second=2),
- DiploidGenotype(first=4, second=5)]
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[DiploidGenotype(first=212, second=504),
+ DiploidGenotype(first=0, second=2),
+ DiploidGenotype(first=746, second=4),
+ DiploidGenotype(first=510, second=5),
+ DiploidGenotype(first=695, second=6)]
 </pre></div>
 </div>
 </div>
@@ -1061,11 +1061,11 @@ That class is also a <a class="reference external" href="https://numpy.org/doc/s
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([(0.94224157, 0., 0.99833337, [0., 0., 0.], 0, [354, 299], 0, 0, [0, 1]),
-       (0.84475778, 0., 0.98802224, [0., 0., 0.], 1, [ 87, 322], 0, 0, [2, 3]),
-       (0.84475778, 0., 0.98802224, [0., 0., 0.], 2, [349, 242], 0, 0, [4, 5]),
-       (0.84475778, 0., 0.98802224, [0., 0., 0.], 3, [403, 428], 0, 0, [6, 7]),
-       (0.8368247 , 0., 0.98677514, [0., 0., 0.], 4, [289, 428], 0, 0, [8, 9])],
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([(0.60778115, 0., 0.92596595, [0., 0., 0.], 0, [117, 140], 0, 0, [0, 1]),
+       (0.74487248, 0., 0.96797887, [0., 0., 0.], 1, [ 66, 370], 0, 0, [2, 3]),
+       (1.13551792, 0., 0.99085948, [0., 0., 0.], 2, [444,  33], 0, 0, [4, 5]),
+       (0.76849376, 0., 0.9735583 , [0., 0., 0.], 3, [ 91, 306], 0, 0, [6, 7]),
+       (1.04182506, 0., 0.99912571, [0., 0., 0.], 4, [ 84,  85], 0, 0, [8, 9])],
       dtype=[(&#39;g&#39;, &#39;&lt;f8&#39;), (&#39;e&#39;, &#39;&lt;f8&#39;), (&#39;w&#39;, &#39;&lt;f8&#39;), (&#39;geography&#39;, &#39;&lt;f8&#39;, (3,)), (&#39;label&#39;, &#39;&lt;u8&#39;), (&#39;parents&#39;, &#39;&lt;u8&#39;, (2,)), (&#39;deme&#39;, &#39;&lt;i4&#39;), (&#39;sex&#39;, &#39;&lt;i4&#39;), (&#39;nodes&#39;, &#39;&lt;i4&#39;, (2,))])
 </pre></div>
 </div>
@@ -1080,8 +1080,8 @@ That class is also a <a class="reference external" href="https://numpy.org/doc/s
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Mean trait value = 0.8766.
-Mean fitness = 0.9914
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Mean trait value = 0.7913.
+Mean fitness = 0.9663
 </pre></div>
 </div>
 </div>
@@ -1114,15 +1114,11 @@ Let’s look at the effect sizes and origin times of mutations in the first non-
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>effect size = -0.0194, origin time = 1252
-effect size = 0.0079, origin time = 4582
-effect size = 0.0546, origin time = 141
-effect size = 0.1095, origin time = 5020
-effect size = 0.1377, origin time = 4998
-effect size = 0.1383, origin time = 5000
-effect size = 0.0159, origin time = 4396
-effect size = -0.0177, origin time = 1052
-effect size = 0.0115, origin time = 1539
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>effect size = 0.1171, origin time = 4781
+effect size = 0.2068, origin time = 5056
+effect size = 0.0084, origin time = 5145
+effect size = -0.0330, origin time = 2015
+effect size = 0.0064, origin time = 2756
 </pre></div>
 </div>
 </div>

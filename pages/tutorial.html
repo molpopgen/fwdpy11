@@ -1603,7 +1603,7 @@ is that we cannot model discrete jumps in genetic maps, such as those between ch
 <p><span class="versionmodified added">New in version 0.3.0.</span></p>
 </div>
 <p>An alternate approach uses instances of classes derived from the <code class="docutils literal notranslate"><span class="pre">ABC</span></code>
-<a class="reference internal" href="regiontypes.html#fwdpy11.GeneticMapUnit" title="fwdpy11.GeneticMapUnit"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GeneticMapUnit</span></code></a>. Here <code class="docutils literal notranslate"><span class="pre">Unit</span></code> refers to an <em>element</em> of
+<code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GeneticMapUnit</span></code>. Here <code class="docutils literal notranslate"><span class="pre">Unit</span></code> refers to an <em>element</em> of
 a genetic map rather than the actual units (<code class="docutils literal notranslate"><span class="pre">cM</span></code>, etc.).  Instances of
 these classes contain their own rates and we can mix and match regions
 where recombination breakpoints are Poisson and binomially distributed.</p>
@@ -2400,7 +2400,7 @@ rate per haploid genome per generation.</p>
 <p>If you use instances of <a class="reference internal" href="regiontypes.html#fwdpy11.Region" title="fwdpy11.Region"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.Region</span></code></a> to set up the genetic map
 (see <a class="reference internal" href="#recregions"><span class="std std-ref">here</span></a>), then you need to provide a non-negative <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>
 representing the total recombination rate per meiosis.  If you use instances
-of <a class="reference internal" href="regiontypes.html#fwdpy11.GeneticMapUnit" title="fwdpy11.GeneticMapUnit"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GeneticMapUnit</span></code></a> (see <a class="reference internal" href="#geneticmapunit"><span class="std std-ref">here</span></a>), then use
+of <code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GeneticMapUnit</span></code> (see <a class="reference internal" href="#geneticmapunit"><span class="std std-ref">here</span></a>), then use
 <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
 </section>
 </section>
@@ -2513,11 +2513,11 @@ where we pass an instance on to <a class="reference internal" href="functions.ht
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[(0., 0., 0.60653066, [0., 0., 0.], 45, [17, 42], 0, 0, [2590, 2591])
- (0., 0., 0.60653066, [0., 0., 0.], 46, [16, 30], 0, 0, [2592, 2593])
- (0., 0., 0.60653066, [0., 0., 0.], 47, [23, 22], 0, 0, [2594, 2595])
- (0., 0., 0.60653066, [0., 0., 0.], 48, [22, 15], 0, 0, [2596, 2597])
- (0., 0., 0.60653066, [0., 0., 0.], 49, [40, 34], 0, 0, [2598, 2599])]
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[(0., 0., 0.60653066, [0., 0., 0.], 45, [ 9, 13], 0, 0, [2590, 2591])
+ (0., 0., 0.60653066, [0., 0., 0.], 46, [11, 19], 0, 0, [2592, 2593])
+ (0., 0., 0.60653066, [0., 0., 0.], 47, [16, 17], 0, 0, [2594, 2595])
+ (0., 0., 0.60653066, [0., 0., 0.], 48, [43, 28], 0, 0, [2596, 2597])
+ (0., 0., 0.60653066, [0., 0., 0.], 49, [34, 10], 0, 0, [2598, 2599])]
 </pre></div>
 </div>
 </div>
@@ -2563,13 +2563,11 @@ in each deme every generation:</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(148, 1, -0.04025600671547646)
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(149, 0, -0.011050844734613895)
-(149, 1, -0.04855647723412074)
-(150, 0, -0.00890522283395959)
-(150, 1, -0.02692623095109998)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(148, 1, -0.004283821388400186)
+(149, 0, -0.021819672969005686)
+(149, 1, -0.018201916502682675)
+(150, 0, -0.013648388151684962)
+(150, 1, -0.011121088973856224)
 </pre></div>
 </div>
 </div>
