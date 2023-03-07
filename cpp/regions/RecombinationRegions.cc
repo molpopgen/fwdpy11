@@ -16,16 +16,7 @@ init_RecombinationRegions(py::module& m)
         .def_readonly("weights", &fwdpy11::RecombinationRegions::weights);
 
     py::class_<fwdpy11::GeneralizedGeneticMap, fwdpy11::GeneticMap>(
-        m, "GeneralizedGeneticMap")
-        .def(py::init([](py::list l) {
-            std::vector<std::unique_ptr<fwdpp::genetic_map_unit>> callbacks;
-            for (auto& i : l)
-                {
-                    auto& ref = i.cast<fwdpp::genetic_map_unit&>();
-                    callbacks.emplace_back(ref.clone());
-                }
-            return fwdpy11::GeneralizedGeneticMap(std::move(callbacks));
-        }));
+        m, "GeneralizedGeneticMap");
 
     m.def("dispatch_create_GeneticMap",
           [](py::object o, std::vector<fwdpy11::Region>& regions) {
@@ -36,15 +27,27 @@ init_RecombinationRegions(py::module& m)
               return fwdpy11::RecombinationRegions(o.cast<double>(), regions);
           });
 
-    m.def("dispatch_create_GeneticMap", [](py::object, py::list l) {
-        std::vector<std::unique_ptr<fwdpp::genetic_map_unit>> callbacks;
-        for (auto& i : l)
-            {
-                auto& ref = i.cast<fwdpy11::GeneticMapUnit&>();
-                callbacks.emplace_back(ref.ll_clone());
-            }
-        std::unique_ptr<fwdpy11::GeneralizedGeneticMap> rv(
-            new fwdpy11::GeneralizedGeneticMap(std::move(callbacks)));
-        return rv;
-    });
+    m.def("dispatch_create_GeneticMap_non_Region",
+          [](py::list poisson, py::list non_poisson) {
+              std::vector<std::unique_ptr<fwdpy11::PoissonCrossoverGenerator>>
+                  poisson_callbacks;
+              std::vector<std::unique_ptr<fwdpy11::NonPoissonCrossoverGenerator>>
+                  non_poisson_callbacks;
+              double x = 0.0;
+              for (auto& i : poisson)
+                  {
+                      auto& ref = i.cast<fwdpy11::PoissonCrossoverGenerator&>();
+                      x += ref.mean_number_xovers();
+                      poisson_callbacks.emplace_back(ref.ll_clone());
+                  }
+              for (auto& i : non_poisson)
+                  {
+                      auto& ref = i.cast<fwdpy11::NonPoissonCrossoverGenerator&>();
+                      non_poisson_callbacks.emplace_back(ref.ll_clone());
+                  }
+              std::unique_ptr<fwdpy11::GeneralizedGeneticMap> rv(
+                  new fwdpy11::GeneralizedGeneticMap(std::move(poisson_callbacks),
+                                                     std::move(non_poisson_callbacks)));
+              return rv;
+          });
 }

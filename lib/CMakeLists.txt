@@ -18,9 +18,13 @@ set(EVOLVE_DISCRETE_DEMES_SOURCES
     evolve_discrete_demes/runtime_checks.cc
     evolve_discrete_demes/util.cc)
 
+set(GENETIC_MAP_SOURCES
+    genetic_maps/regions.cc)
+
 set(ALL_SOURCES ${DISCRETE_DEMOGRAPHY_SOURCES}
     ${MUTATION_DOMINANCE_SOURCES}
     ${DEMES_SOURCES}
+    ${GENETIC_MAP_SOURCES}
     ${EVOLVE_DISCRETE_DEMES_SOURCES})
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")

@@ -1,6 +1,7 @@
 #ifndef FWDPY11_RECOMBINATIONREGIONS_HPP
 #define FWDPY11_RECOMBINATIONREGIONS_HPP
 
+#include <cstdlib>
 #include <limits>
 #include <vector>
 #include <algorithm>
@@ -10,6 +11,9 @@
 #include <gsl/gsl_randist.h>
 #include <fwdpy11/rng.hpp>
 #include "Region.hpp"
+#include "fwdpp/util/validators.hpp"
+#include "fwdpy11/gsl/gsl_error_handler_wrapper.hpp"
+#include "fwdpy11/regions/GeneticMapUnit.hpp"
 
 namespace fwdpy11
 {
@@ -71,21 +75,66 @@ namespace fwdpy11
         }
     };
 
+    struct PoissonCrossoverGenerator
+    {
+        // Must return exactly 1 value per call
+        virtual void breakpoint(const GSLrng_t& rng, std::vector<double>& breakpoints)
+            = 0;
+        virtual double left() = 0;
+        virtual double right() = 0;
+        virtual double mean_number_xovers() = 0;
+        virtual ~PoissonCrossoverGenerator() = default;
+        virtual std::unique_ptr<PoissonCrossoverGenerator> ll_clone() = 0;
+    };
+
+    struct NonPoissonCrossoverGenerator
+    {
+        virtual void breakpoint(const GSLrng_t& rng, std::vector<double>& breakpoints)
+            = 0;
+        virtual double left() = 0;
+        virtual double right() = 0;
+        virtual ~NonPoissonCrossoverGenerator() = default;
+        virtual std::unique_ptr<NonPoissonCrossoverGenerator> ll_clone() = 0;
+    };
+
     struct GeneralizedGeneticMap : public GeneticMap
     {
-        std::vector<std::unique_ptr<fwdpp::genetic_map_unit>> callbacks;
-        GeneralizedGeneticMap(std::vector<std::unique_ptr<fwdpp::genetic_map_unit>> c)
-            : callbacks(std::move(c))
+        std::vector<std::unique_ptr<PoissonCrossoverGenerator>> poisson_callbacks;
+        std::vector<std::unique_ptr<NonPoissonCrossoverGenerator>> non_poisson_callbacks;
+        fwdpp::gsl_ran_discrete_t_ptr poisson_lookup;
+        double sum_poisson_means;
+        GeneralizedGeneticMap(
+            std::vector<std::unique_ptr<PoissonCrossoverGenerator>> pc,
+            std::vector<std::unique_ptr<NonPoissonCrossoverGenerator>> nc)
+            : poisson_callbacks(std::move(pc)), non_poisson_callbacks(std::move(nc)),
+              poisson_lookup(nullptr), sum_poisson_means(0.0)
         {
+            std::vector<double> means;
+            for (auto& i : poisson_callbacks)
+                {
+                    sum_poisson_means += i->mean_number_xovers();
+                    means.push_back(i->mean_number_xovers());
+                }
+            if (!means.empty())
+                {
+                    poisson_lookup.reset(
+                        gsl_ran_discrete_preproc(means.size(), means.data()));
+                }
         }
 
         std::vector<double>
         operator()(const GSLrng_t& rng) const final
         {
             std::vector<double> rv;
-            for (auto&& c : callbacks)
+            auto nc = gsl_ran_poisson(rng.get(), sum_poisson_means);
+            for (unsigned i = 0; i < nc; ++i)
                 {
-                    c->operator()(rng.get(), rv);
+                    auto region = gsl_ran_discrete(rng.get(), poisson_lookup.get());
+                    poisson_callbacks[region]->breakpoint(rng, rv);
+                }
+            for (auto& i : non_poisson_callbacks)
+                {
+                    i->breakpoint(rng, rv);
                 }
             if (!rv.empty())
                 {

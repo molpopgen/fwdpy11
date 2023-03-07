@@ -57,9 +57,11 @@ class MutationAndRecombinationRates(object):
     @selected_mutation_rate.validator
     def validate_individual_rate(self, attribute, value):
         if not np.isfinite(value):
-            raise ValueError(f"{attribute} must be finite, but we got {value} instead")
+            raise ValueError(
+                f"{attribute} must be finite, but we got {value} instead")
         if value < 0.0:
-            raise ValueError(f"{attribute} must be >= 0.0, but we got {value} instead")
+            raise ValueError(
+                f"{attribute} must be >= 0.0, but we got {value} instead")
 
     @recombination_rate.validator
     def validate_recombination_rate(self, attribute, value):
@@ -208,7 +210,7 @@ class ModelParams(object):
         except TypeError:
             try:
                 for i in value:
-                    attr.validators.instance_of(fwdpy11.GeneticMapUnit)(
+                    attr.validators.instance_of(fwdpy11.PoissonCrossoverGenerator)(
                         self, attribute, i
                     )
                 if not all([i.discrete for i in value]) and not all(
@@ -225,7 +227,7 @@ class ModelParams(object):
     def rates_validator(self, attribute, value):
         if value.recombination_rate is None:
             for i in self.recregions:
-                if not isinstance(i, fwdpy11.GeneticMapUnit):
+                if not isinstance(i, fwdpy11.PoissonCrossoverGenerator) and not isinstance(i, fwdpy11.NonPoissonCrossoverGenerator):
                     raise ValueError(
                         f"recombination rate of {value.recombination_rate}"
                         " must be paired with"
@@ -267,4 +269,5 @@ class ModelParams(object):
     @simlen.validator
     def validate_simlen(self, attribute, value):
         if value <= 0:
-            raise ValueError(f"{attribute} must be >= 0, but we got {value} instead")
+            raise ValueError(
+                f"{attribute} must be >= 0, but we got {value} instead")

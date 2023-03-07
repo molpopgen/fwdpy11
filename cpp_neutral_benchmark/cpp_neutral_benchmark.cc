@@ -13,6 +13,7 @@
 #include <fwdpy11/evolvets/recorders.hpp>
 #include <fwdpy11/rng.hpp>
 #include <core/evolve_discrete_demes/evolvets.hpp>
+#include <core/genetic_maps/regions.hpp>
 #include <boost/program_options.hpp>
 
 namespace po = boost::program_options;
@@ -158,11 +159,11 @@ simulate(const command_line_options& options)
 {
     fwdpy11::DiploidPopulation pop(options.N, 1e7);
     fwdpy11::GSLrng_t rng(options.seed);
-    fwdpy11::PoissonInterval recombination_region(0., 1e7, options.xovers, true);
+    fwdpy11_core::PoissonInterval recombination_region(0., 1e7, options.xovers, true);
 
-    std::vector<std::unique_ptr<fwdpp::genetic_map_unit>> callbacks;
+    std::vector<std::unique_ptr<fwdpy11::PoissonCrossoverGenerator>> callbacks;
     callbacks.emplace_back(recombination_region.ll_clone());
-    fwdpy11::GeneralizedGeneticMap genetic_map(std::move(callbacks));
+    fwdpy11::GeneralizedGeneticMap genetic_map(std::move(callbacks), {});
 
     fwdpy11::MutationRegions mmodel({}, {});
 
