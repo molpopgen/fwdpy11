@@ -13,6 +13,7 @@ SET(CPPTEST_SOURCES
     test_forward_demes_graph.cc
     forward_demes_graph_fixtures.cc
     test_evolvets.cc
+    test_core_genetic_map_regions.cc
 )
 
 add_executable(fwdpy11_cpp_tests ${CPPTEST_SOURCES})

@@ -3,6 +3,15 @@
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+## 0.19.5
+
+Bug fix
+
+* Fix error in BinomialInterval and BinomialPoint where
+  they always returned a breakpoint.
+  This bug was introduced in 0.19.4.
+  PR {pr}`1088`
+
 ## 0.19.4
 
 Performance

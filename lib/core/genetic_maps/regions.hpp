@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <gsl/gsl_randist.h>
 #include <fwdpy11/regions/RecombinationRegions.hpp>
+#include <gsl/gsl_rng.h>
 
 namespace fwdpy11_core
 {
@@ -91,12 +92,15 @@ namespace fwdpy11_core
         virtual void
         breakpoint(const fwdpy11::GSLrng_t& rng, std::vector<double>& breakpoints)
         {
-            auto bp = gsl_ran_flat(rng.get(), left_boundary, right_boundary);
-            if (discrete)
+            if (gsl_rng_uniform(rng.get()) <= probability)
                 {
-                    bp = std::floor(bp);
+                    auto bp = gsl_ran_flat(rng.get(), left_boundary, right_boundary);
+                    if (discrete)
+                        {
+                            bp = std::floor(bp);
+                        }
+                    breakpoints.push_back(bp);
                 }
-            breakpoints.push_back(bp);
         }
         virtual std::unique_ptr<fwdpy11::NonPoissonCrossoverGenerator> ll_clone();
     };
@@ -118,9 +122,12 @@ namespace fwdpy11_core
             return position + 1.;
         }
         virtual void
-        breakpoint(const fwdpy11::GSLrng_t& /*rng*/, std::vector<double>& breakpoints)
+        breakpoint(const fwdpy11::GSLrng_t& rng, std::vector<double>& breakpoints)
         {
-            breakpoints.push_back(position);
+            if (gsl_rng_uniform(rng.get()) <= probability)
+                {
+                    breakpoints.push_back(position);
+                }
         }
         virtual std::unique_ptr<fwdpy11::NonPoissonCrossoverGenerator> ll_clone();
     };
