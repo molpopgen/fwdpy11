@@ -50,3 +50,15 @@ struct BadEpochRounding02
     std::string yaml;
     BadEpochRounding02();
 };
+
+struct NonIntegerStartSize
+{
+    std::string yaml;
+    NonIntegerStartSize();
+};
+
+struct NonIntegerEndSize
+{
+    std::string yaml;
+    NonIntegerEndSize();
+};
