@@ -82,10 +82,5 @@ from ._functions import (
     _validate_regions,
 )  # NOQA
 
-
-class AmbiguousPulses(Exception):
-    pass
-
-
 if sys.version_info[0] < 3:
     raise ValueError("Python3 required!")

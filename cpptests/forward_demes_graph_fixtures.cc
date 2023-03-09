@@ -114,6 +114,24 @@ demes:
   - {end_time: 0, start_size: 3}
 )";
 
+const char* non_integer_start_size = R"(
+time_units: generations
+demes:
+ - name: A
+   epochs:
+   - start_size: 1000.1
+)";
+
+const char* non_integer_end_size = R"(
+time_units: generations
+demes:
+ - name: A
+   epochs:
+   - start_size: 1000
+     end_time: 100
+   - end_size: 99.2
+)";
+
 SingleDemeModel::SingleDemeModel() : yaml(single_deme_model)
 {
 }
@@ -149,5 +167,13 @@ ExtremeMigrationUntilOneGenerationAgo::ExtremeMigrationUntilOneGenerationAgo()
 }
 
 BadEpochRounding02::BadEpochRounding02() : yaml(bad_epoch_rounding_02)
+{
+}
+
+NonIntegerStartSize::NonIntegerStartSize() : yaml(non_integer_start_size)
+{
+}
+
+NonIntegerEndSize::NonIntegerEndSize() : yaml(non_integer_end_size)
 {
 }

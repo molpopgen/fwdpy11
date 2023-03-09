@@ -40,7 +40,24 @@ namespace fwdpy11_core
         {
             auto code = demes_forward_graph_initialize_from_yaml(
                 yaml.c_str(), static_cast<double>(burnin), graph.get());
-            handle_error_code(code);
+
+            // FIXME: dup of handle_error_code
+            if (code < 0)
+                {
+                    // NOTE: the rust lib currently doesn't
+                    // set the status code.  Rather, it returns
+                    // nullptr if the model is not, in fact,
+                    // in an error state.
+                    std::int32_t status;
+                    auto message
+                        = demes_forward_graph_get_error_message(graph.get(), &status);
+                    if (message == nullptr)
+                        {
+                            throw std::runtime_error(
+                                "graph in error state but message is nullptr");
+                        }
+                    throw std::invalid_argument(message);
+                }
             if (demes_forward_graph_is_error_state(graph.get()))
                 {
                     int status = 0;
@@ -51,13 +68,12 @@ namespace fwdpy11_core
                             throw std::runtime_error(
                                 "graph in error state but message is nullptr");
                         }
-                    throw fwdpy11::discrete_demography::DemographyError(message);
+                    throw std::invalid_argument(message);
                 }
             number_of_demes = demes_forward_graph_number_of_demes(graph.get());
             if (number_of_demes < 1)
                 {
-                    throw fwdpy11::discrete_demography::DemographyError(
-                        "number of demes must be >= 1");
+                    throw std::invalid_argument("number of demes must be >= 1");
                 }
         }
 
