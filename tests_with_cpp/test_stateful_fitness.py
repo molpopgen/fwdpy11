@@ -53,7 +53,7 @@ def evolve_snowdrift(args):
         "gvalue": snowdrift.DiploidSnowdrift(0.2, -0.2, 1, -2, 1, 0.3),
         # evolve for 100 generations so that unit tests are
         # fast
-        "demography": fp11.DiscreteDemography(),
+        "demography": None,
         "simlen": 20,
         "rates": (0.0, 0.0025, 0.001),
         "prune_selected": False,

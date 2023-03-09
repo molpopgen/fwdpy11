@@ -28,7 +28,7 @@ def set_up_quant_trait_model():
         "rates": (0.0, 0.001, r),
         "gvalue": a,
         "prune_selected": False,
-        "demography": fwdpy11.DiscreteDemography(),
+        "demography": None,
         "simlen": 10 * N,
     }
     params = fwdpy11.ModelParams(**p)
