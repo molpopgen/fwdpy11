@@ -87,7 +87,6 @@ parts:
 - caption: Examples
   chapters:
   - file: examples/gss_divergent_optima
-  - file: examples/IM
   - file: examples/localadaptation
   - file: examples/migtest
   - file: examples/pysnowdrift

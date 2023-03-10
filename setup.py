@@ -127,7 +127,6 @@ class CMakeBuild(build_ext):
 PKGS = [
     "fwdpy11",
     "fwdpy11.conditional_models",
-    "fwdpy11.demographic_models",
     "fwdpy11.tskit_tools",
     "fwdpy11._functions",
     "fwdpy11._types",
