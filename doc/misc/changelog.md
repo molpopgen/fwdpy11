@@ -999,7 +999,7 @@ See {ref}`here <gvalues_python>` for the documentation on Python genetic values.
 * Fixed a back-end bug that could have led to corrupt sample lists for simplification. {pr}`536`.
 * Made improvements to memory handling of data structures when simulations end. {pr}`537`.
 * Added the three-deme model of Jouganous et al. (2017).
-  See {func}`fwdpy11.demographic_models.human.jouganous_three_deme`.
+  See `fwdpy11.demographic_models.human.jouganous_three_deme`.
   {pr}`534`
 
 ## 0.8.0
@@ -1050,7 +1050,7 @@ Performance improvements:
 
 New demographic models:
 
-* The [^cite_tennessen2012] model is added via {func}`fwdpy11.demographic_models.human.tennessen`.
+* The [^cite_tennessen2012] model is added via `fwdpy11.demographic_models.human.tennessen`.
   {pr}`479`
 
 Improved behavior:
@@ -1058,7 +1058,7 @@ Improved behavior:
 * Improved warnings about demographic events scheduled to happen
   before the population's current generation. {pr}`495`
 * Built-in demographic models now return instances of
-  {class}`fwdpy11.demographic_models.DemographicModelDetails`.
+  `fwdpy11.demographic_models.DemographicModelDetails`.
   Such instances can be passed as the `demography` keyword argument
   to initialize {class}`fwdpy11.ModelParams`.
   {pr}`509`.
@@ -1227,7 +1227,7 @@ Kind of a big release:
   PR {pr}`366`
 * Add {class}`fwdpy11.DemographyDebugger`
   PR {pr}`384`
-* Add some pre-computed demographic models, see {ref}`demographic-models`.
+* Add some pre-computed demographic models, see `demographic-models`.
 * New examples added:
   {ref}`IMexample`
 * Many improvements/additions to the test suite and the manual.

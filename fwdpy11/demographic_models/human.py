@@ -9,8 +9,8 @@ import numpy as np
 
 import fwdpy11
 
-from .demographic_model_details import (DemographicModelCitation,
-                                        DemographicModelDetails)
+from fwdpy11._types.demographic_model_details import DemographicModelDetails
+from fwdpy11._types.demographic_model_citation import DemographicModelCitation
 
 
 class TennessenModel(enum.Enum):
@@ -35,7 +35,8 @@ class TennessenModel(enum.Enum):
 class _ModelParameterValidator(object):
     """ Make sure that we get an actual int """
 
-    burnin = attr.ib(type=int, kw_only=True, validator=attr.validators.instance_of(int))
+    burnin = attr.ib(type=int, kw_only=True,
+                     validator=attr.validators.instance_of(int))
 
     @burnin.validator
     def validate_burnin(self, attribute, value):
@@ -149,7 +150,8 @@ def tennessen(burnin: int = 20, model_version: TennessenModel = TennessenModel.V
     total_sim_length = gens_burn_in + T0 + T1 + T2 + T3
 
     # init: size change of common ancestral population
-    size_change.append(fwdpy11.SetDemeSize(when=gens_burn_in, deme=0, new_size=NAfr0))
+    size_change.append(fwdpy11.SetDemeSize(
+        when=gens_burn_in, deme=0, new_size=NAfr0))
 
     # T0: mass migration, copy from A to Eu bottleneck population
     copy.append(
@@ -157,22 +159,29 @@ def tennessen(burnin: int = 20, model_version: TennessenModel = TennessenModel.V
             when=gens_burn_in + T0, source=0, destination=1, fraction=NB / NAfr0,
         )
     )
-    size_change.append(fwdpy11.SetDemeSize(when=gens_burn_in + T0, deme=1, new_size=NB))
+    size_change.append(fwdpy11.SetDemeSize(
+        when=gens_burn_in + T0, deme=1, new_size=NB))
     # at the same time, set migration rate between deme 0 and 1 to m_A_B
-    mig_rates.append(fwdpy11.SetMigrationRates(gens_burn_in + T0, 0, [1 - mB, mB]))
-    mig_rates.append(fwdpy11.SetMigrationRates(gens_burn_in + T0, 1, [mB, 1 - mB]))
+    mig_rates.append(fwdpy11.SetMigrationRates(
+        gens_burn_in + T0, 0, [1 - mB, mB]))
+    mig_rates.append(fwdpy11.SetMigrationRates(
+        gens_burn_in + T0, 1, [mB, 1 - mB]))
 
     # T1: adjust size of Eu to Eu0 and set growth rate
     size_change.append(
-        fwdpy11.SetDemeSize(when=gens_burn_in + T0 + T1, deme=1, new_size=NEur0)
+        fwdpy11.SetDemeSize(when=gens_burn_in + T0 +
+                            T1, deme=1, new_size=NEur0)
     )
     r_Eur0 = (NEur1 / NEur0) ** (1 / T2) - 1
     growth_rates.append(
-        fwdpy11.SetExponentialGrowth(when=gens_burn_in + T0 + T1, deme=1, G=1 + r_Eur0)
+        fwdpy11.SetExponentialGrowth(
+            when=gens_burn_in + T0 + T1, deme=1, G=1 + r_Eur0)
     )
     # set migration rates to contemporary rates
-    mig_rates.append(fwdpy11.SetMigrationRates(gens_burn_in + T0 + T1, 0, [1 - mF, mF]))
-    mig_rates.append(fwdpy11.SetMigrationRates(gens_burn_in + T0 + T1, 1, [mF, 1 - mF]))
+    mig_rates.append(fwdpy11.SetMigrationRates(
+        gens_burn_in + T0 + T1, 0, [1 - mF, mF]))
+    mig_rates.append(fwdpy11.SetMigrationRates(
+        gens_burn_in + T0 + T1, 1, [mF, 1 - mF]))
 
     # T2: set growth rates to accelerated rates in both populations
     r_AfrF = (NAfr / NAfr0) ** (1 / T3) - 1
@@ -298,7 +307,8 @@ def jouganous_three_deme(burnin: int = 20):
 
     TBg = np.rint((TAF - TB) / generation_time).astype(int)
     TAS_EUg = np.rint((TB - TAS_EU) / generation_time).astype(int)
-    total_sim_length = gens_burn_in + TAFg + TBg + TAS_EUg + np.rint(tg).astype(int)
+    total_sim_length = gens_burn_in + TAFg + \
+        TBg + TAS_EUg + np.rint(tg).astype(int)
 
     # Build up the events list
     deme_labels = {"AFR": 0, "B_CEU": 1, "CHB": 2}

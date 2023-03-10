@@ -48,38 +48,30 @@
 .. autoclass:: fwdpy11.mvDES
 ```
 
-```{eval-rst}
-.. autoclass:: fwdpy11.GeneticMapUnit
-```
 
 ```{eval-rst}
 .. autoclass:: fwdpy11.PoissonInterval
 
-    This class inherits from :class:`fwdpy11.GeneticMapUnit`
 ```
 
 ```{eval-rst}
 .. autoclass:: fwdpy11.PoissonPoint
 
-    This class inherits from :class:`fwdpy11.GeneticMapUnit`
 ```
 
 ```{eval-rst}
 .. autoclass:: fwdpy11.BinomialPoint
 
-    This class inherits from :class:`fwdpy11.GeneticMapUnit`
 ```
 
 ```{eval-rst}
 .. autoclass:: fwdpy11.FixedCrossovers
 
-    This class inherits from :class:`fwdpy11.GeneticMapUnit`
 ```
 
 ```{eval-rst}
 .. autoclass:: fwdpy11.BinomialInterval
 
-    This class inherits from :class:`fwdpy11.GeneticMapUnit`
 ```
 
 ```{eval-rst}
