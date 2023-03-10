@@ -22,10 +22,12 @@ import warnings
 
 import attr
 import fwdpy11
-import fwdpy11.demographic_models
 import numpy as np
 from fwdpy11.class_decorators import (attr_add_asblack,
                                       attr_class_to_from_dict_no_recurse)
+
+from fwdpy11._types.demographic_model_details import DemographicModelDetails
+from fwdpy11._types.forward_demes_graph import ForwardDemesGraph
 
 
 @attr_add_asblack
@@ -111,7 +113,7 @@ class ModelParams(object):
     :param sregions: List of regions where selected mutations occur
     :type sregions: list[fwdpy11.Sregion]
     :param recregions: List of regions where recombination events occur
-    :type recregions: list[fwdpy11.Region] or list[fwdpy11.GeneticMapUnit]
+    :type recregions: list[fwdpy11.Region] or list[object]
     :param rates: The neutral mutation rate, selected mutation rate, and
                   total recombination rate, respectively.
                   See below for more details.
@@ -134,7 +136,9 @@ class ModelParams(object):
         the recombination rate, the third value must also
         be a non-negative float if all objects in ``recrates``
         are instances of :class:`fwdpy11.Region`. However,
-        if they are instead instances of :class:`fwdpy11.GeneticMapUnit`,
+        if they are instead instances of any mixture of
+        :class:`fwdpy11.PoissonInterval`, :class:`fwdpy11.PoissonPoint`,
+        :class:`fwdpy11.BinomialPoint`, or :class:`fwdpy11.BinomialInterval`,
         then the final element in ``rates`` must be ``None``.
         See the :ref:`section <geneticmaps_vignette>` on setting
         recombination rates for details.
@@ -166,8 +170,8 @@ class ModelParams(object):
     recregions = attr.ib(factory=list)
     rates: MutationAndRecombinationRates = attr.ib(converter=_convert_rates)
     gvalue = attr.ib(default=None)
-    demography: typing.Optional[typing.Union[fwdpy11.ForwardDemesGraph,
-                                             fwdpy11.demographic_models.DemographicModelDetails]] = attr.ib(
+    demography: typing.Optional[typing.Union[ForwardDemesGraph,
+                                             DemographicModelDetails]] = attr.ib(
         default=None)
     simlen: int = attr.ib(converter=int, default=0)
     prune_selected: bool = attr.ib(default=True)
@@ -260,7 +264,7 @@ class ModelParams(object):
         if isinstance(value, fwdpy11.ForwardDemesGraph):
             return
 
-        if isinstance(value, fwdpy11.demographic_models.DemographicModelDetails):
+        if isinstance(value, DemographicModelDetails):
             return
         raise ValueError(f"Unknown type for {attribute}: {type(value)}")
 

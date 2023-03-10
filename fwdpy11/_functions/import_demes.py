@@ -5,8 +5,9 @@ import attr
 import demes
 import numpy as np
 
-from ..demographic_models import DemographicModelCitation, DemographicModelDetails
-from ..discrete_demography import ForwardDemesGraph
+from fwdpy11._types.demographic_model_citation import DemographicModelCitation
+from fwdpy11._types.demographic_model_details import DemographicModelDetails
+from fwdpy11._types.forward_demes_graph import ForwardDemesGraph
 
 
 # TODO: need type hints for dg

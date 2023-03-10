@@ -24,8 +24,8 @@ from typing import Dict, List, Optional, Union
 import fwdpy11
 import numpy as np
 
-from ..discrete_demography import ForwardDemesGraph
-from ..demographic_models import DemographicModelDetails
+from fwdpy11._types.forward_demes_graph import ForwardDemesGraph
+from fwdpy11._types.demographic_model_details import DemographicModelDetails
 from .diploid_population import DiploidPopulation
 
 
@@ -50,7 +50,7 @@ class DemographyDebugger(object):
     :type initial_deme_sizes: list or fwdpy11.DiploidPopulation
     :param events: The demographic model
     :type events: fwdpy11.ForwardDemesGraph or
-                  fwdpy11.demographic_models.DemographicModelDetails
+                  fwdpy11.DemographicModelDetails
     :param simlen: The length of the simulation.  Defaults to `None`.
     :type simlen: int
     :param deme_labels: A map from deme index to a printable name

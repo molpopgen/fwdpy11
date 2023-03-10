@@ -75,7 +75,6 @@ parts:
   chapters:
   - file: pages/genetic_values
   - file: pages/datamatrix
-  - file: pages/demographic_models
   - file: pages/functions
   - file: pages/gslrandom
   - file: pages/gvaluenoise
