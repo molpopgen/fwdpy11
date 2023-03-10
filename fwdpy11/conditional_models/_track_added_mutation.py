@@ -257,9 +257,6 @@ def _copy_pop_and_add_mutation(
         fwdpy11.evolvets(rng, pcopy, pre_sweep_params,
                          **evolvets_options.asdict())
 
-        if sampling_policy == AncientSamplePolicy.DURATION:
-            pcopy._record_ancient_samples([i for i in range(pop.N)])
-
         count_range = _get_allele_count_range(pcopy, mutation_parameters)
         for c in count_range:
             _mutation_params = {
@@ -356,7 +353,7 @@ def _track_added_mutation(
         _sampling_policy = sampling_policy
 
     if stopping_condition is None:
-       _stopping_condition = _MutationPresent(when, until) # type: ignore
+        _stopping_condition = _MutationPresent(when, until)  # type: ignore
     else:
         _stopping_condition = stopping_condition
 
@@ -401,8 +398,8 @@ def _track_added_mutation(
             local_params_copy,
             recorder=recorder,
             stopping_criterion=recorder.monitor,
-            **evolvets_options_copy.asdict(), # type: ignore
-            **internal_options.asdict(), # type: ignore
+            **evolvets_options_copy.asdict(),  # type: ignore
+            **internal_options.asdict(),  # type: ignore
         )
 
         # The sim ended, so
