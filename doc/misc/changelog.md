@@ -3,6 +3,15 @@
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+## 0.19.6
+
+Bug fix
+
+* Fix error in conditional models when sampling ancient
+  samples throughout the focal mutation sojourn.
+  PR {pr}`1094`
+  Issue {issue}`1093`
+
 ## 0.19.5
 
 Bug fix
