@@ -25,7 +25,6 @@ import sys
 
 from fwdpy11._version import version as __version__  # NOQA
 
-from ._demography import *  # NOQA
 from ._dev import *  # NOQA
 from ._fwdpy11 import *  # NOQA
 
