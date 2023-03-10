@@ -92,7 +92,8 @@ def test_deleterious_mutation_remains_present(msprime_seed, fp11_seed):
     mutation_data = fwdpy11.conditional_models.NewMutationParameters(
         frequency=fwdpy11.conditional_models.AlleleCount(1),
         data=fwdpy11.NewMutationData(effect_size=-1e-2, dominance=1),
-        position=fwdpy11.conditional_models.PositionRange(left=0.49, right=0.51),
+        position=fwdpy11.conditional_models.PositionRange(
+            left=0.49, right=0.51),
     )
     rng = fwdpy11.GSLrng(fp11_seed)
     try:
@@ -132,7 +133,8 @@ def test_deleterious_mutation_remains_present_with_final_recording(
     mutation_data = fwdpy11.conditional_models.NewMutationParameters(
         frequency=fwdpy11.conditional_models.AlleleCount(1),
         data=fwdpy11.NewMutationData(effect_size=-1e-2, dominance=1),
-        position=fwdpy11.conditional_models.PositionRange(left=0.49, right=0.51),
+        position=fwdpy11.conditional_models.PositionRange(
+            left=0.49, right=0.51),
     )
     rng = fwdpy11.GSLrng(fp11_seed)
     try:
@@ -176,8 +178,10 @@ def test_sweep_from_new_mutation_using_API(msprime_seed, fp11_seed, alpha):
     params = fwdpy11.ModelParams(**pdict)
     mutation_data = fwdpy11.conditional_models.NewMutationParameters(
         frequency=fwdpy11.conditional_models.AlleleCount(1),
-        data=fwdpy11.NewMutationData(effect_size=alpha / 2 / pop.N, dominance=1),
-        position=fwdpy11.conditional_models.PositionRange(left=0.49, right=0.51),
+        data=fwdpy11.NewMutationData(
+            effect_size=alpha / 2 / pop.N, dominance=1),
+        position=fwdpy11.conditional_models.PositionRange(
+            left=0.49, right=0.51),
     )
     rng = fwdpy11.GSLrng(fp11_seed)
     output = fwdpy11.conditional_models.selective_sweep(
@@ -239,8 +243,10 @@ def test_sweep_from_new_mutation_using_API_exit_when_finished(
     params = fwdpy11.ModelParams(**pdict)
     mutation_data = fwdpy11.conditional_models.NewMutationParameters(
         frequency=fwdpy11.conditional_models.AlleleCount(1),
-        data=fwdpy11.NewMutationData(effect_size=alpha / 2 / pop.N, dominance=1),
-        position=fwdpy11.conditional_models.PositionRange(left=0.49, right=0.51),
+        data=fwdpy11.NewMutationData(
+            effect_size=alpha / 2 / pop.N, dominance=1),
+        position=fwdpy11.conditional_models.PositionRange(
+            left=0.49, right=0.51),
     )
     rng = fwdpy11.GSLrng(fp11_seed)
     output = fwdpy11.conditional_models.selective_sweep(
@@ -274,8 +280,10 @@ def test_sweep_from_standing_variation_using_API(
     params = fwdpy11.ModelParams(**pdict)
     mutation_data = fwdpy11.conditional_models.NewMutationParameters(
         frequency=fwdpy11.conditional_models.AlleleCount(ndescendants),
-        data=fwdpy11.NewMutationData(effect_size=alpha / 2 / pop.N, dominance=1),
-        position=fwdpy11.conditional_models.PositionRange(left=0.49, right=0.51),
+        data=fwdpy11.NewMutationData(
+            effect_size=alpha / 2 / pop.N, dominance=1),
+        position=fwdpy11.conditional_models.PositionRange(
+            left=0.49, right=0.51),
     )
     finished = False
     rng = fwdpy11.GSLrng(fp11_seed)
@@ -290,7 +298,8 @@ def test_sweep_from_standing_variation_using_API(
         assert output.num_descendant_nodes == ndescendants
         assert output.pop.generation > pop.generation
         if output.pop is not None:
-            assert output.pop.mcounts[output.mutation_index] == 2 * output.pop.N
+            assert output.pop.mcounts[output.mutation_index] == 2 * \
+                output.pop.N
             _ = output.pop.dump_tables_to_tskit()
             finished = True
     except fwdpy11.conditional_models.AddMutationFailure as a:
@@ -406,8 +415,10 @@ def test_sweep_from_new_mutation_in_single_deme_using_API(fp11_seed, demes_yaml,
     params = fwdpy11.ModelParams(**pdict)
     mutation_data = fwdpy11.conditional_models.NewMutationParameters(
         frequency=fwdpy11.conditional_models.AlleleCount(1),
-        data=fwdpy11.NewMutationData(effect_size=alpha / 2 / pop.N, dominance=1),
-        position=fwdpy11.conditional_models.PositionRange(left=0.49, right=0.51),
+        data=fwdpy11.NewMutationData(
+            effect_size=alpha / 2 / pop.N, dominance=1),
+        position=fwdpy11.conditional_models.PositionRange(
+            left=0.49, right=0.51),
     )
     rng = fwdpy11.GSLrng(fp11_seed)
     output = fwdpy11.conditional_models.selective_sweep(
@@ -454,8 +465,10 @@ def test_sweep_from_new_mutation_with_demography_using_API(
     params = fwdpy11.ModelParams(**pdict)
     mutation_data = fwdpy11.conditional_models.NewMutationParameters(
         frequency=fwdpy11.conditional_models.AlleleCount(1),
-        data=fwdpy11.NewMutationData(effect_size=alpha / 2 / pop.N, dominance=1),
-        position=fwdpy11.conditional_models.PositionRange(left=0.49, right=0.51),
+        data=fwdpy11.NewMutationData(
+            effect_size=alpha / 2 / pop.N, dominance=1),
+        position=fwdpy11.conditional_models.PositionRange(
+            left=0.49, right=0.51),
     )
     rng = fwdpy11.GSLrng(fp11_seed)
     output = fwdpy11.conditional_models.selective_sweep(
@@ -502,8 +515,10 @@ def test_origination_deme1_fixation_in_deme_2(fp11_seed, demes_yaml, alpha):
     mutation_data = fwdpy11.conditional_models.NewMutationParameters(
         deme=1,
         frequency=fwdpy11.conditional_models.AlleleCount(1),
-        data=fwdpy11.NewMutationData(effect_size=alpha / 2 / pop.N, dominance=1),
-        position=fwdpy11.conditional_models.PositionRange(left=0.49, right=0.51),
+        data=fwdpy11.NewMutationData(
+            effect_size=alpha / 2 / pop.N, dominance=1),
+        position=fwdpy11.conditional_models.PositionRange(
+            left=0.49, right=0.51),
     )
     rng = fwdpy11.GSLrng(fp11_seed)
     output = fwdpy11.conditional_models.selective_sweep(
@@ -550,8 +565,10 @@ def test_origination_deme1_fixation_in_deme_2_with_growth(fp11_seed, demes_yaml,
     mutation_data = fwdpy11.conditional_models.NewMutationParameters(
         deme=1,
         frequency=fwdpy11.conditional_models.AlleleCount(1),
-        data=fwdpy11.NewMutationData(effect_size=alpha / 2 / pop.N, dominance=1),
-        position=fwdpy11.conditional_models.PositionRange(left=0.49, right=0.51),
+        data=fwdpy11.NewMutationData(
+            effect_size=alpha / 2 / pop.N, dominance=1),
+        position=fwdpy11.conditional_models.PositionRange(
+            left=0.49, right=0.51),
     )
     rng = fwdpy11.GSLrng(fp11_seed)
     output = fwdpy11.conditional_models.selective_sweep(
@@ -609,8 +626,10 @@ def test_origination_deme2_fixation_in_deme_2_no_migration(
     mutation_data = fwdpy11.conditional_models.NewMutationParameters(
         deme=2,
         frequency=fwdpy11.conditional_models.AlleleCount(1),
-        data=fwdpy11.NewMutationData(effect_size=alpha / 2 / pop.N, dominance=1),
-        position=fwdpy11.conditional_models.PositionRange(left=0.49, right=0.51),
+        data=fwdpy11.NewMutationData(
+            effect_size=alpha / 2 / pop.N, dominance=1),
+        position=fwdpy11.conditional_models.PositionRange(
+            left=0.49, right=0.51),
     )
     rng = fwdpy11.GSLrng(fp11_seed)
     output = fwdpy11.conditional_models.selective_sweep(
@@ -628,6 +647,63 @@ def test_origination_deme2_fixation_in_deme_2_no_migration(
             output.pop.mutations[output.mutation_index].g == model.metadata["burnin_time"] + 50
         )
         deme_sizes = output.pop.deme_sizes(as_dict=True)
-        assert count_mutation(output.pop, output.mutation_index, 2) == 2 * deme_sizes[2]
+        assert count_mutation(
+            output.pop, output.mutation_index, 2) == 2 * deme_sizes[2]
         assert count_mutation(output.pop, output.mutation_index, 1) == 0
         _ = output.pop.dump_tables_to_tskit()
+
+
+@pytest.mark.parametrize("seed", seed_list(1512512, 5))
+@pytest.mark.parametrize("when", [0, 1, 3])
+def test_github_issue_1093(seed, when):
+    def setup(prune_selected=False):
+        # Dropping mutations requires existing
+        # ancestry, which we can get either
+        # from a burn-in or from msprime.
+        initial_ts = msprime.sim_ancestry(
+            samples=500,
+            population_size=500,
+            recombination_rate=1e-1,
+            random_seed=43215,
+            sequence_length=1.0,
+        )
+
+        # Build the pop from msprime output
+        pop = fwdpy11.DiploidPopulation.create_from_tskit(initial_ts)
+
+        # Set up basic model parameters
+        pdict = {
+            "recregions": [],
+            # Here, 2 means that fitness is multiplicative
+            # over 1, 1+hs, 1+2s.
+            "gvalue": fwdpy11.Multiplicative(2.0),
+            "rates": (0, 0, 0.0),
+            "prune_selected": False,
+            "simlen": 200,
+        }
+        params = fwdpy11.ModelParams(**pdict)
+
+        return pop, params
+
+    pop, params = setup()
+    assert pop.N == 500
+    ALPHA = -10.0
+    rng = fwdpy11.GSLrng(seed)
+
+    mutation_data = fwdpy11.conditional_models.NewMutationParameters(
+        frequency=fwdpy11.conditional_models.AlleleCount(1),
+        data=fwdpy11.NewMutationData(
+            effect_size=ALPHA / 2 / pop.N, dominance=1),
+        position=fwdpy11.conditional_models.PositionRange(
+            left=0.49, right=0.51),
+    )
+
+    output = fwdpy11.conditional_models.track_added_mutation(
+        rng,
+        pop,
+        params,
+        mutation_data,
+        when=when,
+        until=7,
+        sampling_policy=fwdpy11.conditional_models.AncientSamplePolicy.DURATION,
+    )
