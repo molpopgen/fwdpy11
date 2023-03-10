@@ -81,7 +81,7 @@ def test_ndescendants(msprime_seed, fp11_seed, ndescendants):
 def set_up_quant_trait_model(simlen=1.0):
     # TODO add neutral variants
     N = 1000
-    demography = fwdpy11.DiscreteDemography()
+    demography = None
     rho = 2.0
     # theta = 100.
     # nreps = 500

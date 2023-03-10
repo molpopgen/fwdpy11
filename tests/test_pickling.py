@@ -72,7 +72,7 @@ class TestPickleDiploidPopulationTreeSequences(unittest.TestCase):
             "rates": (0.0, 0.025, self.r),
             "gvalue": a,
             "prune_selected": False,
-            "demography": fwdpy11.DiscreteDemography(),
+            "demography": None,
             "simlen": self.N,
         }
         self.params = fwdpy11.ModelParams(**self.p)

@@ -33,7 +33,7 @@ def test_issue_792(model_triggering_issue_792):
     Test of GitHub Issue 792
     """
     demog = fwdpy11.discrete_demography.from_demes(model_triggering_issue_792, burnin=1)
-    pop = fwdpy11.DiploidPopulation(100, 1)
+    pop = fwdpy11.DiploidPopulation(50, 1)
 
     pdict = {
         "rates": (0, 0, 0),
