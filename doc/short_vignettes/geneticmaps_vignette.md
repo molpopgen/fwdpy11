@@ -26,11 +26,6 @@ The methods described here replace a soon-to-be deprecated approach using {class
 Added ability to restrict crossover positions to discrete values.
 :::
 
-Genetic maps are lists of instances of classes derived from the `ABC`
-{class}`fwdpy11.GeneticMapUnit`.
-Here `Unit` refers to an *element* of a genetic map rather than the actual units (`cM`, etc.).
-Instances of these classes contain their own rates and we can mix and match regions where recombination breakpoints are Poisson and binomially distributed.
-
 The following example uses {class}`fwdpy11.PoissonInterval` to model two genomic regions of equal length.
 The first region, spanning $[0, 5)$, has a mean of $2 \times 10^{-3}$ crossovers per generation. 
 The second region, spanning [5, 10), has half as many crossovers per generation.

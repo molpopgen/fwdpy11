@@ -28,9 +28,9 @@ from fwdpy11._version import version as __version__  # NOQA
 from ._demography import *  # NOQA
 from ._dev import *  # NOQA
 from ._fwdpy11 import *  # NOQA
-from .discrete_demography import (  # NOQA
-    ForwardDemesGraph
-)
+
+from . import discrete_demography
+
 from .regions import *  # NOQA
 from .genetic_map_unit import (
     PoissonPoint,
@@ -68,6 +68,9 @@ from ._types import (
     TreeIterator,
     VariantIterator,
     NewMutationData,
+    ForwardDemesGraph,
+    DemographicModelDetails,
+    DemographicModelCitation
 )  # NOQA
 from ._types.demography_debugger import DemographyDebugger  # NOQA
 from ._types.model_params import ModelParams, MutationAndRecombinationRates  # NOQA

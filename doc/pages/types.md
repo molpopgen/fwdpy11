@@ -265,6 +265,20 @@ that is handled on the C++ side.
     :members:
 ```
 
+```{eval-rst}
+.. autoclass:: fwdpy11.DemographyDebugger
+   :members:
+```
+
+```{eval-rst}
+.. autoclass:: fwdpy11.DemographicModelDetails
+   :members:
+```
+
+```{eval-rst}
+.. autoclass:: fwdpy11.DemographicModelCitation
+```
+
 # Miscellaneous types
 
 ```{eval-rst}
