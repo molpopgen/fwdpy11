@@ -40,6 +40,7 @@ parts:
   - file: short_vignettes/special_considerations_demes_models
 - caption: Short vignettes - conditional models
   chapters:
+  - file: short_vignettes/trackmutationfates
   - file: short_vignettes/selective_sweep
   - file: short_vignettes/incomplete_sweep
 - caption: Longer vignettes - exporting data to tskit
