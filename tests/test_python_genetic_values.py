@@ -24,7 +24,20 @@ import numpy as np
 import fwdpy11
 
 
-def build_model(gvalue_to_fitness, noise, simlen):
+def build_model(gvalue_to_fitness, noise, simlen, sizes):
+    yaml = f"""
+time_units: generations
+demes:
+ - name: A
+   epochs:
+    - start_size: {sizes[0]}
+ - name: B
+   epochs:
+    - start_size: {sizes[1]}
+migrations:
+ - demes: [A, B]
+   rate: 0.1
+"""
     pdict = {
         "nregions": [],
         "sregions": [
@@ -37,9 +50,8 @@ def build_model(gvalue_to_fitness, noise, simlen):
         ],
         "recregions": [fwdpy11.PoissonInterval(0, 1, 0.5)],
         "rates": (0, 1e-2, None),
-        "demography": fwdpy11.DiscreteDemography(
-            migmatrix=np.array([0.9, 0.1, 0.1, 0.9]).reshape((2, 2))
-        ),
+        "demography": fwdpy11.ForwardDemesGraph.from_demes(yaml, burnin=simlen,
+                                                           burnin_is_exact=True),
         "simlen": simlen,
         "gvalue": fwdpy11.Additive(
             ndemes=2, scaling=2, gvalue_to_fitness=gvalue_to_fitness, noise=noise,
@@ -66,7 +78,7 @@ class TestCustomGeneticValueisTrait(unittest.TestCase):
         import pygss
 
         GSS = pygss.PyGSS(opt=0.0, VS=1.0)
-        pdict = build_model(GSS, None, 100)
+        pdict = build_model(GSS, None, 100, [1000, 1000])
 
         params = fwdpy11.ModelParams(**pdict)
         pop = fwdpy11.DiploidPopulation([1000, 1000], 1.0)
@@ -81,7 +93,8 @@ class TestCustomGeneticValueisTrait(unittest.TestCase):
             # ndemes=2, scaling=2, gvalue_to_fitness=
             ndemes=2,
             scaling=2,
-            gvalue_to_fitness=fwdpy11.GSS(fwdpy11.Optimum(optimum=0.0, VS=1.0)),
+            gvalue_to_fitness=fwdpy11.GSS(
+                fwdpy11.Optimum(optimum=0.0, VS=1.0)),
         )
         params = fwdpy11.ModelParams(**pdict)
         pop2 = fwdpy11.DiploidPopulation([1000, 1000], 1.0)
@@ -95,7 +108,7 @@ class TestCustomGeneticValueisTrait(unittest.TestCase):
         import pygss
 
         GSS = pygss.PyGSSRandomOptimum(opt=0.0, VS=1.0)
-        pdict = build_model(GSS, None, 5)
+        pdict = build_model(GSS, None, 5, [1000, 1000])
         params = fwdpy11.ModelParams(**pdict)
         pop = fwdpy11.DiploidPopulation([1000, 1000], 1.0)
 
@@ -113,7 +126,7 @@ class TestCustomGeneticValueNoise(unittest.TestCase):
 
         GSS = fwdpy11.GSS(optimum=0.0, VS=1.0)
         Noise = pynoise.PyNoise()
-        pdict = build_model(GSS, Noise, 5)
+        pdict = build_model(GSS, Noise, 5, [1000, 1000])
         params = fwdpy11.ModelParams(**pdict)
         pop = fwdpy11.DiploidPopulation([1000, 1000], 1.0)
 
@@ -158,7 +171,7 @@ class TestCustomPyGeneticValueOverloadGeneticValueToFitness(unittest.TestCase):
             "sregions": [fwdpy11.GaussianS(beg=0.0, end=1.0, weight=1.0, sd=0.1)],
             "recregions": [fwdpy11.PoissonInterval(0, 1, 0.5)],
             "rates": (0, 1e-2, None),
-            "demography": fwdpy11.DiscreteDemography(),
+            "demography": None,
             "simlen": simlen,
             "gvalue": gvalue,
         }
@@ -180,7 +193,8 @@ class TestCustomPyGeneticValueOverloadGeneticValueToFitness(unittest.TestCase):
         self.assertEqual(pop.generation, params.simlen)
         md = np.array(pop.diploid_metadata)
 
-        pdict["gvalue"] = fwdpy11.Additive(2.0, fwdpy11.GSS(optimum=0.0, VS=1.0))
+        pdict["gvalue"] = fwdpy11.Additive(
+            2.0, fwdpy11.GSS(optimum=0.0, VS=1.0))
         params = fwdpy11.ModelParams(**pdict)
         pop2 = fwdpy11.DiploidPopulation(1000, 1.0)
         rng = fwdpy11.GSLrng(1010)
