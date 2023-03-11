@@ -35,7 +35,6 @@ from fwdpy11.conditional_models import (AddMutationFailure, AlleleCount,
 @attr.s(auto_attribs=True)
 class _InternalSweepEvolveOptions:
     track_mutation_counts: bool = True
-    check_demographic_event_timings: bool = False
 
 
 @attr.s(auto_attribs=True)

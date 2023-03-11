@@ -58,7 +58,6 @@ def evolvets(
     track_mutation_counts: bool = False,
     remove_extinct_variants: bool = True,
     preserve_first_generation: bool = False,
-    check_demographic_event_timings: bool = True,
 ):
     """
     Evolve a population with tree sequence recording
@@ -87,11 +86,6 @@ def evolvets(
                                       tree sequence "recapitation". See
                                       :ref:`recapitation`.
     :type preserve_first_generation: bool
-    :param check_demographic_event_timings: (True) If ``True``, then issue
-                                            warnings if demographic events
-                                            will occur prior to the current
-                                            generation of the population.
-    :type check_demographic_event_timings: bool
 
     The recording of genetic values into :attr:`fwdpy11.DiploidPopulation.genetic_values`
     is suppressed by default.  First, it is redundant with
@@ -131,6 +125,7 @@ def evolvets(
         * Will define a default demographic model using
           :func:`fwdpy11.DemesForwardGraph.tubes` if the
           input model is `None`.
+        * Remove option `check_demographic_event_timings`
 
     """
     if params.demography is not None:
