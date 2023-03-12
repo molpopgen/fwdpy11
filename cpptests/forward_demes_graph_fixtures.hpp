@@ -62,3 +62,9 @@ struct NonIntegerEndSize
     std::string yaml;
     NonIntegerEndSize();
 };
+
+struct LinearSizeChange
+{
+    std::string yaml;
+    LinearSizeChange();
+};
