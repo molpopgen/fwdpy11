@@ -1,4 +1,5 @@
 import glob
+import pickle
 
 import numpy as np
 import pytest
@@ -53,3 +54,34 @@ def test_valid_demes_spec_modules():
                             yaml, burnin=0, round_non_integer_sizes=True)
                         _ = fwdpy11.discrete_demography.from_demes(
                             good, burnin=0, round_non_integer_sizes=True)
+
+
+def test_pickle():
+    yaml = """
+time_units: generations
+demes:
+- name: deme1
+  start_time: .inf
+  epochs:
+  - {end_size: 1200.0, end_time: 0, start_size: 1200.0}
+- name: deme2
+  start_time: .inf
+  epochs:
+  - {end_size: 100, end_time: 400.0, start_size: 100}
+pulses:
+- {sources: [deme2], dest: deme1, proportions: [0.09999999999999998], time: 400.0}
+migrations: []
+    """
+    g = fwdpy11.ForwardDemesGraph.from_demes(
+        yaml, 93, burnin_is_exact=True, round_non_integer_sizes=True)
+    p = pickle.dumps(g)
+    up = pickle.loads(p)
+    assert g == up
+    assert g.graph == up.graph
+
+    # NOTE: we are testing an internal detail here:
+    # pickling works via asdict and we don't
+    # want to include the demes.Graph in that object.
+    d = g.asdict()
+    assert "graph" not in d
+    assert "yaml" in d
