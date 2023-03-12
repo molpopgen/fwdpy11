@@ -904,8 +904,7 @@ def test_evolve_population_in_two_stages(
     pdict["simlen"] = model.metadata["total_simulation_length"] - when
     params = fwdpy11.ModelParams(**pdict)
 
-    fwdpy11.evolvets(rng, pop, params, 100,
-                     check_demographic_event_timings=False)
+    fwdpy11.evolvets(rng, pop, params, 100)
 
     counts = np.unique(np.array(pop.diploid_metadata)
                        ["deme"], return_counts=True)
@@ -935,8 +934,7 @@ def test_evolve_population_in_two_stages_with_deepcopy(
     pdict2["simlen"] = model.metadata["total_simulation_length"] - when
     params2 = fwdpy11.ModelParams(**pdict2)
 
-    fwdpy11.evolvets(rng, pop, params2, 100,
-                     check_demographic_event_timings=False)
+    fwdpy11.evolvets(rng, pop, params2, 100)
 
     counts = np.unique(np.array(pop.diploid_metadata)
                        ["deme"], return_counts=True)
@@ -1583,7 +1581,7 @@ def test_events_in_generation_one_following_demes_import_start_stop(testdata, bu
 
     pdict["simlen"] = demog.metadata["total_simulation_length"] - 1
     fwdpy11.evolvets(
-        rng, pop, params, 100, recorder=recorder, check_demographic_event_timings=False
+        rng, pop, params, 100, recorder=recorder,
     )
 
     validate(recorder)
