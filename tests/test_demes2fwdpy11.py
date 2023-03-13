@@ -1712,7 +1712,7 @@ def test_non_integer_size_change():
                epochs=[{"start_size": 100.5}])
     g = b.resolve()
 
-    _ = fwdpy11.discrete_demography.from_demes(g)
+    _ = fwdpy11.discrete_demography.from_demes(g, round_non_integer_sizes=True)
 
 
 def test_non_integer_initial_epoch_size():
@@ -1720,14 +1720,16 @@ def test_non_integer_initial_epoch_size():
     b.add_deme("A", epochs=[{"start_size": 100.5}])
     g = b.resolve()
 
-    demog = fwdpy11.discrete_demography.from_demes(g)
+    demog = fwdpy11.discrete_demography.from_demes(
+        g, round_non_integer_sizes=True)
 
     # initialize the ancestral population
     initial_sizes = [
         demog.metadata["initial_sizes"][i]
         for i in sorted(demog.metadata["initial_sizes"].keys())
     ]
-    _ = fwdpy11.DiploidPopulation(initial_sizes, 1)
+    _ = fwdpy11.DiploidPopulation(
+        initial_sizes, 1)
 
 
 def test_very_short_epoch():

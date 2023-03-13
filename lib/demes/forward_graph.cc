@@ -34,12 +34,22 @@ namespace fwdpy11_core
         graph_ptr_t graph;
         std::ptrdiff_t number_of_demes;
 
-        forward_graph_implementation(const std::string &yaml, std::uint32_t burnin)
+        forward_graph_implementation(const std::string &yaml, std::uint32_t burnin,
+                                     bool round)
             : graph(demes_forward_graph_allocate(), &demes_forward_graph_deallocate),
               number_of_demes{-1}
         {
-            auto code = demes_forward_graph_initialize_from_yaml(
-                yaml.c_str(), static_cast<double>(burnin), graph.get());
+            auto code = 0;
+            if (round == true)
+                {
+                    code = demes_forward_graph_initialize_from_yaml_round_epoch_sizes(
+                        yaml.c_str(), static_cast<double>(burnin), graph.get());
+                }
+            else
+                {
+                    code = demes_forward_graph_initialize_from_yaml(
+                        yaml.c_str(), static_cast<double>(burnin), graph.get());
+                }
 
             // FIXME: dup of handle_error_code
             if (code < 0)
@@ -160,8 +170,9 @@ namespace fwdpy11_core
     {
     }
 
-    ForwardDemesGraph::ForwardDemesGraph(const std::string &yaml, std::uint32_t burnin)
-        : pimpl{new forward_graph_implementation(yaml, burnin)}
+    ForwardDemesGraph::ForwardDemesGraph(const std::string &yaml, std::uint32_t burnin,
+                                         bool round)
+        : pimpl{new forward_graph_implementation(yaml, burnin, round)}
     {
     }
 

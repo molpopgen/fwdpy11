@@ -25,6 +25,15 @@ pub unsafe extern "C" fn demes_forward_graph_initialize_from_yaml_file(
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn demes_forward_graph_initialize_from_yaml_round_epoch_sizes(
+    file_name: *const c_char,
+    burnin: f64,
+    graph: *mut OpaqueForwardGraph,
+) -> i32 {
+    forward_graph_initialize_from_yaml_round_epoch_sizes(file_name, burnin, graph)
+}
+
+#[no_mangle]
 pub unsafe extern "C" fn demes_forward_graph_is_error_state(
     graph: *const OpaqueForwardGraph,
 ) -> bool {

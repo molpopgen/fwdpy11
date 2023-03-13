@@ -12,6 +12,7 @@ from ..class_decorators import (
 
 import fwdpy11
 
+
 @attr.s(repr_ns="fwdpy11")
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
@@ -47,17 +48,18 @@ class ForwardDemesGraph(fwdpy11._fwdpy11._ForwardDemesGraph):
     def __attrs_post_init__(self):
         from fwdpy11._functions.import_demes import _get_ancestral_population_size
         self.graph = demes.loads(self.yaml)
-        if self.round_non_integer_sizes is True:
-            self.graph = ForwardDemesGraph._round_deme_sizes(self.graph)
+        if self.round_non_integer_sizes is False:
+            ForwardDemesGraph._reject_non_integer_sizes(self.graph)
 
         ForwardDemesGraph._validate_pulses(self.graph)
-        updated_yaml = str(self.graph)
         Nref = _get_ancestral_population_size(self.graph)
+        assert np.modf(Nref)[0] == 0.0
         if self.burnin_is_exact is True:
             burnin = self.burnin
         else:
             burnin = int(np.rint(self.burnin)*Nref)
-        super(ForwardDemesGraph, self).__init__(updated_yaml, burnin)
+        super(ForwardDemesGraph, self).__init__(
+            self.yaml, burnin, self.round_non_integer_sizes)
 
     def _validate_pulses(graph: demes.Graph):
         unique_pulse_times = set([np.rint(p.time) for p in graph.pulses])
@@ -85,20 +87,6 @@ class ForwardDemesGraph(fwdpy11._fwdpy11._ForwardDemesGraph):
                     if np.isfinite(size) and np.modf(size)[0] != 0.0:
                         raise ValueError(
                             f"deme {deme.name} has non-integer size {size} in epoch {i}")
-
-    def _round_deme_sizes(graph: demes.Graph) -> demes.Graph:
-        import copy
-        graph_copy = copy.deepcopy(graph)
-        for deme in graph_copy.demes:
-            for epoch in deme.epochs:
-                epoch.start_size = int(np.rint(epoch.start_size))
-                epoch.end_size = int(np.rint(epoch.end_size))
-                for i in [epoch.start_size, epoch.end_size]:
-                    if i <= 0.0:
-                        raise ValueError(
-                            "rounding resulted in a deme size of 0")
-
-        return graph_copy
 
     def number_of_demes(self) -> int:
         return len(self.graph.demes)
@@ -131,7 +119,7 @@ class ForwardDemesGraph(fwdpy11._fwdpy11._ForwardDemesGraph):
             exact = burnin_is_exact
 
         if round_non_integer_sizes is None:
-            round_sizes = True
+            round_sizes = False
         else:
             round_sizes = round_non_integer_sizes
 
