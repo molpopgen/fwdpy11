@@ -1,4 +1,5 @@
 #include "forward_demes_graph_fixtures.hpp"
+#include <unistd.h>
 
 const char* single_deme_model = R"(
 description: single deme model
@@ -132,6 +133,21 @@ demes:
    - end_size: 99.2
 )";
 
+const char* linear_size_change = R"(
+time_units: generations
+demes:
+ - name: A
+   epochs:
+    - start_size: 100
+      end_time: 20
+    - start_size: 100
+      end_size: 200
+      end_time: 10
+      size_function: linear
+    - end_time: 0
+      start_size: 55
+)";
+
 SingleDemeModel::SingleDemeModel() : yaml(single_deme_model)
 {
 }
@@ -175,5 +191,9 @@ NonIntegerStartSize::NonIntegerStartSize() : yaml(non_integer_start_size)
 }
 
 NonIntegerEndSize::NonIntegerEndSize() : yaml(non_integer_end_size)
+{
+}
+
+LinearSizeChange::LinearSizeChange() : yaml(linear_size_change)
 {
 }

@@ -540,6 +540,40 @@ BOOST_FIXTURE_TEST_CASE(test_size_history_two_demes_unequal_merge,
                               [](const auto& i) { return i.first >= 35 - 25 + 1; }));
 }
 
+// NOTE: upstream has more extensive tests of correctness
+BOOST_FIXTURE_TEST_CASE(test_linear_size_change_history,
+                        common_setup_with_sample_history_recording)
+{
+    auto model = LinearSizeChange();
+    fwdpy11_core::ForwardDemesGraph forward_demes_graph(model.yaml, 10);
+    evolve_with_tree_sequences(rng, pop, recorder, 10, forward_demes_graph, 60, 0., 0.,
+                               mregions, recregions, gvalue_ptrs,
+                               sample_recorder_callback, stopping_criterion,
+                               post_simplification_recorder, options);
+    BOOST_REQUIRE_EQUAL(pop.generation, 30);
+    BOOST_REQUIRE_EQUAL(pop.N, 55);
+
+    BOOST_REQUIRE_EQUAL(size_history[0][9].second, 100);
+    // this is wrong: need to calc slope, etc..
+    double slope = (200. - 100.) / 10.;
+    BOOST_REQUIRE_EQUAL(size_history[0][10].second, static_cast<unsigned>(100. + slope));
+    BOOST_REQUIRE_EQUAL(size_history[0][15].second,
+                        static_cast<unsigned>(100. + 6. * slope));
+    BOOST_REQUIRE_EQUAL(size_history[0][18].first, 19);
+    BOOST_REQUIRE_EQUAL(size_history[0][18].second,
+                        static_cast<unsigned>(100. + 9. * slope));
+    BOOST_REQUIRE_EQUAL(size_history[0][19].first, 20);
+    BOOST_REQUIRE_EQUAL(size_history[0][19].second,
+                        static_cast<unsigned>(100. + 10. * slope));
+    // Pop size is flat at post-growth size
+    // for rest of model
+    for (unsigned i = 21; i < 31; ++i)
+        {
+            BOOST_REQUIRE_EQUAL(size_history[0][i - 1].first, i);
+            BOOST_REQUIRE_EQUAL(size_history[0][i - 1].second, 55);
+        }
+}
+
 BOOST_FIXTURE_TEST_CASE(test_ancestry_proportions_from_pulse_with_burnin,
                         common_setup_with_ancestry_tracking)
 {
