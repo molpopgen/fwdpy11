@@ -11,6 +11,6 @@ boost
 pytest
 pytest-xdist
 setuptools_scm
-demes==0.2.0
+demes==0.2.2
 rust==1.62.1
 hypothesis

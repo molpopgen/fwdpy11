@@ -16,7 +16,7 @@ class test_stopping_criterion_DiploidPopulation(unittest.TestCase):
             "rates": (0.0, 1e-3, 1e-3),
             # Keep mutations at frequency 1 in the pop if they affect fitness.
             "prune_selected": False,
-            "demography": fwdpy11.DiscreteDemography(),
+            "demography": None,
             "simlen": 10 * self.pop.N,
         }
         self.params = fwdpy11.ModelParams(**p)

@@ -25,7 +25,7 @@ mu_selected = 1e-3
 GSSmo = fwdpy11.GSSmo(
     [
         fwdpy11.Optimum(when=0, optimum=0.0, VS=1.0),
-        fwdpy11.Optimum(when=10 * N, optimum=1.0, VS=1.0),
+        fwdpy11.Optimum(when=10 * N - 200, optimum=1.0, VS=1.0),
     ]
 )
 
@@ -37,8 +37,8 @@ p = {
     "rates": (mu_neutral, mu_selected, None),
     # Keep mutations at frequency 1 in the pop if they affect fitness.
     "prune_selected": False,
-    "demography": fwdpy11.DiscreteDemography(),
-    "simlen": 10 * N + 200,
+    "demography": None,
+    "simlen": 10 * N,
 }
 params = fwdpy11.ModelParams(**p)
 ```

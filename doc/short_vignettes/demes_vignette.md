@@ -38,7 +38,7 @@ The following `YAML` specifies the human out-of-Africa model from {cite}`Gutenku
 :language: yaml
 ```
 
-We can generate demographic models directly from these `YAML` files using {func}`fwdpy11.discrete_demography.from_demes`, which handles the conversion to the low-level objects described {ref}`here <softselection>`:
+We can generate demographic models directly from these `YAML` files using {func}`fwdpy11.discrete_demography.from_demes`. 
 
 ```{code-cell} python
 import fwdpy11
@@ -51,7 +51,7 @@ Be sure to read the documentation for {func}`fwdpy11.discrete_demography.from_de
 There are important options concerning the run time of the simulation, etc.
 :::
 
-The return value is an instance of {class}`fwdpy11.demographic_models.DemographicModelDetails` and may be passed as the `demography` keyword argument to initialize an instance of {class}`fwdpy11.ModelParams`.
+The return value is an instance of {class}`fwdpy11.DemographicModelDetails` and may be passed as the `demography` keyword argument to initialize an instance of {class}`fwdpy11.ModelParams`.
 To extract the simulation length to generate the `simlen` parameter of your {class}`fwdpy11.ModelParams` instance:
 
 ```{code-cell} python

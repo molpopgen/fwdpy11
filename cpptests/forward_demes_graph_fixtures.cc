@@ -1,4 +1,5 @@
 #include "forward_demes_graph_fixtures.hpp"
+#include <unistd.h>
 
 const char* single_deme_model = R"(
 description: single deme model
@@ -104,6 +105,49 @@ migrations:
    end_time: 1
 )";
 
+const char* bad_epoch_rounding_02 = R"(
+time_units: generations
+demes:
+- name: bad
+  epochs:
+  - {end_time: 1.5, start_size: 1}
+  - {end_time: 0.4, start_size: 2}
+  - {end_time: 0, start_size: 3}
+)";
+
+const char* non_integer_start_size = R"(
+time_units: generations
+demes:
+ - name: A
+   epochs:
+   - start_size: 1000.1
+)";
+
+const char* non_integer_end_size = R"(
+time_units: generations
+demes:
+ - name: A
+   epochs:
+   - start_size: 1000
+     end_time: 100
+   - end_size: 99.2
+)";
+
+const char* linear_size_change = R"(
+time_units: generations
+demes:
+ - name: A
+   epochs:
+    - start_size: 100
+      end_time: 20
+    - start_size: 100
+      end_size: 200
+      end_time: 10
+      size_function: linear
+    - end_time: 0
+      start_size: 55
+)";
+
 SingleDemeModel::SingleDemeModel() : yaml(single_deme_model)
 {
 }
@@ -135,5 +179,21 @@ VeryRecentPulseTwoGenerationsAgo::VeryRecentPulseTwoGenerationsAgo()
 
 ExtremeMigrationUntilOneGenerationAgo::ExtremeMigrationUntilOneGenerationAgo()
     : yaml(extreme_migration_until_one_generation_ago)
+{
+}
+
+BadEpochRounding02::BadEpochRounding02() : yaml(bad_epoch_rounding_02)
+{
+}
+
+NonIntegerStartSize::NonIntegerStartSize() : yaml(non_integer_start_size)
+{
+}
+
+NonIntegerEndSize::NonIntegerEndSize() : yaml(non_integer_end_size)
+{
+}
+
+LinearSizeChange::LinearSizeChange() : yaml(linear_size_change)
 {
 }

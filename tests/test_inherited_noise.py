@@ -32,15 +32,14 @@ class TestInheritNoise(unittest.TestCase):
     @classmethod
     def setUp(self):
         self.rng = fwdpy11.GSLrng(42)
-        self.pop = fwdpy11.DiploidPopulation(100, 1.0)
+        self.pop = fwdpy11.DiploidPopulation([100, 100, 100], 1.0)
         self.pdict = {
             "nregions": [],
             "sregions": [],
             "recregions": [],
             "rates": (0, 0, 0),
-            "demography": fwdpy11.DiscreteDemography(
-                set_deme_sizes=np.array([self.pop.N] * 3, dtype=np.uint32)
-            ),
+            "demography": fwdpy11.ForwardDemesGraph.tubes(
+                [100] * 3, 1),
             "simlen": 3,
             "gvalue": fwdpy11.Additive(
                 2.0, fwdpy11.GSS(optimum=0.0, VS=1.0), InheritedNoise()
@@ -51,7 +50,8 @@ class TestInheritNoise(unittest.TestCase):
         params = fwdpy11.ModelParams(**self.pdict)
         fwdpy11.evolvets(self.rng, self.pop, params, 100)
         self.assertEqual(self.pop.generation, 3)
-        self.assertTrue(all([i.e == 6.0 for i in self.pop.diploid_metadata]) is True)
+        self.assertTrue(
+            all([i.e == 6.0 for i in self.pop.diploid_metadata]) is True)
 
 
 if __name__ == "__main__":
