@@ -1,5 +1,5 @@
+import decimal
 import typing
-import warnings
 
 import attr
 import demes
@@ -11,6 +11,12 @@ from ..class_decorators import (
 )
 
 import fwdpy11
+
+
+def _round_via_decimal(value):
+    with decimal.localcontext() as ctx:
+        ctx.rounding = decimal.ROUND_HALF_UP
+        return int(decimal.Decimal(value).to_integral_value())
 
 
 @attr.s(repr_ns="fwdpy11")
@@ -44,49 +50,47 @@ class ForwardDemesGraph(fwdpy11._fwdpy11._ForwardDemesGraph):
     burnin_is_exact: int = attr.ib()
     round_non_integer_sizes: bool = attr.ib()
     graph: demes.Graph
+    burnin_generation: int
 
     def __attrs_post_init__(self):
-        from fwdpy11._functions.import_demes import _get_ancestral_population_size
         self.graph = demes.loads(self.yaml)
-        if self.round_non_integer_sizes is False:
-            ForwardDemesGraph._reject_non_integer_sizes(self.graph)
-
-        ForwardDemesGraph._validate_pulses(self.graph)
-        Nref = _get_ancestral_population_size(self.graph)
+        Nref = self._get_ancestral_population_size(self.graph)
         assert np.modf(Nref)[0] == 0.0
         if self.burnin_is_exact is True:
             burnin = self.burnin
         else:
-            burnin = int(np.rint(self.burnin)*Nref)
+            burnin = self.burnin*Nref
+        self.burnin_generation = burnin
         super(ForwardDemesGraph, self).__init__(
             self.yaml, burnin, self.round_non_integer_sizes)
+        x = self._sum_deme_sizes_at_time_zero()
+        assert Nref == x, f"{Nref}, {x}, {self.yaml}"
 
-    def _validate_pulses(graph: demes.Graph):
-        unique_pulse_times = set([np.rint(p.time) for p in graph.pulses])
-        for time in unique_pulse_times:
-            pulses = [p for p in graph.pulses if np.rint(p.time) == time]
-            dests = set()
-            for p in pulses:
-                if p.dest in dests:
-                    warnings.warn(
-                        f"multiple pulse events into deme {p.dest} at time {time}."
-                        + " The effect of these pulses will depend on the order "
-                        + "in which they are applied."
-                        + "To avoid unexpected behavior, "
-                        + "the graph can instead be structured to"
-                        + " introduce a new deme at this time with"
-                        + " the desired ancestry proportions or to specify"
-                        + " concurrent pulses with multiple sources.",
-                        UserWarning)
-                dests.add(p.dest)
+    def __get_most_ancient_deme_start_time(self, dg: demes.Graph) -> demes.demes.Time:
+        return max([d.start_time for d in dg.demes])
 
-    def _reject_non_integer_sizes(graph: demes.Graph):
-        for deme in graph.demes:
-            for i, epoch in enumerate(deme.epochs):
-                for size in [epoch.start_size, epoch.end_size]:
-                    if np.isfinite(size) and np.modf(size)[0] != 0.0:
-                        raise ValueError(
-                            f"deme {deme.name} has non-integer size {size} in epoch {i}")
+    def _get_ancestral_population_size(self, dg: demes.Graph) -> int:
+        """
+        Need this for the burnin time.
+
+        If there are > 1 demes with the same most ancient start_time,
+        then the ancestral size is considered to be the size
+        of all those demes (size of ancestral metapopulation).
+        """
+        oldest_deme_time = self.__get_most_ancient_deme_start_time(dg)
+
+        rv = sum(
+            [
+                _round_via_decimal(e.start_size)
+                for d in dg.demes
+                for e in d.epochs
+                if e.start_time == oldest_deme_time
+            ]
+        )
+        if rv == 0:
+            raise ValueError(
+                "could not determinine ancestral metapopulation size")
+        return rv
 
     def number_of_demes(self) -> int:
         return len(self.graph.demes)
