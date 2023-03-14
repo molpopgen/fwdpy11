@@ -32,7 +32,6 @@ parts:
   chapters:
   - file: short_vignettes/demography_vignettes_intro
   - file: short_vignettes/demes_vignette
-  - file: short_vignettes/demography_debugger_vignette
 - caption: Short vignettes - varying fitness conditions across demes
   chapters:
   - file: short_vignettes/varying_fitness_conditions_across_demes_intro
@@ -60,11 +59,9 @@ parts:
   - file: pages/definitions
 - caption: Tutorials
   chapters:
-  - file: pages/tutorial
   - file: pages/advancedtopics
 - caption: Objects and concepts
   chapters:
-  - file: pages/softselection
   - file: pages/mvdes
   - file: pages/tsoverview
   - file: pages/tstypes
@@ -79,7 +76,6 @@ parts:
   chapters:
   - file: pages/genetic_values
   - file: pages/datamatrix
-  - file: pages/demographic_models
   - file: pages/functions
   - file: pages/gslrandom
   - file: pages/gvaluenoise

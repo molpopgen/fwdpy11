@@ -33,7 +33,7 @@ def pdict(request):
         "nregions": [],
         "rates": (0, 0, 0),
         "gvalue": fwdpy11.Multiplicative(2.0),
-        "demography": fwdpy11.DiscreteDemography(),
+        "demography": None,
         "simlen": request.param["simlen"],
     }
     return pd

@@ -28,3 +28,6 @@ from .data_matrix_iterator import DataMatrixIterator  # NOQA
 from .diploid_population import DiploidPopulation  # NOQA
 from .model_params import ModelParams  # NOQA
 from .new_mutation_data import NewMutationData  # NOQA
+from .demographic_model_citation import DemographicModelCitation  # NOQA
+from .demographic_model_details import DemographicModelDetails  # NOQA
+from .forward_demes_graph import ForwardDemesGraph  # NOQA
