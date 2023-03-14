@@ -27,7 +27,6 @@ namespace fwdpy11
 {
     namespace discrete_demography
     {
-        constexpr double NOGROWTH = 1.0;
         constexpr std::int32_t NULLDEME
             = std::numeric_limits<std::int32_t>::min();
     } // namespace discrete_demography

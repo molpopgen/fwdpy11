@@ -30,7 +30,7 @@ p = {
     "recregions": [fwdpy11.PoissonInterval(0, 1., rho / float(4 * N))],
     "rates": (mu_neutral, mu_selected, None),
     "prune_selected": True,
-    "demography": fwdpy11.DiscreteDemography(),
+    "demography": None,
     "simlen": 10 * N,
 }
 params = fwdpy11.ModelParams(**p)
@@ -49,9 +49,9 @@ Let's explain a few new things:
   (See {ref}`geneticmaps_vignette`.)
   This parameterization of `rates` will soon be deprecated and the need to specify a recombination rate of `None` will go away.
 * The `demography` field is something we've not encountered yet.
-  If nothing is provided, an empty instance of {class}`fwdpy11.DiscreteDemography` gets initialized.
+  If nothing is provided, an empty instance of {class}`fwdpy11.ForwardDemesGraph` gets initialized.
   This means "no demographic events".
-  Demographic events are the subject of later vignettes and {ref}`this page <softselection>`.
+  Demographic events are the subject of {ref}`this page <demes_vignette>`.
 * `simlen` is how many generations to evolve the population.
 * `prune_selected` is a boolean.
   If `True`, then mutations that are fixed in the alive individuals, and not present at all in ancient samples, will be removed from the simulation.

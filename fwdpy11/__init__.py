@@ -25,20 +25,11 @@ import sys
 
 from fwdpy11._version import version as __version__  # NOQA
 
-from ._demography import *  # NOQA
 from ._dev import *  # NOQA
 from ._fwdpy11 import *  # NOQA
-from .discrete_demography import (  # NOQA
-    DiscreteDemography,
-    MassMigration,
-    move_individuals,
-    copy_individuals,
-    SetDemeSize,
-    MigrationMatrix,
-    SetExponentialGrowth,
-    SetMigrationRates,
-    SetSelfingRate,
-)
+
+from . import discrete_demography
+
 from .regions import *  # NOQA
 from .genetic_map_unit import (
     PoissonPoint,
@@ -76,6 +67,9 @@ from ._types import (
     TreeIterator,
     VariantIterator,
     NewMutationData,
+    ForwardDemesGraph,
+    DemographicModelDetails,
+    DemographicModelCitation
 )  # NOQA
 from ._types.demography_debugger import DemographyDebugger  # NOQA
 from ._types.model_params import ModelParams, MutationAndRecombinationRates  # NOQA
@@ -89,11 +83,6 @@ from ._functions import (
     simplify_tables,
     _validate_regions,
 )  # NOQA
-
-
-class AmbiguousPulses(Exception):
-    pass
-
 
 if sys.version_info[0] < 3:
     raise ValueError("Python3 required!")

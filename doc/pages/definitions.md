@@ -94,12 +94,8 @@ fitness.
 
 More details on these topics can be found in:
 
-* {ref}`genetic-values`
-* {ref}`modeling-quant-traits`
 
-```{eval-rst}
-.. todo:: 
-
+    Give links to where details can be found.
     Discuss fitness having default value of 1 and traits 0.
 ```
 

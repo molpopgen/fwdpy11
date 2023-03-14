@@ -17,11 +17,10 @@ kernelspec:
 
 :::
 
-This section describes how to allow mutations to have different effect sizes in different demes,
-building on the material from {ref}`softselection`.
+This section describes how to allow mutations to have different effect sizes in different demes.
 
 To allow for correlated effect sizes across demes, we used {class}`fwdpy11.mvDES` to model multivariate
-distributions of effect sizes.  This class inherits from {class}`fwdpy11.Sregion` (see {ref}`mutationregions`).
+distributions of effect sizes.  This class inherits from {class}`fwdpy11.Sregion` (see {ref}`des_vignette`).
 In general, there is no standard *general* method for drawing random deviates from arbitrary multivariate
 distributions.  The approach that we take is to use a multivariate Gaussian distribution as the underlying kernel.
 
@@ -41,8 +40,27 @@ selection on a quantitative trait.  The effects sizes within each deme are thems
 distributions and there is no correlation in the effect size in the two demes.
 
 ```{code-cell} python
+import demes
 import fwdpy11
 import numpy as np
+
+yaml = """
+description: two demes with symmetric migration
+time_units: generations
+demes:
+ - name: deme0
+   epochs:
+    - start_size: 100
+ - name: deme1
+   epochs:
+     - start_size: 100
+migrations:
+ - demes: [deme0, deme1]
+   rate: 0.1
+"""
+
+graph = demes.loads(yaml)
+demography = fwdpy11.discrete_demography.from_demes(graph, 1)
 
 pdict = {
     "nregions": [],
@@ -53,9 +71,7 @@ pdict = {
         )
     ],
     "rates": (0, 1e-3, None),
-    "demography": fwdpy11.DiscreteDemography(
-        migmatrix=np.array([0.9, 0.1, 0.1, 0.9]).reshape((2, 2))
-    ),
+    "demography": demography,
     "simlen": 100,
     "gvalue": fwdpy11.Additive(
         ndemes=2, scaling=2, gvalue_to_fitness=fwdpy11.GSS(optimum=0.0, VS=10.0)
@@ -145,9 +161,7 @@ pdict = {
     "recregions": [],
     "sregions": [mvdes],
     "rates": (0, 1e-3, None),
-    "demography": fwdpy11.DiscreteDemography(
-        migmatrix=np.array([0.9, 0.1, 0.1, 0.9]).reshape((2, 2))
-    ),
+    "demography": demography,
     "simlen": 100,
     "gvalue": fwdpy11.Multiplicative(ndemes=2, scaling=2),
 }
