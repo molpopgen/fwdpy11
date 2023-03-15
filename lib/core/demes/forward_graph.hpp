@@ -3,6 +3,7 @@
 #include <memory>
 #include <cstdint>
 #include <string>
+#include <vector>
 
 namespace fwdpy11_core
 {
@@ -51,5 +52,10 @@ namespace fwdpy11_core
         ForwardDemesGraphDataIterator<double> offspring_cloning_rates() const;
         ForwardDemesGraphDataIterator<double>
         offspring_ancestry_proportions(std::size_t offspring_deme) const;
+
+        // TODO: this can become const once upstream
+        // gets a fn to handle this
+        std::uint32_t sum_deme_sizes_at_time_zero();
+        std::vector<std::uint32_t> parental_deme_sizes_at_time_zero() const;
     };
 }

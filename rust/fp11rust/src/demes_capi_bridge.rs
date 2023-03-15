@@ -147,3 +147,34 @@ pub unsafe extern "C" fn demes_forward_graph_model_end_time(
 ) -> f64 {
     forward_graph_model_end_time(status, graph)
 }
+
+// Below are functions defined only for fwdpy11.
+// These make use of demes_forward_capi.
+
+#[no_mangle]
+pub unsafe extern "C" fn demes_forward_graph_sum_sizes_at_time_zero(
+    status: *mut i32,
+    graph: *mut OpaqueForwardGraph,
+) -> f64 {
+    if forward_graph_is_error_state(graph) {
+        *status = -1;
+        return f64::NAN;
+    }
+    forward_graph_update_state(0.0, graph);
+    if forward_graph_is_error_state(graph) {
+        *status = -1;
+        return f64::NAN;
+    }
+    let ptr = forward_graph_parental_deme_sizes(graph, status);
+    if *status < 0 {
+        return f64::NAN;
+    }
+    assert!(!ptr.is_null());
+    let num_demes = forward_graph_number_of_demes(graph);
+    if num_demes < 0 {
+        return f64::NAN;
+    }
+    let size_slice = std::slice::from_raw_parts(ptr, num_demes as usize);
+    assert_eq!(size_slice.len(), num_demes as usize); 
+    size_slice.iter().sum()
+}
