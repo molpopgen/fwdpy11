@@ -210,9 +210,15 @@ class ModelParams(object):
         except TypeError:
             try:
                 for i in value:
-                    attr.validators.instance_of(fwdpy11.PoissonCrossoverGenerator)(
-                        self, attribute, i
-                    )
+                    valid = False
+                    for k in [fwdpy11.PoissonCrossoverGenerator,
+                              fwdpy11.NonPoissonCrossoverGenerator]:
+                        if isinstance(i, k):
+                            valid = True
+                            break
+
+                    if not valid:
+                        raise TypeError(f"invalid recregion type {type(i)}")
                 if not all([i.discrete for i in value]) and not all(
                     [not i.discrete for i in value]
                 ):

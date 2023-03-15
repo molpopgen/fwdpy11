@@ -243,6 +243,8 @@ def evolvets(
         non_poisson = [i for i in params.recregions if isinstance(
             i, fwdpy11._fwdpy11.NonPoissonCrossoverGenerator)]
         rm = dispatch_create_GeneticMap_non_Region(poisson, non_poisson)
+        assert rm._num_poisson_callbacks() == len(poisson)
+        assert rm._num_non_poisson_callbacks() == len(non_poisson)
 
     from ._fwdpy11 import SampleRecorder, _evolve_with_tree_sequences_options
 
