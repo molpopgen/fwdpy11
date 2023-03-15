@@ -1,3 +1,4 @@
+#include <limits>
 #include <cstddef>
 #include <cstdint>
 #include <cstdlib>
@@ -281,5 +282,34 @@ namespace fwdpy11_core
         // but we keep it for now.
         throw_if_null(begin, __FILE__, __LINE__);
         return ForwardDemesGraphDataIterator<double>{begin, begin + number_of_demes()};
+    }
+
+    std::uint32_t
+    ForwardDemesGraph::sum_deme_sizes_at_time_zero()
+    {
+        std::int32_t status;
+        auto rv
+            = demes_forward_graph_sum_sizes_at_time_zero(&status, pimpl->graph.get());
+        pimpl->handle_error_code(status);
+        if (rv >= static_cast<double>(std::numeric_limits<std::uint32_t>::max()))
+            {
+                throw std::runtime_error(
+                    "sum of sizes at time zero is too large for integer type");
+            }
+        return rv;
+    }
+
+    std::vector<std::uint32_t>
+    ForwardDemesGraph::parental_deme_sizes_at_time_zero() const
+    {
+        pimpl->update_model_state_to_time(0.0);
+        std::vector<std::uint32_t> rv;
+        auto iter = this->parental_deme_sizes();
+        for (auto i = std::begin(iter); i != std::end(iter); ++i)
+            {
+                rv.push_back(static_cast<std::uint32_t>(*i));
+            }
+
+        return rv;
     }
 }
