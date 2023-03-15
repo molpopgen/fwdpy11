@@ -285,9 +285,10 @@ BOOST_FIXTURE_TEST_CASE(test_basic_api_coherence_two_deme_perpetual_island_model
 {
     auto model = TwoDemePerpetualIslandModel();
 
-    // over-write the fixture so that the initial pop is okay
-    pop = fwdpy11::DiploidPopulation({100, 100}, 10.0);
     fwdpy11_core::ForwardDemesGraph forward_demes_graph(model.yaml, 10);
+    // over-write the fixture so that the initial pop is okay
+    pop = fwdpy11::DiploidPopulation(forward_demes_graph.parental_deme_sizes_at_time_zero(),
+                                     10.0);
 
     // TODO: if we put long run times in here, we get exceptions
     // from the ForwardDemesGraph back end.

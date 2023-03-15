@@ -31,6 +31,7 @@ BOOST_FIXTURE_TEST_CASE(single_deme_model_with_burn_in, SingleDemeModel)
     fwdpy11_core::ForwardDemesGraph g(yaml, 10);
     BOOST_REQUIRE_EQUAL(g.number_of_demes(), 1);
     fwdpy11::DiploidPopulation pop(100, 1.0);
+    BOOST_CHECK_EQUAL(pop.N, g.sum_deme_sizes_at_time_zero());
     g.initialize_model(pop.generation);
     auto end_time = g.model_end_time();
     BOOST_REQUIRE_EQUAL(end_time, 11);
