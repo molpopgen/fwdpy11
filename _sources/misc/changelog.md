@@ -3,6 +3,15 @@
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+## 0.19.7
+
+Bug fix
+
+* Fix bug in ModelParams processing of non-Poisson
+  crossover regions.
+  PR {pr}`1106`
+  Issue {issue}`1105`
+
 ## 0.19.6
 
 Bug fix
