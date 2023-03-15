@@ -16,7 +16,15 @@ init_RecombinationRegions(py::module& m)
         .def_readonly("weights", &fwdpy11::RecombinationRegions::weights);
 
     py::class_<fwdpy11::GeneralizedGeneticMap, fwdpy11::GeneticMap>(
-        m, "GeneralizedGeneticMap");
+        m, "GeneralizedGeneticMap")
+        .def("_num_poisson_callbacks",
+             [](const fwdpy11::GeneralizedGeneticMap& self) {
+                 return self.poisson_callbacks.size();
+             })
+        .def("_num_non_poisson_callbacks",
+             [](const fwdpy11::GeneralizedGeneticMap& self) {
+                 return self.non_poisson_callbacks.size();
+             });
 
     m.def("dispatch_create_GeneticMap",
           [](py::object o, std::vector<fwdpy11::Region>& regions) {
@@ -33,11 +41,9 @@ init_RecombinationRegions(py::module& m)
                   poisson_callbacks;
               std::vector<std::unique_ptr<fwdpy11::NonPoissonCrossoverGenerator>>
                   non_poisson_callbacks;
-              double x = 0.0;
               for (auto& i : poisson)
                   {
                       auto& ref = i.cast<fwdpy11::PoissonCrossoverGenerator&>();
-                      x += ref.mean_number_xovers();
                       poisson_callbacks.emplace_back(ref.ll_clone());
                   }
               for (auto& i : non_poisson)
