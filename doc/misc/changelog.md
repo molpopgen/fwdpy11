@@ -1229,10 +1229,10 @@ release candidates (see below) plus the following:
 :::{note}
 
 This is the first stable release with support for flexible demographic modeling.
-See `softselection` for details as well as {ref}`IMexample`.  Currently,
+See `softselection` for details as well as `IMexample`.  Currently,
 support for different fitness effects in different demes is limited, which
 will be addressed in 0.7.0.  However, this version does support adaptation
-of quantitative traits to different optima.  See {ref}`localadaptation`.
+of quantitative traits to different optima.  See `localadaptation`.
 
 :::
 
@@ -1259,7 +1259,7 @@ Kind of a big release:
   PR {pr}`384`
 * Add some pre-computed demographic models, see `demographic-models`.
 * New examples added:
-  {ref}`IMexample`
+  `IMexample`
 * Many improvements/additions to the test suite and the manual.
 
 ## 0.6.0rc1
@@ -1297,7 +1297,7 @@ New documentation
 
 * Examples of simulations using the `fwdpy11.DiscreteDemograpy` classes.
   PR {pr}`359`
-  See {ref}`localadaptation` and {ref}`migtest`.
+  See `localadaptation` and `migtest`.
 
 Changes to the build system and dependencies:
 
