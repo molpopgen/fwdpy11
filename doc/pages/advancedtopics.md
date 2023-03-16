@@ -27,8 +27,6 @@ many replicates in separate Python *processes* using a single script.
 Fully worked-out examples of varying complexity can be found here:
 
 * {ref}`bgs_vignette`
-* {ref}`IMexample`
-* {ref}`migtest`
 * {ref}`precapitation`
 * {ref}`recapitation`
 
