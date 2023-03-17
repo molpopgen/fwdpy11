@@ -67,11 +67,13 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
 
         :param ts: A tree sequence from tskit
         :type ts: tskit.TreeSequence
+        :param import_mutations: if `True`, import mutations and sites
+                                 from the tree sequence
+        :type import_mutations: bool
 
-        :return: A population object with an initialized :class:`fwdpy11.TableCollection`
+        :return: A population object with an initialized
+                 :class:`fwdpy11.TableCollection`
         :rtype: :class:`fwdpy11.DiploidPopulation`
-
-        .. versionadded:: 0.2.0
 
         .. note::
 
@@ -84,20 +86,59 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
             node times in the correct time units! (Generations,
             for example.)
 
+        .. warning::
+
+            Support for importing mutations is currently limited to
+            two cases:
+
+            1. The tree seq has mutations entirely from tskit's API
+               (see :ref:`import_mutations_from_tskit_vignette`).
+            2. The tree seq has mutations entirely from a previous run
+               of fwdpy11.
+
+
+        .. versionadded:: 0.2.0
+
+        .. versionchanged:: 0.19.8
+
+           Correctly handle two cases:
+
+           1. The tree seq has mutations entirely from tskit's API
+              (see :ref:`import_mutations_from_tskit_vignette`).
+           2. The tree seq has mutations entirely from a previous run
+              of fwdpy11.
+
         """
         ll = ll_DiploidPopulation._create_from_tskit(ts)
         if import_mutations is True:
             import fwdpy11.tskit_tools
             for mutation in ts.mutations():
+                if mutation.metadata["origin"] < 0.0:
+                    msg = "all origin fields in mutation metadata"
+                    msg += "must be non-negative"
+                    raise ValueError(msg)
                 if not mutation.time.is_integer():
                     raise ValueError("mutation times cannot contain decimals")
             mutation_nodes = [i.node for i in ts.mutations()]
             decoded_md = fwdpy11.tskit_tools.decode_mutation_metadata(ts)
-            for i, j in zip(ts.mutations(), decoded_md):
-                if j is not None:
-                    if i.time != j.g:
-                        raise ValueError(
-                            "metadata origin time != mutation time in tables")
+            try:
+                # The case of the tree seq has all mutations added
+                # to it via tskit API
+                for i, j in zip(ts.mutations(), decoded_md):
+                    if j is not None:
+                        if i.time != j.g:
+                            msg = f"metadata origin time {j.g} != "
+                            msg += f"mutation time {i.time} in tables"
+                            raise ValueError(msg)
+            except ValueError:
+                # The case of the tree seq has all of its mutations
+                # from a pervious fwdpy11 run
+                keys = set([i.key for i in decoded_md])
+                for i in ts.mutations():
+                    md = i.metadata
+                    key = (ts.site(i.site).position, md['s'], md['origin'])
+                    if key not in keys:
+                        raise ValueError(f"{key}")
 
             mvec = fwdpy11._fwdpy11.MutationVector()
             for i in decoded_md:
@@ -106,7 +147,7 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
             ll._set_mutations(mvec, mutation_nodes)
         return cls(0, 0.0, ll_pop=ll)
 
-    @classmethod
+    @ classmethod
     def load_from_file(cls, filename: str):
         """
         Load population from the output of
@@ -118,7 +159,7 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
         ll = ll_DiploidPopulation._load_from_file(filename)
         return cls(0, 0.0, ll_pop=ll)
 
-    @classmethod
+    @ classmethod
     def load_from_pickle_file(cls, filename: IO):
         """
         Read in a pickled population from a file.
@@ -133,7 +174,7 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
         ll = ll_DiploidPopulation._load_from_pickle_file(filename)
         return cls(0, 0.0, ll_pop=ll)
 
-    @property
+    @ property
     def alive_nodes(self) -> np.ndarray:
         """
         List of alive nodes corresponding to individuals.
@@ -143,7 +184,7 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
         md = np.array(self.diploid_metadata, copy=False)
         return md["nodes"].flatten()
 
-    @property
+    @ property
     def ancient_sample_nodes(self) -> np.ndarray:
         """
         Return an array of nodes associated with preserved/ancient samples.
@@ -154,22 +195,22 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
         """
         return self.preserved_nodes
 
-    @property
+    @ property
     def ancient_sample_metadata(self) -> Iterable[DiploidMetadata]:
         """Supports buffer protocol"""
         return self._ancient_sample_metadata
 
-    @property
+    @ property
     def diploids(self) -> Iterable[DiploidGenotype]:
         """Supports buffer protocol"""
         return self._diploids
 
-    @property
+    @ property
     def diploid_metadata(self) -> Iterable[DiploidMetadata]:
         """Supports buffer protocol"""
         return self._diploid_metadata
 
-    @property
+    @ property
     def preserved_nodes(self) -> np.ndarray:
         """
         Return an array of nodes associated with preserved/ancient samples.
@@ -181,7 +222,7 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
         """
         return np.array(self.ancient_sample_metadata, copy=False)["nodes"].flatten()
 
-    @property
+    @ property
     def tables(self) -> TableCollection:
         """Access the :class:`fwdpy11.TableCollection`"""
         return self._pytables
