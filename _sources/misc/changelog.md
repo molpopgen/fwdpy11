@@ -3,6 +3,18 @@
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+## 0.19.8
+
+Big fix/new feature (take your pick)
+
+* {func}`fwdpy11.DiploidPopulation.create_from_tskit` now
+  handles tree sequences were all mutations come from
+  adding them "manually" in tskit
+  (see {ref}`import_mutations_from_tskit_vignette`)
+  **OR** from a previous run of fwdpy11.
+  PR {pr}`1110`
+  Issue {issue}`1109`
+
 ## 0.19.7
 
 Bug fix

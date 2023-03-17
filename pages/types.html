@@ -1107,18 +1107,20 @@ forwards in time.</p></li>
 <dd><p>Create a new object from an tskit.TreeSequence</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>ts</strong> (<a class="reference external" href="https://tskit.dev/tskit/docs/stable/python-api.html#tskit.TreeSequence" title="(in Python)"><em>tskit.TreeSequence</em></a>) – A tree sequence from tskit</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ts</strong> (<a class="reference external" href="https://tskit.dev/tskit/docs/stable/python-api.html#tskit.TreeSequence" title="(in Python)"><em>tskit.TreeSequence</em></a>) – A tree sequence from tskit</p></li>
+<li><p><strong>import_mutations</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – if <cite>True</cite>, import mutations and sites
+from the tree sequence</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A population object with an initialized <a class="reference internal" href="#fwdpy11.TableCollection" title="fwdpy11.TableCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.TableCollection</span></code></a></p>
+<dd class="field-even"><p>A population object with an initialized
+<a class="reference internal" href="#fwdpy11.TableCollection" title="fwdpy11.TableCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.TableCollection</span></code></a></p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference internal" href="#fwdpy11.DiploidPopulation" title="fwdpy11.DiploidPopulation"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiploidPopulation</span></code></a></p>
 </dd>
 </dl>
-<div class="versionadded">
-<p><span class="versionmodified added">New in version 0.2.0.</span></p>
-</div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>In general, initializing a population using
@@ -1129,6 +1131,29 @@ of the coalescent model itself. A key issue
 is that your input tree sequence must have
 node times in the correct time units! (Generations,
 for example.)</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Support for importing mutations is currently limited to
+two cases:</p>
+<ol class="arabic simple">
+<li><p>The tree seq has mutations entirely from tskit’s API
+(see <a class="reference internal" href="../long_vignettes/import_mutations_from_tskit.html#import-mutations-from-tskit-vignette"><span class="std std-ref">Importing mutations from tskit</span></a>).</p></li>
+<li><p>The tree seq has mutations entirely from a previous run
+of fwdpy11.</p></li>
+</ol>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 0.2.0.</span></p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 0.19.8: </span>Correctly handle two cases:</p>
+<ol class="arabic simple">
+<li><p>The tree seq has mutations entirely from tskit’s API
+(see <a class="reference internal" href="../long_vignettes/import_mutations_from_tskit.html#import-mutations-from-tskit-vignette"><span class="std std-ref">Importing mutations from tskit</span></a>).</p></li>
+<li><p>The tree seq has mutations entirely from a previous run
+of fwdpy11.</p></li>
+</ol>
 </div>
 </dd></dl>
 
