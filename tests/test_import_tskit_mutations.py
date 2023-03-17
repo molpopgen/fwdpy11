@@ -188,18 +188,23 @@ def test_import_msprime_mutations_bad_metadata(seed1, seed2):
         else:
             md['origin'] = -1
 
-    def bad_origin2(md):
-        if md['origin'] > 0.0:
-            md['origin'] = int(0.5*md['origin'])
-        else:
-            md['origin'] = -1
+    # NOTE: disable in 0.19.8 to
+    # fix #1109 but this should be
+    # a requirement for mutations added "manually"
+    # to tskit.
+    # def bad_origin2(md):
+    #     if md['origin'] > 0.0:
+    #         md['origin'] = -1 #int(0.5*md['origin'])
+    #     else:
+    #         md['origin'] = -1
 
     # This will not trigger an error:
     # fwdpy11 sets the neutral field based on if effect_size == 0.0
     # def neutrality_mismatch1(md):
     #     md['neutral'] = 1
 
-    for callback in [bad_effect_size, bad_dominance, bad_origin, bad_origin2]:
+    # NOTE: bring back bad_origin2 in 0.20.0 if possible
+    for callback in [bad_effect_size, bad_dominance, bad_origin]:
         ts = make_treeseq_with_one_row_containing_bad_metadata(seed2, callback)
         with pytest.raises(ValueError):
             _ = fwdpy11.DiploidPopulation.create_from_tskit(
