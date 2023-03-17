@@ -54,7 +54,6 @@ def pop():
             scaling=2, gvalue_to_fitness=fwdpy11.GSS(optimum=optimum, VS=VS)
         ),
         "simlen": simlen,
-        "demography": fwdpy11.DiscreteDemography(),
         "prune_selected": False,
     }
     params = fwdpy11.ModelParams(**pdict)
