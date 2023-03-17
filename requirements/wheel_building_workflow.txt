@@ -2,8 +2,9 @@
 # requirements file needed to generate
 # a successful wheel installation
 # in the "test wheels" step of .github/workflows/wheels.yml
-msprime~=1.0
 black
 intervaltree
 attrs >= 20.3.0 
+demes == 0.2.2
+tskit
 scipy
