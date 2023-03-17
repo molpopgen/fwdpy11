@@ -31,7 +31,7 @@ git config --global --add safe.directory /project
 # Fetch the full history as we'll be missing tags otherwise.
 # git fetch --unshallow
   
-for py in cp37-cp37m cp38-cp38 cp39-cp39 cp310-cp310
+for py in cp38-cp38 cp39-cp39 cp310-cp310 cp311-cp311
 do
     PYPATH=/opt/python/${py}
     PYBIN=${PYPATH}/bin/python 
