@@ -111,8 +111,9 @@ init_DiploidPopulation(py::module& m)
         .def("_set_mutations",
              [](fwdpy11::DiploidPopulation& self,
                 const std::vector<fwdpy11::Mutation>& mutations,
-                const std::vector<std::int32_t>& mutation_nodes) {
-                 self.set_mutations(mutations, mutation_nodes);
+                const std::vector<std::int32_t>& mutation_nodes,
+                const std::vector<fwdpy11::mutation_origin_time>& origin_times) {
+                 self.set_mutations(mutations, mutation_nodes, origin_times);
              })
         .def(py::pickle(
             [](const fwdpy11::DiploidPopulation& pop) -> py::object {
