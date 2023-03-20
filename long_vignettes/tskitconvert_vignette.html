@@ -1133,29 +1133,29 @@ You do not know the state of the <code class="docutils literal notranslate"><spa
 <span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
 <span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">ts</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">dump_tables_to_tskit</span><span class="p">(</span><span class="n">seed</span><span class="o">=-</span><span class="mi">4616</span><span class="p">)</span>
 
-<span class="nn">File ~/work/fwdpy11/fwdpy11/fwdpy11/_types/diploid_population.py:344,</span> in <span class="ni">DiploidPopulation.dump_tables_to_tskit</span><span class="nt">(self, model_params, demes_graph, population_metadata, data, seed, parameters, destructive)</span>
-<span class="g g-Whitespace">    </span><span class="mi">259</span> <span class="k">def</span> <span class="nf">dump_tables_to_tskit</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">260</span>     <span class="bp">self</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">261</span>     <span class="o">*</span><span class="p">,</span>
+<span class="nn">File ~/work/fwdpy11/fwdpy11/fwdpy11/_types/diploid_population.py:345,</span> in <span class="ni">DiploidPopulation.dump_tables_to_tskit</span><span class="nt">(self, model_params, demes_graph, population_metadata, data, seed, parameters, destructive)</span>
+<span class="g g-Whitespace">    </span><span class="mi">260</span> <span class="k">def</span> <span class="nf">dump_tables_to_tskit</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">261</span>     <span class="bp">self</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">262</span>     <span class="o">*</span><span class="p">,</span>
    <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">269</span>     <span class="n">destructive</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">270</span> <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">tskit</span><span class="o">.</span><span class="n">TreeSequence</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">271</span><span class="w">     </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="g g-Whitespace">    </span><span class="mi">272</span><span class="sd">     Dump the population&#39;s TableCollection into</span>
-<span class="g g-Whitespace">    </span><span class="mi">273</span><span class="sd">     an tskit TreeSequence</span>
+<span class="g g-Whitespace">    </span><span class="mi">270</span>     <span class="n">destructive</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">271</span> <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">tskit</span><span class="o">.</span><span class="n">TreeSequence</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">272</span><span class="w">     </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="g g-Whitespace">    </span><span class="mi">273</span><span class="sd">     Dump the population&#39;s TableCollection into</span>
+<span class="g g-Whitespace">    </span><span class="mi">274</span><span class="sd">     an tskit TreeSequence</span>
 <span class="sd">   (...)</span>
-<span class="g g-Whitespace">    </span><span class="mi">342</span><span class="sd"> </span>
-<span class="g g-Whitespace">    </span><span class="mi">343</span><span class="sd">     &quot;&quot;&quot;</span>
-<span class="ne">--&gt; </span><span class="mi">344</span>     <span class="k">return</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">tskit_tools</span><span class="o">.</span><span class="n">_dump_tables_to_tskit</span><span class="o">.</span><span class="n">_dump_tables_to_tskit</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">345</span>         <span class="bp">self</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">346</span>         <span class="n">model_params</span><span class="o">=</span><span class="n">model_params</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">347</span>         <span class="n">demes_graph</span><span class="o">=</span><span class="n">demes_graph</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">348</span>         <span class="n">population_metadata</span><span class="o">=</span><span class="n">population_metadata</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">349</span>         <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">350</span>         <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">351</span>         <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">352</span>         <span class="n">destructive</span><span class="o">=</span><span class="n">destructive</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">353</span>     <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">343</span><span class="sd"> </span>
+<span class="g g-Whitespace">    </span><span class="mi">344</span><span class="sd">     &quot;&quot;&quot;</span>
+<span class="ne">--&gt; </span><span class="mi">345</span>     <span class="k">return</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">tskit_tools</span><span class="o">.</span><span class="n">_dump_tables_to_tskit</span><span class="o">.</span><span class="n">_dump_tables_to_tskit</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">346</span>         <span class="bp">self</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">347</span>         <span class="n">model_params</span><span class="o">=</span><span class="n">model_params</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">348</span>         <span class="n">demes_graph</span><span class="o">=</span><span class="n">demes_graph</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">349</span>         <span class="n">population_metadata</span><span class="o">=</span><span class="n">population_metadata</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">350</span>         <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">351</span>         <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">352</span>         <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">353</span>         <span class="n">destructive</span><span class="o">=</span><span class="n">destructive</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">354</span>     <span class="p">)</span>
 
 <span class="nn">File ~/work/fwdpy11/fwdpy11/fwdpy11/tskit_tools/_dump_tables_to_tskit.py:187,</span> in <span class="ni">_dump_tables_to_tskit</span><span class="nt">(self, model_params, demes_graph, population_metadata, data, seed, parameters, destructive)</span>
 <span class="g g-Whitespace">    </span><span class="mi">185</span> <span class="k">if</span> <span class="n">seed</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
