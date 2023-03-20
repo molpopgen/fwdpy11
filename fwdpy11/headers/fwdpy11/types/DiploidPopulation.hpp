@@ -4,6 +4,8 @@
 #include "Population.hpp"
 #include "Diploid.hpp"
 #include "fwdpy11/types/Mutation.hpp"
+#include <sstream>
+#include <iostream>
 #include <stdexcept>
 #include <limits>
 #include <unordered_set>
@@ -223,7 +225,8 @@ namespace fwdpy11
          */
         void
         set_mutations(const std::vector<Mutation> &mutations,
-                      const std::vector<std::int32_t> &mutation_nodes)
+                      const std::vector<std::int32_t> &mutation_nodes,
+                      const std::vector<fwdpy11::mutation_origin_time> &origin_times)
         {
             if (this->is_simulating)
                 {
@@ -266,7 +269,7 @@ namespace fwdpy11
                         }
                     this->mutations.emplace_back(
                         Mutation(mutations[i].neutral, mutations[i].pos, mutations[i].s,
-                                 mutations[i].h, -mutations[i].g, mutations[i].esizes,
+                                 mutations[i].h, -origin_times[i], mutations[i].esizes,
                                  mutations[i].heffects, mutations[i].xtra));
                     this->mut_lookup.emplace(mutations[i].pos, i);
                     this->tables->emplace_back_site(mutations[i].pos, std::int8_t{0});
@@ -319,6 +322,32 @@ namespace fwdpy11
                             fwdpp::ts::samples_iterator si(
                                 sv.current_tree(), m->node,
                                 fwdpp::ts::convert_sample_index_to_nodes(true));
+                            if (m->key >= this->mutations.size())
+                                {
+                                    throw std::runtime_error("invalid mutation key");
+                                }
+                            auto parent_node = sv.current_tree().parents[m->node];
+                            auto node_time = this->tables->nodes[m->node].time;
+
+                            if (this->mutations[m->key].g > node_time)
+                                {
+                                    std::ostringstream o;
+                                    o << "invalid mutation origin time";
+                                    throw std::runtime_error(o.str());
+                                }
+                            if (parent_node >= 0)
+                                {
+                                    auto parent_time
+                                        = this->tables
+                                              ->nodes[sv.current_tree().parents[m->node]]
+                                              .time;
+                                    if (this->mutations[m->key].g <= parent_time)
+                                        {
+                                            std::ostringstream o;
+                                            o << "invalid mutation origin time";
+                                            throw std::runtime_error(o.str());
+                                        }
+                                }
                             auto s = si();
                             while (s != fwdpp::ts::NULL_INDEX)
                                 {

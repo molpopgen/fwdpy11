@@ -113,10 +113,10 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
         if import_mutations is True:
             import fwdpy11.tskit_tools
             for mutation in ts.mutations():
-                if mutation.metadata["origin"] < 0.0:
-                    msg = "all origin fields in mutation metadata"
-                    msg += "must be non-negative"
-                    raise ValueError(msg)
+                # if mutation.metadata["origin"] < 0.0:
+                #     msg = "all origin fields in mutation metadata"
+                #     msg += "must be non-negative"
+                #     raise ValueError(msg)
                 if not mutation.time.is_integer():
                     raise ValueError("mutation times cannot contain decimals")
             mutation_nodes = [i.node for i in ts.mutations()]
@@ -144,7 +144,8 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
             for i in decoded_md:
                 if i is not None:
                     mvec.append(i)
-            ll._set_mutations(mvec, mutation_nodes)
+            ll._set_mutations(mvec, mutation_nodes,
+                              [int(i.time) for i in ts.mutations()])
         return cls(0, 0.0, ll_pop=ll)
 
     @ classmethod

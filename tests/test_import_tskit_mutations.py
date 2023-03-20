@@ -182,11 +182,14 @@ def test_import_msprime_mutations_bad_metadata(seed1, seed2):
     # The "origin time" in the metadata
     # must equal the mutation's time value
 
-    def bad_origin(md):
-        if md['origin'] > 0.0:
-            md['origin'] = -1*md['origin']
-        else:
-            md['origin'] = -1
+    # NOTE: disabled in 0.19.9 to allow
+    # creating of pops from fwdpy11-generated
+    # mutations
+    # def bad_origin(md):
+    #     if md['origin'] > 0.0:
+    #         md['origin'] = -1*md['origin']
+    #     else:
+    #         md['origin'] = -1
 
     # NOTE: disable in 0.19.8 to
     # fix #1109 but this should be
@@ -203,8 +206,8 @@ def test_import_msprime_mutations_bad_metadata(seed1, seed2):
     # def neutrality_mismatch1(md):
     #     md['neutral'] = 1
 
-    # NOTE: bring back bad_origin2 in 0.20.0 if possible
-    for callback in [bad_effect_size, bad_dominance, bad_origin]:
+    # NOTE: bring back bad_origin and bad_origin2 in 0.20.0 if possible
+    for callback in [bad_effect_size, bad_dominance]:
         ts = make_treeseq_with_one_row_containing_bad_metadata(seed2, callback)
         with pytest.raises(ValueError):
             _ = fwdpy11.DiploidPopulation.create_from_tskit(

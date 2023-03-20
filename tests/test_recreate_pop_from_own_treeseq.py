@@ -23,10 +23,29 @@ import numpy as np
 import tskit
 
 
-# Example from Aaron Ragsdale.
-# Modified to run much faster
-@pytest.fixture
-def pop():
+# NOTE: this is redundant with
+# internal checks in the C++ back end.
+# However, this code makes use of
+# different code paths on the C++ side.
+def validate_mutation_table(pop):
+    # assert(all([i.time > 0 for i in pop.tables.nodes]))
+    ti = fwdpy11.TreeIterator(pop.tables, [i for i in range(2*pop.N)])
+
+    for t in ti:
+        for m in t.mutations():
+            g = pop.mutations[m.key].g
+            nt = pop.tables.nodes[m.node].time
+            # Internal mutation  times
+            # are meant to be "forwards in time",
+            # so a variant must always have an origin
+            # time <= that of its node time
+            assert g <= nt
+            if t.parent(m.node) >= 0:
+                pt = pop.tables.nodes[t.parent(m.node)].time
+                assert g > pt
+
+
+def pop_rng_params():
     # Set up parameters
     r = 1e-8
     L = 1e8
@@ -60,6 +79,15 @@ def pop():
 
     rng = fwdpy11.GSLrng(424242)
 
+    return pop, rng, params
+
+
+# Example from Aaron Ragsdale.
+# Modified to run much faster
+@pytest.fixture
+def pop():
+    pop, rng, params = pop_rng_params()
+
     fwdpy11.evolvets(rng, pop, params, 100, suppress_table_indexing=True)
 
     assert pop.generation == 3
@@ -77,6 +105,17 @@ def test_recreate_pop_from_own_treeseq(pop):
         ts, import_mutations=True)
     assert len(pop.tables.mutations) == nm
     assert pop.generation == 0
+    validate_mutation_table(pop)
+
+
+def test_multiple_export_recreate_evolve_steps():
+    pop, rng, params = pop_rng_params()
+    for i in range(5):
+        fwdpy11.evolvets(rng, pop, params, 100, suppress_table_indexing=True)
+        assert pop.generation == 3
+        ts = pop.dump_tables_to_tskit()
+        pop = fwdpy11.DiploidPopulation.create_from_tskit(
+            ts, import_mutations=True)
 
 
 def test_start_pop_from_treeseq_without_mutations(pop):

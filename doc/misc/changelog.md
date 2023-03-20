@@ -3,6 +3,15 @@
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+## 0.19.9
+
+Big fix
+
+* Use the mutation's time field rather than
+  the metadata "origin" time when creating
+  a DiploidPopulation from a tskit tree sequence.
+  PR {pr}`1113`
+
 ## 0.19.8
 
 Big fix/new feature (take your pick)
