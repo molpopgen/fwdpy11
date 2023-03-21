@@ -17,27 +17,25 @@
 // along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-#ifndef FWDPY11_MIGRATION_LOOKUP_HPP
-#define FWDPY11_MIGRATION_LOOKUP_HPP
+#ifndef FWDPY11_DISCRETE_DEMOGRAPY_SIMULATION_FUNCTIONS_HPP
+#define FWDPY11_DISCRETE_DEMOGRAPY_SIMULATION_FUNCTIONS_HPP
 
-#include <cstdint>
 #include <vector>
-#include <fwdpp/gsl_discrete.hpp>
+#include <fwdpy11/rng.hpp>
+#include <fwdpy11/discrete_demography/exceptions.hpp>
+#include <core/demes/forward_graph.hpp>
+#include "multideme_fitness_lookups.hpp"
 
-namespace fwdpy11
+namespace fwdpy11_core
 {
     namespace discrete_demography
     {
-        struct migration_lookup
-        {
-            std::vector<fwdpp::gsl_ran_discrete_t_ptr> lookups;
-            const bool null_migmatrix;
-            migration_lookup(std::int32_t maxdemes, bool isnull)
-                : lookups(maxdemes), null_migmatrix(isnull)
-            {
-            }
-        };
+        void validate_parental_state(
+            std::uint32_t generation,
+            const multideme_fitness_lookups<std::uint32_t>& fitnesses,
+            const fwdpy11_core::ForwardDemesGraph& demography);
+
     } // namespace discrete_demography
-} // namespace fwdpy11
+} // namespace fwdpy11_core
 
 #endif

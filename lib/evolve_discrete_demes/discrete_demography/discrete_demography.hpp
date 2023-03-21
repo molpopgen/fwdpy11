@@ -20,9 +20,7 @@
 #ifndef FWDPY11_DISCRETE_DEMOGRAPY_SIMULATION_HPP
 #define FWDPY11_DISCRETE_DEMOGRAPY_SIMULATION_HPP
 
-#include "constants.hpp"
 #include "simulation/multideme_fitness_lookups.hpp"
-#include "simulation/migration_lookup.hpp"
 #include "simulation/functions.hpp"
 #include "simulation/mating_event_type.hpp"
 #include "simulation/pick_parents.hpp"

@@ -24,9 +24,8 @@
 #include <limits>
 #include <cstdint>
 #include "core/demes/forward_graph.hpp"
-#include "deme_property_types.hpp"
 
-namespace fwdpy11
+namespace fwdpy11_core
 {
     namespace discrete_demography
     {
@@ -75,36 +74,6 @@ namespace fwdpy11
                 // we'll get errors from GSL.
                 std::fill(begin(individual_fitness), end(individual_fitness), -1);
                 std::partial_sum(std::begin(deme_sizes_uint), std::end(deme_sizes_uint),
-                                 begin(stops));
-                std::copy(begin(stops), end(stops) - 1, begin(starts) + 1);
-                std::fill(begin(offsets), end(offsets), 0);
-                for (auto&& md : individual_metadata)
-                    {
-                        auto i = starts[md.deme] + offsets[md.deme];
-                        individual_fitness[i] = md.w;
-                        individuals[i] = md.label;
-                        offsets[md.deme]++;
-                    }
-            }
-
-            template <typename METADATATYPE>
-            void
-            update(const current_deme_sizes_vector& deme_sizes,
-                   const std::vector<METADATATYPE>& individual_metadata)
-            {
-                auto& deme_sizes_ref = deme_sizes.get();
-                starts.resize(deme_sizes_ref.size());
-                stops.resize(deme_sizes_ref.size());
-                offsets.resize(deme_sizes_ref.size());
-                individual_fitness.resize(
-                    std::accumulate(begin(deme_sizes_ref), end(deme_sizes_ref), 0),
-                    -1.0);
-                individuals.resize(individual_fitness.size(),
-                                   std::numeric_limits<std::uint32_t>::max());
-                // These -1 are useful b/c if our bookkeeping is bad,
-                // we'll get errors from GSL.
-                std::fill(begin(individual_fitness), end(individual_fitness), -1);
-                std::partial_sum(begin(deme_sizes_ref), end(deme_sizes_ref),
                                  begin(stops));
                 std::copy(begin(stops), end(stops) - 1, begin(starts) + 1);
                 std::fill(begin(offsets), end(offsets), 0);

@@ -20,7 +20,6 @@
 #include "forward_demes_graph_fixtures.hpp"
 #include "fwdpp/ts/simplification/simplification.hpp"
 #include "fwdpy11/discrete_demography/exceptions.hpp"
-#include "fwdpy11/discrete_demography/simulation/functions.hpp"
 
 /* Tests needed
  *
