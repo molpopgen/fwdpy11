@@ -34,6 +34,8 @@
 #include "fwdpy11/types/Mutation.hpp"
 #include "get_individuals.hpp"
 
+#include <core/diploid_population/set_mutations.hpp>
+
 namespace py = pybind11;
 
 PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::DiploidGenotype>);
@@ -113,7 +115,7 @@ init_DiploidPopulation(py::module& m)
                 const std::vector<fwdpy11::Mutation>& mutations,
                 const std::vector<std::int32_t>& mutation_nodes,
                 const std::vector<fwdpy11::mutation_origin_time>& origin_times) {
-                 self.set_mutations(mutations, mutation_nodes, origin_times);
+                 set_mutations(mutations, mutation_nodes, origin_times, self);
              })
         .def(py::pickle(
             [](const fwdpy11::DiploidPopulation& pop) -> py::object {

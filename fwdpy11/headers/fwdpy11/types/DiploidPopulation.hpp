@@ -3,7 +3,6 @@
 
 #include "Population.hpp"
 #include "Diploid.hpp"
-#include "fwdpy11/types/Mutation.hpp"
 #include <sstream>
 #include <iostream>
 #include <stdexcept>
@@ -14,6 +13,7 @@
 #include <fwdpp/ts/tree_visitor.hpp>
 #include <fwdpp/ts/site_visitor.hpp>
 #include <fwdpp/ts/marginal_tree_functions/samples.hpp>
+#include <fwdpy11/types/Mutation.hpp>
 
 namespace fwdpy11
 {
@@ -209,179 +209,6 @@ namespace fwdpy11
                 }
         }
 
-        /* This is the back end for importing mutations from tskit.
-         * They have been decoded from metadata already.
-         *
-         * The procedure is:
-         * * Add them to our table structures.
-         * * Sort the tables.
-         * * Traverse trees so that we can add mutations to genomes.
-         *
-         * Because the data come from a tskit TreeSequence, we
-         * can make some simplifying assumptions:
-         *
-         * 1. Edges, etc., are already sorted.
-         * 2. So we just need to sort mutations.
-         */
-        void
-        set_mutations(const std::vector<Mutation> &mutations,
-                      const std::vector<std::int32_t> &mutation_nodes,
-                      const std::vector<fwdpy11::mutation_origin_time> &origin_times)
-        {
-            if (this->is_simulating)
-                {
-                    throw std::runtime_error(
-                        "cannot set mutations for a simulating population");
-                }
-            if (!this->mutations.empty())
-                {
-                    throw std::runtime_error("population has existing mutations");
-                }
-            this->mut_lookup.clear();
-            this->tables->mutations.clear();
-            this->tables->sites.clear();
-
-            // Here, we cheat a bit
-            this->haploid_genomes.clear();
-            for (auto &dip : this->diploids)
-                {
-                    this->haploid_genomes.emplace_back(1);
-                    dip.first = this->haploid_genomes.size() - 1;
-                    this->haploid_genomes.emplace_back(1);
-                    dip.second = this->haploid_genomes.size() - 1;
-                }
-
-            // Paranoia
-            for (auto &g : this->haploid_genomes)
-                {
-                    if (g.n != 1)
-                        {
-                            throw std::runtime_error(
-                                "all haploid_genomes must have a count of 1");
-                        }
-                }
-
-            for (std::size_t i = 0; i < mutations.size(); ++i)
-                {
-                    if (this->mut_lookup.find(mutations[i].pos) != end(this->mut_lookup))
-                        {
-                            throw std::invalid_argument("duplicate mutation positions");
-                        }
-                    this->mutations.emplace_back(
-                        Mutation(mutations[i].neutral, mutations[i].pos, mutations[i].s,
-                                 mutations[i].h, -origin_times[i], mutations[i].esizes,
-                                 mutations[i].heffects, mutations[i].xtra));
-                    this->mut_lookup.emplace(mutations[i].pos, i);
-                    this->tables->emplace_back_site(mutations[i].pos, std::int8_t{0});
-                    this->tables->emplace_back_mutation(
-                        mutation_nodes[i], this->mutations.size() - 1,
-                        this->tables->sites.size() - 1, std::int8_t{1},
-                        mutations[i].neutral);
-                }
-            this->mcounts.resize(this->mutations.size());
-            std::fill(begin(this->mcounts), end(this->mcounts), 0);
-            fwdpp::ts::sort_mutation_table_and_rebuild_site_table(*this->tables);
-            std::vector<fwdpp::ts::table_index_t> samples;
-            std::unordered_map<fwdpp::ts::table_index_t, std::size_t> node_to_genome;
-            for (std::size_t i = 0; i < this->diploid_metadata.size(); ++i)
-                {
-                    for (auto n : this->diploid_metadata[i].nodes)
-                        {
-                            if (node_to_genome.find(n) != end(node_to_genome))
-                                {
-                                    throw std::runtime_error(
-                                        "node id use multiple times");
-                                }
-                            samples.push_back(n);
-                        }
-                    node_to_genome.emplace(this->diploid_metadata[i].nodes[0],
-                                           this->diploids[i].first);
-                    node_to_genome.emplace(this->diploid_metadata[i].nodes[1],
-                                           diploids[i].second);
-                }
-            if (samples.empty())
-                {
-                    throw std::runtime_error(
-                        "samples list for adding tskit mutations to genomes is empty");
-                }
-
-            auto sv = fwdpp::ts::site_visitor<fwdpp::ts::std_table_collection>(
-                *this->tables, samples);
-            auto site = sv();
-            std::size_t nmutations_processed = 0;
-            while (site != end(sv))
-                {
-                    auto mutations = sv.get_mutations();
-                    if (mutations.second - mutations.first != 1)
-                        {
-                            throw std::runtime_error(
-                                "expected exactly one mutation per site");
-                        }
-                    for (auto m = mutations.first; m != mutations.second; ++m)
-                        {
-                            fwdpp::ts::samples_iterator si(
-                                sv.current_tree(), m->node,
-                                fwdpp::ts::convert_sample_index_to_nodes(true));
-                            if (m->key >= this->mutations.size())
-                                {
-                                    throw std::runtime_error("invalid mutation key");
-                                }
-                            auto parent_node = sv.current_tree().parents[m->node];
-                            auto node_time = this->tables->nodes[m->node].time;
-
-                            if (this->mutations[m->key].g > node_time)
-                                {
-                                    std::ostringstream o;
-                                    o << "invalid mutation origin time";
-                                    throw std::runtime_error(o.str());
-                                }
-                            if (parent_node >= 0)
-                                {
-                                    auto parent_time
-                                        = this->tables
-                                              ->nodes[sv.current_tree().parents[m->node]]
-                                              .time;
-                                    if (this->mutations[m->key].g <= parent_time)
-                                        {
-                                            std::ostringstream o;
-                                            o << "invalid mutation origin time";
-                                            throw std::runtime_error(o.str());
-                                        }
-                                }
-                            auto s = si();
-                            while (s != fwdpp::ts::NULL_INDEX)
-                                {
-                                    auto lookup = node_to_genome.find(s);
-                                    if (lookup == end(node_to_genome))
-                                        {
-                                            throw std::runtime_error(
-                                                "mutation could not be mapped to a "
-                                                "sample node");
-                                        }
-                                    if (m->neutral)
-                                        {
-                                            this->haploid_genomes[lookup->second]
-                                                .mutations.emplace_back(m->key);
-                                        }
-                                    else
-                                        {
-                                            this->haploid_genomes[lookup->second]
-                                                .smutations.emplace_back(m->key);
-                                        }
-                                    this->mcounts[m->key] += 1;
-                                    s = si();
-                                }
-                            nmutations_processed += 1;
-                        }
-                    site = sv();
-                }
-            if (nmutations_processed != this->mutations.size()
-                || nmutations_processed != this->tables->mutations.size())
-                {
-                    throw std::runtime_error(
-                        "failed to process the expected number of mutations");
-                }
-        }
     };
 } // namespace fwdpy11
 #endif
