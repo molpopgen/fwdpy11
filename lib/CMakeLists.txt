@@ -13,7 +13,9 @@ set(EVOLVE_DISCRETE_DEMES_SOURCES
     evolve_discrete_demes/track_ancestral_counts.cc
     evolve_discrete_demes/track_mutation_counts.cc
     evolve_discrete_demes/runtime_checks.cc
-    evolve_discrete_demes/util.cc)
+    evolve_discrete_demes/util.cc
+    evolve_discrete_demes/discrete_demography/simulation/pick_parents.cc
+    evolve_discrete_demes/discrete_demography/simulation/validate_parental_state.cc)
 
 set(GENETIC_MAP_SOURCES
     genetic_maps/regions.cc)
