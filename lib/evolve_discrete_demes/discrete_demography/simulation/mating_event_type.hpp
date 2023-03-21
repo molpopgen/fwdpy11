@@ -1,7 +1,7 @@
 #ifndef FWDPY11_DISCRETE_DEMOGRAPY_MATING_EVENT_TYPE_HPP
 #define FWDPY11_DISCRETE_DEMOGRAPY_MATING_EVENT_TYPE_HPP
 
-namespace fwdpy11
+namespace fwdpy11_core
 {
     namespace discrete_demography
     {

@@ -24,13 +24,12 @@
 #include <sstream>
 #include <numeric>
 #include <limits>
-#include "deme_property_types.hpp"
-#include "multideme_fitness_bookmark.hpp"
-#include "../exceptions.hpp"
-#include "../../rng.hpp"
+#include <fwdpy11/discrete_demography/exceptions.hpp>
+#include <fwdpy11/rng.hpp>
 #include <fwdpp/gsl_discrete.hpp>
+#include "multideme_fitness_bookmark.hpp"
 
-namespace fwdpy11
+namespace fwdpy11_core
 {
     namespace discrete_demography
     {
@@ -112,20 +111,7 @@ namespace fwdpy11
             }
 
             T
-            get_parent(const GSLrng_t& rng, const current_deme_sizes_vector& deme_sizes,
-                       const multideme_fitness_bookmark& fitness_bookmark,
-                       const std::int32_t deme) const
-            {
-                if (deme_sizes.get()[deme] == 0)
-                    {
-                        throw EmptyDeme("parental deme is empty");
-                    }
-                auto o = gsl_ran_discrete(rng.get(), lookups[deme].get());
-                return fitness_bookmark.individuals[fitness_bookmark.starts[deme] + o];
-            }
-
-            T
-            get_parent(const GSLrng_t& rng,
+            get_parent(const fwdpy11::GSLrng_t& rng,
                        const multideme_fitness_bookmark& fitness_bookmark,
                        const std::int32_t deme) const
             {
@@ -134,6 +120,6 @@ namespace fwdpy11
             }
         };
     } // namespace discrete_demography
-} // namespace fwdpy11
+} // namespace fwdpy11_core
 
 #endif

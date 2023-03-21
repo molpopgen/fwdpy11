@@ -18,7 +18,6 @@
 //
 #include <pybind11/pybind11.h>
 #include <fwdpy11/discrete_demography/exceptions.hpp>
-#include <fwdpy11/discrete_demography/constants.hpp>
 
 namespace py = pybind11;
 
