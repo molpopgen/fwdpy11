@@ -27,6 +27,7 @@ parts:
   - file: short_vignettes/recorders_vignette
   - file: short_vignettes/recapitation
   - file: short_vignettes/neutralmutsafter_vignette
+  - file: long_vignettes/import_mutations_from_tskit
 - caption: Short vignettes - demographic modeling
   chapters:
   - file: short_vignettes/demography_vignettes_intro
@@ -50,7 +51,6 @@ parts:
   - file: long_vignettes/tskit_metadata_vignette
 - caption: Longer vignettes - complete examples
   chapters:
-  - file: long_vignettes/import_mutations_from_tskit
   - file: long_vignettes/bgs_vignette
   - file: long_vignettes/gss_vignette
   - file: long_vignettes/pyfreqtracker
