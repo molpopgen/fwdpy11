@@ -23,12 +23,17 @@ struct evolve_with_tree_sequences_options
     bool reset_treeseqs_to_alive_nodes_after_simplification;
     bool preserve_first_generation;
 
+    // NOTE: options below here are likely to change later,
+    // as the back end becomes more general.
+    bool allow_residual_selfing;
+
     evolve_with_tree_sequences_options()
         : preserve_selected_fixations(false), suppress_edge_table_indexing(false),
           record_gvalue_matrix(false), track_mutation_counts_during_sim(false),
           remove_extinct_mutations_at_finish(true),
           reset_treeseqs_to_alive_nodes_after_simplification(false),
-          preserve_first_generation(false)
+          preserve_first_generation(false),
+          allow_residual_selfing(true)
     {
     }
 };

@@ -6,6 +6,7 @@
 #include <core/evolve_discrete_demes/evolvets.hpp>
 #include <core/demes/forward_graph.hpp>
 #include <cstdint>
+#include <cwchar>
 #include <exception>
 #include <fwdpy11/evolvets/SampleRecorder.hpp>
 #include <fwdpy11/genetic_values/dgvalue_pointer_vector.hpp>
@@ -286,8 +287,8 @@ BOOST_FIXTURE_TEST_CASE(test_basic_api_coherence_two_deme_perpetual_island_model
 
     fwdpy11_core::ForwardDemesGraph forward_demes_graph(model.yaml, 10);
     // over-write the fixture so that the initial pop is okay
-    pop = fwdpy11::DiploidPopulation(forward_demes_graph.parental_deme_sizes_at_time_zero(),
-                                     10.0);
+    pop = fwdpy11::DiploidPopulation(
+        forward_demes_graph.parental_deme_sizes_at_time_zero(), 10.0);
 
     // TODO: if we put long run times in here, we get exceptions
     // from the ForwardDemesGraph back end.
@@ -705,6 +706,38 @@ BOOST_FIXTURE_TEST_CASE(
 
     found = validate_ancestry(ancestry, 10, 1, 1, validate_complete_ancestry);
     BOOST_REQUIRE(found);
+}
+
+BOOST_AUTO_TEST_SUITE_END()
+
+BOOST_AUTO_TEST_SUITE(test_residual_selfing)
+
+BOOST_FIXTURE_TEST_CASE(test_no_residual_selfing, common_setup)
+{
+    auto model = DemeSizeIsOne();
+    fwdpy11_core::ForwardDemesGraph forward_demes_graph(model.yaml, 10);
+    pop = fwdpy11::DiploidPopulation(1, 1.0);
+    evolve_with_tree_sequences(rng, pop, recorder, 10, forward_demes_graph, 1, 0., 0.,
+                               mregions, recregions, gvalue_ptrs,
+                               sample_recorder_callback, stopping_criterion,
+                               post_simplification_recorder, options);
+    BOOST_REQUIRE_EQUAL(pop.generation, 1);
+}
+
+BOOST_FIXTURE_TEST_CASE(test_no_residual_selfing_exception, common_setup)
+{
+    auto model = DemeSizeIsOne();
+    fwdpy11_core::ForwardDemesGraph forward_demes_graph(model.yaml, 10);
+    pop = fwdpy11::DiploidPopulation(1, 1.0);
+    options.allow_residual_selfing = false;
+    BOOST_REQUIRE_THROW(
+        {
+            evolve_with_tree_sequences(rng, pop, recorder, 10, forward_demes_graph, 1,
+                                       0., 0., mregions, recregions, gvalue_ptrs,
+                                       sample_recorder_callback, stopping_criterion,
+                                       post_simplification_recorder, options);
+        },
+        fwdpy11::discrete_demography::DemographyError);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

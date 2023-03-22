@@ -68,3 +68,9 @@ struct LinearSizeChange
     std::string yaml;
     LinearSizeChange();
 };
+
+struct DemeSizeIsOne
+{
+    std::string yaml;
+    DemeSizeIsOne();
+};
