@@ -126,6 +126,18 @@ class ModelParams(object):
                            the population when they are first detected
                            as fixed.
     :type prune_selected: bool
+    :param allow_residual_selfing: If ``True``, then an individual may
+                                   be chosen twice as a parent.
+                                   If ``False``, two distinct parents
+                                   are required.
+    :type allow_residual_selfing: bool
+
+    .. warning::
+
+        When ``allow_residual_selfing`` is ``False``, an exception
+        will be raised if the parental deme has a size of 1.
+        The reason is that outcrossing is not possible in order
+        to generate the offspring.
 
     .. note::
 
@@ -163,6 +175,10 @@ class ModelParams(object):
     .. versionchanged:: 0.14.0
 
         Remove deprecated kwargs pself and popsizes.
+
+    .. versionchanged:: 0.20.0
+
+        Add `allow_residual_selfing`
     """
 
     nregions = attr.ib(factory=list)
@@ -175,6 +191,7 @@ class ModelParams(object):
         default=None)
     simlen: int = attr.ib(converter=int, default=0)
     prune_selected: bool = attr.ib(default=True)
+    allow_residual_selfing: bool = attr.ib(default=True)
 
     @nregions.validator
     def validate_nregions(self, attribute, value):

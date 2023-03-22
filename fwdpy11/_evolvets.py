@@ -274,6 +274,21 @@ def evolvets(
     options.remove_extinct_mutations_at_finish = remove_extinct_variants
     options.reset_treeseqs_to_alive_nodes_after_simplification = reset_treeseqs_after_simplify
     options.preserve_first_generation = preserve_first_generation
+    options.allow_residual_selfing = params.allow_residual_selfing
+
+    if options.allow_residual_selfing is False:
+        from fwdpy11._types.forward_demes_graph import _round_via_decimal
+        for d, deme in enumerate(demographic_model.graph.demes):
+            for e, epoch in enumerate(deme.epochs):
+                start_size = _round_via_decimal(epoch.start_size)
+                end_size = _round_via_decimal(epoch.end_size)
+                if start_size == 1 or end_size == 1:
+                    msg = f"deme {d} epoch {e} has a size of 1"
+                    msg += " but residual selfing is not allowed."
+                    msg += " This model will raise an error if this deme "
+                    msg += "contributes to ancestry after the size of 1"
+                    msg += " is reached."
+                    warnings.warn(msg, UserWarning)
 
     gvpointers = _dgvalue_pointer_vector(params.gvalue)
     evolve_with_tree_sequences(
