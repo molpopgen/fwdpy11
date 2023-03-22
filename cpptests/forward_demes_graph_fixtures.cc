@@ -148,6 +148,14 @@ demes:
       start_size: 55
 )";
 
+const char* deme_size_is_one = R"(
+time_units: generations
+demes:
+ - name: A
+   epochs:
+    - start_size: 1
+)";
+
 SingleDemeModel::SingleDemeModel() : yaml(single_deme_model)
 {
 }
@@ -195,5 +203,9 @@ NonIntegerEndSize::NonIntegerEndSize() : yaml(non_integer_end_size)
 }
 
 LinearSizeChange::LinearSizeChange() : yaml(linear_size_change)
+{
+}
+
+DemeSizeIsOne::DemeSizeIsOne() : yaml(deme_size_is_one)
 {
 }
