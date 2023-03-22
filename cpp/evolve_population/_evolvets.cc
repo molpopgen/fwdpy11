@@ -48,7 +48,9 @@ init_evolve_with_tree_sequences(py::module &m)
                        &evolve_with_tree_sequences_options::
                            reset_treeseqs_to_alive_nodes_after_simplification)
         .def_readwrite("preserve_first_generation",
-                       &evolve_with_tree_sequences_options::preserve_first_generation);
+                       &evolve_with_tree_sequences_options::preserve_first_generation)
+        .def_readwrite("allow_residual_selfing",
+                       &evolve_with_tree_sequences_options::allow_residual_selfing);
 
     m.def("evolve_with_tree_sequences", &evolve_with_tree_sequences);
 }

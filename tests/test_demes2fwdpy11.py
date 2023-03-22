@@ -1822,3 +1822,30 @@ demes:
     model = fwdpy11.discrete_demography.from_demes(graph, burnin=0)
     assert model.metadata["deme_labels"][0] == "B"
     assert model.metadata["deme_labels"][1] == "A"
+
+
+def test_residual_selfing_exception():
+    yaml = """
+description: single deme model
+time_units: generations
+demes:
+ - name: B
+   epochs:
+    - start_size: 1
+"""
+    graph = demes.loads(yaml)
+    model = fwdpy11.discrete_demography.from_demes(graph, burnin=10)
+    pop = fwdpy11.DiploidPopulation([1], 1.0)
+    pdict = {"recregions": [],
+             "nregions": [],
+             "rates": (0, 0, 0),
+             "gvalue": fwdpy11.Multiplicative(2.),
+             "simlen": 10,
+             "demography": model,
+             "allow_residual_selfing": False
+             }
+    params = fwdpy11.ModelParams(**pdict)
+    rng = fwdpy11.GSLrng(42)
+    with pytest.raises(fwdpy11.DemographyError):
+        with pytest.warns(UserWarning):
+            fwdpy11.evolvets(rng, pop, params, 5)
