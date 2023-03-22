@@ -186,7 +186,8 @@ evolve_generation_ts(
         fitness_bookmark,
     const fwdpp::uint_t generation, fwdpp::ts::edge_buffer& new_edge_buffer,
     std::vector<fwdpy11::DiploidGenotype>& offspring,
-    std::vector<fwdpy11::DiploidMetadata>& offspring_metadata, std::int32_t next_index)
+    std::vector<fwdpy11::DiploidMetadata>& offspring_metadata, std::int32_t next_index,
+    bool allow_residual_selfing)
 {
     fwdpp::debug::all_haploid_genomes_extant(pop);
 
@@ -233,7 +234,8 @@ evolve_generation_ts(
                             // Get the parents
                             auto pdata = fwdpy11_core::discrete_demography::pick_parents(
                                 rng, offspring_deme_index, demography,
-                                ancestor_deme_lookup, fitness_bookmark, fitness_lookup);
+                                ancestor_deme_lookup, fitness_bookmark, fitness_lookup,
+                                allow_residual_selfing);
                             fwdpy11::DiploidGenotype dip{
                                 std::numeric_limits<std::size_t>::max(),
                                 std::numeric_limits<std::size_t>::max()};

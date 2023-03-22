@@ -50,7 +50,8 @@ namespace fwdpy11_core
                      const fwdpy11_core::ForwardDemesGraph& demography,
                      const fwdpp::gsl_ran_discrete_t_ptr& ancestor_deme_lookup,
                      const multideme_fitness_bookmark& fitness_bookmark,
-                     const multideme_fitness_lookups<std::uint32_t>& wlookups);
+                     const multideme_fitness_lookups<std::uint32_t>& wlookups,
+                     const bool allow_residual_selfing);
 
     } // namespace discrete_demography
 } // namespace fwdpy11_core
