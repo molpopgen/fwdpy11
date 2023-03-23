@@ -27,7 +27,7 @@ parts:
   - file: short_vignettes/recorders_vignette
   - file: short_vignettes/recapitation
   - file: short_vignettes/neutralmutsafter_vignette
-  - file: long_vignettes/import_mutations_from_tskit
+  - file: short_vignettes/import_mutations_from_tskit
 - caption: Short vignettes - demographic modeling
   chapters:
   - file: short_vignettes/demography_vignettes_intro
