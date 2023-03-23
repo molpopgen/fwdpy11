@@ -100,7 +100,7 @@ def test_demes_graph(pop, gutenkunst):
 def test_population_metadata(pop, gutenkunst):
     dm = fwdpy11.discrete_demography.from_demes(gutenkunst)
     demes_metadata = {}
-    for key, value in dm.metadata["deme_labels"].items():
+    for key, value in dm.deme_labels.items():
         demes_metadata[key] = {"name": value}
     ts = pop.dump_tables_to_tskit(population_metadata=demes_metadata)
 
@@ -113,7 +113,7 @@ def test_population_metadata(pop, gutenkunst):
         demes_metadata[i] = {"name": d.name, "description": d.description}
 
     # Validate that dm thinks that things are in the same order
-    for key, value in dm.metadata["deme_labels"].items():
+    for key, value in dm.deme_labels.items():
         assert demes_metadata[key]["name"] == value
 
     ts = pop.dump_tables_to_tskit(population_metadata=demes_metadata)
