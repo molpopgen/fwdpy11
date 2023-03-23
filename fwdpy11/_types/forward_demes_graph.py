@@ -143,3 +143,17 @@ class ForwardDemesGraph(fwdpy11._fwdpy11._ForwardDemesGraph):
         return cls.from_demes(graph, burnin,
                               burnin_is_exact=burnin_is_exact,
                               round_non_integer_sizes=round_non_integer_sizes)
+
+    @property
+    def initial_sizes(self) -> typing.List:
+        """
+        A list of the nonzero (parental) deme sizes at time 0 of the model
+        (thinking forwards in time).
+
+        Due to the structure of a demes graph, the indexes of the list
+        are the deme integer identifiers.
+
+        This property is useful for setting up a
+        :class:`fwdpy11.DiploidPopulation`.
+        """
+        return [i for i in self._parental_deme_sizes_at_time_zero() if i > 0]

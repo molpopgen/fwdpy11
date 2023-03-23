@@ -399,10 +399,7 @@ def two_demes_with_no_migration():
 def test_sweep_from_new_mutation_in_single_deme_using_API(fp11_seed, demes_yaml, alpha):
     g = demes.loads(demes_yaml)
     model = fwdpy11.discrete_demography.from_demes(g, burnin=1)
-    isizes = [
-        model.metadata["initial_sizes"][d]
-        for d in sorted(model.metadata["initial_sizes"].keys())
-    ]
+    isizes = model.initial_sizes_list
     pop = fwdpy11.DiploidPopulation(isizes, 1.0)
     pdict = {
         "recregions": [fwdpy11.PoissonInterval(0, 1, 5e-2)],
@@ -449,10 +446,7 @@ def test_sweep_from_new_mutation_with_demography_using_API(
 ):
     g = demes.loads(demes_yaml)
     model = fwdpy11.discrete_demography.from_demes(g, burnin=1)
-    isizes = [
-        model.metadata["initial_sizes"][d]
-        for d in sorted(model.metadata["initial_sizes"].keys())
-    ]
+    isizes = model.initial_sizes_list
     pop = fwdpy11.DiploidPopulation(isizes, 1.0)
     pdict = {
         "recregions": [fwdpy11.PoissonInterval(0, 1, 5e-2)],
@@ -498,10 +492,7 @@ def test_sweep_from_new_mutation_with_demography_using_API(
 def test_origination_deme1_fixation_in_deme_2(fp11_seed, demes_yaml, alpha):
     g = demes.loads(demes_yaml)
     model = fwdpy11.discrete_demography.from_demes(g, burnin=1)
-    isizes = [
-        model.metadata["initial_sizes"][d]
-        for d in sorted(model.metadata["initial_sizes"].keys())
-    ]
+    isizes = model.initial_sizes_list
     pop = fwdpy11.DiploidPopulation(isizes, 1.0)
     pdict = {
         "recregions": [fwdpy11.PoissonInterval(0, 1, 5e-2)],
@@ -548,10 +539,7 @@ def test_origination_deme1_fixation_in_deme_2(fp11_seed, demes_yaml, alpha):
 def test_origination_deme1_fixation_in_deme_2_with_growth(fp11_seed, demes_yaml, alpha):
     g = demes.loads(demes_yaml)
     model = fwdpy11.discrete_demography.from_demes(g, burnin=1)
-    isizes = [
-        model.metadata["initial_sizes"][d]
-        for d in sorted(model.metadata["initial_sizes"].keys())
-    ]
+    isizes = model.initial_sizes_list
     pop = fwdpy11.DiploidPopulation(isizes, 1.0)
     pdict = {
         "recregions": [fwdpy11.PoissonInterval(0, 1, 5e-2)],
@@ -609,10 +597,7 @@ def test_origination_deme2_fixation_in_deme_2_no_migration(
 ):
     g = demes.loads(demes_yaml)
     model = fwdpy11.discrete_demography.from_demes(g, burnin=1)
-    isizes = [
-        model.metadata["initial_sizes"][d]
-        for d in sorted(model.metadata["initial_sizes"].keys())
-    ]
+    isizes = model.initial_sizes_list
     pop = fwdpy11.DiploidPopulation(isizes, 1.0)
     pdict = {
         "recregions": [fwdpy11.PoissonInterval(0, 1, 5e-2)],

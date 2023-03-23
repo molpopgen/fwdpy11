@@ -63,7 +63,7 @@ def _build_from_foward_demes_graph(
         citation=DemographicModelCitation(
             DOI=doi, full_citation=None, metadata=None),
         metadata={
-            "deme_labels": {j: i for i, j in idmap.items()},
+            "deme_labels": idmap,
             "initial_sizes": _initial_sizes,
             "burnin_time": fg.burnin_generation,
             "total_simulation_length": fg._model_end_time() - 1
@@ -74,20 +74,6 @@ def _build_from_foward_demes_graph(
 def _build_deme_id_to_int_map(dg: demes.Graph) -> Dict:
     """
     Convert the string input ID to output integer values.
-
-    For sanity, the output values will be in increasing
-    order of "deme origin" times.
-
-    We rely on the epoch times being strictly sorted
-    past-to-present in the YAML.  If there are ties,
-    populations are sorted lexically by ID within
-    start_time.
     """
-    temp = []
-    for deme in dg.demes:
-        assert len(deme.epochs) > 0
-        temp.append((deme.epochs[0].start_time, deme.name))
-
-    temp = sorted(temp, key=lambda x: -x[0])
-
-    return {j[1]: i for i, j in enumerate(temp)}
+    labels = {i: d.name for i, d in enumerate(dg.demes)}
+    return labels

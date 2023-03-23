@@ -20,10 +20,6 @@ def run_model_round_trip(cls):
 def resolve_and_run(b: demes.Builder, burnin: int = 1):
     g = b.resolve()
     demog = fwdpy11.discrete_demography.from_demes(g, burnin)
-    initial_sizes = [
-        demog.metadata["initial_sizes"][i]
-        for i in demog.metadata["initial_sizes"].keys()
-    ]
     evolve_demes_model(demog)
 
 
@@ -449,7 +445,7 @@ class TestIslandModel(unittest.TestCase):
     def test_demog_attributes(self):
         self.assertTrue(
             self.demog.metadata["burnin_time"]
-            == sum(self.demog.metadata["initial_sizes"].values()) * 2
+            == sum(self.demog.initial_sizes_list) * 2
         )
 
 
@@ -474,12 +470,12 @@ class TestIslandModelRateChange(unittest.TestCase):
     def test_burnin_time(self):
         self.assertTrue(
             self.demog.metadata["burnin_time"]
-            == sum(self.demog.metadata["initial_sizes"].values()) * 2
+            == sum(self.demog.initial_sizes_list) * 2
         )
 
     def test_total_sim_length(self):
         self.assertEqual(
-            self.demog.metadata["total_simulation_length"],
+            self.demog.total_simulation_length,
             self.demog.metadata["burnin_time"] + 500,
         )
 
@@ -515,7 +511,7 @@ class TestTwoPopMerger(unittest.TestCase):
 
     def test_total_sim_length(self):
         self.assertEqual(
-            self.demog.metadata["total_simulation_length"],
+            self.demog.total_simulation_length,
             self.demog.metadata["burnin_time"] + 1000,
         )
 
@@ -563,7 +559,7 @@ class TestFourWayMerger(unittest.TestCase):
 
     def test_total_sim_length(self):
         self.assertEqual(
-            self.demog.metadata["total_simulation_length"],
+            self.demog.total_simulation_length,
             self.demog.metadata["burnin_time"] + 1000,
         )
 
@@ -584,7 +580,7 @@ class TestPulseMigration(unittest.TestCase):
 
     def test_total_sim_length(self):
         self.assertEqual(
-            self.demog.metadata["total_simulation_length"],
+            self.demog.total_simulation_length,
             self.demog.metadata["burnin_time"] + 100,
         )
 
@@ -594,12 +590,9 @@ def evolve_demes_model(demog) -> fwdpy11.DiploidPopulation:
         "rates": (0.0, 0.0, 0.0),
         "gvalue": fwdpy11.Multiplicative(2.0),
         "demography": demog,
-        "simlen": demog.metadata["total_simulation_length"],
+        "simlen": demog.total_simulation_length,
     }
-    initial_sizes = [
-        demog.metadata["initial_sizes"][i]
-        for i in demog.metadata["initial_sizes"].keys()
-    ]
+    initial_sizes = demog.initial_sizes_list
     params = fwdpy11.ModelParams(**pdict)
     rng = fwdpy11.GSLrng(100)
     pop = fwdpy11.DiploidPopulation(initial_sizes, 1.0)
@@ -682,7 +675,7 @@ def test_three_way_continuous_migration_pairwise(graph):
 def test_evolve_three_way_continuous_migration_pairwise(graph):
     demog = fwdpy11.discrete_demography.from_demes(graph, 1)
     pop = evolve_demes_model(demog)
-    assert pop.generation == demog.metadata["total_simulation_length"]
+    assert pop.generation == demog.total_simulation_length
 
 
 def multiple_migrations_delayed():
@@ -849,7 +842,7 @@ def test_split_model_population_size_history(two_deme_split_with_ancestral_size_
         "gvalue": fwdpy11.Multiplicative(2.0),
         "rates": (0, 0, 0),
         "demography": model,
-        "simlen": model.metadata["total_simulation_length"],
+        "simlen": model.total_simulation_length,
     }
     params = fwdpy11.ModelParams(**pdict)
     pop = fwdpy11.DiploidPopulation(100, 1.0)
@@ -863,7 +856,7 @@ def test_split_model_population_size_history(two_deme_split_with_ancestral_size_
     # The daughter demes are seen from 110 till the end
     for deme in [1, 2]:
         assert [i.when for i in recorder.sizes[deme]] == [
-            i for i in range(111, model.metadata["total_simulation_length"] + 1)
+            i for i in range(111, model.total_simulation_length + 1)
         ]
     # initial daughter deme sizes
     g1 = 2 ** (1 / 10) - 1
@@ -901,7 +894,7 @@ def test_evolve_population_in_two_stages(
     rng = fwdpy11.GSLrng(90210)
     fwdpy11.evolvets(rng, pop, params, 100)
 
-    pdict["simlen"] = model.metadata["total_simulation_length"] - when
+    pdict["simlen"] = model.total_simulation_length - when
     params = fwdpy11.ModelParams(**pdict)
 
     fwdpy11.evolvets(rng, pop, params, 100)
@@ -931,7 +924,7 @@ def test_evolve_population_in_two_stages_with_deepcopy(
     fwdpy11.evolvets(rng, pop, params, 100)
 
     pdict2 = copy.deepcopy(pdict)
-    pdict2["simlen"] = model.metadata["total_simulation_length"] - when
+    pdict2["simlen"] = model.total_simulation_length - when
     params2 = fwdpy11.ModelParams(**pdict2)
 
     fwdpy11.evolvets(rng, pop, params2, 100)
@@ -954,10 +947,10 @@ def test_evolve_demes_model_starting_with_two_pops_and_no_ancestry(
         "gvalue": fwdpy11.Multiplicative(2.0),
         "rates": (0, 0, 0),
         "demography": model,
-        "simlen": model.metadata["total_simulation_length"],
+        "simlen": model.total_simulation_length,
     }
     params = fwdpy11.ModelParams(**pdict)
-    initial_sizes = [i for i in model.metadata["initial_sizes"].values()]
+    initial_sizes = model.initial_sizes_list
     pop = fwdpy11.DiploidPopulation(initial_sizes, 1.0)
     for key, value in pop.deme_sizes(as_dict=True).items():
         if key == 0:
@@ -1030,7 +1023,7 @@ demes:
         "gvalue": fwdpy11.Multiplicative(2.0),
         "rates": (0, 0, 0),
         "demography": model,
-        "simlen": model.metadata["total_simulation_length"],
+        "simlen": model.total_simulation_length,
     }
     params = fwdpy11.ModelParams(**pdict)
     initial_size = g["A"].epochs[0].start_size
@@ -1082,7 +1075,7 @@ demes:
         "gvalue": fwdpy11.Multiplicative(2.0),
         "rates": (0, 0, 0),
         "demography": model,
-        "simlen": model.metadata["total_simulation_length"],
+        "simlen": model.total_simulation_length,
     }
     params = fwdpy11.ModelParams(**pdict)
     initial_size = g["A"].epochs[0].start_size
@@ -1530,13 +1523,11 @@ def test_events_in_generation_one_following_demes_import(testdata, burnin):
         "gvalue": fwdpy11.Multiplicative(2.0),
         "rates": (0, 0, 0),
         "demography": demog,
-        "simlen": demog.metadata["total_simulation_length"],
+        "simlen": demog.total_simulation_length,
     }
     params = fwdpy11.ModelParams(**pdict)
 
-    initial_sizes = []
-    for d in sorted(demog.metadata["initial_sizes"].keys()):
-        initial_sizes.append(demog.metadata["initial_sizes"][d])
+    initial_sizes = demog.initial_sizes_list
     pop = fwdpy11.DiploidPopulation(initial_sizes, 1.0)
     recorder(pop, None)
     rng = fwdpy11.GSLrng(90210)
@@ -1571,15 +1562,13 @@ def test_events_in_generation_one_following_demes_import_start_stop(testdata, bu
     }
     params = fwdpy11.ModelParams(**pdict)
 
-    initial_sizes = []
-    for d in sorted(demog.metadata["initial_sizes"].keys()):
-        initial_sizes.append(demog.metadata["initial_sizes"][d])
+    initial_sizes = demog.initial_sizes_list
     pop = fwdpy11.DiploidPopulation(initial_sizes, 1.0)
     recorder(pop, None)
     rng = fwdpy11.GSLrng(90210)
     fwdpy11.evolvets(rng, pop, params, 100, recorder=recorder)
 
-    pdict["simlen"] = demog.metadata["total_simulation_length"] - 1
+    pdict["simlen"] = demog.total_simulation_length - 1
     fwdpy11.evolvets(
         rng, pop, params, 100, recorder=recorder,
     )
@@ -1605,7 +1594,7 @@ def multiple_pulse_source_setup():
 def test_multiple_pulse_source(multiple_pulse_source_setup):
     demog = multiple_pulse_source_setup
     assert (
-        demog.metadata["total_simulation_length"] == demog.metadata["burnin_time"] + 100
+        demog.total_simulation_length == demog.metadata["burnin_time"] + 100
     )
 
 
@@ -1661,10 +1650,10 @@ def test_two_demes_migration_rate_changes(two_demes_migration_rate_changes_setup
         "gvalue": fwdpy11.Multiplicative(2.0),
         "rates": (0, 0, 0),
         "demography": demog,
-        "simlen": demog.metadata["total_simulation_length"],
+        "simlen": demog.total_simulation_length,
     }
     params = fwdpy11.ModelParams(**pdict)
-    initial_sizes = demog.metadata["initial_sizes"]
+    initial_sizes = demog.initial_sizes_list
     pop = fwdpy11.DiploidPopulation([initial_sizes[0], initial_sizes[1]], 1.0)
     rng = fwdpy11.GSLrng(90210)
     recorder = ParentDemes()
@@ -1724,10 +1713,7 @@ def test_non_integer_initial_epoch_size():
         g, round_non_integer_sizes=True)
 
     # initialize the ancestral population
-    initial_sizes = [
-        demog.metadata["initial_sizes"][i]
-        for i in sorted(demog.metadata["initial_sizes"].keys())
-    ]
+    initial_sizes = demog.initial_sizes_list
     _ = fwdpy11.DiploidPopulation(
         initial_sizes, 1)
 
@@ -1820,8 +1806,8 @@ demes:
 """
     graph = demes.loads(yaml)
     model = fwdpy11.discrete_demography.from_demes(graph, burnin=0)
-    assert model.metadata["deme_labels"][0] == "B"
-    assert model.metadata["deme_labels"][1] == "A"
+    assert model.deme_labels[0] == "B"
+    assert model.deme_labels[1] == "A"
 
 
 def test_residual_selfing_exception():
