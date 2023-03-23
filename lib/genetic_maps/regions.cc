@@ -1,4 +1,3 @@
-#include "fwdpy11/regions/GeneticMapUnit.hpp"
 #include "fwdpy11/regions/RecombinationRegions.hpp"
 #include <cmath>
 #include <limits>
