@@ -176,3 +176,21 @@ class ForwardDemesGraph(fwdpy11._fwdpy11._ForwardDemesGraph):
         (strings).
         """
         return {i: j.name for i, j in enumerate(self.graph.demes)}
+
+    @property
+    def demes_at_final_generation(self) -> typing.List[int]:
+        """
+        List of integer ids of extant demes in the final generation
+        of the demes graph.
+        """
+        epoch_end_times = []
+        for deme in self.graph.demes:
+            for epoch in deme.epochs:
+                epoch_end_times.append(epoch.end_time)
+        min_end_time = min(epoch_end_times)
+        rv = []
+        for deme in self.deme_labels.keys():
+            for epoch in self.graph.demes[deme].epochs:
+                if epoch.end_time == min_end_time:
+                    rv.append(deme)
+        return rv
