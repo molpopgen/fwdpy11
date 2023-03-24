@@ -1,4 +1,3 @@
-#include "fwdpy11/regions/GeneticMapUnit.hpp"
 #include "fwdpy11/regions/RecombinationRegions.hpp"
 #include <boost/test/tools/old/interface.hpp>
 #include <boost/test/unit_test.hpp>

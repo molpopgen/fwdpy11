@@ -7,7 +7,6 @@
 #include <fwdpy11/genetic_values/dgvalue_pointer_vector.hpp>
 #include <fwdpy11/genetic_values/fwdpp_wrappers/fwdpp_genetic_value.hpp>
 #include <fwdpy11/regions/RecombinationRegions.hpp>
-#include <fwdpy11/regions/GeneticMapUnit.hpp>
 #include <fwdpy11/regions/MutationRegions.hpp>
 #include <fwdpy11/evolvets/SampleRecorder.hpp>
 #include <fwdpy11/evolvets/recorders.hpp>

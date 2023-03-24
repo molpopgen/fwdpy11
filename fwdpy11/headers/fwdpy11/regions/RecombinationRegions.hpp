@@ -13,7 +13,6 @@
 #include "Region.hpp"
 #include "fwdpp/util/validators.hpp"
 #include "fwdpy11/gsl/gsl_error_handler_wrapper.hpp"
-#include "fwdpy11/regions/GeneticMapUnit.hpp"
 
 namespace fwdpy11
 {

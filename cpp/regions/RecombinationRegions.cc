@@ -1,7 +1,6 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 #include <fwdpy11/regions/RecombinationRegions.hpp>
-#include <fwdpy11/regions/GeneticMapUnit.hpp>
 
 namespace py = pybind11;
 
