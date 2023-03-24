@@ -220,6 +220,9 @@ class ModelParams(object):
 
     @recregions.validator
     def validate_recregions(self, attribute, value):
+        if len(value) > 0 and all([isinstance(i, fwdpy11.Region) for i in value]):
+            warnings.warn(
+                "using a list of Regions for recregions is deprecated", UserWarning)
         try:
             for i in value:
                 attr.validators.instance_of(fwdpy11.Region)(self, attribute, i)

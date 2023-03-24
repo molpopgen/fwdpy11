@@ -69,8 +69,8 @@ def set_up_quant_trait_model(simlen=1.0):
     p = {
         "nregions": [],
         "sregions": [fwdpy11.GaussianS(0, 1, 1, 0.25)],
-        "recregions": [fwdpy11.Region(0, 1, 1)],
-        "rates": (0.0, 0.025, r),
+        "recregions": [fwdpy11.PoissonInterval(0, 1, r)],
+        "rates": (0.0, 0.025, None),
         "gvalue": a,
         "prune_selected": False,
         "demography": demography,
@@ -110,8 +110,8 @@ def set_up_standard_pop_gen_model(simlen=1.0):
             ),
             fwdpy11.ConstantS(0, 1, pselected, 1000, scaling=2 * N),
         ],
-        "recregions": [fwdpy11.Region(0, 1, 1)],
-        "rates": (0.0, 0.001, r),
+        "recregions": [fwdpy11.PoissonInterval(0, 1, r)],
+        "rates": (0.0, 0.001, None),
         "gvalue": a,
         "prune_selected": True,
         "demography": demography,
@@ -777,7 +777,7 @@ class TestUpdateTiming(unittest.TestCase):
 
         params, rng, pop = set_up_quant_trait_model(1.1)
         pdict = params.asdict()
-        pdict["rates"] = (0, 0, 0)
+        pdict["rates"] = (0, 0, None)
         params = fwdpy11.ModelParams(**pdict)
 
         class Recorder(object):
@@ -987,8 +987,8 @@ class TestSimplificationInterval(unittest.TestCase):
         self.p = {
             "nregions": [],
             "sregions": [fwdpy11.GaussianS(0, 1, 1, 0.25)],
-            "recregions": [fwdpy11.Region(0, 1, 1)],
-            "rates": (0.0, 0.025, self.r),
+            "recregions": [fwdpy11.PoissonInterval(0, 1, self.r)],
+            "rates": (0.0, 0.025, None),
             "gvalue": a,
             "prune_selected": False,
             "demography": fwdpy11.ForwardDemesGraph.tubes([self.N], 1),
@@ -1020,8 +1020,8 @@ class TestFixationPreservation(unittest.TestCase):
         p = {
             "nregions": [],
             "sregions": [fwdpy11.GaussianS(0, 1, 1, 0.25)],
-            "recregions": [fwdpy11.Region(0, 1, 1)],
-            "rates": (0.0, 0.005, r),
+            "recregions": [fwdpy11.PoissonInterval(0, 1, r)],
+            "rates": (0.0, 0.005, None),
             "gvalue": a,
             "prune_selected": False,
             "demography": fwdpy11.ForwardDemesGraph.tubes([N], 3),
@@ -1057,8 +1057,8 @@ class TestFixationPreservation(unittest.TestCase):
         p = {
             "nregions": [],
             "sregions": [fwdpy11.ExpS(0, 1, 1, 0.01)],
-            "recregions": [fwdpy11.Region(0, 1, 1)],
-            "rates": (0.0, 0.00005, r),
+            "recregions": [fwdpy11.PoissonInterval(0, 1, r)],
+            "rates": (0.0, 0.00005, None),
             "gvalue": a,
             "prune_selected": True,
             "demography": fwdpy11.ForwardDemesGraph.tubes([N], 2),
@@ -1197,8 +1197,8 @@ class TestDataMatrixIterator(unittest.TestCase):
         self.p = {
             "nregions": [],
             "sregions": [fwdpy11.GaussianS(0, 1, 1, 0.25)],
-            "recregions": [fwdpy11.Region(0, 1, 1)],
-            "rates": (0.0, 0.025, self.r),
+            "recregions": [fwdpy11.PoissonInterval(0, 1, self.r)],
+            "rates": (0.0, 0.025, None),
             "gvalue": a,
             "prune_selected": False,
             "demography": fwdpy11.ForwardDemesGraph.tubes([self.N], 1),
@@ -1341,8 +1341,8 @@ class TestTreeSequenceResettingDuringTimeSeriesAnalysis(unittest.TestCase):
         self.p = {
             "nregions": [],
             "sregions": [fwdpy11.GaussianS(0, 1, 1, 0.25)],
-            "recregions": [fwdpy11.Region(0, 1, 1)],
-            "rates": (0.0, 0.025, self.r),
+            "recregions": [fwdpy11.PoissonInterval(0, 1, self.r)],
+            "rates": (0.0, 0.025, None),
             "gvalue": a,
             "prune_selected": False,
             "demography": fwdpy11.ForwardDemesGraph.tubes([self.N], 1),

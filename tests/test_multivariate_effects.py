@@ -24,8 +24,8 @@ def set_up_quant_trait_model():
     p = {
         "nregions": [],
         "sregions": [fwdpy11.MultivariateGaussianEffects(0, 1, 1, cmat)],
-        "recregions": [fwdpy11.Region(0, 1, 1)],
-        "rates": (0.0, 0.001, r),
+        "recregions": [fwdpy11.PoissonInterval(0, 1, r)],
+        "rates": (0.0, 0.001, None),
         "gvalue": a,
         "prune_selected": False,
         "demography": None,

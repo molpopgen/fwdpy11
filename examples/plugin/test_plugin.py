@@ -20,8 +20,8 @@ pdict = {
     "simlen": 100,
     "nregions": [],
     "sregions": [fwdpy11.GaussianS(0, 1, 1, 0.25)],
-    "recregions": [fwdpy11.Region(0, 1, 1)],
-    "rates": (0.0, 5e-3, 5e-3),
+    "recregions": [fwdpy11.PoissonInterval(0, 1, 5e-3)],
+    "rates": (0.0, 5e-3, None),
     "gvalue": fwdpy11.Additive(2.0, fwdpy11.GSS(VS=1.0, optimum=1.0)),
     "prune_selected": False,
 }
