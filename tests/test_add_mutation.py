@@ -95,8 +95,8 @@ def set_up_quant_trait_model(simlen=1.0):
     p = {
         "nregions": [],
         "sregions": [fwdpy11.GaussianS(0, 1, 1, 0.25)],
-        "recregions": [fwdpy11.Region(0, 1, 1)],
-        "rates": (0.0, 0.025, r),
+        "recregions": [fwdpy11.PoissonInterval(0, 1, r)],
+        "rates": (0.0, 0.025, None),
         "gvalue": a,
         "prune_selected": False,
         "demography": demography,

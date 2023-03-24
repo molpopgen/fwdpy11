@@ -43,16 +43,16 @@ def mslike(pop, **kwargs):
     for key, value in kwargs.items():
         if key in defaults:
             defaults[key] = value
-    import numpy as np
 
+    r = defaults["rho"] / (4.0 * float(pop.N))
     params = {
         "simlen": defaults["simlen"],
         "nregions": [fwdpy11.Region(defaults["beg"], defaults["end"], 1.0)],
-        "recregions": [fwdpy11.Region(defaults["beg"], defaults["end"], 1.0)],
+        "recregions": [fwdpy11.PoissonInterval(defaults["beg"], defaults["end"], r)],
         "rates": (
             (defaults["pneutral"] * defaults["theta"]) / (4.0 * pop.N),
             ((1.0 - defaults["pneutral"]) * defaults["theta"]) / (4.0 * pop.N),
-            defaults["rho"] / (4.0 * float(pop.N)),
+            None,
         ),
         "gvalue": fwdpy11.Multiplicative(2.0),
     }
