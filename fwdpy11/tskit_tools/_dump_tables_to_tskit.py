@@ -165,7 +165,8 @@ def _dump_tables_to_tskit(
     tc.metadata_schema = fwdpy11.tskit_tools.metadata_schema.TopLevelMetadata
 
     # Populate the required fields
-    top_level_metadata = {"generation": self.generation}
+    top_level_metadata = {"generation": self.generation,
+                          "forward_model_time": self.forward_model_time}
 
     if model_params is not None:
         try:

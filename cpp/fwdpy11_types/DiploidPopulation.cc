@@ -309,7 +309,14 @@ init_DiploidPopulation(py::module& m)
                     = load(f).cast<decltype(rv.ancient_sample_genetic_value_matrix)>();
                 return rv;
             })
-        .def_static("_create_from_tskit", [](py::object ts) {
-            return create_DiploidPopulation_from_tree_sequence(ts);
+        .def_static("_create_from_tskit",
+                    [](py::object ts) {
+                        return create_DiploidPopulation_from_tree_sequence(ts);
+                    })
+        .def_readonly("forward_model_time",
+                      &fwdpy11::DiploidPopulation::forward_model_time)
+        .def("_set_forward_model_time", [](fwdpy11::DiploidPopulation& self,
+                                           const std::uint32_t forward_model_time) {
+            self.forward_model_time = forward_model_time;
         });
 }

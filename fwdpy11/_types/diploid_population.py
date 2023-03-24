@@ -110,6 +110,10 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
 
         """
         ll = ll_DiploidPopulation._create_from_tskit(ts)
+        if len(ts.metadata) > 0:
+            if "forward_model_time" in ts.metadata:
+                forward_model_time = ts.metadata["forward_model_time"]
+                ll._set_forward_model_time(forward_model_time)
         if import_mutations is True:
             import fwdpy11.tskit_tools
             for mutation in ts.mutations():

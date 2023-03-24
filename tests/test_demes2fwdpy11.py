@@ -1835,3 +1835,53 @@ demes:
     with pytest.raises(fwdpy11.DemographyError):
         with pytest.warns(UserWarning):
             fwdpy11.evolvets(rng, pop, params, 5)
+
+
+def test_complex_start_stop_workflow():
+    yaml = """
+description: split
+time_units: generations
+demes:
+ - name: A
+   epochs:
+    - start_size: 10
+      end_time: 10
+ - name: B
+   start_time: 10
+   ancestors: [A]
+   epochs:
+    - start_size: 10
+      end_size: 50
+ - name: C
+   start_time: 10
+   ancestors: [A]
+   epochs:
+    - start_size: 10
+      end_size: 50
+"""
+    demography = fwdpy11.ForwardDemesGraph.from_demes(
+        yaml, burnin=10, burnin_is_exact=True)
+    pdict = {'recregions': [],
+             'nregions': [],
+             'sregions': [],
+             'rates': (0, 0, 0),
+             'gvalue': fwdpy11.Multiplicative(2.),
+             'simlen': 11,
+             'demography': demography
+             }
+    params = fwdpy11.ModelParams(**pdict)
+    pop = fwdpy11.DiploidPopulation(demography.initial_sizes, 1.0)
+    rng = fwdpy11.GSLrng(10)
+    fwdpy11.evolvets(rng, pop, params, 10)
+    assert len(pop.deme_sizes()) == 2
+    ts = pop.dump_tables_to_tskit()
+    restored = fwdpy11.DiploidPopulation.create_from_tskit(ts)
+    pdict['simlen'] = 100
+    params = fwdpy11.ModelParams(**pdict)
+    # Evolve rest of model
+    fwdpy11.evolvets(rng, restored, params, 10)
+    model_time = restored.forward_model_time
+    ts = restored.dump_tables_to_tskit()
+    restored2 = fwdpy11.DiploidPopulation.create_from_tskit(ts)
+    fwdpy11.evolvets(rng, restored2, params, 10)
+    assert model_time == restored2.forward_model_time
