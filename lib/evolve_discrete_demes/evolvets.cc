@@ -283,7 +283,7 @@ evolve_with_tree_sequences(
                 "current time of population is past the end of the model");
         }
 
-    demography.initialize_model(pop.generation);
+    demography.initialize_model(pop.forward_model_time);
 
     if (demography.number_of_demes() <= 0)
         {
@@ -446,7 +446,7 @@ evolve_with_tree_sequences(
     clear_edge_table_indexes(*pop.tables);
     fwdpp::ts::simplify_tables_output simplification_output;
     pop.is_simulating = true;
-    for (std::uint32_t gen = 0; pop.generation < demography.model_end_time() - 1
+    for (std::uint32_t gen = 0; pop.forward_model_time < demography.model_end_time() - 1
                                 && gen < simlen && !stopping_criteron_met;
          ++gen)
         {
@@ -455,6 +455,7 @@ evolve_with_tree_sequences(
                     throw std::runtime_error("forward graph is in an error state");
                 }
             ++pop.generation;
+            ++pop.forward_model_time;
             evolve_generation_ts(rng, pop, genetics, demography, fitness_lookup,
                                  fitness_bookmark, // miglookup,
                                  pop.generation, *new_edge_buffer, offspring,

@@ -108,11 +108,16 @@ namespace fwdpy11
         //TODO figure out what to do with class constructor??
         //TODO Introduce types for ancient sample individual and node tracking
         std::vector<DiploidMetadata> diploid_metadata, ancient_sample_metadata;
+        
+        // Added in 0.20.0.
+        // This is the forward (parental)
+        // generation time of a demographic model.
+        std::uint32_t forward_model_time;
 
         // Constructors for Python
         DiploidPopulation(const fwdpp::uint_t N, const double length)
             : Population{2, N, length}, diploids(N, {0, 0}),
-              diploid_metadata(N), ancient_sample_metadata{}
+              diploid_metadata(N), ancient_sample_metadata{}, forward_model_time(0)
         {
             finish_construction({N});
         }
@@ -122,7 +127,7 @@ namespace fwdpy11
             : Population{2, std::accumulate(begin(deme_sizes), end(deme_sizes), 0u),
                          length},
               diploids(std::accumulate(begin(deme_sizes), end(deme_sizes), 0u), {0, 0}),
-              diploid_metadata(N), ancient_sample_metadata{}
+              diploid_metadata(N), ancient_sample_metadata{}, forward_model_time(0)
         {
             finish_construction(deme_sizes);
         }
