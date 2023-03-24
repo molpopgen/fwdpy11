@@ -157,3 +157,22 @@ class ForwardDemesGraph(fwdpy11._fwdpy11._ForwardDemesGraph):
         :class:`fwdpy11.DiploidPopulation`.
         """
         return [i for i in self._parental_deme_sizes_at_time_zero() if i > 0]
+
+    @property
+    def final_generation(self) -> int:
+        """
+        This is the final offspring generation of the model.
+        In other words, a model evolved from parental generation
+        zero until time zero of the graph (backwards in time)
+        will result in individuals whose birth times equal
+        the value of this property.
+        """
+        return self._model_end_time() - 1
+
+    @property
+    def deme_labels(self) -> typing.Dict[int, str]:
+        """
+        A dictionary mapping integer deme IDs to deme names
+        (strings).
+        """
+        return {i: j.name for i, j in enumerate(self.graph.demes)}

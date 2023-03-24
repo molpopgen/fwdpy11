@@ -46,7 +46,7 @@ def _build_from_foward_demes_graph(
     """
     The workhorse.
     """
-    idmap = _build_deme_id_to_int_map(fg.graph)
+    idmap = fg.deme_labels
 
     if fg.graph.doi != "None":
         doi = fg.graph.doi
@@ -66,14 +66,6 @@ def _build_from_foward_demes_graph(
             "deme_labels": idmap,
             "initial_sizes": _initial_sizes,
             "burnin_time": fg.burnin_generation,
-            "total_simulation_length": fg._model_end_time() - 1
+            "total_simulation_length": fg.final_generation
         },
     )
-
-
-def _build_deme_id_to_int_map(dg: demes.Graph) -> Dict:
-    """
-    Convert the string input ID to output integer values.
-    """
-    labels = {i: d.name for i, d in enumerate(dg.demes)}
-    return labels
