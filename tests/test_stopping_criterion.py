@@ -12,8 +12,8 @@ class test_stopping_criterion_DiploidPopulation(unittest.TestCase):
             "nregions": [],  # No neutral mutations -- add them later!
             "gvalue": fwdpy11.Additive(2.0),
             "sregions": [fwdpy11.ExpS(0, 1, 1, -0.1)],
-            "recregions": [fwdpy11.Region(0, 1, 1)],
-            "rates": (0.0, 1e-3, 1e-3),
+            "recregions": [fwdpy11.PoissonInterval(0, 1, 1e-3)],
+            "rates": (0.0, 1e-3, None),
             # Keep mutations at frequency 1 in the pop if they affect fitness.
             "prune_selected": False,
             "demography": None,
