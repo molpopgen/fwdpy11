@@ -39,6 +39,7 @@ parts:
   - file: short_vignettes/multivariate_lognormal_effect_sizes
   - file: short_vignettes/custom_multivarate_distributions
   - file: short_vignettes/special_considerations_demes_models
+  - file: short_vignettes/genetic_values_multi_deme_models_advanced
 - caption: Short vignettes - conditional models
   chapters:
   - file: short_vignettes/trackmutationfates
