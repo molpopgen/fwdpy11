@@ -3,6 +3,47 @@
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+## 0.20.0a0
+
+New features
+
+* {func}`fwdpy11.DiploidPopulation.create_from_tskit` now uses the `generation` field from top-level metadata to restore all times to their forward-in-time values.
+  PR {pr}`1129`
+* Discrete demographic models are now managed by
+  {class}`fwdpy11.ForwardDemesGraph`
+  See {ref}`here <demes_vignette>`.
+  PR {pr}`1101`
+  PR {pr}`1103`
+  PR {pr}`1121`
+  PR {pr}`1123`
+  PR {pr}`1124`
+* Add support for Python 3.11
+  PR {pr}`1108`
+* Allow suppressing of residual selfing.
+  See {ref}`here <demes_details>`.
+  PR {pr}`1117`
+  PR {pr}`1118`
+
+Deprecations
+
+* Deprecate use of {class}`fwdpy11.Region` for recombination
+  PR {pr}`1126`
+
+Breaking changes
+
+* Drop support for Python 3.7
+  PR {pr}`1108`
+* Removed deprecated discrete demography API
+  PR {pr}`1101`
+  PR {pr}`1116`
+
+Documentation
+
+* Give link to examples of lists of "gvalue" objects
+  PR {pr}`1127`
+* Rewrite `demes`-related documentation
+  PR {pr}`1124` 
+
 ## 0.19.10
 
 Documentation
