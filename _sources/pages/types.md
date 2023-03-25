@@ -261,63 +261,22 @@ that is handled on the C++ side.
 # Types related to discrete demographic events
 
 ```{eval-rst}
-.. autoclass:: fwdpy11.DiscreteDemography
+.. autoclass:: fwdpy11.ForwardDemesGraph
     :members:
 ```
 
-```{data} fwdpy11.NOGROWTH
-
-The author of this software has a bad habit of using the
-value of 0.0 to represent "no exponential growth".  This is,
-of course, wrong, and so a constant is provided to help
-other people with similar problems:
-
-```
-
-```{code-cell} python
-import fwdpy11
-
-print(fwdpy11.NOGROWTH)
+```{eval-rst}
+.. autoclass:: fwdpy11.DemographyDebugger
+   :members:
 ```
 
 ```{eval-rst}
-.. autoclass:: fwdpy11.SetExponentialGrowth
+.. autoclass:: fwdpy11.DemographicModelDetails
+   :members:
 ```
 
 ```{eval-rst}
-.. autoclass:: fwdpy11.SetDemeSize
-```
-
-```{eval-rst}
-.. autoclass:: fwdpy11.SetSelfingRate
-```
-
-```{eval-rst}
-.. autoclass:: fwdpy11.MassMigration
-```
-
-```{eval-rst}
-.. autofunction:: fwdpy11.move_individuals
-```
-
-```{eval-rst}
-.. autofunction:: fwdpy11.copy_individuals
-```
-
-```{eval-rst}
-.. autoclass:: fwdpy11.MigrationMatrix
-
-   .. autoattribute:: shape
-
-      The shape of the migration matrix
-
-   .. autoattribute:: M
-
-      Returns a copy of the rate matrix
-```
-
-```{eval-rst}
-.. autoclass:: fwdpy11.SetMigrationRates
+.. autoclass:: fwdpy11.DemographicModelCitation
 ```
 
 # Miscellaneous types

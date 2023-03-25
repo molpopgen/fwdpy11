@@ -31,17 +31,19 @@ def runsim(N, R, U, nsam, seed):
 
     pdict = {
         "gvalue": fwdpy11.Multiplicative(2.0),
-        "rates": (0.0, U / 2.0, R),  # The U/2. is from their eqn. 2.
+        "rates": (0.0, U / 2.0, None),  # The U/2. is from their eqn. 2.
         "nregions": [],
         "sregions": [
             fwdpy11.ConstantS(0, 1.0 / 3.0, 1, -0.02, 1.0),
             fwdpy11.ConstantS(2.0 / 3.0, 1.0, 1, -0.02, 1.0),
         ],
         "recregions": [
-            fwdpy11.Region(0, 1.0 / 3.0, 1),
-            fwdpy11.Region(2.0 / 3.0, 1.0, 1),
+            fwdpy11.PoissonInterval(0, 1.0 / 3.0, R/2.0),
+            fwdpy11.PoissonInterval(2.0 / 3.0, 1.0, R/2.0),
         ],
-        "demography": fwdpy11.DiscreteDemography(),
+        # Evolve a single deme of size N for 20*N 
+        # generations
+        "demography": fwdpy11.ForwardDemesGraph.tubes([N], 20),
         "simlen": 20 * N,
     }
     params = fwdpy11.ModelParams(**pdict)

@@ -53,7 +53,7 @@ const thebe_selector_output = ".output, .cell_output"
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Random number distributions" href="gslrandom.html" />
-    <link rel="prev" title="The demography debugger" href="demographic_models.html" />
+    <link rel="prev" title="DataMatrix and StateMatrix" href="datamatrix.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -225,6 +225,11 @@ const thebe_selector_output = ".output, .cell_output"
    Adding neutral mutations to a population with existing ancestry
   </a>
  </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/import_mutations_from_tskit.html">
+   Importing mutations from tskit
+  </a>
+ </li>
 </ul>
 <p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
@@ -246,11 +251,6 @@ const thebe_selector_output = ".output, .cell_output"
     </span>
    </code>
    to specify demographic models.
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/demography_debugger_vignette.html">
-   Debugging demographic models
   </a>
  </li>
 </ul>
@@ -283,6 +283,11 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toctree-l1">
   <a class="reference internal" href="../short_vignettes/special_considerations_demes_models.html">
    Special considerations for demes models
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/genetic_values_multi_deme_models_advanced.html">
+   Advanced topics
   </a>
  </li>
 </ul>
@@ -376,11 +381,6 @@ const thebe_selector_output = ".output, .cell_output"
 </p>
 <ul class="nav bd-sidenav">
  <li class="toctree-l1">
-  <a class="reference internal" href="tutorial.html">
-   Tutorial
-  </a>
- </li>
- <li class="toctree-l1">
   <a class="reference internal" href="advancedtopics.html">
    Advanced topics
   </a>
@@ -392,11 +392,6 @@ const thebe_selector_output = ".output, .cell_output"
  </span>
 </p>
 <ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="softselection.html">
-   Soft selection with discrete demes
-  </a>
- </li>
  <li class="toctree-l1">
   <a class="reference internal" href="mvdes.html">
    Different effect sizes of mutations in different demes
@@ -467,11 +462,6 @@ const thebe_selector_output = ".output, .cell_output"
    DataMatrix and StateMatrix
   </a>
  </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="demographic_models.html">
-   The demography debugger
-  </a>
- </li>
  <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
    Function documentation
@@ -537,21 +527,6 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toctree-l1">
   <a class="reference internal" href="../examples/gss_divergent_optima.html">
    Adaptation to different optima with multivariate distribution of effect sizes
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../examples/IM.html">
-   Isolation-with-migration (IM)
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../examples/localadaptation.html">
-   Local adaptation of a quantitative trait
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../examples/migtest.html">
-   Symmetric migration between two demes
   </a>
  </li>
  <li class="toctree-l1">
@@ -869,7 +844,7 @@ the population’s metadata containers.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fwdpy11.evolvets">
-<span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">evolvets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rng</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pop</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">simplification_interval</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recorder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">post_simplification_recorder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">suppress_table_indexing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">record_gvalue_matrix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stopping_criterion</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">track_mutation_counts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remove_extinct_variants</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preserve_first_generation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_demographic_event_timings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.evolvets" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">evolvets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rng</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pop</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">simplification_interval</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recorder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">post_simplification_recorder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">suppress_table_indexing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">record_gvalue_matrix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stopping_criterion</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">track_mutation_counts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remove_extinct_variants</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preserve_first_generation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.evolvets" title="Permalink to this definition">#</a></dt>
 <dd><p>Evolve a population with tree sequence recording</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -889,10 +864,6 @@ will be interpreted as <cite>True</cite></p></li>
 ancient samples. Must be <cite>True</cite> for
 tree sequence “recapitation”. See
 <a class="reference internal" href="../short_vignettes/recapitation.html#recapitation"><span class="std std-ref">Finishing a simulation with msprime</span></a>.</p></li>
-<li><p><strong>check_demographic_event_timings</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – (True) If <code class="docutils literal notranslate"><span class="pre">True</span></code>, then issue
-warnings if demographic events
-will occur prior to the current
-generation of the population.</p></li>
 </ul>
 </dd>
 </dl>
@@ -918,49 +889,6 @@ then <a class="reference internal" href="types.html#fwdpy11.NoAncientSamples" ti
 <div class="versionchanged">
 <p><span class="versionmodified changed">Changed in version 0.8.0: </span>Update to refactored ModelParams.
 Added <code class="docutils literal notranslate"><span class="pre">check_demographic_event_timings</span></code>.</p>
-</div>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fwdpy11.exponential_growth_rate">
-<span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">exponential_growth_rate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Nt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.exponential_growth_rate" title="Permalink to this definition">#</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>N0</strong> – Population size at onset of size change</p></li>
-<li><p><strong>Nt</strong> – Population size to reach at end of size change</p></li>
-<li><p><strong>time</strong> – Time (in generations) to get from N0 to Nt</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A list of integers representing population size over time.</p>
-</dd>
-</dl>
-<div class="versionadded">
-<p><span class="versionmodified added">New in version 0.6.0.</span></p>
-</div>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fwdpy11.migration_matrix_single_extant_deme">
-<span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">migration_matrix_single_extant_deme</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ndemes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">focal_deme</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.migration_matrix_single_extant_deme" title="Permalink to this definition">#</a></dt>
-<dd><p>Sets up a migration matrix for a system of ndemes
-but where only one deme has a size &gt; 0.  This
-is a convenience function for simulations where
-demes will appear later on and have migration amongst them.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>ndemes</strong> – The number of demes that will eventually exist.</p></li>
-<li><p><strong>focal_deme</strong> – The index of the initial extant deme.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)">numpy.ndarray</a></p>
-</dd>
-</dl>
-<div class="versionadded">
-<p><span class="versionmodified added">New in version 0.6.0.</span></p>
 </div>
 </dd></dl>
 
@@ -997,9 +925,9 @@ demes will appear later on and have migration amongst them.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fwdpy11.discrete_demography.from_demes">
-<span class="sig-prename descclassname"><span class="pre">fwdpy11.discrete_demography.</span></span><span class="sig-name descname"><span class="pre">from_demes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">burnin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.discrete_demography.from_demes" title="Permalink to this definition">#</a></dt>
-<dd><p>Build a <a class="reference internal" href="types.html#fwdpy11.DiscreteDemography" title="fwdpy11.DiscreteDemography"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiscreteDemography</span></code></a> object using demes. The deme
-graph can either be a demes Graph object or a string as the filepath to a
+<span class="sig-prename descclassname"><span class="pre">fwdpy11.discrete_demography.</span></span><span class="sig-name descname"><span class="pre">from_demes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">burnin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">round_non_integer_sizes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.discrete_demography.from_demes" title="Permalink to this definition">#</a></dt>
+<dd><p>Build a <a class="reference internal" href="types.html#fwdpy11.DemographicModelDetails" title="fwdpy11.DemographicModelDetails"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DemographicModelDetails</span></code></a> object using demes.
+The deme graph can either be a demes Graph object or a string as the filepath to a
 demes-specifiend YAML demography.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1013,7 +941,7 @@ size is determined as the size of the metapopulation.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference internal" href="demographic_models.html#fwdpy11.demographic_models.DemographicModelDetails" title="fwdpy11.demographic_models.DemographicModelDetails"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.demographic_models.DemographicModelDetails</span></code></a></p>
+<dd class="field-even"><p><a class="reference internal" href="types.html#fwdpy11.DemographicModelDetails" title="fwdpy11.DemographicModelDetails"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DemographicModelDetails</span></code></a></p>
 </dd>
 </dl>
 <div class="versionadded">
@@ -1050,11 +978,11 @@ size is determined as the size of the metapopulation.</p></li>
                 
     <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="demographic_models.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="datamatrix.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">The demography debugger</p>
+            <p class="prev-next-title">DataMatrix and StateMatrix</p>
         </div>
     </a>
     <a class='right-next' id="next-link" href="gslrandom.html" title="next page">

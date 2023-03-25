@@ -225,6 +225,11 @@ const thebe_selector_output = ".output, .cell_output"
    Adding neutral mutations to a population with existing ancestry
   </a>
  </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="import_mutations_from_tskit.html">
+   Importing mutations from tskit
+  </a>
+ </li>
 </ul>
 <p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
@@ -246,11 +251,6 @@ const thebe_selector_output = ".output, .cell_output"
     </span>
    </code>
    to specify demographic models.
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="demography_debugger_vignette.html">
-   Debugging demographic models
   </a>
  </li>
 </ul>
@@ -283,6 +283,11 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toctree-l1">
   <a class="reference internal" href="special_considerations_demes_models.html">
    Special considerations for demes models
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="genetic_values_multi_deme_models_advanced.html">
+   Advanced topics
   </a>
  </li>
 </ul>
@@ -376,11 +381,6 @@ const thebe_selector_output = ".output, .cell_output"
 </p>
 <ul class="nav bd-sidenav">
  <li class="toctree-l1">
-  <a class="reference internal" href="../pages/tutorial.html">
-   Tutorial
-  </a>
- </li>
- <li class="toctree-l1">
   <a class="reference internal" href="../pages/advancedtopics.html">
    Advanced topics
   </a>
@@ -392,11 +392,6 @@ const thebe_selector_output = ".output, .cell_output"
  </span>
 </p>
 <ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../pages/softselection.html">
-   Soft selection with discrete demes
-  </a>
- </li>
  <li class="toctree-l1">
   <a class="reference internal" href="../pages/mvdes.html">
    Different effect sizes of mutations in different demes
@@ -468,11 +463,6 @@ const thebe_selector_output = ".output, .cell_output"
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../pages/demographic_models.html">
-   The demography debugger
-  </a>
- </li>
- <li class="toctree-l1">
   <a class="reference internal" href="../pages/functions.html">
    Function documentation
   </a>
@@ -537,21 +527,6 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toctree-l1">
   <a class="reference internal" href="../examples/gss_divergent_optima.html">
    Adaptation to different optima with multivariate distribution of effect sizes
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../examples/IM.html">
-   Isolation-with-migration (IM)
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../examples/localadaptation.html">
-   Local adaptation of a quantitative trait
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../examples/migtest.html">
-   Symmetric migration between two demes
   </a>
  </li>
  <li class="toctree-l1">
@@ -869,7 +844,7 @@ It is also possible that we will move them into a class that can be pickled, add
 <span class="n">GSSmo</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSSmo</span><span class="p">(</span>
     <span class="p">[</span>
         <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Optimum</span><span class="p">(</span><span class="n">when</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">optimum</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">VS</span><span class="o">=</span><span class="mf">1.0</span><span class="p">),</span>
-        <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Optimum</span><span class="p">(</span><span class="n">when</span><span class="o">=</span><span class="mi">10</span> <span class="o">*</span> <span class="n">pop</span><span class="o">.</span><span class="n">N</span><span class="p">,</span> <span class="n">optimum</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">VS</span><span class="o">=</span><span class="mf">1.0</span><span class="p">),</span>
+        <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Optimum</span><span class="p">(</span><span class="n">when</span><span class="o">=</span><span class="mi">10</span> <span class="o">*</span> <span class="n">pop</span><span class="o">.</span><span class="n">N</span> <span class="o">-</span> <span class="mi">200</span><span class="p">,</span> <span class="n">optimum</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">VS</span><span class="o">=</span><span class="mf">1.0</span><span class="p">),</span>
     <span class="p">]</span>
 <span class="p">)</span>
 
@@ -885,8 +860,8 @@ It is also possible that we will move them into a class that can be pickled, add
     <span class="s2">&quot;recregions&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">PoissonInterval</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="n">rho</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">pop</span><span class="o">.</span><span class="n">N</span><span class="p">))],</span>
     <span class="s2">&quot;rates&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1e-3</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
     <span class="s2">&quot;prune_selected&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-    <span class="s2">&quot;demography&quot;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiscreteDemography</span><span class="p">(),</span>
-    <span class="s2">&quot;simlen&quot;</span><span class="p">:</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">pop</span><span class="o">.</span><span class="n">N</span> <span class="o">+</span> <span class="mi">200</span><span class="p">,</span>
+    <span class="s2">&quot;demography&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="s2">&quot;simlen&quot;</span><span class="p">:</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">pop</span><span class="o">.</span><span class="n">N</span><span class="p">,</span>
 <span class="p">}</span>
 <span class="n">params</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="n">p</span><span class="p">)</span>
 </pre></div>
@@ -908,10 +883,16 @@ For example, there are no edges:</p>
 </div>
 </div>
 <p>Now, we can call our function to evolve our population.
-We will apply the table simplification algorithm of <span id="id1">[<a class="reference internal" href="../misc/bibliography.html#id10" title="Jerome Kelleher, Kevin R Thornton, Jaime Ashander, and Peter L Ralph. Efficient pedigree recording for fast population genetics simulation. PLoS Comput. Biol., 14(11):e1006581, November 2018. doi:10.1371/journal.pcbi.1006581.">KTAR18</a>]</span> every 100 generations.</p>
+We will apply the table simplification algorithm of <span id="id1">[<a class="reference internal" href="../misc/bibliography.html#id12" title="Jerome Kelleher, Kevin R Thornton, Jaime Ashander, and Peter L Ralph. Efficient pedigree recording for fast population genetics simulation. PLoS Comput. Biol., 14(11):e1006581, November 2018.">KTAR18</a>]</span> every 100 generations.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">evolvets</span><span class="p">(</span><span class="n">rng</span><span class="p">,</span> <span class="n">pop</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">simplification_interval</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span> 
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/runner/work/fwdpy11/fwdpy11/fwdpy11/_evolvets.py:147: UserWarning: Applying a default demographic model where deme sizes are [500] and the burn-in length is 10*500
+  warnings.warn(msg)
 </pre></div>
 </div>
 </div>
@@ -926,16 +907,16 @@ We will apply the table simplification algorithm of <span id="id1">[<a class="re
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([(0.        , 1.        , 1000, 441),
-       (0.        , 1.        , 1000, 612),
-       (0.        , 1.        , 1001, 768),
-       (0.        , 1.        , 1001, 865),
-       (0.        , 0.57590443, 1002, 266),
-       (0.        , 0.57590443, 1002, 280),
-       (0.        , 1.        , 1003, 203),
-       (0.57590443, 1.        , 1003, 280),
-       (0.        , 1.        , 1003, 603),
-       (0.31601056, 1.        , 1004, 130)],
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([(0.        , 0.30459662, 1000, 303),
+       (0.        , 0.30459662, 1000, 757),
+       (0.93025801, 1.        , 1001, 145),
+       (0.93025801, 1.        , 1001, 246),
+       (0.        , 0.93025801, 1002, 145),
+       (0.        , 0.57626909, 1002, 246),
+       (0.        , 1.        , 1002, 899),
+       (0.        , 1.        , 1002, 932),
+       (0.15737727, 0.25823389, 1003, 244),
+       (0.15737727, 0.25823389, 1003, 681)],
       dtype=[(&#39;left&#39;, &#39;&lt;f8&#39;), (&#39;right&#39;, &#39;&lt;f8&#39;), (&#39;parent&#39;, &#39;&lt;i4&#39;), (&#39;child&#39;, &#39;&lt;i4&#39;)])
 </pre></div>
 </div>

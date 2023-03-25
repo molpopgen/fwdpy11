@@ -54,7 +54,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Tutorial" href="tutorial.html" />
+    <link rel="next" title="Advanced topics" href="advancedtopics.html" />
     <link rel="prev" title="Tracking mutations over time using sqlite3" href="../long_vignettes/pyfreqtracker_sqlite.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
@@ -227,6 +227,11 @@ const thebe_selector_output = ".output, .cell_output"
    Adding neutral mutations to a population with existing ancestry
   </a>
  </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/import_mutations_from_tskit.html">
+   Importing mutations from tskit
+  </a>
+ </li>
 </ul>
 <p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
@@ -248,11 +253,6 @@ const thebe_selector_output = ".output, .cell_output"
     </span>
    </code>
    to specify demographic models.
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/demography_debugger_vignette.html">
-   Debugging demographic models
   </a>
  </li>
 </ul>
@@ -285,6 +285,11 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toctree-l1">
   <a class="reference internal" href="../short_vignettes/special_considerations_demes_models.html">
    Special considerations for demes models
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/genetic_values_multi_deme_models_advanced.html">
+   Advanced topics
   </a>
  </li>
 </ul>
@@ -378,11 +383,6 @@ const thebe_selector_output = ".output, .cell_output"
 </p>
 <ul class="nav bd-sidenav">
  <li class="toctree-l1">
-  <a class="reference internal" href="tutorial.html">
-   Tutorial
-  </a>
- </li>
- <li class="toctree-l1">
   <a class="reference internal" href="advancedtopics.html">
    Advanced topics
   </a>
@@ -394,11 +394,6 @@ const thebe_selector_output = ".output, .cell_output"
  </span>
 </p>
 <ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="softselection.html">
-   Soft selection with discrete demes
-  </a>
- </li>
  <li class="toctree-l1">
   <a class="reference internal" href="mvdes.html">
    Different effect sizes of mutations in different demes
@@ -470,11 +465,6 @@ const thebe_selector_output = ".output, .cell_output"
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="demographic_models.html">
-   The demography debugger
-  </a>
- </li>
- <li class="toctree-l1">
   <a class="reference internal" href="functions.html">
    Function documentation
   </a>
@@ -539,21 +529,6 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toctree-l1">
   <a class="reference internal" href="../examples/gss_divergent_optima.html">
    Adaptation to different optima with multivariate distribution of effect sizes
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../examples/IM.html">
-   Isolation-with-migration (IM)
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../examples/localadaptation.html">
-   Local adaptation of a quantitative trait
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../examples/migtest.html">
-   Symmetric migration between two demes
   </a>
  </li>
  <li class="toctree-l1">
@@ -790,11 +765,6 @@ title="Print to PDF"
    Genetic values, fitness, etc.
   </a>
  </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#stateful-vs-stateless-genetic-value-calculations">
-   Stateful vs stateless genetic value calculations
-  </a>
- </li>
 </ul>
 
     </nav>
@@ -822,11 +792,6 @@ title="Print to PDF"
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#genetic-values-fitness-etc">
    Genetic values, fitness, etc.
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#stateful-vs-stateless-genetic-value-calculations">
-   Stateful vs stateless genetic value calculations
   </a>
  </li>
 </ul>
@@ -882,7 +847,7 @@ that <span class="math notranslate nohighlight">\(P=G+E\)</span>, where <span cl
 </dd>
 </dl>
 <p>Consider the following two cases:</p>
-<p>First,  standard population genetic models of the sort that <a class="reference external" href="http://sfscode.sourceforge.net/SFS_CODE/index/index.html">sfs_code</a> or <a class="reference external" href="https://messerlab.org/slim/">SLiM2</a>
+<p>First,  standard population genetic models of the sort that [sfs_code][sfs_code] or [SLiM2][slim2]
 are typically used for.  Mutations affecting fitness interact multiplicatively.
 Here, mutations directly affect fitness.  In our terms, <span class="math notranslate nohighlight">\(G = w\)</span>.</p>
 <p>Next, we think about a quantitative trait under Gaussian stabilizing selection
@@ -900,26 +865,30 @@ straight from a diploid’s data to fitness while others require multiple functi
 to go from genotype to genetic value to trait value and then, finally, to
 fitness.</p>
 <p>More details on these topics can be found in:</p>
-<ul class="simple">
-<li><p><a class="reference internal" href="tutorial.html#genetic-values"><span class="std std-ref">Modeling mutations having direct effects on fitness</span></a></p></li>
-<li><p><a class="reference internal" href="tutorial.html#modeling-quant-traits"><span class="std std-ref">Modeling mutations affecting phenotypes</span></a></p></li>
-</ul>
-<div class="admonition-todo admonition" id="id1">
-<p class="admonition-title">Todo</p>
-<p>Discuss fitness having default value of 1 and traits 0.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Give links to where details can be found.
+Discuss fitness having default value of 1 and traits 0.
+</pre></div>
 </div>
-</section>
-<section id="stateful-vs-stateless-genetic-value-calculations">
-<h2>Stateful vs stateless genetic value calculations<a class="headerlink" href="#stateful-vs-stateless-genetic-value-calculations" title="Permalink to this headline">#</a></h2>
-<p>A genetic value calculation that only requires a diploid, a gamete container,
-and a mutation container as arguments is considered “stateless”.
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
+## Stateful vs stateless genetic value calculations
+
+A genetic value calculation that only requires a diploid, a gamete container,
+and a mutation container as arguments is considered &quot;stateless&quot;.
 In contrast, if a calculation requires knowledge of the rest of the state of
 the population, or somehow depends on an externally-defined object,
-then it is “stateful”.  For example, if fitness depends on the mean
+then it is &quot;stateful&quot;.  For example, if fitness depends on the mean
 genetic distance to all other individuals in the population,
 then that is something that would need to be updated and
-recorded each generation, making genetic value calculations “stateful”.
-Another example is the snowdrift model, which is shown in <a class="reference internal" href="../examples/pysnowdrift.html#pysnowdrift"><span class="std std-ref">Snowdrift model in python</span></a>.</p>
+recorded each generation, making genetic value calculations &quot;stateful&quot;.
+Another example is the snowdrift model, which is shown in {ref}`pysnowdrift`.
+
+[sfs_code]: http://sfscode.sourceforge.net/SFS_CODE/index/index.html
+
+[slim2]: https://messerlab.org/slim/
+
+
+</pre></div>
+</div>
 </section>
 </section>
 
@@ -957,10 +926,10 @@ Another example is the snowdrift model, which is shown in <a class="reference in
             <p class="prev-next-title">Tracking mutations over time using <code class="docutils literal notranslate"><span class="pre">sqlite3</span></code></p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="tutorial.html" title="next page">
+    <a class='right-next' id="next-link" href="advancedtopics.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Tutorial</p>
+        <p class="prev-next-title">Advanced topics</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>

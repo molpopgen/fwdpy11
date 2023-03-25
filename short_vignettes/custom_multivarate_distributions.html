@@ -225,6 +225,11 @@ const thebe_selector_output = ".output, .cell_output"
    Adding neutral mutations to a population with existing ancestry
   </a>
  </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="import_mutations_from_tskit.html">
+   Importing mutations from tskit
+  </a>
+ </li>
 </ul>
 <p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
@@ -246,11 +251,6 @@ const thebe_selector_output = ".output, .cell_output"
     </span>
    </code>
    to specify demographic models.
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="demography_debugger_vignette.html">
-   Debugging demographic models
   </a>
  </li>
 </ul>
@@ -283,6 +283,11 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toctree-l1">
   <a class="reference internal" href="special_considerations_demes_models.html">
    Special considerations for demes models
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="genetic_values_multi_deme_models_advanced.html">
+   Advanced topics
   </a>
  </li>
 </ul>
@@ -376,11 +381,6 @@ const thebe_selector_output = ".output, .cell_output"
 </p>
 <ul class="nav bd-sidenav">
  <li class="toctree-l1">
-  <a class="reference internal" href="../pages/tutorial.html">
-   Tutorial
-  </a>
- </li>
- <li class="toctree-l1">
   <a class="reference internal" href="../pages/advancedtopics.html">
    Advanced topics
   </a>
@@ -392,11 +392,6 @@ const thebe_selector_output = ".output, .cell_output"
  </span>
 </p>
 <ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../pages/softselection.html">
-   Soft selection with discrete demes
-  </a>
- </li>
  <li class="toctree-l1">
   <a class="reference internal" href="../pages/mvdes.html">
    Different effect sizes of mutations in different demes
@@ -468,11 +463,6 @@ const thebe_selector_output = ".output, .cell_output"
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../pages/demographic_models.html">
-   The demography debugger
-  </a>
- </li>
- <li class="toctree-l1">
   <a class="reference internal" href="../pages/functions.html">
    Function documentation
   </a>
@@ -537,21 +527,6 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toctree-l1">
   <a class="reference internal" href="../examples/gss_divergent_optima.html">
    Adaptation to different optima with multivariate distribution of effect sizes
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../examples/IM.html">
-   Isolation-with-migration (IM)
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../examples/localadaptation.html">
-   Local adaptation of a quantitative trait
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../examples/migtest.html">
-   Symmetric migration between two demes
   </a>
  </li>
  <li class="toctree-l1">
@@ -825,7 +800,7 @@ deviates from a multivariate distribution are straightforward and agreed
 upon.</p>
 <p>In order to simulate multivariate distributions of effect sizes based on
 <a class="reference internal" href="../pages/regiontypes.html#fwdpy11.Sregion" title="fwdpy11.Sregion"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.Sregion</span></code></a> types, we follow a fairly intuitive approach
-described in <span id="id1">[<a class="reference internal" href="../misc/bibliography.html#id4" title="Peter Xue-Kun Song. Multivariate dispersion models generated from gaussian copula. Scand. Stat. Theory Appl., 27(2):305–320, June 2000. doi:10.1111/1467-9469.00191.">XKS00</a>]</span>.  Briefly, the multivariate Gaussian kernel is
+described in <span id="id1">[<a class="reference internal" href="../misc/bibliography.html#id6" title="Peter Xue-Kun Song. Multivariate dispersion models generated from gaussian copula. Scand. Stat. Theory Appl., 27(2):305–320, June 2000.">XKS00</a>]</span>.  Briefly, the multivariate Gaussian kernel is
 used to produce deviates.  Then, the quantiles from the cummulative distribution
 of each marginal Gaussian are used to generate a deviate from the desired output distribution of interest.</p>
 <p>For a simulation with <code class="docutils literal notranslate"><span class="pre">n</span></code> populations we need:</p>

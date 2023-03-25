@@ -52,7 +52,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script async="async" src="../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Debugging demographic models" href="demography_debugger_vignette.html" />
+    <link rel="next" title="Introduction" href="varying_fitness_conditions_across_demes_intro.html" />
     <link rel="prev" title="Introduction" href="demography_vignettes_intro.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
@@ -225,6 +225,11 @@ const thebe_selector_output = ".output, .cell_output"
    Adding neutral mutations to a population with existing ancestry
   </a>
  </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="import_mutations_from_tskit.html">
+   Importing mutations from tskit
+  </a>
+ </li>
 </ul>
 <p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
@@ -246,11 +251,6 @@ const thebe_selector_output = ".output, .cell_output"
     </span>
    </code>
    to specify demographic models.
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="demography_debugger_vignette.html">
-   Debugging demographic models
   </a>
  </li>
 </ul>
@@ -283,6 +283,11 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toctree-l1">
   <a class="reference internal" href="special_considerations_demes_models.html">
    Special considerations for demes models
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="genetic_values_multi_deme_models_advanced.html">
+   Advanced topics
   </a>
  </li>
 </ul>
@@ -376,11 +381,6 @@ const thebe_selector_output = ".output, .cell_output"
 </p>
 <ul class="nav bd-sidenav">
  <li class="toctree-l1">
-  <a class="reference internal" href="../pages/tutorial.html">
-   Tutorial
-  </a>
- </li>
- <li class="toctree-l1">
   <a class="reference internal" href="../pages/advancedtopics.html">
    Advanced topics
   </a>
@@ -392,11 +392,6 @@ const thebe_selector_output = ".output, .cell_output"
  </span>
 </p>
 <ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../pages/softselection.html">
-   Soft selection with discrete demes
-  </a>
- </li>
  <li class="toctree-l1">
   <a class="reference internal" href="../pages/mvdes.html">
    Different effect sizes of mutations in different demes
@@ -468,11 +463,6 @@ const thebe_selector_output = ".output, .cell_output"
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../pages/demographic_models.html">
-   The demography debugger
-  </a>
- </li>
- <li class="toctree-l1">
   <a class="reference internal" href="../pages/functions.html">
    Function documentation
   </a>
@@ -537,21 +527,6 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toctree-l1">
   <a class="reference internal" href="../examples/gss_divergent_optima.html">
    Adaptation to different optima with multivariate distribution of effect sizes
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../examples/IM.html">
-   Isolation-with-migration (IM)
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../examples/localadaptation.html">
-   Local adaptation of a quantitative trait
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../examples/migtest.html">
-   Symmetric migration between two demes
   </a>
  </li>
  <li class="toctree-l1">
@@ -807,18 +782,13 @@ title="Print to PDF"
     <nav id="bd-toc-nav" aria-label="Page">
         <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#yaml-file-input">
-   YAML file input
+  <a class="reference internal nav-link" href="#yaml-input">
+   YAML input
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#working-with-graphs">
-   Working with graphs
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#initializing-populations">
-   Initializing populations
+  <a class="reference internal nav-link" href="#obtaining-the-demes-present-at-the-end-of-a-simulation">
+   Obtaining the demes present at the end of a simulation
   </a>
  </li>
 </ul>
@@ -841,18 +811,13 @@ title="Print to PDF"
                         <nav aria-label="Page">
                             <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#yaml-file-input">
-   YAML file input
+  <a class="reference internal nav-link" href="#yaml-input">
+   YAML input
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#working-with-graphs">
-   Working with graphs
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#initializing-populations">
-   Initializing populations
+  <a class="reference internal nav-link" href="#obtaining-the-demes-present-at-the-end-of-a-simulation">
+   Obtaining the demes present at the end of a simulation
   </a>
  </li>
 </ul>
@@ -877,364 +842,170 @@ This method of specifying models uses a <code class="docutils literal notranslat
 <p>There are several advantages to using <code class="docutils literal notranslate"><span class="pre">demes</span></code>:</p>
 <ul class="simple">
 <li><p>The <code class="docutils literal notranslate"><span class="pre">YAML</span></code> files can be used by many pieces of related software, including <a class="reference external" href="https://tskit.dev/msprime/docs/stable/"><code class="docutils literal notranslate"><span class="pre">msprime</span></code></a> and <a class="reference external" href="https://moments.readthedocs.io"><code class="docutils literal notranslate"><span class="pre">moments</span></code></a>.</p></li>
-<li><p>The specification is simpler than the low-level <code class="docutils literal notranslate"><span class="pre">API</span></code> provided by any of these tools.</p></li>
 <li><p>You’ll get an extra layer of model validation when <code class="docutils literal notranslate"><span class="pre">demes</span></code> loads your model prior to it being converted into <code class="docutils literal notranslate"><span class="pre">fwpdy11</span></code> objects.</p></li>
 <li><p>Tools to visualize the models are under active development.</p></li>
 </ul>
-<section id="yaml-file-input">
-<h2>YAML file input<a class="headerlink" href="#yaml-file-input" title="Permalink to this headline">#</a></h2>
-<p>The following <code class="docutils literal notranslate"><span class="pre">YAML</span></code> specifies the human out-of-Africa model from <span id="id1">[<a class="reference internal" href="../misc/bibliography.html#id24" title="Ryan N Gutenkunst, Ryan D Hernandez, Scott H Williamson, and Carlos D Bustamante. Inferring the joint demographic history of multiple populations from multidimensional SNP frequency data. PLoS Genet., 5(10):e1000695, October 2009. doi:10.1371/journal.pgen.1000695.">GHWB09</a>]</span>:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">The Gutenkunst et al. (2009) OOA model.</span>
-<span class="nt">doi</span><span class="p">:</span>
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://doi.org/10.1371/journal.pgen.1000695</span>
-<span class="nt">time_units</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">years</span>
-<span class="nt">generation_time</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">25</span>
-
-<span class="nt">demes</span><span class="p">:</span>
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ancestral</span>
-<span class="w">  </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Equilibrium/root population</span>
-<span class="w">  </span><span class="nt">epochs</span><span class="p">:</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">end_time</span><span class="p">:</span><span class="w"> </span><span class="nv">220e3</span><span class="p p-Indicator">,</span><span class="nt"> start_size</span><span class="p">:</span><span class="w"> </span><span class="nv">7300</span><span class="p p-Indicator">}</span>
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">AMH</span>
-<span class="w">  </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Anatomically modern humans</span>
-<span class="w">  </span><span class="nt">ancestors</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">ancestral</span><span class="p p-Indicator">]</span>
-<span class="w">  </span><span class="nt">epochs</span><span class="p">:</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">end_time</span><span class="p">:</span><span class="w"> </span><span class="nv">140e3</span><span class="p p-Indicator">,</span><span class="nt"> start_size</span><span class="p">:</span><span class="w"> </span><span class="nv">12300</span><span class="p p-Indicator">}</span>
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">OOA</span>
-<span class="w">  </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Bottleneck out-of-Africa population</span>
-<span class="w">  </span><span class="nt">ancestors</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">AMH</span><span class="p p-Indicator">]</span>
-<span class="w">  </span><span class="nt">epochs</span><span class="p">:</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">end_time</span><span class="p">:</span><span class="w"> </span><span class="nv">21.2e3</span><span class="p p-Indicator">,</span><span class="nt"> start_size</span><span class="p">:</span><span class="w"> </span><span class="nv">2100</span><span class="p p-Indicator">}</span>
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">YRI</span>
-<span class="w">  </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Yoruba in Ibadan, Nigeria</span>
-<span class="w">  </span><span class="nt">ancestors</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">AMH</span><span class="p p-Indicator">]</span>
-<span class="w">  </span><span class="nt">epochs</span><span class="p">:</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">start_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">12300</span>
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CEU</span>
-<span class="w">  </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Utah Residents (CEPH) with Northern and Western European Ancestry</span>
-<span class="w">  </span><span class="nt">ancestors</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">OOA</span><span class="p p-Indicator">]</span>
-<span class="w">  </span><span class="nt">epochs</span><span class="p">:</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">start_size</span><span class="p">:</span><span class="w"> </span><span class="nv">1000</span><span class="p p-Indicator">,</span><span class="nt"> end_size</span><span class="p">:</span><span class="w"> </span><span class="nv">29725</span><span class="p p-Indicator">}</span>
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CHB</span>
-<span class="w">  </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Han Chinese in Beijing, China</span>
-<span class="w">  </span><span class="nt">ancestors</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">OOA</span><span class="p p-Indicator">]</span>
-<span class="w">  </span><span class="nt">epochs</span><span class="p">:</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">start_size</span><span class="p">:</span><span class="w"> </span><span class="nv">510</span><span class="p p-Indicator">,</span><span class="nt"> end_size</span><span class="p">:</span><span class="w"> </span><span class="nv">54090</span><span class="p p-Indicator">}</span>
-
-<span class="nt">migrations</span><span class="p">:</span>
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">demes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">YRI</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">OOA</span><span class="p p-Indicator">],</span><span class="nt"> rate</span><span class="p">:</span><span class="w"> </span><span class="nv">25e-5</span><span class="p p-Indicator">}</span>
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">demes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">YRI</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">CEU</span><span class="p p-Indicator">],</span><span class="nt"> rate</span><span class="p">:</span><span class="w"> </span><span class="nv">3e-5</span><span class="p p-Indicator">}</span>
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">demes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">YRI</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">CHB</span><span class="p p-Indicator">],</span><span class="nt"> rate</span><span class="p">:</span><span class="w"> </span><span class="nv">1.9e-5</span><span class="p p-Indicator">}</span>
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">demes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">CEU</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">CHB</span><span class="p p-Indicator">],</span><span class="nt"> rate</span><span class="p">:</span><span class="w"> </span><span class="nv">9.6e-5</span><span class="p p-Indicator">}</span>
+<section id="yaml-input">
+<h2>YAML input<a class="headerlink" href="#yaml-input" title="Permalink to this headline">#</a></h2>
+<p>The following <code class="docutils literal notranslate"><span class="pre">YAML</span></code> specifies a model of a derived population created
+from unequal admixture of two ancestral populations 50 generations ago:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">yaml</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">description: An example demes model</span>
+<span class="s2">time_units: generations</span>
+<span class="s2">demes:</span>
+<span class="s2"> - name: ancestor1</span>
+<span class="s2">   epochs:</span>
+<span class="s2">    - start_size: 100</span>
+<span class="s2">      end_time: 50</span>
+<span class="s2"> - name: ancestor2</span>
+<span class="s2">   epochs:</span>
+<span class="s2">    - start_size: 250</span>
+<span class="s2">      end_time: 50</span>
+<span class="s2"> - name: admixed</span>
+<span class="s2">   start_time: 50</span>
+<span class="s2">   ancestors: [ancestor1, ancestor2]</span>
+<span class="s2">   proportions: [0.90, 0.10]</span>
+<span class="s2">   epochs:</span>
+<span class="s2">    - start_size: 100</span>
+<span class="s2">&quot;&quot;&quot;</span>
 </pre></div>
 </div>
-<p>We can generate demographic models directly from these <code class="docutils literal notranslate"><span class="pre">YAML</span></code> files using <a class="reference internal" href="../pages/functions.html#fwdpy11.discrete_demography.from_demes" title="fwdpy11.discrete_demography.from_demes"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.discrete_demography.from_demes()</span></code></a>, which handles the conversion to the low-level objects described <a class="reference internal" href="../pages/softselection.html#softselection"><span class="std std-ref">here</span></a>:</p>
+</div>
+</div>
+<p>A visual representation of the model looks like:</p>
+<div class="cell tag_hide-input docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">demes</span>
+<span class="kn">import</span> <span class="nn">demesdraw</span>
+<span class="n">graph</span> <span class="o">=</span> <span class="n">demes</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">yaml</span><span class="p">)</span>
+<span class="n">demesdraw</span><span class="o">.</span><span class="n">tubes</span><span class="p">(</span><span class="n">graph</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/demes_vignette_3_0.png" src="../_images/demes_vignette_3_0.png" />
+</div>
+</div>
+<p>We can generate demographic models directly from these <code class="docutils literal notranslate"><span class="pre">YAML</span></code> files using
+<a class="reference internal" href="../pages/types.html#fwdpy11.ForwardDemesGraph.from_demes" title="fwdpy11.ForwardDemesGraph.from_demes"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.ForwardDemesGraph.from_demes()</span></code></a>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fwdpy11</span>
 
-<span class="n">model</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">discrete_demography</span><span class="o">.</span><span class="n">from_demes</span><span class="p">(</span><span class="s2">&quot;gutenkunst_ooa.yml&quot;</span><span class="p">)</span>
+<span class="n">demography</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ForwardDemesGraph</span><span class="o">.</span><span class="n">from_demes</span><span class="p">(</span><span class="n">yaml</span><span class="p">,</span> <span class="n">burnin</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">burnin_is_exact</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
+<p>The previous command defines a model where we evolve the population for 100 generations
+of a “burn-in”.
+When <code class="docutils literal notranslate"><span class="pre">burnin_is_exact=False</span></code>, the value passed to <code class="docutils literal notranslate"><span class="pre">burnin</span></code> is treated as a multiple
+of the <strong>sum</strong> of all ancestral deme sizes (those having a start time of <code class="docutils literal notranslate"><span class="pre">inf</span></code>
+in the demes model).</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Be sure to read the documentation for <a class="reference internal" href="../pages/functions.html#fwdpy11.discrete_demography.from_demes" title="fwdpy11.discrete_demography.from_demes"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.discrete_demography.from_demes()</span></code></a>!
+<p>Be sure to read the documentation for <a class="reference internal" href="../pages/types.html#fwdpy11.ForwardDemesGraph.from_demes" title="fwdpy11.ForwardDemesGraph.from_demes"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.ForwardDemesGraph.from_demes()</span></code></a>!
 There are important options concerning the run time of the simulation, etc.</p>
 </div>
-<p>The return value is an instance of <a class="reference internal" href="../pages/demographic_models.html#fwdpy11.demographic_models.DemographicModelDetails" title="fwdpy11.demographic_models.DemographicModelDetails"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.demographic_models.DemographicModelDetails</span></code></a> and may be passed as the <code class="docutils literal notranslate"><span class="pre">demography</span></code> keyword argument to initialize an instance of <a class="reference internal" href="../pages/model_params.html#fwdpy11.ModelParams" title="fwdpy11.ModelParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.ModelParams</span></code></a>.
-To extract the simulation length to generate the <code class="docutils literal notranslate"><span class="pre">simlen</span></code> parameter of your <a class="reference internal" href="../pages/model_params.html#fwdpy11.ModelParams" title="fwdpy11.ModelParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.ModelParams</span></code></a> instance:</p>
+<p>The return value is an instance of <a class="reference internal" href="../pages/types.html#fwdpy11.ForwardDemesGraph" title="fwdpy11.ForwardDemesGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.ForwardDemesGraph</span></code></a>.
+The object contains several properties that are useful in setting up your
+simulation.</p>
+<p>First, the sizes of all demes extant at generation zero:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;total_simulation_length&quot;</span><span class="p">]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">demography</span><span class="o">.</span><span class="n">initial_sizes</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>81800
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[100, 250]
 </pre></div>
 </div>
 </div>
 </div>
-<p>If we print the <code class="docutils literal notranslate"><span class="pre">model</span></code> object, we will see how much logic we’d have had to use in order to implement this model using the low-level object <code class="docutils literal notranslate"><span class="pre">API</span></code>:</p>
+<p>This property can be used to correctly initialize a population:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">asblack</span><span class="p">())</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>fwdpy11.demographic_models.DemographicModelDetails(
-    model=fwdpy11.DiscreteDemography(
-        mass_migrations=[],
-        set_growth_rates=[
-            fwdpy11.SetExponentialGrowth(when=80952, deme=4, G=1.00400799699368),
-            fwdpy11.SetExponentialGrowth(when=80952, deme=5, G=1.005515145509541),
-        ],
-        set_deme_sizes=[
-            fwdpy11.SetDemeSize(
-                when=73000, deme=0, new_size=0, resets_growth_rate=True
-            ),
-            fwdpy11.SetDemeSize(
-                when=73000, deme=1, new_size=12300, resets_growth_rate=True
-            ),
-            fwdpy11.SetDemeSize(
-                when=76200, deme=1, new_size=0, resets_growth_rate=True
-            ),
-            fwdpy11.SetDemeSize(
-                when=76200, deme=2, new_size=2100, resets_growth_rate=True
-            ),
-            fwdpy11.SetDemeSize(
-                when=76200, deme=3, new_size=12300, resets_growth_rate=True
-            ),
-            fwdpy11.SetDemeSize(
-                when=80952, deme=2, new_size=0, resets_growth_rate=True
-            ),
-            fwdpy11.SetDemeSize(
-                when=80952, deme=4, new_size=1000, resets_growth_rate=True
-            ),
-            fwdpy11.SetDemeSize(
-                when=80952, deme=5, new_size=510, resets_growth_rate=True
-            ),
-        ],
-        set_selfing_rates=[
-            fwdpy11.SetSelfingRate(when=0, deme=0, S=0),
-            fwdpy11.SetSelfingRate(when=73000, deme=1, S=0),
-            fwdpy11.SetSelfingRate(when=76200, deme=2, S=0),
-            fwdpy11.SetSelfingRate(when=76200, deme=3, S=0),
-            fwdpy11.SetSelfingRate(when=80952, deme=4, S=0),
-            fwdpy11.SetSelfingRate(when=80952, deme=5, S=0),
-        ],
-        migmatrix=fwdpy11.MigrationMatrix(
-            migmatrix=array(
-                [
-                    [1.0, 0.0, 0.0, 0.0, 0.0, 0.0],
-                    [0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
-                    [0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
-                    [0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
-                    [0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
-                    [0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
-                ]
-            ),
-            scaled=False,
-        ),
-        set_migration_rates=[
-            fwdpy11.SetMigrationRates(
-                when=73000, deme=0, migrates=array([0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
-            ),
-            fwdpy11.SetMigrationRates(
-                when=73000, deme=1, migrates=array([1.0, 0.0, 0.0, 0.0, 0.0, 0.0])
-            ),
-            fwdpy11.SetMigrationRates(
-                when=73001, deme=1, migrates=array([0.0, 1.0, 0.0, 0.0, 0.0, 0.0])
-            ),
-            fwdpy11.SetMigrationRates(
-                when=76200, deme=1, migrates=array([0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
-            ),
-            fwdpy11.SetMigrationRates(
-                when=76200, deme=2, migrates=array([0.0, 1.0, 0.0, 0.0, 0.0, 0.0])
-            ),
-            fwdpy11.SetMigrationRates(
-                when=76200, deme=3, migrates=array([0.0, 1.0, 0.0, 0.0, 0.0, 0.0])
-            ),
-            fwdpy11.SetMigrationRates(
-                when=76201,
-                deme=2,
-                migrates=array(
-                    [0.0000e00, 0.0000e00, 9.9975e-01, 2.5000e-04, 0.0000e00, 0.0000e00]
-                ),
-            ),
-            fwdpy11.SetMigrationRates(
-                when=76201,
-                deme=3,
-                migrates=array(
-                    [0.0000e00, 0.0000e00, 2.5000e-04, 9.9975e-01, 0.0000e00, 0.0000e00]
-                ),
-            ),
-            fwdpy11.SetMigrationRates(
-                when=80952, deme=2, migrates=array([0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
-            ),
-            fwdpy11.SetMigrationRates(
-                when=80952, deme=3, migrates=array([0.0, 0.0, 0.0, 1.0, 0.0, 0.0])
-            ),
-            fwdpy11.SetMigrationRates(
-                when=80952, deme=4, migrates=array([0.0, 0.0, 1.0, 0.0, 0.0, 0.0])
-            ),
-            fwdpy11.SetMigrationRates(
-                when=80952, deme=5, migrates=array([0.0, 0.0, 1.0, 0.0, 0.0, 0.0])
-            ),
-            fwdpy11.SetMigrationRates(
-                when=80953,
-                deme=3,
-                migrates=array(
-                    [
-                        0.00000e00,
-                        0.00000e00,
-                        0.00000e00,
-                        9.99951e-01,
-                        3.00000e-05,
-                        1.90000e-05,
-                    ]
-                ),
-            ),
-            fwdpy11.SetMigrationRates(
-                when=80953,
-                deme=4,
-                migrates=array(
-                    [
-                        0.00000e00,
-                        0.00000e00,
-                        0.00000e00,
-                        3.00000e-05,
-                        9.99874e-01,
-                        9.60000e-05,
-                    ]
-                ),
-            ),
-            fwdpy11.SetMigrationRates(
-                when=80953,
-                deme=5,
-                migrates=array(
-                    [
-                        0.00000e00,
-                        0.00000e00,
-                        0.00000e00,
-                        1.90000e-05,
-                        9.60000e-05,
-                        9.99885e-01,
-                    ]
-                ),
-            ),
-        ],
-    ),
-    name=&quot;The Gutenkunst et al. (2009) OOA model.&quot;,
-    source={&quot;demes_yaml_file&quot;: &quot;gutenkunst_ooa.yml&quot;},
-    parameters=None,
-    citation=fwdpy11.demographic_models.DemographicModelCitation(
-        DOI=[&quot;https://doi.org/10.1371/journal.pgen.1000695&quot;],
-        full_citation=None,
-        metadata=None,
-    ),
-    metadata={
-        &quot;deme_labels&quot;: {
-            0: &quot;ancestral&quot;,
-            1: &quot;AMH&quot;,
-            2: &quot;OOA&quot;,
-            3: &quot;YRI&quot;,
-            4: &quot;CEU&quot;,
-            5: &quot;CHB&quot;,
-        },
-        &quot;initial_sizes&quot;: {0: 7300},
-        &quot;burnin_time&quot;: 73000,
-        &quot;total_simulation_length&quot;: 81800,
-    },
-)
-</pre></div>
-</div>
-</div>
-</div>
-<p>It is hopefully clear how much simpler it is to use the <code class="docutils literal notranslate"><span class="pre">demes</span></code> <code class="docutils literal notranslate"><span class="pre">YAML</span></code> specification!</p>
-</section>
-<section id="working-with-graphs">
-<h2>Working with graphs<a class="headerlink" href="#working-with-graphs" title="Permalink to this headline">#</a></h2>
-<p>You may also build models by creating <a class="reference external" href="https://popsim-consortium.github.io/demes-docs/main/api.html#demes.Builder" title="(in Python)"><code class="xref py py-class docutils literal notranslate"><span class="pre">demes.Builder</span></code></a> objects using the <code class="docutils literal notranslate"><span class="pre">demes</span></code> <code class="docutils literal notranslate"><span class="pre">API</span></code>.
-In general, we feel that the <code class="docutils literal notranslate"><span class="pre">YAML</span></code> method will be less error-prone and therefore the preferred approach.
-But, for example:</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">demes</span>
-
-<span class="n">builder</span> <span class="o">=</span> <span class="n">demes</span><span class="o">.</span><span class="n">Builder</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;test demography&quot;</span><span class="p">,</span> <span class="n">time_units</span><span class="o">=</span><span class="s2">&quot;generations&quot;</span><span class="p">)</span>
-<span class="n">builder</span><span class="o">.</span><span class="n">add_deme</span><span class="p">(</span>
-    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;deme&quot;</span><span class="p">,</span>
-    <span class="n">epochs</span><span class="o">=</span><span class="p">[</span>
-        <span class="nb">dict</span><span class="p">(</span><span class="n">start_size</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">end_time</span><span class="o">=</span><span class="mi">100</span><span class="p">),</span>
-        <span class="nb">dict</span><span class="p">(</span><span class="n">start_size</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">end_time</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
-    <span class="p">],</span>
-<span class="p">)</span>
-
-<span class="n">graph</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
-
-<span class="n">model</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">discrete_demography</span><span class="o">.</span><span class="n">from_demes</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">asblack</span><span class="p">())</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>fwdpy11.demographic_models.DemographicModelDetails(
-    model=fwdpy11.DiscreteDemography(
-        mass_migrations=[],
-        set_growth_rates=[],
-        set_deme_sizes=[
-            fwdpy11.SetDemeSize(
-                when=10000, deme=0, new_size=2000, resets_growth_rate=True
-            )
-        ],
-        set_selfing_rates=[
-            fwdpy11.SetSelfingRate(when=0, deme=0, S=0),
-            fwdpy11.SetSelfingRate(when=10000, deme=0, S=0),
-        ],
-        migmatrix=None,
-        set_migration_rates=[],
-    ),
-    name=&quot;test demography&quot;,
-    source=None,
-    parameters=None,
-    citation=fwdpy11.demographic_models.DemographicModelCitation(
-        DOI=[], full_citation=None, metadata=None
-    ),
-    metadata={
-        &quot;deme_labels&quot;: {0: &quot;deme&quot;},
-        &quot;initial_sizes&quot;: {0: 1000},
-        &quot;burnin_time&quot;: 10000,
-        &quot;total_simulation_length&quot;: 10100,
-    },
-)
-</pre></div>
-</div>
-</div>
-</div>
-<p>Again, it is simpler to build up the demography using <code class="docutils literal notranslate"><span class="pre">demes</span></code> than it is using the <code class="docutils literal notranslate"><span class="pre">fwdpy11</span></code> objects directly.</p>
-</section>
-<section id="initializing-populations">
-<h2>Initializing populations<a class="headerlink" href="#initializing-populations" title="Permalink to this headline">#</a></h2>
-<p>A model specified using <code class="docutils literal notranslate"><span class="pre">demes</span></code> contains enough information to initialize instances of <a class="reference internal" href="../pages/types.html#fwdpy11.DiploidPopulation" title="fwdpy11.DiploidPopulation"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiploidPopulation</span></code></a>.
-We recommend that you use this information so that the initial deme size(s) in your simulation is correct!</p>
-<p>To see how this works, let’s revisit the Gutenkunst model from above.
-The value returned contains the initial size of each deme in the model:</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">discrete_demography</span><span class="o">.</span><span class="n">from_demes</span><span class="p">(</span><span class="s2">&quot;gutenkunst_ooa.yml&quot;</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;initial_sizes&#39;</span><span class="p">])</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{0: 7300}
-</pre></div>
-</div>
-</div>
-</div>
-<p>Given that, a sorted list comprehension does the job:</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">initial_sizes</span><span class="o">=</span> <span class="p">[</span><span class="n">model</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;initial_sizes&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;initial_sizes&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())]</span>
-<span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">(</span><span class="n">initial_sizes</span><span class="p">,</span> <span class="mf">1000.</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">(</span><span class="n">demography</span><span class="o">.</span><span class="n">initial_sizes</span><span class="p">,</span> <span class="mf">1000.</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">deme_sizes</span><span class="p">())</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(array([0], dtype=int32), array([7300]))
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(array([0, 1], dtype=int32), array([100, 250]))
 </pre></div>
 </div>
 </div>
 </div>
-<p>The reason to go through the sorting step is to get the right initial sizes <em>in the right order</em> for “rootless” <code class="docutils literal notranslate"><span class="pre">demes</span></code> graphs.
-A rootless model is one with more than one ancestral deme in the ancient past.</p>
+<p>The generation corresponding to the end of the model:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">demography</span><span class="o">.</span><span class="n">final_generation</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>150
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can now set up our simulation parameters:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pdict</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;simlen&#39;</span><span class="p">:</span> <span class="n">demography</span><span class="o">.</span><span class="n">final_generation</span><span class="p">,</span>
+         <span class="s1">&#39;demography&#39;</span><span class="p">:</span> <span class="n">demography</span><span class="p">,</span>
+         <span class="c1"># Everything below is standard</span>
+         <span class="c1"># and covered in other vignettes</span>
+         <span class="s1">&#39;recregions&#39;</span><span class="p">:</span> <span class="p">[],</span>
+         <span class="s1">&#39;nregions&#39;</span><span class="p">:</span> <span class="p">[],</span>
+         <span class="s1">&#39;sregions&#39;</span><span class="p">:</span> <span class="p">[],</span>
+         <span class="s1">&#39;rates&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span>
+         <span class="s1">&#39;gvalue&#39;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Multiplicative</span><span class="p">(</span><span class="mf">2.</span><span class="p">)</span>
+         <span class="p">}</span>
+<span class="n">params</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="n">pdict</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We are now ready to run a simulaton:</p>
+<ul class="simple">
+<li><p>We have a valid <a class="reference internal" href="../pages/model_params.html#fwdpy11.ModelParams" title="fwdpy11.ModelParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.ModelParams</span></code></a> object.</p></li>
+<li><p>Our population has its initial sizes correctly set.</p></li>
+</ul>
+</section>
+<section id="obtaining-the-demes-present-at-the-end-of-a-simulation">
+<h2>Obtaining the demes present at the end of a simulation<a class="headerlink" href="#obtaining-the-demes-present-at-the-end-of-a-simulation" title="Permalink to this headline">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">demography</span><span class="o">.</span><span class="n">demes_at_final_generation</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[2]
+</pre></div>
+</div>
+</div>
+</div>
+<p>To get the names of those demes:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">deme</span> <span class="ow">in</span> <span class="n">demography</span><span class="o">.</span><span class="n">demes_at_final_generation</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">demography</span><span class="o">.</span><span class="n">deme_labels</span><span class="p">[</span><span class="n">deme</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>admixed
+</pre></div>
+</div>
+</div>
+</div>
+<p>It is probably useful to read more about how <code class="docutils literal notranslate"><span class="pre">fwdpy11</span></code> handles <code class="docutils literal notranslate"><span class="pre">demes</span></code>
+models <a class="reference internal" href="../technical/demes.html#demes-details"><span class="std std-ref">here</span></a>.</p>
 </section>
 </section>
 
@@ -1272,10 +1043,10 @@ A rootless model is one with more than one ancestral deme in the ancient past.</
             <p class="prev-next-title">Introduction</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="demography_debugger_vignette.html" title="next page">
+    <a class='right-next' id="next-link" href="varying_fitness_conditions_across_demes_intro.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Debugging demographic models</p>
+        <p class="prev-next-title">Introduction</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>

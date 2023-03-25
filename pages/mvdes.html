@@ -55,7 +55,7 @@ const thebe_selector_output = ".output, .cell_output"
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Conceptual overview of tree sequence recording" href="tsoverview.html" />
-    <link rel="prev" title="Soft selection with discrete demes" href="softselection.html" />
+    <link rel="prev" title="Advanced topics" href="advancedtopics.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -227,6 +227,11 @@ const thebe_selector_output = ".output, .cell_output"
    Adding neutral mutations to a population with existing ancestry
   </a>
  </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/import_mutations_from_tskit.html">
+   Importing mutations from tskit
+  </a>
+ </li>
 </ul>
 <p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
@@ -248,11 +253,6 @@ const thebe_selector_output = ".output, .cell_output"
     </span>
    </code>
    to specify demographic models.
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/demography_debugger_vignette.html">
-   Debugging demographic models
   </a>
  </li>
 </ul>
@@ -285,6 +285,11 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toctree-l1">
   <a class="reference internal" href="../short_vignettes/special_considerations_demes_models.html">
    Special considerations for demes models
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/genetic_values_multi_deme_models_advanced.html">
+   Advanced topics
   </a>
  </li>
 </ul>
@@ -378,11 +383,6 @@ const thebe_selector_output = ".output, .cell_output"
 </p>
 <ul class="nav bd-sidenav">
  <li class="toctree-l1">
-  <a class="reference internal" href="tutorial.html">
-   Tutorial
-  </a>
- </li>
- <li class="toctree-l1">
   <a class="reference internal" href="advancedtopics.html">
    Advanced topics
   </a>
@@ -394,11 +394,6 @@ const thebe_selector_output = ".output, .cell_output"
  </span>
 </p>
 <ul class="current nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="softselection.html">
-   Soft selection with discrete demes
-  </a>
- </li>
  <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
    Different effect sizes of mutations in different demes
@@ -470,11 +465,6 @@ const thebe_selector_output = ".output, .cell_output"
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="demographic_models.html">
-   The demography debugger
-  </a>
- </li>
- <li class="toctree-l1">
   <a class="reference internal" href="functions.html">
    Function documentation
   </a>
@@ -539,21 +529,6 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toctree-l1">
   <a class="reference internal" href="../examples/gss_divergent_optima.html">
    Adaptation to different optima with multivariate distribution of effect sizes
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../examples/IM.html">
-   Isolation-with-migration (IM)
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../examples/localadaptation.html">
-   Local adaptation of a quantitative trait
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../examples/migtest.html">
-   Symmetric migration between two demes
   </a>
  </li>
  <li class="toctree-l1">
@@ -906,10 +881,9 @@ title="Print to PDF"
 <div class="versionadded">
 <p><span class="versionmodified added">New in version 0.7.0.</span></p>
 </div>
-<p>This section describes how to allow mutations to have different effect sizes in different demes,
-building on the material from <a class="reference internal" href="softselection.html#softselection"><span class="std std-ref">Soft selection with discrete demes</span></a>.</p>
+<p>This section describes how to allow mutations to have different effect sizes in different demes.</p>
 <p>To allow for correlated effect sizes across demes, we used <a class="reference internal" href="regiontypes.html#fwdpy11.mvDES" title="fwdpy11.mvDES"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.mvDES</span></code></a> to model multivariate
-distributions of effect sizes.  This class inherits from <a class="reference internal" href="regiontypes.html#fwdpy11.Sregion" title="fwdpy11.Sregion"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.Sregion</span></code></a> (see <a class="reference internal" href="tutorial.html#mutationregions"><span class="std std-ref">Defining distributions of mutation effect sizes</span></a>).
+distributions of effect sizes.  This class inherits from <a class="reference internal" href="regiontypes.html#fwdpy11.Sregion" title="fwdpy11.Sregion"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.Sregion</span></code></a> (see <a class="reference internal" href="../short_vignettes/des_vignette.html#des-vignette"><span class="std std-ref">Distributions of effect sizes</span></a>).
 In general, there is no standard <em>general</em> method for drawing random deviates from arbitrary multivariate
 distributions.  The approach that we take is to use a multivariate Gaussian distribution as the underlying kernel.</p>
 <p>First, we will describe the cases where the multivariate Gaussian kernel leads to output effect size distributions
@@ -926,8 +900,27 @@ selection on a quantitative trait.  The effects sizes within each deme are thems
 distributions and there is no correlation in the effect size in the two demes.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fwdpy11</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">demes</span>
+<span class="kn">import</span> <span class="nn">fwdpy11</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="n">yaml</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">description: two demes with symmetric migration</span>
+<span class="s2">time_units: generations</span>
+<span class="s2">demes:</span>
+<span class="s2"> - name: deme0</span>
+<span class="s2">   epochs:</span>
+<span class="s2">    - start_size: 100</span>
+<span class="s2"> - name: deme1</span>
+<span class="s2">   epochs:</span>
+<span class="s2">     - start_size: 100</span>
+<span class="s2">migrations:</span>
+<span class="s2"> - demes: [deme0, deme1]</span>
+<span class="s2">   rate: 0.1</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+<span class="n">graph</span> <span class="o">=</span> <span class="n">demes</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">yaml</span><span class="p">)</span>
+<span class="n">demography</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">discrete_demography</span><span class="o">.</span><span class="n">from_demes</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
 <span class="n">pdict</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;nregions&quot;</span><span class="p">:</span> <span class="p">[],</span>
@@ -938,9 +931,7 @@ distributions and there is no correlation in the effect size in the two demes.</
         <span class="p">)</span>
     <span class="p">],</span>
     <span class="s2">&quot;rates&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1e-3</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-    <span class="s2">&quot;demography&quot;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiscreteDemography</span><span class="p">(</span>
-        <span class="n">migmatrix</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
-    <span class="p">),</span>
+    <span class="s2">&quot;demography&quot;</span><span class="p">:</span> <span class="n">demography</span><span class="p">,</span>
     <span class="s2">&quot;simlen&quot;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
     <span class="s2">&quot;gvalue&quot;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Additive</span><span class="p">(</span>
         <span class="n">ndemes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">scaling</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">gvalue_to_fitness</span><span class="o">=</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSS</span><span class="p">(</span><span class="n">optimum</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">VS</span><span class="o">=</span><span class="mf">10.0</span><span class="p">)</span>
@@ -1058,9 +1049,7 @@ To model deleterious mutations/effect sizes &lt; 0, use the
     <span class="s2">&quot;recregions&quot;</span><span class="p">:</span> <span class="p">[],</span>
     <span class="s2">&quot;sregions&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">mvdes</span><span class="p">],</span>
     <span class="s2">&quot;rates&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1e-3</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-    <span class="s2">&quot;demography&quot;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiscreteDemography</span><span class="p">(</span>
-        <span class="n">migmatrix</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
-    <span class="p">),</span>
+    <span class="s2">&quot;demography&quot;</span><span class="p">:</span> <span class="n">demography</span><span class="p">,</span>
     <span class="s2">&quot;simlen&quot;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
     <span class="s2">&quot;gvalue&quot;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Multiplicative</span><span class="p">(</span><span class="n">ndemes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">scaling</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span>
 <span class="p">}</span>
@@ -1087,7 +1076,7 @@ deviates from a multivariate distribution are straightforward and agreed
 upon.</p>
 <p>In order to simulate multivariate distributions of effect sizes based on
 <a class="reference internal" href="regiontypes.html#fwdpy11.Sregion" title="fwdpy11.Sregion"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.Sregion</span></code></a> types, we follow a fairly intuitive approach
-described in <span id="id1">[<a class="reference internal" href="../misc/bibliography.html#id4" title="Peter Xue-Kun Song. Multivariate dispersion models generated from gaussian copula. Scand. Stat. Theory Appl., 27(2):305–320, June 2000. doi:10.1111/1467-9469.00191.">XKS00</a>]</span>.  Briefly, the multivariate Gaussian kernel is
+described in <span id="id1">[<a class="reference internal" href="../misc/bibliography.html#id6" title="Peter Xue-Kun Song. Multivariate dispersion models generated from gaussian copula. Scand. Stat. Theory Appl., 27(2):305–320, June 2000.">XKS00</a>]</span>.  Briefly, the multivariate Gaussian kernel is
 used to produce deviates.  Then, the quantiles from the cummulative distribution
 of each marginal Gaussian are used to generate a deviate from the desired output distribution of interest.</p>
 <p>For a simulation with <code class="docutils literal notranslate"><span class="pre">n</span></code> populations we need:</p>
@@ -1313,11 +1302,11 @@ correlations such that deleterious mutations in deme 0 are less deleterious in d
                 
     <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="softselection.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="advancedtopics.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Soft selection with discrete demes</p>
+            <p class="prev-next-title">Advanced topics</p>
         </div>
     </a>
     <a class='right-next' id="next-link" href="tsoverview.html" title="next page">

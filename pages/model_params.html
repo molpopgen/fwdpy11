@@ -225,6 +225,11 @@ const thebe_selector_output = ".output, .cell_output"
    Adding neutral mutations to a population with existing ancestry
   </a>
  </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/import_mutations_from_tskit.html">
+   Importing mutations from tskit
+  </a>
+ </li>
 </ul>
 <p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
@@ -246,11 +251,6 @@ const thebe_selector_output = ".output, .cell_output"
     </span>
    </code>
    to specify demographic models.
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/demography_debugger_vignette.html">
-   Debugging demographic models
   </a>
  </li>
 </ul>
@@ -283,6 +283,11 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toctree-l1">
   <a class="reference internal" href="../short_vignettes/special_considerations_demes_models.html">
    Special considerations for demes models
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/genetic_values_multi_deme_models_advanced.html">
+   Advanced topics
   </a>
  </li>
 </ul>
@@ -376,11 +381,6 @@ const thebe_selector_output = ".output, .cell_output"
 </p>
 <ul class="nav bd-sidenav">
  <li class="toctree-l1">
-  <a class="reference internal" href="tutorial.html">
-   Tutorial
-  </a>
- </li>
- <li class="toctree-l1">
   <a class="reference internal" href="advancedtopics.html">
    Advanced topics
   </a>
@@ -392,11 +392,6 @@ const thebe_selector_output = ".output, .cell_output"
  </span>
 </p>
 <ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="softselection.html">
-   Soft selection with discrete demes
-  </a>
- </li>
  <li class="toctree-l1">
   <a class="reference internal" href="mvdes.html">
    Different effect sizes of mutations in different demes
@@ -468,11 +463,6 @@ const thebe_selector_output = ".output, .cell_output"
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="demographic_models.html">
-   The demography debugger
-  </a>
- </li>
- <li class="toctree-l1">
   <a class="reference internal" href="functions.html">
    Function documentation
   </a>
@@ -537,21 +527,6 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toctree-l1">
   <a class="reference internal" href="../examples/gss_divergent_optima.html">
    Adaptation to different optima with multivariate distribution of effect sizes
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../examples/IM.html">
-   Isolation-with-migration (IM)
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../examples/localadaptation.html">
-   Local adaptation of a quantitative trait
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../examples/migtest.html">
-   Symmetric migration between two demes
   </a>
  </li>
  <li class="toctree-l1">
@@ -784,7 +759,7 @@ title="Print to PDF"
 <h1>Model parameters<a class="headerlink" href="#model-parameters" title="Permalink to this headline">#</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="fwdpy11.ModelParams">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">ModelParams</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nregions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">NOTHING</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sregions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">NOTHING</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recregions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">NOTHING</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rates</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gvalue</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">demography</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">fwdpy11.DiscreteDemography(mass_migrations=None,</span> <span class="pre">set_growth_rates=None,</span> <span class="pre">set_deme_sizes=None,</span> <span class="pre">set_selfing_rates=None,</span> <span class="pre">migmatrix=None,</span> <span class="pre">set_migration_rates=None)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">simlen</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prune_selected</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.ModelParams" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">ModelParams</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nregions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">NOTHING</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sregions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">NOTHING</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recregions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">NOTHING</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rates</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gvalue</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">demography</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">simlen</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prune_selected</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_residual_selfing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.ModelParams" title="Permalink to this definition">#</a></dt>
 <dd><p>This class stores and validates the parameters of a simulation.
 Instances of this class are constructed using <code class="docutils literal notranslate"><span class="pre">kwargs</span></code>
 and instance attributes are immutable once initialized.</p>
@@ -795,18 +770,29 @@ the attribute names for instances:</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>nregions</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>[</em><a class="reference internal" href="regiontypes.html#fwdpy11.Region" title="fwdpy11.Region"><em>fwdpy11.Region</em></a><em>]</em>) – List of regions where neutral mutations occur</p></li>
 <li><p><strong>sregions</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>[</em><a class="reference internal" href="regiontypes.html#fwdpy11.Sregion" title="fwdpy11.Sregion"><em>fwdpy11.Sregion</em></a><em>]</em>) – List of regions where selected mutations occur</p></li>
-<li><p><strong>recregions</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>[</em><a class="reference internal" href="regiontypes.html#fwdpy11.Region" title="fwdpy11.Region"><em>fwdpy11.Region</em></a><em>] or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>[</em><em>fwdpy11.GeneticMapUnit</em><em>]</em>) – List of regions where recombination events occur</p></li>
+<li><p><strong>recregions</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>[</em><a class="reference internal" href="regiontypes.html#fwdpy11.Region" title="fwdpy11.Region"><em>fwdpy11.Region</em></a><em>] or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.11)"><em>object</em></a><em>]</em>) – List of regions where recombination events occur</p></li>
 <li><p><strong>rates</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em> or </em><a class="reference internal" href="#fwdpy11.MutationAndRecombinationRates" title="fwdpy11.MutationAndRecombinationRates"><em>fwdpy11.MutationAndRecombinationRates</em></a>) – The neutral mutation rate, selected mutation rate, and
 total recombination rate, respectively.
 See below for more details.</p></li>
-<li><p><strong>demography</strong> (<a class="reference internal" href="types.html#fwdpy11.DiscreteDemography" title="fwdpy11.DiscreteDemography"><em>fwdpy11.DiscreteDemography</em></a>) – The demographic model to simulate</p></li>
+<li><p><strong>demography</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.11)"><em>object</em></a>) – The demographic model to simulate</p></li>
 <li><p><strong>simlen</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – The number of time steps to evolve</p></li>
 <li><p><strong>prune_selected</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, remove selected fixations from
 the population when they are first detected
 as fixed.</p></li>
+<li><p><strong>allow_residual_selfing</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, then an individual may
+be chosen twice as a parent.
+If <code class="docutils literal notranslate"><span class="pre">False</span></code>, two distinct parents
+are required.</p></li>
 </ul>
 </dd>
 </dl>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>When <code class="docutils literal notranslate"><span class="pre">allow_residual_selfing</span></code> is <code class="docutils literal notranslate"><span class="pre">False</span></code>, an exception
+will be raised if the parental deme has a size of 1.
+The reason is that outcrossing is not possible in order
+to generate the offspring.</p>
+</div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>To initialize the <code class="docutils literal notranslate"><span class="pre">rates</span></code> field, we require an instance of
@@ -816,9 +802,11 @@ The two mutation rates must be non-negative floats. For
 the recombination rate, the third value must also
 be a non-negative float if all objects in <code class="docutils literal notranslate"><span class="pre">recrates</span></code>
 are instances of <a class="reference internal" href="regiontypes.html#fwdpy11.Region" title="fwdpy11.Region"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.Region</span></code></a>. However,
-if they are instead instances of <code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GeneticMapUnit</span></code>,
+if they are instead instances of any mixture of
+<a class="reference internal" href="regiontypes.html#fwdpy11.PoissonInterval" title="fwdpy11.PoissonInterval"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.PoissonInterval</span></code></a>, <a class="reference internal" href="regiontypes.html#fwdpy11.PoissonPoint" title="fwdpy11.PoissonPoint"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.PoissonPoint</span></code></a>,
+<a class="reference internal" href="regiontypes.html#fwdpy11.BinomialPoint" title="fwdpy11.BinomialPoint"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.BinomialPoint</span></code></a>, or <a class="reference internal" href="regiontypes.html#fwdpy11.BinomialInterval" title="fwdpy11.BinomialInterval"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.BinomialInterval</span></code></a>,
 then the final element in <code class="docutils literal notranslate"><span class="pre">rates</span></code> must be <code class="docutils literal notranslate"><span class="pre">None</span></code>.
-See the <a class="reference internal" href="tutorial.html#geneticmaps"><span class="std std-ref">section</span></a> on setting
+See the <a class="reference internal" href="../short_vignettes/geneticmaps_vignette.html#geneticmaps-vignette"><span class="std std-ref">section</span></a> on setting
 recombination rates for details.</p>
 </div>
 <div class="versionadded">
@@ -829,7 +817,7 @@ recombination rates for details.</p>
 into a much simpler, single class.</p>
 </div>
 <div class="versionchanged">
-<p><span class="versionmodified changed">Changed in version 0.6.0: </span>Updated to support <a class="reference internal" href="types.html#fwdpy11.DiscreteDemography" title="fwdpy11.DiscreteDemography"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiscreteDemography</span></code></a></p>
+<p><span class="versionmodified changed">Changed in version 0.6.0: </span>Updated to support <cite>fwdpy11.DiscreteDemography</cite></p>
 </div>
 <div class="versionchanged">
 <p><span class="versionmodified changed">Changed in version 0.8.0: </span>Refactored class internals using <code class="docutils literal notranslate"><span class="pre">attrs</span></code>.
@@ -838,6 +826,9 @@ stored in <a class="reference internal" href="#fwdpy11.MutationAndRecombinationR
 </div>
 <div class="versionchanged">
 <p><span class="versionmodified changed">Changed in version 0.14.0: </span>Remove deprecated kwargs pself and popsizes.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 0.20.0: </span>Add <cite>allow_residual_selfing</cite></p>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="fwdpy11.ModelParams.asblack">

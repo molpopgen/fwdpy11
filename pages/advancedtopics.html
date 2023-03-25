@@ -54,8 +54,8 @@ const thebe_selector_output = ".output, .cell_output"
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Soft selection with discrete demes" href="softselection.html" />
-    <link rel="prev" title="Tutorial" href="tutorial.html" />
+    <link rel="next" title="Different effect sizes of mutations in different demes" href="mvdes.html" />
+    <link rel="prev" title="Definitions" href="definitions.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -227,6 +227,11 @@ const thebe_selector_output = ".output, .cell_output"
    Adding neutral mutations to a population with existing ancestry
   </a>
  </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/import_mutations_from_tskit.html">
+   Importing mutations from tskit
+  </a>
+ </li>
 </ul>
 <p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
@@ -248,11 +253,6 @@ const thebe_selector_output = ".output, .cell_output"
     </span>
    </code>
    to specify demographic models.
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/demography_debugger_vignette.html">
-   Debugging demographic models
   </a>
  </li>
 </ul>
@@ -285,6 +285,11 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toctree-l1">
   <a class="reference internal" href="../short_vignettes/special_considerations_demes_models.html">
    Special considerations for demes models
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/genetic_values_multi_deme_models_advanced.html">
+   Advanced topics
   </a>
  </li>
 </ul>
@@ -377,11 +382,6 @@ const thebe_selector_output = ".output, .cell_output"
  </span>
 </p>
 <ul class="current nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="tutorial.html">
-   Tutorial
-  </a>
- </li>
  <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
    Advanced topics
@@ -394,11 +394,6 @@ const thebe_selector_output = ".output, .cell_output"
  </span>
 </p>
 <ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="softselection.html">
-   Soft selection with discrete demes
-  </a>
- </li>
  <li class="toctree-l1">
   <a class="reference internal" href="mvdes.html">
    Different effect sizes of mutations in different demes
@@ -470,11 +465,6 @@ const thebe_selector_output = ".output, .cell_output"
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="demographic_models.html">
-   The demography debugger
-  </a>
- </li>
- <li class="toctree-l1">
   <a class="reference internal" href="functions.html">
    Function documentation
   </a>
@@ -539,21 +529,6 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toctree-l1">
   <a class="reference internal" href="../examples/gss_divergent_optima.html">
    Adaptation to different optima with multivariate distribution of effect sizes
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../examples/IM.html">
-   Isolation-with-migration (IM)
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../examples/localadaptation.html">
-   Local adaptation of a quantitative trait
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../examples/migtest.html">
-   Symmetric migration between two demes
   </a>
  </li>
  <li class="toctree-l1">
@@ -1152,8 +1127,6 @@ many replicates in separate Python <em>processes</em> using a single script.</p>
 <p>Fully worked-out examples of varying complexity can be found here:</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="../long_vignettes/bgs_vignette.html#bgs-vignette"><span class="std std-ref">Background selection</span></a></p></li>
-<li><p><a class="reference internal" href="../examples/IM.html#imexample"><span class="std std-ref">Isolation-with-migration (IM)</span></a></p></li>
-<li><p><a class="reference internal" href="../examples/migtest.html#migtest"><span class="std std-ref">Symmetric migration between two demes</span></a></p></li>
 <li><p><a class="reference internal" href="../short_vignettes/initpops_vignette.html#precapitation"><span class="std std-ref">Initializing with ancestry from msprime</span></a></p></li>
 <li><p><a class="reference internal" href="../short_vignettes/recapitation.html#recapitation"><span class="std std-ref">Finishing a simulation with msprime</span></a></p></li>
 </ul>
@@ -1163,7 +1136,7 @@ many replicates in separate Python <em>processes</em> using a single script.</p>
 the instance of <a class="reference internal" href="types.html#fwdpy11.DiploidPopulation" title="fwdpy11.DiploidPopulation"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiploidPopulation</span></code></a>.  Such
 a return requires pickling, which is very expensive.  If you
 need to store these population, write them to files rather
-than returning them. See <a class="reference internal" href="tutorial.html#savingsimstodisk"><span class="std std-ref">here</span></a>.</p></li>
+than returning them.</p></li>
 <li><p>If you do return something to the main “collector”
 process, keep it simple!</p></li>
 <li><p>Random number seeds are set in <code class="docutils literal notranslate"><span class="pre">__main__</span></code> using
@@ -1195,8 +1168,8 @@ For example, for a neutral model, the distribution of the
 number of mutations under an infinitely-many sites model
 for a small sample should match <code class="docutils literal notranslate"><span class="pre">msprime</span></code> very well.
 For a steady-state model of recurrent hitch-hiking
-<span id="id1">[<a class="reference internal" href="../misc/bibliography.html#id21" title="N L Kaplan, R R Hudson, and C H Langley. The “hitchhiking effect” revisited. Genetics, 123(4):887–899, December 1989.">KHL89</a>]</span>, results from small samples
-should match coalescent simulations such as <span id="id2">[<a class="reference internal" href="../misc/bibliography.html#id18" title="Andrew D Kern and Daniel R Schrider. Discoal: flexible coalescent simulations with selection. Bioinformatics, 32(24):3839–3841, December 2016. doi:10.1093/bioinformatics/btw556.">KS16</a>]</span>.
+<span id="id1">[<a class="reference internal" href="../misc/bibliography.html#id22" title="N L Kaplan, R R Hudson, and C H Langley. The “hitchhiking effect” revisited. Genetics, 123(4):887–899, December 1989.">KHL89</a>]</span>, results from small samples
+should match coalescent simulations such as <span id="id2">[<a class="reference internal" href="../misc/bibliography.html#id19" title="Andrew D Kern and Daniel R Schrider. Discoal: flexible coalescent simulations with selection. Bioinformatics, 32(24):3839–3841, December 2016.">KS16</a>]</span>.
 Clearly, all of the different methods
 should match analytical results where possible.</p></li>
 <li><p>You probably want all of your trees to be fully coalesced
@@ -1216,11 +1189,11 @@ population size of your population (<em>e.g.</em> in the absence of selection).<
 <p>With tree sequence recording, we run into the “uncoalesced marginal
 trees” issue mentioned above.  We could just simulate much longer
 to get rid of this problem, but it is simply easier to start
-with a tree sequence from <code class="docutils literal notranslate"><span class="pre">msprime</span></code> (see <a class="reference internal" href="tutorial.html#starting-from-msprime"><span class="std std-ref">here</span></a>).</p>
+with a tree sequence from <code class="docutils literal notranslate"><span class="pre">msprime</span></code>.</p>
 </section>
 <section id="the-eyre-walker-model-of-complex-traits">
 <span id="eyre-walker"></span><h2>The “Eyre-Walker” model of complex traits<a class="headerlink" href="#the-eyre-walker-model-of-complex-traits" title="Permalink to this headline">#</a></h2>
-<p><span id="id3">[<a class="reference internal" href="../misc/bibliography.html#id23" title="Adam Eyre-Walker. Evolution in health and medicine sackler colloquium: genetic architecture of a complex trait and its implications for fitness and genome-wide association studies. Proc. Natl. Acad. Sci. U. S. A., 107 Suppl 1:1752–1756, January 2010. doi:10.1073/pnas.0906182107.">EW10</a>]</span> describes a model relating mutations with
+<p><span id="id3">[<a class="reference internal" href="../misc/bibliography.html#id24" title="Adam Eyre-Walker. Evolution in health and medicine sackler colloquium: genetic architecture of a complex trait and its implications for fitness and genome-wide association studies. Proc. Natl. Acad. Sci. U. S. A., 107 Suppl 1:1752–1756, January 2010.">EW10</a>]</span> describes a model relating mutations with
 fitness effect <span class="math notranslate nohighlight">\(S = |2Ns|\)</span> to <span class="math notranslate nohighlight">\(z\)</span>, their effect on
 a phenotype/trait according to <span class="math notranslate nohighlight">\(z = \delta S^\tau(1+\epsilon)\)</span>.
 Here, <span class="math notranslate nohighlight">\(\epsilon\)</span> is a draw from a Gaussian distribution with mean zero,
@@ -1260,7 +1233,11 @@ near equilibrium, but we’re just using it as an example:</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>13
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>16
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/runner/work/fwdpy11/fwdpy11/fwdpy11/_evolvets.py:147: UserWarning: Applying a default demographic model where deme sizes are [1000] and the burn-in length is 10*1000
+  warnings.warn(msg)
 </pre></div>
 </div>
 </div>
@@ -1293,19 +1270,22 @@ near equilibrium, but we’re just using it as an example:</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-0.000564326291355723 3.0570101297646897
--0.0031767822279411854 -1.2254363224702223
--0.0031205965500979028 -3.6742812016992197
--0.01845775750391224 -4.154395354780866
--0.005766885878456741 -3.1354157324807517
--0.0021590316871619632 2.3867765144412654
--0.013792574482305614 -10.13588720871937
--0.006866992454793022 -9.222969516068272
--0.010102914074967481 1.311433517659296
--0.0030856574773373683 4.423543410470347
--0.003344261771935411 3.7850081304119776
--0.0009353737988953688 -2.3095853581305783
--0.0004009511851097394 0.18064883423998518
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-0.009545936425350269 12.57306047991845
+-0.010349104565670205 -2.2118130398591935
+-0.011602139413926871 -7.084718822750244
+-0.0032279509968761435 -1.737328013826212
+-0.015449207258832993 -5.131892545676067
+-0.0077168400201644664 4.512341872600712
+-0.0022531736886723442 -4.0967214493294986
+-0.006044053890735736 -8.652700112679995
+-0.0023465570676289957 0.6320311886584215
+-0.0007746986635068075 2.2164750099025436
+-0.021502039265014553 9.597464398344142
+-0.009716042965590406 -7.443653191909565
+-0.0008560999958330585 0.26396822983492146
+-0.01597600966131924 4.99434887087133
+-0.003548690338568886 1.3665737289445181
+-0.005819804232148941 8.384444628613952
 </pre></div>
 </div>
 </div>
@@ -1338,14 +1318,16 @@ strictly additive model:</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(array([-13.27130294,  -9.30137512,  -6.16595939,  -4.15439535,
-         -3.6742812 ,  -3.13541573,  -2.30958536,  -1.82398221,
-         -1.30384193,   0.        ,   0.18064883,   0.74926221,
-          1.28812768,   1.31143352,   1.83157381,   2.11395805,
-          2.38677651,   3.78500813,   4.42354341,   4.60419224,
-          5.09644165,   5.73497693,   6.25511722,   8.84708682]),
- array([  1,   1,   5,   3,   6,  33,   6,   1,   1, 734,   3,   2,   4,
-         19,   6,   1,   1,   5, 152,   1,   1,   2,   2,  10]))
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(array([-17.30540023, -15.73741894, -11.18144027, -10.39002813,
+         -8.82204684,  -8.65270011,  -7.44365319,  -7.08471882,
+         -5.13189255,  -4.09672145,  -2.57237695,  -2.21181304,
+         -1.73732801,   0.        ,   0.26396823,   0.63203119,
+          1.26406238,   1.36657373,   1.63054196,   2.21647501,
+          4.51234187,   4.99434887,   5.62638006,   5.8789156 ,
+          8.38444463,  11.81393941,  12.57306048]),
+ array([  1,   1,   1,   1,   2,  11,  22,  39,   2,  17,   1,  16,  28,
+        799,   6,  12,   1,  13,   1,   7,  13,   1,   1,   1,   1,   1,
+          1]))
 </pre></div>
 </div>
 </div>
@@ -1359,7 +1341,7 @@ strictly additive model:</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>4.611632796861219
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>5.8498620701229225
 </pre></div>
 </div>
 </div>
@@ -1376,11 +1358,11 @@ strictly additive model:</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.0 0.0
-4.423543410470347 4.423543410470347
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-1.737328013826212 -1.737328013826212
 0.0 0.0
 0.0 0.0
 0.0 0.0
+-7.084718822750244 -7.084718822750244
 </pre></div>
 </div>
 </div>
@@ -1392,12 +1374,12 @@ to abuse this.  More often than not, you’ll just break stuff.)</p>
 <p>I feel that some comments about this model are warranted:</p>
 <ul class="simple">
 <li><p>The model is a simplification of earlier work by Keightley and Hill
-(<span id="id4">[<a class="reference internal" href="../misc/bibliography.html#id28" title="P D Keightley and W G Hill. Quantitative genetic variability maintained by mutation-stabilizing selection balance in finite populations. Genet. Res., 52(1):33–43, August 1988.">KH88</a>]</span>, <span id="id5">[<a class="reference internal" href="../misc/bibliography.html#id29" title="Peter D Keightley and William G Hill. Variation maintained in quantitative traits with Mutation-Selection balance: pleiotropic Side-Effects on fitness traits. Proceedings of the Royal Society of London B: Biological Sciences, 242(1304):95–100, November 1990. doi:10.1098/rspb.1990.0110.">KH90</a>]</span>), which should be cited
-alongside <span id="id6">[<a class="reference internal" href="../misc/bibliography.html#id23" title="Adam Eyre-Walker. Evolution in health and medicine sackler colloquium: genetic architecture of a complex trait and its implications for fitness and genome-wide association studies. Proc. Natl. Acad. Sci. U. S. A., 107 Suppl 1:1752–1756, January 2010. doi:10.1073/pnas.0906182107.">EW10</a>]</span>.</p></li>
-<li><p><span id="id7">[<a class="reference internal" href="../misc/bibliography.html#id28" title="P D Keightley and W G Hill. Quantitative genetic variability maintained by mutation-stabilizing selection balance in finite populations. Genet. Res., 52(1):33–43, August 1988.">KH88</a>]</span> and <span id="id8">[<a class="reference internal" href="../misc/bibliography.html#id29" title="Peter D Keightley and William G Hill. Variation maintained in quantitative traits with Mutation-Selection balance: pleiotropic Side-Effects on fitness traits. Proceedings of the Royal Society of London B: Biological Sciences, 242(1304):95–100, November 1990. doi:10.1098/rspb.1990.0110.">KH90</a>]</span>) show that this model predicts heritability
+(<span id="id4">[<a class="reference internal" href="../misc/bibliography.html#id29" title="P D Keightley and W G Hill. Quantitative genetic variability maintained by mutation-stabilizing selection balance in finite populations. Genet. Res., 52(1):33–43, August 1988.">KH88</a>]</span>, <span id="id5">[<a class="reference internal" href="../misc/bibliography.html#id30" title="Peter D Keightley and William G Hill. Variation maintained in quantitative traits with Mutation-Selection balance: pleiotropic Side-Effects on fitness traits. Proceedings of the Royal Society of London B: Biological Sciences, 242(1304):95–100, November 1990.">KH90</a>]</span>), which should be cited
+alongside <span id="id6">[<a class="reference internal" href="../misc/bibliography.html#id24" title="Adam Eyre-Walker. Evolution in health and medicine sackler colloquium: genetic architecture of a complex trait and its implications for fitness and genome-wide association studies. Proc. Natl. Acad. Sci. U. S. A., 107 Suppl 1:1752–1756, January 2010.">EW10</a>]</span>.</p></li>
+<li><p><span id="id7">[<a class="reference internal" href="../misc/bibliography.html#id29" title="P D Keightley and W G Hill. Quantitative genetic variability maintained by mutation-stabilizing selection balance in finite populations. Genet. Res., 52(1):33–43, August 1988.">KH88</a>]</span> and <span id="id8">[<a class="reference internal" href="../misc/bibliography.html#id30" title="Peter D Keightley and William G Hill. Variation maintained in quantitative traits with Mutation-Selection balance: pleiotropic Side-Effects on fitness traits. Proceedings of the Royal Society of London B: Biological Sciences, 242(1304):95–100, November 1990.">KH90</a>]</span>) show that this model predicts heritability
 (the genetic variance) is linear-ish with <code class="docutils literal notranslate"><span class="pre">N</span></code>, with the details depending
 somewhat on the model parameters.  The biological reasonableness
-of that prediction is dubious.  <span id="id9">[<a class="reference internal" href="../misc/bibliography.html#id16" title="Toby Johnson and Nick Barton. Theoretical models of selection and mutation on quantitative traits. Philos. Trans. R. Soc. Lond. B Biol. Sci., 360(1459):1411–1425, July 2005. doi:10.1098/rstb.2005.1667.">JB05</a>]</span> discuss this point
+of that prediction is dubious.  <span id="id9">[<a class="reference internal" href="../misc/bibliography.html#id17" title="Toby Johnson and Nick Barton. Theoretical models of selection and mutation on quantitative traits. Philos. Trans. R. Soc. Lond. B Biol. Sci., 360(1459):1411–1425, July 2005.">JB05</a>]</span> discuss this point
 in some detail, and give other relevant references.</p></li>
 <li><p>Depending somewhat on the parameters of the <code class="docutils literal notranslate"><span class="pre">getz</span></code> function, one will eventually
 generate an intermediate-frequency variant with a massive <span class="math notranslate nohighlight">\(z\)</span>,
@@ -2101,7 +2083,7 @@ and this value.</p>
 <section id="subtleties-of-starting-finishing-tree-sequences-using-msprime">
 <span id="msprime-subtleties"></span><h2>Subtleties of starting/finishing tree sequences using <code class="docutils literal notranslate"><span class="pre">msprime</span></code><a class="headerlink" href="#subtleties-of-starting-finishing-tree-sequences-using-msprime" title="Permalink to this headline">#</a></h2>
 <p>Some care is required starting a simulation from a tree sequence (see <a class="reference internal" href="../short_vignettes/initpops_vignette.html#precapitation"><span class="std std-ref">here</span></a>) or finishing a simulation with one (see <a class="reference internal" href="../short_vignettes/recapitation.html#recapitation"><span class="std std-ref">here</span></a>).</p>
-<p>If simulating with discrete recombination positions (see <a class="reference internal" href="tutorial.html#geneticmapunit"><span class="std std-ref">here</span></a>), it may be important to realize that the current stable releases of <code class="docutils literal notranslate"><span class="pre">msprime</span></code> model continuous recombination breakpoints.
+<p>If simulating with discrete recombination positions, it may be important to realize that the current stable releases of <code class="docutils literal notranslate"><span class="pre">msprime</span></code> model continuous recombination breakpoints.
 A future <code class="docutils literal notranslate"><span class="pre">msprime</span></code> release will support discretized positions.</p>
 <p>When simulating with genome lengths longer than unity (1.0), determining the correct recombination rate for <code class="docutils literal notranslate"><span class="pre">msprime</span></code> needs additional work.
 The examples shown <a class="reference internal" href="../short_vignettes/recapitation.html#recapitation"><span class="std std-ref">here</span></a> and <a class="reference internal" href="../short_vignettes/initpops_vignette.html#precapitation"><span class="std std-ref">here</span></a> show the following method for determining the <code class="docutils literal notranslate"><span class="pre">msprime</span></code> recombination rate:</p>
@@ -2143,17 +2125,17 @@ A more general example, for a genome of length <code class="docutils literal not
                 
     <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="tutorial.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="definitions.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Tutorial</p>
+            <p class="prev-next-title">Definitions</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="softselection.html" title="next page">
+    <a class='right-next' id="next-link" href="mvdes.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Soft selection with discrete demes</p>
+        <p class="prev-next-title">Different effect sizes of mutations in different demes</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>

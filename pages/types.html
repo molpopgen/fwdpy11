@@ -227,6 +227,11 @@ const thebe_selector_output = ".output, .cell_output"
    Adding neutral mutations to a population with existing ancestry
   </a>
  </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/import_mutations_from_tskit.html">
+   Importing mutations from tskit
+  </a>
+ </li>
 </ul>
 <p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
@@ -248,11 +253,6 @@ const thebe_selector_output = ".output, .cell_output"
     </span>
    </code>
    to specify demographic models.
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/demography_debugger_vignette.html">
-   Debugging demographic models
   </a>
  </li>
 </ul>
@@ -285,6 +285,11 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toctree-l1">
   <a class="reference internal" href="../short_vignettes/special_considerations_demes_models.html">
    Special considerations for demes models
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/genetic_values_multi_deme_models_advanced.html">
+   Advanced topics
   </a>
  </li>
 </ul>
@@ -378,11 +383,6 @@ const thebe_selector_output = ".output, .cell_output"
 </p>
 <ul class="nav bd-sidenav">
  <li class="toctree-l1">
-  <a class="reference internal" href="tutorial.html">
-   Tutorial
-  </a>
- </li>
- <li class="toctree-l1">
   <a class="reference internal" href="advancedtopics.html">
    Advanced topics
   </a>
@@ -394,11 +394,6 @@ const thebe_selector_output = ".output, .cell_output"
  </span>
 </p>
 <ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="softselection.html">
-   Soft selection with discrete demes
-  </a>
- </li>
  <li class="toctree-l1">
   <a class="reference internal" href="mvdes.html">
    Different effect sizes of mutations in different demes
@@ -470,11 +465,6 @@ const thebe_selector_output = ".output, .cell_output"
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="demographic_models.html">
-   The demography debugger
-  </a>
- </li>
- <li class="toctree-l1">
   <a class="reference internal" href="functions.html">
    Function documentation
   </a>
@@ -539,21 +529,6 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toctree-l1">
   <a class="reference internal" href="../examples/gss_divergent_optima.html">
    Adaptation to different optima with multivariate distribution of effect sizes
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../examples/IM.html">
-   Isolation-with-migration (IM)
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../examples/localadaptation.html">
-   Local adaptation of a quantitative trait
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../examples/migtest.html">
-   Symmetric migration between two demes
   </a>
  </li>
  <li class="toctree-l1">
@@ -1133,7 +1108,7 @@ for example.)</p>
 two cases:</p>
 <ol class="arabic simple">
 <li><p>The tree seq has mutations entirely from tskit’s API
-(see <span class="xref std std-ref">import_mutations_from_tskit_vignette</span>).</p></li>
+(see <a class="reference internal" href="../short_vignettes/import_mutations_from_tskit.html#import-mutations-from-tskit-vignette"><span class="std std-ref">Importing mutations from tskit</span></a>).</p></li>
 <li><p>The tree seq has mutations entirely from a previous run
 of fwdpy11.</p></li>
 </ol>
@@ -1145,7 +1120,7 @@ of fwdpy11.</p></li>
 <p><span class="versionmodified changed">Changed in version 0.19.8: </span>Correctly handle two cases:</p>
 <ol class="arabic simple">
 <li><p>The tree seq has mutations entirely from tskit’s API
-(see <span class="xref std std-ref">import_mutations_from_tskit_vignette</span>).</p></li>
+(see <a class="reference internal" href="../short_vignettes/import_mutations_from_tskit.html#import-mutations-from-tskit-vignette"><span class="std std-ref">Importing mutations from tskit</span></a>).</p></li>
 <li><p>The tree seq has mutations entirely from a previous run
 of fwdpy11.</p></li>
 </ol>
@@ -2267,298 +2242,218 @@ instance of <a class="reference internal" href="datamatrix.html#fwdpy11.DataMatr
 <section class="tex2jax_ignore mathjax_ignore" id="types-related-to-discrete-demographic-events">
 <h1>Types related to discrete demographic events<a class="headerlink" href="#types-related-to-discrete-demographic-events" title="Permalink to this headline">#</a></h1>
 <dl class="py class">
-<dt class="sig sig-object py" id="fwdpy11.DiscreteDemography">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">DiscreteDemography</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mass_migrations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">set_growth_rates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">set_deme_sizes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">set_selfing_rates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">migmatrix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">set_migration_rates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.DiscreteDemography" title="Permalink to this definition">#</a></dt>
-<dd><p>Representation of demographic events acting on
-discrete demes (sub-populations).</p>
-<p>This class has the following attributes, whose names
-are also <cite>kwargs</cite> for intitialization.  The attribute names
-also determine the order of positional arguments:</p>
+<dt class="sig sig-object py" id="fwdpy11.ForwardDemesGraph">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">ForwardDemesGraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">yaml</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">burnin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">burnin_is_exact</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">round_non_integer_sizes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.ForwardDemesGraph" title="Permalink to this definition">#</a></dt>
+<dd><p>A forward-in-time representation of a <cite>demes.Graph</cite></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>mass_migrations</strong> (<em>None</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>[</em><a class="reference internal" href="#fwdpy11.MassMigration" title="fwdpy11.MassMigration"><em>fwdpy11.MassMigration</em></a><em>]</em>) – Instances of <a class="reference internal" href="#fwdpy11.MassMigration" title="fwdpy11.MassMigration"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.MassMigration</span></code></a></p></li>
-<li><p><strong>set_growth_rates</strong> (<em>None</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>[</em><a class="reference internal" href="#fwdpy11.SetExponentialGrowth" title="fwdpy11.SetExponentialGrowth"><em>fwdpy11.SetExponentialGrowth</em></a><em>]</em>) – Instances of <a class="reference internal" href="#fwdpy11.SetExponentialGrowth" title="fwdpy11.SetExponentialGrowth"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.SetExponentialGrowth</span></code></a></p></li>
-<li><p><strong>set_deme_sizes</strong> (<em>None</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>[</em><a class="reference internal" href="#fwdpy11.SetDemeSize" title="fwdpy11.SetDemeSize"><em>fwdpy11.SetDemeSize</em></a><em>]</em>) – Instances of <a class="reference internal" href="#fwdpy11.SetDemeSize" title="fwdpy11.SetDemeSize"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.SetDemeSize</span></code></a></p></li>
-<li><p><strong>set_selfing_rates</strong> (<em>None</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>[</em><a class="reference internal" href="#fwdpy11.SetSelfingRate" title="fwdpy11.SetSelfingRate"><em>fwdpy11.SetSelfingRate</em></a><em>]</em>) – Instances of <a class="reference internal" href="#fwdpy11.SetSelfingRate" title="fwdpy11.SetSelfingRate"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.SetSelfingRate</span></code></a></p></li>
-<li><p><strong>migmatrix</strong> (<em>None</em><em> or </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><em>numpy.ndarray</em></a><em> or </em><a class="reference internal" href="#fwdpy11.MigrationMatrix" title="fwdpy11.MigrationMatrix"><em>fwdpy11.MigrationMatrix</em></a>) – A migraton matrix. See <a class="reference internal" href="softselection.html#migration"><span class="std std-ref">Migration</span></a>. If not
-<cite>None</cite>, then input are converted into an
-instance of <a class="reference internal" href="#fwdpy11.MigrationMatrix" title="fwdpy11.MigrationMatrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.MigrationMatrix</span></code></a>.</p></li>
-<li><p><strong>set_migration_rates</strong> (<em>None</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>[</em><a class="reference internal" href="#fwdpy11.SetMigrationRates" title="fwdpy11.SetMigrationRates"><em>fwdpy11.SetMigrationRates</em></a><em>]</em>) – Instances of <a class="reference internal" href="#fwdpy11.SetMigrationRates" title="fwdpy11.SetMigrationRates"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.SetMigrationRates</span></code></a></p></li>
+<li><p><strong>yaml</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – The string representation of a demes model.</p></li>
+<li><p><strong>burnin</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – The number of generations of evolution to occur before the
+events in the <cite>yaml</cite> take place.</p></li>
+<li><p><strong>burnin_is_exact</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – If <cite>False</cite>, <cite>burnin</cite> will be treated as an integer
+multiple of the sum of ancestor population sizes.
+If <cite>True</cite>, <cite>burnin</cite> will be used as-is.</p></li>
+</ul>
+</dd>
+</dl>
+<p>The recommended method for construction is
+<a class="reference internal" href="#fwdpy11.ForwardDemesGraph.from_demes" title="fwdpy11.ForwardDemesGraph.from_demes"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ForwardDemesGraph.from_demes()</span></code></a> or
+<a class="reference internal" href="#fwdpy11.ForwardDemesGraph.tubes" title="fwdpy11.ForwardDemesGraph.tubes"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ForwardDemesGraph.tubes()</span></code></a>.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 0.20.0.</span></p>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="fwdpy11.ForwardDemesGraph.asdict">
+<span class="sig-name descname"><span class="pre">asdict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.ForwardDemesGraph.asdict" title="Permalink to this definition">#</a></dt>
+<dd><p>Return dict representation</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="fwdpy11.ForwardDemesGraph.deme_labels">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">deme_labels</span></span><a class="headerlink" href="#fwdpy11.ForwardDemesGraph.deme_labels" title="Permalink to this definition">#</a></dt>
+<dd><p>A dictionary mapping integer deme IDs to deme names
+(strings).</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="fwdpy11.ForwardDemesGraph.demes_at_final_generation">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">demes_at_final_generation</span></span><a class="headerlink" href="#fwdpy11.ForwardDemesGraph.demes_at_final_generation" title="Permalink to this definition">#</a></dt>
+<dd><p>List of integer ids of extant demes in the final generation
+of the demes graph.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="fwdpy11.ForwardDemesGraph.final_generation">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">final_generation</span></span><a class="headerlink" href="#fwdpy11.ForwardDemesGraph.final_generation" title="Permalink to this definition">#</a></dt>
+<dd><p>This is the final offspring generation of the model.
+In other words, a model evolved from parental generation
+zero until time zero of the graph (backwards in time)
+will result in individuals whose birth times equal
+the value of this property.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fwdpy11.ForwardDemesGraph.from_demes">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_demes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">burnin</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">burnin_is_exact</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">round_non_integer_sizes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.ForwardDemesGraph.from_demes" title="Permalink to this definition">#</a></dt>
+<dd><p>Build from a demes graph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em> or </em><a class="reference external" href="https://popsim-consortium.github.io/demes-docs/main/api.html#demes.Graph" title="(in Python)"><em>demes.Graph</em></a>) – A <cite>demes</cite> model.</p></li>
+<li><p><strong>burnin</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – The number of generations of evolution to occur before
+the events in the <cite>yaml</cite> take place.
+The value will be <cite>burnin</cite> times the total ancestral
+population size.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fwdpy11.ForwardDemesGraph.fromdict">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fromdict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.ForwardDemesGraph.fromdict" title="Permalink to this definition">#</a></dt>
+<dd><p>Build an instance from a dictionary</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="fwdpy11.ForwardDemesGraph.initial_sizes">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">initial_sizes</span></span><a class="headerlink" href="#fwdpy11.ForwardDemesGraph.initial_sizes" title="Permalink to this definition">#</a></dt>
+<dd><p>A list of the nonzero (parental) deme sizes at time 0 of the model
+(thinking forwards in time).</p>
+<p>Due to the structure of a demes graph, the indexes of the list
+are the deme integer identifiers.</p>
+<p>This property is useful for setting up a
+<a class="reference internal" href="#fwdpy11.DiploidPopulation" title="fwdpy11.DiploidPopulation"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiploidPopulation</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fwdpy11.ForwardDemesGraph.tubes">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tubes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sizes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">burnin</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">burnin_is_exact</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">round_non_integer_sizes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.ForwardDemesGraph.tubes" title="Permalink to this definition">#</a></dt>
+<dd><p>TODO</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="fwdpy11.DemographyDebugger">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">DemographyDebugger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">initial_deme_sizes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">events</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">simlen</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deme_labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.DemographyDebugger" title="Permalink to this definition">#</a></dt>
+<dd><p>Efficiently debug demographic events.</p>
+<p>The class executes a mock simulation
+of demographic events in order to quickly
+detect errors. It also generates a “report”
+of the model details for double-checking.</p>
+<p>If model errors are found, a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> exception
+is raised. The goal is to catch the types of errors that would
+result in an exception during a simulation.</p>
+<p>The class is initialized with the following arguments,
+which may be either positional or keyword:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>initial_deme_sizes</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em> or </em><a class="reference internal" href="#fwdpy11.DiploidPopulation" title="fwdpy11.DiploidPopulation"><em>fwdpy11.DiploidPopulation</em></a>) – The initial sizes of each deme</p></li>
+<li><p><strong>events</strong> (<a class="reference internal" href="#fwdpy11.ForwardDemesGraph" title="fwdpy11.ForwardDemesGraph"><em>fwdpy11.ForwardDemesGraph</em></a><em> or
+</em><a class="reference internal" href="#fwdpy11.DemographicModelDetails" title="fwdpy11.DemographicModelDetails"><em>fwdpy11.DemographicModelDetails</em></a>) – The demographic model</p></li>
+<li><p><strong>simlen</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – The length of the simulation.  Defaults to <cite>None</cite>.</p></li>
+<li><p><strong>deme_labels</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) – A map from deme index to a printable name</p></li>
 </ul>
 </dd>
 </dl>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 0.5.3.</span></p>
+<p><span class="versionmodified added">New in version 0.6.0.</span></p>
 </div>
 <div class="versionchanged">
-<p><span class="versionmodified changed">Changed in version 0.8.0: </span>Refactored to use attrs and inherit from
-low-level C++ class</p>
+<p><span class="versionmodified changed">Changed in version 0.8.1: </span>Initialization now done with attr.
+A list of initial deme sizes is now accepted.</p>
+</div>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="fwdpy11.DemographicModelDetails">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">DemographicModelDetails</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">citation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.DemographicModelDetails" title="Permalink to this definition">#</a></dt>
+<dd><p>Stores rich information about a demographic model.
+Instances of this class get returned by functions
+generating pre-calculated models.</p>
+<p>This class has the following attributes, whose names
+are also <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> for intitialization.  The attribute names
+also determine the order of positional arguments:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<a class="reference internal" href="#fwdpy11.ForwardDemesGraph" title="fwdpy11.ForwardDemesGraph"><em>fwdpy11.ForwardDemesGraph</em></a>) – The demographic model parameters</p></li>
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – The name of the model</p></li>
+<li><p><strong>source</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) – The source of the model</p></li>
+<li><p><strong>parameters</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.11)"><em>object</em></a>) – The parameters used to generate <code class="docutils literal notranslate"><span class="pre">model</span></code></p></li>
+<li><p><strong>citation</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a><em> or </em><a class="reference internal" href="#fwdpy11.DemographicModelCitation" title="fwdpy11.DemographicModelCitation"><em>fwdpy11.DemographicModelCitation</em></a><em> or </em><em>None</em>) – Citation information</p></li>
+<li><p><strong>metadata</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.11)"><em>object</em></a>) – Optional field for additional info</p></li>
+</ul>
+</dd>
+</dl>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 0.8.0.</span></p>
 </div>
 <dl class="py method">
-<dt class="sig sig-object py" id="fwdpy11.DiscreteDemography.asblack">
-<span class="sig-name descname"><span class="pre">asblack</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.DiscreteDemography.asblack" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="fwdpy11.DemographicModelDetails.asblack">
+<span class="sig-name descname"><span class="pre">asblack</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.DemographicModelDetails.asblack" title="Permalink to this definition">#</a></dt>
 <dd><p>Return a string representation formatted with black</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="fwdpy11.DiscreteDemography.asdict">
-<span class="sig-name descname"><span class="pre">asdict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.DiscreteDemography.asdict" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="fwdpy11.DemographicModelDetails.asdict">
+<span class="sig-name descname"><span class="pre">asdict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.DemographicModelDetails.asdict" title="Permalink to this definition">#</a></dt>
 <dd><p>Return dict representation</p>
 </dd></dl>
 
+<dl class="py property">
+<dt class="sig sig-object py" id="fwdpy11.DemographicModelDetails.deme_labels">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">deme_labels</span></span><a class="headerlink" href="#fwdpy11.DemographicModelDetails.deme_labels" title="Permalink to this definition">#</a></dt>
+<dd><p>A dictionary mapping integer deme IDs to deme names
+(strings).</p>
+</dd></dl>
+
 <dl class="py method">
-<dt class="sig sig-object py" id="fwdpy11.DiscreteDemography.fromdict">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fromdict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.DiscreteDemography.fromdict" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="fwdpy11.DemographicModelDetails.fromdict">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fromdict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.DemographicModelDetails.fromdict" title="Permalink to this definition">#</a></dt>
 <dd><p>Build an instance from a dictionary</p>
 </dd></dl>
 
+<dl class="py property">
+<dt class="sig sig-object py" id="fwdpy11.DemographicModelDetails.initial_sizes_list">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">initial_sizes_list</span></span><a class="headerlink" href="#fwdpy11.DemographicModelDetails.initial_sizes_list" title="Permalink to this definition">#</a></dt>
+<dd><p>A list of the nonzero (parental) deme sizes at time 0 of the model
+(thinking forwards in time).</p>
+<p>This property is useful for setting up a
+<a class="reference internal" href="#fwdpy11.DiploidPopulation" title="fwdpy11.DiploidPopulation"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiploidPopulation</span></code></a>.</p>
 </dd></dl>
 
-<dl class="py data">
-<dt class="sig sig-object py" id="fwdpy11.NOGROWTH">
-<span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">NOGROWTH</span></span><a class="headerlink" href="#fwdpy11.NOGROWTH" title="Permalink to this definition">#</a></dt>
-<dd><p>The author of this software has a bad habit of using the
-value of 0.0 to represent “no exponential growth”.  This is,
-of course, wrong, and so a constant is provided to help
-other people with similar problems:</p>
-</dd></dl>
-
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fwdpy11</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">NOGROWTH</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1.0
-</pre></div>
-</div>
-</div>
-</div>
-<dl class="py class">
-<dt class="sig sig-object py" id="fwdpy11.SetExponentialGrowth">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">SetExponentialGrowth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">when</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deme</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">G</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.SetExponentialGrowth" title="Permalink to this definition">#</a></dt>
-<dd><p>Set the growth rate of a deme at a given time.</p>
-<p>This class has the following attributes, whose names
-are also <cite>kwargs</cite> for intitialization.  The attribute names
-also determine the order of positional arguments:</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>when</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – The generation when the event occurs</p></li>
-<li><p><strong>deme</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – The deme whose growth rate will change</p></li>
-<li><p><strong>G</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – The new growth rate</p></li>
-</ul>
-</dd>
-</dl>
-<div class="versionadded">
-<p><span class="versionmodified added">New in version 0.5.3.</span></p>
-</div>
-<div class="versionchanged">
-<p><span class="versionmodified changed">Changed in version 0.8.0: </span>Refactored to use attrs and inherit from
-low-level C++ class</p>
-</div>
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="fwdpy11.SetDemeSize">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">SetDemeSize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">when</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deme</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resets_growth_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.SetDemeSize" title="Permalink to this definition">#</a></dt>
-<dd><p>Set the size of a deme at a given time.</p>
-<p>This class has the following attributes, whose names
-are also <cite>kwargs</cite> for intitialization.  The attribute names
-also determine the order of positional arguments:</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>when</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – The generation when the event occurs</p></li>
-<li><p><strong>deme</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – The deme whose size will change</p></li>
-<li><p><strong>new_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – The new size</p></li>
-<li><p><strong>resets_growth_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – (True) If deme size change resets
-growth rate to <a class="reference internal" href="#fwdpy11.NOGROWTH" title="fwdpy11.NOGROWTH"><code class="xref py py-data docutils literal notranslate"><span class="pre">fwdpy11.NOGROWTH</span></code></a></p></li>
-</ul>
-</dd>
-</dl>
-<div class="versionadded">
-<p><span class="versionmodified added">New in version 0.5.3.</span></p>
-</div>
-<div class="versionchanged">
-<p><span class="versionmodified changed">Changed in version 0.8.0: </span>Refactored to use attrs and inherit from
-low-level C++ class</p>
-</div>
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="fwdpy11.SetSelfingRate">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">SetSelfingRate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">when</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deme</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.SetSelfingRate" title="Permalink to this definition">#</a></dt>
-<dd><p>Set the selfing probability within a deme at a given time.</p>
-<p>This class has the following attributes, whose names
-are also <cite>kwargs</cite> for intitialization.  The attribute names
-also determine the order of positional arguments:</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>when</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – The generation when the event occurs</p></li>
-<li><p><strong>deme</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – The deme whose selfing probability will change</p></li>
-<li><p><strong>S</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – The new selfing probability</p></li>
-</ul>
-</dd>
-</dl>
-<div class="versionadded">
-<p><span class="versionmodified added">New in version 0.5.3.</span></p>
-</div>
-<div class="versionchanged">
-<p><span class="versionmodified changed">Changed in version 0.8.0: </span>Refactored to use attrs and inherit from
-low-level C++ class</p>
-</div>
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="fwdpy11.MassMigration">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">MassMigration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">when</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">destination</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fraction</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">move_individuals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resets_growth_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.MassMigration" title="Permalink to this definition">#</a></dt>
-<dd><p>Mass migration events.</p>
-<p>This class has the following attributes, whose names
-are also <cite>kwargs</cite> for intitialization.  The attribute names
-also determine the order of positional arguments:</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>when</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – When the mass migration happens</p></li>
-<li><p><strong>source</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – The source deme for individuals to move</p></li>
-<li><p><strong>destination</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – The deme to where individuals we be moved</p></li>
-<li><p><strong>fraction</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – The fraction of <cite>source</cite> to move to <cite>destination</cite>.</p></li>
-<li><p><strong>move_individuals</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – If <cite>True</cite>, the event moves individuals.
-If <cite>False</cite>, individuals are copied.</p></li>
-<li><p><strong>resets_growth_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – (True) Whether or not to reset the
-growth rates of <cite>source</cite> and <cite>destination</cite> to
-<a class="reference internal" href="#fwdpy11.NOGROWTH" title="fwdpy11.NOGROWTH"><code class="xref py py-data docutils literal notranslate"><span class="pre">fwdpy11.NOGROWTH</span></code></a></p></li>
-</ul>
-</dd>
-</dl>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>It is a bit simpler to construct instances of this class
-using <a class="reference internal" href="#fwdpy11.move_individuals" title="fwdpy11.move_individuals"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.move_individuals()</span></code></a> or <a class="reference internal" href="#fwdpy11.copy_individuals" title="fwdpy11.copy_individuals"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.copy_individuals()</span></code></a>.</p>
-</div>
-<div class="versionadded">
-<p><span class="versionmodified added">New in version 0.5.3.</span></p>
-</div>
-<div class="versionchanged">
-<p><span class="versionmodified changed">Changed in version 0.8.0: </span>Refactored to use attrs and inherit from
-low-level C++ class</p>
-</div>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fwdpy11.move_individuals">
-<span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">move_individuals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">when</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">destination</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fraction</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resets_growth_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.move_individuals" title="Permalink to this definition">#</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>when</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – The generation when the event occurs</p></li>
-<li><p><strong>source</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – The source deme for individuals to move</p></li>
-<li><p><strong>destination</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – The deme to where individuals we be moved</p></li>
-<li><p><strong>fraction</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – The fraction of <cite>source</cite> to move to <cite>destination</cite>.</p></li>
-<li><p><strong>resets_growth_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – (True) Whether or not to reset the
-growth rates of <cite>source</cite> and <cite>destination</cite> to
-<a class="reference internal" href="#fwdpy11.NOGROWTH" title="fwdpy11.NOGROWTH"><code class="xref py py-data docutils literal notranslate"><span class="pre">fwdpy11.NOGROWTH</span></code></a></p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference internal" href="#fwdpy11.MassMigration" title="fwdpy11.MassMigration"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.MassMigration</span></code></a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fwdpy11.copy_individuals">
-<span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">copy_individuals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">when</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">destination</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fraction</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resets_growth_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.copy_individuals" title="Permalink to this definition">#</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>when</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – The generation when the event occurs</p></li>
-<li><p><strong>source</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – The source deme for individuals to copy</p></li>
-<li><p><strong>destination</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – The deme to where individuals we be copied</p></li>
-<li><p><strong>fraction</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – The fraction of <cite>source</cite> to copy to <cite>destination</cite>.</p></li>
-<li><p><strong>resets_growth_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – (True) Whether or not to reset the
-growth rates of <cite>source</cite> and <cite>destination</cite> to
-<a class="reference internal" href="#fwdpy11.NOGROWTH" title="fwdpy11.NOGROWTH"><code class="xref py py-data docutils literal notranslate"><span class="pre">fwdpy11.NOGROWTH</span></code></a></p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference internal" href="#fwdpy11.MassMigration" title="fwdpy11.MassMigration"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.MassMigration</span></code></a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="fwdpy11.MigrationMatrix">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">MigrationMatrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">migmatrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaled</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.MigrationMatrix" title="Permalink to this definition">#</a></dt>
-<dd><p>The forward migration matrix for a simulation.</p>
-<p>This class has the following attributes, whose names
-are also <cite>kwargs</cite> for intitialization.  The attribute names
-also determine the order of positional arguments:</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>migmatrix</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><em>numpy.ndarray</em></a>) – A square matrix of non-negative floats.</p></li>
-<li><p><strong>scaled</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – (True) If entries in <cite>migmatrix</cite> will be
-multiplied by deme sizes during simulation</p></li>
-</ul>
-</dd>
-</dl>
-<div class="versionadded">
-<p><span class="versionmodified added">New in version 0.5.3.</span></p>
-</div>
-<div class="versionchanged">
-<p><span class="versionmodified changed">Changed in version 0.8.0: </span>Refactored to use attrs and inherit from
-low-level C++ class</p>
-</div>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fwdpy11.MigrationMatrix.shape">
-<span class="sig-name descname"><span class="pre">shape</span></span><a class="headerlink" href="#fwdpy11.MigrationMatrix.shape" title="Permalink to this definition">#</a></dt>
-<dd><p>The shape of the migration matrix</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fwdpy11.MigrationMatrix.M">
-<span class="sig-name descname"><span class="pre">M</span></span><a class="headerlink" href="#fwdpy11.MigrationMatrix.M" title="Permalink to this definition">#</a></dt>
-<dd><p>Returns a copy of the rate matrix</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="fwdpy11.DemographicModelDetails.total_simulation_length">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">total_simulation_length</span></span><a class="headerlink" href="#fwdpy11.DemographicModelDetails.total_simulation_length" title="Permalink to this definition">#</a></dt>
+<dd><p>The total number of generations in the model.</p>
+<p>This value includes any burn-in time and starts
+from time 0 (forwards in time).</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="fwdpy11.SetMigrationRates">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">SetMigrationRates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">when</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deme</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">migrates</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.SetMigrationRates" title="Permalink to this definition">#</a></dt>
-<dd><p>Set the migration parameters of a simulation at a given time.
-May be used to set either the migration rates from a given
-deme or the entire migration matrix.</p>
+<dt class="sig sig-object py" id="fwdpy11.DemographicModelCitation">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">DemographicModelCitation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DOI</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">full_citation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.DemographicModelCitation" title="Permalink to this definition">#</a></dt>
+<dd><p>Citation information for a demographic model</p>
 <p>This class has the following attributes, whose names
-are also <cite>kwargs</cite> for intitialization.  The attribute names
+are also <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> for intitialization.  The attribute names
 also determine the order of positional arguments:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>when</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – The generation when the event occurs</p></li>
-<li><p><strong>deme</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em> or </em><em>None</em>) – The row index of the migration matrix</p></li>
-<li><p><strong>migrates</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em> or </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><em>numpy.ndarray</em></a>) – The migration rates into <cite>deme</cite> from all other populations.</p></li>
+<li><p><strong>DOI</strong> – The Digital Object Identifier</p></li>
+<li><p><strong>full_citation</strong> – Something string-like giving the full citation.</p></li>
+<li><p><strong>metadata</strong> – Any additional information that may be needed.</p></li>
 </ul>
 </dd>
 </dl>
-<p>The migration rates are equivalent to the single-generation ancestry proportions
-with respect to <cite>deme</cite>.</p>
-<p>In order to change the entire migration matrix, pass <cite>None</cite> (or -1)
-to <cite>deme</cite> and a 2d <cite>numpy.ndarray</cite> for <cite>migrates</cite>.  A value of
-<cite>None</cite> will be converted to <cite>-1</cite> in this case.</p>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 0.5.3.</span></p>
-</div>
-<div class="versionchanged">
-<p><span class="versionmodified changed">Changed in version 0.8.0: </span>Refactored to use attrs and inherit from
-low-level C++ class</p>
+<p><span class="versionmodified added">New in version 0.8.0.</span></p>
 </div>
 </dd></dl>
 

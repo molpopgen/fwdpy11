@@ -27,8 +27,6 @@ many replicates in separate Python *processes* using a single script.
 Fully worked-out examples of varying complexity can be found here:
 
 * {ref}`bgs_vignette`
-* {ref}`IMexample`
-* {ref}`migtest`
 * {ref}`precapitation`
 * {ref}`recapitation`
 
@@ -38,7 +36,7 @@ A common set of idioms used by these examples are:
   the instance of {class}`fwdpy11.DiploidPopulation`.  Such
   a return requires pickling, which is very expensive.  If you
   need to store these population, write them to files rather
-  than returning them. See {ref}`here <savingsimstodisk>`.
+  than returning them.
 * If you do return something to the main "collector"
   process, keep it simple!
 * Random number seeds are set in `__main__` using
@@ -94,7 +92,7 @@ population size of your population (*e.g.* in the absence of selection).
 With tree sequence recording, we run into the "uncoalesced marginal
 trees" issue mentioned above.  We could just simulate much longer
 to get rid of this problem, but it is simply easier to start
-with a tree sequence from `msprime` (see {ref}`here <starting-from-msprime>`).
+with a tree sequence from `msprime`.
 
 (eyre-walker)=
 
@@ -900,7 +898,7 @@ Instances of this class have the following attributes:
 
 Some care is required starting a simulation from a tree sequence (see {ref}`here <precapitation>`) or finishing a simulation with one (see {ref}`here <recapitation>`).
 
-If simulating with discrete recombination positions (see {ref}`here <geneticmapunit>`), it may be important to realize that the current stable releases of `msprime` model continuous recombination breakpoints.
+If simulating with discrete recombination positions, it may be important to realize that the current stable releases of `msprime` model continuous recombination breakpoints.
 A future `msprime` release will support discretized positions.
 
 When simulating with genome lengths longer than unity (1.0), determining the correct recombination rate for `msprime` needs additional work.

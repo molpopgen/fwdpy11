@@ -3,6 +3,47 @@
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+## 0.20.0a0
+
+New features
+
+* {func}`fwdpy11.DiploidPopulation.create_from_tskit` now uses the `generation` field from top-level metadata to restore all times to their forward-in-time values.
+  PR {pr}`1129`
+* Discrete demographic models are now managed by
+  {class}`fwdpy11.ForwardDemesGraph`
+  See {ref}`here <demes_vignette>`.
+  PR {pr}`1101`
+  PR {pr}`1103`
+  PR {pr}`1121`
+  PR {pr}`1123`
+  PR {pr}`1124`
+* Add support for Python 3.11
+  PR {pr}`1108`
+* Allow suppressing of residual selfing.
+  See {ref}`here <demes_details>`.
+  PR {pr}`1117`
+  PR {pr}`1118`
+
+Deprecations
+
+* Deprecate use of {class}`fwdpy11.Region` for recombination
+  PR {pr}`1126`
+
+Breaking changes
+
+* Drop support for Python 3.7
+  PR {pr}`1108`
+* Removed deprecated discrete demography API
+  PR {pr}`1101`
+  PR {pr}`1116`
+
+Documentation
+
+* Give link to examples of lists of "gvalue" objects
+  PR {pr}`1127`
+* Rewrite `demes`-related documentation
+  PR {pr}`1124` 
+
 ## 0.19.10
 
 Documentation
@@ -66,6 +107,11 @@ Performance
 * Greatly improve the performance of recombination maps.
   PR {pr}`1087`.
   Issue {issue}`1082`.
+
+Python API
+
+* Add :class:`fwdpy11.ForwardDemesGraph`.
+  PR {pr}`1077`.
 
 Back end changes
 
@@ -383,7 +429,7 @@ Breaking changes
 
 Behavior changes
 
-* {func}`fwdpy11.DemographyDebugger.report` raises a warning
+* `fwdpy11.DemographyDebugger.report` raises a warning
   to state that it has not been implemented.
   It returns a string with a message to that effect.
 
@@ -544,7 +590,7 @@ Back end changes:
 
 Bug fixes:
 
-* Fixed a "use after move" error in C++ code used to pickle {class}`fwdpy11.DiscreteDemography`.
+* Fixed a "use after move" error in C++ code used to pickle `fwdpy11.DiscreteDemograpy`.
   It looks like this bug was introduced back in {pr}`791`, which was part of the 0.16.0 release.
   PR {pr}`857`
 
@@ -642,8 +688,8 @@ Behavior changes
   it is now possible that exceptions will raise.
   This change is due to the fix for Issue {issue}`775` introduced in PR {pr}`774`.
   See issue {issue}`777` for more background.
-* Mass migration events implemented via {func}`fwdpy11.copy_individuals`
-  and {func}`fwdpy11.move_individuals` now occur *after* sampling within a generation.  
+* Mass migration events implemented via `fwdpy11.copy_individuals`
+  and `fwdpy11.move_individuals` now occur *after* sampling within a generation.  
   This change makes the timings consistent with all other events and also makes
   certain operations easier/feasible.
   {pr}`809`
@@ -664,14 +710,14 @@ New features
   PR {pr}`764`
 * Add `__copy__` and `__deepcopy__` to {class}`fwdpy11.DiploidPopulation`.
   PR {pr}`770`
-* Add `__deepcopy__` to {class}`fwdpy11.DiscreteDemography`.
+* Add `__deepcopy__` to `fwdpy11.DiscreteDemograpy`.
   PR {pr}`773`
 
 C++ back-end
 
 * A population can now be checked that it is- or is not- being simulated.
   PR {pr}`762`
-* {class}`fwdpy11.discrete_demography.DiscreteDemography` now stores the migration matrix as a stack-allocated object and not a `unique_ptr`.
+* `fwdpy11.discrete_demography.DiscreteDemography` now stores the migration matrix as a stack-allocated object and not a `unique_ptr`.
   PR {pr}`785`
   {issue}`781`
 
@@ -694,7 +740,7 @@ Point release
 
 Bug fixes
 
-* {class}`fwdpy11.SetMigrationRates` now uses a tolerance when checking that rates sum to 0 or 1.
+* `fwdpy11.SetMigrationRates` now uses a tolerance when checking that rates sum to 0 or 1.
   {issue}`787`
   {user}`apragsdale`
   {user}`molpopgen`
@@ -942,17 +988,17 @@ Point release.
 
 Behavior changes:
 
-* The events passed to {class}`fwdpy11.DiscreteDemography` are now sorted stably
+* The events passed to `fwdpy11.DiscreteDemograpy` are now sorted stably
   by time. {pr}`598`
 
 Documentation changes:
 
-* Fixed documentation for {class}`fwdpy11.SetMigrationRates`. {pr}`603`
+* Fixed documentation for `fwdpy11.SetMigrationRates`. {pr}`603`
 
 Back end changes:
 
 * Cleanup some parts of the code base.  {pr}`604`
-* Make the C++ back-end of {class}`fwdpy11.MassMigration` have the same initialization
+* Make the C++ back-end of `fwdpy11.MassMigration` have the same initialization
   semantics as other demographic events. {pr}`605`.
 
 ## 0.10.1
@@ -1032,7 +1078,7 @@ See {ref}`here <gvalues_python>` for the documentation on Python genetic values.
 * Fixed a back-end bug that could have led to corrupt sample lists for simplification. {pr}`536`.
 * Made improvements to memory handling of data structures when simulations end. {pr}`537`.
 * Added the three-deme model of Jouganous et al. (2017).
-  See {func}`fwdpy11.demographic_models.human.jouganous_three_deme`.
+  See `fwdpy11.demographic_models.human.jouganous_three_deme`.
   {pr}`534`
 
 ## 0.8.0
@@ -1083,7 +1129,7 @@ Performance improvements:
 
 New demographic models:
 
-* The [^cite_tennessen2012] model is added via {func}`fwdpy11.demographic_models.human.tennessen`.
+* The [^cite_tennessen2012] model is added via `fwdpy11.demographic_models.human.tennessen`.
   {pr}`479`
 
 Improved behavior:
@@ -1091,7 +1137,7 @@ Improved behavior:
 * Improved warnings about demographic events scheduled to happen
   before the population's current generation. {pr}`495`
 * Built-in demographic models now return instances of
-  {class}`fwdpy11.demographic_models.DemographicModelDetails`.
+  `fwdpy11.demographic_models.DemographicModelDetails`.
   Such instances can be passed as the `demography` keyword argument
   to initialize {class}`fwdpy11.ModelParams`.
   {pr}`509`.
@@ -1232,10 +1278,10 @@ release candidates (see below) plus the following:
 :::{note}
 
 This is the first stable release with support for flexible demographic modeling.
-See {ref}`softselection` for details as well as {ref}`IMexample`.  Currently,
+See `softselection` for details as well as `IMexample`.  Currently,
 support for different fitness effects in different demes is limited, which
 will be addressed in 0.7.0.  However, this version does support adaptation
-of quantitative traits to different optima.  See {ref}`localadaptation`.
+of quantitative traits to different optima.  See `localadaptation`.
 
 :::
 
@@ -1260,9 +1306,9 @@ Kind of a big release:
   PR {pr}`366`
 * Add {class}`fwdpy11.DemographyDebugger`
   PR {pr}`384`
-* Add some pre-computed demographic models, see {ref}`demographic-models`.
+* Add some pre-computed demographic models, see `demographic-models`.
 * New examples added:
-  {ref}`IMexample`
+  `IMexample`
 * Many improvements/additions to the test suite and the manual.
 
 ## 0.6.0rc1
@@ -1284,7 +1330,7 @@ in different demes.
 
 New features:
 
-* Support for {class}`fwdpy11.DiscreteDemography` in simulations with tree sequences.
+* Support for `fwdpy11.DiscreteDemograpy` in simulations with tree sequences.
   PR {pr}`342`
   PR {pr}`346`
   PR {pr}`358`
@@ -1298,9 +1344,9 @@ Miscellaneous changes:
 
 New documentation
 
-* Examples of simulations using the {class}`fwdpy11.DiscreteDemography` classes.
+* Examples of simulations using the `fwdpy11.DiscreteDemograpy` classes.
   PR {pr}`359`
-  See {ref}`localadaptation` and {ref}`migtest`.
+  See `localadaptation` and `migtest`.
 
 Changes to the build system and dependencies:
 
@@ -1449,7 +1495,7 @@ Minor bugfix release:
 
 ### Deprecations of note
 
-* `fwdpy11.MlocusPop` is *tentatively* deprecated.  The new features described in {ref}`geneticmapunit` make
+* `fwdpy11.MlocusPop` is *tentatively* deprecated.  The new features described in `geneticmapunit` make
   this class obsolete, but we will await a final verdict pending more testing.
 
 ### Bug fixes
@@ -1495,8 +1541,8 @@ Changes to the C++ back end:
 
 It may be helpful to look at the following documentation pages:
 
-* {ref}`savingsimstodisk`
-* {ref}`geneticmapunit`
+* `savingsimstodisk`
+* `geneticmapunit`
 
 Detailed changes:
 
@@ -1565,7 +1611,7 @@ This version breaks pickle format compatibility with files generated with versio
   two elements.  PR {pr}`128`
 * Diploids have been refactored into two separate classes, {class}`fwdpy11.DiploidGenotype` and
   {class}`fwdpy11.DiploidMetadata`.  Both classes are valid NumPy dtypes.  PR {pr}`108`
-* `fwdpy11.model_params.ModelParams` is massively simpilfied. There is now only one class! See {ref}`model-params`. PR {pr}`108`
+* `fwdpy11.model_params.ModelParams` is massively simpilfied. There is now only one class! See `model-params`. PR {pr}`108`
 * The design of objects related to calculating genetic values is vastly simplified. PR {pr}`108`
 * Populations now contain functions to add mutations, replacing previous functions in fwdpy11.util.  PR {pr}`94`
 * `fwdpy11.MlocusPop` now requires that `fwdpy11.MlocusPop.locus_boundaries` be initialized upon

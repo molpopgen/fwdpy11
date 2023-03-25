@@ -26,94 +26,124 @@ It is a good idea to browse both the [tutorial](https://popsim-consortium.github
 There are several advantages to using `demes`:
 
 * The `YAML` files can be used by many pieces of related software, including [`msprime`](https://tskit.dev/msprime/docs/stable/) and [`moments`](https://moments.readthedocs.io).
-* The specification is simpler than the low-level `API` provided by any of these tools.
 * You'll get an extra layer of model validation when `demes` loads your model prior to it being converted into `fwpdy11` objects.
 * Tools to visualize the models are under active development.
 
-## YAML file input
+## YAML input
 
-The following `YAML` specifies the human out-of-Africa model from {cite}`Gutenkunst2009-wd`:
+The following `YAML` specifies a model of a derived population created
+from unequal admixture of two ancestral populations 50 generations ago:
 
-```{literalinclude} gutenkunst_ooa.yml
-:language: yaml
+```{code-cell} python
+yaml="""
+description: An example demes model
+time_units: generations
+demes:
+ - name: ancestor1
+   epochs:
+    - start_size: 100
+      end_time: 50
+ - name: ancestor2
+   epochs:
+    - start_size: 250
+      end_time: 50
+ - name: admixed
+   start_time: 50
+   ancestors: [ancestor1, ancestor2]
+   proportions: [0.90, 0.10]
+   epochs:
+    - start_size: 100
+"""
 ```
 
-We can generate demographic models directly from these `YAML` files using {func}`fwdpy11.discrete_demography.from_demes`, which handles the conversion to the low-level objects described {ref}`here <softselection>`:
+A visual representation of the model looks like:
+
+```{code-cell} python
+---
+'tags': ['hide-input']
+---
+import demes
+import demesdraw
+graph = demes.loads(yaml)
+demesdraw.tubes(graph);
+```
+
+We can generate demographic models directly from these `YAML` files using
+{func}`fwdpy11.ForwardDemesGraph.from_demes`. 
 
 ```{code-cell} python
 import fwdpy11
 
-model = fwdpy11.discrete_demography.from_demes("gutenkunst_ooa.yml")
+demography = fwdpy11.ForwardDemesGraph.from_demes(yaml, burnin=100, burnin_is_exact=True)
 ```
 
+The previous command defines a model where we evolve the population for 100 generations
+of a "burn-in".
+When `burnin_is_exact=False`, the value passed to `burnin` is treated as a multiple
+of the **sum** of all ancestral deme sizes (those having a start time of `inf`
+in the demes model).
+
 :::{note}
-Be sure to read the documentation for {func}`fwdpy11.discrete_demography.from_demes`!
+Be sure to read the documentation for {func}`fwdpy11.ForwardDemesGraph.from_demes`!
 There are important options concerning the run time of the simulation, etc.
 :::
 
-The return value is an instance of {class}`fwdpy11.demographic_models.DemographicModelDetails` and may be passed as the `demography` keyword argument to initialize an instance of {class}`fwdpy11.ModelParams`.
-To extract the simulation length to generate the `simlen` parameter of your {class}`fwdpy11.ModelParams` instance:
+The return value is an instance of {class}`fwdpy11.ForwardDemesGraph`.
+The object contains several properties that are useful in setting up your
+simulation.
+
+First, the sizes of all demes extant at generation zero:
 
 ```{code-cell} python
-model.metadata["total_simulation_length"]
+demography.initial_sizes
 ```
 
-If we print the `model` object, we will see how much logic we'd have had to use in order to implement this model using the low-level object `API`:
-
-```{code-cell} python
-print(model.asblack())
-```
-
-It is hopefully clear how much simpler it is to use the `demes` `YAML` specification!
-
-## Working with graphs
-
-You may also build models by creating {class}`demes.Builder` objects using the `demes` `API`.
-In general, we feel that the `YAML` method will be less error-prone and therefore the preferred approach.
-But, for example:
+This property can be used to correctly initialize a population:
 
 ```{code-cell}
-import demes
-
-builder = demes.Builder(description="test demography", time_units="generations")
-builder.add_deme(
-    name="deme",
-    epochs=[
-        dict(start_size=1000, end_time=100),
-        dict(start_size=2000, end_time=0),
-    ],
-)
-
-graph = builder.resolve()
-
-model = fwdpy11.discrete_demography.from_demes(graph)
-
-print(model.asblack())
-```
-
-Again, it is simpler to build up the demography using `demes` than it is using the `fwdpy11` objects directly.
-
-## Initializing populations
-
-A model specified using `demes` contains enough information to initialize instances of {class}`fwdpy11.DiploidPopulation`.
-We recommend that you use this information so that the initial deme size(s) in your simulation is correct!
-
-To see how this works, let's revisit the Gutenkunst model from above.
-The value returned contains the initial size of each deme in the model:
-
-```{code-cell}
-model = fwdpy11.discrete_demography.from_demes("gutenkunst_ooa.yml")
-
-print(model.metadata['initial_sizes'])
-```
-
-Given that, a sorted list comprehension does the job:
-
-```{code-cell}
-initial_sizes= [model.metadata['initial_sizes'][i] for i in sorted(model.metadata['initial_sizes'].keys())]
-pop = fwdpy11.DiploidPopulation(initial_sizes, 1000.)
+pop = fwdpy11.DiploidPopulation(demography.initial_sizes, 1000.)
 print(pop.deme_sizes())
 ```
 
-The reason to go through the sorting step is to get the right initial sizes *in the right order* for "rootless" `demes` graphs.
-A rootless model is one with more than one ancestral deme in the ancient past.
+The generation corresponding to the end of the model:
+
+```{code-cell} python
+demography.final_generation
+```
+
+We can now set up our simulation parameters:
+
+```{code-cell} python
+pdict = {'simlen': demography.final_generation,
+         'demography': demography,
+         # Everything below is standard
+         # and covered in other vignettes
+         'recregions': [],
+         'nregions': [],
+         'sregions': [],
+         'rates': (0,0,0),
+         'gvalue': fwdpy11.Multiplicative(2.)
+         }
+params = fwdpy11.ModelParams(**pdict)
+```
+
+We are now ready to run a simulaton:
+
+* We have a valid {class}`fwdpy11.ModelParams` object.
+* Our population has its initial sizes correctly set.
+
+## Obtaining the demes present at the end of a simulation
+
+```{code-cell} python
+demography.demes_at_final_generation
+```
+
+To get the names of those demes:
+
+```{code-cell} python
+for deme in demography.demes_at_final_generation:
+    print(demography.deme_labels[deme])
+```
+
+It is probably useful to read more about how ``fwdpy11`` handles ``demes``
+models {ref}`here <demes_details>`.

@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Debugging demographic models &#8212; fwdpy11 manual</title>
+    <title>Advanced topics &#8212; fwdpy11 manual</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -52,8 +52,8 @@ const thebe_selector_output = ".output, .cell_output"
     <script async="async" src="../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Introduction" href="varying_fitness_conditions_across_demes_intro.html" />
-    <link rel="prev" title="Using demes to specify demographic models." href="demes_vignette.html" />
+    <link rel="next" title="Tracking user-specified new mutations" href="trackmutationfates.html" />
+    <link rel="prev" title="Special considerations for demes models" href="special_considerations_demes_models.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -225,13 +225,18 @@ const thebe_selector_output = ".output, .cell_output"
    Adding neutral mutations to a population with existing ancestry
   </a>
  </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="import_mutations_from_tskit.html">
+   Importing mutations from tskit
+  </a>
+ </li>
 </ul>
 <p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
   Short vignettes - demographic modeling
  </span>
 </p>
-<ul class="current nav bd-sidenav">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="demography_vignettes_intro.html">
    Introduction
@@ -248,18 +253,13 @@ const thebe_selector_output = ".output, .cell_output"
    to specify demographic models.
   </a>
  </li>
- <li class="toctree-l1 current active">
-  <a class="current reference internal" href="#">
-   Debugging demographic models
-  </a>
- </li>
 </ul>
 <p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
   Short vignettes - varying fitness conditions across demes
  </span>
 </p>
-<ul class="nav bd-sidenav">
+<ul class="current nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="varying_fitness_conditions_across_demes_intro.html">
    Introduction
@@ -283,6 +283,11 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toctree-l1">
   <a class="reference internal" href="special_considerations_demes_models.html">
    Special considerations for demes models
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Advanced topics
   </a>
  </li>
 </ul>
@@ -376,11 +381,6 @@ const thebe_selector_output = ".output, .cell_output"
 </p>
 <ul class="nav bd-sidenav">
  <li class="toctree-l1">
-  <a class="reference internal" href="../pages/tutorial.html">
-   Tutorial
-  </a>
- </li>
- <li class="toctree-l1">
   <a class="reference internal" href="../pages/advancedtopics.html">
    Advanced topics
   </a>
@@ -392,11 +392,6 @@ const thebe_selector_output = ".output, .cell_output"
  </span>
 </p>
 <ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../pages/softselection.html">
-   Soft selection with discrete demes
-  </a>
- </li>
  <li class="toctree-l1">
   <a class="reference internal" href="../pages/mvdes.html">
    Different effect sizes of mutations in different demes
@@ -468,11 +463,6 @@ const thebe_selector_output = ".output, .cell_output"
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../pages/demographic_models.html">
-   The demography debugger
-  </a>
- </li>
- <li class="toctree-l1">
   <a class="reference internal" href="../pages/functions.html">
    Function documentation
   </a>
@@ -537,21 +527,6 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toctree-l1">
   <a class="reference internal" href="../examples/gss_divergent_optima.html">
    Adaptation to different optima with multivariate distribution of effect sizes
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../examples/IM.html">
-   Isolation-with-migration (IM)
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../examples/localadaptation.html">
-   Local adaptation of a quantitative trait
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../examples/migtest.html">
-   Symmetric migration between two demes
   </a>
  </li>
  <li class="toctree-l1">
@@ -652,17 +627,6 @@ title="Toggle navigation"
         
     </div>
     <div class="header-article__right">
-<div class="menu-dropdown menu-dropdown-launch-buttons">
-  <button class="headerbtn menu-dropdown__trigger"
-      aria-label="Launch interactive content">
-      <i class="fas fa-rocket"></i>
-  </button>
-  <div class="menu-dropdown__content">
-    <ul>
-    </ul>
-  </div>
-</div>
-
 <button onclick="toggleFullScreen()"
   class="headerbtn"
   data-toggle="tooltip"
@@ -702,7 +666,7 @@ title="Source repository"
       </li>
       
       <li>
-        <a href="https://github.com/molpopgen/fwdpy11/issues/new?title=Issue%20on%20page%20%2Fshort_vignettes/demography_debugger_vignette.html&body=Your%20issue%20content%20here."
+        <a href="https://github.com/molpopgen/fwdpy11/issues/new?title=Issue%20on%20page%20%2Fshort_vignettes/genetic_values_multi_deme_models_advanced.html&body=Your%20issue%20content%20here."
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -730,24 +694,7 @@ title="Open an issue"
   <div class="menu-dropdown__content">
     <ul>
       <li>
-        <a href="../_sources/short_vignettes/demography_debugger_vignette.ipynb"
-   class="headerbtn"
-   data-toggle="tooltip"
-data-placement="left"
-title="Download notebook file"
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-code"></i>
-  </span>
-<span class="headerbtn__text-container">.ipynb</span>
-</a>
-
-      </li>
-      
-      <li>
-        <a href="../_sources/short_vignettes/demography_debugger_vignette.md"
+        <a href="../_sources/short_vignettes/genetic_values_multi_deme_models_advanced.md"
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -796,7 +743,7 @@ title="Print to PDF"
         <div class="col pl-md-3 pl-lg-5 content-container">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>Debugging demographic models</h1>
+                <h1>Advanced topics</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
@@ -808,55 +755,10 @@ title="Print to PDF"
                 
               <div>
                 
-  <section class="tex2jax_ignore mathjax_ignore" id="debugging-demographic-models">
-<span id="demography-debugger-vignette"></span><h1>Debugging demographic models<a class="headerlink" href="#debugging-demographic-models" title="Permalink to this headline">#</a></h1>
-<p>You may use <a class="reference internal" href="../pages/demographic_models.html#fwdpy11.DemographyDebugger" title="fwdpy11.DemographyDebugger"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DemographyDebugger</span></code></a> to check the validity of demographic models.
-The following code block applies this class to the model we built using <code class="docutils literal notranslate"><span class="pre">demes</span></code> in <a class="reference internal" href="demes_vignette.html#demes-vignette"><span class="std std-ref">an earlier vignette</span></a>.</p>
-<p>For the debugger to do its job, it needs to know the initial sizes of each deme.
-For models generated via <a class="reference internal" href="../pages/functions.html#fwdpy11.discrete_demography.from_demes" title="fwdpy11.discrete_demography.from_demes"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.discrete_demography.from_demes()</span></code></a>, the meta data contains a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> mapping the integer <code class="docutils literal notranslate"><span class="pre">ID</span></code> for each deme to its initial size.
-We use that <code class="docutils literal notranslate"><span class="pre">dict</span></code> below to get the required list of initial_sizes.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">demes</span>
-<span class="kn">import</span> <span class="nn">fwdpy11</span>
-
-<span class="n">builder</span> <span class="o">=</span> <span class="n">demes</span><span class="o">.</span><span class="n">Builder</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;test demography&quot;</span><span class="p">,</span> <span class="n">time_units</span><span class="o">=</span><span class="s2">&quot;generations&quot;</span><span class="p">)</span>
-<span class="n">builder</span><span class="o">.</span><span class="n">add_deme</span><span class="p">(</span>
-    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;deme&quot;</span><span class="p">,</span>
-    <span class="n">epochs</span><span class="o">=</span><span class="p">[</span>
-        <span class="nb">dict</span><span class="p">(</span><span class="n">start_size</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">end_time</span><span class="o">=</span><span class="mi">100</span><span class="p">),</span>
-        <span class="nb">dict</span><span class="p">(</span><span class="n">start_size</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">end_time</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
-    <span class="p">],</span>
-<span class="p">)</span>
-
-<span class="n">graph</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
-
-<span class="n">demog</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">discrete_demography</span><span class="o">.</span><span class="n">from_demes</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
-
-<span class="n">initial_sizes</span> <span class="o">=</span> <span class="p">[</span><span class="n">demog</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;initial_sizes&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">demog</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;initial_sizes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())]</span>
-
-<span class="n">dbg</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DemographyDebugger</span><span class="p">(</span><span class="n">initial_sizes</span><span class="p">,</span> <span class="n">demog</span><span class="o">.</span><span class="n">model</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<p>The <code class="docutils literal notranslate"><span class="pre">dbg</span></code> variable also contains a “report” describing the model:</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">dbg</span><span class="o">.</span><span class="n">report</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>DemographyDebugger::report not yet implemented
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/runner/work/fwdpy11/fwdpy11/fwdpy11/_types/demography_debugger.py:307: UserWarning: report generation has not been implemented
-  warnings.warn(&quot;report generation has not been implemented&quot;)
-</pre></div>
-</div>
-</div>
-</div>
+  <section class="tex2jax_ignore mathjax_ignore" id="advanced-topics">
+<h1>Advanced topics<a class="headerlink" href="#advanced-topics" title="Permalink to this headline">#</a></h1>
+<p>It is also possible to have arrays of genetic value objects as well as multivariate effect size distributions.
+See <a class="reference internal" href="../examples/gss_divergent_optima.html#gssdivergentoptima"><span class="std std-ref">here</span></a> for an example.</p>
 </section>
 
     <script type="text/x-thebe-config">
@@ -886,17 +788,17 @@ We use that <code class="docutils literal notranslate"><span class="pre">dict</s
                 
     <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="demes_vignette.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="special_considerations_demes_models.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Using <code class="docutils literal notranslate"><span class="pre">demes</span></code> to specify demographic models.</p>
+            <p class="prev-next-title">Special considerations for demes models</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="varying_fitness_conditions_across_demes_intro.html" title="next page">
+    <a class='right-next' id="next-link" href="trackmutationfates.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Introduction</p>
+        <p class="prev-next-title">Tracking user-specified new mutations</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>

@@ -222,6 +222,11 @@ const thebe_selector_output = ".output, .cell_output"
    Adding neutral mutations to a population with existing ancestry
   </a>
  </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="short_vignettes/import_mutations_from_tskit.html">
+   Importing mutations from tskit
+  </a>
+ </li>
 </ul>
 <p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
@@ -243,11 +248,6 @@ const thebe_selector_output = ".output, .cell_output"
     </span>
    </code>
    to specify demographic models.
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="short_vignettes/demography_debugger_vignette.html">
-   Debugging demographic models
   </a>
  </li>
 </ul>
@@ -280,6 +280,11 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toctree-l1">
   <a class="reference internal" href="short_vignettes/special_considerations_demes_models.html">
    Special considerations for demes models
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="short_vignettes/genetic_values_multi_deme_models_advanced.html">
+   Advanced topics
   </a>
  </li>
 </ul>
@@ -373,11 +378,6 @@ const thebe_selector_output = ".output, .cell_output"
 </p>
 <ul class="nav bd-sidenav">
  <li class="toctree-l1">
-  <a class="reference internal" href="pages/tutorial.html">
-   Tutorial
-  </a>
- </li>
- <li class="toctree-l1">
   <a class="reference internal" href="pages/advancedtopics.html">
    Advanced topics
   </a>
@@ -389,11 +389,6 @@ const thebe_selector_output = ".output, .cell_output"
  </span>
 </p>
 <ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="pages/softselection.html">
-   Soft selection with discrete demes
-  </a>
- </li>
  <li class="toctree-l1">
   <a class="reference internal" href="pages/mvdes.html">
    Different effect sizes of mutations in different demes
@@ -465,11 +460,6 @@ const thebe_selector_output = ".output, .cell_output"
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="pages/demographic_models.html">
-   The demography debugger
-  </a>
- </li>
- <li class="toctree-l1">
   <a class="reference internal" href="pages/functions.html">
    Function documentation
   </a>
@@ -534,21 +524,6 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toctree-l1">
   <a class="reference internal" href="examples/gss_divergent_optima.html">
    Adaptation to different optima with multivariate distribution of effect sizes
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="examples/IM.html">
-   Isolation-with-migration (IM)
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="examples/localadaptation.html">
-   Local adaptation of a quantitative trait
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="examples/migtest.html">
-   Symmetric migration between two demes
   </a>
  </li>
  <li class="toctree-l1">
@@ -746,7 +721,6 @@ title="Open an issue"
  | <a href="#G"><strong>G</strong></a>
  | <a href="#H"><strong>H</strong></a>
  | <a href="#I"><strong>I</strong></a>
- | <a href="#J"><strong>J</strong></a>
  | <a href="#K"><strong>K</strong></a>
  | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
@@ -817,9 +791,7 @@ title="Open an issue"
       <li><a href="pages/genetic_values.html#fwdpy11.Additive.asblack">asblack() (fwdpy11.Additive method)</a>
 
       <ul>
-        <li><a href="pages/demographic_models.html#fwdpy11.demographic_models.DemographicModelDetails.asblack">(fwdpy11.demographic_models.DemographicModelDetails method)</a>
-</li>
-        <li><a href="pages/types.html#fwdpy11.DiscreteDemography.asblack">(fwdpy11.DiscreteDemography method)</a>
+        <li><a href="pages/types.html#fwdpy11.DemographicModelDetails.asblack">(fwdpy11.DemographicModelDetails method)</a>
 </li>
         <li><a href="pages/gvaluenoise.html#fwdpy11.GaussianNoise.asblack">(fwdpy11.GaussianNoise method)</a>
 </li>
@@ -853,9 +825,9 @@ title="Open an issue"
       <ul>
         <li><a href="pages/conditional_models.html#fwdpy11.conditional_models.EvolveOptions.asdict">(fwdpy11.conditional_models.EvolveOptions method)</a>
 </li>
-        <li><a href="pages/demographic_models.html#fwdpy11.demographic_models.DemographicModelDetails.asdict">(fwdpy11.demographic_models.DemographicModelDetails method)</a>
+        <li><a href="pages/types.html#fwdpy11.DemographicModelDetails.asdict">(fwdpy11.DemographicModelDetails method)</a>
 </li>
-        <li><a href="pages/types.html#fwdpy11.DiscreteDemography.asdict">(fwdpy11.DiscreteDemography method)</a>
+        <li><a href="pages/types.html#fwdpy11.ForwardDemesGraph.asdict">(fwdpy11.ForwardDemesGraph method)</a>
 </li>
         <li><a href="pages/gvaluenoise.html#fwdpy11.GaussianNoise.asdict">(fwdpy11.GaussianNoise method)</a>
 </li>
@@ -931,13 +903,11 @@ title="Open an issue"
 </li>
       <li><a href="pages/conditional_models.html#fwdpy11.conditional_models.SimulationStatus.condition_met">condition_met (fwdpy11.conditional_models.SimulationStatus attribute)</a>
 </li>
-      <li><a href="pages/conditional_models.html#fwdpy11.conditional_models.ConditionalModelOutput">ConditionalModelOutput (class in fwdpy11.conditional_models)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="pages/regiontypes.html#fwdpy11.ConstantS">ConstantS (class in fwdpy11)</a>
+      <li><a href="pages/conditional_models.html#fwdpy11.conditional_models.ConditionalModelOutput">ConditionalModelOutput (class in fwdpy11.conditional_models)</a>
 </li>
-      <li><a href="pages/types.html#fwdpy11.copy_individuals">copy_individuals() (in module fwdpy11)</a>
+      <li><a href="pages/regiontypes.html#fwdpy11.ConstantS">ConstantS (class in fwdpy11)</a>
 </li>
       <li><a href="pages/conditional_models.html#fwdpy11.conditional_models.AlleleCount.count">count (fwdpy11.conditional_models.AlleleCount attribute)</a>
 </li>
@@ -971,18 +941,26 @@ title="Open an issue"
         <li><a href="pages/types.html#fwdpy11.Node.deme">(fwdpy11.Node attribute)</a>
 </li>
       </ul></li>
+      <li><a href="pages/types.html#fwdpy11.DemographicModelDetails.deme_labels">deme_labels (fwdpy11.DemographicModelDetails property)</a>
+
+      <ul>
+        <li><a href="pages/types.html#fwdpy11.ForwardDemesGraph.deme_labels">(fwdpy11.ForwardDemesGraph property)</a>
+</li>
+      </ul></li>
       <li><a href="pages/types.html#fwdpy11.DiploidPopulation.deme_sizes">deme_sizes() (fwdpy11.DiploidPopulation method)</a>
 </li>
-      <li><a href="pages/demographic_models.html#fwdpy11.demographic_models.DemographicModelCitation">DemographicModelCitation (class in fwdpy11.demographic_models)</a>
+      <li><a href="pages/types.html#fwdpy11.ForwardDemesGraph.demes_at_final_generation">demes_at_final_generation (fwdpy11.ForwardDemesGraph property)</a>
 </li>
-      <li><a href="pages/demographic_models.html#fwdpy11.demographic_models.DemographicModelDetails">DemographicModelDetails (class in fwdpy11.demographic_models)</a>
+      <li><a href="pages/types.html#fwdpy11.DemographicModelCitation">DemographicModelCitation (class in fwdpy11)</a>
 </li>
-      <li><a href="pages/demographic_models.html#fwdpy11.DemographyDebugger">DemographyDebugger (class in fwdpy11)</a>
-</li>
-      <li><a href="pages/types.html#fwdpy11.MutationRecord.derived_state">derived_state (fwdpy11.MutationRecord attribute)</a>
+      <li><a href="pages/types.html#fwdpy11.DemographicModelDetails">DemographicModelDetails (class in fwdpy11)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="pages/types.html#fwdpy11.DemographyDebugger">DemographyDebugger (class in fwdpy11)</a>
+</li>
+      <li><a href="pages/types.html#fwdpy11.MutationRecord.derived_state">derived_state (fwdpy11.MutationRecord attribute)</a>
+</li>
       <li><a href="pages/types.html#fwdpy11.DiploidPopulation.diploid_metadata">diploid_metadata (fwdpy11.DiploidPopulation property)</a>
 </li>
       <li><a href="pages/genetic_values.html#fwdpy11.DiploidGeneticValue">DiploidGeneticValue (class in fwdpy11)</a>
@@ -1004,8 +982,6 @@ title="Open an issue"
       <li><a href="pages/types.html#fwdpy11.DiploidVector">DiploidVector (class in fwdpy11)</a>
 </li>
       <li><a href="pages/definitions.html#term-direct"><strong>direct</strong></a>
-</li>
-      <li><a href="pages/types.html#fwdpy11.DiscreteDemography">DiscreteDemography (class in fwdpy11)</a>
 </li>
       <li><a href="pages/regiontypes.html#fwdpy11.DiscreteDESD">DiscreteDESD (class in fwdpy11)</a>
 </li>
@@ -1029,15 +1005,13 @@ title="Open an issue"
 </li>
       <li><a href="pages/types.html#fwdpy11.EdgeTable">EdgeTable (class in fwdpy11)</a>
 </li>
-      <li><a href="pages/types.html#fwdpy11.Mutation.esizes">esizes (fwdpy11.Mutation attribute)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="pages/types.html#fwdpy11.Mutation.esizes">esizes (fwdpy11.Mutation attribute)</a>
+</li>
       <li><a href="pages/conditional_models.html#fwdpy11.conditional_models.EvolveOptions">EvolveOptions (class in fwdpy11.conditional_models)</a>
 </li>
       <li><a href="pages/functions.html#fwdpy11.evolvets">evolvets() (in module fwdpy11)</a>
-</li>
-      <li><a href="pages/functions.html#fwdpy11.exponential_growth_rate">exponential_growth_rate() (in module fwdpy11)</a>
 </li>
       <li><a href="pages/regiontypes.html#fwdpy11.ExponentialDominance">ExponentialDominance (class in fwdpy11)</a>
 </li>
@@ -1049,6 +1023,8 @@ title="Open an issue"
 <h2 id="F">F</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="pages/types.html#fwdpy11.ForwardDemesGraph.final_generation">final_generation (fwdpy11.ForwardDemesGraph property)</a>
+</li>
       <li><a href="pages/types.html#fwdpy11.DiploidGenotype.first">first (fwdpy11.DiploidGenotype attribute)</a>
 </li>
       <li><a href="pages/definitions.html#term-fitness"><strong>fitness</strong></a>
@@ -1059,20 +1035,26 @@ title="Open an issue"
 </li>
       <li><a href="pages/conditional_models.html#fwdpy11.conditional_models.FocalDemeFixation">FocalDemeFixation (class in fwdpy11.conditional_models)</a>
 </li>
+      <li><a href="pages/types.html#fwdpy11.ForwardDemesGraph">ForwardDemesGraph (class in fwdpy11)</a>
+</li>
       <li><a href="pages/conditional_models.html#fwdpy11.conditional_models.NewMutationParameters.frequency">frequency (fwdpy11.conditional_models.NewMutationParameters attribute)</a>
 </li>
       <li><a href="pages/conditional_models.html#fwdpy11.conditional_models.FrequencyRange">FrequencyRange (class in fwdpy11.conditional_models)</a>
 </li>
-      <li><a href="pages/functions.html#fwdpy11.discrete_demography.from_demes">from_demes() (in module fwdpy11.discrete_demography)</a>
+      <li><a href="pages/types.html#fwdpy11.ForwardDemesGraph.from_demes">from_demes() (fwdpy11.ForwardDemesGraph class method)</a>
+
+      <ul>
+        <li><a href="pages/functions.html#fwdpy11.discrete_demography.from_demes">(in module fwdpy11.discrete_demography)</a>
 </li>
+      </ul></li>
       <li><a href="pages/genetic_values.html#fwdpy11.Additive.fromdict">fromdict() (fwdpy11.Additive class method)</a>
 
       <ul>
         <li><a href="pages/conditional_models.html#fwdpy11.conditional_models.EvolveOptions.fromdict">(fwdpy11.conditional_models.EvolveOptions class method)</a>
 </li>
-        <li><a href="pages/demographic_models.html#fwdpy11.demographic_models.DemographicModelDetails.fromdict">(fwdpy11.demographic_models.DemographicModelDetails class method)</a>
+        <li><a href="pages/types.html#fwdpy11.DemographicModelDetails.fromdict">(fwdpy11.DemographicModelDetails class method)</a>
 </li>
-        <li><a href="pages/types.html#fwdpy11.DiscreteDemography.fromdict">(fwdpy11.DiscreteDemography class method)</a>
+        <li><a href="pages/types.html#fwdpy11.ForwardDemesGraph.fromdict">(fwdpy11.ForwardDemesGraph class method)</a>
 </li>
         <li><a href="pages/gvaluenoise.html#fwdpy11.GaussianNoise.fromdict">(fwdpy11.GaussianNoise class method)</a>
 </li>
@@ -1108,6 +1090,8 @@ title="Open an issue"
         <li><a href="pages/advancedtopics.html#fwdpy11.additive_effects">built-in function</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     fwdpy11.conditional_models
 
@@ -1122,8 +1106,6 @@ title="Open an issue"
         <li><a href="pages/advancedtopics.html#fwdpy11.custom_genetic_value_decorators.default_update">built-in function</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     fwdpy11.custom_genetic_value_decorators.genetic_value_is_trait_default_clone()
 
@@ -1136,27 +1118,6 @@ title="Open an issue"
 
       <ul>
         <li><a href="pages/advancedtopics.html#fwdpy11.custom_genetic_value_decorators.genetic_value_noise_default_clone">built-in function</a>
-</li>
-      </ul></li>
-      <li>
-    fwdpy11.demographic_models
-
-      <ul>
-        <li><a href="pages/demographic_models.html#module-fwdpy11.demographic_models">module</a>
-</li>
-      </ul></li>
-      <li>
-    fwdpy11.demographic_models.human
-
-      <ul>
-        <li><a href="pages/demographic_models.html#module-fwdpy11.demographic_models.human">module</a>
-</li>
-      </ul></li>
-      <li>
-    fwdpy11.demographic_models.IM
-
-      <ul>
-        <li><a href="pages/demographic_models.html#module-fwdpy11.demographic_models.IM">module</a>
 </li>
       </ul></li>
       <li><a href="pages/advancedtopics.html#fwdpy11.DiploidGeneticValueNoiseData">fwdpy11.DiploidGeneticValueNoiseData (built-in class)</a>
@@ -1198,8 +1159,6 @@ title="Open an issue"
         <li><a href="pages/gslrandom.html#fwdpy11.gsl_rng_uniform">built-in function</a>
 </li>
       </ul></li>
-      <li><a href="pages/types.html#fwdpy11.NOGROWTH">fwdpy11.NOGROWTH (built-in variable)</a>
-</li>
       <li><a href="pages/advancedtopics.html#fwdpy11.PyDiploidGeneticValue">fwdpy11.PyDiploidGeneticValue (built-in class)</a>
 </li>
       <li><a href="pages/advancedtopics.html#fwdpy11.PyDiploidGeneticValueData">fwdpy11.PyDiploidGeneticValueData (built-in class)</a>
@@ -1316,19 +1275,15 @@ title="Open an issue"
 </li>
       <li><a href="pages/functions.html#fwdpy11.infinite_sites">infinite_sites() (in module fwdpy11)</a>
 </li>
+      <li><a href="pages/types.html#fwdpy11.ForwardDemesGraph.initial_sizes">initial_sizes (fwdpy11.ForwardDemesGraph property)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="pages/types.html#fwdpy11.DemographicModelDetails.initial_sizes_list">initial_sizes_list (fwdpy11.DemographicModelDetails property)</a>
+</li>
       <li><a href="pages/types.html#fwdpy11.TableCollection.input_left">input_left (fwdpy11.TableCollection property)</a>
 </li>
       <li><a href="pages/tskit_tools.html#fwdpy11.tskit_tools.iterate_timepoints_with_individuals">iterate_timepoints_with_individuals() (in module fwdpy11.tskit_tools)</a>
-</li>
-  </ul></td>
-</tr></table>
-
-<h2 id="J">J</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="pages/demographic_models.html#fwdpy11.demographic_models.human.jouganous_three_deme">jouganous_three_deme() (in module fwdpy11.demographic_models.human)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -1380,8 +1335,6 @@ title="Open an issue"
 <h2 id="M">M</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="pages/types.html#fwdpy11.MigrationMatrix.M">M (fwdpy11.MigrationMatrix attribute)</a>
-</li>
       <li><a href="pages/genetic_values.html#fwdpy11.Additive.maps_to_fitness">maps_to_fitness (fwdpy11.Additive property)</a>
 
       <ul>
@@ -1410,8 +1363,6 @@ title="Open an issue"
         <li><a href="pages/genetic_values.html#fwdpy11.StrictAdditiveMultivariateEffects.maps_to_trait_value">(fwdpy11.StrictAdditiveMultivariateEffects property)</a>
 </li>
       </ul></li>
-      <li><a href="pages/types.html#fwdpy11.MassMigration">MassMigration (class in fwdpy11)</a>
-</li>
       <li><a href="pages/conditional_models.html#fwdpy11.conditional_models.AlleleCountRange.maximum">maximum (fwdpy11.conditional_models.AlleleCountRange attribute)</a>
 
       <ul>
@@ -1419,10 +1370,6 @@ title="Open an issue"
 </li>
       </ul></li>
       <li><a href="pages/datamatrix.html#fwdpy11.DataMatrix.merge">merge() (fwdpy11.DataMatrix method)</a>
-</li>
-      <li><a href="pages/functions.html#fwdpy11.migration_matrix_single_extant_deme">migration_matrix_single_extant_deme() (in module fwdpy11)</a>
-</li>
-      <li><a href="pages/types.html#fwdpy11.MigrationMatrix">MigrationMatrix (class in fwdpy11)</a>
 </li>
       <li><a href="pages/conditional_models.html#fwdpy11.conditional_models.AlleleCountRange.minimum">minimum (fwdpy11.conditional_models.AlleleCountRange attribute)</a>
 
@@ -1438,19 +1385,11 @@ title="Open an issue"
       <ul>
         <li><a href="pages/conditional_models.html#module-fwdpy11.conditional_models">fwdpy11.conditional_models</a>
 </li>
-        <li><a href="pages/demographic_models.html#module-fwdpy11.demographic_models">fwdpy11.demographic_models</a>
-</li>
-        <li><a href="pages/demographic_models.html#module-fwdpy11.demographic_models.human">fwdpy11.demographic_models.human</a>
-</li>
-        <li><a href="pages/demographic_models.html#module-fwdpy11.demographic_models.IM">fwdpy11.demographic_models.IM</a>
-</li>
         <li><a href="pages/tskit_tools.html#module-fwdpy11.tskit_tools">fwdpy11.tskit_tools</a>
 </li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="pages/types.html#fwdpy11.move_individuals">move_individuals() (in module fwdpy11)</a>
-</li>
       <li><a href="pages/genetic_values.html#fwdpy11.Multiplicative">Multiplicative (class in fwdpy11)</a>
 </li>
       <li><a href="pages/regiontypes.html#fwdpy11.MultivariateGaussianEffects">MultivariateGaussianEffects (class in fwdpy11)</a>
@@ -1631,10 +1570,6 @@ title="Open an issue"
 </li>
       <li><a href="pages/regiontypes.html#fwdpy11.Region">Region (class in fwdpy11)</a>
 </li>
-      <li><a href="pages/demographic_models.html#fwdpy11.DemographyDebugger.report">report (fwdpy11.DemographyDebugger property)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pages/conditional_models.html#fwdpy11.conditional_models.PositionRange.right">right (fwdpy11.conditional_models.PositionRange attribute)</a>
 
       <ul>
@@ -1643,6 +1578,8 @@ title="Open an issue"
         <li><a href="pages/types.html#fwdpy11.TreeIterator.right">(fwdpy11.TreeIterator property)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pages/types.html#fwdpy11.TreeIterator.right_child">right_child() (fwdpy11.TreeIterator method)</a>
 </li>
       <li><a href="pages/types.html#fwdpy11.TreeIterator.right_sib">right_sib() (fwdpy11.TreeIterator method)</a>
@@ -1691,14 +1628,6 @@ title="Open an issue"
 </li>
       <li><a href="pages/conditional_models.html#fwdpy11.conditional_models.selective_sweep">selective_sweep() (in module fwdpy11.conditional_models)</a>
 </li>
-      <li><a href="pages/types.html#fwdpy11.SetDemeSize">SetDemeSize (class in fwdpy11)</a>
-</li>
-      <li><a href="pages/types.html#fwdpy11.SetExponentialGrowth">SetExponentialGrowth (class in fwdpy11)</a>
-</li>
-      <li><a href="pages/types.html#fwdpy11.SetMigrationRates">SetMigrationRates (class in fwdpy11)</a>
-</li>
-      <li><a href="pages/types.html#fwdpy11.SetSelfingRate">SetSelfingRate (class in fwdpy11)</a>
-</li>
       <li><a href="pages/types.html#fwdpy11.DiploidMetadata.sex">sex (fwdpy11.DiploidMetadata property)</a>
 </li>
       <li><a href="pages/genetic_values.html#fwdpy11.Additive.shape">shape (fwdpy11.Additive property)</a>
@@ -1709,8 +1638,6 @@ title="Open an issue"
         <li><a href="pages/genetic_values.html#fwdpy11.GBR.shape">(fwdpy11.GBR property)</a>
 </li>
         <li><a href="pages/gvalue_to_fitness.html#fwdpy11.GeneticValueToFitnessMap.shape">(fwdpy11.GeneticValueToFitnessMap property)</a>
-</li>
-        <li><a href="pages/types.html#fwdpy11.MigrationMatrix.shape">(fwdpy11.MigrationMatrix attribute)</a>
 </li>
         <li><a href="pages/genetic_values.html#fwdpy11.Multiplicative.shape">(fwdpy11.Multiplicative property)</a>
 </li>
@@ -1769,11 +1696,9 @@ title="Open an issue"
         <li><a href="pages/types.html#fwdpy11.TreeIterator.tables">(fwdpy11.TreeIterator property)</a>
 </li>
       </ul></li>
-      <li><a href="pages/demographic_models.html#fwdpy11.demographic_models.human.tennessen">tennessen() (in module fwdpy11.demographic_models.human)</a>
-</li>
-      <li><a href="pages/demographic_models.html#fwdpy11.demographic_models.human.TennessenModel">TennessenModel (class in fwdpy11.demographic_models.human)</a>
-</li>
       <li><a href="pages/types.html#fwdpy11.Node.time">time (fwdpy11.Node attribute)</a>
+</li>
+      <li><a href="pages/types.html#fwdpy11.DemographicModelDetails.total_simulation_length">total_simulation_length (fwdpy11.DemographicModelDetails property)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -1785,11 +1710,7 @@ title="Open an issue"
 </li>
       <li><a href="pages/types.html#fwdpy11.TreeIterator">TreeIterator (class in fwdpy11)</a>
 </li>
-      <li><a href="pages/demographic_models.html#fwdpy11.demographic_models.IM.two_deme_IM">two_deme_IM() (in module fwdpy11.demographic_models.IM)</a>
-</li>
-      <li><a href="pages/demographic_models.html#fwdpy11.demographic_models.IM.TwoDemeIMMetaData">TwoDemeIMMetaData (class in fwdpy11.demographic_models.IM)</a>
-</li>
-      <li><a href="pages/demographic_models.html#fwdpy11.demographic_models.IM.TwoDemeIMParameters">TwoDemeIMParameters (class in fwdpy11.demographic_models.IM)</a>
+      <li><a href="pages/types.html#fwdpy11.ForwardDemesGraph.tubes">tubes() (fwdpy11.ForwardDemesGraph class method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -1809,12 +1730,6 @@ title="Open an issue"
 <h2 id="V">V</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="pages/demographic_models.html#fwdpy11.demographic_models.human.TennessenModel.V0">V0 (fwdpy11.demographic_models.human.TennessenModel attribute)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="pages/demographic_models.html#fwdpy11.demographic_models.human.TennessenModel.V1">V1 (fwdpy11.demographic_models.human.TennessenModel attribute)</a>
-</li>
       <li><a href="pages/types.html#fwdpy11.VariantIterator">VariantIterator (class in fwdpy11)</a>
 </li>
   </ul></td>

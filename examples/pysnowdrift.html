@@ -53,7 +53,7 @@ const thebe_selector_output = ".output, .cell_output"
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Example of time series analysis implemented in C++" href="recorder.html" />
-    <link rel="prev" title="Symmetric migration between two demes" href="migtest.html" />
+    <link rel="prev" title="Adaptation to different optima with multivariate distribution of effect sizes" href="gss_divergent_optima.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -225,6 +225,11 @@ const thebe_selector_output = ".output, .cell_output"
    Adding neutral mutations to a population with existing ancestry
   </a>
  </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/import_mutations_from_tskit.html">
+   Importing mutations from tskit
+  </a>
+ </li>
 </ul>
 <p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
@@ -246,11 +251,6 @@ const thebe_selector_output = ".output, .cell_output"
     </span>
    </code>
    to specify demographic models.
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/demography_debugger_vignette.html">
-   Debugging demographic models
   </a>
  </li>
 </ul>
@@ -283,6 +283,11 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toctree-l1">
   <a class="reference internal" href="../short_vignettes/special_considerations_demes_models.html">
    Special considerations for demes models
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/genetic_values_multi_deme_models_advanced.html">
+   Advanced topics
   </a>
  </li>
 </ul>
@@ -376,11 +381,6 @@ const thebe_selector_output = ".output, .cell_output"
 </p>
 <ul class="nav bd-sidenav">
  <li class="toctree-l1">
-  <a class="reference internal" href="../pages/tutorial.html">
-   Tutorial
-  </a>
- </li>
- <li class="toctree-l1">
   <a class="reference internal" href="../pages/advancedtopics.html">
    Advanced topics
   </a>
@@ -392,11 +392,6 @@ const thebe_selector_output = ".output, .cell_output"
  </span>
 </p>
 <ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../pages/softselection.html">
-   Soft selection with discrete demes
-  </a>
- </li>
  <li class="toctree-l1">
   <a class="reference internal" href="../pages/mvdes.html">
    Different effect sizes of mutations in different demes
@@ -468,11 +463,6 @@ const thebe_selector_output = ".output, .cell_output"
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../pages/demographic_models.html">
-   The demography debugger
-  </a>
- </li>
- <li class="toctree-l1">
   <a class="reference internal" href="../pages/functions.html">
    Function documentation
   </a>
@@ -537,21 +527,6 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toctree-l1">
   <a class="reference internal" href="gss_divergent_optima.html">
    Adaptation to different optima with multivariate distribution of effect sizes
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="IM.html">
-   Isolation-with-migration (IM)
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="localadaptation.html">
-   Local adaptation of a quantitative trait
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="migtest.html">
-   Symmetric migration between two demes
   </a>
  </li>
  <li class="toctree-l1 current active">
@@ -782,7 +757,7 @@ title="Print to PDF"
                 
   <section class="tex2jax_ignore mathjax_ignore" id="snowdrift-model-in-python">
 <span id="pysnowdrift"></span><h1>Snowdrift model in python<a class="headerlink" href="#snowdrift-model-in-python" title="Permalink to this headline">#</a></h1>
-<p>A Python implementation of the model described in <span id="id1">[<a class="reference internal" href="../misc/bibliography.html#id17" title="Michael Doebeli, Christoph Hauert, and Timothy Killingback. The evolutionary origin of cooperators and defectors. Science, 306(5697):859–862, October 2004. doi:10.1126/science.1101456.">DHK04</a>]</span>.
+<p>A Python implementation of the model described in <span id="id1">[<a class="reference internal" href="../misc/bibliography.html#id18" title="Michael Doebeli, Christoph Hauert, and Timothy Killingback. The evolutionary origin of cooperators and defectors. Science, 306(5697):859–862, October 2004.">DHK04</a>]</span>.
 See <a class="reference internal" href="../pages/advancedtopics.html#gvalues-python"><span class="std std-ref">here</span></a> for how to implement genetic value
 calculations in Python.</p>
 <p>Implementing this model in C++ gives much better performance with little
@@ -791,7 +766,7 @@ the C++ version.</p>
 <figure class="align-default" id="id2">
 <img alt="../_images/pysnowdrift.png" src="../_images/pysnowdrift.png" />
 <figcaption>
-<p><span class="caption-number">Fig. 8 </span><span class="caption-text">Example output from the script.  The y axis values are simple
+<p><span class="caption-number">Fig. 4 </span><span class="caption-text">Example output from the script.  The y axis values are simple
 indexes of sampling events. Sampling occurrs every 100 generations,
 so multiply by that value for the generation.</span><a class="headerlink" href="#id2" title="Permalink to this image">#</a></p>
 </figcaption>
@@ -960,11 +935,11 @@ so multiply by that value for the generation.</span><a class="headerlink" href="
                 
     <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="migtest.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="gss_divergent_optima.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Symmetric migration between two demes</p>
+            <p class="prev-next-title">Adaptation to different optima with multivariate distribution of effect sizes</p>
         </div>
     </a>
     <a class='right-next' id="next-link" href="recorder.html" title="next page">

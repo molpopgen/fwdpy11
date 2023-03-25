@@ -225,6 +225,11 @@ const thebe_selector_output = ".output, .cell_output"
    Adding neutral mutations to a population with existing ancestry
   </a>
  </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="import_mutations_from_tskit.html">
+   Importing mutations from tskit
+  </a>
+ </li>
 </ul>
 <p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
@@ -246,11 +251,6 @@ const thebe_selector_output = ".output, .cell_output"
     </span>
    </code>
    to specify demographic models.
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="demography_debugger_vignette.html">
-   Debugging demographic models
   </a>
  </li>
 </ul>
@@ -283,6 +283,11 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toctree-l1">
   <a class="reference internal" href="special_considerations_demes_models.html">
    Special considerations for demes models
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="genetic_values_multi_deme_models_advanced.html">
+   Advanced topics
   </a>
  </li>
 </ul>
@@ -376,11 +381,6 @@ const thebe_selector_output = ".output, .cell_output"
 </p>
 <ul class="nav bd-sidenav">
  <li class="toctree-l1">
-  <a class="reference internal" href="../pages/tutorial.html">
-   Tutorial
-  </a>
- </li>
- <li class="toctree-l1">
   <a class="reference internal" href="../pages/advancedtopics.html">
    Advanced topics
   </a>
@@ -392,11 +392,6 @@ const thebe_selector_output = ".output, .cell_output"
  </span>
 </p>
 <ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../pages/softselection.html">
-   Soft selection with discrete demes
-  </a>
- </li>
  <li class="toctree-l1">
   <a class="reference internal" href="../pages/mvdes.html">
    Different effect sizes of mutations in different demes
@@ -468,11 +463,6 @@ const thebe_selector_output = ".output, .cell_output"
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../pages/demographic_models.html">
-   The demography debugger
-  </a>
- </li>
- <li class="toctree-l1">
   <a class="reference internal" href="../pages/functions.html">
    Function documentation
   </a>
@@ -537,21 +527,6 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toctree-l1">
   <a class="reference internal" href="../examples/gss_divergent_optima.html">
    Adaptation to different optima with multivariate distribution of effect sizes
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../examples/IM.html">
-   Isolation-with-migration (IM)
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../examples/localadaptation.html">
-   Local adaptation of a quantitative trait
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../examples/migtest.html">
-   Symmetric migration between two demes
   </a>
  </li>
  <li class="toctree-l1">
@@ -941,7 +916,7 @@ The simulation done here is taken from <a class="reference internal" href="../lo
 <span class="n">GSSmo</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSSmo</span><span class="p">(</span>
     <span class="p">[</span>
         <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Optimum</span><span class="p">(</span><span class="n">when</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">optimum</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">VS</span><span class="o">=</span><span class="mf">1.0</span><span class="p">),</span>
-        <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Optimum</span><span class="p">(</span><span class="n">when</span><span class="o">=</span><span class="mi">10</span> <span class="o">*</span> <span class="n">pop</span><span class="o">.</span><span class="n">N</span><span class="p">,</span> <span class="n">optimum</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">VS</span><span class="o">=</span><span class="mf">1.0</span><span class="p">),</span>
+        <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Optimum</span><span class="p">(</span><span class="n">when</span><span class="o">=</span><span class="mi">10</span> <span class="o">*</span> <span class="n">pop</span><span class="o">.</span><span class="n">N</span> <span class="o">-</span> <span class="mi">200</span><span class="p">,</span> <span class="n">optimum</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">VS</span><span class="o">=</span><span class="mf">1.0</span><span class="p">),</span>
     <span class="p">]</span>
 <span class="p">)</span>
 
@@ -954,12 +929,18 @@ The simulation done here is taken from <a class="reference internal" href="../lo
     <span class="s2">&quot;recregions&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">PoissonInterval</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="n">rho</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">pop</span><span class="o">.</span><span class="n">N</span><span class="p">))],</span>
     <span class="s2">&quot;rates&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1e-3</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
     <span class="s2">&quot;prune_selected&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-    <span class="s2">&quot;demography&quot;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiscreteDemography</span><span class="p">(),</span>
-    <span class="s2">&quot;simlen&quot;</span><span class="p">:</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">pop</span><span class="o">.</span><span class="n">N</span> <span class="o">+</span> <span class="mi">200</span><span class="p">,</span>
+    <span class="s2">&quot;demography&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="s2">&quot;simlen&quot;</span><span class="p">:</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">pop</span><span class="o">.</span><span class="n">N</span><span class="p">,</span>
 <span class="p">}</span>
 <span class="n">params</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="n">p</span><span class="p">)</span>
 
 <span class="n">fwdpy11</span><span class="o">.</span><span class="n">evolvets</span><span class="p">(</span><span class="n">rng</span><span class="p">,</span> <span class="n">pop</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">suppress_table_indexing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/runner/work/fwdpy11/fwdpy11/fwdpy11/_evolvets.py:147: UserWarning: Applying a default demographic model where deme sizes are [500] and the burn-in length is 10*500
+  warnings.warn(msg)
 </pre></div>
 </div>
 </div>
@@ -975,7 +956,7 @@ The simulation done here is taken from <a class="reference internal" href="../lo
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Total number of diploids = 500
-Current generation = 5200
+Current generation = 5000
 </pre></div>
 </div>
 </div>
@@ -992,11 +973,11 @@ These objects do not have nice representations in Python:</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&lt;fwdpy11._fwdpy11.Mutation at 0x7fb8c90124b0&gt;,
- &lt;fwdpy11._fwdpy11.Mutation at 0x7fb8c9011ef0&gt;,
- &lt;fwdpy11._fwdpy11.Mutation at 0x7fb8c9002c30&gt;,
- &lt;fwdpy11._fwdpy11.Mutation at 0x7fb8c90006f0&gt;,
- &lt;fwdpy11._fwdpy11.Mutation at 0x7fb8c9002c70&gt;]
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&lt;fwdpy11._fwdpy11.Mutation at 0x7f995c50fd70&gt;,
+ &lt;fwdpy11._fwdpy11.Mutation at 0x7f995c50cd30&gt;,
+ &lt;fwdpy11._fwdpy11.Mutation at 0x7f995c50e230&gt;,
+ &lt;fwdpy11._fwdpy11.Mutation at 0x7f995c50e0f0&gt;,
+ &lt;fwdpy11._fwdpy11.Mutation at 0x7f995c50d330&gt;]
 </pre></div>
 </div>
 </div>
@@ -1010,10 +991,10 @@ These objects do not have nice representations in Python:</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>position = 0.6483045711647719
-effect_size = 0.023315680999283495
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>position = 0.6127802762202919
+effect_size = -0.022110190349565278
 dominance = 1.0
-origin time = 5102
+origin time = 4511
 </pre></div>
 </div>
 </div>
@@ -1032,11 +1013,11 @@ Diploids store the indexes of their individual genomes, which we describe below.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[DiploidGenotype(first=212, second=504),
- DiploidGenotype(first=0, second=2),
- DiploidGenotype(first=746, second=4),
- DiploidGenotype(first=510, second=5),
- DiploidGenotype(first=695, second=6)]
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[DiploidGenotype(first=1, second=624),
+ DiploidGenotype(first=471, second=270),
+ DiploidGenotype(first=210, second=596),
+ DiploidGenotype(first=559, second=2),
+ DiploidGenotype(first=567, second=4)]
 </pre></div>
 </div>
 </div>
@@ -1056,11 +1037,11 @@ That class is also a <a class="reference external" href="https://numpy.org/doc/s
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([(0.60778115, 0., 0.92596595, [0., 0., 0.], 0, [117, 140], 0, 0, [0, 1]),
-       (0.74487248, 0., 0.96797887, [0., 0., 0.], 1, [ 66, 370], 0, 0, [2, 3]),
-       (1.13551792, 0., 0.99085948, [0., 0., 0.], 2, [444,  33], 0, 0, [4, 5]),
-       (0.76849376, 0., 0.9735583 , [0., 0., 0.], 3, [ 91, 306], 0, 0, [6, 7]),
-       (1.04182506, 0., 0.99912571, [0., 0., 0.], 4, [ 84,  85], 0, 0, [8, 9])],
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([(1.10704541, 0., 0.99428702, [0., 0., 0.], 0, [124,  38], 0, 0, [0, 1]),
+       (0.72834507, 0., 0.96377424, [0., 0., 0.], 1, [264,  27], 0, 0, [2, 3]),
+       (0.8343338 , 0., 0.98637108, [0., 0., 0.], 2, [111, 338], 0, 0, [4, 5]),
+       (1.10704541, 0., 0.99428702, [0., 0., 0.], 3, [311, 274], 0, 0, [6, 7]),
+       (0.9436857 , 0., 0.99841561, [0., 0., 0.], 4, [316, 124], 0, 0, [8, 9])],
       dtype=[(&#39;g&#39;, &#39;&lt;f8&#39;), (&#39;e&#39;, &#39;&lt;f8&#39;), (&#39;w&#39;, &#39;&lt;f8&#39;), (&#39;geography&#39;, &#39;&lt;f8&#39;, (3,)), (&#39;label&#39;, &#39;&lt;u8&#39;), (&#39;parents&#39;, &#39;&lt;u8&#39;, (2,)), (&#39;deme&#39;, &#39;&lt;i4&#39;), (&#39;sex&#39;, &#39;&lt;i4&#39;), (&#39;nodes&#39;, &#39;&lt;i4&#39;, (2,))])
 </pre></div>
 </div>
@@ -1075,8 +1056,8 @@ That class is also a <a class="reference external" href="https://numpy.org/doc/s
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Mean trait value = 0.7913.
-Mean fitness = 0.9663
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Mean trait value = 0.8998.
+Mean fitness = 0.9880
 </pre></div>
 </div>
 </div>
@@ -1109,11 +1090,12 @@ Let’s look at the effect sizes and origin times of mutations in the first non-
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>effect size = 0.1171, origin time = 4781
-effect size = 0.2068, origin time = 5056
-effect size = 0.0084, origin time = 5145
-effect size = -0.0330, origin time = 2015
-effect size = 0.0064, origin time = 2756
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>effect size = 0.1634, origin time = 4843
+effect size = 0.0078, origin time = 4421
+effect size = 0.0644, origin time = 4592
+effect size = 0.1151, origin time = 4788
+effect size = 0.1521, origin time = 4823
+effect size = 0.0508, origin time = 4740
 </pre></div>
 </div>
 </div>
@@ -1125,7 +1107,7 @@ effect size = 0.0064, origin time = 2756
 </section>
 <section id="tables">
 <h2>Tables<a class="headerlink" href="#tables" title="Permalink to this headline">#</a></h2>
-<p>A population contains an instance of <a class="reference internal" href="../pages/types.html#fwdpy11.TableCollection" title="fwdpy11.TableCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.TableCollection</span></code></a> which is used to represent the genetic ancestry of the sample using the methods described in <span id="id1">[<a class="reference internal" href="../misc/bibliography.html#id10" title="Jerome Kelleher, Kevin R Thornton, Jaime Ashander, and Peter L Ralph. Efficient pedigree recording for fast population genetics simulation. PLoS Comput. Biol., 14(11):e1006581, November 2018. doi:10.1371/journal.pcbi.1006581.">KTAR18</a>]</span>.</p>
+<p>A population contains an instance of <a class="reference internal" href="../pages/types.html#fwdpy11.TableCollection" title="fwdpy11.TableCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.TableCollection</span></code></a> which is used to represent the genetic ancestry of the sample using the methods described in <span id="id1">[<a class="reference internal" href="../misc/bibliography.html#id12" title="Jerome Kelleher, Kevin R Thornton, Jaime Ashander, and Peter L Ralph. Efficient pedigree recording for fast population genetics simulation. PLoS Comput. Biol., 14(11):e1006581, November 2018.">KTAR18</a>]</span>.</p>
 <p>The table contents are described in the class documentation.
 All tables can be accessed either as Python objects or as <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.recarray.html#numpy.recarray" title="(in NumPy v1.24)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.recarray</span></code></a> objects as we say above for diploid meta data.</p>
 </section>

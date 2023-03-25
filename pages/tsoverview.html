@@ -227,6 +227,11 @@ const thebe_selector_output = ".output, .cell_output"
    Adding neutral mutations to a population with existing ancestry
   </a>
  </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/import_mutations_from_tskit.html">
+   Importing mutations from tskit
+  </a>
+ </li>
 </ul>
 <p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
@@ -248,11 +253,6 @@ const thebe_selector_output = ".output, .cell_output"
     </span>
    </code>
    to specify demographic models.
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/demography_debugger_vignette.html">
-   Debugging demographic models
   </a>
  </li>
 </ul>
@@ -285,6 +285,11 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toctree-l1">
   <a class="reference internal" href="../short_vignettes/special_considerations_demes_models.html">
    Special considerations for demes models
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/genetic_values_multi_deme_models_advanced.html">
+   Advanced topics
   </a>
  </li>
 </ul>
@@ -378,11 +383,6 @@ const thebe_selector_output = ".output, .cell_output"
 </p>
 <ul class="nav bd-sidenav">
  <li class="toctree-l1">
-  <a class="reference internal" href="tutorial.html">
-   Tutorial
-  </a>
- </li>
- <li class="toctree-l1">
   <a class="reference internal" href="advancedtopics.html">
    Advanced topics
   </a>
@@ -394,11 +394,6 @@ const thebe_selector_output = ".output, .cell_output"
  </span>
 </p>
 <ul class="current nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="softselection.html">
-   Soft selection with discrete demes
-  </a>
- </li>
  <li class="toctree-l1">
   <a class="reference internal" href="mvdes.html">
    Different effect sizes of mutations in different demes
@@ -470,11 +465,6 @@ const thebe_selector_output = ".output, .cell_output"
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="demographic_models.html">
-   The demography debugger
-  </a>
- </li>
- <li class="toctree-l1">
   <a class="reference internal" href="functions.html">
    Function documentation
   </a>
@@ -539,21 +529,6 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toctree-l1">
   <a class="reference internal" href="../examples/gss_divergent_optima.html">
    Adaptation to different optima with multivariate distribution of effect sizes
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../examples/IM.html">
-   Isolation-with-migration (IM)
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../examples/localadaptation.html">
-   Local adaptation of a quantitative trait
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../examples/migtest.html">
-   Symmetric migration between two demes
   </a>
  </li>
  <li class="toctree-l1">
@@ -872,8 +847,8 @@ title="Print to PDF"
 <p><code class="docutils literal notranslate"><span class="pre">fwdpy11</span></code> 0.2.0 added support for tree sequence recording (<code class="docutils literal notranslate"><span class="pre">TSR</span></code>),
 which is a method to both speed up forward-time simulations and to
 track the entire genealogical history of the simulation.
-The key reference describing <code class="docutils literal notranslate"><span class="pre">TSR</span></code> is <span id="id1">[<a class="reference internal" href="../misc/bibliography.html#id19" title="Jerome Kelleher, Alison M Etheridge, and Gilean McVean. Efficient coalescent simulation and genealogical analysis for large sample sizes. PLoS Comput. Biol., 12(5):e1004842, May 2016. doi:10.1371/journal.pcbi.1004842.">KEM16</a>]</span>, which in turn relies
-heavily on concepts described in <span id="id2">[<a class="reference internal" href="../misc/bibliography.html#id19" title="Jerome Kelleher, Alison M Etheridge, and Gilean McVean. Efficient coalescent simulation and genealogical analysis for large sample sizes. PLoS Comput. Biol., 12(5):e1004842, May 2016. doi:10.1371/journal.pcbi.1004842.">KEM16</a>]</span>.</p>
+The key reference describing <code class="docutils literal notranslate"><span class="pre">TSR</span></code> is <span id="id1">[<a class="reference internal" href="../misc/bibliography.html#id20" title="Jerome Kelleher, Alison M Etheridge, and Gilean McVean. Efficient coalescent simulation and genealogical analysis for large sample sizes. PLoS Comput. Biol., 12(5):e1004842, May 2016.">KEM16</a>]</span>, which in turn relies
+heavily on concepts described in <span id="id2">[<a class="reference internal" href="../misc/bibliography.html#id20" title="Jerome Kelleher, Alison M Etheridge, and Gilean McVean. Efficient coalescent simulation and genealogical analysis for large sample sizes. PLoS Comput. Biol., 12(5):e1004842, May 2016.">KEM16</a>]</span>.</p>
 <p>The goal of <code class="docutils literal notranslate"><span class="pre">TSR</span></code> is to track a set of tables that contain the trees describing the ancestry of the population.</p>
 <section id="trees-and-tables">
 <h2>Trees and tables<a class="headerlink" href="#trees-and-tables" title="Permalink to this headline">#</a></h2>
@@ -910,7 +885,7 @@ heavily on concepts described in <span id="id2">[<a class="reference internal" h
 </figure>
 <p>This tree is the “marginal” history of a genomic segment covering the half-open interval <span class="math notranslate nohighlight">\([0, 1)\)</span>.
 In other words, all genomic positions in this interval have the same ancestry, and recombination results in different intervals having different trees.</p>
-<p>Following <span id="id3">[<a class="reference internal" href="../misc/bibliography.html#id19" title="Jerome Kelleher, Alison M Etheridge, and Gilean McVean. Efficient coalescent simulation and genealogical analysis for large sample sizes. PLoS Comput. Biol., 12(5):e1004842, May 2016. doi:10.1371/journal.pcbi.1004842.">KEM16</a>]</span>, we can represent the above tree using two tables:</p>
+<p>Following <span id="id3">[<a class="reference internal" href="../misc/bibliography.html#id20" title="Jerome Kelleher, Alison M Etheridge, and Gilean McVean. Efficient coalescent simulation and genealogical analysis for large sample sizes. PLoS Comput. Biol., 12(5):e1004842, May 2016.">KEM16</a>]</span>, we can represent the above tree using two tables:</p>
 <div class="cell tag_hide-input docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>

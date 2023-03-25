@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Details of demes integration &#8212; fwdpy11 manual</title>
+    <title>Importing mutations from tskit &#8212; fwdpy11 manual</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -50,12 +50,10 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
-    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
-    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Technical overview of genetic value calculations" href="genetic_values.html" />
-    <link rel="prev" title="Time series analysis" href="../pages/recorders.html" />
+    <link rel="next" title="Introduction" href="demography_vignettes_intro.html" />
+    <link rel="prev" title="Adding neutral mutations to a population with existing ancestry" href="neutralmutsafter_vignette.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -139,12 +137,12 @@ const thebe_selector_output = ".output, .cell_output"
 </p>
 <ul class="nav bd-sidenav">
  <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/initpops_vignette.html">
+  <a class="reference internal" href="initpops_vignette.html">
    Initializing a population
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/poptour_vignette.html">
+  <a class="reference internal" href="poptour_vignette.html">
    Properties of populations
   </a>
  </li>
@@ -156,47 +154,47 @@ const thebe_selector_output = ".output, .cell_output"
 </p>
 <ul class="nav bd-sidenav">
  <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/genetics_vignettes_intro.html">
+  <a class="reference internal" href="genetics_vignettes_intro.html">
    Introduction
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/geneticmaps_vignette.html">
+  <a class="reference internal" href="geneticmaps_vignette.html">
    Genetic maps
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/des_vignette.html">
+  <a class="reference internal" href="des_vignette.html">
    Distributions of effect sizes
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/mutationdominance_vignette.html">
+  <a class="reference internal" href="mutationdominance_vignette.html">
    Mutations with variable dominance
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/neutralmuts_vignette.html">
+  <a class="reference internal" href="neutralmuts_vignette.html">
    Neutral mutations during a simulation
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/gvalues_fitness.html">
+  <a class="reference internal" href="gvalues_fitness.html">
    Genetic values - mutations with direct effects on fitness
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/gvalues_traits.html">
+  <a class="reference internal" href="gvalues_traits.html">
    Genetic values - simulating phenotypes/traits.
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/workingexample_fitness.html">
+  <a class="reference internal" href="workingexample_fitness.html">
    Working example - parameters for simulating direct effects on fitness
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/workingexample_trait.html">
+  <a class="reference internal" href="workingexample_trait.html">
    Working example - parameters for the simulation of a trait
   </a>
  </li>
@@ -206,29 +204,29 @@ const thebe_selector_output = ".output, .cell_output"
   Short vignettes - simulation with tree sequence recording
  </span>
 </p>
-<ul class="nav bd-sidenav">
+<ul class="current nav bd-sidenav">
  <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/evolvets_vignette.html">
+  <a class="reference internal" href="evolvets_vignette.html">
    Evolving with tree sequence recording
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/recorders_vignette.html">
+  <a class="reference internal" href="recorders_vignette.html">
    Recording data during a simulation
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/recapitation.html">
+  <a class="reference internal" href="recapitation.html">
    Finishing a simulation with msprime
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/neutralmutsafter_vignette.html">
+  <a class="reference internal" href="neutralmutsafter_vignette.html">
    Adding neutral mutations to a population with existing ancestry
   </a>
  </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/import_mutations_from_tskit.html">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
    Importing mutations from tskit
   </a>
  </li>
@@ -240,12 +238,12 @@ const thebe_selector_output = ".output, .cell_output"
 </p>
 <ul class="nav bd-sidenav">
  <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/demography_vignettes_intro.html">
+  <a class="reference internal" href="demography_vignettes_intro.html">
    Introduction
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/demes_vignette.html">
+  <a class="reference internal" href="demes_vignette.html">
    Using
    <code class="docutils literal notranslate">
     <span class="pre">
@@ -263,32 +261,32 @@ const thebe_selector_output = ".output, .cell_output"
 </p>
 <ul class="nav bd-sidenav">
  <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/varying_fitness_conditions_across_demes_intro.html">
+  <a class="reference internal" href="varying_fitness_conditions_across_demes_intro.html">
    Introduction
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/multivariate_gaussian_effect_sizes_across_demes.html">
+  <a class="reference internal" href="multivariate_gaussian_effect_sizes_across_demes.html">
    The multivariate Gaussian distribution
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/multivariate_lognormal_effect_sizes.html">
+  <a class="reference internal" href="multivariate_lognormal_effect_sizes.html">
    The multivariate lognormal distribution
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/custom_multivarate_distributions.html">
+  <a class="reference internal" href="custom_multivarate_distributions.html">
    “Custom” multivariate distributions
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/special_considerations_demes_models.html">
+  <a class="reference internal" href="special_considerations_demes_models.html">
    Special considerations for demes models
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/genetic_values_multi_deme_models_advanced.html">
+  <a class="reference internal" href="genetic_values_multi_deme_models_advanced.html">
    Advanced topics
   </a>
  </li>
@@ -300,17 +298,17 @@ const thebe_selector_output = ".output, .cell_output"
 </p>
 <ul class="nav bd-sidenav">
  <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/trackmutationfates.html">
+  <a class="reference internal" href="trackmutationfates.html">
    Tracking user-specified new mutations
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/selective_sweep.html">
+  <a class="reference internal" href="selective_sweep.html">
    Selective sweeps
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/incomplete_sweep.html">
+  <a class="reference internal" href="incomplete_sweep.html">
    Incomplete selective sweeps
   </a>
  </li>
@@ -425,9 +423,9 @@ const thebe_selector_output = ".output, .cell_output"
   Technical details
  </span>
 </p>
-<ul class="current nav bd-sidenav">
- <li class="toctree-l1 current active">
-  <a class="current reference internal" href="#">
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../technical/demes.html">
    Details of
    <code class="docutils literal notranslate">
     <span class="pre">
@@ -438,12 +436,12 @@ const thebe_selector_output = ".output, .cell_output"
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="genetic_values.html">
+  <a class="reference internal" href="../technical/genetic_values.html">
    Technical overview of genetic value calculations
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="writingplugins.html">
+  <a class="reference internal" href="../technical/writingplugins.html">
    Writing “plugins” with C++
   </a>
  </li>
@@ -629,6 +627,17 @@ title="Toggle navigation"
         
     </div>
     <div class="header-article__right">
+<div class="menu-dropdown menu-dropdown-launch-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Launch interactive content">
+      <i class="fas fa-rocket"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+    </ul>
+  </div>
+</div>
+
 <button onclick="toggleFullScreen()"
   class="headerbtn"
   data-toggle="tooltip"
@@ -668,7 +677,7 @@ title="Source repository"
       </li>
       
       <li>
-        <a href="https://github.com/molpopgen/fwdpy11/issues/new?title=Issue%20on%20page%20%2Ftechnical/demes.html&body=Your%20issue%20content%20here."
+        <a href="https://github.com/molpopgen/fwdpy11/issues/new?title=Issue%20on%20page%20%2Fshort_vignettes/import_mutations_from_tskit.html&body=Your%20issue%20content%20here."
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -696,7 +705,24 @@ title="Open an issue"
   <div class="menu-dropdown__content">
     <ul>
       <li>
-        <a href="../_sources/technical/demes.md"
+        <a href="../_sources/short_vignettes/import_mutations_from_tskit.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download notebook file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-code"></i>
+  </span>
+<span class="headerbtn__text-container">.ipynb</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="../_sources/short_vignettes/import_mutations_from_tskit.md"
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -733,70 +759,23 @@ title="Print to PDF"
     </ul>
   </div>
 </div>
-<label for="__page-toc"
-  class="headerbtn headerbtn-page-toc"
-  
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-list"></i>
-  </span>
-
-</label>
 
     </div>
 </div>
 
 <!-- Table of contents -->
 <div class="col-md-3 bd-toc show noprint">
-    <div class="tocsection onthispage pt-5 pb-3">
-        <i class="fas fa-list"></i> Contents
-    </div>
-    <nav id="bd-toc-nav" aria-label="Page">
-        <ul class="visible nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#burn-in-times">
-   “Burn-in” times
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#selfing">
-   Selfing
-  </a>
- </li>
-</ul>
-
-    </nav>
 </div>
     </div>
     <div class="article row">
         <div class="col pl-md-3 pl-lg-5 content-container">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>Details of demes integration</h1>
+                <h1>Importing mutations from tskit</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
                         
-                        <div>
-                            <h2> Contents </h2>
-                        </div>
-                        <nav aria-label="Page">
-                            <ul class="visible nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#burn-in-times">
-   “Burn-in” times
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#selfing">
-   Selfing
-  </a>
- </li>
-</ul>
-
-                        </nav>
                     </div>
                 </div>
             </div>
@@ -804,88 +783,110 @@ title="Print to PDF"
                 
               <div>
                 
-  <section class="tex2jax_ignore mathjax_ignore" id="details-of-demes-integration">
-<span id="demes-details"></span><h1>Details of <code class="docutils literal notranslate"><span class="pre">demes</span></code> integration<a class="headerlink" href="#details-of-demes-integration" title="Permalink to this headline">#</a></h1>
-<p>This page gives various technical details regarding <code class="docutils literal notranslate"><span class="pre">fwdpy11</span></code> and <a class="reference external" href="https://popsim-consortium.github.io/demes-docs/main/"><code class="docutils literal notranslate"><span class="pre">demes</span></code></a> models.
-See <a class="reference internal" href="../short_vignettes/demes_vignette.html#demes-vignette"><span class="std std-ref">the vignette</span></a> for an overview.</p>
-<section id="burn-in-times">
-<h2>“Burn-in” times<a class="headerlink" href="#burn-in-times" title="Permalink to this headline">#</a></h2>
-<p>When specifying a burn-in time for a population, that time
-corresponds to epochs in the past where the demographic history
-of all ancestral demes (those with start times of infinity) are constant.</p>
-<p>For example, let’s revisit the model from <a class="reference internal" href="../short_vignettes/demes_vignette.html#demes-vignette"><span class="std std-ref">before</span></a>:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">An example demes model</span>
-<span class="nt">time_units</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">generations</span>
-<span class="nt">demes</span><span class="p">:</span>
-<span class="w"> </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ancestor1</span>
-<span class="w">   </span><span class="nt">epochs</span><span class="p">:</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">start_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100</span>
-<span class="w">      </span><span class="nt">end_time</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">50</span>
-<span class="w"> </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ancestor2</span>
-<span class="w">   </span><span class="nt">epochs</span><span class="p">:</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">start_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">250</span>
-<span class="w">      </span><span class="nt">end_time</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">50</span>
-<span class="w"> </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">admixed</span>
-<span class="w">   </span><span class="nt">start_time</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">50</span>
-<span class="w">   </span><span class="nt">ancestors</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">ancestor1</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">ancestor2</span><span class="p p-Indicator">]</span>
-<span class="w">   </span><span class="nt">proportions</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0.90</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.10</span><span class="p p-Indicator">]</span>
-<span class="w">   </span><span class="nt">epochs</span><span class="p">:</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">start_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100</span>
+  <section class="tex2jax_ignore mathjax_ignore" id="importing-mutations-from-tskit">
+<span id="import-mutations-from-tskit-vignette"></span><h1>Importing mutations from tskit<a class="headerlink" href="#importing-mutations-from-tskit" title="Permalink to this headline">#</a></h1>
+<p>This vignette shows how to add mutations to a tree sequence
+generated by <code class="docutils literal notranslate"><span class="pre">msprime</span></code> and import them into <code class="docutils literal notranslate"><span class="pre">fwdpy11</span></code>.
+The key idea is that we add mutations to the tree sequence
+using the <code class="docutils literal notranslate"><span class="pre">fwdpy11</span></code> metadata schema.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">msprime</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">tskit</span>
+
+<span class="n">ts</span> <span class="o">=</span> <span class="n">msprime</span><span class="o">.</span><span class="n">sim_ancestry</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span>
+                          <span class="n">recombination_rate</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                          <span class="n">sequence_length</span><span class="o">=</span><span class="mf">1e6</span><span class="p">,</span>
+                          <span class="n">population_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+                          <span class="n">random_seed</span><span class="o">=</span><span class="mi">54321</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Here, we have two ancestral demes, each with a single epoch.
-In other words, the size history of these two demes is constant
-from time 50 in the past back to “infinity”.</p>
-<p>For cases like this one, any “burn in” time is simply the history of the
-ancestral demes.</p>
-<p>For such a model, 49 generations ago will correspond to first time offspring
-are born after the burning phase has ended.</p>
-<p>Let’s modify the model to add a second epoch to <code class="docutils literal notranslate"><span class="pre">ancestor2</span></code>:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">An example demes model</span>
-<span class="nt">time_units</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">generations</span>
-<span class="nt">demes</span><span class="p">:</span>
-<span class="w"> </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ancestor1</span>
-<span class="w">   </span><span class="nt">epochs</span><span class="p">:</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">start_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100</span>
-<span class="w">      </span><span class="nt">end_time</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">50</span>
-<span class="w"> </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ancestor2</span>
-<span class="w">   </span><span class="nt">epochs</span><span class="p">:</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">start_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100</span>
-<span class="w">      </span><span class="nt">end_time</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">60</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">start_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">250</span>
-<span class="w">      </span><span class="nt">end_time</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">50</span>
-<span class="w"> </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">admixed</span>
-<span class="w">   </span><span class="nt">start_time</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">50</span>
-<span class="w">   </span><span class="nt">ancestors</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">ancestor1</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">ancestor2</span><span class="p p-Indicator">]</span>
-<span class="w">   </span><span class="nt">proportions</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0.90</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.10</span><span class="p p-Indicator">]</span>
-<span class="w">   </span><span class="nt">epochs</span><span class="p">:</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">start_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100</span>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tables</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">tables</span>
 </pre></div>
 </div>
-<p>Now we have a size change in the ancestral population 60 generations ago.
-That event is relevant to contemporary patterns of variation.
-Therefore, our burn-in phase must end one generation prior to the size change.</p>
-<p>See <a class="reference internal" href="../pages/types.html#fwdpy11.ForwardDemesGraph.from_demes" title="fwdpy11.ForwardDemesGraph.from_demes"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.ForwardDemesGraph.from_demes()</span></code></a> for details on how to set
-the burn-in times.
-The <a class="reference internal" href="../short_vignettes/demes_vignette.html#demes-vignette"><span class="std std-ref">vignette</span></a> has examples.</p>
-</section>
-<section id="selfing">
-<h2>Selfing<a class="headerlink" href="#selfing" title="Permalink to this headline">#</a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">fwdpy11</span></code> simulates according to Wright-Fisher dynamics.
-This means that parents are chosen with replacement and proportionally to their fitnesses.</p>
-<p>When an epoch has a selfing rate of zero, sampling with replacement actually implies
-a residual selfing rate of <span class="math notranslate nohighlight">\(O(1/N)\)</span> (assuming that individual fitnesses are
-all close to 1.0).</p>
-<p>Further, an epoch with a selfing rate <span class="math notranslate nohighlight">\(0 &lt; S \leq 1/N\)</span> will have a realized
-selfing rate <em>larger than</em> <span class="math notranslate nohighlight">\(S\)</span>.
-(An individual will not self with probability <span class="math notranslate nohighlight">\(1-S\)</span> and will then be chosen
-again as a parent with probability <span class="math notranslate nohighlight">\(O(1/N)\)</span>.)</p>
-<p>If this behavior is not desired, pass <code class="docutils literal notranslate"><span class="pre">allow_residual_selfing</span> <span class="pre">=</span> <span class="pre">False</span></code> when constructing
-instances of <a class="reference internal" href="../pages/model_params.html#fwdpy11.ModelParams" title="fwdpy11.ModelParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.ModelParams</span></code></a>.
-Passing <code class="docutils literal notranslate"><span class="pre">False</span></code> will prevent an individual from being picked twice as a parent.
-See the documentation of <a class="reference internal" href="../pages/model_params.html#fwdpy11.ModelParams" title="fwdpy11.ModelParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.ModelParams</span></code></a> for details about errors
-that may occur if deme sizes get down to a single individual.</p>
-</section>
+</div>
+</div>
+<p>Add the <code class="docutils literal notranslate"><span class="pre">fwdpy11</span></code> mutation metadata schema:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fwdpy11</span>
+
+<span class="n">tables</span><span class="o">.</span><span class="n">mutations</span><span class="o">.</span><span class="n">metadata_schema</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">tskit_tools</span><span class="o">.</span><span class="n">metadata_schema</span><span class="o">.</span><span class="n">MutationMetadata</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now, we add a single mutation on the first node we encounter that has at least
+10 sample descendants.</p>
+<p>We will add a mutation with a dominance of 1.0 and a selection coefficient of 0.01.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tree</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">tree</span><span class="o">.</span><span class="n">nodes</span><span class="p">():</span>
+    <span class="k">if</span> <span class="n">tree</span><span class="o">.</span><span class="n">num_samples</span><span class="p">(</span><span class="n">node</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">10</span><span class="p">:</span>
+        <span class="c1"># NOTE: mutations times must </span>
+        <span class="c1"># fall in the half open interval</span>
+        <span class="c1"># of [node time, node&#39;s parent node time)</span>
+        <span class="c1"># Here, we crudely make sure this happens</span>
+        <span class="c1"># while also respecting fwdpy11&#39;s requirement</span>
+        <span class="c1"># that times are integer-values</span>
+        <span class="n">ntime</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">node</span><span class="p">(</span><span class="n">node</span><span class="p">)</span><span class="o">.</span><span class="n">time</span>
+        <span class="n">ptime</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">node</span><span class="p">(</span><span class="n">tree</span><span class="o">.</span><span class="n">parent</span><span class="p">(</span><span class="n">node</span><span class="p">))</span><span class="o">.</span><span class="n">time</span>
+        <span class="k">if</span> <span class="n">ptime</span> <span class="o">-</span> <span class="n">ntime</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">time</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">ntime</span> <span class="o">+</span> <span class="p">(</span><span class="n">ptime</span> <span class="o">-</span> <span class="n">ntime</span><span class="p">)</span><span class="o">/</span><span class="mf">2.0</span><span class="p">)</span>
+            <span class="n">md</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;s&#39;</span><span class="p">:</span> <span class="mf">0.01</span><span class="p">,</span>
+                  <span class="s1">&#39;h&#39;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+                  <span class="s1">&#39;origin&#39;</span><span class="p">:</span> <span class="n">time</span><span class="p">,</span>
+                  <span class="s1">&#39;label&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span>
+                  <span class="c1"># NOTE: always write the</span>
+                  <span class="c1"># next 2 lines as shown here.</span>
+                  <span class="c1"># The fwdpy11 back end will do</span>
+                  <span class="c1"># the right thing.</span>
+                  <span class="c1"># A future release will provide a</span>
+                  <span class="c1"># nicer API so that you only need</span>
+                  <span class="c1"># to provide the previous 2 fields.</span>
+                  <span class="s1">&#39;neutral&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                  <span class="s1">&#39;key&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+                 <span class="p">}</span>
+            <span class="n">site</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">sites</span><span class="o">.</span><span class="n">add_row</span><span class="p">(</span><span class="n">tables</span><span class="o">.</span><span class="n">sequence_length</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;0&#39;</span><span class="p">)</span>
+            <span class="n">tables</span><span class="o">.</span><span class="n">mutations</span><span class="o">.</span><span class="n">add_row</span><span class="p">(</span><span class="n">site</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span>
+                                     <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="n">time</span><span class="p">,</span>
+                                     <span class="n">metadata</span><span class="o">=</span><span class="n">md</span><span class="p">)</span>
+            <span class="k">break</span>
+
+<span class="n">tables</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+<span class="n">ts_with_muts</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">tree_sequence</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Create a population and lift over the mutations:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="o">.</span><span class="n">create_from_tskit</span><span class="p">(</span><span class="n">ts_with_muts</span><span class="p">,</span> <span class="n">import_mutations</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Print the number of times each mutation appears in the population and its internal data:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">c</span><span class="p">,</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">mcounts</span><span class="p">,</span> <span class="n">pop</span><span class="o">.</span><span class="n">mutations</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="s2">&quot;-&gt;&quot;</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>48 -&gt; Mutation[position:500000.000000, effect size:0.010000, dominance:1.000000, origin time:-180, label:0]
+</pre></div>
+</div>
+</div>
+</div>
 </section>
 
     <script type="text/x-thebe-config">
@@ -901,7 +902,7 @@ that may occur if deme sizes get down to a single individual.</p>
         },
         kernelOptions: {
             name: "python3",
-            path: "./technical"
+            path: "./short_vignettes"
         },
         predefinedOutput: true
     }
@@ -915,17 +916,17 @@ that may occur if deme sizes get down to a single individual.</p>
                 
     <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="../pages/recorders.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="neutralmutsafter_vignette.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Time series analysis</p>
+            <p class="prev-next-title">Adding neutral mutations to a population with existing ancestry</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="genetic_values.html" title="next page">
+    <a class='right-next' id="next-link" href="demography_vignettes_intro.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Technical overview of genetic value calculations</p>
+        <p class="prev-next-title">Introduction</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>

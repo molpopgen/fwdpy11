@@ -227,6 +227,11 @@ const thebe_selector_output = ".output, .cell_output"
    Adding neutral mutations to a population with existing ancestry
   </a>
  </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/import_mutations_from_tskit.html">
+   Importing mutations from tskit
+  </a>
+ </li>
 </ul>
 <p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
@@ -248,11 +253,6 @@ const thebe_selector_output = ".output, .cell_output"
     </span>
    </code>
    to specify demographic models.
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/demography_debugger_vignette.html">
-   Debugging demographic models
   </a>
  </li>
 </ul>
@@ -285,6 +285,11 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toctree-l1">
   <a class="reference internal" href="../short_vignettes/special_considerations_demes_models.html">
    Special considerations for demes models
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/genetic_values_multi_deme_models_advanced.html">
+   Advanced topics
   </a>
  </li>
 </ul>
@@ -378,11 +383,6 @@ const thebe_selector_output = ".output, .cell_output"
 </p>
 <ul class="nav bd-sidenav">
  <li class="toctree-l1">
-  <a class="reference internal" href="../pages/tutorial.html">
-   Tutorial
-  </a>
- </li>
- <li class="toctree-l1">
   <a class="reference internal" href="../pages/advancedtopics.html">
    Advanced topics
   </a>
@@ -394,11 +394,6 @@ const thebe_selector_output = ".output, .cell_output"
  </span>
 </p>
 <ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../pages/softselection.html">
-   Soft selection with discrete demes
-  </a>
- </li>
  <li class="toctree-l1">
   <a class="reference internal" href="../pages/mvdes.html">
    Different effect sizes of mutations in different demes
@@ -470,11 +465,6 @@ const thebe_selector_output = ".output, .cell_output"
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../pages/demographic_models.html">
-   The demography debugger
-  </a>
- </li>
- <li class="toctree-l1">
   <a class="reference internal" href="../pages/functions.html">
    Function documentation
   </a>
@@ -539,21 +529,6 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toctree-l1">
   <a class="reference internal" href="../examples/gss_divergent_optima.html">
    Adaptation to different optima with multivariate distribution of effect sizes
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../examples/IM.html">
-   Isolation-with-migration (IM)
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../examples/localadaptation.html">
-   Local adaptation of a quantitative trait
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../examples/migtest.html">
-   Symmetric migration between two demes
   </a>
  </li>
  <li class="toctree-l1">
@@ -812,7 +787,7 @@ title="Print to PDF"
                 
   <section class="tex2jax_ignore mathjax_ignore" id="background-selection">
 <span id="bgs-vignette"></span><h1>Background selection<a class="headerlink" href="#background-selection" title="Permalink to this headline">#</a></h1>
-<p>This vignette recreates results from <span id="id1">[<a class="reference internal" href="../misc/bibliography.html#id25" title="R R Hudson and N L Kaplan. Deleterious background selection with recombination. Genetics, 141(4):1605–1617, December 1995.">HK95</a>]</span>.</p>
+<p>This vignette recreates results from <span id="id1">[<a class="reference internal" href="../misc/bibliography.html#id26" title="R R Hudson and N L Kaplan. Deleterious background selection with recombination. Genetics, 141(4):1605–1617, December 1995.">HK95</a>]</span>.</p>
 <p>The physical layout of the genome follows their Figure 1.
 The fact that the neutral region is non-recombining is a major simplification for the analysis.
 By definition, a single tree describes the history of that region.
@@ -828,17 +803,19 @@ If that were not the case, we would have to take the weighted mean of summaries 
 
     <span class="n">pdict</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;gvalue&quot;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Multiplicative</span><span class="p">(</span><span class="mf">2.0</span><span class="p">),</span>
-        <span class="s2">&quot;rates&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">U</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">,</span> <span class="n">R</span><span class="p">),</span>  <span class="c1"># The U/2. is from their eqn. 2.</span>
+        <span class="s2">&quot;rates&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">U</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>  <span class="c1"># The U/2. is from their eqn. 2.</span>
         <span class="s2">&quot;nregions&quot;</span><span class="p">:</span> <span class="p">[],</span>
         <span class="s2">&quot;sregions&quot;</span><span class="p">:</span> <span class="p">[</span>
             <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ConstantS</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.02</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span>
             <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ConstantS</span><span class="p">(</span><span class="mf">2.0</span> <span class="o">/</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.02</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span>
         <span class="p">],</span>
         <span class="s2">&quot;recregions&quot;</span><span class="p">:</span> <span class="p">[</span>
-            <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Region</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
-            <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Region</span><span class="p">(</span><span class="mf">2.0</span> <span class="o">/</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+            <span class="n">fwdpy11</span><span class="o">.</span><span class="n">PoissonInterval</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="mf">3.0</span><span class="p">,</span> <span class="n">R</span><span class="o">/</span><span class="mf">2.0</span><span class="p">),</span>
+            <span class="n">fwdpy11</span><span class="o">.</span><span class="n">PoissonInterval</span><span class="p">(</span><span class="mf">2.0</span> <span class="o">/</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">R</span><span class="o">/</span><span class="mf">2.0</span><span class="p">),</span>
         <span class="p">],</span>
-        <span class="s2">&quot;demography&quot;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiscreteDemography</span><span class="p">(),</span>
+        <span class="c1"># Evolve a single deme of size N for 20*N </span>
+        <span class="c1"># generations</span>
+        <span class="s2">&quot;demography&quot;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ForwardDemesGraph</span><span class="o">.</span><span class="n">tubes</span><span class="p">([</span><span class="n">N</span><span class="p">],</span> <span class="mi">20</span><span class="p">),</span>
         <span class="s2">&quot;simlen&quot;</span><span class="p">:</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">N</span><span class="p">,</span>
     <span class="p">}</span>
     <span class="n">params</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="n">pdict</span><span class="p">)</span>
@@ -876,7 +853,7 @@ If that were not the case, we would have to take the weighted mean of summaries 
 </div>
 </div>
 </div>
-<p>The following function runs the parameters in line 4 of Table 1 from <span id="id2">[<a class="reference internal" href="../misc/bibliography.html#id25" title="R R Hudson and N L Kaplan. Deleterious background selection with recombination. Genetics, 141(4):1605–1617, December 1995.">HK95</a>]</span>.</p>
+<p>The following function runs the parameters in line 4 of Table 1 from <span id="id2">[<a class="reference internal" href="../misc/bibliography.html#id26" title="R R Hudson and N L Kaplan. Deleterious background selection with recombination. Genetics, 141(4):1605–1617, December 1995.">HK95</a>]</span>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">hk95_table1_line4</span><span class="p">(</span><span class="n">seed</span><span class="p">):</span>

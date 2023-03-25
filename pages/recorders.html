@@ -225,6 +225,11 @@ const thebe_selector_output = ".output, .cell_output"
    Adding neutral mutations to a population with existing ancestry
   </a>
  </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/import_mutations_from_tskit.html">
+   Importing mutations from tskit
+  </a>
+ </li>
 </ul>
 <p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
@@ -246,11 +251,6 @@ const thebe_selector_output = ".output, .cell_output"
     </span>
    </code>
    to specify demographic models.
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/demography_debugger_vignette.html">
-   Debugging demographic models
   </a>
  </li>
 </ul>
@@ -283,6 +283,11 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toctree-l1">
   <a class="reference internal" href="../short_vignettes/special_considerations_demes_models.html">
    Special considerations for demes models
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/genetic_values_multi_deme_models_advanced.html">
+   Advanced topics
   </a>
  </li>
 </ul>
@@ -376,11 +381,6 @@ const thebe_selector_output = ".output, .cell_output"
 </p>
 <ul class="nav bd-sidenav">
  <li class="toctree-l1">
-  <a class="reference internal" href="tutorial.html">
-   Tutorial
-  </a>
- </li>
- <li class="toctree-l1">
   <a class="reference internal" href="advancedtopics.html">
    Advanced topics
   </a>
@@ -392,11 +392,6 @@ const thebe_selector_output = ".output, .cell_output"
  </span>
 </p>
 <ul class="current nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="softselection.html">
-   Soft selection with discrete demes
-  </a>
- </li>
  <li class="toctree-l1">
   <a class="reference internal" href="mvdes.html">
    Different effect sizes of mutations in different demes
@@ -468,11 +463,6 @@ const thebe_selector_output = ".output, .cell_output"
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="demographic_models.html">
-   The demography debugger
-  </a>
- </li>
- <li class="toctree-l1">
   <a class="reference internal" href="functions.html">
    Function documentation
   </a>
@@ -537,21 +527,6 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toctree-l1">
   <a class="reference internal" href="../examples/gss_divergent_optima.html">
    Adaptation to different optima with multivariate distribution of effect sizes
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../examples/IM.html">
-   Isolation-with-migration (IM)
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../examples/localadaptation.html">
-   Local adaptation of a quantitative trait
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../examples/migtest.html">
-   Symmetric migration between two demes
   </a>
  </li>
  <li class="toctree-l1">
@@ -811,8 +786,7 @@ title="Print to PDF"
   <section class="tex2jax_ignore mathjax_ignore" id="time-series-analysis">
 <span id="timeseries"></span><h1>Time series analysis<a class="headerlink" href="#time-series-analysis" title="Permalink to this headline">#</a></h1>
 <p>fwdpy11 allows populations to be analyzed during the course of a simulation.  Any valid callable type
-may be used.  The most useful such type will be a class defining <code class="docutils literal notranslate"><span class="pre">__call__</span></code> to update member data, as
-was done in <a class="reference internal" href="tutorial.html#tutorial"><span class="std std-ref">Tutorial</span></a>.</p>
+may be used.  The most useful such type will be a class defining <code class="docutils literal notranslate"><span class="pre">__call__</span></code> to update member data.</p>
 <p>There are built-in types to handle common scenarios:</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="fwdpy11.RandomAncientSamples">
@@ -893,8 +867,8 @@ via a numpy array with dtype uint32:</p>
 </div>
 </div>
 <p>The important thing to keep in mind is that user-defined callable
-types can do essentially <em>anything</em>.  For example, in <a class="reference internal" href="tutorial.html#tutorial"><span class="std std-ref">Tutorial</span></a>,
-summaries of trait variation were also recorded.  When recording samples
+types can do essentially <em>anything</em>.<br />
+When recording samples
 to preserve, “anything goes”.  For example, you could pick samples with the top <code class="docutils literal notranslate"><span class="pre">x</span></code> and
 the lowest <code class="docutils literal notranslate"><span class="pre">y</span></code> fitnesses.  You could pick individuals based on their genetic load, whether or
 not they carry a specific variant, etc..  It is up to you.</p>

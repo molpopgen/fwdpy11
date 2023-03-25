@@ -225,6 +225,11 @@ const thebe_selector_output = ".output, .cell_output"
    Adding neutral mutations to a population with existing ancestry
   </a>
  </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/import_mutations_from_tskit.html">
+   Importing mutations from tskit
+  </a>
+ </li>
 </ul>
 <p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
@@ -246,11 +251,6 @@ const thebe_selector_output = ".output, .cell_output"
     </span>
    </code>
    to specify demographic models.
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/demography_debugger_vignette.html">
-   Debugging demographic models
   </a>
  </li>
 </ul>
@@ -283,6 +283,11 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toctree-l1">
   <a class="reference internal" href="../short_vignettes/special_considerations_demes_models.html">
    Special considerations for demes models
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/genetic_values_multi_deme_models_advanced.html">
+   Advanced topics
   </a>
  </li>
 </ul>
@@ -376,11 +381,6 @@ const thebe_selector_output = ".output, .cell_output"
 </p>
 <ul class="nav bd-sidenav">
  <li class="toctree-l1">
-  <a class="reference internal" href="../pages/tutorial.html">
-   Tutorial
-  </a>
- </li>
- <li class="toctree-l1">
   <a class="reference internal" href="../pages/advancedtopics.html">
    Advanced topics
   </a>
@@ -392,11 +392,6 @@ const thebe_selector_output = ".output, .cell_output"
  </span>
 </p>
 <ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../pages/softselection.html">
-   Soft selection with discrete demes
-  </a>
- </li>
  <li class="toctree-l1">
   <a class="reference internal" href="../pages/mvdes.html">
    Different effect sizes of mutations in different demes
@@ -468,11 +463,6 @@ const thebe_selector_output = ".output, .cell_output"
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../pages/demographic_models.html">
-   The demography debugger
-  </a>
- </li>
- <li class="toctree-l1">
   <a class="reference internal" href="../pages/functions.html">
    Function documentation
   </a>
@@ -537,21 +527,6 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toctree-l1">
   <a class="reference internal" href="../examples/gss_divergent_optima.html">
    Adaptation to different optima with multivariate distribution of effect sizes
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../examples/IM.html">
-   Isolation-with-migration (IM)
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../examples/localadaptation.html">
-   Local adaptation of a quantitative trait
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../examples/migtest.html">
-   Symmetric migration between two demes
   </a>
  </li>
  <li class="toctree-l1">
@@ -1062,8 +1037,8 @@ We will generate the model from a <a class="reference external" href="https://po
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">initial_history</span> <span class="o">=</span> <span class="n">msprime</span><span class="o">.</span><span class="n">sim_ancestry</span><span class="p">(</span>
-    <span class="n">samples</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">Nref</span><span class="p">,</span>
-    <span class="n">population_size</span> <span class="o">=</span> <span class="n">Nref</span><span class="p">,</span>
+    <span class="n">samples</span> <span class="o">=</span> <span class="n">Nref</span><span class="p">,</span>
+    <span class="n">population_size</span> <span class="o">=</span> <span class="n">Nref</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span>
     <span class="n">random_seed</span> <span class="o">=</span> <span class="mi">12345</span><span class="p">,</span>
     <span class="n">recombination_rate</span> <span class="o">=</span> <span class="n">RECRATE</span> <span class="o">/</span> <span class="n">L</span><span class="p">,</span>
     <span class="n">discrete_genome</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
@@ -1101,18 +1076,18 @@ We will generate the model from a <a class="reference external" href="https://po
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;esizes&#39;: [-0.008194291199486217, -0.008194291177536308, -0.022149988005024778], &#39;h&#39;: 1.0, &#39;heffects&#39;: [1.0, 1.0, 1.0], &#39;key&#39;: 0, &#39;label&#39;: 0, &#39;neutral&#39;: False, &#39;origin&#39;: 102, &#39;s&#39;: 0.0}
-{&#39;esizes&#39;: [-0.00670761460827434, -0.006707614484449482, -0.0038931687779355443], &#39;h&#39;: 1.0, &#39;heffects&#39;: [1.0, 1.0, 1.0], &#39;key&#39;: 2, &#39;label&#39;: 0, &#39;neutral&#39;: False, &#39;origin&#39;: 136, &#39;s&#39;: 0.0}
-{&#39;esizes&#39;: [-0.0070506930041513635, -0.007050693219746693, -0.017067426607408006], &#39;h&#39;: 1.0, &#39;heffects&#39;: [1.0, 1.0, 1.0], &#39;key&#39;: 6, &#39;label&#39;: 0, &#39;neutral&#39;: False, &#39;origin&#39;: 143, &#39;s&#39;: 0.0}
-{&#39;esizes&#39;: [-0.00879653072005719, -0.008796530520772559, -0.00511350689894381], &#39;h&#39;: 1.0, &#39;heffects&#39;: [1.0, 1.0, 1.0], &#39;key&#39;: 1, &#39;label&#39;: 0, &#39;neutral&#39;: False, &#39;origin&#39;: 104, &#39;s&#39;: 0.0}
-{&#39;esizes&#39;: [-0.006719015957570394, -0.006719015790410149, -0.010460403530483314], &#39;h&#39;: 1.0, &#39;heffects&#39;: [1.0, 1.0, 1.0], &#39;key&#39;: 8, &#39;label&#39;: 0, &#39;neutral&#39;: False, &#39;origin&#39;: 146, &#39;s&#39;: 0.0}
-{&#39;esizes&#39;: [-0.007951665402753664, -0.007951665285224932, -0.0020371061917801472], &#39;h&#39;: 1.0, &#39;heffects&#39;: [1.0, 1.0, 1.0], &#39;key&#39;: 10, &#39;label&#39;: 0, &#39;neutral&#39;: False, &#39;origin&#39;: 94, &#39;s&#39;: 0.0}
-{&#39;esizes&#39;: [-0.0032465550402395638, -0.0032465549405847017, -0.001435896821872106], &#39;h&#39;: 1.0, &#39;heffects&#39;: [1.0, 1.0, 1.0], &#39;key&#39;: 5, &#39;label&#39;: 0, &#39;neutral&#39;: False, &#39;origin&#39;: 140, &#39;s&#39;: 0.0}
-{&#39;esizes&#39;: [-0.0013137864251136263, -0.0013137864489052684, -0.009665399379226388], &#39;h&#39;: 1.0, &#39;heffects&#39;: [1.0, 1.0, 1.0], &#39;key&#39;: 11, &#39;label&#39;: 0, &#39;neutral&#39;: False, &#39;origin&#39;: 99, &#39;s&#39;: 0.0}
-{&#39;esizes&#39;: [-0.00724180689701593, -0.007241806852948975, -0.007786598276615362], &#39;h&#39;: 1.0, &#39;heffects&#39;: [1.0, 1.0, 1.0], &#39;key&#39;: 9, &#39;label&#39;: 0, &#39;neutral&#39;: False, &#39;origin&#39;: 85, &#39;s&#39;: 0.0}
-{&#39;esizes&#39;: [-0.009862617953014637, -0.009862617677750535, -0.016825430211413344], &#39;h&#39;: 1.0, &#39;heffects&#39;: [1.0, 1.0, 1.0], &#39;key&#39;: 7, &#39;label&#39;: 0, &#39;neutral&#39;: False, &#39;origin&#39;: 146, &#39;s&#39;: 0.0}
-{&#39;esizes&#39;: [-0.010257209767976283, -0.01025720980860215, -0.004003950578811581], &#39;h&#39;: 1.0, &#39;heffects&#39;: [1.0, 1.0, 1.0], &#39;key&#39;: 4, &#39;label&#39;: 0, &#39;neutral&#39;: False, &#39;origin&#39;: 140, &#39;s&#39;: 0.0}
-{&#39;esizes&#39;: [-0.0035716107368928686, -0.0035716108781342127, -0.006449585515382224], &#39;h&#39;: 1.0, &#39;heffects&#39;: [1.0, 1.0, 1.0], &#39;key&#39;: 3, &#39;label&#39;: 0, &#39;neutral&#39;: False, &#39;origin&#39;: 139, &#39;s&#39;: 0.0}
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;esizes&#39;: [-0.012623238903808174, -0.012623239205499553, -0.0016703468456438187], &#39;h&#39;: 1.0, &#39;heffects&#39;: [1.0, 1.0, 1.0], &#39;key&#39;: 9, &#39;label&#39;: 0, &#39;neutral&#39;: False, &#39;origin&#39;: 143, &#39;s&#39;: 0.0}
+{&#39;esizes&#39;: [-0.0003653137107332991, -0.0003653137049199985, -0.008385608495355528], &#39;h&#39;: 1.0, &#39;heffects&#39;: [1.0, 1.0, 1.0], &#39;key&#39;: 5, &#39;label&#39;: 0, &#39;neutral&#39;: False, &#39;origin&#39;: 131, &#39;s&#39;: 0.0}
+{&#39;esizes&#39;: [-0.005145173903927555, -0.005145173951569319, -0.01313208676636952], &#39;h&#39;: 1.0, &#39;heffects&#39;: [1.0, 1.0, 1.0], &#39;key&#39;: 4, &#39;label&#39;: 0, &#39;neutral&#39;: False, &#39;origin&#39;: 128, &#39;s&#39;: 0.0}
+{&#39;esizes&#39;: [-0.010095013649331552, -0.010095013774628793, -0.004373345644889459], &#39;h&#39;: 1.0, &#39;heffects&#39;: [1.0, 1.0, 1.0], &#39;key&#39;: 8, &#39;label&#39;: 0, &#39;neutral&#39;: False, &#39;origin&#39;: 141, &#39;s&#39;: 0.0}
+{&#39;esizes&#39;: [-0.0005352057637457395, -0.0005352057524495173, -0.020502069417358642], &#39;h&#39;: 1.0, &#39;heffects&#39;: [1.0, 1.0, 1.0], &#39;key&#39;: 2, &#39;label&#39;: 0, &#39;neutral&#39;: False, &#39;origin&#39;: 122, &#39;s&#39;: 0.0}
+{&#39;esizes&#39;: [-0.018070984822376193, -0.018070984634143302, -0.019988302717412986], &#39;h&#39;: 1.0, &#39;heffects&#39;: [1.0, 1.0, 1.0], &#39;key&#39;: 3, &#39;label&#39;: 0, &#39;neutral&#39;: False, &#39;origin&#39;: 127, &#39;s&#39;: 0.0}
+{&#39;esizes&#39;: [-0.0010802891553584244, -0.0010802891761623927, -0.002925798477131282], &#39;h&#39;: 1.0, &#39;heffects&#39;: [1.0, 1.0, 1.0], &#39;key&#39;: 1, &#39;label&#39;: 0, &#39;neutral&#39;: False, &#39;origin&#39;: 17, &#39;s&#39;: 0.0}
+{&#39;esizes&#39;: [-0.036046827270880044, -0.036046826375927724, -0.006416225519968411], &#39;h&#39;: 1.0, &#39;heffects&#39;: [1.0, 1.0, 1.0], &#39;key&#39;: 7, &#39;label&#39;: 0, &#39;neutral&#39;: False, &#39;origin&#39;: 138, &#39;s&#39;: 0.0}
+{&#39;esizes&#39;: [-0.04793076710246424, -0.04793076734249477, -0.002349944631050108], &#39;h&#39;: 1.0, &#39;heffects&#39;: [1.0, 1.0, 1.0], &#39;key&#39;: 10, &#39;label&#39;: 0, &#39;neutral&#39;: False, &#39;origin&#39;: 149, &#39;s&#39;: 0.0}
+{&#39;esizes&#39;: [-0.003918899722778209, -0.003918899653371586, -0.0008939461234158104], &#39;h&#39;: 1.0, &#39;heffects&#39;: [1.0, 1.0, 1.0], &#39;key&#39;: 6, &#39;label&#39;: 0, &#39;neutral&#39;: False, &#39;origin&#39;: 134, &#39;s&#39;: 0.0}
+{&#39;esizes&#39;: [-0.01052387781383134, -0.010523877991434082, -0.003613386303846068], &#39;h&#39;: 1.0, &#39;heffects&#39;: [1.0, 1.0, 1.0], &#39;key&#39;: 11, &#39;label&#39;: 0, &#39;neutral&#39;: False, &#39;origin&#39;: 95, &#39;s&#39;: 0.0}
+{&#39;esizes&#39;: [-0.004738711258115506, -0.004738711417968354, -0.010637415336509182], &#39;h&#39;: 1.0, &#39;heffects&#39;: [1.0, 1.0, 1.0], &#39;key&#39;: 0, &#39;label&#39;: 0, &#39;neutral&#39;: False, &#39;origin&#39;: 118, &#39;s&#39;: 0.0}
 </pre></div>
 </div>
 </div>
@@ -1140,18 +1115,18 @@ We will generate the model from a <a class="reference external" href="https://po
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[-0.00819429 -0.00819429 -0.02214999]
-[-0.00670761 -0.00670761 -0.00389317]
-[-0.00705069 -0.00705069 -0.01706743]
-[-0.00879653 -0.00879653 -0.00511351]
-[-0.00671902 -0.00671902 -0.0104604 ]
-[-0.00795167 -0.00795167 -0.00203711]
-[-0.00324656 -0.00324655 -0.0014359 ]
-[-0.00131379 -0.00131379 -0.0096654 ]
-[-0.00724181 -0.00724181 -0.0077866 ]
-[-0.00986262 -0.00986262 -0.01682543]
-[-0.01025721 -0.01025721 -0.00400395]
-[-0.00357161 -0.00357161 -0.00644959]
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[-0.01262324 -0.01262324 -0.00167035]
+[-0.00036531 -0.00036531 -0.00838561]
+[-0.00514517 -0.00514517 -0.01313209]
+[-0.01009501 -0.01009501 -0.00437335]
+[-0.00053521 -0.00053521 -0.02050207]
+[-0.01807098 -0.01807098 -0.0199883 ]
+[-0.00108029 -0.00108029 -0.0029258 ]
+[-0.03604683 -0.03604683 -0.00641623]
+[-0.04793077 -0.04793077 -0.00234994]
+[-0.0039189  -0.0039189  -0.00089395]
+[-0.01052388 -0.01052388 -0.00361339]
+[-0.00473871 -0.00473871 -0.01063742]
 </pre></div>
 </div>
 </div>
@@ -1177,7 +1152,7 @@ We will apply a binary, infinite-site model to add neutral mutations:</p>
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Our original number of mutations = 12
-Our new number of mutations = 33741
+Our new number of mutations = 29495
 </pre></div>
 </div>
 </div>
@@ -1209,7 +1184,7 @@ Our new number of mutations = 33741
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;deme&#39;: 1, &#39;e&#39;: 0.0, &#39;g&#39;: 0.9932923855155505, &#39;geography&#39;: [0.0, 0.0, 0.0], &#39;label&#39;: 0, &#39;nodes&#39;: [0, 1], &#39;parents&#39;: [1, 17], &#39;sex&#39;: 0, &#39;w&#39;: 0.9932923855155505}
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;deme&#39;: 1, &#39;e&#39;: 0.0, &#39;g&#39;: 1.0, &#39;geography&#39;: [0.0, 0.0, 0.0], &#39;label&#39;: 0, &#39;nodes&#39;: [0, 1], &#39;parents&#39;: [8, 5], &#39;sex&#39;: 0, &#39;w&#39;: 1.0}
 &lt;class &#39;dict&#39;&gt;
 </pre></div>
 </div>
@@ -1224,7 +1199,7 @@ As with mutation metadata, <a class="reference internal" href="../pages/tskit_to
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[DiploidMetadata(g=0.9932923855155505, e=0.0, w=0.9932923855155505, sex=0, deme=1, label=0, alive=True, preserved=False, first_generation=False, parents=[1, 17], geography=[0.0, 0.0, 0.0], nodes=[0, 1])]
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[DiploidMetadata(g=1.0, e=0.0, w=1.0, sex=0, deme=1, label=0, alive=True, preserved=False, first_generation=False, parents=[8, 5], geography=[0.0, 0.0, 0.0], nodes=[0, 1])]
 </pre></div>
 </div>
 </div>

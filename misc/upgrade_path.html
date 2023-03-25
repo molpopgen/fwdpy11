@@ -225,6 +225,11 @@ const thebe_selector_output = ".output, .cell_output"
    Adding neutral mutations to a population with existing ancestry
   </a>
  </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/import_mutations_from_tskit.html">
+   Importing mutations from tskit
+  </a>
+ </li>
 </ul>
 <p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
@@ -246,11 +251,6 @@ const thebe_selector_output = ".output, .cell_output"
     </span>
    </code>
    to specify demographic models.
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/demography_debugger_vignette.html">
-   Debugging demographic models
   </a>
  </li>
 </ul>
@@ -283,6 +283,11 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toctree-l1">
   <a class="reference internal" href="../short_vignettes/special_considerations_demes_models.html">
    Special considerations for demes models
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/genetic_values_multi_deme_models_advanced.html">
+   Advanced topics
   </a>
  </li>
 </ul>
@@ -376,11 +381,6 @@ const thebe_selector_output = ".output, .cell_output"
 </p>
 <ul class="nav bd-sidenav">
  <li class="toctree-l1">
-  <a class="reference internal" href="../pages/tutorial.html">
-   Tutorial
-  </a>
- </li>
- <li class="toctree-l1">
   <a class="reference internal" href="../pages/advancedtopics.html">
    Advanced topics
   </a>
@@ -392,11 +392,6 @@ const thebe_selector_output = ".output, .cell_output"
  </span>
 </p>
 <ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../pages/softselection.html">
-   Soft selection with discrete demes
-  </a>
- </li>
  <li class="toctree-l1">
   <a class="reference internal" href="../pages/mvdes.html">
    Different effect sizes of mutations in different demes
@@ -468,11 +463,6 @@ const thebe_selector_output = ".output, .cell_output"
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../pages/demographic_models.html">
-   The demography debugger
-  </a>
- </li>
- <li class="toctree-l1">
   <a class="reference internal" href="../pages/functions.html">
    Function documentation
   </a>
@@ -537,21 +527,6 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toctree-l1">
   <a class="reference internal" href="../examples/gss_divergent_optima.html">
    Adaptation to different optima with multivariate distribution of effect sizes
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../examples/IM.html">
-   Isolation-with-migration (IM)
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../examples/localadaptation.html">
-   Local adaptation of a quantitative trait
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../examples/migtest.html">
-   Symmetric migration between two demes
   </a>
  </li>
  <li class="toctree-l1">
@@ -894,7 +869,7 @@ The fix is to use tree sequence recording.</p>
 <h2>0.8.2<a class="headerlink" href="#id3" title="Permalink to this headline">#</a></h2>
 <ul class="simple">
 <li><p>The first <code class="docutils literal notranslate"><span class="pre">kwarg</span></code>/positional argument for initializing a
-<a class="reference internal" href="../pages/demographic_models.html#fwdpy11.DemographyDebugger" title="fwdpy11.DemographyDebugger"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DemographyDebugger</span></code></a> has been renamed <code class="docutils literal notranslate"><span class="pre">initial_deme_sizes</span></code>.
+<a class="reference internal" href="../pages/types.html#fwdpy11.DemographyDebugger" title="fwdpy11.DemographyDebugger"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DemographyDebugger</span></code></a> has been renamed <code class="docutils literal notranslate"><span class="pre">initial_deme_sizes</span></code>.
 As the argument is required, and previously only took one possible type,
 we expect this change to not really break anyone’s code.</p></li>
 </ul>
@@ -902,10 +877,11 @@ we expect this change to not really break anyone’s code.</p></li>
 <section id="id4">
 <h2>0.8.0<a class="headerlink" href="#id4" title="Permalink to this headline">#</a></h2>
 <ul class="simple">
-<li><p><a class="reference internal" href="../pages/types.html#fwdpy11.DiscreteDemography" title="fwdpy11.DiscreteDemography"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiscreteDemography</span></code></a> can no longer be initialized with a <code class="docutils literal notranslate"><span class="pre">numpy</span></code> array as a positional
+<li><p><code class="docutils literal notranslate"><span class="pre">fwdpy11.DiscreteDemography</span></code> can no longer be initialized with a <code class="docutils literal notranslate"><span class="pre">numpy</span></code> array as a positional
 argument. Now, pass it as the value to the <code class="docutils literal notranslate"><span class="pre">set_deme_sizes</span></code> keyword argument.</p></li>
-<li><p>Initialization of <a class="reference internal" href="../pages/types.html#fwdpy11.SetMigrationRates" title="fwdpy11.SetMigrationRates"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.SetMigrationRates</span></code></a> has changed for the case
-of resetting the entire migration matrix. See <a class="reference internal" href="../pages/softselection.html#migration"><span class="std std-ref">here</span></a>.</p></li>
+<li><p>Initialization of :w
+<code class="docutils literal notranslate"><span class="pre">fwdpy11.SetMigrationRates</span></code> has changed for the case
+of resetting the entire migration matrix. See <code class="docutils literal notranslate"><span class="pre">here</span> <span class="pre">&lt;migration&gt;</span></code>.</p></li>
 <li><p>The <code class="docutils literal notranslate"><span class="pre">shape</span></code> <code class="docutils literal notranslate"><span class="pre">kwarg</span></code> to initialize a <a class="reference internal" href="../pages/regiontypes.html#fwdpy11.GammaS" title="fwdpy11.GammaS"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GammaS</span></code></a> has been
 renamed <code class="docutils literal notranslate"><span class="pre">shape_parameter</span></code>.</p></li>
 <li><p>The <code class="docutils literal notranslate"><span class="pre">matrix</span></code> <code class="docutils literal notranslate"><span class="pre">kwarg</span></code> to initialize a <a class="reference internal" href="../pages/regiontypes.html#fwdpy11.MultivariateGaussianEffects" title="fwdpy11.MultivariateGaussianEffects"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.MultivariateGaussianEffects</span></code></a>
