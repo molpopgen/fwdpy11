@@ -35,9 +35,10 @@ class ForwardDemesGraph(fwdpy11._fwdpy11._ForwardDemesGraph):
                             multiple of the sum of ancestor population sizes.
                             If `True`, `burnin` will be used as-is.
     :type burnin_is_exact: bool
-    :type round_non_integer_sizes: If `True`, a graph containing non-integer
+    :param round_non_integer_sizes: If `True`, a graph containing non-integer
                             values for epoch start and/or end sizes will
                             have those values rounded to the nearest integer.
+    :type round_non_integer_sizes: bool
 
     The recommended method for construction is
     :meth:`ForwardDemesGraph.from_demes` or
@@ -106,9 +107,19 @@ class ForwardDemesGraph(fwdpy11._fwdpy11._ForwardDemesGraph):
         :type model: str or demes.Graph
         :param burnin: The number of generations of evolution to occur before
                        the events in the `yaml` take place.
-                       The value will be `burnin` times the total ancestral
-                       population size.
         :type burnin: int
+        :param burnin_is_exact: If `False`, `burnin` will be treated as an
+                                integer multiple of the sum of ancestor
+                                population sizes. If `True`, `burnin` will
+                                be used as-is.
+        :type burnin_is_exact: bool
+        :type round_non_integer_sizes: If `True`, a graph containing
+                                non-integer values for epoch start
+                                and/or end sizes will have those values
+                                rounded to the nearest integer.
+
+        :returns: A forward-time representation of a demes graph
+        :rtype: fwdpy11.ForwardDemesGraph
         """
         # NOTE: the logic is messy and we are losing
         # track of "provenance" of the demes input
@@ -134,7 +145,24 @@ class ForwardDemesGraph(fwdpy11._fwdpy11._ForwardDemesGraph):
               burnin_is_exact: typing.Optional[bool] = None,
               round_non_integer_sizes: typing.Optional[bool] = None):
         """
-        TODO
+        Build a demographic model for one or more demes of constant size.
+
+        :param sizes: Deme sizes
+        :type sizes: typing.List[int]
+        :param burnin: The number of generations of evolution to simulate.
+        :type burnin: int
+        :param burnin_is_exact: If `False`, `burnin` will be treated as an
+                                integer multiple of the sum of ancestor
+                                population sizes. If `True`, `burnin` will
+                                be used as-is.
+        :type burnin_is_exact: bool
+        :type round_non_integer_sizes: If `True`, a graph containing
+                                non-integer values for epoch start
+                                and/or end sizes will have those values
+                                rounded to the nearest integer.
+
+        :returns: A forward-time representation of a demes graph
+        :rtype: fwdpy11.ForwardDemesGraph
         """
         builder = demes.Builder()
         for i, j in enumerate(sizes):

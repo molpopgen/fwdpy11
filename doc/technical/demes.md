@@ -94,3 +94,21 @@ instances of {class}`fwdpy11.ModelParams`.
 Passing ``False`` will prevent an individual from being picked twice as a parent.
 See the documentation of {class}`fwdpy11.ModelParams` for details about errors
 that may occur if deme sizes get down to a single individual.
+
+## "Default" demographic models.
+
+If ``None`` is passed to the ``demography`` field of {class}`fwdpy11.ModelParams`,
+then {func}`fwdpy11.evolvets` will build a model of constant sizes for all
+demes in the population using {meth}`fwdpy11.ForwardDemesGraph.tubes`.
+The model with have a "burn-in" time of ``10N`` generations where N is the *sum*
+of all deme sizes in the :class:`fwdpy11.DiploidPopulation`.
+
+The code raises a ``UserWarning`` when these models are constructed, letting
+you know that some default magic is happening.
+
+```{note}
+This default behavior was introduced in ``v0.20.0`` in order to maintain
+backwards compatability with the previous releases.
+Moving forwward, in the spirit of "explicit is better than implicit",
+using ``None`` for a demographic model will become a hard error.
+```
