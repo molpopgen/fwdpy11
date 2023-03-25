@@ -43,7 +43,8 @@ PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::DiploidMetadata>);
 PYBIND11_MAKE_OPAQUE(fwdpy11::DiploidPopulation::genome_container);
 PYBIND11_MAKE_OPAQUE(fwdpy11::DiploidPopulation::mutation_container);
 
-fwdpy11::DiploidPopulation create_DiploidPopulation_from_tree_sequence(py::object ts);
+fwdpy11::DiploidPopulation
+create_DiploidPopulation_from_tree_sequence(py::object ts, std::uint32_t generation);
 
 namespace
 {
@@ -309,7 +310,7 @@ init_DiploidPopulation(py::module& m)
                     = load(f).cast<decltype(rv.ancient_sample_genetic_value_matrix)>();
                 return rv;
             })
-        .def_static("_create_from_tskit", [](py::object ts) {
-            return create_DiploidPopulation_from_tree_sequence(ts);
+        .def_static("_create_from_tskit", [](py::object ts, std::uint32_t generation) {
+            return create_DiploidPopulation_from_tree_sequence(ts, generation);
         });
 }

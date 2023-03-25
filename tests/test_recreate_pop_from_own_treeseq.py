@@ -1,4 +1,3 @@
-#
 # Copyright (C) 2023 Kevin Thornton <krthornt@uci.edu>
 #
 # This file is part of fwdpy11.
@@ -90,32 +89,33 @@ def pop():
 
     fwdpy11.evolvets(rng, pop, params, 100, suppress_table_indexing=True)
 
-    assert pop.generation == 3
-
     return pop
 
 
 # Related to GitHub issue 1109.
 def test_recreate_pop_from_own_treeseq(pop):
+    gen = pop.generation
     ts = pop.dump_tables_to_tskit()
     nm = ts.num_mutations
     assert nm > 0
 
     pop = fwdpy11.DiploidPopulation.create_from_tskit(
         ts, import_mutations=True)
+    assert pop.generation == gen
     assert len(pop.tables.mutations) == nm
-    assert pop.generation == 0
     validate_mutation_table(pop)
+    assert(all([pop.mutations[i.key].g >= 0 for i in pop.tables.mutations]))
 
 
 def test_multiple_export_recreate_evolve_steps():
     pop, rng, params = pop_rng_params()
     for i in range(5):
         fwdpy11.evolvets(rng, pop, params, 100, suppress_table_indexing=True)
-        assert pop.generation == 3
         ts = pop.dump_tables_to_tskit()
         pop = fwdpy11.DiploidPopulation.create_from_tskit(
             ts, import_mutations=True)
+        assert(all([pop.mutations[i.key].g >= 0 for i in pop.tables.mutations]))
+    assert pop.generation == 15
 
 
 def test_start_pop_from_treeseq_without_mutations(pop):
@@ -157,3 +157,55 @@ def test_start_pop_from_treeseq_without_mutations(pop):
     ts = tables.tree_sequence()
     pop = fwdpy11.DiploidPopulation.create_from_tskit(
         ts, import_mutations=True)
+
+
+def test_complex_start_stop_workflow():
+    yaml = """
+description: split
+time_units: generations
+demes:
+ - name: A
+   epochs:
+    - start_size: 10
+      end_time: 10
+ - name: B
+   start_time: 10
+   ancestors: [A]
+   epochs:
+    - start_size: 10
+      end_size: 50
+ - name: C
+   start_time: 10
+   ancestors: [A]
+   epochs:
+    - start_size: 10
+      end_size: 50
+"""
+    demography = fwdpy11.ForwardDemesGraph.from_demes(
+        yaml, burnin=10, burnin_is_exact=True)
+    pdict = {'recregions': [],
+             'nregions': [],
+             'sregions': [],
+             'rates': (0, 0, 0),
+             'gvalue': fwdpy11.Multiplicative(2.),
+             'simlen': 11,
+             'demography': demography
+             }
+    params = fwdpy11.ModelParams(**pdict)
+    pop = fwdpy11.DiploidPopulation(demography.initial_sizes, 1.0)
+    rng = fwdpy11.GSLrng(10)
+    fwdpy11.evolvets(rng, pop, params, 10)
+    assert len(pop.deme_sizes()) == 2
+    assert pop.generation == 11
+    ts = pop.dump_tables_to_tskit()
+    restored = fwdpy11.DiploidPopulation.create_from_tskit(ts)
+    pdict['simlen'] = 100
+    params = fwdpy11.ModelParams(**pdict)
+    # Evolve rest of model
+    fwdpy11.evolvets(rng, restored, params, 10)
+    model_time = restored.generation
+    assert model_time == 20
+    ts = restored.dump_tables_to_tskit()
+    restored2 = fwdpy11.DiploidPopulation.create_from_tskit(ts)
+    fwdpy11.evolvets(rng, restored2, params, 10)
+    assert model_time == restored2.generation

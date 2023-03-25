@@ -1,3 +1,4 @@
+#include "fwdpp/ts/generate_offspring.hpp"
 #include <vector>
 #include <utility>
 #include <cstdint>
@@ -14,8 +15,9 @@
 namespace py = pybind11;
 
 // TODO put this in a header in case anyone else finds it useful?
-std::tuple<fwdpp::ts::std_table_collection::node_table, fwdpp::ts::std_table_collection::edge_table, int, double>
-convert_tables_from_tskit(py::object ts)
+std::tuple<fwdpp::ts::std_table_collection::node_table,
+           fwdpp::ts::std_table_collection::edge_table, int, double>
+convert_tables_from_tskit(py::object ts, std::uint32_t generation)
 {
     py::object tstables = ts.attr("tables");
     py::object tsnodes = tstables.attr("nodes");
@@ -36,14 +38,12 @@ convert_tables_from_tskit(py::object ts)
     edges.reserve(left_.shape(0));
     for (py::ssize_t i = 0; i < left_.shape(0); ++i)
         {
-            edges.push_back(
-                fwdpp::ts::edge{ left_(i), right_(i), parent_(i), child_(i) });
+            edges.push_back(fwdpp::ts::edge{left_(i), right_(i), parent_(i), child_(i)});
         }
 
     // same treatment for nodes
     auto time = tsnodes.attr("time").cast<py::array_t<double>>();
-    auto population
-        = tsnodes.attr("population").cast<py::array_t<std::int32_t>>();
+    auto population = tsnodes.attr("population").cast<py::array_t<std::int32_t>>();
     auto time_ = time.unchecked<1>();
     auto population_ = population.unchecked<1>();
 
@@ -62,7 +62,8 @@ convert_tables_from_tskit(py::object ts)
                 {
                     ++ntips;
                 }
-            nodes.push_back(fwdpp::ts::node{ population_(i), t });
+            t += generation;
+            nodes.push_back(fwdpp::ts::node{population_(i), t});
         }
 
     double l = ts.attr("get_sequence_length")().cast<double>();
@@ -70,25 +71,25 @@ convert_tables_from_tskit(py::object ts)
 }
 
 fwdpy11::DiploidPopulation
-create_DiploidPopulation_from_tree_sequence(py::object ts)
+create_DiploidPopulation_from_tree_sequence(py::object ts, std::uint32_t generation)
 {
-    auto t = convert_tables_from_tskit(ts);
+    auto t = convert_tables_from_tskit(ts, generation);
     auto nodes(std::move(std::get<0>(t)));
     auto edges(std::move(std::get<1>(t)));
     auto twoN = std::get<2>(t);
     auto l = std::get<3>(t);
     if (twoN % 2 != 0.0)
         {
-            throw std::invalid_argument(
-                "tree sequence has odd number of tips");
+            throw std::invalid_argument("tree sequence has odd number of tips");
         }
 
     fwdpy11::DiploidPopulation pop(twoN / 2, l);
     pop.tables->nodes.swap(nodes);
     pop.tables->edges.swap(edges);
     // NOTE: this may be an issue when we allow variable survival probabilitites!
-    pop.tables->edge_offset = static_cast<fwdpp::ts::table_index_t>(pop.tables->num_edges());
-    if(!fwdpp::ts::edge_table_minimally_sorted(*pop.tables))
+    pop.tables->edge_offset
+        = static_cast<fwdpp::ts::table_index_t>(pop.tables->num_edges());
+    if (!fwdpp::ts::edge_table_minimally_sorted(*pop.tables))
         {
             throw std::runtime_error("edge table is not sorted");
         }
@@ -102,15 +103,14 @@ create_DiploidPopulation_from_tree_sequence(py::object ts)
         {
             pop.diploid_metadata[i].nodes[0] = 2 * i;
             pop.diploid_metadata[i].nodes[1] = 2 * i + 1;
-            if (pop.tables->nodes[2*i].deme 
-                != pop.tables->nodes[2*i+1].deme)
+            if (pop.tables->nodes[2 * i].deme != pop.tables->nodes[2 * i + 1].deme)
                 {
                     throw std::invalid_argument(
                         "inconsistent deme fields for nodes in the same "
                         "individual");
                 }
-            pop.diploid_metadata[i].deme
-                = pop.tables->nodes[2*i].deme;
+            pop.diploid_metadata[i].deme = pop.tables->nodes[2 * i].deme;
         }
+    pop.generation = generation;
     return pop;
 }
