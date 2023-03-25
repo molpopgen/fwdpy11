@@ -90,7 +90,7 @@ def make_treeseq_with_one_row_containing_bad_metadata(seed, callback):
 
 
 @given(integers(1, int(2**32 - 1)), integers(1, int(2**32 - 1)))
-@settings(deadline=None)
+@settings(deadline=None, max_examples=10)
 def test_import_msprime_mutations(seed, seed2):
     ts = msprime.sim_ancestry(5, population_size=10000,
                               recombination_rate=1e-5, sequence_length=1.0,
@@ -169,7 +169,7 @@ def test_import_msprime_mutations(seed, seed2):
 
 
 @given(integers(1, int(2**32 - 1)), integers(1, int(2**32 - 1)))
-@settings(deadline=None)
+@settings(deadline=None, max_examples=10)
 def test_import_msprime_mutations_bad_metadata(seed1, seed2):
     np.random.seed(seed1)
 

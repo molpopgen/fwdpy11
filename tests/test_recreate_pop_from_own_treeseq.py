@@ -73,6 +73,9 @@ def pop_rng_params():
         ),
         "simlen": simlen,
         "prune_selected": False,
+        "demography": fwdpy11.ForwardDemesGraph.tubes(pop.deme_sizes()[1],
+                                                      burnin=30,
+                                                      burnin_is_exact=True)
     }
     params = fwdpy11.ModelParams(**pdict)
 

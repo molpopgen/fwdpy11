@@ -152,9 +152,13 @@ class TestCustomPyGeneticValue(unittest.TestCase):
         self.pdict_PyA = build_single_trait_model(PyA, 100)
 
     def test_run(self):
+        pop_PyA = fwdpy11.DiploidPopulation(1000, 1.0)
+        self.pdict_PyA["demography"] = \
+            fwdpy11.ForwardDemesGraph.tubes(pop_PyA.deme_sizes()[1],
+                                            burnin=self.pdict_PyA["simlen"],
+                                            burnin_is_exact=True)
         mparams_PyA = fwdpy11.ModelParams(**self.pdict_PyA)
         rng_PyA = fwdpy11.GSLrng(42 * 666)
-        pop_PyA = fwdpy11.DiploidPopulation(1000, 1.0)
 
         fwdpy11.evolvets(rng_PyA, pop_PyA, mparams_PyA, 100)
         if len(pop_PyA.tables.mutations) == 0:
@@ -183,9 +187,13 @@ class TestCustomPyGeneticValueOverloadGeneticValueToFitness(unittest.TestCase):
 
         pygv = pyadditivegss.PyAdditiveGSS(opt=0.0, VS=1.0)
         pdict = self.build_model(pygv, 100)
+        pop = fwdpy11.DiploidPopulation(1000, 1.0)
+        pdict["demography"] = \
+            fwdpy11.ForwardDemesGraph.tubes(pop.deme_sizes()[1],
+                                            burnin=pdict["simlen"],
+                                            burnin_is_exact=True)
 
         params = fwdpy11.ModelParams(**pdict)
-        pop = fwdpy11.DiploidPopulation(1000, 1.0)
 
         rng = fwdpy11.GSLrng(1010)
         fwdpy11.evolvets(rng, pop, params, 100, suppress_table_indexing=True)

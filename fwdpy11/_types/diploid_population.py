@@ -463,7 +463,7 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
           Otherwise, a 64 bit integer is chosen uniformly between the
           node time and the node's parent's time.
         * If `deme` is None, any set of `ndescendants` will be considered.
-        * If `deme` is :math:`\geq 0`, all `ndescendants` alive nodes must be
+        * If `deme` is `>= 0`, all `ndescendants` alive nodes must be
           from that deme.
         * If the `deme`/`ndescendants` requirements cannot be satisified,
           the function returns `None`.

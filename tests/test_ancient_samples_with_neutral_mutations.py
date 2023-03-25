@@ -17,7 +17,6 @@
 # along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-import numpy as np
 import pytest
 
 import fwdpy11
@@ -116,11 +115,15 @@ def test_ancient_samples_and_neutral_mutations(
     """
     The test involving neutral mutations test GitHub issue 639 and 646
     """
+    demography = fwdpy11.ForwardDemesGraph.tubes(mslike_pop.deme_sizes()[1],
+                                                 burnin=simlen,
+                                                 burnin_is_exact=True)
     ancient_sample_recorder = fwdpy11.RandomAncientSamples(
         seed=42, samplesize=10, timepoints=[i for i in range(1, simlen + 1)]
     )
-    pdict["simlen"] = simlen
+    pdict["simlen"] = demography.final_generation
     pdict["prune_selected"] = prune_selected
+    pdict["demography"] = demography
     params = fwdpy11.ModelParams(**pdict)
     fwdpy11.evolvets(
         rng,

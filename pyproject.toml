@@ -4,3 +4,8 @@ requires = ["setuptools>=30.3.0", "wheel", "setuptools_scm", "pybind11[global]==
 
 [tool.setuptools_scm]
 write_to = "fwdpy11/_version.py"
+
+[tool.pytest.ini_options]
+filterwarnings = [
+    "error",
+]

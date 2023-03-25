@@ -21,6 +21,8 @@ def set_up_quant_trait_model():
     cmat = np.identity(ntraits)
     np.fill_diagonal(cmat, 0.1)
     a = fwdpy11.StrictAdditiveMultivariateEffects(ntraits, 0, GSSmo)
+    demography = fwdpy11.ForwardDemesGraph.tubes([N], burnin=100,
+                                                 burnin_is_exact=True)
     p = {
         "nregions": [],
         "sregions": [fwdpy11.MultivariateGaussianEffects(0, 1, 1, cmat)],
@@ -28,8 +30,8 @@ def set_up_quant_trait_model():
         "rates": (0.0, 0.001, None),
         "gvalue": a,
         "prune_selected": False,
-        "demography": None,
-        "simlen": 10 * N,
+        "demography": demography,
+        "simlen": demography.final_generation
     }
     params = fwdpy11.ModelParams(**p)
     rng = fwdpy11.GSLrng(101 * 45 * 110 * 210)
@@ -43,7 +45,7 @@ class TestMultivariateGSSmo(unittest.TestCase):
         self.params, self.rng, self.pop, self.ntraits = set_up_quant_trait_model()
 
     def test_github_issue_310(self):
-        fwdpy11.evolvets(self.rng, self.pop, self.params, 100)
+        fwdpy11.evolvets(self.rng, self.pop, self.params, 500)
         nonmutants = 0
         md = np.array(self.pop.diploid_metadata, copy=False)
         for i, j in enumerate(self.pop.diploids):

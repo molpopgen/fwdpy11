@@ -1787,7 +1787,8 @@ pulses:
    proportions: [0.9]
    time: 25
 """
-    graph = demes.loads(yaml)
+    with pytest.warns(UserWarning):
+        graph = demes.loads(yaml)
     with pytest.warns(UserWarning):
         _ = fwdpy11.discrete_demography.from_demes(graph, burnin=0)
 

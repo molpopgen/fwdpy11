@@ -65,6 +65,9 @@ class TestPickleDiploidPopulationTreeSequences(unittest.TestCase):
 
         self.GSS = fwdpy11.GSS(VS=1.0, optimum=0.0)
         a = fwdpy11.Additive(2.0, self.GSS)
+        demography = fwdpy11.ForwardDemesGraph.tubes([self.N],
+                                                     burnin=100,
+                                                     burnin_is_exact=True)
         self.p = {
             "nregions": [],
             "sregions": [fwdpy11.GaussianS(0, 1, 1, 0.25)],
@@ -72,8 +75,8 @@ class TestPickleDiploidPopulationTreeSequences(unittest.TestCase):
             "rates": (0.0, 0.025, None),
             "gvalue": a,
             "prune_selected": False,
-            "demography": None,
-            "simlen": self.N,
+            "demography": demography,
+            "simlen": demography.final_generation
         }
         self.params = fwdpy11.ModelParams(**self.p)
         self.rng = fwdpy11.GSLrng(101 * 45 * 110 * 210)
