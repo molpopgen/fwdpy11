@@ -19,7 +19,7 @@ pytest-xdist
 hypothesis==6.56.4
 
 # Docs
-jupyter-book~=0.13.1
+jupyter-book~=0.15.1
 matplotlib
 pandas
 sphinx-issues
