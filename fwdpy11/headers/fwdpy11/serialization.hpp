@@ -51,7 +51,8 @@ namespace fwdpy11
             // Changed to 6 in 0.6.3 because we removed "ancient sample
             // records" that weren't being used and we changed the C++
             // constructor for Mutation.
-            return 6;
+            // Changed to 7 in 0.20.0 to handle forward_model_time
+            return 7;
         }
 
         template <typename streamtype, typename poptype>
@@ -62,6 +63,8 @@ namespace fwdpy11
             auto m = magic();
             buffer.write(reinterpret_cast<char *>(&m), sizeof(decltype(m)));
             buffer.write(reinterpret_cast<const char *>((&pop->generation)),
+                         sizeof(unsigned));
+            buffer.write(reinterpret_cast<const char *>((&pop->forward_model_time)),
                          sizeof(unsigned));
             fwdpy11::serialize_diploid_metadata()(buffer, pop->diploid_metadata);
             fwdpy11::serialize_diploid_metadata()(buffer, pop->ancient_sample_metadata);
@@ -129,6 +132,11 @@ namespace fwdpy11
                                                  "fwdpy11 0.1.4");
                     }
                 buffer.read(reinterpret_cast<char *>(&pop.generation), sizeof(unsigned));
+                if (version > 6)
+                    {
+                        buffer.read(reinterpret_cast<char *>(&pop.forward_model_time),
+                                    sizeof(unsigned));
+                    }
                 deserialize_diploid_metadata()(buffer, pop.diploid_metadata);
                 deserialize_diploid_metadata()(buffer, pop.ancient_sample_metadata);
                 if (version < 6)
@@ -166,8 +174,10 @@ namespace fwdpy11
                             }
                     }
 
-                auto _tables = fwdpp::ts::io::deserialize_tables<fwdpp::ts::std_table_collection>()(buffer);
-                pop.tables.reset(new fwdpp::ts::std_table_collection(std::move(_tables)));
+                auto _tables = fwdpp::ts::io::deserialize_tables<
+                    fwdpp::ts::std_table_collection>()(buffer);
+                pop.tables.reset(
+                    new fwdpp::ts::std_table_collection(std::move(_tables)));
                 // NOTE: version 0.5.0 added in a site table that previous versions
                 // did not have.  Further, the mutation table entries differed in
                 // previous versions.
