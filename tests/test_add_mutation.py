@@ -16,6 +16,8 @@
 # You should have received a copy of the GNU General Public License
 # along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 #
+from hypothesis import settings, given, HealthCheck
+from hypothesis.strategies import integers
 
 import fwdpy11
 import msprime
@@ -51,7 +53,7 @@ def generate_msprime_ancestry(
             "prune_selected": False,
             "simlen": 10 * pop.N,
         }
-        params = fwdpy11.ModelParams(**pdict)
+        _ = fwdpy11.ModelParams(**pdict)
 
         rng = fwdpy11.GSLrng(fp11_seed)
         data = fwdpy11.NewMutationData(
@@ -67,10 +69,12 @@ def generate_msprime_ancestry(
 
 
 # This test triggers GitHub issue 836
-@pytest.mark.parametrize("msprime_seed", seed_list(135123, 5))
-@pytest.mark.parametrize("fp11_seed", seed_list(5130125, 5))
-@pytest.mark.parametrize("ndescendants", [2, 7, 10, 23, 12, 100])
+@given(msprime_seed=integers(1, int(2**32 - 1)),
+       fp11_seed=integers(1, int(2**32 - 1)),
+       ndescendants=integers(2, 101))
+@settings(deadline=None, max_examples=25)
 def test_ndescendants(msprime_seed, fp11_seed, ndescendants):
+    print(msprime_seed, fp11_seed, ndescendants)
     pop, idx = generate_msprime_ancestry(msprime_seed, fp11_seed, ndescendants)
     if pop is not None:
         _ = pop.dump_tables_to_tskit()
@@ -144,14 +148,17 @@ def test_new_mutation_data_bad_construction():
         )
 
 
-@pytest.mark.parametrize("ndescendants", [1, 2, 3, 4, 5, 10])
-def test_add_mutation_in_single_deme(ndescendants):
+@given(ndescendants=integers(1, 11),
+       seed=integers(1, int(2**32 - 1)),
+       msprime_seed=integers(1, int(2**32 - 1)))
+@settings(deadline=None, max_examples=10)
+def test_add_mutation_in_single_deme(ndescendants, seed, msprime_seed):
     ts = msprime.sim_ancestry(
-        50, population_size=50, sequence_length=10, random_seed=612534
+        50, population_size=50, sequence_length=10, random_seed=msprime_seed
     )
     pop = fwdpy11.DiploidPopulation.create_from_tskit(ts)
     data = fwdpy11.NewMutationData(effect_size=-1e-3, dominance=1.0)
-    rng = fwdpy11.GSLrng(42)
+    rng = fwdpy11.GSLrng(seed)
     key = pop.add_mutation(rng, ndescendants=ndescendants, data=data)
     # Skip over cases where ndescendants could not be satisfied
     if key is not None:
@@ -169,13 +176,21 @@ def test_add_mutation_in_single_deme(ndescendants):
         assert count == pop.mcounts[key]
 
 
-@pytest.mark.parametrize("ndescendants", [1, 2, 3, 4, 5, 10])
-@pytest.mark.parametrize("deme", [0, 1])
-def test_add_mutation_in_two_deme_model(deme, ndescendants, small_split_model):
+@given(ndescendants=integers(1, 45),
+       msprime_seed=integers(1, int(2**32 - 1)),
+       seed=integers(1, int(2**32 - 1)),
+       deme=integers(0, 1))
+@settings(suppress_health_check=[HealthCheck.function_scoped_fixture],
+          deadline=None, max_examples=10)
+def test_add_mutation_in_two_deme_model(deme,
+                                        ndescendants,
+                                        seed,
+                                        msprime_seed,
+                                        small_split_model):
     demog = msprime.Demography.from_demes(small_split_model)
     ts = msprime.sim_ancestry(
         samples={0: 50, 1: 50},
-        random_seed=654321,
+        random_seed=msprime_seed,
         sequence_length=1.0,
         demography=demog,
         recombination_rate=1,
@@ -183,7 +198,7 @@ def test_add_mutation_in_two_deme_model(deme, ndescendants, small_split_model):
     )
     pop = fwdpy11.DiploidPopulation.create_from_tskit(ts)
     data = fwdpy11.NewMutationData(effect_size=-1e-3, dominance=1.0)
-    rng = fwdpy11.GSLrng(42)
+    rng = fwdpy11.GSLrng(seed)
     key = pop.add_mutation(
         rng, ndescendants=ndescendants, deme=deme, data=data)
     # Skip over cases where ndescendants could not be satisfied
@@ -203,11 +218,13 @@ def test_add_mutation_in_two_deme_model(deme, ndescendants, small_split_model):
         assert count == pop.mcounts[key]
 
 
-@pytest.mark.parametrize("ndescendants", [3, 4, 5, 10])
-@pytest.mark.parametrize("deme", [0, 1])
 @pytest.mark.parametrize("window", [(0.3, 0.6), (0.7, 0.88)])
-@pytest.mark.parametrize("msprime_seed", [654321, 12345, 111, 222])
-@pytest.mark.parametrize("fwdpy11_seed", [123451])
+@given(msprime_seed=integers(1, int(2**32 - 1)),
+       fwdpy11_seed=integers(1, int(2**32-1)),
+       ndescendants=integers(2, 25),
+       deme=integers(0, 1))
+@settings(suppress_health_check=[HealthCheck.function_scoped_fixture],
+          deadline=None, max_examples=5)
 def test_add_mutation_in_two_deme_model_windows(
     deme, ndescendants, small_split_model, window, msprime_seed, fwdpy11_seed
 ):
@@ -313,9 +330,10 @@ def test_attempt_to_add_to_pop_without_ancestry():
         pop.add_mutation(rng, ndescendants=1, data=data)
 
 
-@pytest.mark.parametrize("msprime_seed", seed_list(135123, 10))
-@pytest.mark.parametrize("fp11_seed", seed_list(5130125, 10))
-@pytest.mark.parametrize("ndescendants", [2, 7, 10, 23, 100, 257])
+@given(msprime_seed=integers(1, int(2**32 - 1)),
+       fp11_seed=integers(1, int(2**32-1)),
+       ndescendants=integers(1, 300))
+@settings(deadline=None, max_examples=25)
 def test_add_mutation_to_random_msprime_output(msprime_seed, fp11_seed, ndescendants):
     initial_ts = msprime.sim_ancestry(
         samples=250,

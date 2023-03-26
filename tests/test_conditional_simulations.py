@@ -19,6 +19,9 @@
 
 import copy
 
+from hypothesis import settings, given
+from hypothesis.strategies import integers
+
 import demes
 import fwdpy11
 import fwdpy11.conditional_models
@@ -77,8 +80,9 @@ def test_bad_frequency_range(r):
         pytest.fail(f"unexpected exception {e}")
 
 
-@pytest.mark.parametrize("msprime_seed", seed_list(151251, 5))
-@pytest.mark.parametrize("fp11_seed", seed_list(238145238, 5))
+@given(msprime_seed=integers(1, int(2**32-1)),
+       fp11_seed=integers(1, int(2**32-1)))
+@settings(deadline=None, max_examples=10)
 def test_deleterious_mutation_remains_present(msprime_seed, fp11_seed):
     pop = make_pop_with_msprime_ancestry(msprime_seed)
     demography = fwdpy11.ForwardDemesGraph.tubes(pop.deme_sizes()[1],
@@ -120,8 +124,9 @@ def test_deleterious_mutation_remains_present(msprime_seed, fp11_seed):
         pytest.fail(f"unexpected exception: {e}")
 
 
-@pytest.mark.parametrize("msprime_seed", seed_list(151251, 5))
-@pytest.mark.parametrize("fp11_seed", seed_list(238145238, 5))
+@given(msprime_seed=integers(1, int(2**32-1)),
+       fp11_seed=integers(1, int(2**32-1)))
+@settings(deadline=None)
 def test_deleterious_mutation_remains_present_with_final_recording(
     msprime_seed, fp11_seed
 ):
@@ -171,8 +176,9 @@ def test_deleterious_mutation_remains_present_with_final_recording(
         pytest.fail(f"unexpected exception: {e}")
 
 
-@pytest.mark.parametrize("msprime_seed", seed_list(135123, 5))
-@pytest.mark.parametrize("fp11_seed", seed_list(5130125, 5))
+@given(msprime_seed=integers(1, int(2**32-1)),
+       fp11_seed=integers(1, int(2**32-1)))
+@settings(deadline=None)
 @pytest.mark.parametrize("alpha", [1000.0])
 def test_sweep_from_new_mutation_using_API(msprime_seed, fp11_seed, alpha):
     pop = make_pop_with_msprime_ancestry(msprime_seed)
@@ -238,9 +244,10 @@ def test_sweep_from_new_mutation_using_API(msprime_seed, fp11_seed, alpha):
                 assert t.leaf_counts(mutation.node) == 2 * pop.N
 
 
-@pytest.mark.parametrize("msprime_seed", seed_list(135123, 5))
-@pytest.mark.parametrize("fp11_seed", seed_list(5130125, 5))
 @pytest.mark.parametrize("alpha", [1000.0])
+@given(msprime_seed=integers(1, int(2**32-1)),
+       fp11_seed=integers(1, int(2**32-1)))
+@settings(deadline=None)
 def test_sweep_from_new_mutation_using_API_exit_when_finished(
     msprime_seed, fp11_seed, alpha
 ):
@@ -278,10 +285,11 @@ def test_sweep_from_new_mutation_using_API_exit_when_finished(
     assert output.pop.generation == output.pop.fixation_times[0]
 
 
-@pytest.mark.parametrize("msprime_seed", seed_list(135123, 5))
-@pytest.mark.parametrize("fp11_seed", seed_list(5130125, 5))
-@pytest.mark.parametrize("ndescendants", [2, 7, 10, 23, 12, 100])
+@given(msprime_seed=integers(1, int(2**32-1)),
+       fp11_seed=integers(1, int(2**32-1)),
+       ndescendants=integers(2, 100))
 @pytest.mark.parametrize("alpha", [1000.0])
+@settings(deadline=None, max_examples=10)
 def test_sweep_from_standing_variation_using_API(
     msprime_seed, fp11_seed, ndescendants, alpha
 ):

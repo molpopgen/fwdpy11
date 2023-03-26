@@ -40,7 +40,7 @@ def set_up_quant_trait_model():
     Opt = fwdpy11.Optimum
     GSSmo = fwdpy11.GSSmo(
         [Opt(when=0, optimum=0.0, VS=1.0), Opt(
-            when=10 * N, optimum=1.0, VS=1.0)]
+            when=N, optimum=1.0, VS=1.0)]
     )
     demography = fwdpy11.ForwardDemesGraph.tubes(
         [N], 10*N+100, burnin_is_exact=True)
@@ -53,7 +53,7 @@ def set_up_quant_trait_model():
         "gvalue": a,
         "prune_selected": False,
         "demography": demography,
-        "simlen": 10 * N + 100,
+        "simlen": N + 100,
     }
     params = fwdpy11.ModelParams(**p)
     rng = fwdpy11.GSLrng(101 * 45 * 110 * 210)
@@ -69,7 +69,7 @@ def set_up_two_trait_quant_trait_model():
     optima = [
         fwdpy11.PleiotropicOptima(when=0, optima=np.zeros(2), VS=2.0),
         fwdpy11.PleiotropicOptima(
-            when=10 * N, optima=np.array([np.sqrt(2.0), 0]), VS=2.0
+            when=N, optima=np.array([np.sqrt(2.0), 0]), VS=2.0
         ),
     ]
     GSSmo = fwdpy11.MultivariateGSSmo(optima)
@@ -78,7 +78,7 @@ def set_up_two_trait_quant_trait_model():
     np.fill_diagonal(vcov, 0.25)
     DES = fwdpy11.MultivariateGaussianEffects(0, 1, 1, vcov)
     demography = fwdpy11.ForwardDemesGraph.tubes(
-        [N], 10*N+100, burnin_is_exact=True)
+        [N], N+100, burnin_is_exact=True)
     p = {
         "nregions": [],
         "sregions": [DES],
@@ -87,7 +87,7 @@ def set_up_two_trait_quant_trait_model():
         "gvalue": a,
         "prune_selected": False,
         "demography": demography,
-        "simlen": 10 * N + 100,
+        "simlen": N + 100,
     }
     params = fwdpy11.ModelParams(**p)
     rng = fwdpy11.GSLrng(101 * 45 * 110 * 210)
@@ -109,7 +109,7 @@ class TestNoPleiotropy(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         self.params, self.rng, self.pop = set_up_quant_trait_model()
-        preserver = PreserveN(10 * self.pop.N, 10)
+        preserver = PreserveN(self.pop.N, 10)
         fwdpy11.evolvets(
             self.rng, self.pop, self.params, 100, preserver, record_gvalue_matrix=True
         )
@@ -194,7 +194,7 @@ class TestTwoTraitsIsotropy(unittest.TestCase):
         it simpler to verify fitnesses.
         """
         self.params, self.rng, self.pop = set_up_two_trait_quant_trait_model()
-        preserver = PreserveN(10 * self.pop.N + 1, 10)
+        preserver = PreserveN(self.pop.N + 1, 10)
         fwdpy11.evolvets(
             self.rng, self.pop, self.params, 100, preserver, record_gvalue_matrix=True
         )
@@ -304,7 +304,7 @@ class TestWithFirstGenerationPreserved(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         self.params, self.rng, self.pop = set_up_quant_trait_model()
-        preserver = PreserveN(10 * self.pop.N, 10)
+        preserver = PreserveN(self.pop.N, 10)
         fwdpy11.evolvets(
             self.rng,
             self.pop,
