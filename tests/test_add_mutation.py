@@ -54,7 +54,8 @@ def generate_msprime_ancestry(
         params = fwdpy11.ModelParams(**pdict)
 
         rng = fwdpy11.GSLrng(fp11_seed)
-        data = fwdpy11.NewMutationData(effect_size=alpha / 2 / N, dominance=1.0)
+        data = fwdpy11.NewMutationData(
+            effect_size=alpha / 2 / N, dominance=1.0)
         idx = pop.add_mutation(
             rng, ndescendants=ndescendants, data=data, window=(0.49, 0.51)
         )
@@ -78,10 +79,11 @@ def test_ndescendants(msprime_seed, fp11_seed, ndescendants):
 # NOTE: this is copied from test/test_tree_sequences.py
 # FIXME: this should be a more general fixture?
 @pytest.fixture
-def set_up_quant_trait_model(simlen=1.0):
+def set_up_quant_trait_model():
     # TODO add neutral variants
     N = 1000
-    demography = None
+    demography = fwdpy11.ForwardDemesGraph.tubes(
+        [N], burnin=100, burnin_is_exact=True)
     rho = 2.0
     # theta = 100.
     # nreps = 500
@@ -100,7 +102,7 @@ def set_up_quant_trait_model(simlen=1.0):
         "gvalue": a,
         "prune_selected": False,
         "demography": demography,
-        "simlen": np.rint(simlen * N).astype(int),
+        "simlen": demography.final_generation
     }
     params = fwdpy11.ModelParams(**p)
     rng = fwdpy11.GSLrng(101 * 45 * 110 * 210)
@@ -182,7 +184,8 @@ def test_add_mutation_in_two_deme_model(deme, ndescendants, small_split_model):
     pop = fwdpy11.DiploidPopulation.create_from_tskit(ts)
     data = fwdpy11.NewMutationData(effect_size=-1e-3, dominance=1.0)
     rng = fwdpy11.GSLrng(42)
-    key = pop.add_mutation(rng, ndescendants=ndescendants, deme=deme, data=data)
+    key = pop.add_mutation(
+        rng, ndescendants=ndescendants, deme=deme, data=data)
     # Skip over cases where ndescendants could not be satisfied
     if key is not None:
         assert key == 0

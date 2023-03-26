@@ -81,12 +81,16 @@ def test_bad_frequency_range(r):
 @pytest.mark.parametrize("fp11_seed", seed_list(238145238, 5))
 def test_deleterious_mutation_remains_present(msprime_seed, fp11_seed):
     pop = make_pop_with_msprime_ancestry(msprime_seed)
+    demography = fwdpy11.ForwardDemesGraph.tubes(pop.deme_sizes()[1],
+                                                 burnin=10,
+                                                 burnin_is_exact=True)
     pdict = {
         "recregions": [fwdpy11.PoissonInterval(0, 1, 5e-2)],
         "gvalue": fwdpy11.Multiplicative(2.0),
         "rates": (0, 0, None),
         "prune_selected": False,
         "simlen": 10,
+        "demography": demography
     }
     params = fwdpy11.ModelParams(**pdict)
     mutation_data = fwdpy11.conditional_models.NewMutationParameters(
@@ -122,12 +126,16 @@ def test_deleterious_mutation_remains_present_with_final_recording(
     msprime_seed, fp11_seed
 ):
     pop = make_pop_with_msprime_ancestry(msprime_seed)
+    demography = fwdpy11.ForwardDemesGraph.tubes(pop.deme_sizes()[1],
+                                                 burnin=20,
+                                                 burnin_is_exact=True)
     pdict = {
         "recregions": [fwdpy11.PoissonInterval(0, 1, 5e-2)],
         "gvalue": fwdpy11.Multiplicative(2.0),
         "rates": (0, 0, None),
         "prune_selected": False,
         "simlen": 20,
+        "demography": demography,
     }
     params = fwdpy11.ModelParams(**pdict)
     mutation_data = fwdpy11.conditional_models.NewMutationParameters(
@@ -168,12 +176,16 @@ def test_deleterious_mutation_remains_present_with_final_recording(
 @pytest.mark.parametrize("alpha", [1000.0])
 def test_sweep_from_new_mutation_using_API(msprime_seed, fp11_seed, alpha):
     pop = make_pop_with_msprime_ancestry(msprime_seed)
+    demography = fwdpy11.ForwardDemesGraph.tubes(pop.deme_sizes()[1],
+                                                 burnin=200,
+                                                 burnin_is_exact=True)
     pdict = {
         "recregions": [fwdpy11.PoissonInterval(0, 1, 5e-2)],
         "gvalue": fwdpy11.Multiplicative(2.0),
         "rates": (0, 0, None),
         "prune_selected": False,
         "simlen": 10 * pop.N,
+        "demography": demography
     }
     params = fwdpy11.ModelParams(**pdict)
     mutation_data = fwdpy11.conditional_models.NewMutationParameters(
@@ -233,12 +245,16 @@ def test_sweep_from_new_mutation_using_API_exit_when_finished(
     msprime_seed, fp11_seed, alpha
 ):
     pop = make_pop_with_msprime_ancestry(msprime_seed)
+    demography = fwdpy11.ForwardDemesGraph.tubes(pop.deme_sizes()[1],
+                                                 burnin=200,
+                                                 burnin_is_exact=True)
     pdict = {
         "recregions": [fwdpy11.PoissonInterval(0, 1, 5e-2)],
         "gvalue": fwdpy11.Multiplicative(2.0),
         "rates": (0, 0, None),
         "prune_selected": False,
         "simlen": 10 * pop.N,
+        "demography": demography
     }
     params = fwdpy11.ModelParams(**pdict)
     mutation_data = fwdpy11.conditional_models.NewMutationParameters(
@@ -270,12 +286,16 @@ def test_sweep_from_standing_variation_using_API(
     msprime_seed, fp11_seed, ndescendants, alpha
 ):
     pop = make_pop_with_msprime_ancestry(msprime_seed)
+    demography = fwdpy11.ForwardDemesGraph.tubes(pop.deme_sizes()[1],
+                                                 burnin=200,
+                                                 burnin_is_exact=True)
     pdict = {
         "recregions": [fwdpy11.PoissonInterval(0, 1, 5e-2)],
         "gvalue": fwdpy11.Multiplicative(2.0),
         "rates": (0, 0, None),
         "prune_selected": False,
         "simlen": 10 * pop.N,
+        "demography": demography
     }
     params = fwdpy11.ModelParams(**pdict)
     mutation_data = fwdpy11.conditional_models.NewMutationParameters(
@@ -655,6 +675,9 @@ def test_github_issue_1093(seed, when):
 
         # Build the pop from msprime output
         pop = fwdpy11.DiploidPopulation.create_from_tskit(initial_ts)
+        demography = fwdpy11.ForwardDemesGraph.tubes(pop.deme_sizes()[1],
+                                                     burnin=200,
+                                                     burnin_is_exact=True)
 
         # Set up basic model parameters
         pdict = {
@@ -665,6 +688,7 @@ def test_github_issue_1093(seed, when):
             "rates": (0, 0, 0.0),
             "prune_selected": False,
             "simlen": 200,
+            "demography": demography
         }
         params = fwdpy11.ModelParams(**pdict)
 

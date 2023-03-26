@@ -16,6 +16,9 @@ class testCustomAdditive(unittest.TestCase):
             self.pop, dfe=fwdpy11.ExpS(0, 1, 1, -0.05), pneutral=0.95, simlen=10
         )
         self.pdict["gvalue"] = ca.additive()
+        self.pdict["demography"] = fwdpy11.ForwardDemesGraph.tubes(self.pop.deme_sizes()[1],
+                                                                   burnin=self.pdict["simlen"],
+                                                                   burnin_is_exact=True)
         self.rng = fwdpy11.GSLrng(42)
         self.params = fwdpy11.ModelParams(**self.pdict)
 
@@ -40,6 +43,9 @@ class testGeneralModule(unittest.TestCase):
             simlen=10,
         )
         self.pdict["gvalue"] = general.GeneralW()
+        self.pdict["demography"] = fwdpy11.ForwardDemesGraph.tubes(self.pop.deme_sizes()[1],
+                                                                   burnin=self.pdict["simlen"],
+                                                                   burnin_is_exact=True)
         self.rng = fwdpy11.GSLrng(42)
         self.params = fwdpy11.ModelParams(**self.pdict)
 

@@ -26,13 +26,18 @@ from ezparams import mslike
 
 def quick_neutral_slocus(N=1000, simlen=100):
     from fwdpy11 import ModelParams
+    from fwdpy11 import ForwardDemesGraph
     from fwdpy11 import DiploidPopulation, GSLrng
     from fwdpy11 import Multiplicative
     from fwdpy11 import evolvets
 
     pop = DiploidPopulation(N, 1.)
+    demography = ForwardDemesGraph.tubes([N],
+                                         burnin=simlen,
+                                         burnin_is_exact=True)
     params_dict = mslike(pop, simlen=simlen)
     params_dict["gvalue"] = Multiplicative(2.0)
+    params_dict["demography"] = demography
     params = ModelParams(**params_dict)
     rng = GSLrng(42)
     evolvets(rng, pop, params, 100)
@@ -41,6 +46,7 @@ def quick_neutral_slocus(N=1000, simlen=100):
 
 def quick_nonneutral_slocus(N=1000, simlen=100, dfe=None):
     from fwdpy11 import ModelParams
+    from fwdpy11 import ForwardDemesGraph
     from fwdpy11 import DiploidPopulation, GSLrng
     from fwdpy11 import evolvets
     from fwdpy11 import ExpS
@@ -49,8 +55,13 @@ def quick_nonneutral_slocus(N=1000, simlen=100, dfe=None):
     pop = DiploidPopulation(N, 1.)
     if dfe is None:
         dfe = ExpS(0, 1, 1, -0.1)
+    demography = ForwardDemesGraph.tubes(
+        pop.deme_sizes()[1],
+        burnin=simlen,
+        burnin_is_exact=True)
     params_dict = mslike(pop, simlen=simlen, dfe=dfe, pneutral=0.95)
     params_dict["gvalue"] = Multiplicative(2.0)
+    params_dict["demography"] = demography
     params = ModelParams(**params_dict)
     rng = GSLrng(42)
     evolvets(rng, pop, params, 100)

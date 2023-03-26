@@ -48,14 +48,16 @@ def evolve_snowdrift(args):
     rng = fp11.GSLrng(seed)
     p = {
         "sregions": [fp11.ExpS(0, 1, 1, -0.1, 1.0)],
-        "recregions": [fp11.Region(0, 1, 1)],
+        "recregions": [fp11.PoissonInterval(0, 1, 1e-3)],
         "nregions": [],
         "gvalue": snowdrift.DiploidSnowdrift(0.2, -0.2, 1, -2, 1, 0.3),
         # evolve for 100 generations so that unit tests are
         # fast
-        "demography": None,
+        "demography": fp11.ForwardDemesGraph.tubes(pop.deme_sizes()[1],
+                                                   burnin=20,
+                                                   burnin_is_exact=True),
         "simlen": 20,
-        "rates": (0.0, 0.0025, 0.001),
+        "rates": (0.0, 0.0025, None),
         "prune_selected": False,
     }
     params = fp11.ModelParams(**p)
