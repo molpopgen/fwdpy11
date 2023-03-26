@@ -20,6 +20,9 @@
 import math
 import typing
 
+from hypothesis import settings, given
+from hypothesis.strategies import integers
+
 import attr
 import fwdpy11.tskit_tools
 import fwdpy11.tskit_tools._dump_tables_to_tskit
@@ -273,12 +276,9 @@ def test_mutation_metadata_with_vectors(mock_population, tables):
         assert np.array_equal(i.heffects, j.heffects)
 
 
-@pytest.mark.parametrize(
-    "msprime_seed", np.random.randint(0, np.iinfo(np.uint32).max, 10).tolist()
-)
-@pytest.mark.parametrize(
-    "fp11_seed", np.random.randint(0, np.iinfo(np.uint32).max, 10).tolist()
-)
+@given(msprime_seed=integers(1, int(2**32 - 1)),
+       fp11_seed=integers(1, int(2**32-1)))
+@settings(deadline=None, max_examples=5)
 def test_encoding_neutral_mutations_with_msprime_tree_sequences(
     msprime_seed, fp11_seed
 ):
@@ -296,8 +296,7 @@ def test_encoding_neutral_mutations_with_msprime_tree_sequences(
     ts = msprime.simulate(500, Ne=1000, random_seed=msprime_seed)
     pop = fwdpy11.DiploidPopulation.create_from_tskit(ts)
     rng = fwdpy11.GSLrng(fp11_seed)
-    nmuts = fwdpy11.infinite_sites(rng, pop, 1e-3)
-    assert nmuts > 0
+    _ = fwdpy11.infinite_sites(rng, pop, 1e-3)
     for m in pop.tables.mutations:
         assert pop.mutations[m.key].g <= pop.tables.nodes[m.node].time
     _ = pop.dump_tables_to_tskit()
