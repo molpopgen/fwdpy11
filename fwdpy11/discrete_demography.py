@@ -17,26 +17,11 @@
 # along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-import itertools
 import typing
-import warnings
-from collections import defaultdict
-from dataclasses import dataclass
 
-import attr
 import demes
 import demes.demes
-import intervaltree
-import numpy as np
 
-import fwdpy11
-
-from .class_decorators import (
-    attr_add_asblack,
-    attr_class_pickle_with_super,
-    attr_class_to_from_dict,
-    attr_class_to_from_dict_no_recurse,
-)
 
 from fwdpy11._types.demographic_model_details import DemographicModelDetails
 
@@ -47,8 +32,8 @@ def from_demes(
 ) -> DemographicModelDetails:
     """
     Build a :class:`fwdpy11.DemographicModelDetails` object using demes.
-    The deme graph can either be a demes Graph object or a string as the filepath to a
-    demes-specifiend YAML demography.
+    The deme graph can either be a demes Graph object or a string as the
+    filepath to a demes-specifiend YAML demography.
 
     :param dg: The demes Graph to convert.
     :type dg: demes.Graph or str

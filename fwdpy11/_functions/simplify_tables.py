@@ -12,7 +12,8 @@ def simplify(pop, samples):
     :param pop: A :class:`fwdpy11.DiploidPopulation`
     :param samples: A list of samples (node indexes).
 
-    :return: The simplified tables and array mapping input sample IDs to output IDS
+    :return: The simplified tables and array mapping input sample
+             IDs to output IDS
 
     :rtype: tuple
 
@@ -22,13 +23,15 @@ def simplify(pop, samples):
     including some node IDs from
     :attr:`fwdpy11.DiploidPopulation.ancient_sample_metadata`.
 
-    If the input contains ancient samples, and you wish to include them in the output,
+    If the input contains ancient samples,
+    and you wish to include them in the output,
     then you need to include their IDs in the samples argument.
 
     .. note::
 
-        Due to node ID remapping, the metadata corresponding to nodes becomes a bit more
-        difficult to look up.  You need to use the output ID map, the original IDs, and
+        Due to node ID remapping, the metadata corresponding
+        to nodes becomes a bit more difficult to look up.
+        You need to use the output ID map, the original IDs, and
         the population's metadata containers.
 
     .. deprecated:: 0.3.0
@@ -47,8 +50,9 @@ def simplify(pop, samples):
     import warnings
 
     warnings.warn(
-        "This function is deprecated and will be removed soon. Please use fwdpy11.simplify_tables instead",
-        category=FutureWarning,
+        "This function is deprecated and will be removed soon."
+        "Please use fwdpy11.simplify_tables instead",
+        category=FutureWarning, stacklevel=2
     )
 
     ll_t, idmap = fwdpy11._fwdpy11._simplify(pop, samples)

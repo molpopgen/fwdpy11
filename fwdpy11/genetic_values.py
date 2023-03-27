@@ -123,7 +123,9 @@ class PleiotropicOptima(_ll_PleiotropicOptima):
             attr.validators.instance_of(int)(self, attribute, value)
 
     def __attrs_post_init__(self):
-        super(PleiotropicOptima, self).__init__(self.optima, self.VS, self.when)
+        super(PleiotropicOptima, self).__init__(self.optima,
+                                                self.VS,
+                                                self.when)
 
     def __eq__(self, other):
         optima_equal = np.array_equal(self.optima, other.optima)
@@ -172,7 +174,8 @@ class GSS(_ll_GSSmo):
     def __attrs_post_init__(self):
         if self.VS is None:
             super(GSS, self).__init__(
-                [Optimum(optimum=self.optimum.optimum, VS=self.optimum.VS, when=0)]
+                [Optimum(optimum=self.optimum.optimum,
+                         VS=self.optimum.VS, when=0)]
             )
         else:
             super(GSS, self).__init__(
@@ -186,7 +189,8 @@ class GSS(_ll_GSSmo):
         self.__dict__.update(d)
         if self.VS is None:
             super(GSS, self).__init__(
-                [Optimum(optimum=self.optimum.optimum, VS=self.optimum.VS, when=0)]
+                [Optimum(optimum=self.optimum.optimum,
+                         VS=self.optimum.VS, when=0)]
             )
         else:
             super(GSS, self).__init__(
@@ -249,7 +253,8 @@ class MultivariateGSS(_ll_MultivariateGSSmo):
     Essentially, this is Equation 1 of
 
     Simons, Yuval B., Kevin Bullaughey, Richard R. Hudson, and Guy Sella. 2018.
-    "A Population Genetic Interpretation of GWAS Findings for Human Quantitative Traits."
+    "A Population Genetic Interpretation of GWAS Findings
+    for Human Quantitative Traits."
     PLoS Biology 16 (3): e2002985.
 
     For the case of moving optima, see :class:`fwdpy11.MultivariateGSSmo`.
@@ -491,7 +496,8 @@ class GBR(_ll_GBR):
     2013 http://dx.doi.org/10.1371/journal.pgen.1003258 and Sanjak et al. 2017
     http://dx.doi.org/10.1371/journal.pgen.1006573.
 
-    The trait value is the geometric mean of the sum of effect sizes on each haplotype.
+    The trait value is the geometric mean of the sum of effect
+    sizes on each haplotype.
     It is undefined for the case where these sums are negative.
 
     This class has the following attributes, whose names
@@ -524,15 +530,15 @@ class StrictAdditiveMultivariateEffects(_ll_StrictAdditiveMultivariateEffects):
     """
     Multivariate trait values under strictly additive effects.
 
-    Calculate the trait value for a diploid in a :class:`fwdpy11.DiploidPopulation`
-    for a multidimensional trait.
+    Calculate the trait value for a diploid in a
+    :class:`fwdpy11.DiploidPopulation` for a multidimensional trait.
 
     This class is restricted to the case of simple additive effects, meaning
     that any dominance terms associated with mutations are ignored.
 
     During a simulation, :attr:`fwdpy11.DiploidMetadata.g` is filled with the
-    genetic value corresponding to a "focal" trait specified upon object construction.
-    This class has the following attributes, whose names
+    genetic value corresponding to a "focal" trait specified upon
+    object construction. This class has the following attributes, whose names
     are also `kwargs` for intitialization.  The attribute names
     also determine the order of positional arguments:
 
@@ -558,5 +564,8 @@ class StrictAdditiveMultivariateEffects(_ll_StrictAdditiveMultivariateEffects):
 
     def __attrs_post_init__(self):
         super(StrictAdditiveMultivariateEffects, self).__init__(
-            self.ndimensions, self.focal_trait, self.gvalue_to_fitness, self.noise
+            self.ndimensions,
+            self.focal_trait,
+            self.gvalue_to_fitness,
+            self.noise
         )

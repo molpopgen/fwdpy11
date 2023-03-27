@@ -310,16 +310,23 @@ def _track_added_mutation(
     :type when: int
     :param until: Time stop monitoring the new mutation
     :type until: int
-    :param max_attempts: Maximum number of attempts to satisfy `stopping_condition`
+    :param max_attempts: Maximum number of attempts to
+                         satisfy `stopping_condition`
     :type max_attempts: int
-    :param sampling_policy: Enumeration specifying the recording of ancient samples.
+    :param sampling_policy: Enumeration specifying the
+                            recording of ancient samples.
     :type sampling_policy: :class:`AncientSamplePolicy`
     :param stopping_condition: An optional callable that specifies a TODO
-    :type stopping_condition:  typing.Optional[ typing.Callable[ [fwdpy11.DiploidPopulation, int, typing.Tuple[float, float, int]], SimulationStatus, ]
+    :type stopping_condition: typing.Optional[typing.Callable[
+                              [fwdpy11.DiploidPopulation,
+                              int,
+                              typing.Tuple[float, float, int]],
+                              SimulationStatus,]
     :param evolvets_options: Options to :func:`fwdpy11.evolvets`
     :type evolvets_options: :class:`EvolveOptions`
-    :param return_when_stopping_condition_met: If `True`, return to calling environment once `stopping_condition` is satisfied.
-                                               If `False`, simulate to the end of the model.
+    :param return_when_stopping_condition_met: If `True`,
+        return to calling environment once `stopping_condition` is satisfied.
+        If `False`, simulate to the end of the model.
     """
 
     if pop.generation > 0:

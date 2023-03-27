@@ -17,12 +17,7 @@
 # along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 #
 from dataclasses import dataclass
-import copy
-import warnings
 from typing import Dict, List, Optional, Union
-
-import fwdpy11
-import numpy as np
 
 from fwdpy11._types.forward_demes_graph import ForwardDemesGraph
 from fwdpy11._types.demographic_model_details import DemographicModelDetails

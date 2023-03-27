@@ -73,7 +73,6 @@ def quick_slocus_qtrait_pop_params(N=1000, simlen=100):
     from fwdpy11 import GSS
     from fwdpy11 import Additive
     from fwdpy11 import GaussianS, Region
-    import numpy as np
 
     p = {
         "nregions": [],

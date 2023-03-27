@@ -45,7 +45,8 @@ def _selective_sweep(
     **kwargs,
 ) -> ConditionalModelOutput:
     """
-    This function is a wrapper around :func:`fwdpy11.conditional_models.track_added_mutation`.
+    This function is a wrapper around
+    :func:`fwdpy11.conditional_models.track_added_mutation`.
 
     This function requires a `stopping_condition`.
     If `when` is not given as a keyword argument, it is assumed to be 0.

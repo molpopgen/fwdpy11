@@ -26,21 +26,6 @@ from ._fwdpy11 import GSLrng, SampleRecorder
 from ._types import DiploidPopulation, ModelParams
 
 
-# def _validate_event_timings(demography: fwdpy11.DiscreteDemography, generation: int):
-#     too_early = []
-#     for i in demography._timed_events():
-#         if i is not None:
-#             for j in i:
-#                 if j.when < generation:
-#                     too_early.append(j)
-#     if len(too_early) > 0:
-#         import warnings
-#
-#         msg = "The following demographic events are registered to occur "
-#         msg += f"before the current generation, which is {generation}: {too_early}"
-#         warnings.warn(msg)
-
-
 def evolvets(
     rng: GSLrng,
     pop: DiploidPopulation,
@@ -68,15 +53,16 @@ def evolvets(
     :type pop: :class:`fwdpy11.DiploidPopulation`
     :param params: simulation parameters
     :type params: :class:`fwdpy11.ModelParams`
-    :param simplification_interval: Number of generations between simplifications.
+    :param simplification_interval: Number of generations
+        between simplifications.
     :type simplification_interval: int
     :param recorder: (None) A temporal sampler/data recorder.
     :type recorder: typing.Callable
     :param post_simplification_recorder: (None) A temporal sampler
     :type post_simplification_recorder: typing.Callable
     :param suppress_table_indexing: (`None`) Prevents edge table indexing until
-                                    end of simulation.  The default value (`None`)
-                                    will be interpreted as `True`
+                                    end of simulation.  The default value
+                                    (`None`) will be interpreted as `True`
     :type suppress_table_indexing: Optional[bool]
     :param record_gvalue_matrix: (False) Whether to record genetic values into
                                  :attr:`fwdpy11.DiploidPopulation.genetic_values`.
@@ -144,7 +130,7 @@ def evolvets(
         msg = "Applying a default demographic model "
         msg += f"where deme sizes are {sizes} "
         msg += f"and the burn-in length is 10*{sum(sizes)}"
-        warnings.warn(msg)
+        warnings.warn(msg, stacklevel=2)
         demographic_model = ForwardDemesGraph.tubes(sizes, 10)
 
     for r in params.sregions:
@@ -152,8 +138,10 @@ def evolvets(
             if isinstance(r.des, list):
                 nd = demographic_model.number_of_demes()
                 if nd > params.gvalue.ndemes:
-                    raise ValueError(f"maxmimum number of demes in model ({nd}) is not compatible with genetic value"
-                                     f" number of demes {params.gvalue.ndemes}")
+                    msg = f"maxmimum number of demes in model ({nd})"
+                    msg += " is not compatible with genetic value"
+                    msg += f" number of demes {params.gvalue.ndemes}"
+                    raise ValueError(msg)
                 for rr in r.des:
                     assert isinstance(rr, fwdpy11.Sregion)  # type: ignore
                     if rr.beg < 0:
@@ -168,8 +156,10 @@ def evolvets(
                 assert isinstance(r.des, fwdpy11.Sregion)  # type: ignore
                 nd = demographic_model.number_of_demes()
                 if nd > params.gvalue.ndemes:
-                    raise ValueError(f"maxmimum number of demes in model ({nd}) is not compatible with genetic value"
-                                     f" number of demes {params.gvalue.ndemes}")
+                    msg = f"maxmimum number of demes in model ({nd})"
+                    msg += " is not compatible with genetic value"
+                    msg += f" number of demes {params.gvalue.ndemes}"
+                    raise ValueError(msg)
                 if r.des.beg < 0:
                     raise ValueError(f"{r} has begin value < 0.0")
                 if r.des.end > pop.tables.genome_length:
@@ -261,18 +251,18 @@ def evolvets(
     sr = SampleRecorder()
     from ._fwdpy11 import _dgvalue_pointer_vector
 
-    _suppress_table_indexing = suppress_table_indexing
-    if _suppress_table_indexing is None:
-        _suppress_table_indexing is True
-
     options = _evolve_with_tree_sequences_options()
 
     options.preserve_selected_fixations = params.prune_selected is False
-    options.suppress_edge_table_indexing = _suppress_table_indexing
+    if suppress_table_indexing is not None:
+        options.suppress_edge_table_indexing = suppress_table_indexing
+    else:
+        options.suppress_edge_table_indexing = True
     options.record_gvalue_matrix = record_gvalue_matrix
     options.track_mutation_counts_during_sim = track_mutation_counts
     options.remove_extinct_mutations_at_finish = remove_extinct_variants
-    options.reset_treeseqs_to_alive_nodes_after_simplification = reset_treeseqs_after_simplify
+    options.reset_treeseqs_to_alive_nodes_after_simplification = \
+        reset_treeseqs_after_simplify
     options.preserve_first_generation = preserve_first_generation
     options.allow_residual_selfing = params.allow_residual_selfing
 
@@ -288,7 +278,7 @@ def evolvets(
                     msg += " This model will raise an error if this deme "
                     msg += "contributes to ancestry after the size of 1"
                     msg += " is reached."
-                    warnings.warn(msg, UserWarning)
+                    warnings.warn(msg, UserWarning, stacklevel=2)
 
     gvpointers = _dgvalue_pointer_vector(params.gvalue)
     evolve_with_tree_sequences(

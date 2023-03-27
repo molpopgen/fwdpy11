@@ -220,9 +220,11 @@ class ModelParams(object):
 
     @recregions.validator
     def validate_recregions(self, attribute, value):
-        if len(value) > 0 and all([isinstance(i, fwdpy11.Region) for i in value]):
+        if len(value) > 0 and all([isinstance(i, fwdpy11.Region) for
+                                   i in value]):
             warnings.warn(
-                "using a list of Regions for recregions is deprecated", UserWarning)
+                "using a list of Regions for recregions is deprecated",
+                UserWarning, stacklevel=2)
         try:
             for i in value:
                 attr.validators.instance_of(fwdpy11.Region)(self, attribute, i)
@@ -242,7 +244,8 @@ class ModelParams(object):
                     [not i.discrete for i in value]
                 ):
                     warnings.warn(
-                        "genetic map has a mix of discrete=True and discrete=False"
+                        "genetic map has a mix of discrete=True"
+                        "and discrete=False", stacklevel=2
                     )
 
             except TypeError:
@@ -252,7 +255,9 @@ class ModelParams(object):
     def rates_validator(self, attribute, value):
         if value.recombination_rate is None:
             for i in self.recregions:
-                if not isinstance(i, fwdpy11.PoissonCrossoverGenerator) and not isinstance(i, fwdpy11.NonPoissonCrossoverGenerator):
+                if not isinstance(i, fwdpy11.PoissonCrossoverGenerator) and \
+                        not isinstance(i,
+                                       fwdpy11.NonPoissonCrossoverGenerator):
                     raise ValueError(
                         f"recombination rate of {value.recombination_rate}"
                         " must be paired with"

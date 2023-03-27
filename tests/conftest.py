@@ -30,6 +30,7 @@ def numpy_generator(request):
     except AttributeError as a:  # NOQA
         raise a
 
+
 @pytest.fixture(scope="function")
 def rng(request):
     try:
