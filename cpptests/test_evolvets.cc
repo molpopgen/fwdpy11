@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <boost/test/tools/fpc_op.hpp>
 #include <boost/test/tools/old/interface.hpp>
 #include <boost/test/unit_test.hpp>
 
@@ -109,7 +110,7 @@ namespace
         multi_deme_additive_hom, 0>;
 }
 
-struct common_setup
+template <typename T> struct common_setup
 {
     fwdpy11::GSLrng_t rng;
     fwdpy11::DiploidPopulation pop;
@@ -138,14 +139,21 @@ struct common_setup
           options{}
     {
     }
+
+    T
+    build_model() const
+    {
+        return T();
+    }
 };
 
-struct common_setup_with_sample_history_recording : public common_setup
+template <typename T>
+struct common_setup_with_sample_history_recording : public common_setup<T>
 {
     std::unordered_map<std::int32_t,
                        std::vector<std::pair<std::uint32_t, std::uint32_t>>>
         size_history;
-    common_setup_with_sample_history_recording() : common_setup(), size_history{}
+    common_setup_with_sample_history_recording() : common_setup<T>(), size_history{}
     {
         this->sample_recorder_callback = [this](const fwdpy11::DiploidPopulation& pop,
                                                 fwdpy11::SampleRecorder&) {
@@ -188,12 +196,12 @@ struct ancestry_proportions
 };
 
 // NOTE: efficiency is out the window here.
-struct common_setup_with_ancestry_tracking : public common_setup
+template <typename T> struct common_setup_with_ancestry_tracking : public common_setup<T>
 {
     std::vector<ancestry_proportions> ancestry;
     // parent id -> parent deme
     std::unordered_map<std::size_t, std::int32_t> parents;
-    common_setup_with_ancestry_tracking() : common_setup(), ancestry(), parents()
+    common_setup_with_ancestry_tracking() : common_setup<T>(), ancestry(), parents()
     {
         this->sample_recorder_callback = [this](const fwdpy11::DiploidPopulation& pop,
                                                 fwdpy11::SampleRecorder&) {
@@ -266,9 +274,9 @@ validate_ancestry(const std::vector<ancestry_proportions>& ancestry,
 
 BOOST_AUTO_TEST_SUITE(test_evolvets)
 
-BOOST_FIXTURE_TEST_CASE(test_basic_api_coherence, common_setup)
+BOOST_FIXTURE_TEST_CASE(test_basic_api_coherence, common_setup<SingleDemeModel>)
 {
-    auto model = SingleDemeModel();
+    auto model = build_model();
     fwdpy11_core::ForwardDemesGraph forward_demes_graph(model.yaml, 10);
 
     // TODO: if we put long run times in here, we get exceptions
@@ -281,10 +289,9 @@ BOOST_FIXTURE_TEST_CASE(test_basic_api_coherence, common_setup)
 }
 
 BOOST_FIXTURE_TEST_CASE(test_basic_api_coherence_two_deme_perpetual_island_model,
-                        common_setup)
+                        common_setup<TwoDemePerpetualIslandModel>)
 {
-    auto model = TwoDemePerpetualIslandModel();
-
+    auto model = build_model();
     fwdpy11_core::ForwardDemesGraph forward_demes_graph(model.yaml, 10);
     // over-write the fixture so that the initial pop is okay
     pop = fwdpy11::DiploidPopulation(
@@ -306,9 +313,10 @@ BOOST_FIXTURE_TEST_CASE(test_basic_api_coherence_two_deme_perpetual_island_model
     BOOST_REQUIRE_EQUAL(ndemes[1], 100);
 }
 
-BOOST_FIXTURE_TEST_CASE(test_simlen_longer_than_model_length, common_setup)
+BOOST_FIXTURE_TEST_CASE(test_simlen_longer_than_model_length,
+                        common_setup<SingleDemeModel>)
 {
-    auto model = SingleDemeModel();
+    auto model = build_model();
     fwdpy11_core::ForwardDemesGraph forward_demes_graph(model.yaml, 10);
 
     // Here, simlen = 100, but the graph only has 10 generations of births in it.
@@ -319,9 +327,9 @@ BOOST_FIXTURE_TEST_CASE(test_simlen_longer_than_model_length, common_setup)
     BOOST_REQUIRE_EQUAL(pop.generation, 10);
 }
 
-BOOST_FIXTURE_TEST_CASE(test_invalid_deme_metadata, common_setup)
+BOOST_FIXTURE_TEST_CASE(test_invalid_deme_metadata, common_setup<SingleDemeModel>)
 {
-    auto model = SingleDemeModel();
+    auto model = build_model();
     fwdpy11_core::ForwardDemesGraph forward_demes_graph(model.yaml, 10);
 
     // Make some of the individuals in deme 1 but all must be in deme 0
@@ -346,7 +354,7 @@ BOOST_FIXTURE_TEST_CASE(test_invalid_deme_metadata, common_setup)
     BOOST_REQUIRE_EQUAL(pop.generation, 0);
 }
 
-BOOST_FIXTURE_TEST_CASE(test_initial_pop_size_invalid, common_setup)
+BOOST_FIXTURE_TEST_CASE(test_initial_pop_size_invalid, common_setup<SingleDemeModel>)
 {
     // The demes model specifies N = 100.
     // Here, we will start with a different N.
@@ -359,7 +367,7 @@ BOOST_FIXTURE_TEST_CASE(test_initial_pop_size_invalid, common_setup)
         {
             // reset the fixture
             pop = fwdpy11::DiploidPopulation(initial_n, 10.0);
-            auto model = SingleDemeModel();
+            auto model = build_model();
             fwdpy11_core::ForwardDemesGraph forward_demes_graph(model.yaml, 10);
 
             BOOST_CHECK_THROW(
@@ -376,7 +384,8 @@ BOOST_FIXTURE_TEST_CASE(test_initial_pop_size_invalid, common_setup)
     BOOST_REQUIRE_EQUAL(pop.generation, 0);
 }
 
-BOOST_FIXTURE_TEST_CASE(test_initial_pop_size_invalid_island_model, common_setup)
+BOOST_FIXTURE_TEST_CASE(test_initial_pop_size_invalid_island_model,
+                        common_setup<TwoDemePerpetualIslandModel>)
 {
     {
         // The demes model specifies N = [100, 100].
@@ -390,7 +399,7 @@ BOOST_FIXTURE_TEST_CASE(test_initial_pop_size_invalid_island_model, common_setup
             {
                 // reset the fixture
                 pop = fwdpy11::DiploidPopulation(initial_n, 10.0);
-                auto model = TwoDemePerpetualIslandModel();
+                auto model = build_model();
                 fwdpy11_core::ForwardDemesGraph forward_demes_graph(model.yaml, 10);
 
                 BOOST_CHECK_THROW(
@@ -414,7 +423,7 @@ BOOST_FIXTURE_TEST_CASE(test_initial_pop_size_invalid_island_model, common_setup
             {
                 // reset the fixture
                 pop = fwdpy11::DiploidPopulation(initial_n, 10.0);
-                auto model = TwoDemePerpetualIslandModel();
+                auto model = build_model();
                 fwdpy11_core::ForwardDemesGraph forward_demes_graph(model.yaml, 10);
                 BOOST_CHECK_THROW(
                     {
@@ -431,9 +440,10 @@ BOOST_FIXTURE_TEST_CASE(test_initial_pop_size_invalid_island_model, common_setup
     }
 }
 
-BOOST_FIXTURE_TEST_CASE(test_generation_time_past_end_of_model, common_setup)
+BOOST_FIXTURE_TEST_CASE(test_generation_time_past_end_of_model,
+                        common_setup<SingleDemeModel>)
 {
-    auto model = SingleDemeModel();
+    auto model = build_model();
     fwdpy11_core::ForwardDemesGraph forward_demes_graph(model.yaml, 10);
 
     // The model is only set to simulate 10 generations
@@ -449,10 +459,11 @@ BOOST_FIXTURE_TEST_CASE(test_generation_time_past_end_of_model, common_setup)
     BOOST_REQUIRE_EQUAL(pop.generation, 11);
 }
 
-BOOST_FIXTURE_TEST_CASE(test_size_history_single_deme_model_one_size_change,
-                        common_setup_with_sample_history_recording)
+BOOST_FIXTURE_TEST_CASE(
+    test_size_history_single_deme_model_one_size_change,
+    common_setup_with_sample_history_recording<SingleDemeModelOneSizeChange>)
 {
-    auto model = SingleDemeModelOneSizeChange();
+    auto model = build_model();
     fwdpy11_core::ForwardDemesGraph forward_demes_graph(model.yaml, 10);
     evolve_with_tree_sequences(rng, pop, recorder, 10, forward_demes_graph, 60, 0., 0.,
                                mregions, recregions, gvalue_ptrs,
@@ -480,10 +491,11 @@ BOOST_FIXTURE_TEST_CASE(test_size_history_single_deme_model_one_size_change,
 
 BOOST_FIXTURE_TEST_CASE(
     test_size_history_two_deme_island_model_with_size_change_and_excinction,
-    common_setup_with_sample_history_recording)
+    common_setup_with_sample_history_recording<
+        TwoDemePerpetualIslandModelWithSizeChangeAndExtinction>)
 {
-    auto model = TwoDemePerpetualIslandModelWithSizeChangeAndExtinction();
     pop = fwdpy11::DiploidPopulation({100, 100}, 10.);
+    auto model = build_model();
     fwdpy11_core::ForwardDemesGraph forward_demes_graph(model.yaml, 10);
     evolve_with_tree_sequences(rng, pop, recorder, 10, forward_demes_graph, 60, 0., 0.,
                                mregions, recregions, gvalue_ptrs,
@@ -511,10 +523,10 @@ BOOST_FIXTURE_TEST_CASE(
 }
 
 BOOST_FIXTURE_TEST_CASE(test_size_history_two_demes_unequal_merge,
-                        common_setup_with_sample_history_recording)
+                        common_setup_with_sample_history_recording<TwoDemesUnequalMerge>)
 {
-    auto model = TwoDemesUnequalMerge();
     pop = fwdpy11::DiploidPopulation({100, 75}, 10.);
+    auto model = build_model();
     fwdpy11_core::ForwardDemesGraph forward_demes_graph(model.yaml, 10);
     evolve_with_tree_sequences(rng, pop, recorder, 10, forward_demes_graph, 60, 0., 0.,
                                mregions, recregions, gvalue_ptrs,
@@ -543,9 +555,9 @@ BOOST_FIXTURE_TEST_CASE(test_size_history_two_demes_unequal_merge,
 
 // NOTE: upstream has more extensive tests of correctness
 BOOST_FIXTURE_TEST_CASE(test_linear_size_change_history,
-                        common_setup_with_sample_history_recording)
+                        common_setup_with_sample_history_recording<LinearSizeChange>)
 {
-    auto model = LinearSizeChange();
+    auto model = build_model();
     fwdpy11_core::ForwardDemesGraph forward_demes_graph(model.yaml, 10);
     evolve_with_tree_sequences(rng, pop, recorder, 10, forward_demes_graph, 60, 0., 0.,
                                mregions, recregions, gvalue_ptrs,
@@ -575,10 +587,11 @@ BOOST_FIXTURE_TEST_CASE(test_linear_size_change_history,
         }
 }
 
-BOOST_FIXTURE_TEST_CASE(test_ancestry_proportions_from_pulse_with_burnin,
-                        common_setup_with_ancestry_tracking)
+BOOST_FIXTURE_TEST_CASE(
+    test_ancestry_proportions_from_pulse_with_burnin,
+    common_setup_with_ancestry_tracking<VeryRecentPulseTwoGenerationsAgo>)
 {
-    auto model = VeryRecentPulseTwoGenerationsAgo();
+    auto model = build_model();
     fwdpy11_core::ForwardDemesGraph forward_demes_graph(model.yaml, 10);
     BOOST_REQUIRE_EQUAL(forward_demes_graph.number_of_demes(), 2);
     pop = fwdpy11::DiploidPopulation({50, 50}, 1.);
@@ -609,10 +622,11 @@ BOOST_FIXTURE_TEST_CASE(test_ancestry_proportions_from_pulse_with_burnin,
     BOOST_REQUIRE(found);
 }
 
-BOOST_FIXTURE_TEST_CASE(test_ancestry_with_extreme_migration_until_one_generation_ago,
-                        common_setup_with_ancestry_tracking)
+BOOST_FIXTURE_TEST_CASE(
+    test_ancestry_with_extreme_migration_until_one_generation_ago,
+    common_setup_with_ancestry_tracking<ExtremeMigrationUntilOneGenerationAgo>)
 {
-    auto model = ExtremeMigrationUntilOneGenerationAgo();
+    auto model = build_model();
     fwdpy11_core::ForwardDemesGraph forward_demes_graph(model.yaml, 10);
     BOOST_REQUIRE_EQUAL(forward_demes_graph.number_of_demes(), 2);
     pop = fwdpy11::DiploidPopulation({1000, 1000}, 1.);
@@ -658,12 +672,12 @@ BOOST_AUTO_TEST_SUITE(test_evolvets_start_stop_start)
 // Tests of repeatedly entering in to the same model
 BOOST_FIXTURE_TEST_CASE(
     test_ancestry_with_extreme_migration_until_one_generation_ago_start_stop,
-    common_setup_with_ancestry_tracking)
+    common_setup_with_ancestry_tracking<ExtremeMigrationUntilOneGenerationAgo>)
 {
     // NOTE: this is a copy-paste of a test from above.
     // The only difference is that we call into the
     // evolve function for one generation at a time.
-    auto model = ExtremeMigrationUntilOneGenerationAgo();
+    auto model = build_model();
     fwdpy11_core::ForwardDemesGraph forward_demes_graph(model.yaml, 10);
     BOOST_REQUIRE_EQUAL(forward_demes_graph.number_of_demes(), 2);
     pop = fwdpy11::DiploidPopulation({1000, 1000}, 1.);
@@ -712,9 +726,9 @@ BOOST_AUTO_TEST_SUITE_END()
 
 BOOST_AUTO_TEST_SUITE(test_residual_selfing)
 
-BOOST_FIXTURE_TEST_CASE(test_no_residual_selfing, common_setup)
+BOOST_FIXTURE_TEST_CASE(test_no_residual_selfing, common_setup<DemeSizeIsOne>)
 {
-    auto model = DemeSizeIsOne();
+    auto model = build_model();
     fwdpy11_core::ForwardDemesGraph forward_demes_graph(model.yaml, 10);
     pop = fwdpy11::DiploidPopulation(1, 1.0);
     evolve_with_tree_sequences(rng, pop, recorder, 10, forward_demes_graph, 1, 0., 0.,
@@ -724,9 +738,9 @@ BOOST_FIXTURE_TEST_CASE(test_no_residual_selfing, common_setup)
     BOOST_REQUIRE_EQUAL(pop.generation, 1);
 }
 
-BOOST_FIXTURE_TEST_CASE(test_no_residual_selfing_exception, common_setup)
+BOOST_FIXTURE_TEST_CASE(test_no_residual_selfing_exception, common_setup<DemeSizeIsOne>)
 {
-    auto model = DemeSizeIsOne();
+    auto model = build_model();
     fwdpy11_core::ForwardDemesGraph forward_demes_graph(model.yaml, 10);
     pop = fwdpy11::DiploidPopulation(1, 1.0);
     options.allow_residual_selfing = false;
