@@ -28,10 +28,10 @@ from fwdpy11._version import version as __version__  # NOQA
 from ._dev import *  # NOQA
 from ._fwdpy11 import *  # NOQA
 
-from . import discrete_demography
+from . import discrete_demography  # NOQA
 
 from .regions import *  # NOQA
-from .genetic_map_unit import (
+from .genetic_map_unit import (  # NOQA
     PoissonPoint,
     PoissonInterval,
     BinomialInterval,
@@ -59,7 +59,7 @@ from .genetic_values import (  # NOQA
     StrictAdditiveMultivariateEffects,
 )
 
-from ._types import (
+from ._types import (  # NOQA
     DataMatrix,
     DataMatrixIterator,
     TableCollection,
@@ -75,7 +75,7 @@ from ._types.demography_debugger import DemographyDebugger  # NOQA
 from ._types.model_params import ModelParams, MutationAndRecombinationRates  # NOQA
 from ._evolvets import *  # NOQA
 
-from ._functions import (
+from ._functions import (  # NOQA
     data_matrix_from_tables,
     infinite_sites,
     make_data_matrix,

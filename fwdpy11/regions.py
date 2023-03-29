@@ -18,7 +18,6 @@
 #
 
 import typing
-import warnings
 
 import attr
 import numpy as np

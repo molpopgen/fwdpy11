@@ -18,19 +18,16 @@
 #
 
 import copy
-import json
 import os
 import pickle
 import unittest
 from collections import namedtuple
 
-import demes
 import fwdpy11
 import fwdpy11.tskit_tools
 import msprime
 import numpy as np
 import pytest
-import tskit
 
 
 class Recorder(object):
@@ -98,7 +95,7 @@ def set_up_standard_pop_gen_model(simlen=1.0):
     r = rho / (4 * N)
 
     demography = fwdpy11.ForwardDemesGraph.tubes(
-        [N], int(np.rint(simlen*N)),burnin_is_exact=True)
+        [N], int(np.rint(simlen*N)), burnin_is_exact=True)
 
     a = fwdpy11.Multiplicative(2.0)
     pselected = 5e-3
@@ -621,7 +618,7 @@ class TestTreeSequencesWithAncientSamplesKeepFixations(unittest.TestCase):
 
     def test_ancient_sample_times(self):
         times = []
-        for t, n, md in self.pop.sample_timepoints(False):
+        for t, _, _ in self.pop.sample_timepoints(False):
             times.append(int(t))
         self.assertEqual(times, [i for i in range(1, 101)])
 
@@ -1313,11 +1310,12 @@ class TestTreeSequenceResettingDuringTimeSeriesAnalysis(unittest.TestCase):
 
             def __call__(self, pop):
                 assert len(
-                    pop.preserved_nodes) // 2 == len(pop.ancient_sample_metadata)
+                    pop.preserved_nodes) // 2 == \
+                    len(pop.ancient_sample_metadata)
                 # Get the most recent ancient samples
                 # and record their number.  We do this
                 # by a "brute-force" approach
-                for t, n, m in pop.sample_timepoints(False):
+                for t, n, _ in pop.sample_timepoints(False):
                     if t not in self.timepoint_seen:
                         self.timepoint_seen[t] = 1
                     else:
@@ -1372,7 +1370,7 @@ class TestTreeSequenceResettingDuringTimeSeriesAnalysis(unittest.TestCase):
         self.assertEqual(len(self.pop.ancient_sample_metadata), 0)
 
     def test_all_timepoints_seen_exactly_once(self):
-        for i, j in self.resetter.timepoint_seen.items():
+        for _, j in self.resetter.timepoint_seen.items():
             self.assertEqual(j, 1)
 
     def test_all_expected_timepoints_are_present(self):

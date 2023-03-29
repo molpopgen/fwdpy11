@@ -20,7 +20,6 @@
 import typing
 
 import attr
-import numpy as np
 
 import fwdpy11._fwdpy11
 
@@ -51,8 +50,10 @@ class PoissonInterval(fwdpy11._fwdpy11._ll_PoissonInterval):
     :type end: int or float
     :param mean: The mean number of breakpoints per meiosis
     :type mean: float
-    :param discrete: If `False`, positions are continuous and uniform from `[beg, end)`.
-     If `True`, positions take integer values uniformly from `[beg, end)`.
+    :param discrete: If `False`, positions are continuous
+                     and uniform from `[beg, end)`.
+                     If `True`, positions take integer values
+                     uniformly from `[beg, end)`.
     :type discrete: bool
 
     .. versionadded:: 0.3.0
@@ -103,8 +104,10 @@ class PoissonPoint(fwdpy11._fwdpy11._ll_PoissonPoint):
     :type position: int or float
     :param mean: The mean number of breakpoints per meiosis
     :type mean: float
-    :param discrete: If `False`, positions are continuous and uniform from `[beg, end)`.
-     If `True`, positions take integer values uniformly from `[beg, end)`.
+    :param discrete: If `False`, positions are continuous and
+                     uniform from `[beg, end)`. If `True`,
+                     positions take integer values uniformly
+                     from `[beg, end)`.
     :type discrete: bool
 
     .. versionadded:: 0.3.0
@@ -127,7 +130,8 @@ class PoissonPoint(fwdpy11._fwdpy11._ll_PoissonPoint):
         Added `discrete` option to initializer.
     """
 
-    position: typing.Union[int, float] = attr.ib(validator=_is_integer_if_discrete)
+    position: typing.Union[int, float] = \
+        attr.ib(validator=_is_integer_if_discrete)
     mean: float
     discrete: bool = attr.ib(kw_only=True, default=False)
 
@@ -161,8 +165,10 @@ class BinomialInterval(fwdpy11._fwdpy11._ll_BinomialInterval):
     :type end: int or float
     :param probability: The probability of a recombination (per meiosis).
     :type probability: float
-    :param discrete: If `False`, positions are continuous and uniform from `[beg, end)`.
-     If `True`, positions take integer values uniformly from `[beg, end)`.
+    :param discrete: If `False`, positions are continuous
+                     and uniform from `[beg, end)`.
+                     If `True`, positions take integer values
+                     uniformly from `[beg, end)`.
     :type discrete: bool
 
     .. versionadded:: 0.5.2
@@ -213,8 +219,10 @@ class BinomialPoint(fwdpy11._fwdpy11._ll_BinomialPoint):
     :type position: int or float
     :param probability: The probability of a recombination (per meiosis).
     :type probability: float
-    :param discrete: If `False`, positions are continuous and uniform from `[beg, end)`.
-     If `True`, positions take integer values uniformly from `[beg, end)`.
+    :param discrete: If `False`, positions are continuous
+                     and uniform from `[beg, end)`.
+                     If `True`, positions take integer values
+                     uniformly from `[beg, end)`.
     :type discrete: bool
 
     .. versionadded:: 0.3.0
@@ -237,13 +245,15 @@ class BinomialPoint(fwdpy11._fwdpy11._ll_BinomialPoint):
         Added `discrete` option to initializer.
     """
 
-    position: typing.Union[int, float] = attr.ib(validator=_is_integer_if_discrete)
+    position: typing.Union[int, float] = attr.ib(
+        validator=_is_integer_if_discrete)
     probability: typing.Union[int, float]
     discrete: bool = attr.ib(kw_only=True, default=False)
 
     def __attrs_post_init__(self):
         super(BinomialPoint, self).__init__(
-            position=self.position, probability=self.probability, discrete=self.discrete
+            position=self.position, probability=self.probability,
+            discrete=self.discrete
         )
 
 
@@ -265,8 +275,10 @@ class FixedCrossovers(fwdpy11._fwdpy11._ll_FixedCrossovers):
     :type end: int or float
     :param num_xovers: The number of breakpoints per meiosis
     :type num_xovers: float
-    :param discrete: If `False`, positions are continuous and uniform from `[beg, end)`.
-     If `True`, positions take integer values uniformly from `[beg, end)`.
+    :param discrete: If `False`, positions are continuous
+                     and uniform from `[beg, end)`.
+                     If `True`, positions take integer values
+                     uniformly from `[beg, end)`.
     :type discrete: bool
 
     .. versionadded:: 0.3.0

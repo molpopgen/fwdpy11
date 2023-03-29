@@ -17,7 +17,6 @@
 # along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-import math
 import typing
 
 from hypothesis import settings, given
@@ -177,7 +176,7 @@ def test_diploid_metadata(mock_population, tables):
         assert not i.preserved
         assert not i.first_generation
 
-    for i in decoded[len(mock_population.diploid_metadata) :]:
+    for i in decoded[len(mock_population.diploid_metadata):]:
         assert not i.alive
         assert i.preserved
         assert i.first_generation
@@ -199,14 +198,16 @@ def test_diploid_metadata(mock_population, tables):
 def test_mutation_metadata_without_vectors(mock_population, tables):
     mock_population.generation = 1
 
-    mock_population.tables.sites.append(MockSite(position=0.1, ancestral_state=0))
+    mock_population.tables.sites.append(
+        MockSite(position=0.1, ancestral_state=0))
 
     mock_population.tables.mutations.append(
         MockMutationRecord(node=0, key=0, site=0, derived_state=1)
     )
 
     mock_population.mutations.append(
-        fwdpy11.Mutation(pos=0.1, s=-1e-3, h=1, g=mock_population.generation, label=7)
+        fwdpy11.Mutation(pos=0.1, s=-1e-3, h=1,
+                         g=mock_population.generation, label=7)
     )
 
     fwdpy11.tskit_tools._dump_tables_to_tskit._dump_mutation_site_and_site_tables(
@@ -233,7 +234,8 @@ def test_mutation_metadata_without_vectors(mock_population, tables):
 def test_mutation_metadata_with_vectors(mock_population, tables):
     mock_population.generation = 1
 
-    mock_population.tables.sites.append(MockSite(position=0.1, ancestral_state=0))
+    mock_population.tables.sites.append(
+        MockSite(position=0.1, ancestral_state=0))
 
     mock_population.tables.mutations.append(
         MockMutationRecord(node=0, key=0, site=0, derived_state=1)

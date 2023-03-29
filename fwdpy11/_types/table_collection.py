@@ -1,7 +1,7 @@
 from typing import Iterable
 
 import numpy as np
-import scipy.sparse # type: ignore
+import scipy.sparse  # type: ignore
 
 from .._fwdpy11 import Edge, MutationRecord, Node, Site, ll_TableCollection
 
@@ -30,9 +30,11 @@ def _validate_windows(windows, genome_length):
             raise ValueError("windows must be [a, b) and a < b")
         for i in w:
             if i < 0 or i > genome_length:
-                raise ValueError("window coordinates must be [0, genome_length)")
+                raise ValueError(
+                    "window coordinates must be [0, genome_length)")
     for i in range(1, len(windows), 2):
-        if windows[i - 1][0] < windows[i][1] and windows[i][0] < windows[i - 1][1]:
+        if windows[i - 1][0] < windows[i][1] and \
+                windows[i][0] < windows[i - 1][1]:
             raise ValueError("windows cannot overlap")
 
 
@@ -182,7 +184,8 @@ class TableCollection(ll_TableCollection):
         from . import TreeIterator
 
         shapes = tuple(len(i) + 1 for i in samples)
-        dok_JFS = [scipy.sparse.dok_matrix(shapes, dtype=np.int32) for i in windows]
+        dok_JFS = [scipy.sparse.dok_matrix(
+            shapes, dtype=np.int32) for i in windows]
 
         sample_list = np.where(sample_groups != NOT_A_SAMPLE)[0]
         t, s = _simplify(self, sample_list, simplify)
@@ -221,7 +224,8 @@ class TableCollection(ll_TableCollection):
         if len(samples) == 1:
             return self._1dfs(samples[0], windows, include_function, simplify)
 
-        sample_groups = np.array([NOT_A_SAMPLE] * len(self.nodes), dtype=np.int32)
+        sample_groups = np.array(
+            [NOT_A_SAMPLE] * len(self.nodes), dtype=np.int32)
         for i, j in enumerate(samples):
             if np.any(sample_groups[j] != NOT_A_SAMPLE):
                 raise ValueError(
@@ -272,14 +276,16 @@ class TableCollection(ll_TableCollection):
           bins correspond to frequencies 1 to n-1, where n is the number
           of sample nodes.
         * If multiple sample lists are provided, the return value is a
-          :class:`scipy.sparse.coo_matrix`.  For each dimension, the 0 and n bins
-          are included.
+          :class:`scipy.sparse.coo_matrix`.  For each dimension, the 0 and n
+          bins are included.
         * If ``marginalize == True`` and more than one sample bin is provided,
-          the :class:`scipy.sparse.coo_matrix` matrix is converted into a dict where the key
-          is the index of the sample list and the value is a dense 1-d array,
+          the :class:`scipy.sparse.coo_matrix` matrix is converted into a dict
+          where the key is the index of the sample list and the
+          value is a dense 1-d array,
           masked as described above.
         * If multiple windows are provided and ``separate_windows == False``,
-          then the return value is a single frequency spectrum summed over windows.
+          then the return value is a single frequency spectrum summed over
+          windows.
           If ``separate_windows == True``, then a list of frequency spectra is
           returned, indexed in the same order as the input windows.
 
@@ -289,8 +295,8 @@ class TableCollection(ll_TableCollection):
 
         .. versionchanged:: 0.18.0
 
-            Dropped `sparse` as a dependency, using types from `scipy.sparse` instead.
-            This change drops support for more than 2 sample lists.
+            Dropped `sparse` as a dependency, using types from `scipy.sparse`
+            instead. This change drops support for more than 2 sample lists.
 
         """
         for s in samples:
@@ -308,7 +314,8 @@ class TableCollection(ll_TableCollection):
 
         if include_neutral is False and include_selected is False:
             raise ValueError(
-                "One or both of include_neutral " "and include_selected must be True"
+                "One or both of include_neutral "
+                "and include_selected must be True"
             )
 
         include_function = _include_both
@@ -317,17 +324,21 @@ class TableCollection(ll_TableCollection):
         elif include_selected is False:
             include_function = _include_neutral
 
-        lfs = self._fs_implementation(samples, windows, include_function, simplify)
+        lfs = self._fs_implementation(
+            samples, windows, include_function, simplify)
         if separate_windows is True:
-            lfs = _handle_fs_marginalizing(lfs, marginalize, len(windows), len(samples))
+            lfs = _handle_fs_marginalizing(
+                lfs, marginalize, len(windows), len(samples))
             return lfs
         fs = lfs[0]
         for i in lfs[1:]:
             fs += i
-        fs = _handle_fs_marginalizing(fs, marginalize, len(windows), len(samples))
+        fs = _handle_fs_marginalizing(
+            fs, marginalize, len(windows), len(samples))
         return fs
 
     def preserved_nodes(self):
         raise AttributeError(
-            "TableCollection.preserved_nodes was removed in 0.13.0 and is now an attribute of DiploidPopulation"
+            "TableCollection.preserved_nodes was removed in 0.13.0 and is"
+            " now an attribute of DiploidPopulation"
         )

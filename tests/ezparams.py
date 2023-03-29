@@ -43,7 +43,6 @@ def mslike(pop, **kwargs):
     for key, value in kwargs.items():
         if key in defaults:
             defaults[key] = value
-    import numpy as np
 
     r = defaults["rho"] / (4.0 * float(pop.N))
     params = {

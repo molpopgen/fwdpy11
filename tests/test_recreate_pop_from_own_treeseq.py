@@ -107,7 +107,7 @@ def test_recreate_pop_from_own_treeseq(pop):
     assert pop.generation == gen
     assert len(pop.tables.mutations) == nm
     validate_mutation_table(pop)
-    assert(all([pop.mutations[i.key].g >= 0 for i in pop.tables.mutations]))
+    assert(all([pop.mutations[i.key].g >= 0 for i in pop.tables.mutations]))  # NOQA
 
 
 def test_multiple_export_recreate_evolve_steps():
@@ -117,7 +117,7 @@ def test_multiple_export_recreate_evolve_steps():
         ts = pop.dump_tables_to_tskit()
         pop = fwdpy11.DiploidPopulation.create_from_tskit(
             ts, import_mutations=True)
-        assert(all([pop.mutations[i.key].g >= 0 for i in pop.tables.mutations]))
+        assert(all([pop.mutations[i.key].g >= 0 for i in pop.tables.mutations]))  # NOQA
     assert pop.generation == 15
 
 

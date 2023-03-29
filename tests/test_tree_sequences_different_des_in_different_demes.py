@@ -227,14 +227,15 @@ class TestMultivariateLogNormalS(unittest.TestCase):
 
 
 @ pytest.mark.parametrize("mvDES",
-                          [fwdpy11.mvDES(fwdpy11.MultivariateGaussianEffects(0, 1, 1, np.identity(2)), np.zeros(2)),
+                          [fwdpy11.mvDES(fwdpy11.MultivariateGaussianEffects(0, 1, 1, np.identity(2)), np.zeros(2)),  # NOQA
                            fwdpy11.mvDES(
                               [fwdpy11.ConstantS(0, 1, 1, 0.1),
                                fwdpy11.ConstantS(0, 1, 1, -0.1)],
                               np.zeros(2),
                               np.identity(2),
                           )])
-@ pytest.mark.parametrize("gvalue", [fwdpy11.Multiplicative(2., ndemes=2), fwdpy11.Additive(2., ndemes=2)])
+@ pytest.mark.parametrize("gvalue", [fwdpy11.Multiplicative(2., ndemes=2),
+                                     fwdpy11.Additive(2., ndemes=2)])
 def test_invalid_model(mvDES, gvalue):
     demog = """
 description: trigger exception

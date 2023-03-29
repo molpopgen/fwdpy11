@@ -3,7 +3,6 @@ import typing
 import attr
 
 from ..class_decorators import (attr_add_asblack, attr_class_pickle,
-                                attr_class_to_from_dict,
                                 attr_class_to_from_dict_no_recurse)
 
 
@@ -46,7 +45,8 @@ class DemographicModelDetails(object):
     name: str
     source: typing.Dict
     parameters: object
-    citation: typing.Optional[typing.Union[DemographicModelCitation, typing.Dict]]
+    citation: typing.Optional[typing.Union[DemographicModelCitation,
+                                           typing.Dict]]
     metadata: typing.Optional[object] = None
 
     @property

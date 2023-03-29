@@ -144,7 +144,7 @@ class TestNoPleiotropy(unittest.TestCase):
         nt = np.array(self.pop.tables.nodes, copy=False)
         ancient_nodes = amd["nodes"][:, 0]
         ancient_node_times = nt["time"][ancient_nodes]
-        for time, n, md in self.pop.sample_timepoints(include_alive=False):
+        for time, n, _ in self.pop.sample_timepoints(include_alive=False):
             w = np.where(ancient_node_times == time)[0]
             gvslice = as_gv[w].flatten()
             ti = fwdpy11.TreeIterator(self.pop.tables, n, update_samples=True)
@@ -335,7 +335,8 @@ class TestWithFirstGenerationPreserved(unittest.TestCase):
 
     def test_ancient_sample_genetic_values(self):
         for i, j in zip(
-            self.pop.ancient_sample_genetic_values, self.pop.ancient_sample_metadata
+            self.pop.ancient_sample_genetic_values,
+            self.pop.ancient_sample_metadata
         ):
             self.assertEqual(i, j.g)
 
@@ -345,7 +346,7 @@ class TestWithFirstGenerationPreserved(unittest.TestCase):
         nt = np.array(self.pop.tables.nodes, copy=False)
         ancient_nodes = amd["nodes"][:, 0]
         ancient_node_times = nt["time"][ancient_nodes]
-        for time, n, md in self.pop.sample_timepoints(include_alive=False):
+        for time, n, _ in self.pop.sample_timepoints(include_alive=False):
             w = np.where(ancient_node_times == time)[0]
             gvslice = as_gv[w].flatten()
             ti = fwdpy11.TreeIterator(self.pop.tables, n, update_samples=True)

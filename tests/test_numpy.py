@@ -2,8 +2,6 @@ import unittest
 
 import numpy as np
 
-import fwdpy11
-
 
 class test_DiploidPopulation(unittest.TestCase):
     """

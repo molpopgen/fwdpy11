@@ -17,8 +17,6 @@
 # along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-import copy
-
 from hypothesis import settings, given
 from hypothesis.strategies import integers
 
@@ -26,7 +24,6 @@ import demes
 import fwdpy11
 import fwdpy11.conditional_models
 import msprime
-import numpy as np
 import pytest
 
 from fwdpy11_test_utilities import seed_list
@@ -52,7 +49,7 @@ def test_allele_count(count):
     if count <= 0:
         try:
             _ = fwdpy11.conditional_models.AlleleCount(count)
-        except ValueError as _:
+        except ValueError:
             pass
         except Exception as e:
             pytest.fail(f"unexpected exception {e}")
@@ -64,7 +61,7 @@ def test_allele_count(count):
 def test_bad_allele_count_range(r):
     try:
         _ = fwdpy11.conditional_models.AlleleCountRange(*r)
-    except ValueError as _:
+    except ValueError:
         pass
     except Exception as e:
         pytest.fail(f"unexpected exception {e}")
@@ -74,7 +71,7 @@ def test_bad_allele_count_range(r):
 def test_bad_frequency_range(r):
     try:
         _ = fwdpy11.conditional_models.FrequencyRange(*r)
-    except ValueError as _:
+    except ValueError:
         pass
     except Exception as e:
         pytest.fail(f"unexpected exception {e}")
@@ -118,7 +115,7 @@ def test_deleterious_mutation_remains_present(msprime_seed, fp11_seed):
         assert output.mutation_index is not None
         assert output.mutation_index < len(output.pop.mutations)
         assert output.pop.mutations[output.mutation_index].s == -1e-2
-    except fwdpy11.conditional_models.AddMutationFailure as _:
+    except fwdpy11.conditional_models.AddMutationFailure:
         pass
     except Exception as e:
         pytest.fail(f"unexpected exception: {e}")
@@ -313,7 +310,6 @@ def test_sweep_from_standing_variation_using_API(
         position=fwdpy11.conditional_models.PositionRange(
             left=0.49, right=0.51),
     )
-    finished = False
     rng = fwdpy11.GSLrng(fp11_seed)
     try:
         output = fwdpy11.conditional_models.selective_sweep(
@@ -329,8 +325,7 @@ def test_sweep_from_standing_variation_using_API(
             assert output.pop.mcounts[output.mutation_index] == 2 * \
                 output.pop.N
             _ = output.pop.dump_tables_to_tskit()
-            finished = True
-    except fwdpy11.conditional_models.AddMutationFailure as a:
+    except fwdpy11.conditional_models.AddMutationFailure:
         pass
     except Exception as e:
         pytest.fail(f"unexpected exception: {e}")
@@ -458,7 +453,8 @@ def test_sweep_from_new_mutation_in_single_deme_using_API(fp11_seed, demes_yaml,
     assert output.pop.generation > pop.generation
     if output.pop is not None:
         assert (
-            output.pop.mutations[output.mutation_index].g == model.metadata["burnin_time"] + 50
+            output.pop.mutations[output.mutation_index].g ==
+            model.metadata["burnin_time"] + 50
         )
         assert output.pop.mcounts[output.mutation_index] == 2 * output.pop.N
         _ = output.pop.dump_tables_to_tskit()
@@ -506,7 +502,8 @@ def test_sweep_from_new_mutation_with_demography_using_API(
     assert output.pop.generation == params.simlen
     if output.pop is not None:
         assert (
-            output.pop.mutations[output.mutation_index].g == model.metadata["burnin_time"] + 50
+            output.pop.mutations[output.mutation_index].g ==
+            model.metadata["burnin_time"] + 50
         )
         assert output.pop.mcounts[output.mutation_index] == 2 * output.pop.N
         _ = output.pop.dump_tables_to_tskit()
@@ -552,7 +549,8 @@ def test_origination_deme1_fixation_in_deme_2(fp11_seed, demes_yaml, alpha):
     assert output.pop.generation > pop.generation
     if output.pop is not None:
         assert (
-            output.pop.mutations[output.mutation_index].g == model.metadata["burnin_time"] + 50
+            output.pop.mutations[output.mutation_index].g ==
+            model.metadata["burnin_time"] + 50
         )
         assert (
             count_mutation(output.pop, output.mutation_index, 2)
@@ -600,7 +598,8 @@ def test_origination_deme1_fixation_in_deme_2_with_growth(fp11_seed, demes_yaml,
     del pop
     if output.pop is not None:
         assert (
-            output.pop.mutations[output.mutation_index].g == model.metadata["burnin_time"] + 50
+            output.pop.mutations[output.mutation_index].g ==
+            model.metadata["burnin_time"] + 50
         )
 
         deme_sizes = output.pop.deme_sizes(as_dict=True)
@@ -657,7 +656,8 @@ def test_origination_deme2_fixation_in_deme_2_no_migration(
     assert output.pop.generation > pop.generation
     if output.pop is not None:
         assert (
-            output.pop.mutations[output.mutation_index].g == model.metadata["burnin_time"] + 50
+            output.pop.mutations[output.mutation_index].g ==
+            model.metadata["burnin_time"] + 50
         )
         deme_sizes = output.pop.deme_sizes(as_dict=True)
         assert count_mutation(
@@ -715,7 +715,7 @@ def test_github_issue_1093(seed, when):
             left=0.49, right=0.51),
     )
 
-    output = fwdpy11.conditional_models.track_added_mutation(
+    _ = fwdpy11.conditional_models.track_added_mutation(
         rng,
         pop,
         params,

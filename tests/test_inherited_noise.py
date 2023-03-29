@@ -2,7 +2,6 @@ import unittest
 
 import fwdpy11
 import fwdpy11.custom_genetic_value_decorators
-import numpy as np
 
 
 @fwdpy11.custom_genetic_value_decorators.genetic_value_noise_default_clone

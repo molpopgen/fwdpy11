@@ -18,6 +18,8 @@
 #
 
 import numpy as np
+
+
 def seed_list(seed, nseeds):
     rng = np.random.Generator(np.random.MT19937(seed=seed))
     used = {}
@@ -29,4 +31,3 @@ def seed_list(seed, nseeds):
         used[candidate] = 1
         seeds.append(candidate)
     return seeds
-

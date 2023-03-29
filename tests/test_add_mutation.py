@@ -24,8 +24,6 @@ import msprime
 import numpy as np
 import pytest
 
-from fwdpy11_test_utilities import seed_list
-
 
 def generate_msprime_ancestry(
     msprime_seed,

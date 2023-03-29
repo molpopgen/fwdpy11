@@ -51,10 +51,12 @@ def make_data_matrix(
     from warnings import warn
 
     warn(
-        "fwdpy11.make_data_matrix is deprecated. Please use fwdpy11.data_matrix_from_tables.",
+        "fwdpy11.make_data_matrix is deprecated."
+        " Please use fwdpy11.data_matrix_from_tables.",
         FutureWarning,
     )
-    return DataMatrix(_make_data_matrix(pop, samples, record_neutral, record_selected))
+    return DataMatrix(_make_data_matrix(pop, samples,
+                                        record_neutral, record_selected))
 
 
 def data_matrix_from_tables(

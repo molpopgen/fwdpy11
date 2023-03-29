@@ -212,10 +212,13 @@ class SimulationStatus:
     """
     The return value of a stopping condition callable.
 
-    :param should_terminate: Set to `True` if the simulation should be terminated.
-    :param condition_met: Set to `True` if the stopping condition has been met.
+    :param should_terminate: Set to `True` if the simulation
+                             should be terminated.
+    :param condition_met: Set to `True` if the stopping
+                          condition has been met.
 
-    For examples, see implementations of :class:`GlobalFixation` and :class:`FocalDemeFixation`.
+    For examples, see implementations of :class:`GlobalFixation`
+    and :class:`FocalDemeFixation`.
     """
 
     should_terminate: bool = attr.ib(

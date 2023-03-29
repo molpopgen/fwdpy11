@@ -42,7 +42,8 @@ def generate_mutation_origin_time(tables, edge):
                        tables.nodes.time[edge.child])/2.0)
     # Sometimes a branch is too short to assign an integer
     # time, so we just bail
-    if origin_time >= tables.nodes.time[edge.parent] or origin_time < tables.nodes.time[edge.child]:
+    if origin_time >= tables.nodes.time[edge.parent] or \
+            origin_time < tables.nodes.time[edge.child]:
         return None
 
     assert origin_time >= tables.nodes.time[edge.child]
@@ -55,7 +56,8 @@ def make_generic_mutation_metadata(origin_time):
             origin_time,
             'label': 0,
             'neutral': 0,
-            'key': 0}  # fwdpy11 will have to figure out a real key value later.
+            # fwdpy11 will have to figure out a real key value later.
+            'key': 0}
 
 
 def make_treeseq_with_one_row_containing_bad_metadata(seed, callback):
@@ -63,9 +65,10 @@ def make_treeseq_with_one_row_containing_bad_metadata(seed, callback):
 
     tables = ts.tables
 
-    tables.mutations.metadata_schema = fwdpy11.tskit_tools.metadata_schema.MutationMetadata
+    tables.mutations.metadata_schema = \
+        fwdpy11.tskit_tools.metadata_schema.MutationMetadata
     sites = set()
-    for (e, edge) in enumerate(tables.edges):
+    for edge in tables.edges:
         position, sites = make_position(sites, edge)
         site = tables.sites.add_row(position, '0')
         origin_time = generate_mutation_origin_time(tables, edge)
@@ -97,9 +100,10 @@ def test_import_msprime_mutations(seed, seed2):
                               discrete_genome=False, random_seed=seed)
     np.random.seed(seed2)
     tables = ts.tables
-    tables.mutations.metadata_schema = fwdpy11.tskit_tools.metadata_schema.MutationMetadata
+    tables.mutations.metadata_schema = \
+        fwdpy11.tskit_tools.metadata_schema.MutationMetadata
     sites = set()
-    for (e, edge) in enumerate(tables.edges):
+    for edge in tables.edges:
         position, sites = make_position(sites, edge)
         origin_time = generate_mutation_origin_time(tables, edge)
         if origin_time is not None:
@@ -122,7 +126,8 @@ def test_import_msprime_mutations(seed, seed2):
         assert len(
             [i for i in pop.tables.sites if i.position == site.position]) == 1
         assert len(
-            [i for i in pop.tables.mutations if pop.tables.sites[i.key].position == site.position]) == 1
+            [i for i in pop.tables.mutations if
+             pop.tables.sites[i.key].position == site.position]) == 1
 
     # All origin times must be < the time of the mutation time
     for m in pop.tables.mutations:

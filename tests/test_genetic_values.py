@@ -1,7 +1,5 @@
 import unittest
 
-import numpy as np
-
 import fwdpy11
 
 
@@ -11,7 +9,8 @@ class testAdditive(unittest.TestCase):
         GN = fwdpy11.GaussianNoise
         self.w = fwdpy11.Additive(2.0)
         self.t = fwdpy11.Additive(2.0, fwdpy11.GSS(0.0, 1.0))
-        self.tn = fwdpy11.Additive(1.0, fwdpy11.GSS(0.0, 1.0), GN(mean=0.1, sd=2.0))
+        self.tn = fwdpy11.Additive(
+            1.0, fwdpy11.GSS(0.0, 1.0), GN(mean=0.1, sd=2.0))
 
     def testScaling(self):
         self.assertEqual(self.w.scaling, 2.0)
@@ -34,7 +33,8 @@ class testAdditive(unittest.TestCase):
         self.assertEqual(up.scaling, self.w.scaling)
         self.assertTrue(up.maps_to_fitness)
         self.assertEqual(type(up.noise), type(self.w.noise))
-        self.assertEqual(type(up.gvalue_to_fitness), type(self.w.gvalue_to_fitness))
+        self.assertEqual(type(up.gvalue_to_fitness),
+                         type(self.w.gvalue_to_fitness))
 
     def testPickleTraitNoNoise(self):
         import pickle
@@ -44,7 +44,8 @@ class testAdditive(unittest.TestCase):
         self.assertEqual(up.scaling, self.t.scaling)
         self.assertTrue(up.maps_to_fitness is False)
         self.assertEqual(type(up.noise), type(self.t.noise))
-        self.assertEqual(type(up.gvalue_to_fitness), type(self.t.gvalue_to_fitness))
+        self.assertEqual(type(up.gvalue_to_fitness),
+                         type(self.t.gvalue_to_fitness))
 
     def testPickleTraitWithNoise(self):
         import pickle
@@ -54,7 +55,8 @@ class testAdditive(unittest.TestCase):
         self.assertEqual(up.scaling, self.tn.scaling)
         self.assertTrue(up.maps_to_fitness is False)
         self.assertEqual(type(up.noise), type(self.tn.noise))
-        self.assertEqual(type(up.gvalue_to_fitness), type(self.tn.gvalue_to_fitness))
+        self.assertEqual(type(up.gvalue_to_fitness),
+                         type(self.tn.gvalue_to_fitness))
 
     def testPickleTraitWithNoiseToFile(self):
         import pickle
@@ -67,7 +69,8 @@ class testAdditive(unittest.TestCase):
         self.assertEqual(up.scaling, self.tn.scaling)
         self.assertTrue(up.maps_to_fitness is False)
         self.assertEqual(type(up.noise), type(self.tn.noise))
-        self.assertEqual(type(up.gvalue_to_fitness), type(self.tn.gvalue_to_fitness))
+        self.assertEqual(type(up.gvalue_to_fitness),
+                         type(self.tn.gvalue_to_fitness))
 
 
 class testMultiplicative(unittest.TestCase):
@@ -101,7 +104,8 @@ class testMultiplicative(unittest.TestCase):
         self.assertEqual(up.scaling, self.w.scaling)
         self.assertTrue(up.maps_to_fitness)
         self.assertEqual(type(up.noise), type(self.w.noise))
-        self.assertEqual(type(up.gvalue_to_fitness), type(self.w.gvalue_to_fitness))
+        self.assertEqual(type(up.gvalue_to_fitness),
+                         type(self.w.gvalue_to_fitness))
 
     def testPickleTraitNoNoise(self):
         import pickle
@@ -111,7 +115,8 @@ class testMultiplicative(unittest.TestCase):
         self.assertEqual(up.scaling, self.t.scaling)
         self.assertTrue(up.maps_to_fitness is False)
         self.assertEqual(type(up.noise), type(self.t.noise))
-        self.assertEqual(type(up.gvalue_to_fitness), type(self.t.gvalue_to_fitness))
+        self.assertEqual(type(up.gvalue_to_fitness),
+                         type(self.t.gvalue_to_fitness))
 
     def testPickleTraitWithNoise(self):
         import pickle
@@ -121,7 +126,8 @@ class testMultiplicative(unittest.TestCase):
         self.assertEqual(up.scaling, self.tn.scaling)
         self.assertTrue(up.maps_to_fitness is False)
         self.assertEqual(type(up.noise), type(self.tn.noise))
-        self.assertEqual(type(up.gvalue_to_fitness), type(self.tn.gvalue_to_fitness))
+        self.assertEqual(type(up.gvalue_to_fitness),
+                         type(self.tn.gvalue_to_fitness))
 
 
 class testGBR(unittest.TestCase):

@@ -25,20 +25,20 @@ interact with ``tskit``.
 """
 
 import typing
-import warnings
 
 import numpy as np
 import tskit  # type: ignore
 
 from ._flags import *  # NOQA
-from .metadata import (
+from .metadata import (  # NOQA
     DiploidMetadata,
     decode_individual_metadata,
     decode_mutation_metadata,
 )
 
 
-def get_toplevel_metadata(ts: tskit.TreeSequence, name: str) -> typing.Optional[object]:
+def get_toplevel_metadata(ts: tskit.TreeSequence,
+                          name: str) -> typing.Optional[object]:
     """
     Extract top-level metadata from a tree sequence.
 

@@ -15,7 +15,7 @@ def test_invalid_demes_spec_modules():
             yaml = "".join(f.readlines())
             # NOTE: cannot test these YAML with demes.Graph b/c
             # they cannot create a valid Graph.
-            with pytest.raises(Exception):
+            with pytest.raises(Exception):  # NOQA
                 _ = fwdpy11.ForwardDemesGraph.from_demes(yaml, burnin=0)
 
 

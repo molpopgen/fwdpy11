@@ -4,11 +4,11 @@ import pickle
 import unittest
 
 import numpy as np
-import pytest
 
 import fwdpy11
 
-# Choose global values that differ from default values in Python class constructors
+# Choose global values that differ from default
+# values in Python class constructors
 BEG, END, WEIGHT, DOM, LABEL, COUPLED = 0.0, 1.0, 0.5, 0.5, 63, False
 
 

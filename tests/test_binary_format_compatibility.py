@@ -1,5 +1,3 @@
-import lzma
-import pickle
 import unittest
 
 import fwdpy11
@@ -13,6 +11,7 @@ class TestOldBinaryFileFormats(unittest.TestCase):
             self.assertEqual(
                 pop.mutations[i.key].pos, pop.tables.sites[i.site].position
             )
+
 
 if __name__ == "__main__":
     unittest.main()

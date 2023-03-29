@@ -807,7 +807,7 @@ migrations:
 @pytest.mark.parametrize("data", [yaml_migration_1(), yaml_migration_2()])
 def test_yamls_with_migration(data):
     g = demes.loads(data)
-    demog = fwdpy11.discrete_demography.from_demes(g, 1)
+    _ = fwdpy11.discrete_demography.from_demes(g, 1)
 
 
 def test_split_model_population_size_history(two_deme_split_with_ancestral_size_change):
@@ -982,15 +982,15 @@ demes:
   epochs:
     - {end_time: 45, start_size: 10}
 - name: B
-  ancestors: [A] 
+  ancestors: [A]
   epochs:
     - {end_time: 30, start_size: 20}
 - name: C
-  ancestors: [B] 
+  ancestors: [B]
   epochs:
     - {end_time: 15, start_size: 30}
 - name: D
-  ancestors: [C] 
+  ancestors: [C]
   epochs:
     - {end_time: 0, start_size: 40}
 """
@@ -1635,7 +1635,7 @@ def test_two_demes_migration_rate_changes(two_demes_migration_rate_changes_setup
                     self.parents[deme_idx].append(
                         ParentDemesAtTime(when=pop.generation, parents=[0, 0])
                     )
-            for ii, metadata in enumerate(pop.diploid_metadata):
+            for metadata in pop.diploid_metadata:
                 parents = metadata.parents
                 for parent in parents:
                     self.parents[metadata.deme][-1].parents[

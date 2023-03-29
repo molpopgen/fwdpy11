@@ -21,7 +21,6 @@ import json
 
 import fwdpy11
 import msprime
-import numpy as np
 import pytest
 
 

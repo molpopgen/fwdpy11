@@ -1,4 +1,4 @@
-from typing import IO, Dict, Iterable, Iterator, List, Optional, Tuple, Union
+from typing import IO, Dict, Iterable, List, Optional, Tuple, Union
 
 import demes
 import fwdpy11._types
@@ -148,8 +148,8 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
             for i in decoded_md:
                 if i is not None:
                     mvec.append(i)
-            ll._set_mutations(mvec, mutation_nodes,
-                              [int(i.time) - ll._generation for i in ts.mutations()])
+            times = [int(i.time) - ll._generation for i in ts.mutations()]
+            ll._set_mutations(mvec, mutation_nodes, times)
         return cls(0, 0.0, ll_pop=ll)
 
     @ classmethod
@@ -225,7 +225,8 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
         .. versionadded:: 0.13.0
 
         """
-        return np.array(self.ancient_sample_metadata, copy=False)["nodes"].flatten()
+        return np.array(self.ancient_sample_metadata,
+                        copy=False)["nodes"].flatten()
 
     @ property
     def tables(self) -> TableCollection:
@@ -277,13 +278,15 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
         Dump the population's TableCollection into
         an tskit TreeSequence
 
-        :param model_params: Model parameters to be stored as top-level metadata
+        :param model_params: Model parameters to be stored as top-level
+                             metadata
         :type model_params: :class:`fwdpy11.ModelParams` or :class:`dict`
 
         :param demes_graph: A demographic model specified via `demes`.
         :type demes_graph: :class:`demes.Graph`
 
-        :param population_metadata: A mapping from integer id of a deme/population to metadata
+        :param population_metadata: A mapping from integer id of a
+                                    deme/population to metadata
         :type population_metadata: dict
 
         :param data: User-generated data to add to top-level metadata
@@ -296,7 +299,8 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
         :param parameters: The simulation parameters for the provenance table.
         :type parameters: None or dict
 
-        :param destructive: If `True`, delete data held by the current instance.
+        :param destructive: If `True`, delete data held by the current
+                            instance.
         :type destructive: bool
 
         :rtype: tskit.TreeSequence
@@ -433,13 +437,13 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
 
         The following arguments are keyword-only:
 
-        :param window: A window [left, right) within which to place the mutation.
-                       The default is `None`, meaning the window is the entire
-                       genome.
+        :param window: A window [left, right) within which to place
+                       the mutation. The default is `None`, meaning
+                       the window is the entire genome.
         :type window: tuple[float, float]
-        :param ndescendants: The number of alive nodes carrying the new mutation.
-                             Default is `1`, implying that a singleton mutation
-                             will be generated.
+        :param ndescendants: The number of alive nodes carrying the new
+                             mutation. Default is `1`, implying that a
+                             singleton mutation will be generated.
         :type ndescendants: int
         :param deme: The deme in which to place the new mutation
                      The default is `None`, meaning that alive node demes are
@@ -449,7 +453,8 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
         :type data: fwdpy11.NewMutationData
 
         :returns: The key of the new mutation.
-                  (The index of the variant in :attr:`DiploidPopulation.mutations`.)
+                  (The index of the variant in
+                  :attr:`DiploidPopulation.mutations`.)
 
         Implementation details:
 
