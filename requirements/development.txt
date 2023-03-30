@@ -20,6 +20,7 @@ hypothesis==6.56.4
 
 # Docs
 jupyter-book~=0.15.1
+pydata-sphinx-theme==0.13.1
 matplotlib
 pandas
 sphinx-issues
