@@ -15,6 +15,7 @@ jobs:
       matrix:
         compiler: [gcc]
         python-version: ["3.10"]
+        rust: [1.62.1]
     defaults:
       run:
         shell: bash
@@ -30,6 +31,16 @@ jobs:
           submodules: true
           fetch-depth: 0
 
+      - name: Set up rust
+        uses: dtolnay/rust-toolchain@v1
+        with:
+          toolchain: ${{ matrix.rust }}
+
+      - name: Install cbindgen
+        uses: baptiste0928/cargo-install@v2
+        with:
+          crate: cbindgen
+          version: "=0.24.3" 
       # We install the R dependencies first
       # Later, Python dependencies will go into the same place.
       # Python will silently update dependencies if needed,
@@ -73,6 +84,14 @@ jobs:
           # These are needed to install black:
           python -m pip install --user --upgrade setuptools wheel 
           python -m pip install --user --upgrade -r requirements/development.txt
+
+      - name: rustc version
+        run: |
+            rustc --version
+
+      - name: cbindgen version
+        run: |
+            cbindgen --version
 
       - name: Build module
         run: |

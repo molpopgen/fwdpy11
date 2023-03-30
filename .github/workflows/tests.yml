@@ -13,6 +13,7 @@ jobs:
       matrix:
         python: [ 3.8, 3.9, "3.10", "3.11" ]
         os:  [ macos-latest, ubuntu-latest ]
+        rust: [1.62.1]
     defaults:
       run:
         shell: bash
@@ -75,6 +76,32 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true' && matrix.os == 'macos-latest'
         run: |
           cp ~/.bash_profile ~/.bashrc
+
+      - name: Set rust version
+        run: |
+          source ~/.bashrc
+          conda activate anaconda-client-env
+          rustup override set ${{ matrix.rust }}
+
+      - name: rustc version
+        run: |
+          source ~/.bashrc
+          conda activate anaconda-client-env
+          rustc --version
+          which rustc
+
+      - name: Install cbindgen
+        uses: baptiste0928/cargo-install@v2
+        with:
+          crate: cbindgen
+          version: "=0.24.3" 
+
+      - name: cbindgen version
+        run: |
+          source ~/.bashrc
+          conda activate anaconda-client-env
+          cbindgen --version
+          which cbindgen
 
       - name: Build
         run: |
