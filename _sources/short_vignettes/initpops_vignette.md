@@ -71,12 +71,6 @@ print(np.where(md['deme'] == 0)[0].min(),
 
 ## Initializing with ancestry from msprime
 
-:::{note}
-
-The details of this section will change once `msprime` 1.0 is released.
-
-:::
-
 ### A single deme
 
 ```{code-cell} python

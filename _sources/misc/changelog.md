@@ -3,6 +3,28 @@
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+## 0.20.0a1
+
+New features
+
+* Add {class}`fwdpy11.BinomialIntervalMap`.
+  PR {pr}`1142`
+
+Back end
+
+* Improve test suite run times.
+  PR {pr}`1136`
+* Refactor some C++ test fixtures.
+  PR {pr}`1139`
+* Python tests now treat warnings as errors.
+  PR {pr}`1135`
+
+Documentation
+
+* Improve docs related to {class}`fwdpy11.ForwardDemesGraph`.
+  PR {pr}`1133`
+  PR {pr}`1137`
+
 ## 0.20.0a0
 
 New features

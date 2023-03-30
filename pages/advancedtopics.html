@@ -1,48 +1,59 @@
 
+
 <!DOCTYPE html>
 
-<html>
+
+<html lang="en" >
+
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>Advanced topics &#8212; fwdpy11 manual</title>
-    
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+  <link href="../_static/styles/theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
 
-    
-  <link rel="stylesheet"
-    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
-  <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
-  <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
-    
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d" />
 
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
     <script src="../_static/clipboard.min.js"></script>
     <script src="../_static/copybutton.js"></script>
-    <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
     <script src="../_static/togglebutton.js"></script>
-    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script src="../_static/design-tabs.js"></script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
 const thebe_selector = ".thebe,.cell"
@@ -52,56 +63,87 @@ const thebe_selector_output = ".output, .cell_output"
     <script async="async" src="../_static/sphinx-thebe.js"></script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'pages/advancedtopics';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Different effect sizes of mutations in different demes" href="mvdes.html" />
     <link rel="prev" title="Definitions" href="definitions.html" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="docsearch:language" content="None">
-    
-
-    <!-- Google Analytics -->
-    
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
   </head>
-  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
-<!-- Checkboxes to toggle the left sidebar -->
-<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
-<label class="overlay overlay-navbar" for="__navigation">
-    <div class="visually-hidden">Toggle navigation sidebar</div>
-</label>
-<!-- Checkboxes to toggle the in-page toc -->
-<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
-<label class="overlay overlay-pagetoc" for="__page-toc">
-    <div class="visually-hidden">Toggle in-page Table of Contents</div>
-</label>
-<!-- Headers at the top -->
-<div class="announcement header-item noprint"></div>
-<div class="header header-item noprint"></div>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
 
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
     
-    <div class="container-fluid" id="banner"></div>
-
     
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
 
-    <div class="container-xl">
-      <div class="row">
-          
-<!-- Sidebar -->
-<div class="bd-sidebar noprint" id="site-navigation">
-    <div class="bd-sidebar__content">
-        <div class="bd-sidebar__top"><div class="navbar-brand-box">
-    <a class="navbar-brand text-wrap" href="../index.html">
-      
-      
-      
-      <h1 class="site-logo" id="site-title">fwdpy11 manual</h1>
-      
-    </a>
-</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
-  <i class="icon fas fa-search"></i>
-  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
-</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
-    <div class="bd-toc-item active">
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">fwdpy11 manual</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
         
         <ul class="nav bd-sidenav bd-sidenav__home-link">
             <li class="toctree-l1">
@@ -110,1014 +152,367 @@ const thebe_selector_output = ".output, .cell_output"
                 </a>
             </li>
         </ul>
-        <p aria-level="2" class="caption" role="heading">
- <span class="caption-text">
-  Installation and setup
- </span>
-</p>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Installation and setup</span></p>
 <ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="userenv.html">
-   Setting up user environments for installation
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="installation.html">
-   Installation
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="deploymenttools.html">
-   Deployment tools
-  </a>
- </li>
+<li class="toctree-l1"><a class="reference internal" href="userenv.html">Setting up user environments for installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deploymenttools.html">Deployment tools</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading">
- <span class="caption-text">
-  Short vignettes - operations on populations
- </span>
-</p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Short vignettes - operations on populations</span></p>
 <ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/initpops_vignette.html">
-   Initializing a population
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/poptour_vignette.html">
-   Properties of populations
-  </a>
- </li>
+<li class="toctree-l1"><a class="reference internal" href="../short_vignettes/initpops_vignette.html">Initializing a population</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../short_vignettes/poptour_vignette.html">Properties of populations</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading">
- <span class="caption-text">
-  Short vignettes - setting up the genetics
- </span>
-</p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Short vignettes - setting up the genetics</span></p>
 <ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/genetics_vignettes_intro.html">
-   Introduction
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/geneticmaps_vignette.html">
-   Genetic maps
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/des_vignette.html">
-   Distributions of effect sizes
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/mutationdominance_vignette.html">
-   Mutations with variable dominance
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/neutralmuts_vignette.html">
-   Neutral mutations during a simulation
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/gvalues_fitness.html">
-   Genetic values - mutations with direct effects on fitness
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/gvalues_traits.html">
-   Genetic values - simulating phenotypes/traits.
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/workingexample_fitness.html">
-   Working example - parameters for simulating direct effects on fitness
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/workingexample_trait.html">
-   Working example - parameters for the simulation of a trait
-  </a>
- </li>
+<li class="toctree-l1"><a class="reference internal" href="../short_vignettes/genetics_vignettes_intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../short_vignettes/geneticmaps_vignette.html">Genetic maps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../short_vignettes/des_vignette.html">Distributions of effect sizes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../short_vignettes/mutationdominance_vignette.html">Mutations with variable dominance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../short_vignettes/neutralmuts_vignette.html">Neutral mutations during a simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../short_vignettes/gvalues_fitness.html">Genetic values - mutations with direct effects on fitness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../short_vignettes/gvalues_traits.html">Genetic values - simulating phenotypes/traits.</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../short_vignettes/workingexample_fitness.html">Working example - parameters for simulating direct effects on fitness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../short_vignettes/workingexample_trait.html">Working example - parameters for the simulation of a trait</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading">
- <span class="caption-text">
-  Short vignettes - simulation with tree sequence recording
- </span>
-</p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Short vignettes - simulation with tree sequence recording</span></p>
 <ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/evolvets_vignette.html">
-   Evolving with tree sequence recording
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/recorders_vignette.html">
-   Recording data during a simulation
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/recapitation.html">
-   Finishing a simulation with msprime
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/neutralmutsafter_vignette.html">
-   Adding neutral mutations to a population with existing ancestry
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/import_mutations_from_tskit.html">
-   Importing mutations from tskit
-  </a>
- </li>
+<li class="toctree-l1"><a class="reference internal" href="../short_vignettes/evolvets_vignette.html">Evolving with tree sequence recording</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../short_vignettes/recorders_vignette.html">Recording data during a simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../short_vignettes/recapitation.html">Finishing a simulation with msprime</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../short_vignettes/neutralmutsafter_vignette.html">Adding neutral mutations to a population with existing ancestry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../short_vignettes/import_mutations_from_tskit.html">Importing mutations from tskit</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading">
- <span class="caption-text">
-  Short vignettes - demographic modeling
- </span>
-</p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Short vignettes - demographic modeling</span></p>
 <ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/demography_vignettes_intro.html">
-   Introduction
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/demes_vignette.html">
-   Using
-   <code class="docutils literal notranslate">
-    <span class="pre">
-     demes
-    </span>
-   </code>
-   to specify demographic models.
-  </a>
- </li>
+<li class="toctree-l1"><a class="reference internal" href="../short_vignettes/demography_vignettes_intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../short_vignettes/demes_vignette.html">Using <code class="docutils literal notranslate"><span class="pre">demes</span></code> to specify demographic models.</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading">
- <span class="caption-text">
-  Short vignettes - varying fitness conditions across demes
- </span>
-</p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Short vignettes - varying fitness conditions across demes</span></p>
 <ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/varying_fitness_conditions_across_demes_intro.html">
-   Introduction
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/multivariate_gaussian_effect_sizes_across_demes.html">
-   The multivariate Gaussian distribution
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/multivariate_lognormal_effect_sizes.html">
-   The multivariate lognormal distribution
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/custom_multivarate_distributions.html">
-   “Custom” multivariate distributions
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/special_considerations_demes_models.html">
-   Special considerations for demes models
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/genetic_values_multi_deme_models_advanced.html">
-   Advanced topics
-  </a>
- </li>
+<li class="toctree-l1"><a class="reference internal" href="../short_vignettes/varying_fitness_conditions_across_demes_intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../short_vignettes/multivariate_gaussian_effect_sizes_across_demes.html">The multivariate Gaussian distribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../short_vignettes/multivariate_lognormal_effect_sizes.html">The multivariate lognormal distribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../short_vignettes/custom_multivarate_distributions.html">“Custom” multivariate distributions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../short_vignettes/special_considerations_demes_models.html">Special considerations for demes models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../short_vignettes/genetic_values_multi_deme_models_advanced.html">Advanced topics</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading">
- <span class="caption-text">
-  Short vignettes - conditional models
- </span>
-</p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Short vignettes - conditional models</span></p>
 <ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/trackmutationfates.html">
-   Tracking user-specified new mutations
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/selective_sweep.html">
-   Selective sweeps
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/incomplete_sweep.html">
-   Incomplete selective sweeps
-  </a>
- </li>
+<li class="toctree-l1"><a class="reference internal" href="../short_vignettes/trackmutationfates.html">Tracking user-specified new mutations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../short_vignettes/selective_sweep.html">Selective sweeps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../short_vignettes/incomplete_sweep.html">Incomplete selective sweeps</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading">
- <span class="caption-text">
-  Longer vignettes - exporting data to tskit
- </span>
-</p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Longer vignettes - exporting data to tskit</span></p>
 <ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../long_vignettes/tskitconvert_vignette.html">
-   Converting data to tskit format
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../long_vignettes/tskit_metadata_vignette.html">
-   Working with data in tskit format
-  </a>
- </li>
+<li class="toctree-l1"><a class="reference internal" href="../long_vignettes/tskitconvert_vignette.html">Converting data to tskit format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../long_vignettes/tskit_metadata_vignette.html">Working with data in tskit format</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading">
- <span class="caption-text">
-  Longer vignettes - complete examples
- </span>
-</p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Longer vignettes - complete examples</span></p>
 <ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../long_vignettes/bgs_vignette.html">
-   Background selection
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../long_vignettes/gss_vignette.html">
-   Gaussian stabilizing selection with an optimum shift
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../long_vignettes/pyfreqtracker.html">
-   Tracking mutations over time
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../long_vignettes/pyfreqtracker_sqlite.html">
-   Tracking mutations over time using
-   <code class="docutils literal notranslate">
-    <span class="pre">
-     sqlite3
-    </span>
-   </code>
-  </a>
- </li>
+<li class="toctree-l1"><a class="reference internal" href="../long_vignettes/bgs_vignette.html">Background selection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../long_vignettes/gss_vignette.html">Gaussian stabilizing selection with an optimum shift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../long_vignettes/pyfreqtracker.html">Tracking mutations over time</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../long_vignettes/pyfreqtracker_sqlite.html">Tracking mutations over time using <code class="docutils literal notranslate"><span class="pre">sqlite3</span></code></a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading">
- <span class="caption-text">
-  Concepts
- </span>
-</p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Concepts</span></p>
 <ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="definitions.html">
-   Definitions
-  </a>
- </li>
+<li class="toctree-l1"><a class="reference internal" href="definitions.html">Definitions</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading">
- <span class="caption-text">
-  Tutorials
- </span>
-</p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
 <ul class="current nav bd-sidenav">
- <li class="toctree-l1 current active">
-  <a class="current reference internal" href="#">
-   Advanced topics
-  </a>
- </li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Advanced topics</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading">
- <span class="caption-text">
-  Objects and concepts
- </span>
-</p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Objects and concepts</span></p>
 <ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="mvdes.html">
-   Different effect sizes of mutations in different demes
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="tsoverview.html">
-   Conceptual overview of tree sequence recording
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="tstypes.html">
-   Data structures related to tree sequences
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="tablefs.html">
-   Calculating frequency spectra from tree sequences
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="recorders.html">
-   Time series analysis
-  </a>
- </li>
+<li class="toctree-l1"><a class="reference internal" href="mvdes.html">Different effect sizes of mutations in different demes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tsoverview.html">Conceptual overview of tree sequence recording</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tstypes.html">Data structures related to tree sequences</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tablefs.html">Calculating frequency spectra from tree sequences</a></li>
+<li class="toctree-l1"><a class="reference internal" href="recorders.html">Time series analysis</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading">
- <span class="caption-text">
-  Technical details
- </span>
-</p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Technical details</span></p>
 <ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../technical/demes.html">
-   Details of
-   <code class="docutils literal notranslate">
-    <span class="pre">
-     demes
-    </span>
-   </code>
-   integration
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../technical/genetic_values.html">
-   Technical overview of genetic value calculations
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../technical/writingplugins.html">
-   Writing “plugins” with C++
-  </a>
- </li>
+<li class="toctree-l1"><a class="reference internal" href="../technical/demes.html">Details of <code class="docutils literal notranslate"><span class="pre">demes</span></code> integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../technical/genetic_values.html">Technical overview of genetic value calculations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../technical/writingplugins.html">Writing “plugins” with C++</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading">
- <span class="caption-text">
-  Data types and fuctions
- </span>
-</p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Data types and fuctions</span></p>
 <ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="genetic_values.html">
-   Genetic values
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="datamatrix.html">
-   DataMatrix and StateMatrix
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="functions.html">
-   Function documentation
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="gslrandom.html">
-   Random number distributions
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="gvaluenoise.html">
-   Adding random noise to genetic values
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="gvalue_to_fitness.html">
-   Mapping genetic values to fitness
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="model_params.html">
-   Model parameters
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="regiontypes.html">
-   Setting up genomic intervals
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="tskit_tools.html">
-   Module
-   <code class="docutils literal notranslate">
-    <span class="pre">
-     fwdpy11.tskit_tools
-    </span>
-   </code>
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="conditional_models.html">
-   Module
-   <code class="docutils literal notranslate">
-    <span class="pre">
-     fwdpy11.conditional_models
-    </span>
-   </code>
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="types.html">
-   Data types related to simulated populations
-  </a>
- </li>
+<li class="toctree-l1"><a class="reference internal" href="genetic_values.html">Genetic values</a></li>
+<li class="toctree-l1"><a class="reference internal" href="datamatrix.html">DataMatrix and StateMatrix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="functions.html">Function documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gslrandom.html">Random number distributions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gvaluenoise.html">Adding random noise to genetic values</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gvalue_to_fitness.html">Mapping genetic values to fitness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model_params.html">Model parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="regiontypes.html">Setting up genomic intervals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tskit_tools.html">Module <code class="docutils literal notranslate"><span class="pre">fwdpy11.tskit_tools</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="conditional_models.html">Module <code class="docutils literal notranslate"><span class="pre">fwdpy11.conditional_models</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="types.html">Data types related to simulated populations</a></li>
+
+
+
 </ul>
-<p aria-level="2" class="caption" role="heading">
- <span class="caption-text">
-  Examples
- </span>
-</p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Examples</span></p>
 <ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../examples/gss_divergent_optima.html">
-   Adaptation to different optima with multivariate distribution of effect sizes
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../examples/pysnowdrift.html">
-   Snowdrift model in python
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../examples/recorder.html">
-   Example of time series analysis implemented in C++
-  </a>
- </li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/gss_divergent_optima.html">Adaptation to different optima with multivariate distribution of effect sizes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/pysnowdrift.html">Snowdrift model in python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/recorder.html">Example of time series analysis implemented in C++</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading">
- <span class="caption-text">
-  Miscellany
- </span>
-</p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Miscellany</span></p>
 <ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/changelog.html">
-   Changelog
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/deprecated.html">
-   Deprecated features
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/developersguide.html">
-   Developer’s guide
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/pubs.html">
-   Publications using fwdpy11
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/upgrade_path.html">
-   Upgrade path
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/bibliography.html">
-   Literature cited
-  </a>
- </li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/deprecated.html">Deprecated features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/developersguide.html">Developer’s guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/pubs.html">Publications using fwdpy11</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/upgrade_path.html">Upgrade path</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/bibliography.html">Literature cited</a></li>
 </ul>
 
     </div>
 </nav></div>
-        <div class="bd-sidebar__bottom">
-             <!-- To handle the deprecated key -->
-            
-            <div class="navbar_extra_footer">
-            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
-            </div>
-            
-        </div>
     </div>
-    <div id="rtd-footer-container"></div>
-</div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
 
 
-          
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
 
-
-          
-<!-- A tiny helper pixel to detect if we've scrolled -->
 <div class="sbt-scroll-pixel-helper"></div>
-<!-- Main content -->
-<div class="col py-0 content-container">
-    
-    <div class="header-article row sticky-top noprint">
-        
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
 
 
 
-<div class="col py-1 d-flex header-article-main">
-    <div class="header-article__left">
-        
-        <label for="__navigation"
-  class="headerbtn"
-  data-toggle="tooltip"
-data-placement="right"
-title="Toggle navigation"
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/molpopgen/fwdpy11" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
 >
   
 
-<span class="headerbtn__icon-container">
-  <i class="fas fa-bars"></i>
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
   </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/molpopgen/fwdpy11/issues/new?title=Issue%20on%20page%20%2Fpages/advancedtopics.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
 
-</label>
-
-        
-    </div>
-    <div class="header-article__right">
-<div class="menu-dropdown menu-dropdown-launch-buttons">
-  <button class="headerbtn menu-dropdown__trigger"
-      aria-label="Launch interactive content">
-      <i class="fas fa-rocket"></i>
-  </button>
-  <div class="menu-dropdown__content">
-    <ul>
-    </ul>
-  </div>
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
 </div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/pages/advancedtopics.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
 
 <button onclick="toggleFullScreen()"
-  class="headerbtn"
-  data-toggle="tooltip"
-data-placement="bottom"
-title="Fullscreen mode"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
 >
   
 
-<span class="headerbtn__icon-container">
+<span class="btn__icon-container">
   <i class="fas fa-expand"></i>
   </span>
 
 </button>
 
-<div class="menu-dropdown menu-dropdown-repository-buttons">
-  <button class="headerbtn menu-dropdown__trigger"
-      aria-label="Source repositories">
-      <i class="fab fa-github"></i>
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
   </button>
-  <div class="menu-dropdown__content">
-    <ul>
-      <li>
-        <a href="https://github.com/molpopgen/fwdpy11"
-   class="headerbtn"
-   data-toggle="tooltip"
-data-placement="left"
-title="Source repository"
->
-  
+`);
+</script>
 
-<span class="headerbtn__icon-container">
-  <i class="fab fa-github"></i>
-  </span>
-<span class="headerbtn__text-container">repository</span>
-</a>
-
-      </li>
-      
-      <li>
-        <a href="https://github.com/molpopgen/fwdpy11/issues/new?title=Issue%20on%20page%20%2Fpages/advancedtopics.html&body=Your%20issue%20content%20here."
-   class="headerbtn"
-   data-toggle="tooltip"
-data-placement="left"
-title="Open an issue"
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-lightbulb"></i>
-  </span>
-<span class="headerbtn__text-container">open issue</span>
-</a>
-
-      </li>
-      
-    </ul>
-  </div>
-</div>
-
-<div class="menu-dropdown menu-dropdown-download-buttons">
-  <button class="headerbtn menu-dropdown__trigger"
-      aria-label="Download this page">
-      <i class="fas fa-download"></i>
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
   </button>
-  <div class="menu-dropdown__content">
-    <ul>
-      <li>
-        <a href="../_sources/pages/advancedtopics.ipynb"
-   class="headerbtn"
-   data-toggle="tooltip"
-data-placement="left"
-title="Download notebook file"
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-code"></i>
-  </span>
-<span class="headerbtn__text-container">.ipynb</span>
-</a>
-
-      </li>
-      
-      <li>
-        <a href="../_sources/pages/advancedtopics.md"
-   class="headerbtn"
-   data-toggle="tooltip"
-data-placement="left"
-title="Download source file"
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-file"></i>
-  </span>
-<span class="headerbtn__text-container">.md</span>
-</a>
-
-      </li>
-      
-      <li>
-        
-<button onclick="printPdf(this)"
-  class="headerbtn"
-  data-toggle="tooltip"
-data-placement="left"
-title="Print to PDF"
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-file-pdf"></i>
-  </span>
-<span class="headerbtn__text-container">.pdf</span>
-</button>
-
-      </li>
-      
-    </ul>
-  </div>
-</div>
-<label for="__page-toc"
-  class="headerbtn headerbtn-page-toc"
-  
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-list"></i>
-  </span>
-
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
 </label>
-
+</div></div>
+      
     </div>
+  
 </div>
-
-<!-- Table of contents -->
-<div class="col-md-3 bd-toc show noprint">
-    <div class="tocsection onthispage pt-5 pb-3">
-        <i class="fas fa-list"></i> Contents
-    </div>
-    <nav id="bd-toc-nav" aria-label="Page">
-        <ul class="visible nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#executing-multiple-replicates-in-parallel-using-concurrent-futures">
-   Executing multiple replicates in parallel using
-   <code class="docutils literal notranslate">
-    <span class="pre">
-     concurrent.futures
-    </span>
-   </code>
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#how-long-to-run-the-simulation">
-   How long to run the simulation
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#the-eyre-walker-model-of-complex-traits">
-   The “Eyre-Walker” model of complex traits
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#writing-genetic-value-classes-in-python">
-   Writing genetic value classes in Python
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#concepts">
-     Concepts
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#the-dimensionality-of-a-model">
-       The “dimensionality” of a model
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#supporting-time-dependent-models">
-       Supporting time-dependent models
-      </a>
-     </li>
-    </ul>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#performance">
-     Performance
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#technical-issues">
-     Technical issues
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#abstract-base-classes">
-       Abstract base classes
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#initializing-the-super-class">
-       Initializing the super class
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#attrs">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         attrs
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#custom-decorators">
-       Custom decorators
-      </a>
-     </li>
-    </ul>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#genetic-value-to-fitness-maps">
-     Genetic value to fitness maps
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#the-data-type">
-       The data type
-      </a>
-     </li>
-    </ul>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#genetic-value-noise">
-     Genetic value “noise”
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#id10">
-       The data type
-      </a>
-     </li>
-    </ul>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#new-genetic-value-models">
-     New genetic value models
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#the-abstract-base-class">
-       The abstract base class
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#outline-of-user-defined-classes">
-       Outline of user-defined classes
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#method-requirements">
-       Method requirements
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#example-strictly-additive-effects-on-a-trait">
-       Example: strictly additive effects on a trait
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#more-complex-scenarios-such-as-social-interactions">
-       More complex scenarios (such as social interactions)
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#the-data-types">
-       The data types
-      </a>
-     </li>
-    </ul>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#subtleties-of-starting-finishing-tree-sequences-using-msprime">
-   Subtleties of starting/finishing tree sequences using
-   <code class="docutils literal notranslate">
-    <span class="pre">
-     msprime
-    </span>
-   </code>
-  </a>
- </li>
-</ul>
-
-    </nav>
 </div>
-    </div>
-    <div class="article row">
-        <div class="col pl-md-3 pl-lg-5 content-container">
-            <!-- Table of contents that is only displayed when printing the page -->
-            <div id="jb-print-docs-body" class="onlyprint">
-                <h1>Advanced topics</h1>
-                <!-- Table of contents -->
-                <div id="print-main-content">
-                    <div id="jb-print-toc">
-                        
-                        <div>
-                            <h2> Contents </h2>
-                        </div>
-                        <nav aria-label="Page">
-                            <ul class="visible nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#executing-multiple-replicates-in-parallel-using-concurrent-futures">
-   Executing multiple replicates in parallel using
-   <code class="docutils literal notranslate">
-    <span class="pre">
-     concurrent.futures
-    </span>
-   </code>
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#how-long-to-run-the-simulation">
-   How long to run the simulation
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#the-eyre-walker-model-of-complex-traits">
-   The “Eyre-Walker” model of complex traits
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#writing-genetic-value-classes-in-python">
-   Writing genetic value classes in Python
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#concepts">
-     Concepts
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#the-dimensionality-of-a-model">
-       The “dimensionality” of a model
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#supporting-time-dependent-models">
-       Supporting time-dependent models
-      </a>
-     </li>
-    </ul>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#performance">
-     Performance
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#technical-issues">
-     Technical issues
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#abstract-base-classes">
-       Abstract base classes
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#initializing-the-super-class">
-       Initializing the super class
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#attrs">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         attrs
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#custom-decorators">
-       Custom decorators
-      </a>
-     </li>
-    </ul>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#genetic-value-to-fitness-maps">
-     Genetic value to fitness maps
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#the-data-type">
-       The data type
-      </a>
-     </li>
-    </ul>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#genetic-value-noise">
-     Genetic value “noise”
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#id10">
-       The data type
-      </a>
-     </li>
-    </ul>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#new-genetic-value-models">
-     New genetic value models
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#the-abstract-base-class">
-       The abstract base class
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#outline-of-user-defined-classes">
-       Outline of user-defined classes
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#method-requirements">
-       Method requirements
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#example-strictly-additive-effects-on-a-trait">
-       Example: strictly additive effects on a trait
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#more-complex-scenarios-such-as-social-interactions">
-       More complex scenarios (such as social interactions)
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#the-data-types">
-       The data types
-      </a>
-     </li>
-    </ul>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#subtleties-of-starting-finishing-tree-sequences-using-msprime">
-   Subtleties of starting/finishing tree sequences using
-   <code class="docutils literal notranslate">
-    <span class="pre">
-     msprime
-    </span>
-   </code>
-  </a>
- </li>
-</ul>
+              
+              
 
-                        </nav>
-                    </div>
-                </div>
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Advanced topics</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
             </div>
-            <main id="main-content" role="main">
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#executing-multiple-replicates-in-parallel-using-concurrent-futures">Executing multiple replicates in parallel using <code class="docutils literal notranslate"><span class="pre">concurrent.futures</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-long-to-run-the-simulation">How long to run the simulation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-eyre-walker-model-of-complex-traits">The “Eyre-Walker” model of complex traits</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#writing-genetic-value-classes-in-python">Writing genetic value classes in Python</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#concepts">Concepts</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-dimensionality-of-a-model">The “dimensionality” of a model</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#supporting-time-dependent-models">Supporting time-dependent models</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#performance">Performance</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#technical-issues">Technical issues</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abstract-base-classes">Abstract base classes</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#initializing-the-super-class">Initializing the super class</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#attrs"><code class="docutils literal notranslate"><span class="pre">attrs</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#custom-decorators">Custom decorators</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#genetic-value-to-fitness-maps">Genetic value to fitness maps</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-data-type">The data type</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#genetic-value-noise">Genetic value “noise”</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">The data type</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#new-genetic-value-models">New genetic value models</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-abstract-base-class">The abstract base class</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#outline-of-user-defined-classes">Outline of user-defined classes</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#method-requirements">Method requirements</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#example-strictly-additive-effects-on-a-trait">Example: strictly additive effects on a trait</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#more-complex-scenarios-such-as-social-interactions">More complex scenarios (such as social interactions)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-data-types">The data types</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#subtleties-of-starting-finishing-tree-sequences-using-msprime">Subtleties of starting/finishing tree sequences using <code class="docutils literal notranslate"><span class="pre">msprime</span></code></a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
                 
-              <div>
-                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
   <section class="tex2jax_ignore mathjax_ignore" id="advanced-topics">
-<span id="advancedtopics"></span><h1>Advanced topics<a class="headerlink" href="#advanced-topics" title="Permalink to this headline">#</a></h1>
+<span id="advancedtopics"></span><h1>Advanced topics<a class="headerlink" href="#advanced-topics" title="Permalink to this heading">#</a></h1>
 <section id="executing-multiple-replicates-in-parallel-using-concurrent-futures">
-<h2>Executing multiple replicates in parallel using <code class="docutils literal notranslate"><span class="pre">concurrent.futures</span></code><a class="headerlink" href="#executing-multiple-replicates-in-parallel-using-concurrent-futures" title="Permalink to this headline">#</a></h2>
+<h2>Executing multiple replicates in parallel using <code class="docutils literal notranslate"><span class="pre">concurrent.futures</span></code><a class="headerlink" href="#executing-multiple-replicates-in-parallel-using-concurrent-futures" title="Permalink to this heading">#</a></h2>
 <p>You have many options when it comes to running many replicates of a model.
 For example, you could write a single Python script plus a shell script
 that your local cluster understands, sending your simulation to hundreds
@@ -1145,7 +540,7 @@ process, keep it simple!</p></li>
 </ul>
 </section>
 <section id="how-long-to-run-the-simulation">
-<span id="howlongtorun"></span><h2>How long to run the simulation<a class="headerlink" href="#how-long-to-run-the-simulation" title="Permalink to this headline">#</a></h2>
+<span id="howlongtorun"></span><h2>How long to run the simulation<a class="headerlink" href="#how-long-to-run-the-simulation" title="Permalink to this heading">#</a></h2>
 <p>Deciding how long to run a simulation depends on whether or not
 a “burn in” phase is required to get the model to statistical
 equilibrium.  For example, if you want to get the steady-state
@@ -1192,7 +587,7 @@ to get rid of this problem, but it is simply easier to start
 with a tree sequence from <code class="docutils literal notranslate"><span class="pre">msprime</span></code>.</p>
 </section>
 <section id="the-eyre-walker-model-of-complex-traits">
-<span id="eyre-walker"></span><h2>The “Eyre-Walker” model of complex traits<a class="headerlink" href="#the-eyre-walker-model-of-complex-traits" title="Permalink to this headline">#</a></h2>
+<span id="eyre-walker"></span><h2>The “Eyre-Walker” model of complex traits<a class="headerlink" href="#the-eyre-walker-model-of-complex-traits" title="Permalink to this heading">#</a></h2>
 <p><span id="id3">[<a class="reference internal" href="../misc/bibliography.html#id24" title="Adam Eyre-Walker. Evolution in health and medicine sackler colloquium: genetic architecture of a complex trait and its implications for fitness and genome-wide association studies. Proc. Natl. Acad. Sci. U. S. A., 107 Suppl 1:1752–1756, January 2010.">EW10</a>]</span> describes a model relating mutations with
 fitness effect <span class="math notranslate nohighlight">\(S = |2Ns|\)</span> to <span class="math notranslate nohighlight">\(z\)</span>, their effect on
 a phenotype/trait according to <span class="math notranslate nohighlight">\(z = \delta S^\tau(1+\epsilon)\)</span>.
@@ -1236,8 +631,8 @@ near equilibrium, but we’re just using it as an example:</p>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>16
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/runner/work/fwdpy11/fwdpy11/fwdpy11/_evolvets.py:147: UserWarning: Applying a default demographic model where deme sizes are [1000] and the burn-in length is 10*1000
-  warnings.warn(msg)
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_4629/116052154.py:20: UserWarning: Applying a default demographic model where deme sizes are [1000] and the burn-in length is 10*1000
+  fwdpy11.evolvets(rng, pop, params, 100)
 </pre></div>
 </div>
 </div>
@@ -1401,7 +796,7 @@ a frequency below <span class="math notranslate nohighlight">\(x\)</span> if the
 </ul>
 </section>
 <section id="writing-genetic-value-classes-in-python">
-<span id="gvalues-python"></span><h2>Writing genetic value classes in Python<a class="headerlink" href="#writing-genetic-value-classes-in-python" title="Permalink to this headline">#</a></h2>
+<span id="gvalues-python"></span><h2>Writing genetic value classes in Python<a class="headerlink" href="#writing-genetic-value-classes-in-python" title="Permalink to this heading">#</a></h2>
 <p>Version <code class="docutils literal notranslate"><span class="pre">0.9.0</span></code> added the ability to write custom genetic value types in
 Python.  Such classes are useful for prototyping new models
 and/or generating example models for teaching/illustrating concepts.</p>
@@ -1409,9 +804,9 @@ and/or generating example models for teaching/illustrating concepts.</p>
 <p><span class="versionmodified added">New in version 0.9.0.</span></p>
 </div>
 <section id="concepts">
-<h3>Concepts<a class="headerlink" href="#concepts" title="Permalink to this headline">#</a></h3>
+<h3>Concepts<a class="headerlink" href="#concepts" title="Permalink to this heading">#</a></h3>
 <section id="the-dimensionality-of-a-model">
-<span id="python-genetic-value-dimensions"></span><h4>The “dimensionality” of a model<a class="headerlink" href="#the-dimensionality-of-a-model" title="Permalink to this headline">#</a></h4>
+<span id="python-genetic-value-dimensions"></span><h4>The “dimensionality” of a model<a class="headerlink" href="#the-dimensionality-of-a-model" title="Permalink to this heading">#</a></h4>
 <p><code class="docutils literal notranslate"><span class="pre">fwdpy11</span></code> supports both univariate and multivariate trait simulations.
 Thus, a genetic value implicitly has a dimensionality. For the
 case of a standard population-genetic simulation where mutations
@@ -1443,7 +838,7 @@ in place for simulations of Gaussian stabilizing selection with pleiotropy.</p>
 </div>
 </section>
 <section id="supporting-time-dependent-models">
-<span id="python-genetic-value-update-desc"></span><h4>Supporting time-dependent models<a class="headerlink" href="#supporting-time-dependent-models" title="Permalink to this headline">#</a></h4>
+<span id="python-genetic-value-update-desc"></span><h4>Supporting time-dependent models<a class="headerlink" href="#supporting-time-dependent-models" title="Permalink to this heading">#</a></h4>
 <p>Genetic value methods may have dynamic states that depend on some
 state of the population.  For example, something may change once
 <code class="docutils literal notranslate"><span class="pre">pop.generation</span> <span class="pre">&gt;</span> <span class="pre">x</span></code>.</p>
@@ -1460,7 +855,7 @@ use any information from <code class="docutils literal notranslate"><span class=
 </section>
 </section>
 <section id="performance">
-<h3>Performance<a class="headerlink" href="#performance" title="Permalink to this headline">#</a></h3>
+<h3>Performance<a class="headerlink" href="#performance" title="Permalink to this heading">#</a></h3>
 <p>It will be hard to get “awesome” performance with Python genetic
 value classes.  The culprit are abstract methods that get called
 once per offspring.  That’s simply a lot of Python/C++ boundary
@@ -1524,17 +919,17 @@ fitness if needed.</p>
 accounting for dominance effects.</p>
 </section>
 <section id="technical-issues">
-<h3>Technical issues<a class="headerlink" href="#technical-issues" title="Permalink to this headline">#</a></h3>
+<h3>Technical issues<a class="headerlink" href="#technical-issues" title="Permalink to this heading">#</a></h3>
 <p>This section discusses some important technicalities.</p>
 <section id="abstract-base-classes">
-<h4>Abstract base classes<a class="headerlink" href="#abstract-base-classes" title="Permalink to this headline">#</a></h4>
+<h4>Abstract base classes<a class="headerlink" href="#abstract-base-classes" title="Permalink to this heading">#</a></h4>
 <p>In object oriented lingo, the <code class="docutils literal notranslate"><span class="pre">fwdpy11</span></code> base classes here are <em>abstract
 base classes</em> or <code class="docutils literal notranslate"><span class="pre">ABCs</span></code>.  This means that they simply describe a required
 interface.  When you inherit from an ABC, you must fill in the details
 of that interface.</p>
 </section>
 <section id="initializing-the-super-class">
-<h4>Initializing the super class<a class="headerlink" href="#initializing-the-super-class" title="Permalink to this headline">#</a></h4>
+<h4>Initializing the super class<a class="headerlink" href="#initializing-the-super-class" title="Permalink to this heading">#</a></h4>
 <p>When writing object-oriented code, it is important that a derived
 class properly initialize the base class.  In Python, base
 classes are often called <code class="docutils literal notranslate"><span class="pre">superclasses</span></code> and derived classes are
@@ -1584,11 +979,11 @@ super() may work, but once you begin mixing Python and C++ multiple inheritance,
 things will fall apart due to differences between Python’s MRO and C++’s mechanisms.</p>
 </div></blockquote>
 <p>The source of this quote is the <code class="docutils literal notranslate"><span class="pre">pybind11</span></code> manual section on
-<a class="reference external" href="https://pybind11.readthedocs.io/en/stable/advanced/classes.html">Classes</a>.</p>
+<a class="reference external" href="https://pybind11.readthedocs.io/en/stable/advanced/classes.html#">Classes</a>.</p>
 <p>The examples that follow take their advice.</p>
 </section>
 <section id="attrs">
-<h4><code class="docutils literal notranslate"><span class="pre">attrs</span></code><a class="headerlink" href="#attrs" title="Permalink to this headline">#</a></h4>
+<h4><code class="docutils literal notranslate"><span class="pre">attrs</span></code><a class="headerlink" href="#attrs" title="Permalink to this heading">#</a></h4>
 <p>The <a class="reference external" href="https://www.attrs.org">attrs</a> package provides a library
 of convenient class decorators that significantly reduce the amount
 of “boiler plate” code needed to write Python
@@ -1600,7 +995,7 @@ initialize the base.</p>
 <code class="docutils literal notranslate"><span class="pre">attrs</span></code>.</p>
 </section>
 <section id="custom-decorators">
-<h4>Custom decorators<a class="headerlink" href="#custom-decorators" title="Permalink to this headline">#</a></h4>
+<h4>Custom decorators<a class="headerlink" href="#custom-decorators" title="Permalink to this heading">#</a></h4>
 <p>Speaking of decorators, we provide several that make writing genetic
 value types a bit easier.  You will see concrete examples using them
 later.</p>
@@ -1654,7 +1049,7 @@ implementation of this no-op.
 </section>
 </section>
 <section id="genetic-value-to-fitness-maps">
-<span id="python-gvalue-to-fitness"></span><h3>Genetic value to fitness maps<a class="headerlink" href="#genetic-value-to-fitness-maps" title="Permalink to this headline">#</a></h3>
+<span id="python-gvalue-to-fitness"></span><h3>Genetic value to fitness maps<a class="headerlink" href="#genetic-value-to-fitness-maps" title="Permalink to this heading">#</a></h3>
 <p>Here, one derives a new class from <a class="reference internal" href="gvalue_to_fitness.html#fwdpy11.GeneticValueIsTrait" title="fwdpy11.GeneticValueIsTrait"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GeneticValueIsTrait</span></code></a>.
 The basic form of such a class is:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fwdpy11</span>
@@ -1744,7 +1139,7 @@ so that results are reproducible.)</p>
 </pre></div>
 </div>
 <section id="the-data-type">
-<h4>The data type<a class="headerlink" href="#the-data-type" title="Permalink to this headline">#</a></h4>
+<h4>The data type<a class="headerlink" href="#the-data-type" title="Permalink to this heading">#</a></h4>
 <p>The type passed into the <code class="docutils literal notranslate"><span class="pre">__call__</span></code> function is:</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="fwdpy11.DiploidGeneticValueToFitnessData">
@@ -1781,7 +1176,7 @@ and this value.
 </section>
 </section>
 <section id="genetic-value-noise">
-<h3>Genetic value “noise”<a class="headerlink" href="#genetic-value-noise" title="Permalink to this headline">#</a></h3>
+<h3>Genetic value “noise”<a class="headerlink" href="#genetic-value-noise" title="Permalink to this heading">#</a></h3>
 <p>A custom “noise” class inherits from <a class="reference internal" href="gvaluenoise.html#fwdpy11.GeneticValueNoise" title="fwdpy11.GeneticValueNoise"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GeneticValueNoise</span></code></a>.
 A minimal implementation has the following form:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@fwdpy11</span><span class="o">.</span><span class="n">custom_genetic_value_decorators</span><span class="o">.</span><span class="n">genetic_value_noise_default_clone</span>
@@ -1814,7 +1209,7 @@ and standard deviation <code class="docutils literal notranslate"><span class="p
 </div>
 <p>See <a class="reference internal" href="gslrandom.html#fwdpy11.gsl_ran_gaussian_ziggurat" title="fwdpy11.gsl_ran_gaussian_ziggurat"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.gsl_ran_gaussian_ziggurat()</span></code></a> for details on that function.</p>
 <section id="id10">
-<h4>The data type<a class="headerlink" href="#id10" title="Permalink to this headline">#</a></h4>
+<h4>The data type<a class="headerlink" href="#id10" title="Permalink to this heading">#</a></h4>
 <dl class="py class">
 <dt class="sig sig-object py" id="fwdpy11.DiploidGeneticValueNoiseData">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">DiploidGeneticValueNoiseData</span></span><a class="headerlink" href="#fwdpy11.DiploidGeneticValueNoiseData" title="Permalink to this definition">#</a></dt>
@@ -1852,9 +1247,9 @@ and this value.
 </section>
 </section>
 <section id="new-genetic-value-models">
-<h3>New genetic value models<a class="headerlink" href="#new-genetic-value-models" title="Permalink to this headline">#</a></h3>
+<h3>New genetic value models<a class="headerlink" href="#new-genetic-value-models" title="Permalink to this heading">#</a></h3>
 <section id="the-abstract-base-class">
-<h4>The abstract base class<a class="headerlink" href="#the-abstract-base-class" title="Permalink to this headline">#</a></h4>
+<h4>The abstract base class<a class="headerlink" href="#the-abstract-base-class" title="Permalink to this heading">#</a></h4>
 <p>The ABC type is <a class="reference internal" href="#fwdpy11.PyDiploidGeneticValue" title="fwdpy11.PyDiploidGeneticValue"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.PyDiploidGeneticValue</span></code></a>:</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="fwdpy11.PyDiploidGeneticValue">
@@ -1915,7 +1310,7 @@ and this value.
 
 </section>
 <section id="outline-of-user-defined-classes">
-<h4>Outline of user-defined classes<a class="headerlink" href="#outline-of-user-defined-classes" title="Permalink to this headline">#</a></h4>
+<h4>Outline of user-defined classes<a class="headerlink" href="#outline-of-user-defined-classes" title="Permalink to this heading">#</a></h4>
 <p>The form of a custom genetic value type inherits from the ABC
 described above and would look something like this:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyGeneticValueObject</span><span class="p">(</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">PyDiploidGeneticValue</span><span class="p">):</span>
@@ -1932,7 +1327,7 @@ described above and would look something like this:</p>
 </div>
 </section>
 <section id="method-requirements">
-<h4>Method requirements<a class="headerlink" href="#method-requirements" title="Permalink to this headline">#</a></h4>
+<h4>Method requirements<a class="headerlink" href="#method-requirements" title="Permalink to this heading">#</a></h4>
 <p><a class="reference internal" href="#fwdpy11.PyDiploidGeneticValue" title="fwdpy11.PyDiploidGeneticValue"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.PyDiploidGeneticValue</span></code></a> <em>does</em> provide a default <code class="docutils literal notranslate"><span class="pre">update</span></code>
 function that updates the genetic-value-to-fitness-map and noise objects.</p>
 <p>If your model can allow a no-op <code class="docutils literal notranslate"><span class="pre">update</span></code> function, you may apply
@@ -1943,7 +1338,7 @@ functionality of an instance of <a class="reference internal" href="gvalue_to_fi
 See <a class="reference internal" href="#python-gvalue-to-fitness"><span class="std std-ref">here</span></a> for details.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">calculate_gvalue</span></code> function is more complex because it has more
 responsibilities:</p>
-<ol class="simple">
+<ol class="arabic simple">
 <li><p>It must return a value that will populate the genetic value
 field of the offspring’s metadata (<a class="reference internal" href="types.html#fwdpy11.DiploidMetadata.g" title="fwdpy11.DiploidMetadata.g"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.DiploidMetadata.g</span></code></a>).</p></li>
 <li><p>It also needs to populate an array of <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> that represents
@@ -1964,24 +1359,24 @@ resistance in the short term was to implement the current approach.</p>
 </div>
 </section>
 <section id="example-strictly-additive-effects-on-a-trait">
-<h4>Example: strictly additive effects on a trait<a class="headerlink" href="#example-strictly-additive-effects-on-a-trait" title="Permalink to this headline">#</a></h4>
+<h4>Example: strictly additive effects on a trait<a class="headerlink" href="#example-strictly-additive-effects-on-a-trait" title="Permalink to this heading">#</a></h4>
 <p>Here is an example of a strict additive model of a trait,
 taken from the test suite. You’ll notice that we are accessing
 arrays on the <code class="docutils literal notranslate"><span class="pre">C++</span></code> using Python <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#memoryview" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">memoryview</span></code></a> objects.
 This is a <em>very</em> efficient method, and much faster
 than creating a temporary, non-owning <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-
-<span class="kn">import</span> <span class="nn">fwdpy11</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fwdpy11</span>
 <span class="kn">import</span> <span class="nn">fwdpy11.custom_genetic_value_decorators</span>
 
 
 <span class="nd">@fwdpy11</span><span class="o">.</span><span class="n">custom_genetic_value_decorators</span><span class="o">.</span><span class="n">default_update</span>
 <span class="k">class</span> <span class="nc">PyAdditive</span><span class="p">(</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">PyDiploidGeneticValue</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gvalue_to_fitness</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">noise</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="n">fwdpy11</span><span class="o">.</span><span class="n">PyDiploidGeneticValue</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">gvalue_to_fitness</span><span class="p">,</span> <span class="n">noise</span><span class="p">)</span>
+        <span class="n">fwdpy11</span><span class="o">.</span><span class="n">PyDiploidGeneticValue</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>
+                                               <span class="n">gvalue_to_fitness</span><span class="p">,</span> <span class="n">noise</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">calculate_gvalue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">PyDiploidGeneticValueData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">calculate_gvalue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                         <span class="n">data</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">PyDiploidGeneticValueData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="n">s</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">strict_additive_effects</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">offspring_metadata</span><span class="p">)</span>
         <span class="nb">memoryview</span><span class="p">(</span><span class="n">data</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span>
         <span class="k">return</span> <span class="n">s</span>
@@ -2015,7 +1410,7 @@ most explicit approach is probably to use <a class="reference external" href="ht
 with <a class="reference internal" href="#fwdpy11.additive_effects" title="fwdpy11.additive_effects"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.additive_effects()</span></code></a>.</p>
 </section>
 <section id="more-complex-scenarios-such-as-social-interactions">
-<span id="more-complex-gvalue-models"></span><h4>More complex scenarios (such as social interactions)<a class="headerlink" href="#more-complex-scenarios-such-as-social-interactions" title="Permalink to this headline">#</a></h4>
+<span id="more-complex-gvalue-models"></span><h4>More complex scenarios (such as social interactions)<a class="headerlink" href="#more-complex-scenarios-such-as-social-interactions" title="Permalink to this heading">#</a></h4>
 <p>Some models are not easily implemented with the genetic value +
 genetic value to fitness map + noise trio of types defined here.
 The reason has to do with how these types are applied during a simulation,
@@ -2023,7 +1418,7 @@ which is described in more detail <a class="reference internal" href="../technic
 in <a class="reference internal" href="../technical/genetic_values.html#gvalue-simulation-behavior"><span class="std std-ref">this section</span></a> specifically.</p>
 </section>
 <section id="the-data-types">
-<h4>The data types<a class="headerlink" href="#the-data-types" title="Permalink to this headline">#</a></h4>
+<h4>The data types<a class="headerlink" href="#the-data-types" title="Permalink to this heading">#</a></h4>
 <dl class="py class">
 <dt class="sig sig-object py" id="fwdpy11.PyDiploidGeneticValueData">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">PyDiploidGeneticValueData</span></span><a class="headerlink" href="#fwdpy11.PyDiploidGeneticValueData" title="Permalink to this definition">#</a></dt>
@@ -2081,7 +1476,7 @@ and this value.</p>
 </section>
 </section>
 <section id="subtleties-of-starting-finishing-tree-sequences-using-msprime">
-<span id="msprime-subtleties"></span><h2>Subtleties of starting/finishing tree sequences using <code class="docutils literal notranslate"><span class="pre">msprime</span></code><a class="headerlink" href="#subtleties-of-starting-finishing-tree-sequences-using-msprime" title="Permalink to this headline">#</a></h2>
+<span id="msprime-subtleties"></span><h2>Subtleties of starting/finishing tree sequences using <code class="docutils literal notranslate"><span class="pre">msprime</span></code><a class="headerlink" href="#subtleties-of-starting-finishing-tree-sequences-using-msprime" title="Permalink to this heading">#</a></h2>
 <p>Some care is required starting a simulation from a tree sequence (see <a class="reference internal" href="../short_vignettes/initpops_vignette.html#precapitation"><span class="std std-ref">here</span></a>) or finishing a simulation with one (see <a class="reference internal" href="../short_vignettes/recapitation.html#recapitation"><span class="std std-ref">here</span></a>).</p>
 <p>If simulating with discrete recombination positions, it may be important to realize that the current stable releases of <code class="docutils literal notranslate"><span class="pre">msprime</span></code> model continuous recombination breakpoints.
 A future <code class="docutils literal notranslate"><span class="pre">msprime</span></code> release will support discretized positions.</p>
@@ -2118,50 +1513,135 @@ A more general example, for a genome of length <code class="docutils literal not
     </script>
     <script>kernelName = 'python3'</script>
 
-              </div>
+                </article>
               
-            </main>
-            <footer class="footer-article noprint">
-                
-    <!-- Previous / next buttons -->
-<div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="definitions.html" title="previous page">
-        <i class="fas fa-angle-left"></i>
-        <div class="prev-next-info">
-            <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Definitions</p>
-        </div>
+
+              
+              
+                <footer class="bd-footer-article">
+                  <!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="definitions.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Definitions</p>
+      </div>
     </a>
-    <a class='right-next' id="next-link" href="mvdes.html" title="next page">
-    <div class="prev-next-info">
+    <a class="right-next"
+       href="mvdes.html"
+       title="next page">
+      <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
         <p class="prev-next-title">Different effect sizes of mutations in different demes</p>
-    </div>
-    <i class="fas fa-angle-right"></i>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
     </a>
 </div>
-            </footer>
-        </div>
-    </div>
-    <div class="footer-content row">
-        <footer class="col footer"><p>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#executing-multiple-replicates-in-parallel-using-concurrent-futures">Executing multiple replicates in parallel using <code class="docutils literal notranslate"><span class="pre">concurrent.futures</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-long-to-run-the-simulation">How long to run the simulation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-eyre-walker-model-of-complex-traits">The “Eyre-Walker” model of complex traits</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#writing-genetic-value-classes-in-python">Writing genetic value classes in Python</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#concepts">Concepts</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-dimensionality-of-a-model">The “dimensionality” of a model</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#supporting-time-dependent-models">Supporting time-dependent models</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#performance">Performance</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#technical-issues">Technical issues</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abstract-base-classes">Abstract base classes</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#initializing-the-super-class">Initializing the super class</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#attrs"><code class="docutils literal notranslate"><span class="pre">attrs</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#custom-decorators">Custom decorators</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#genetic-value-to-fitness-maps">Genetic value to fitness maps</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-data-type">The data type</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#genetic-value-noise">Genetic value “noise”</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">The data type</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#new-genetic-value-models">New genetic value models</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-abstract-base-class">The abstract base class</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#outline-of-user-defined-classes">Outline of user-defined classes</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#method-requirements">Method requirements</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#example-strictly-additive-effects-on-a-trait">Example: strictly additive effects on a trait</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#more-complex-scenarios-such-as-social-interactions">More complex scenarios (such as social interactions)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-data-types">The data types</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#subtleties-of-starting-finishing-tree-sequences-using-msprime">Subtleties of starting/finishing tree sequences using <code class="docutils literal notranslate"><span class="pre">msprime</span></code></a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            <div class="bd-footer-content__inner">
+<div class="bd-footer-content__inner container">
   
-    By Kevin Thornton<br/>
-  
-      &copy; Copyright 2022.<br/>
-</p>
-        </footer>
-    </div>
+  <div class="footer-item">
     
-</div>
+<p class="component-author">
+By Kevin Thornton
+</p>
 
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
 
-      </div>
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div></div>
+          </footer>
+        
+
+      </main>
     </div>
+  </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+  <script src="../_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d"></script>
 
-
+  <footer class="bd-footer">
+  </footer>
   </body>
 </html>

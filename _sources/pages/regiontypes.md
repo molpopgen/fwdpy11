@@ -75,6 +75,11 @@
 ```
 
 ```{eval-rst}
+.. autoclass:: fwdpy11.BinomialIntervalMap
+
+```
+
+```{eval-rst}
 .. autoclass:: fwdpy11.MutationDominance
     
     See :ref:`here <mutationdominance_vignette>` for details.
