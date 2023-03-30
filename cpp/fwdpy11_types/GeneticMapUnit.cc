@@ -1,5 +1,6 @@
 #include "fwdpy11/regions/RecombinationRegions.hpp"
 #include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
 #include <core/genetic_maps/regions.hpp>
 
 namespace py = pybind11;
@@ -34,4 +35,14 @@ init_GeneticMapUnit(py::module& m)
         m, "_ll_FixedCrossovers")
         .def(py::init<double, double, int, bool>(), py::kw_only(), py::arg("beg"),
              py::arg("end"), py::arg("num_xovers"), py::arg("discrete") = true);
+
+    py::class_<fwdpy11_core::BinomialIntervalMap, fwdpy11::NonPoissonCrossoverGenerator>(
+        m, "_ll_BinomialIntervalMap")
+        .def(py::init([](double probability, const std::vector<fwdpy11::Region>& regions,
+                         bool discrete) {
+                 return fwdpy11_core::BinomialIntervalMap(probability, discrete,
+                                                          regions);
+             }),
+             py::kw_only(), py::arg("probability"), py::arg("regions"),
+             py::arg("discrete") = true);
 }

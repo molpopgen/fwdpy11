@@ -313,3 +313,45 @@ class FixedCrossovers(fwdpy11._fwdpy11._ll_FixedCrossovers):
             num_xovers=self.num_xovers,
             discrete=self.discrete,
         )
+
+
+@attr_add_asblack
+@attr_class_pickle_with_super
+@attr_class_to_from_dict
+@attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
+class BinomialIntervalMap(fwdpy11._fwdpy11._ll_BinomialIntervalMap):
+    """
+    Generate exactly one crossover with a given probability
+    and a non-uniform map to generate positions.
+
+    This class has the following attributes, whose names
+    are also `kwargs` for intitialization.  The attribute names
+    also determine the order of positional arguments:
+
+    :param probability: The probability of a breakpoint
+    :type probability: float
+    :param regions: the map describing intervals and weights
+    :type regions: list[fwdpy11.Region]
+    :param discrete: If `False`, positions are continuous
+                     and uniform from `[beg, end)`.
+                     If `True`, positions take integer values
+                     uniformly from `[beg, end)`.
+    :type discrete: bool
+
+    Unlike :class:`fwdpy11.BinomialInterval`, this class allows
+    a non-uniform map to generate breakpoint positions.
+    The ``regions`` parameter is used to generate a lookup
+    table allowing efficient generation of positions.
+
+    .. versionadded:: 0.20.0
+    """
+    probability: float
+    regions: typing.List[fwdpy11.Region]
+    discrete: bool = attr.ib(kw_only=True, default=False)
+
+    def __attrs_post_init__(self):
+        super(BinomialIntervalMap, self).__init__(
+            probability=self.probability,
+            regions=self.regions,
+            discrete=self.discrete
+        )

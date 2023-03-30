@@ -1,5 +1,6 @@
 #include "fwdpy11/regions/RecombinationRegions.hpp"
 #include <cmath>
+#include <gsl/gsl_randist.h>
 #include <limits>
 #include <memory>
 #include <stdexcept>
@@ -129,5 +130,74 @@ namespace fwdpy11_core
     {
         return std::unique_ptr<fwdpy11::NonPoissonCrossoverGenerator>(
             new FixedCrossovers(*this));
+    }
+
+    BinomialIntervalMap::BinomialIntervalMap(double probability, const bool discrete,
+                                             const std::vector<fwdpy11::Region>& regions)
+        : probability(probability), discrete{discrete}, lookup{nullptr},
+          regions{regions}, segments{}
+    {
+        validate_parameter(probability, 0.0, 1.0);
+        std::vector<double> weights;
+        weights.reserve(regions.size());
+        segments.reserve(regions.size());
+        for (const auto& r : this->regions)
+            {
+                validate_interval(r.beg, r.end, discrete);
+                auto w = r.weight;
+                if (r.coupled)
+                    {
+                        w += (r.end - r.beg);
+                    }
+                weights.push_back(w);
+                segments.push_back(Segment{r.beg, r.end});
+            }
+        lookup.reset(gsl_ran_discrete_preproc(segments.size(), weights.data()));
+    }
+
+    double
+    BinomialIntervalMap::left()
+    {
+        auto rv = std::numeric_limits<double>::max();
+        for (const auto& s : this->segments)
+            {
+                rv = std::min(s.left, rv);
+            }
+        return rv;
+    }
+
+    double
+    BinomialIntervalMap::right()
+    {
+        auto rv = std::numeric_limits<double>::min();
+        for (const auto& s : this->segments)
+            {
+                rv = std::max(s.right, rv);
+            }
+        return rv;
+    }
+
+    void
+    BinomialIntervalMap::breakpoint(const fwdpy11::GSLrng_t& rng,
+                                    std::vector<double>& breakpoints)
+    {
+        if (gsl_rng_uniform(rng.get()) <= probability)
+            {
+                auto index = gsl_ran_discrete(rng.get(), this->lookup.get());
+                auto bp = gsl_ran_flat(rng.get(), this->segments[index].left,
+                                       this->segments[index].right);
+                if (discrete)
+                    {
+                        bp = std::floor(bp);
+                    }
+                breakpoints.push_back(bp);
+            }
+    }
+
+    std::unique_ptr<fwdpy11::NonPoissonCrossoverGenerator>
+    BinomialIntervalMap::ll_clone()
+    {
+        return std::unique_ptr<fwdpy11::NonPoissonCrossoverGenerator>(
+            new BinomialIntervalMap(this->probability, this->discrete, this->regions));
     }
 }

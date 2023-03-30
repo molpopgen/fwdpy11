@@ -45,7 +45,9 @@ def _validate_expected(regions, numbers):
     ([fwdpy11.PoissonInterval(0, 0.1, 1e-3),
      fwdpy11.PoissonPoint(0.1, 1e-3),
      fwdpy11.BinomialInterval(0.1, 0.2, 1e-3),
-     fwdpy11.BinomialPoint(0.2, 1e-3)], (2, 2))
+     fwdpy11.BinomialPoint(0.2, 1e-3)], (2, 2)),
+    ([fwdpy11.BinomialIntervalMap(0.5, [fwdpy11.Region(0, 1, 1e-5),
+                                        fwdpy11.Region(1, 2, 2)])], (0, 1))
 ])
 def test_model_params_with_recregions(data):
     regions, expected = data
