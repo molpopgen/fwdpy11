@@ -35,6 +35,7 @@ from .genetic_map_unit import (  # NOQA
     PoissonPoint,
     PoissonInterval,
     BinomialInterval,
+    BinomialIntervalMap,
     BinomialPoint,
     FixedCrossovers,
 )

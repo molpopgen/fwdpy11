@@ -1,5 +1,7 @@
 #pragma once
 
+#include "fwdpp/gsl_discrete.hpp"
+#include "fwdpy11/regions/Region.hpp"
 #include "fwdpy11/rng.hpp"
 #include <algorithm>
 #include <gsl/gsl_randist.h>
@@ -102,6 +104,28 @@ namespace fwdpy11_core
                     breakpoints.push_back(bp);
                 }
         }
+        virtual std::unique_ptr<fwdpy11::NonPoissonCrossoverGenerator> ll_clone();
+    };
+
+    struct BinomialIntervalMap : public fwdpy11::NonPoissonCrossoverGenerator
+    {
+        struct Segment
+        {
+            double left;
+            double right;
+        };
+        double probability;
+        bool discrete;
+        fwdpp::gsl_ran_discrete_t_ptr lookup;
+        std::vector<fwdpy11::Region> regions;
+        std::vector<Segment> segments;
+        BinomialIntervalMap(double probability, bool discrete,
+                            const std::vector<fwdpy11::Region>&);
+
+        virtual double left();
+        virtual double right();
+        virtual void breakpoint(const fwdpy11::GSLrng_t& rng,
+                                std::vector<double>& breakpoints);
         virtual std::unique_ptr<fwdpy11::NonPoissonCrossoverGenerator> ll_clone();
     };
 

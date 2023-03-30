@@ -1,4 +1,5 @@
 #include "fwdpy11/regions/RecombinationRegions.hpp"
+#include "fwdpy11/regions/Region.hpp"
 #include <boost/test/tools/old/interface.hpp>
 #include <boost/test/unit_test.hpp>
 
@@ -6,6 +7,7 @@
 #include <core/genetic_maps/regions.hpp>
 #include <fwdpy11/rng.hpp>
 #include <limits>
+#include <memory>
 
 BOOST_AUTO_TEST_SUITE(test_core_genetic_map_regions)
 
@@ -142,6 +144,25 @@ BOOST_AUTO_TEST_CASE(test_poisson_point)
     BOOST_REQUIRE_EQUAL(
         std::count_if(begin(bp), end(bp) - 1, [](auto x) { return x >= 0 && x < 1.0; }),
         bp.size() - 1);
+}
+
+BOOST_AUTO_TEST_CASE(test_binomial_interval_map)
+{
+    std::vector<fwdpy11::Region> regions;
+    regions.push_back(fwdpy11::Region(0, 10, 1e-3, false, 0));
+    regions.push_back(fwdpy11::Region(10, 20, 5e-3, true, 0));
+    auto b = fwdpy11_core::BinomialIntervalMap(0.5, true, regions);
+    BOOST_CHECK_EQUAL(b.left(), 0.0);
+    BOOST_CHECK_EQUAL(b.right(), 20.0);
+    std::vector<std::unique_ptr<fwdpy11::NonPoissonCrossoverGenerator>> callbacks;
+    callbacks.push_back(
+        std::make_unique<fwdpy11_core::BinomialIntervalMap>(std::move(b)));
+    auto map = fwdpy11::GeneralizedGeneticMap({}, std::move(callbacks));
+    auto rng = fwdpy11::GSLrng_t(42);
+    for (int i = 0; i < 100; ++i)
+        {
+            auto bp = map(rng);
+        }
 }
 
 BOOST_AUTO_TEST_SUITE_END()
