@@ -107,7 +107,7 @@ jobs:
         run: |
           source ~/.bashrc
           conda activate anaconda-client-env
-          cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release -DBUILD_CPP_UNIT_TESTS=ON -DBUILD_PYTHON_UNIT_TESTS=ON
+          cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release -DBUILD_CPP_UNIT_TESTS=ON -DBUILD_PYTHON_UNIT_TESTS=ON -DDISABLE_LTO=ON
           cmake --build build -j 4
 
       - name: Run C++ tests

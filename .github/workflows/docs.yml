@@ -95,7 +95,7 @@ jobs:
 
       - name: Build module
         run: |
-            python3 -m pip install -e .
+            python3 -m pip install -e . --install-option="--disable_lto"
 
       - name: Build the docs
         working-directory: doc
