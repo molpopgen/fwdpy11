@@ -32,18 +32,26 @@ jobs:
         with:
           submodules: true
 
-      - uses: actions-rs/toolchain@v1
+      - uses: dtolnay/rust-toolchain@v1
         with:
           toolchain: ${{ matrix.rust }}
-          override: false
 
       - name: Install apt dependencies
         run: |
             sudo apt install --fix-missing -y libgsl-dev cmake autoconf libboost-test-dev libboost-program-options-dev
 
       - name: Install cbindgen
+        uses: baptiste0928/cargo-install@v2
+        with:
+          crate: cbindgen
+          version: "=0.24.3" 
+
+      - name: rustc version
         run: |
-          cargo install cbindgen@0.24.3
+            rustc --version
+      - name: cbindgen version
+        run: |
+            cbindgen --version
 
       - name: Edit PATH
         run: |
