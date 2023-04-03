@@ -3,6 +3,24 @@
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+## 0.20.0
+
+Documentation
+
+* Update docs on user environments.
+  PR {pr}`1148`
+
+Back end
+
+* Disable LTO during CI
+  PR {pr}`1147`
+* Improve rust handling during CI
+  PR {pr}`1146`
+* Bump `demes-forward-capi` dependency.
+  PR {pr}`1145`
+* Bump `demes-spec` submodule.
+  PR {pr}`1144`
+
 ## 0.20.0a1
 
 New features
