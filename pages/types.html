@@ -848,7 +848,7 @@ memory.  It is, however, slower.</p>
 <dd><p>Return an array of nodes associated with preserved/ancient samples.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)">numpy.ndarray</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.25)">numpy.ndarray</a></p>
 </dd>
 </dl>
 <div class="versionadded">
@@ -1179,10 +1179,10 @@ each interval in <code class="docutils literal notranslate"><span class="pre">wi
 bins correspond to frequencies 1 to n-1, where n is the number
 of sample nodes.</p></li>
 <li><p>If multiple sample lists are provided, the return value is a
-<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.coo_matrix.html#scipy.sparse.coo_matrix" title="(in SciPy v1.10.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">scipy.sparse.coo_matrix</span></code></a>.  For each dimension, the 0 and n
+<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.coo_matrix.html#scipy.sparse.coo_matrix" title="(in SciPy v1.11.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">scipy.sparse.coo_matrix</span></code></a>.  For each dimension, the 0 and n
 bins are included.</p></li>
 <li><p>If <code class="docutils literal notranslate"><span class="pre">marginalize</span> <span class="pre">==</span> <span class="pre">True</span></code> and more than one sample bin is provided,
-the <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.coo_matrix.html#scipy.sparse.coo_matrix" title="(in SciPy v1.10.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">scipy.sparse.coo_matrix</span></code></a> matrix is converted into a dict
+the <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.coo_matrix.html#scipy.sparse.coo_matrix" title="(in SciPy v1.11.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">scipy.sparse.coo_matrix</span></code></a> matrix is converted into a dict
 where the key is the index of the sample list and the
 value is a dense 1-d array,
 masked as described above.</p></li>
@@ -1429,7 +1429,7 @@ when generating such views.</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>tables</strong> (<a class="reference internal" href="#fwdpy11.TableCollection" title="fwdpy11.TableCollection"><em>TableCollection</em></a>) – A table collection</p></li>
-<li><p><strong>samples</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em> or </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><em>numpy.ndarray</em></a>) – List of sample nodes</p></li>
+<li><p><strong>samples</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em> or </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.25)"><em>numpy.ndarray</em></a>) – List of sample nodes</p></li>
 </ul>
 </dd>
 </dl>
@@ -1437,7 +1437,7 @@ when generating such views.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>ancient_samples</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em> or </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><em>numpy.ndarray</em></a>) – List of ancient_samples nodes</p></li>
+<li><p><strong>ancient_samples</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em> or </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.25)"><em>numpy.ndarray</em></a>) – List of ancient_samples nodes</p></li>
 <li><p><strong>begin</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – Start iteration at this position</p></li>
 <li><p><strong>end</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a><em> or </em><em>None</em>) – End iteration at this position</p></li>
 </ul>
@@ -1609,7 +1609,7 @@ on the current tree.</p>
 <dd class="field-odd"><p>The samples list</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)">numpy.ndarray</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.25)">numpy.ndarray</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1673,7 +1673,7 @@ on the current tree.</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>tables</strong> (<a class="reference internal" href="#fwdpy11.TableCollection" title="fwdpy11.TableCollection"><em>fwdpy11.TableCollection</em></a>) – The table collection</p></li>
-<li><p><strong>samples</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em> or </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><em>numpy.ndarray</em></a>) – Samples list</p></li>
+<li><p><strong>samples</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em> or </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.25)"><em>numpy.ndarray</em></a>) – Samples list</p></li>
 </ul>
 </dd>
 </dl>
@@ -1741,7 +1741,7 @@ as properties.</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>tables</strong> (<a class="reference internal" href="#fwdpy11.TableCollection" title="fwdpy11.TableCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.TableCollection</span></code></a>) – A table collection</p></li>
-<li><p><strong>samples</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em> or </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><em>numpy.ndarray</em></a>) – A list of samples</p></li>
+<li><p><strong>samples</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em> or </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.25)"><em>numpy.ndarray</em></a>) – A list of samples</p></li>
 <li><p><strong>intervals</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)"><em>tuple</em></a><em>]</em>) – The <span class="math notranslate nohighlight">\([start, stop)\)</span> positions of each interval</p></li>
 <li><p><strong>neutral</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – If True, include neutral variants</p></li>
 <li><p><strong>selected</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – If True, include selected variants</p></li>
