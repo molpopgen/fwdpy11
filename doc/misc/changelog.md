@@ -5,6 +5,12 @@ updates to latest `fwdpp` version, etc.
 
 ## 0.20.1
 
+Bug fixes
+
+* Fix attribute errors when validating recombination intervals.
+  PR {pr}`1155`
+  Issue {issue}`1153`
+
 Build system and CI.
 
 * Update pip usage and ensure reproducible builds of rust code.
