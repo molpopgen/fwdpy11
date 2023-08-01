@@ -191,12 +191,30 @@ def evolvets(
             isinstance(
                 r, fwdpy11._fwdpy11.NonPoissonCrossoverGenerator) or \
             isinstance(r, fwdpy11.Region), f"{type(r)}"
-        if r.beg < 0:
-            raise ValueError(f"{r} has begin value < 0.0")
-        if r.end > pop.tables.genome_length:
-            raise ValueError(
-                f"{r} has end value >= genome length of {pop.tables.genome_length}"
-            )
+        if hasattr(r, "beg") and hasattr(r, "end"):
+            if r.beg < 0:
+                raise ValueError(f"{r} has begin value < 0.0")
+            if r.end > pop.tables.genome_length:
+                raise ValueError(
+                    f"{r} has end value >= genome length of {pop.tables.genome_length}"
+                )
+        elif hasattr(r, "position"):
+            if r.position < 0:
+                raise ValueError(f"{r} has position value < 0.0")
+            if r.position >= pop.tables.genome_length:
+                raise ValueError(
+                    f"{r} has position value >= genome length of {pop.tables.genome_length}"
+                )
+        elif hasattr(r, "regions"):
+            for i in r.regions:
+                if i.beg < 0:
+                    raise ValueError(f"{r} has begin value < 0.0")
+                if i.end > pop.tables.genome_length:
+                    raise ValueError(
+                        f"{r} has end value >= genome length of {pop.tables.genome_length}"
+                    )
+        else:
+            raise TypeError(f"unexpceted type: {type(r)}")
 
     if recorder is None:
         from ._fwdpy11 import NoAncientSamples
@@ -225,7 +243,6 @@ def evolvets(
 
     fwdpy11._validate_regions(params.sregions, pop.tables.genome_length)
     fwdpy11._validate_regions(params.nregions, pop.tables.genome_length)
-    fwdpy11._validate_regions(params.recregions, pop.tables.genome_length)
 
     pneutral = 0.0
     if params.rates.neutral_mutation_rate + params.rates.selected_mutation_rate > 0.0:
