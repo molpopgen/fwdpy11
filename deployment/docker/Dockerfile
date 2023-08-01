@@ -28,7 +28,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -qq -y install cmak
   # so we need to be careful in general.
   && rustup override set 1.62.1 \
   # Pin cbindgen 
-  && cargo install cbindgen@0.24.3 \
+  && cargo install --locked cbindgen@0.24.3 \
   && rustc --version \
   && cbindgen --version \
   && ls -lhrt

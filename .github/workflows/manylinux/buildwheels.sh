@@ -13,7 +13,7 @@ source "$HOME/.cargo/env"
 # so we need to be careful in general.
 rustup override set 1.62.1 
 # Pin cbindgen 
-cargo install cbindgen@0.24.3 
+cargo install --locked cbindgen@0.24.3 
 
 # GSL_VERSION=2.5
 # curl -o gsl-${GSL_VERSION}.tar.gz "ftp://ftp.gnu.org/gnu/gsl/gsl-${GSL_VERSION}.tar.gz" 
