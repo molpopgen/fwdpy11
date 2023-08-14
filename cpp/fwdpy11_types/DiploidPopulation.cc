@@ -32,7 +32,6 @@
 #include <fwdpy11/serialization/Diploid.hpp>
 #include <fwdpy11/numpy/array.hpp>
 #include "fwdpy11/types/Mutation.hpp"
-#include "get_individuals.hpp"
 
 #include <core/diploid_population/set_mutations.hpp>
 
