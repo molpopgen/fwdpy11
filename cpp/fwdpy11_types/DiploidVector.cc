@@ -27,7 +27,8 @@ namespace py = pybind11;
 PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::DiploidGenotype>);
 PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::DiploidMetadata>);
 
-void init_DiploidVector(py::module & m)
+void
+init_DiploidVector(py::module& m)
 {
     PYBIND11_NUMPY_DTYPE(fwdpy11::DiploidGenotype, first, second);
 
@@ -54,12 +55,11 @@ void init_DiploidVector(py::module & m)
                 return rv;
             }));
 
-    PYBIND11_NUMPY_DTYPE(fwdpy11::DiploidMetadata, g, e, w, geography, label,
-                         parents, deme, sex, nodes);
+    PYBIND11_NUMPY_DTYPE(fwdpy11::DiploidMetadata, g, e, w, geography, label, parents,
+                         deme, sex, nodes);
 
     py::bind_vector<std::vector<fwdpy11::DiploidMetadata>>(
-        m, "DiploidMetadataVector", py::module_local(false),
-        py::buffer_protocol(),
+        m, "DiploidMetadataVector", py::module_local(false), py::buffer_protocol(),
         R"delim(
         Container of diploid metadata.
         )delim")
@@ -80,5 +80,7 @@ void init_DiploidVector(py::module & m)
                         rv.push_back(i.cast<fwdpy11::DiploidMetadata>());
                     }
                 return rv;
-            }));
+            }))
+        .def("_resize", [](std::vector<fwdpy11::DiploidMetadata>& self,
+                           std::size_t newsize) { self.resize(newsize); });
 }

@@ -61,7 +61,8 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
 
     @classmethod
     def create_from_tskit(cls, ts: tskit.TreeSequence,
-                          *, import_mutations=False):
+                          *, import_mutations=False,
+                          import_individuals=False):
         """
         Create a new object from an tskit.TreeSequence
 
@@ -150,6 +151,30 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
                     mvec.append(i)
             times = [int(i.time) - ll._generation for i in ts.mutations()]
             ll._set_mutations(mvec, mutation_nodes, times)
+        if import_individuals is True:
+            import fwdpy11.tskit_tools
+
+            def liftover(input, output):
+                for i in range(len(input)):
+                    output['g'][i] = input[i].g
+                    output['w'][i] = input[i].w
+                    output['e'][i] = input[i].e
+                    output['sex'][i] = input[i].sex
+                    output['deme'][i] = input[i].deme
+                    output['parents'][i] = input[i].parents
+                    output['nodes'][i] = input[i].nodes
+                    output['geography'][i] = input[i].geography
+                    output['label'][i] = input[i].label
+            decoded_md = fwdpy11.tskit_tools.decode_individual_metadata(ts)
+            # Take a writeable VIEW of the C++-side data...
+            md = np.array(ll._diploid_metadata, copy=False)
+            alive_md = [i for i in decoded_md if i.alive is True]
+            ancient_sample_md = [i for i in decoded_md if i.alive is False]
+            ll._ancient_sample_metadata._resize(len(ancient_sample_md))
+            amd = np.array(ll._ancient_sample_metadata, copy=False)
+            # ...overwrite that data here
+            liftover(alive_md, md)
+            liftover(ancient_sample_md, amd)
         return cls(0, 0.0, ll_pop=ll)
 
     @ classmethod
