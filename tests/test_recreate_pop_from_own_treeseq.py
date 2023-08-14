@@ -95,6 +95,19 @@ def pop():
     return pop
 
 
+@pytest.fixture
+def pop_with_ancient_samples():
+    pop, rng, params = pop_rng_params()
+
+    def preserver(pop, sampler):
+        sampler.assign(np.arange(pop.N, dtype=np.uint32))
+
+    fwdpy11.evolvets(rng, pop, params, 100, recorder=preserver,
+                     suppress_table_indexing=True)
+
+    return pop
+
+
 # Related to GitHub issue 1109.
 def test_recreate_pop_from_own_treeseq(pop):
     gen = pop.generation
@@ -107,7 +120,32 @@ def test_recreate_pop_from_own_treeseq(pop):
     assert pop.generation == gen
     assert len(pop.tables.mutations) == nm
     validate_mutation_table(pop)
-    assert(all([pop.mutations[i.key].g >= 0 for i in pop.tables.mutations]))  # NOQA
+    assert (all([pop.mutations[i.key].g >= 0 for i in pop.tables.mutations]))  # NOQA
+
+
+def test_rebuild_individual_metadata(pop):
+    md = np.array(pop.diploid_metadata)
+    ts = pop.dump_tables_to_tskit()
+    pop2 = fwdpy11.DiploidPopulation.create_from_tskit(
+        ts, import_individuals=True)
+    md2 = np.array(pop2.diploid_metadata)
+    assert len(md) == len(md2)
+    assert np.array_equal(md['w'], md2['w'])
+
+
+def test_rebuild_individual_metadata_with_ancient_samples(pop_with_ancient_samples):
+    md = np.array(pop_with_ancient_samples.diploid_metadata)
+    amd = np.array(pop_with_ancient_samples.ancient_sample_metadata)
+    assert len(amd) > 0
+    ts = pop_with_ancient_samples.dump_tables_to_tskit()
+    pop2 = fwdpy11.DiploidPopulation.create_from_tskit(
+        ts, import_individuals=True)
+    md2 = np.array(pop2.diploid_metadata)
+    assert len(md) == len(md2)
+    assert np.array_equal(md['w'], md2['w'])
+    amd2 = np.array(pop2.ancient_sample_metadata)
+    assert len(amd) == len(amd2)
+    assert np.array_equal(amd['w'], amd2['w'])
 
 
 def test_multiple_export_recreate_evolve_steps():
@@ -117,7 +155,7 @@ def test_multiple_export_recreate_evolve_steps():
         ts = pop.dump_tables_to_tskit()
         pop = fwdpy11.DiploidPopulation.create_from_tskit(
             ts, import_mutations=True)
-        assert(all([pop.mutations[i.key].g >= 0 for i in pop.tables.mutations]))  # NOQA
+        assert (all([pop.mutations[i.key].g >= 0 for i in pop.tables.mutations]))  # NOQA
     assert pop.generation == 15
 
 

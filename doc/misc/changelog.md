@@ -3,6 +3,17 @@
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+## Next release
+
+# New features
+
+* {func}`fwdpy11.DiploidPopulation.create_from_tskit` is now able to restore
+  individual metadata, populating {attr}`fwdpy11.DiploidPopulation.diploid_metadata` 
+  and {attr}`fwdpy11.DiploidPopulation.ancient_sample_metadata`. 
+  PR {pr}`1157`.
+  Issue {issue}`1130`.
+
+
 ## 0.20.1
 
 Bug fixes
