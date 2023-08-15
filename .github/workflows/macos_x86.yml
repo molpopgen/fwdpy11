@@ -1,0 +1,69 @@
+# NOTE: these tests do not run the C++
+# test suite. We don't do these tests
+# b/c boost from brew has proven tricky
+# to work with here.
+name: macOS_x86
+
+on:
+  pull_request:
+  push:
+    branches: [main, dev]
+
+jobs:
+  test:
+    name: Python
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        python: [ "3.10", "3.11" ]
+        os:  [ macos-latest ]
+        rust: [1.62.1]
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.11.0
+        with:
+          access_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+      - name: Set up Python ${{ matrix.python }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install cbindgen
+        uses: baptiste0928/cargo-install@v2
+        with:
+          crate: cbindgen
+          version: "=0.24.3" 
+      - name: Install GSL
+        run: |
+          brew install gsl
+      - name: Install Python dependencies
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+          python -m pip install --upgrade pip
+          python -m pip install setuptools wheel build
+          python -m pip install -r requirements/development.txt
+      - name: Build extension module
+        run: |
+          source venv/bin/activate
+          cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release -DBUILD_PYTHON_UNIT_TESTS=ON -DDISABLE_LTO=ON
+          cmake --build build -j 4
+
+      - name: Manualy run setuptools_scm
+        run: |
+          source venv/bin/activate
+          python -m setuptools_scm
+
+      - name: Run Python tests
+        run: |
+          source venv/bin/activate
+          python -m pytest -n 4 tests
+          python -m pytest -n 2 tests_with_cpp
+
