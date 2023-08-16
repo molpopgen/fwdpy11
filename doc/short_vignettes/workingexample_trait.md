@@ -22,7 +22,7 @@ rho = 1000.0
 mu_neutral = 0.0
 mu_selected = 1e-3
 
-GSSmo = fwdpy11.GSSmo(
+GSSmo = fwdpy11.GaussianStabilizingSelection.single_trait(
     [
         fwdpy11.Optimum(when=0, optimum=0.0, VS=1.0),
         fwdpy11.Optimum(when=10 * N - 200, optimum=1.0, VS=1.0),

@@ -63,7 +63,8 @@ class TestPickleDiploidPopulationTreeSequences(unittest.TestCase):
         self.mu = self.theta / (4 * self.N)
         self.r = self.rho / (4 * self.N)
 
-        self.GSS = fwdpy11.GSS(VS=1.0, optimum=0.0)
+        self.GSS = fwdpy11.GaussianStabilizingSelection.single_trait(
+            [fwdpy11.Optimum(VS=1.0, optimum=0.0, when=0)])
         a = fwdpy11.Additive(2.0, self.GSS)
         demography = fwdpy11.ForwardDemesGraph.tubes([self.N],
                                                      burnin=100,
