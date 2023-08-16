@@ -487,16 +487,16 @@ hits a frequency :math:<code class="docutils literal notranslate"><span class="p
         <span class="k">if</span> <span class="n">pop</span><span class="o">.</span><span class="n">mutations</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">key</span> <span class="o">!=</span> <span class="n">key</span><span class="p">:</span>
             <span class="c1"># it is fixed or lost, neither of </span>
             <span class="c1"># which we want</span>
-            <span class="k">return</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">conditional_models</span><span class="o">.</span><span class="n">SimulationStatus</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">conditional_models</span><span class="o">.</span><span class="n">SimulationStatus</span><span class="o">.</span><span class="n">Restart</span>
         <span class="k">if</span> <span class="n">pop</span><span class="o">.</span><span class="n">mcounts</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">conditional_models</span><span class="o">.</span><span class="n">SimulationStatus</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">conditional_models</span><span class="o">.</span><span class="n">SimulationStatus</span><span class="o">.</span><span class="n">Restart</span>
         
         <span class="c1"># Terminate the first time we see the </span>
         <span class="c1"># variant get about a freq of 0.25</span>
         <span class="k">if</span> <span class="n">pop</span><span class="o">.</span><span class="n">mcounts</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">/</span> <span class="n">pop</span><span class="o">.</span><span class="n">N</span> <span class="o">&gt;=</span> <span class="mf">0.25</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">conditional_models</span><span class="o">.</span><span class="n">SimulationStatus</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">conditional_models</span><span class="o">.</span><span class="n">SimulationStatus</span><span class="o">.</span><span class="n">Success</span>
         <span class="c1"># make sure there&#39;s a valid return value</span>
-        <span class="k">return</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">conditional_models</span><span class="o">.</span><span class="n">SimulationStatus</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">conditional_models</span><span class="o">.</span><span class="n">SimulationStatus</span><span class="o">.</span><span class="n">Continue</span>
 
 <span class="n">L</span> <span class="o">=</span> <span class="mf">10000.0</span>
 <span class="n">ttl_rec_rate</span> <span class="o">=</span> <span class="mf">1e-5</span><span class="o">*</span><span class="n">L</span>
@@ -593,7 +593,7 @@ genotype table of resultant sweep
   0 0 1 1 0 0 0 0 0 1 0 1 0 0 1 0 0 1 1 0 0 0 0 1 0 0 0 0]]
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/runner/work/fwdpy11/fwdpy11/fwdpy11/conditional_models/_track_added_mutation.py:401: UserWarning: Applying a default demographic model where deme sizes are [500] and the burn-in length is 10*500
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/runner/work/fwdpy11/fwdpy11/fwdpy11/conditional_models/_track_added_mutation.py:402: UserWarning: Applying a default demographic model where deme sizes are [500] and the burn-in length is 10*500
   fwdpy11.evolvets(
 </pre></div>
 </div>

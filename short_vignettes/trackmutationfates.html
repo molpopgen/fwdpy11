@@ -580,9 +580,9 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/runner/work/fwdpy11/fwdpy11/fwdpy11/conditional_models/_track_added_mutation.py:256: UserWarning: Applying a default demographic model where deme sizes are [500] and the burn-in length is 10*500
-  fwdpy11.evolvets(rng, pcopy, pre_sweep_params,
-/home/runner/work/fwdpy11/fwdpy11/fwdpy11/conditional_models/_track_added_mutation.py:401: UserWarning: Applying a default demographic model where deme sizes are [500] and the burn-in length is 10*500
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/runner/work/fwdpy11/fwdpy11/fwdpy11/conditional_models/_track_added_mutation.py:257: UserWarning: Applying a default demographic model where deme sizes are [500] and the burn-in length is 10*500
+  fwdpy11.evolvets(rng, pcopy, pre_sweep_params, **evolvets_options.asdict())
+/home/runner/work/fwdpy11/fwdpy11/fwdpy11/conditional_models/_track_added_mutation.py:402: UserWarning: Applying a default demographic model where deme sizes are [500] and the burn-in length is 10*500
   fwdpy11.evolvets(
 </pre></div>
 </div>
@@ -591,15 +591,17 @@ document.write(`
 <p>When tracking deleterious variants, it is unlikely that they will be around at the end of the simulation:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">output</span><span class="o">.</span><span class="n">mutation_index</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">output</span><span class="o">.</span><span class="n">pop</span><span class="o">.</span><span class="n">mutations</span><span class="p">[</span><span class="n">output</span><span class="o">.</span><span class="n">mutation_index</span><span class="p">])</span>
-<span class="k">except</span> <span class="ne">IndexError</span> <span class="k">as</span> <span class="n">_</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;mutation </span><span class="si">{</span><span class="n">output</span><span class="o">.</span><span class="n">mutation_index</span><span class="si">}</span><span class="s2"> is no longer in the population!&quot;</span><span class="p">)</span> 
+<span class="k">elif</span> <span class="n">output</span><span class="o">.</span><span class="n">fixation_index</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">output</span><span class="o">.</span><span class="n">pop</span><span class="o">.</span><span class="n">fixations</span><span class="p">[</span><span class="n">output</span><span class="o">.</span><span class="n">fixation_index</span><span class="p">])</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Our mutation is no longer in the population!&quot;</span><span class="p">)</span> 
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>mutation 0 is no longer in the population!
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Our mutation is no longer in the population!
 </pre></div>
 </div>
 </div>
@@ -635,10 +637,12 @@ Let’s record all generations of its existence as ancient samples:</p>
 Let’s try to print it again:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">output</span><span class="o">.</span><span class="n">mutation_index</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">output</span><span class="o">.</span><span class="n">pop</span><span class="o">.</span><span class="n">mutations</span><span class="p">[</span><span class="n">output</span><span class="o">.</span><span class="n">mutation_index</span><span class="p">])</span>
-<span class="k">except</span> <span class="ne">IndexError</span> <span class="k">as</span> <span class="n">_</span><span class="p">:</span>
-    <span class="n">output</span><span class="o">.</span><span class="n">mutation_index</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;mutation </span><span class="si">{</span><span class="n">output</span><span class="o">.</span><span class="n">mutation_index</span><span class="si">}</span><span class="s2"> is no longer in the population!&quot;</span><span class="p">)</span> 
+<span class="k">elif</span> <span class="n">output</span><span class="o">.</span><span class="n">fixation_index</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">output</span><span class="o">.</span><span class="n">pop</span><span class="o">.</span><span class="n">fixations</span><span class="p">[</span><span class="n">output</span><span class="o">.</span><span class="n">fixation_index</span><span class="p">])</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Our mutation is no longer in the population!&quot;</span><span class="p">)</span> 
 </pre></div>
 </div>
 </div>

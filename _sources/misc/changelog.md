@@ -3,6 +3,42 @@
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+## 0.21.0
+
+Breaking changes
+
+* Refactor {class}`fwdpy11.conditional_models.SimulationStatus` as an enum.
+  This change makes correct use much easier.
+  PR {pr}`1161`.
+  Issue {issue}`934`.
+
+Fixes
+
+* {class}`fwdpy11.conditional_models.ConditionalModelOutput` now contains
+  fields allowing one to distinguish if the tracked mutation is still present
+  in {attr}`fwdpy11.DiploidPopulation.mutations` and/or {attr}`fwdpy11.DiploidPopulation.fixations`
+  PR {pr}`1163`.
+  Issue {issue}`1160`.
+
+New features
+
+* {func}`fwdpy11.DiploidPopulation.create_from_tskit` is now able to restore
+  individual metadata, populating {attr}`fwdpy11.DiploidPopulation.diploid_metadata` 
+  and {attr}`fwdpy11.DiploidPopulation.ancient_sample_metadata`. 
+  PR {pr}`1157`.
+  Issue {issue}`1130`.
+
+CI changes
+
+* Remove tests using `conda` environments.
+  This removal was a pragmatic decision to speed up CI time.
+* Test macOS/x86 using brew instead of `conda`
+* Reduce number of work flows run for PRs into the `dev` branch.
+  Several work flows are only needed when merging into `main`.
+* Reduce number of work flows running upon push to `main`/`dev`.
+  We now use branch protection, so in theory any changes merging
+  have passed their CI requirements.
+
 ## 0.20.1
 
 Bug fixes

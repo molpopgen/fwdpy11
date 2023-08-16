@@ -541,8 +541,14 @@ added to when the terminiation condition is first met.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fwdpy11.conditional_models.ConditionalModelOutput">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.conditional_models.</span></span><span class="sig-name descname"><span class="pre">ConditionalModelOutput</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pop</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mutation_index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_descendant_nodes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.conditional_models.ConditionalModelOutput" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.conditional_models.</span></span><span class="sig-name descname"><span class="pre">ConditionalModelOutput</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pop</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mutation_index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fixation_index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_descendant_nodes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.conditional_models.ConditionalModelOutput" title="Permalink to this definition">#</a></dt>
 <dd><dl class="py attribute">
+<dt class="sig sig-object py" id="fwdpy11.conditional_models.ConditionalModelOutput.fixation_index">
+<span class="sig-name descname"><span class="pre">fixation_index</span></span><a class="headerlink" href="#fwdpy11.conditional_models.ConditionalModelOutput.fixation_index" title="Permalink to this definition">#</a></dt>
+<dd><p>The index of the new mutation in pop.fixations</p>
+</dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="fwdpy11.conditional_models.ConditionalModelOutput.mutation_index">
 <span class="sig-name descname"><span class="pre">mutation_index</span></span><a class="headerlink" href="#fwdpy11.conditional_models.ConditionalModelOutput.mutation_index" title="Permalink to this definition">#</a></dt>
 <dd><p>The index of the new mutation in pop.mutations</p>
@@ -719,28 +725,21 @@ become attribute names:</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fwdpy11.conditional_models.SimulationStatus">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.conditional_models.</span></span><span class="sig-name descname"><span class="pre">SimulationStatus</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">should_terminate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">condition_met</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.conditional_models.SimulationStatus" title="Permalink to this definition">#</a></dt>
-<dd><p>The return value of a stopping condition callable.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>should_terminate</strong> – Set to <cite>True</cite> if the simulation
-should be terminated.</p></li>
-<li><p><strong>condition_met</strong> – Set to <cite>True</cite> if the stopping
-condition has been met.</p></li>
-</ul>
-</dd>
-</dl>
-<p>For examples, see implementations of <a class="reference internal" href="#fwdpy11.conditional_models.GlobalFixation" title="fwdpy11.conditional_models.GlobalFixation"><code class="xref py py-class docutils literal notranslate"><span class="pre">GlobalFixation</span></code></a>
-and <a class="reference internal" href="#fwdpy11.conditional_models.FocalDemeFixation" title="fwdpy11.conditional_models.FocalDemeFixation"><code class="xref py py-class docutils literal notranslate"><span class="pre">FocalDemeFixation</span></code></a>.</p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.conditional_models.</span></span><span class="sig-name descname"><span class="pre">SimulationStatus</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.conditional_models.SimulationStatus" title="Permalink to this definition">#</a></dt>
+<dd><p>An enumeration.</p>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="fwdpy11.conditional_models.SimulationStatus.condition_met">
-<span class="sig-name descname"><span class="pre">condition_met</span></span><a class="headerlink" href="#fwdpy11.conditional_models.SimulationStatus.condition_met" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="fwdpy11.conditional_models.SimulationStatus.Continue">
+<span class="sig-name descname"><span class="pre">Continue</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#fwdpy11.conditional_models.SimulationStatus.Continue" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="fwdpy11.conditional_models.SimulationStatus.should_terminate">
-<span class="sig-name descname"><span class="pre">should_terminate</span></span><a class="headerlink" href="#fwdpy11.conditional_models.SimulationStatus.should_terminate" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="fwdpy11.conditional_models.SimulationStatus.Restart">
+<span class="sig-name descname"><span class="pre">Restart</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#fwdpy11.conditional_models.SimulationStatus.Restart" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fwdpy11.conditional_models.SimulationStatus.Success">
+<span class="sig-name descname"><span class="pre">Success</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#fwdpy11.conditional_models.SimulationStatus.Success" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
