@@ -46,13 +46,18 @@ class TestDiploidPopulation(unittest.TestCase):
     def test_labels(self):
         # All diploids should be labeled 0 to pop.N-1
         self.assertEqual(
-            [i.label for i in self.pop.diploid_metadata], [i for i in range(self.pop.N)]
+            [i.label for i in self.pop.diploid_metadata], [
+                i for i in range(self.pop.N)]
         )
 
     def test_ids(self):
         # All diploids should be hav ids 0 to pop.N-1
         self.assertEqual(
-            [i.id for i in self.pop.diploid_metadata], [i for i in range(self.pop.N)]
+            [i.id for i in self.pop.diploid_metadata], [
+                i for i in range(self.pop.N)]
+        )
+        self.assertTrue(np.array_equal(
+            np.array(self.pop.diploid_metadata)['id'], [i for i in range(self.pop.N)])
         )
 
     def test_genetic_values(self):
