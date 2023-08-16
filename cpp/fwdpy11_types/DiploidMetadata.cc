@@ -72,7 +72,7 @@ init_DiploidMetadata(py::module &m)
                     md.g, md.e, md.w,
                     py::make_tuple(md.geography[0], md.geography[1],
                                    md.geography[2]),
-                    md.label, py::make_tuple(md.parents[0], md.parents[1]),
+                    md.label, md.id, py::make_tuple(md.parents[0], md.parents[1]),
                     md.deme, md.sex, py::make_tuple(md.nodes[0], md.nodes[1]));
             },
             [](py::tuple t) {
@@ -85,12 +85,13 @@ init_DiploidMetadata(py::module &m)
                 rv.geography[1] = ttuple[1].cast<double>();
                 rv.geography[2] = ttuple[2].cast<double>();
                 rv.label = t[4].cast<std::size_t>();
-                ttuple = t[5].cast<py::tuple>();
+                rv.id = t[5].cast<std::size_t>();
+                ttuple = t[6].cast<py::tuple>();
                 rv.parents[0] = ttuple[0].cast<std::size_t>();
                 rv.parents[1] = ttuple[1].cast<std::size_t>();
-                rv.deme = t[6].cast<std::int32_t>();
-                rv.sex = t[7].cast<std::int32_t>();
-                ttuple = t[8].cast<py::tuple>();
+                rv.deme = t[7].cast<std::int32_t>();
+                rv.sex = t[8].cast<std::int32_t>();
+                ttuple = t[9].cast<py::tuple>();
                 rv.nodes[0] = ttuple[0].cast<fwdpp::ts::table_index_t>();
                 rv.nodes[1] = ttuple[1].cast<fwdpp::ts::table_index_t>();
                 return rv;
