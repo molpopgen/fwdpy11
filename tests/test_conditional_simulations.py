@@ -18,7 +18,7 @@
 #
 
 from hypothesis import settings, given
-from hypothesis.strategies import integers
+from hypothesis.strategies import booleans, integers
 
 import demes
 import fwdpy11
@@ -78,9 +78,10 @@ def test_bad_frequency_range(r):
 
 
 @given(msprime_seed=integers(1, int(2**32-1)),
-       fp11_seed=integers(1, int(2**32-1)))
+       fp11_seed=integers(1, int(2**32-1)),
+       prune_selected=booleans())
 @settings(deadline=None, max_examples=10)
-def test_deleterious_mutation_remains_present(msprime_seed, fp11_seed):
+def test_deleterious_mutation_remains_present(msprime_seed, fp11_seed, prune_selected):
     pop = make_pop_with_msprime_ancestry(msprime_seed)
     demography = fwdpy11.ForwardDemesGraph.tubes(pop.deme_sizes()[1],
                                                  burnin=10,
@@ -89,7 +90,7 @@ def test_deleterious_mutation_remains_present(msprime_seed, fp11_seed):
         "recregions": [fwdpy11.PoissonInterval(0, 1, 5e-2)],
         "gvalue": fwdpy11.Multiplicative(2.0),
         "rates": (0, 0, None),
-        "prune_selected": False,
+        "prune_selected": prune_selected,
         "simlen": 10,
         "demography": demography
     }
@@ -122,10 +123,11 @@ def test_deleterious_mutation_remains_present(msprime_seed, fp11_seed):
 
 
 @given(msprime_seed=integers(1, int(2**32-1)),
-       fp11_seed=integers(1, int(2**32-1)))
+       fp11_seed=integers(1, int(2**32-1)),
+       prune_selected=booleans())
 @settings(deadline=None)
 def test_deleterious_mutation_remains_present_with_final_recording(
-    msprime_seed, fp11_seed
+    msprime_seed, fp11_seed, prune_selected
 ):
     pop = make_pop_with_msprime_ancestry(msprime_seed)
     demography = fwdpy11.ForwardDemesGraph.tubes(pop.deme_sizes()[1],
@@ -135,7 +137,7 @@ def test_deleterious_mutation_remains_present_with_final_recording(
         "recregions": [fwdpy11.PoissonInterval(0, 1, 5e-2)],
         "gvalue": fwdpy11.Multiplicative(2.0),
         "rates": (0, 0, None),
-        "prune_selected": False,
+        "prune_selected": prune_selected,
         "simlen": 20,
         "demography": demography,
     }
@@ -174,10 +176,11 @@ def test_deleterious_mutation_remains_present_with_final_recording(
 
 
 @given(msprime_seed=integers(1, int(2**32-1)),
-       fp11_seed=integers(1, int(2**32-1)))
+       fp11_seed=integers(1, int(2**32-1)),
+       prune_selected=booleans())
 @settings(deadline=None)
 @pytest.mark.parametrize("alpha", [1000.0])
-def test_sweep_from_new_mutation_using_API(msprime_seed, fp11_seed, alpha):
+def test_sweep_from_new_mutation_using_API(msprime_seed, fp11_seed, alpha, prune_selected):
     pop = make_pop_with_msprime_ancestry(msprime_seed)
     demography = fwdpy11.ForwardDemesGraph.tubes(pop.deme_sizes()[1],
                                                  burnin=200,
@@ -186,7 +189,7 @@ def test_sweep_from_new_mutation_using_API(msprime_seed, fp11_seed, alpha):
         "recregions": [fwdpy11.PoissonInterval(0, 1, 5e-2)],
         "gvalue": fwdpy11.Multiplicative(2.0),
         "rates": (0, 0, None),
-        "prune_selected": False,
+        "prune_selected": prune_selected,
         "simlen": 10 * pop.N,
         "demography": demography
     }
@@ -243,10 +246,11 @@ def test_sweep_from_new_mutation_using_API(msprime_seed, fp11_seed, alpha):
 
 @pytest.mark.parametrize("alpha", [1000.0])
 @given(msprime_seed=integers(1, int(2**32-1)),
-       fp11_seed=integers(1, int(2**32-1)))
+       fp11_seed=integers(1, int(2**32-1)),
+       prune_selected=booleans())
 @settings(deadline=None)
 def test_sweep_from_new_mutation_using_API_exit_when_finished(
-    msprime_seed, fp11_seed, alpha
+    msprime_seed, fp11_seed, alpha, prune_selected,
 ):
     pop = make_pop_with_msprime_ancestry(msprime_seed)
     demography = fwdpy11.ForwardDemesGraph.tubes(pop.deme_sizes()[1],
@@ -256,7 +260,7 @@ def test_sweep_from_new_mutation_using_API_exit_when_finished(
         "recregions": [fwdpy11.PoissonInterval(0, 1, 5e-2)],
         "gvalue": fwdpy11.Multiplicative(2.0),
         "rates": (0, 0, None),
-        "prune_selected": False,
+        "prune_selected": prune_selected,
         "simlen": 10 * pop.N,
         "demography": demography
     }
@@ -284,11 +288,12 @@ def test_sweep_from_new_mutation_using_API_exit_when_finished(
 
 @given(msprime_seed=integers(1, int(2**32-1)),
        fp11_seed=integers(1, int(2**32-1)),
-       ndescendants=integers(2, 100))
+       ndescendants=integers(2, 100),
+       prune_selected=booleans())
 @pytest.mark.parametrize("alpha", [1000.0])
 @settings(deadline=None, max_examples=10)
 def test_sweep_from_standing_variation_using_API(
-    msprime_seed, fp11_seed, ndescendants, alpha
+    msprime_seed, fp11_seed, ndescendants, alpha, prune_selected
 ):
     pop = make_pop_with_msprime_ancestry(msprime_seed)
     demography = fwdpy11.ForwardDemesGraph.tubes(pop.deme_sizes()[1],
@@ -298,7 +303,7 @@ def test_sweep_from_standing_variation_using_API(
         "recregions": [fwdpy11.PoissonInterval(0, 1, 5e-2)],
         "gvalue": fwdpy11.Multiplicative(2.0),
         "rates": (0, 0, None),
-        "prune_selected": False,
+        "prune_selected": prune_selected,
         "simlen": 10 * pop.N,
         "demography": demography
     }
@@ -322,8 +327,13 @@ def test_sweep_from_standing_variation_using_API(
         assert output.num_descendant_nodes == ndescendants
         assert output.pop.generation > pop.generation
         if output.pop is not None:
-            assert output.pop.mcounts[output.mutation_index] == 2 * \
-                output.pop.N
+            if output.mutation_index is not None:
+                assert output.pop.mcounts[output.mutation_index] == 2 * \
+                    output.pop.N
+            else:
+                assert output.fixation_index is not None
+                assert output.fixation_index < len(output.pop.fixations)
+                assert output.fixation_index < len(output.pop.fixation_times)
             _ = output.pop.dump_tables_to_tskit()
     except fwdpy11.conditional_models.AddMutationFailure:
         pass
@@ -419,7 +429,8 @@ def two_demes_with_no_migration():
 @pytest.mark.parametrize("fp11_seed", seed_list(5130125, 5))
 @pytest.mark.parametrize("demes_yaml", [single_deme_model()])
 @pytest.mark.parametrize("alpha", [1000.0])
-def test_sweep_from_new_mutation_in_single_deme_using_API(fp11_seed, demes_yaml, alpha):
+@pytest.mark.parametrize("prune_selected", [True, False])
+def test_sweep_from_new_mutation_in_single_deme_using_API(fp11_seed, demes_yaml, alpha, prune_selected):
     g = demes.loads(demes_yaml)
     model = fwdpy11.discrete_demography.from_demes(g, burnin=1)
     isizes = model.initial_sizes_list
@@ -429,7 +440,7 @@ def test_sweep_from_new_mutation_in_single_deme_using_API(fp11_seed, demes_yaml,
         "gvalue": fwdpy11.Multiplicative(2.0),
         "rates": (0, 0, None),
         "demography": model,
-        "prune_selected": False,
+        "prune_selected": prune_selected,
         "simlen": model.metadata["total_simulation_length"],
     }
     params = fwdpy11.ModelParams(**pdict)
@@ -452,11 +463,17 @@ def test_sweep_from_new_mutation_in_single_deme_using_API(fp11_seed, demes_yaml,
     assert output.num_descendant_nodes == 1
     assert output.pop.generation > pop.generation
     if output.pop is not None:
-        assert (
-            output.pop.mutations[output.mutation_index].g ==
-            model.metadata["burnin_time"] + 50
-        )
-        assert output.pop.mcounts[output.mutation_index] == 2 * output.pop.N
+        if output.mutation_index is not None:
+            assert (
+                output.pop.mutations[output.mutation_index].g ==
+                model.metadata["burnin_time"] + 50
+            )
+            assert output.pop.mcounts[output.mutation_index] == 2 * output.pop.N
+        else:
+            assert (
+                output.pop.fixations[output.fixation_index].g ==
+                model.metadata["burnin_time"] + 50
+            )
         _ = output.pop.dump_tables_to_tskit()
     else:
         pytest.fail("test failed")
@@ -465,8 +482,9 @@ def test_sweep_from_new_mutation_in_single_deme_using_API(fp11_seed, demes_yaml,
 @pytest.mark.parametrize("fp11_seed", seed_list(5130125, 5))
 @pytest.mark.parametrize("demes_yaml", [two_demes_with_migration()])
 @pytest.mark.parametrize("alpha", [1000.0])
+@pytest.mark.parametrize("prune_selected", [True, False])
 def test_sweep_from_new_mutation_with_demography_using_API(
-    fp11_seed, demes_yaml, alpha
+    fp11_seed, demes_yaml, alpha, prune_selected
 ):
     g = demes.loads(demes_yaml)
     model = fwdpy11.discrete_demography.from_demes(g, burnin=1)
@@ -477,7 +495,7 @@ def test_sweep_from_new_mutation_with_demography_using_API(
         "gvalue": fwdpy11.Multiplicative(2.0),
         "rates": (0, 0, None),
         "demography": model,
-        "prune_selected": False,
+        "prune_selected": prune_selected,
         "simlen": model.metadata["total_simulation_length"],
     }
     params = fwdpy11.ModelParams(**pdict)
@@ -501,11 +519,17 @@ def test_sweep_from_new_mutation_with_demography_using_API(
     assert output.pop.generation > pop.generation
     assert output.pop.generation == params.simlen
     if output.pop is not None:
-        assert (
-            output.pop.mutations[output.mutation_index].g ==
-            model.metadata["burnin_time"] + 50
-        )
-        assert output.pop.mcounts[output.mutation_index] == 2 * output.pop.N
+        if output.mutation_index is not None:
+            assert (
+                output.pop.mutations[output.mutation_index].g ==
+                model.metadata["burnin_time"] + 50
+            )
+            assert output.pop.mcounts[output.mutation_index] == 2 * output.pop.N
+        else:
+            assert (
+                output.pop.fixations[output.fixation_index].g ==
+                model.metadata["burnin_time"] + 50
+            )
         _ = output.pop.dump_tables_to_tskit()
     else:
         pytest.fail("test failed")
@@ -514,7 +538,8 @@ def test_sweep_from_new_mutation_with_demography_using_API(
 @pytest.mark.parametrize("fp11_seed", seed_list(5130125, 1))
 @pytest.mark.parametrize("demes_yaml", [two_demes_with_migration()])
 @pytest.mark.parametrize("alpha", [1000.0])
-def test_origination_deme1_fixation_in_deme_2(fp11_seed, demes_yaml, alpha):
+@pytest.mark.parametrize("prune_selected", [True, False])
+def test_origination_deme1_fixation_in_deme_2(fp11_seed, demes_yaml, alpha, prune_selected):
     g = demes.loads(demes_yaml)
     model = fwdpy11.discrete_demography.from_demes(g, burnin=1)
     isizes = model.initial_sizes_list
@@ -524,7 +549,7 @@ def test_origination_deme1_fixation_in_deme_2(fp11_seed, demes_yaml, alpha):
         "gvalue": fwdpy11.Multiplicative(2.0),
         "demography": model,
         "rates": (0, 0, None),
-        "prune_selected": False,
+        "prune_selected": prune_selected,
         "simlen": model.metadata["total_simulation_length"],
     }
     params = fwdpy11.ModelParams(**pdict)
@@ -548,21 +573,28 @@ def test_origination_deme1_fixation_in_deme_2(fp11_seed, demes_yaml, alpha):
     assert output.num_descendant_nodes == 1
     assert output.pop.generation > pop.generation
     if output.pop is not None:
-        assert (
-            output.pop.mutations[output.mutation_index].g ==
-            model.metadata["burnin_time"] + 50
-        )
-        assert (
-            count_mutation(output.pop, output.mutation_index, 2)
-            == 2 * output.pop.deme_sizes(as_dict=True)[2]
-        )
+        if output.mutation_index is not None:
+            assert (
+                output.pop.mutations[output.mutation_index].g ==
+                model.metadata["burnin_time"] + 50
+            )
+            assert (
+                count_mutation(output.pop, output.mutation_index, 2)
+                == 2 * output.pop.deme_sizes(as_dict=True)[2]
+            )
+        else:
+            assert (
+                output.pop.fixations[output.fixation_index].g ==
+                model.metadata["burnin_time"] + 50
+            )
         _ = output.pop.dump_tables_to_tskit()
 
 
 @pytest.mark.parametrize("fp11_seed", seed_list(5130125, 1))
 @pytest.mark.parametrize("demes_yaml", [two_demes_with_migration_and_growth()])
 @pytest.mark.parametrize("alpha", [1000.0])
-def test_origination_deme1_fixation_in_deme_2_with_growth(fp11_seed, demes_yaml, alpha):
+@pytest.mark.parametrize("prune_selected", [True, False])
+def test_origination_deme1_fixation_in_deme_2_with_growth(fp11_seed, demes_yaml, alpha, prune_selected):
     g = demes.loads(demes_yaml)
     model = fwdpy11.discrete_demography.from_demes(g, burnin=1)
     isizes = model.initial_sizes_list
@@ -572,7 +604,7 @@ def test_origination_deme1_fixation_in_deme_2_with_growth(fp11_seed, demes_yaml,
         "gvalue": fwdpy11.Multiplicative(2.0),
         "demography": model,
         "rates": (0, 0, None),
-        "prune_selected": False,
+        "prune_selected": prune_selected,
         "simlen": model.metadata["total_simulation_length"],
     }
     params = fwdpy11.ModelParams(**pdict)
@@ -597,20 +629,27 @@ def test_origination_deme1_fixation_in_deme_2_with_growth(fp11_seed, demes_yaml,
     assert output.pop.generation > pop.generation
     del pop
     if output.pop is not None:
-        assert (
-            output.pop.mutations[output.mutation_index].g ==
-            model.metadata["burnin_time"] + 50
-        )
+        if output.mutation_index is not None:
+            assert (
+                output.pop.mutations[output.mutation_index].g ==
+                model.metadata["burnin_time"] + 50
+            )
 
-        deme_sizes = output.pop.deme_sizes(as_dict=True)
+            deme_sizes = output.pop.deme_sizes(as_dict=True)
 
-        for deme, n in zip([1, 2], [60, 55]):
-            assert deme_sizes[deme] == n
+            for deme, n in zip([1, 2], [60, 55]):
+                assert deme_sizes[deme] == n
 
-        assert (
-            count_mutation(output.pop, output.mutation_index, 2)
-            == 2 * output.pop.deme_sizes(as_dict=True)[2]
-        )
+            assert (
+                count_mutation(output.pop, output.mutation_index, 2)
+                == 2 * output.pop.deme_sizes(as_dict=True)[2]
+            )
+        else:
+            assert output.fixation_index is not None
+            assert (
+                output.pop.fixations[output.fixation_index].g ==
+                model.metadata["burnin_time"] + 50
+            )
         _ = output.pop.dump_tables_to_tskit()
     else:
         pytest.fail("mutation did not fix?")
@@ -619,8 +658,9 @@ def test_origination_deme1_fixation_in_deme_2_with_growth(fp11_seed, demes_yaml,
 @pytest.mark.parametrize("fp11_seed", seed_list(5130125, 1))
 @pytest.mark.parametrize("demes_yaml", [two_demes_with_no_migration()])
 @pytest.mark.parametrize("alpha", [1000.0])
+@pytest.mark.parametrize("prune_selected", [True, False])
 def test_origination_deme2_fixation_in_deme_2_no_migration(
-    fp11_seed, demes_yaml, alpha
+    fp11_seed, demes_yaml, alpha, prune_selected
 ):
     g = demes.loads(demes_yaml)
     model = fwdpy11.discrete_demography.from_demes(g, burnin=1)
@@ -631,7 +671,7 @@ def test_origination_deme2_fixation_in_deme_2_no_migration(
         "gvalue": fwdpy11.Multiplicative(2.0),
         "demography": model,
         "rates": (0, 0, None),
-        "prune_selected": False,
+        "prune_selected": prune_selected,
         "simlen": model.metadata["total_simulation_length"],
     }
     params = fwdpy11.ModelParams(**pdict)
