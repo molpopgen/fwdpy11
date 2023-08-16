@@ -200,7 +200,7 @@ template <typename T> struct common_setup_with_ancestry_tracking : public common
 {
     std::vector<ancestry_proportions> ancestry;
     // parent id -> parent deme
-    std::unordered_map<std::size_t, std::int32_t> parents;
+    std::unordered_map<std::int64_t, std::int32_t> parents;
     common_setup_with_ancestry_tracking() : common_setup<T>(), ancestry(), parents()
     {
         this->sample_recorder_callback = [this](const fwdpy11::DiploidPopulation& pop,
@@ -250,7 +250,7 @@ template <typename T> struct common_setup_with_ancestry_tracking : public common
         parents.clear();
         for (auto& md : pop.diploid_metadata)
             {
-                parents.emplace(md.label, md.deme);
+                parents.emplace(md.id, md.deme);
             }
     }
 };

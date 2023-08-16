@@ -11,6 +11,7 @@ class InheritedNoise(fwdpy11.GeneticValueNoise):
         fwdpy11.GeneticValueNoise.__init__(self)
 
     def __call__(self, data) -> float:
+        print(data.parent1_metadata)
         return data.parent1_metadata.e + self.generation
 
     def update(self, pop):
