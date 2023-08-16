@@ -5,7 +5,14 @@ updates to latest `fwdpp` version, etc.
 
 ## Next release
 
-# New features
+Breaking changes
+
+* Refactor {class}`fwdpy11.conditional_models.SimulationStatus` as an enum.
+  This change makes correct use much easier.
+  PR {pr}`1161`.
+  Issue {issue}`934`.
+
+New features
 
 * {func}`fwdpy11.DiploidPopulation.create_from_tskit` is now able to restore
   individual metadata, populating {attr}`fwdpy11.DiploidPopulation.diploid_metadata` 

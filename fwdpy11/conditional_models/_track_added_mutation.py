@@ -23,12 +23,19 @@ import attr
 import fwdpy11
 import numpy as np
 from fwdpy11.class_decorators import attr_class_to_from_dict
-from fwdpy11.conditional_models import (AddMutationFailure, AlleleCount,
-                                        AlleleCountRange, AncientSamplePolicy,
-                                        ConditionalModelOutput, EvolveOptions,
-                                        FrequencyRange, NewMutationParameters,
-                                        OutOfAttempts, SimulationStatus,
-                                        _non_negative_value)
+from fwdpy11.conditional_models import (
+    AddMutationFailure,
+    AlleleCount,
+    AlleleCountRange,
+    AncientSamplePolicy,
+    ConditionalModelOutput,
+    EvolveOptions,
+    FrequencyRange,
+    NewMutationParameters,
+    OutOfAttempts,
+    SimulationStatus,
+    _non_negative_value,
+)
 
 
 @attr_class_to_from_dict
@@ -51,11 +58,11 @@ class _ProgressMonitor:
 
     def __call__(self, pop: fwdpy11.DiploidPopulation, _) -> bool:
         if (
-            self.status.condition_met is True
+            self.status == SimulationStatus.Success
             and self.return_when_stopping_condition_met is True
         ):
             return True
-        return self.status.should_terminate
+        return self.status == SimulationStatus.Restart
 
 
 @attr.s(auto_attribs=True)
@@ -63,13 +70,11 @@ class _MutationPresent:
     when: int = attr.ib(
         validator=[attr.validators.instance_of(int), _non_negative_value]
     )
-    until: typing.Optional[int] = attr.ib(
-        attr.validators.optional(int))  # type: ignore
+    until: typing.Optional[int] = attr.ib(attr.validators.optional(int))  # type: ignore
 
     def __attrs_post_init__(self):
         if self.until is None:
-            raise ValueError(
-                "until cannot be None if stopping_condition is None")
+            raise ValueError("until cannot be None if stopping_condition is None")
         if self.until is not None and self.until <= self.when:
             raise ValueError("until must be > when")
 
@@ -79,17 +84,15 @@ class _MutationPresent:
                 return True
         return False
 
-    def __call__(
-        self, pop, index: int, key: tuple
-    ) -> SimulationStatus:
+    def __call__(self, pop, index: int, key: tuple) -> SimulationStatus:
         if pop.generation == self.until:
             if pop.mutations[index].key != key and self.is_fixed(pop, key) is False:
-                return SimulationStatus(True, False)
+                return SimulationStatus.Restart
             if pop.mcounts[index] > 0:
-                return SimulationStatus(False, True)
+                return SimulationStatus.Success
             if self.is_fixed(pop, key):
-                return SimulationStatus(False, True)
-        return SimulationStatus(False, False)
+                return SimulationStatus.Success
+        return SimulationStatus.Continue
 
 
 @attr.s(auto_attribs=True)
@@ -111,7 +114,7 @@ class _Recorder:
                 )
 
     def __call__(self, pop, sampler) -> None:
-        if self.monitor.status.condition_met is False:
+        if self.monitor.status != SimulationStatus.Success:
             self.monitor.status = self.criterion(
                 pop, self.monitor.index, self.monitor.key
             )
@@ -126,7 +129,7 @@ class _Recorder:
 
         y = (
             self.sampling_policy == AncientSamplePolicy.COMPLETION
-            and self.monitor.status.condition_met is True
+            and self.monitor.status == SimulationStatus.Success
             and (self.until is None or pop.generation == self.until)
         )
 
@@ -206,8 +209,7 @@ def _get_allele_count_range(
             )
         return _integer_count_details(lo, hi, mutation_parameters.deme, pop)
     else:
-        raise TypeError(
-            f"unsupported type {type(mutation_parameters.frequency)}")
+        raise TypeError(f"unsupported type {type(mutation_parameters.frequency)}")
 
 
 def _copy_pop_and_add_mutation(
@@ -249,12 +251,10 @@ def _copy_pop_and_add_mutation(
             raise ValueError(f"when must be >= 0, got {when}")
 
         pcopy = copy.deepcopy(pop)
-        pre_sweep_pdict = {k: copy.deepcopy(v)
-                           for k, v in params.asdict().items()}
+        pre_sweep_pdict = {k: copy.deepcopy(v) for k, v in params.asdict().items()}
         pre_sweep_pdict["simlen"] = when
         pre_sweep_params = fwdpy11.ModelParams(**pre_sweep_pdict)
-        fwdpy11.evolvets(rng, pcopy, pre_sweep_params,
-                         **evolvets_options.asdict())
+        fwdpy11.evolvets(rng, pcopy, pre_sweep_params, **evolvets_options.asdict())
 
         count_range = _get_allele_count_range(pcopy, mutation_parameters)
         for c in count_range:
@@ -371,7 +371,7 @@ def _track_added_mutation(
             idx,
             pcopy.mutations[idx].key,
             return_when_stopping_condition_met,
-            SimulationStatus(False, False),
+            SimulationStatus.Continue,
         ),
         _sampling_policy,
     )
@@ -390,7 +390,6 @@ def _track_added_mutation(
         or max_attempts is not None
         and attempt < max_attempts
     ):
-
         # NOTE: deepcopy and not copy!
         pcopy_loop = copy.deepcopy(pcopy)
         local_params_copy = copy.deepcopy(local_params)
@@ -410,7 +409,7 @@ def _track_added_mutation(
 
         # The sim ended, so
         # check if condition was satisfied or not
-        if recorder.monitor.status.condition_met is True:
+        if recorder.monitor.status == SimulationStatus.Success:
             pop_to_return = pcopy_loop
             _evolvets_options = evolvets_options_copy
             local_params = local_params_copy
@@ -422,6 +421,7 @@ def _track_added_mutation(
         raise OutOfAttempts()
 
     assert pop_to_return is not None
+
     return ConditionalModelOutput(
         pop=pop_to_return,
         params=local_params,
