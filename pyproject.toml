@@ -1,6 +1,12 @@
 [build-system]
 # We need setup.cfg support, which setuptools indtroduced in 30.3.0.
-requires = ["setuptools>=30.3.0", "wheel", "setuptools_scm", "pybind11[global]==2.11.1"]
+requires = [
+    "setuptools>=30.3.0",
+    "wheel",
+    "setuptools_scm",
+    "pybind11[global]==2.11.1",
+]
+build-backend = "setuptools.build_meta"
 
 [tool.setuptools_scm]
 write_to = "fwdpy11/_version.py"

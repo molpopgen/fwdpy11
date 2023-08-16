@@ -185,5 +185,4 @@ setup(
     cmdclass={"build_ext": CMakeBuild},
     packages=PKGS,
     package_data=generated_package_data,
-    zip_safe=False,
 )
