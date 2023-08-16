@@ -165,6 +165,7 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
                     output['nodes'][i] = input[i].nodes
                     output['geography'][i] = input[i].geography
                     output['label'][i] = input[i].label
+                    output['id'][i] = input[i].id
             decoded_md = fwdpy11.tskit_tools.decode_individual_metadata(ts)
             # Take a writeable VIEW of the C++-side data...
             md = np.array(ll._diploid_metadata, copy=False)

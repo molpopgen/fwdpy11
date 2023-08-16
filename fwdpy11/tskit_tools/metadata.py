@@ -48,6 +48,8 @@ class DiploidMetadata(object):
     :type deme: int
     :param label: Index in the population at time of living/sampling
     :type label: int
+    :param id: Unique identifier for this individual
+    :type id: int
     :param alive: Individual is alive
     :type alive: bool
     :param preserved: Individual is preserved
@@ -70,6 +72,7 @@ class DiploidMetadata(object):
     sex: int
     deme: int
     label: int
+    id: int
     alive: bool = attr.ib(converter=bool)
     preserved: bool = attr.ib(converter=bool)
     first_generation: bool = attr.ib(converter=bool)
