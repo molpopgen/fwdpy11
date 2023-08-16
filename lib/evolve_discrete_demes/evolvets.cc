@@ -462,7 +462,7 @@ evolve_with_tree_sequences(
             ++pop.generation;
             evolve_generation_ts(rng, pop, genetics, demography, fitness_lookup,
                                  fitness_bookmark, // miglookup,
-                                 pop.generation, pop.diploid_metadata, *new_edge_buffer,
+                                 pop.generation, *new_edge_buffer,
                                  offspring, offspring_metadata, next_index,
                                  next_offspring_id, options.allow_residual_selfing);
             next_offspring_id += static_cast<std::int64_t>(offspring_metadata.size());
