@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.27)
 project(fwdpy11)
 
 set(CMAKE_CXX_EXTENSIONS OFF)
