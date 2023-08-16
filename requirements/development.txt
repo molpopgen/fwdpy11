@@ -1,7 +1,7 @@
 # NOTE: any pinning should also be coordinated
 # with requirements.in and doc/requirements.in
 # and may require regenerating the .txt files.
-pybind11[global]==2.10.0
+pybind11[global]==2.11.1
 intervaltree
 numpy
 scipy
