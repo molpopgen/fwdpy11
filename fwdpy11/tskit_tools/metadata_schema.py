@@ -71,10 +71,10 @@ IndividualDiploidMetadata = tskit.metadata.MetadataSchema(
             "sex": {"type": "number", "binaryFormat": "i"},
             "deme": {"type": "number", "binaryFormat": "i"},
             "label": {"type": "number", "binaryFormat": "Q"},
-            "id": {"type": "number", "binaryFormat": "L"},
+            "id": {"type": "number", "binaryFormat": "q"},
             "parents": {
                 "type": "array",
-                "items": {"type": "number", "binaryFormat": "Q"},
+                "items": {"type": "number", "binaryFormat": "q"},
                 "arrayLengthFormat": "H",
             },
             "geography": {
