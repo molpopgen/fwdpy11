@@ -83,8 +83,8 @@ init_DiploidMetadata(py::module &m)
                 rv.label = t[4].cast<std::size_t>();
                 rv.id = t[5].cast<std::int64_t>();
                 ttuple = t[6].cast<py::tuple>();
-                rv.parents[0] = ttuple[0].cast<std::size_t>();
-                rv.parents[1] = ttuple[1].cast<std::size_t>();
+                rv.parents[0] = ttuple[0].cast<std::int64_t>();
+                rv.parents[1] = ttuple[1].cast<std::int64_t>();
                 rv.deme = t[7].cast<std::int32_t>();
                 rv.sex = t[8].cast<std::int32_t>();
                 ttuple = t[9].cast<py::tuple>();
