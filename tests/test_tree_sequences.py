@@ -685,6 +685,7 @@ class TestTreeSequencesWithAncientSamplesKeepFixations(unittest.TestCase):
                 self.assertEqual(amd["g"][k], l.g)
                 self.assertEqual(amd["w"][k], l.w)
                 self.assertEqual(amd["e"][k], l.e)
+                self.assertEqual(amd["id"][k], l.id)
                 self.assertEqual(amd["label"][k], l.label)
                 self.assertEqual(amd["parents"][k][0], l.parents[0])
                 self.assertEqual(amd["parents"][k][1], l.parents[1])

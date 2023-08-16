@@ -143,9 +143,11 @@ def test_rebuild_individual_metadata_with_ancient_samples(pop_with_ancient_sampl
     md2 = np.array(pop2.diploid_metadata)
     assert len(md) == len(md2)
     assert np.array_equal(md['w'], md2['w'])
+    assert np.array_equal(md['id'], md2['id'])
     amd2 = np.array(pop2.ancient_sample_metadata)
     assert len(amd) == len(amd2)
     assert np.array_equal(amd['w'], amd2['w'])
+    assert np.array_equal(amd['id'], amd2['id'])
 
 
 def test_multiple_export_recreate_evolve_steps():
