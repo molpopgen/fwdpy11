@@ -9,7 +9,7 @@ on:
 
 jobs:
   builddocs:
-    name: Build
+    name: Build manual
     runs-on: ubuntu-20.04
     strategy:
       matrix:

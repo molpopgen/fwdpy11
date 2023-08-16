@@ -6,12 +6,10 @@ name: macOS_x86
 
 on:
   pull_request:
-  push:
-    branches: [main, dev]
 
 jobs:
-  test:
-    name: Python
+  test_macos_x86:
+    name: macOS_x86
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
