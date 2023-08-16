@@ -15,8 +15,8 @@ endif()
 
 find_package(pybind11)
 message(STATUS "Found pybind11: ${pybind11_VERSION}")
-if(${pybind11_VERSION} VERSION_LESS '2.10.0')
-    message(FATAL_ERROR "pybind11 version must be >= '2.10.0'")
+if(${pybind11_VERSION} VERSION_LESS '2.11.1')
+    message(FATAL_ERROR "pybind11 version must be >= '2.11.1'")
 endif()
 add_definitions(-DPYBIND11_VERSION="${pybind11_VERSION}")
 
