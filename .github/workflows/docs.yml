@@ -2,8 +2,7 @@ name: Build and deploy manual
 
 on:
   pull_request:
-  push:
-    branches: [main]
+    branches: [main, dev]
   release:
     types: [created]
 
