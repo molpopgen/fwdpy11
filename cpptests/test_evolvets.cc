@@ -22,6 +22,7 @@
 #include "forward_demes_graph_fixtures.hpp"
 #include "fwdpp/ts/simplification/simplification.hpp"
 #include "fwdpy11/discrete_demography/exceptions.hpp"
+#include "fwdpy11/types/Diploid.hpp"
 
 /* Tests needed
  *
@@ -255,6 +256,25 @@ template <typename T> struct common_setup_with_ancestry_tracking : public common
     }
 };
 
+template <typename T> struct common_setup_remember_everyone : public common_setup<T>
+{
+    struct Record
+    {
+        fwdpy11::DiploidMetadata metadata;
+        std::uint32_t birth_time;
+    };
+    common_setup_remember_everyone() : common_setup<T>()
+    {
+        this->sample_recorder_callback = [this](const fwdpy11::DiploidPopulation& pop,
+                                                fwdpy11::SampleRecorder& recorder) {
+            for (std::size_t i = 0; i < pop.diploids.size(); ++i)
+                {
+                    recorder.add_sample(i);
+                }
+        };
+    }
+};
+
 bool
 validate_ancestry(const std::vector<ancestry_proportions>& ancestry,
                   std::uint32_t generation, std::int32_t offspring_deme,
@@ -286,6 +306,65 @@ BOOST_FIXTURE_TEST_CASE(test_basic_api_coherence, common_setup<SingleDemeModel>)
                                sample_recorder_callback, stopping_criterion,
                                post_simplification_recorder, options);
     BOOST_REQUIRE_EQUAL(pop.generation, 10);
+}
+
+BOOST_FIXTURE_TEST_CASE(test_individual_id,
+                        common_setup_remember_everyone<SingleDemeModel>)
+{
+    auto model = build_model();
+    fwdpy11_core::ForwardDemesGraph forward_demes_graph(model.yaml, 10);
+
+    // TODO: if we put long run times in here, we get exceptions
+    // from the ForwardDemesGraph back end.
+    options.preserve_first_generation = true;
+    evolve_with_tree_sequences(rng, pop, recorder, 10, forward_demes_graph, 10, 0., 0.,
+                               mregions, recregions, gvalue_ptrs,
+                               sample_recorder_callback, stopping_criterion,
+                               post_simplification_recorder, options);
+    BOOST_REQUIRE_EQUAL(pop.generation, 10);
+
+    for (const auto& md : pop.ancient_sample_metadata)
+        {
+            BOOST_REQUIRE_EQUAL(
+                std::count_if(std::begin(pop.ancient_sample_metadata),
+                              std::end(pop.ancient_sample_metadata),
+                              [md](const auto& mdi) { return md.id == mdi.id; }),
+                1);
+        }
+    for (const auto& md : pop.diploid_metadata)
+        {
+            BOOST_REQUIRE(md.id >= (pop.generation) * pop.N);
+            BOOST_REQUIRE(md.id < (pop.generation + 1) * pop.N);
+            for (auto p : md.parents)
+                {
+                    std::vector<fwdpy11::DiploidMetadata>::const_iterator amd
+                        = std::find_if(std::begin(pop.ancient_sample_metadata),
+                                       std::end(pop.ancient_sample_metadata),
+                                       [p](const auto& m) { return m.id == p; });
+                    BOOST_REQUIRE(amd != std::end(pop.ancient_sample_metadata));
+                    int generations_ago = 1;
+                    while (amd != std::end(pop.ancient_sample_metadata))
+                        {
+                            BOOST_REQUIRE(amd->id
+                                          >= (pop.generation - generations_ago) * pop.N);
+                            BOOST_REQUIRE(amd->id
+                                          < (pop.generation - generations_ago + 1)
+                                                * pop.N);
+                            // Only go up one path of parentage
+                            auto p0 = amd->parents[0];
+                            amd = std::find_if(std::begin(pop.ancient_sample_metadata),
+                                               std::end(pop.ancient_sample_metadata),
+                                               [amd](const auto& m) {
+                                                   return m.id == amd->parents[0];
+                                               });
+                            if (amd == std::end(pop.ancient_sample_metadata))
+                                {
+                                    BOOST_REQUIRE_EQUAL(p0, -1);
+                                }
+                            ++generations_ago;
+                        }
+                }
+        }
 }
 
 BOOST_FIXTURE_TEST_CASE(test_basic_api_coherence_two_deme_perpetual_island_model,

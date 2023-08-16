@@ -66,6 +66,9 @@ namespace fwdpy11
                             d.nodes[0] = 2 * d.label;
                             d.nodes[1] = 2 * d.label + 1;
                         }
+                    // Set to NULL values
+                    d.parents[0] = -1;
+                    d.parents[1] = -1;
                 }
             if (this->tables->genome_length() != std::numeric_limits<double>::max())
                 {
