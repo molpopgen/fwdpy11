@@ -3,7 +3,7 @@
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
-## Next release
+## 0.21.0
 
 Breaking changes
 
@@ -28,6 +28,16 @@ New features
   PR {pr}`1157`.
   Issue {issue}`1130`.
 
+CI changes
+
+* Remove tests using `conda` environments.
+  This removal was a pragmatic decision to speed up CI time.
+* Test macOS/x86 using brew instead of `conda`
+* Reduce number of work flows run for PRs into the `dev` branch.
+  Several work flows are only needed when merging into `main`.
+* Reduce number of work flows running upon push to `main`/`dev`.
+  We now use branch protection, so in theory any changes merging
+  have passed their CI requirements.
 
 ## 0.20.1
 
