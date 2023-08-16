@@ -184,7 +184,9 @@ evolve_generation_ts(
         fitness_lookup,
     const fwdpy11_core::discrete_demography::multideme_fitness_bookmark&
         fitness_bookmark,
-    const fwdpp::uint_t generation, fwdpp::ts::edge_buffer& new_edge_buffer,
+    const fwdpp::uint_t generation,
+    const std::vector<fwdpy11::DiploidMetadata>& parental_metadata,
+    fwdpp::ts::edge_buffer& new_edge_buffer,
     std::vector<fwdpy11::DiploidGenotype>& offspring,
     std::vector<fwdpy11::DiploidMetadata>& offspring_metadata, std::int32_t next_index,
     std::int64_t next_individual_id, bool allow_residual_selfing)
@@ -235,7 +237,7 @@ evolve_generation_ts(
                             auto pdata = fwdpy11_core::discrete_demography::pick_parents(
                                 rng, offspring_deme_index, demography,
                                 ancestor_deme_lookup, fitness_bookmark, fitness_lookup,
-                                allow_residual_selfing);
+                                parental_metadata, allow_residual_selfing);
                             fwdpy11::DiploidGenotype dip{
                                 std::numeric_limits<std::size_t>::max(),
                                 std::numeric_limits<std::size_t>::max()};

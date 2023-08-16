@@ -462,9 +462,9 @@ evolve_with_tree_sequences(
             ++pop.generation;
             evolve_generation_ts(rng, pop, genetics, demography, fitness_lookup,
                                  fitness_bookmark, // miglookup,
-                                 pop.generation, *new_edge_buffer, offspring,
-                                 offspring_metadata, next_index, next_offspring_id,
-                                 options.allow_residual_selfing);
+                                 pop.generation, pop.diploid_metadata, *new_edge_buffer,
+                                 offspring, offspring_metadata, next_index,
+                                 next_offspring_id, options.allow_residual_selfing);
             // TODO: abstract out these steps into a "cleanup_pop" function
             // NOTE: by swapping the diploids here, it is not possible
             // for genetics.value to make use of parental genotype information.

@@ -25,6 +25,7 @@
 #include <fwdpy11/rng.hpp>
 #include "core/demes/forward_graph.hpp"
 #include "fwdpp/gsl_discrete.hpp"
+#include "fwdpy11/types/Diploid.hpp"
 #include "multideme_fitness_lookups.hpp"
 #include "mating_event_type.hpp"
 
@@ -51,6 +52,7 @@ namespace fwdpy11_core
                      const fwdpp::gsl_ran_discrete_t_ptr& ancestor_deme_lookup,
                      const multideme_fitness_bookmark& fitness_bookmark,
                      const multideme_fitness_lookups<std::uint32_t>& wlookups,
+                     const std::vector<fwdpy11::DiploidMetadata>& parental_metadata,
                      const bool allow_residual_selfing);
 
     } // namespace discrete_demography
