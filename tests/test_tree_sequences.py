@@ -614,6 +614,25 @@ class TestTreeSequencesWithAncientSamplesKeepFixations(unittest.TestCase):
     def test_count_mutations_preserved_samples(self):
         mc = fwdpy11.count_mutations(self.pop, self.pop.preserved_nodes)
         pmc = np.array(self.pop.mcounts_ancient_samples)
+        ti = fwdpy11.TreeIterator(self.pop.tables,
+                                  self.pop.alive_nodes,
+                                  ancient_samples=self.pop.ancient_sample_nodes,
+                                  update_samples=True)
+        mc_tree = np.zeros(len(self.pop.mutations))
+        amc_tree = np.zeros(len(self.pop.mutations))
+        alive_nodes = self.pop.alive_nodes
+        ancient_nodes = self.pop.ancient_sample_nodes
+        for t in ti:
+            for mut in t.mutations():
+                for node in t.samples_below(mut.node):
+                    if node in alive_nodes:
+                        mc_tree[mut.key] += 1
+                    if node in ancient_nodes:
+                        amc_tree[mut.key] += 1
+        self.assertTrue(np.array_equal(mc, amc_tree))
+        self.assertTrue(np.array_equal(fwdpy11.count_mutations(self.pop,
+                                                               alive_nodes),
+                                       mc_tree))
         self.assertTrue(np.array_equal(mc, pmc))
 
     def test_ancient_sample_times(self):
