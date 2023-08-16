@@ -12,6 +12,14 @@ Breaking changes
   PR {pr}`1161`.
   Issue {issue}`934`.
 
+Fixes
+
+* {class}`fwdpy11.conditional_models.ConditionalModelOutput` now contains
+  fields allowing one to distinguish if the tracked mutation is still present
+  in {attr}`fwdpy11.DiploidPopulation.mutations` and/or {attr}`fwdpy11.DiploidPopulation.fixations`
+  PR {pr}`1163`.
+  Issue {issue}`1160`.
+
 New features
 
 * {func}`fwdpy11.DiploidPopulation.create_from_tskit` is now able to restore

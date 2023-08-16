@@ -376,6 +376,8 @@ def _track_added_mutation(
         _sampling_policy,
     )
 
+    tracked_mutation_key = pcopy.mutations[idx].key
+
     internal_options = _InternalSweepEvolveOptions()
 
     finished = False
@@ -422,9 +424,20 @@ def _track_added_mutation(
 
     assert pop_to_return is not None
 
+    if idx < len(pop_to_return.mutations):
+        mutation_index = idx
+    else:
+        mutation_index = None
+    if mutation_index is not None:
+        assert pop_to_return.mutations[mutation_index].key == tracked_mutation_key
+    fixation_index = None
+    for i, f in enumerate(pop_to_return.fixations):
+        if f.key == tracked_mutation_key:
+            fixation_index = i
     return ConditionalModelOutput(
         pop=pop_to_return,
         params=local_params,
-        mutation_index=idx,
+        mutation_index=mutation_index,
+        fixation_index=fixation_index,
         num_descendant_nodes=ndescendants,
     )

@@ -99,10 +99,12 @@ output = fwdpy11.conditional_models.track_added_mutation(
 When tracking deleterious variants, it is unlikely that they will be around at the end of the simulation:
 
 ```{code-cell} python
-try:
+if output.mutation_index is not None:
     print(output.pop.mutations[output.mutation_index])
-except IndexError as _:
-    print(f"mutation {output.mutation_index} is no longer in the population!") 
+elif output.fixation_index is not None:
+    print(output.pop.fixations[output.fixation_index])
+else:
+    print("Our mutation is no longer in the population!") 
 ```
 
 ### Recording all generations of the mutation's sojourn
@@ -131,10 +133,12 @@ Now, our mutation is present in nodes in our tree sequence.
 Let's try to print it again:
 
 ```{code-cell} python
-try:
+if output.mutation_index is not None:
     print(output.pop.mutations[output.mutation_index])
-except IndexError as _:
-    output.mutation_index(f"mutation {output.mutation_index} is no longer in the population!") 
+elif output.fixation_index is not None:
+    print(output.pop.fixations[output.fixation_index])
+else:
+    print("Our mutation is no longer in the population!") 
 ```
 
 Let's track this variant's frequency at each time point:
