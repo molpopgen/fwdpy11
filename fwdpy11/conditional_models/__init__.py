@@ -219,8 +219,10 @@ class ConditionalModelOutput:
     """The population with the added mutation"""
     params: fwdpy11.ModelParams
     """The evolved model parameters"""
-    mutation_index: int
+    mutation_index: typing.Optional[int]
     """The index of the new mutation in pop.mutations"""
+    fixation_index: typing.Optional[int]
+    """The index of the new mutation in pop.fixations"""
     num_descendant_nodes: int
     """The number of alive nodes initially containing the new mutation"""
 
