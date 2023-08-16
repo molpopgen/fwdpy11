@@ -38,16 +38,16 @@ class IncompleteSweep(object):
         if pop.mutations[index].key != key:
             # it is fixed or lost, neither of 
             # which we want
-            return fwdpy11.conditional_models.SimulationStatus(False, False)
+            return fwdpy11.conditional_models.SimulationStatus.Restart
         if pop.mcounts[index] == 0:
-            return fwdpy11.conditional_models.SimulationStatus(True, False)
+            return fwdpy11.conditional_models.SimulationStatus.Restart
         
         # Terminate the first time we see the 
         # variant get about a freq of 0.25
         if pop.mcounts[index] / 2 / pop.N >= 0.25:
-            return fwdpy11.conditional_models.SimulationStatus(False, True)
+            return fwdpy11.conditional_models.SimulationStatus.Success
         # make sure there's a valid return value
-        return fwdpy11.conditional_models.SimulationStatus(False, False)
+        return fwdpy11.conditional_models.SimulationStatus.Continue
 
 L = 10000.0
 ttl_rec_rate = 1e-5*L

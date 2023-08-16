@@ -207,23 +207,10 @@ class NewMutationParameters:
     )
 
 
-@attr.s(frozen=True)
-class SimulationStatus:
-    """
-    The return value of a stopping condition callable.
-
-    :param should_terminate: Set to `True` if the simulation
-                             should be terminated.
-    :param condition_met: Set to `True` if the stopping
-                          condition has been met.
-
-    For examples, see implementations of :class:`GlobalFixation`
-    and :class:`FocalDemeFixation`.
-    """
-
-    should_terminate: bool = attr.ib(
-        validator=attr.validators.instance_of(bool))
-    condition_met: bool = attr.ib(validator=attr.validators.instance_of(bool))
+class SimulationStatus(Enum):
+    Restart = 0
+    Continue = 1
+    Success = 2
 
 
 @attr.s(auto_attribs=True, kw_only=True)
@@ -247,21 +234,11 @@ class GlobalFixation(object):
     def __call__(
         self, pop, index: int, key: tuple
     ) -> SimulationStatus:
-        if pop.mutations[index].key != key:
-            # The key has changed, meaning the mutation is
-            # flagged for recycling.
-            # First, check if it is in the fixations list
-            for m in pop.fixations:
-                if m.key == key:
-                    # It is fixed, so we are done
-                    return SimulationStatus(True, False)
-            # The mutation is gone from the simulation
-            return SimulationStatus(True, False)
         if pop.mcounts[index] == 0:
-            return SimulationStatus(True, False)
+            return SimulationStatus.Restart
         if pop.mcounts[index] == 2 * pop.N:
-            return SimulationStatus(False, True)
-        return SimulationStatus(False, False)
+            return SimulationStatus.Success
+        return SimulationStatus.Continue
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -276,15 +253,8 @@ class FocalDemeFixation:
 
     def __call__(self, pop, index, key) -> SimulationStatus:
         deme_sizes = pop.deme_sizes(as_dict=True)
-        if pop.mutations[index].key != key:
-            # check for a global fixation
-            for m in pop.fixations:
-                if m.key == key:
-                    return SimulationStatus(True, False)
-            # The mutation is gone from the simulation
-            return SimulationStatus(True, False)
         if self.deme not in deme_sizes:
-            return SimulationStatus(False, False)
+            return SimulationStatus.Restart
         count = 0
 
         # TODO: we can probably do better here
@@ -299,10 +269,10 @@ class FocalDemeFixation:
                         count += 1
 
         if count == 0:
-            return SimulationStatus(True, False)
+            return SimulationStatus.Restart
         if count == 2 * deme_sizes[self.deme]:
-            return SimulationStatus(False, True)
-        return SimulationStatus(False, False)
+            return SimulationStatus.Success
+        return SimulationStatus.Continue
 
 
 @attr_class_to_from_dict
