@@ -78,7 +78,6 @@ class CMakeBuild(build_ext):
         cmake_args = [
             "-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=" + extdir,
             "-DCMAKE_ARCHIVE_OUTPUT_DIRECTORY=" + parent + "/lib/",
-            "-DPYTHON_EXECUTABLE=" + sys.executable,
             "-DCMAKE_BUILD=OFF",
         ]
 
@@ -186,5 +185,4 @@ setup(
     cmdclass={"build_ext": CMakeBuild},
     packages=PKGS,
     package_data=generated_package_data,
-    zip_safe=False,
 )
