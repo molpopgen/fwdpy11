@@ -49,6 +49,12 @@ class TestDiploidPopulation(unittest.TestCase):
             [i.label for i in self.pop.diploid_metadata], [i for i in range(self.pop.N)]
         )
 
+    def test_ids(self):
+        # All diploids should be hav ids 0 to pop.N-1
+        self.assertEqual(
+            [i.id for i in self.pop.diploid_metadata], [i for i in range(self.pop.N)]
+        )
+
     def test_genetic_values(self):
         self.assertEqual(sum([i.g for i in self.pop.diploid_metadata]), 0.0)
 
