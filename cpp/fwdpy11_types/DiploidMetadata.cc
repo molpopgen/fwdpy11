@@ -39,6 +39,8 @@ init_DiploidMetadata(py::module &m)
         .def_readwrite("deme", &fwdpy11::DiploidMetadata::deme, "Deme.")
         .def_readwrite("label", &fwdpy11::DiploidMetadata::label,
                        "Index of the individual in the population.")
+        .def_readwrite("id", &fwdpy11::DiploidMetadata::id,
+                       "Unique id for this individual in the simulation.")
         .def_property_readonly("nodes",
                                [](const fwdpy11::DiploidMetadata &md) {
                                    py::list rv;
