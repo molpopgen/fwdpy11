@@ -47,7 +47,13 @@ namespace fwdpy11_core
             if (selfing_rate_offspring_deme > 0.
                 && gsl_rng_uniform(rng.get()) <= selfing_rate_offspring_deme)
                 {
-                    return {p1, p1, pdeme, pdeme, mating_event_type::selfing};
+                    return {p1,
+                            p1,
+                            parental_metadata[p1].id,
+                            parental_metadata[p1].id,
+                            pdeme,
+                            pdeme,
+                            mating_event_type::selfing};
                 }
             auto p2 = wlookups.get_parent(rng, fitness_bookmark, pdeme);
             if (allow_residual_selfing == false && p1 == p2)
@@ -57,8 +63,9 @@ namespace fwdpy11_core
                             p2 = wlookups.get_parent(rng, fitness_bookmark, pdeme);
                         }
                 }
-            return {parental_metadata[p1].id, parental_metadata[p2].id, pdeme, pdeme,
-                    mating_event_type::outcrossing};
+            return {
+                p1,    p2,    parental_metadata[p1].id,      parental_metadata[p2].id,
+                pdeme, pdeme, mating_event_type::outcrossing};
         }
     }
 }

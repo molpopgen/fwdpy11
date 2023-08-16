@@ -35,13 +35,16 @@ namespace fwdpy11_core
     {
         struct parent_data
         {
-            std::int64_t parent1, parent2;
+            std::size_t parent1, parent2;
+            std::int64_t parent1_id, parent2_id;
             std::int32_t deme1, deme2;
             mating_event_type mating;
 
-            parent_data(std::int64_t p1, std::int64_t p2, std::int32_t d1,
-                        std::int32_t d2, mating_event_type m)
-                : parent1(p1), parent2(p2), deme1(d1), deme2(d2), mating(m)
+            parent_data(std::size_t p1, std::size_t p2, std::int64_t p1_id,
+                        std::int64_t p2_id, std::int32_t d1, std::int32_t d2,
+                        mating_event_type m)
+                : parent1(p1), parent2(p2), parent1_id(p1_id), parent2_id(p2_id),
+                  deme1(d1), deme2(d2), mating(m)
             {
             }
         };

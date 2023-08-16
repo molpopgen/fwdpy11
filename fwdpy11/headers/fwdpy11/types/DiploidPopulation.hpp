@@ -54,6 +54,7 @@ namespace fwdpy11
             for (auto &&d : this->diploid_metadata)
                 {
                     d.label = label++;
+                    d.id = static_cast<std::int64_t>(d.label);
                     d.w = 1.0;
                     if (this->tables->genome_length()
                         == std::numeric_limits<double>::max())
