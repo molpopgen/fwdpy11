@@ -446,6 +446,11 @@ evolve_with_tree_sequences(
     clear_edge_table_indexes(*pop.tables);
     fwdpp::ts::simplify_tables_output simplification_output;
     pop.is_simulating = true;
+    std::int64_t next_offspring_id = -1;
+    for (const auto &md : pop.diploid_metadata)
+        {
+            next_offspring_id = std::max(next_offspring_id, md.id);
+        }
     for (std::uint32_t gen = 0; pop.generation < demography.model_end_time() - 1
                                 && gen < simlen && !stopping_criteron_met;
          ++gen)
@@ -458,7 +463,7 @@ evolve_with_tree_sequences(
             evolve_generation_ts(rng, pop, genetics, demography, fitness_lookup,
                                  fitness_bookmark, // miglookup,
                                  pop.generation, *new_edge_buffer, offspring,
-                                 offspring_metadata, next_index,
+                                 offspring_metadata, next_index, next_offspring_id,
                                  options.allow_residual_selfing);
             // TODO: abstract out these steps into a "cleanup_pop" function
             // NOTE: by swapping the diploids here, it is not possible

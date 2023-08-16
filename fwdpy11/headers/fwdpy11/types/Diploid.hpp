@@ -41,8 +41,8 @@ namespace fwdpy11
         double e;               // Random component of trait value
         double w;               // Fitness
         double geography[3];    // Location in geographic space
-        std::int64_t id;        // A unique "individual id"
         std::size_t label;      // Index of individual in pop container
+        std::int64_t id;        // A unique "individual id"
         std::int64_t parents[2]; // "Individual ids" of parents
         std::int32_t deme;
         std::int32_t sex;

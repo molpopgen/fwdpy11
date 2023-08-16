@@ -187,7 +187,7 @@ evolve_generation_ts(
     const fwdpp::uint_t generation, fwdpp::ts::edge_buffer& new_edge_buffer,
     std::vector<fwdpy11::DiploidGenotype>& offspring,
     std::vector<fwdpy11::DiploidMetadata>& offspring_metadata, std::int32_t next_index,
-    bool allow_residual_selfing)
+    std::int64_t next_individual_id, bool allow_residual_selfing)
 {
     fwdpp::debug::all_haploid_genomes_extant(pop);
 
@@ -272,6 +272,7 @@ evolve_generation_ts(
                                 1.,
                                 {0, 0, 0},
                                 offspring_metadata.size(),
+                                ++next_individual_id,
                                 {pdata.parent1, pdata.parent2},
                                 static_cast<std::int32_t>(offspring_deme_index),
                                 0,

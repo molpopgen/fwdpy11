@@ -1,5 +1,6 @@
 #include "pick_parents.hpp"
 #include "fwdpy11/discrete_demography/exceptions.hpp"
+#include "fwdpy11/types/Diploid.hpp"
 #include <cwchar>
 #include <iterator>
 #include <stdexcept>
@@ -14,6 +15,7 @@ namespace fwdpy11_core
                      const fwdpp::gsl_ran_discrete_t_ptr& ancestor_deme_lookup,
                      const multideme_fitness_bookmark& fitness_bookmark,
                      const multideme_fitness_lookups<std::uint32_t>& wlookups,
+                     const std::vector<fwdpy11::DiploidMetadata>& parental_metadata,
                      bool allow_residual_selfing)
         {
             std::int32_t pdeme = static_cast<std::int32_t>(
@@ -55,7 +57,8 @@ namespace fwdpy11_core
                             p2 = wlookups.get_parent(rng, fitness_bookmark, pdeme);
                         }
                 }
-            return {p1, p2, pdeme, pdeme, mating_event_type::outcrossing};
+            return {parental_metadata[p1].id, parental_metadata[p2].id, pdeme, pdeme,
+                    mating_event_type::outcrossing};
         }
     }
 }
