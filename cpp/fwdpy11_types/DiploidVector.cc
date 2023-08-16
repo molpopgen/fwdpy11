@@ -55,8 +55,8 @@ init_DiploidVector(py::module& m)
                 return rv;
             }));
 
-    PYBIND11_NUMPY_DTYPE(fwdpy11::DiploidMetadata, g, e, w, geography, label, parents,
-                         deme, sex, nodes);
+    PYBIND11_NUMPY_DTYPE(fwdpy11::DiploidMetadata, g, e, w, geography, label, id,
+                         parents, deme, sex, nodes);
 
     py::bind_vector<std::vector<fwdpy11::DiploidMetadata>>(
         m, "DiploidMetadataVector", py::module_local(false), py::buffer_protocol(),
