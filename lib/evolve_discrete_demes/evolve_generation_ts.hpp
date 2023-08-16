@@ -275,7 +275,7 @@ evolve_generation_ts(
                                 {0, 0, 0},
                                 offspring_metadata.size(),
                                 ++next_individual_id,
-                                {pdata.parent1, pdata.parent2},
+                                {pdata.parent1_id, pdata.parent2_id},
                                 static_cast<std::int32_t>(offspring_deme_index),
                                 0,
                                 {offspring_node_1, offspring_node_2}});
