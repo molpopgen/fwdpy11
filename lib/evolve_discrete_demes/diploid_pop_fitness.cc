@@ -16,6 +16,7 @@ calculate_diploid_fitness(
             auto idx = deme_to_gvalue_map[offspring_metadata[i].deme];
             //gvalue_pointers[idx]->operator()(rng, offspring_metadata[i].label, pop,
             //                                 offspring_metadata[i]);
+            throw std::runtime_error("the parents are the ids here, not the labels.");
             gvalue_pointers[idx]->operator()(fwdpy11::DiploidGeneticValueData(
                 rng, pop, pop.diploid_metadata[offspring_metadata[i].parents[0]],
                 pop.diploid_metadata[offspring_metadata[i].parents[1]], i,
