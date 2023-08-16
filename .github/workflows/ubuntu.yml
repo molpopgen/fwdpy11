@@ -2,11 +2,9 @@ name: UbuntuStressTest
 
 on:
   pull_request:
-  push:
-    branches: [main, dev]
 
 jobs:
-  test:
+  test_ubuntu:
     name: Ubuntu
     runs-on: ${{ matrix.os }}
     strategy:
