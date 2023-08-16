@@ -48,6 +48,7 @@ class MockDiploid(object):
     sex: int
     deme: int
     label: int
+    id: int
     parents: typing.List[int]
     geography: typing.List[float]
     nodes: typing.List[int]
@@ -114,6 +115,7 @@ def add_diploid_metadata_and_nodes(pop: MockPopulation) -> MockPopulation:
                 w=float(i ** 2),
                 sex=i,
                 label=i,
+                id=i,
                 deme=demes[i],
                 parents=[101, 202],  # nonsense data
                 geography=[i, 2 * i, 3 * i],  # nonsense data
@@ -132,6 +134,7 @@ def add_diploid_metadata_and_nodes(pop: MockPopulation) -> MockPopulation:
                 w=float(i ** 2),
                 sex=i,
                 label=i,
+                id=i,
                 deme=demes[i],
                 parents=[101, 202],  # nonsense data
                 geography=[i, 2 * i, 3 * i],  # nonsense data
