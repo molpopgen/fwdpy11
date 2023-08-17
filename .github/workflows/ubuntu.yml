@@ -10,8 +10,8 @@ jobs:
     strategy:
       matrix:
         python: [ 3.8, 3.9, "3.10", "3.11" ]
-        os:  [ ubuntu-20.04 ]
-        compiler: [gcc, clang10]
+        os:  [ ubuntu-22.04 ]
+        compiler: [gcc, clang14]
         rust: [1.62.1]
     defaults:
       run:
@@ -55,19 +55,32 @@ jobs:
         run: |
           echo "$HOME/.local/bin" >> $GITHUB_PATH
 
+      - name: Set GCC as compiler
+        if: matrix.compiler == 'gcc'
+        run: |
+          echo "CC=gcc" >> $GITHUB_ENV
+          echo "CXX=g++" >> $GITHUB_ENV
+
+      - name: Install clang-14
+        if: matrix.compiler == 'clang14'
+        run: |
+          sudo apt-get install clang-14 clang++-14
+          echo "CC=clang-14" >> $GITHUB_ENV
+          echo "CXX=clang++-14" >> $GITHUB_ENV
+
       - name: Discover llvm-config
         run: |
           dpkg -S llvm-config
 
-      - name: Set LLVM_CONFIG on 20.04
-        if: matrix.os == 'ubuntu-20.04'
+      - name: Set LLVM_CONFIG on 22.04
+        if: matrix.os == 'ubuntu-22.04'
         run: |
-            echo "LLVM_CONFIG=/usr/bin/llvm-config-10" >> $GITHUB_ENV
+            echo "LLVM_CONFIG=/usr/bin/llvm-config" >> $GITHUB_ENV
 
-      - name: Set LLVM_CONFIG on 18.04
-        if: matrix.os == 'ubuntu-18.04'
-        run: |
-            echo "LLVM_CONFIG=/usr/lib/llvm-9/bin/llvm-config" >> $GITHUB_ENV
+      # - name: Set LLVM_CONFIG on 18.04
+      #   if: matrix.os == 'ubuntu-18.04'
+      #   run: |
+      #       echo "LLVM_CONFIG=/usr/lib/llvm-9/bin/llvm-config" >> $GITHUB_ENV
 
       - name: Python version
         run: |
@@ -91,19 +104,10 @@ jobs:
             # For sdist validation
             python -m pip install --user --upgrade twine
 
-      - name: Set GCC as compiler
-        if: matrix.compiler == 'gcc'
+      # Needed so that we don't affect building any pip dependencies with these flags
+      - name: Set CPPFLAGS for C++ builds
         run: |
-          echo "CC=gcc" >> $GITHUB_ENV
-          echo "CXX=g++" >> $GITHUB_ENV
           echo "CPPFLAGS=-Wextra -Weffc++ -Woverloaded-virtual -Wold-style-cast -Werror=effc++ -Werror=old-style-cast -Werror=overloaded-virtual -Werror=unused-parameter" >> $GITHUB_ENV
-
-      - name: Install clang-10
-        if: matrix.compiler == 'clang10'
-        run: |
-          sudo apt-get install clang-10 clang++-10
-          echo "CC=clang-10" >> $GITHUB_ENV
-          echo "CXX=clang++-10" >> $GITHUB_ENV
 
       - name: Build
         run: |
