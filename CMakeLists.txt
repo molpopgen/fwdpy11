@@ -1,4 +1,7 @@
-cmake_minimum_required(VERSION 3.27)
+# Do not change this version range!
+# Doing so can break builds in unexpected ways.
+# The manylinux wheel build seem especially sensitive!
+cmake_minimum_required(VERSION 3.4...3.18)
 project(fwdpy11)
 
 set(CMAKE_CXX_EXTENSIONS OFF)
@@ -13,7 +16,9 @@ if (APPLE)
     set(CMAKE_MACOSX_RPATH 1)
 endif()
 
-find_package(pybind11)
+find_package(Python COMPONENTS Interpreter Development)
+find_package(pybind11 CONFIG)
+
 message(STATUS "Found pybind11: ${pybind11_VERSION}")
 if(${pybind11_VERSION} VERSION_LESS '2.11.1')
     message(FATAL_ERROR "pybind11 version must be >= '2.11.1'")
