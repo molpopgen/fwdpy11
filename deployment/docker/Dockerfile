@@ -8,7 +8,7 @@ WORKDIR /app
 
 COPY . /app
 
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -qq -y install cmake \
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -qq -y install \
   gcc \
   git \
   g++ \
