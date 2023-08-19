@@ -78,7 +78,8 @@ pdict = {
     "demography": model,
     "simlen": model.metadata["total_simulation_length"],
     "gvalue": fwdpy11.Additive(
-        ndemes=3, scaling=2, gvalue_to_fitness=fwdpy11.GSS(optimum=0.0, VS=10.0)
+        ndemes=3, scaling=2,
+        gvalue_to_fitness=fwdpy11.GaussianStabilizingSelection.single_trait([fwdpy11.Optimum(optimum=0.0, VS=10.0, when=0)])
     ),
 }
 ```

@@ -35,7 +35,7 @@ pop = fwdpy11.DiploidPopulation(500, 1.0)
 
 rng = fwdpy11.GSLrng(54321)
 
-GSSmo = fwdpy11.GSSmo(
+GSSmo = fwdpy11.GaussianStabilizingSelection.single_trait(
     [
         fwdpy11.Optimum(when=0, optimum=0.0, VS=1.0),
         fwdpy11.Optimum(when=10 * pop.N - 200, optimum=1.0, VS=1.0),

@@ -135,7 +135,7 @@ class TestGaussianStabilizingSelection(unittest.TestCase):
             "demography": demography,
             "simlen": 100,
             "gvalue": fwdpy11.Additive(
-                ndemes=2, scaling=2, gvalue_to_fitness=fwdpy11.GSS(optimum=0.0, VS=1.0)
+                ndemes=2, scaling=2, gvalue_to_fitness=fwdpy11.GaussianStabilizingSelection.single_trait([fwdpy11.Optimum(optimum=0.0, VS=1.0, when=0)])
             ),
         }
 

@@ -41,7 +41,8 @@ class TestInheritNoise(unittest.TestCase):
                 [100] * 3, 1),
             "simlen": 3,
             "gvalue": fwdpy11.Additive(
-                2.0, fwdpy11.GSS(optimum=0.0, VS=1.0), InheritedNoise()
+                2.0, fwdpy11.GaussianStabilizingSelection.single_trait(
+                    [fwdpy11.Optimum(optimum=0.0, VS=1.0, when=0)]), InheritedNoise()
             ),
         }
 

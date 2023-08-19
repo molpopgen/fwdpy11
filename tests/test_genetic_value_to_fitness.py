@@ -43,15 +43,16 @@ class testGSS(unittest.TestCase):
     def setUp(self):
         self.VS = 1.0
         self.opt = 0.0
-        self.g = fwdpy11.GSS(VS=self.VS, optimum=self.opt)
+        self.g = fwdpy11.GaussianStabilizingSelection.single_trait(
+            [fwdpy11.Optimum(VS=self.VS, optimum=self.opt, when=None)])
 
     def testPickle(self):
         import pickle
 
         p = pickle.dumps(self.g, -1)
         up = pickle.loads(p)
-        self.assertEqual(up.VS, self.VS)
-        self.assertEqual(up.optimum, self.opt)
+        self.assertEqual(up.optima[0].VS, self.VS)
+        self.assertEqual(up.optima[0].optimum, self.opt)
 
     def test_mapping(self):
         self.assertEqual(self.g.maps_to_fitness, False)
@@ -66,7 +67,7 @@ class testGSSmo(unittest.TestCase):
             Opt(when=0, optimum=0.0, VS=1.0),
             Opt(when=100, optimum=1.0, VS=1.0),
         ]
-        self.g = fwdpy11.GSSmo(self.optima)
+        self.g = fwdpy11.GaussianStabilizingSelection.single_trait(self.optima)
 
     def testPickle(self):
         import pickle
@@ -92,8 +93,9 @@ class testMultivariateGSSmo(unittest.TestCase):
         timepoints = [0, 100]
         po = []
         for i, t in enumerate(timepoints):
-            po.append(fwdpy11.PleiotropicOptima(when=t, optima=optima[i, :], VS=1.0))
-        self.mvgssmo = fwdpy11.MultivariateGSSmo(po)
+            po.append(fwdpy11.PleiotropicOptima(
+                when=t, optima=optima[i, :], VS=1.0))
+        self.mvgssmo = fwdpy11.GaussianStabilizingSelection.pleiotropy(po)
 
     def test_pickle(self):
         import pickle
@@ -105,6 +107,28 @@ class testMultivariateGSSmo(unittest.TestCase):
     def test_mapping(self):
         self.assertEqual(self.mvgssmo.maps_to_fitness, False)
         self.assertEqual(self.mvgssmo.maps_to_trait_value, True)
+
+
+def test_gaussian_stabilizing_selection_single_trait():
+    gss = fwdpy11.GaussianStabilizingSelection.single_trait(
+        [fwdpy11.Optimum(0.0, 10.0, None)])
+    d = gss.asdict()
+    gss2 = gss.fromdict(d)
+    assert gss == gss2
+    s = str(d)
+    gss2 = gss.fromdict(eval(s))
+    assert gss == gss2
+
+
+def test_gaussian_stabilizing_selection_pleiotropy():
+    gss = fwdpy11.GaussianStabilizingSelection.pleiotropy(
+        [fwdpy11.PleiotropicOptima([0, 0, 0, 0], 1.0, 0)])
+    d = gss.asdict()
+    gss2 = gss.fromdict(d)
+    assert gss == gss2
+    s = str(d)
+    gss2 = gss.fromdict(eval(s))
+    assert gss == gss2
 
 
 if __name__ == "__main__":

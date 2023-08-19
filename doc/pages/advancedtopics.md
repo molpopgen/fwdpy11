@@ -560,7 +560,8 @@ class MyGeneticValueToFitness(fwdpy11.GeneticValueIsTrait):
 ```
 
 Two complete examples come from the test suite.  The first example reimplements
-{class}`fwdpy11.GSS` in Python.  The second example implements a model
+{class}`fwdpy11.GaussianStabilizingSelection` in Python for a single trait.
+The second example implements a model
 where the optimum changes to a new value each generation. (Note that
 the second model requires that {func}`numpy.random.seed` be called elsewhere
 so that results are reproducible.)

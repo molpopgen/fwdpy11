@@ -11,6 +11,7 @@ void init_GeneticValueToFitnessMap(py::module&);
 void init_GeneticValueIsTrait(py::module&);
 void init_GeneticValueIsFitness(py::module&);
 void init_GSSmo(py::module&);
+void init_GaussianStabilizingSelection(py::module&);
 
 // Multivariate classes
 void init_MultivariateGSSmo(py::module&);
@@ -25,6 +26,7 @@ initialize_genetic_value_to_fitness(py::module& m)
     init_GeneticValueIsTrait(m);
     init_GeneticValueIsFitness(m);
     init_GSSmo(m);
+    init_GaussianStabilizingSelection(m);
 
     init_MultivariateGSSmo(m);
 }

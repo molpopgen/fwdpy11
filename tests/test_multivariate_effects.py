@@ -17,7 +17,7 @@ def set_up_quant_trait_model():
     po = []
     for i, j in enumerate(timepoints):
         po.append(PO(when=int(j), optima=optima[i, :], VS=1.0))
-    GSSmo = fwdpy11.MultivariateGSSmo(po)
+    GSSmo = fwdpy11.GaussianStabilizingSelection.pleiotropy(po)
     cmat = np.identity(ntraits)
     np.fill_diagonal(cmat, 0.1)
     a = fwdpy11.StrictAdditiveMultivariateEffects(ntraits, 0, GSSmo)
