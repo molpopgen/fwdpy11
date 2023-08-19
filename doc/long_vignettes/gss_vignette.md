@@ -38,7 +38,7 @@ class Recorder(object):
 ```
 
 Now, we will set up and simulate the model.
-We use {class}`fwdpy11.GSSmo` to specify when/how the optimum value shifts.
+We use {class}`fwdpy11.GaussianStabilizingSelection` to specify when/how the optimum value shifts.
 
 We will simulate the population for $10N$ generations around an optimum of zero.
 Then, we shift the optimum to 1 and evolve another 200 generations.
@@ -51,7 +51,7 @@ pop = fwdpy11.DiploidPopulation(500, 1.0)
 
 rng = fwdpy11.GSLrng(54321)
 
-GSSmo = fwdpy11.GSSmo(
+gssmo = fwdpy11.GaussianStabilizingSelection.single_trait(
     [
         fwdpy11.Optimum(when=0, optimum=0.0, VS=1.0),
         fwdpy11.Optimum(when=10 * pop.N - 200, optimum=1.0, VS=1.0),
@@ -62,7 +62,7 @@ rho = 1000.
 
 p = {
     "nregions": [],
-    "gvalue": fwdpy11.Additive(2.0, GSSmo),
+    "gvalue": fwdpy11.Additive(2.0, gssmo),
     "sregions": [fwdpy11.GaussianS(0, 1., 1, 0.1)],
     "recregions": [fwdpy11.PoissonInterval(0, 1., rho / float(4 * pop.N))],
     "rates": (0.0, 1e-3, None),

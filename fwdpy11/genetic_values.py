@@ -17,13 +17,17 @@
 # along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+import enum
 import typing
+import warnings
 
 import attr
 import numpy as np
 
 from ._fwdpy11 import (GeneticValueIsTrait, GeneticValueNoise, _ll_Additive,
-                       _ll_GaussianNoise, _ll_GBR, _ll_GSSmo,
+                       _ll_GaussianNoise, _ll_GBR,
+                       _ll_GaussianStabilizingSelection,
+                       _ll_GSSmo,
                        _ll_Multiplicative, _ll_MultivariateGSSmo, _ll_NoNoise,
                        _ll_Optimum, _ll_PleiotropicOptima,
                        _ll_StrictAdditiveMultivariateEffects)
@@ -50,13 +54,6 @@ class Optimum(_ll_Optimum):
     :type VS: float
     :param when: The time when the optimum shifts
     :type when: int or None
-
-    .. note::
-
-        When used to model a stable optimum (e.g.,
-        :class:`fwdpy11.GSS`), the `when` parameter is omitted.
-        The `when` parameter is used for moving optima
-        (:class:`fwdpy11.GSSmo`).
 
     .. versionadded:: 0.7.1
 
@@ -98,13 +95,6 @@ class PleiotropicOptima(_ll_PleiotropicOptima):
     :param when: The time when the optimum shifts
     :type when: int or None
 
-    .. note::
-
-        When used to model stable optima (e.g.,
-        :class:`fwdpy11.MultivariateGSS`), the `when` parameter is omitted.
-        The `when` parameter is used for moving optima
-        (:class:`fwdpy11.MultivariateGSSmo`).
-
     .. versionadded:: 0.7.1
 
     .. versionchanged:: 0.8.0
@@ -135,6 +125,71 @@ class PleiotropicOptima(_ll_PleiotropicOptima):
             when_equal = self.when == other.when
 
         return optima_equal and VS_equal and when_equal
+
+
+@attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
+class GaussianStabilizingSelection(_ll_GaussianStabilizingSelection):
+    """
+    Define a mapping of phenotype-to-fitness according to a 
+    Gaussian stabilizing selection model.
+
+    Instances of this trait must be constructed by one of the
+    various class methods available.
+    """
+    is_single_trait: bool
+    optima: list
+
+    def __attrs_post_init__(self):
+        if self.optima != sorted(self.optima, key=lambda x: x.when):
+            raise ValueError("optima must be sorted by time from past to present")
+        if self.is_single_trait is True:
+            inner = _ll_GSSmo(self.optima)
+        else:
+            inner = _ll_MultivariateGSSmo(self.optima)
+        super(GaussianStabilizingSelection, self).__init__(inner)
+
+    def __getstate__(self):
+        return self.asdict()
+
+    def __setstate__(self, d):
+        self.__dict__.update(**d)
+        self.__attrs_post_init__()
+
+    @classmethod
+    def single_trait(cls, optima: typing.List[Optimum]):
+        """
+        Stabilizing selection on a single trait
+
+        :param optima: The optimum values.
+                       Multiple values specify a moving optimum.
+        :type optima: List[fwdpy11.Optimum]
+
+        """
+        new_optima = []
+        for o in optima:
+            if o.when is None:
+                new_optima.append(Optimum(o.optimum, o.VS, 0))
+            else:
+                new_optima.append(o)
+        return cls(is_single_trait=True, optima=new_optima)
+
+    @classmethod
+    def pleiotropy(cls, optima: typing.List[PleiotropicOptima]):
+        """
+        Stabilizing selection with pleiotropy.
+
+        :param optima: The optimum values.
+                       Multiple values specify a moving optimum.
+        :type optima: List[fwdpy11.PleiotropicOptima]
+        """
+        return cls(is_single_trait=False, optima=optima)
+
+    def asdict(self):
+        return {"is_single_trait": self.is_single_trait, "optima": self.optima}
+
+    @classmethod
+    def fromdict(cls, data):
+        return cls(**data)
 
 
 @attr_add_asblack
@@ -172,6 +227,8 @@ class GSS(_ll_GSSmo):
     VS: typing.Optional[float] = None
 
     def __attrs_post_init__(self):
+        warnings.warn("use GaussianStabilizingSelection instead",
+                      DeprecationWarning)
         if self.VS is None:
             super(GSS, self).__init__(
                 [Optimum(optimum=self.optimum.optimum,
@@ -237,6 +294,8 @@ class GSSmo(_ll_GSSmo):
                 raise ValueError("Optimum.when is None")
 
     def __attrs_post_init__(self):
+        warnings.warn("use GaussianStabilizingSelection instead",
+                      DeprecationWarning)
         super(GSSmo, self).__init__(self.optima)
 
 
@@ -286,6 +345,8 @@ class MultivariateGSS(_ll_MultivariateGSSmo):
     VS: typing.Optional[float] = None
 
     def __attrs_post_init__(self):
+        warnings.warn("use GaussianStabilizingSelection instead",
+                      DeprecationWarning)
         if self.VS is None:
             super(MultivariateGSS, self).__init__([self.optima])
         else:
@@ -342,6 +403,8 @@ class MultivariateGSSmo(_ll_MultivariateGSSmo):
                 raise ValueError("PleiotropicOptima.when is None")
 
     def __attrs_post_init__(self):
+        warnings.warn("use GaussianStabilizingSelection instead",
+                      DeprecationWarning)
         super(MultivariateGSSmo, self).__init__(self.optima)
 
 

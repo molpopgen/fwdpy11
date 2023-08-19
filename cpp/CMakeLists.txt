@@ -54,6 +54,7 @@ set(GENETIC_VALUE_TO_FITNESS_SOURCES
     genetic_value_to_fitness/GeneticValueIsFitness.cc
     genetic_value_to_fitness/GeneticValueIsTrait.cc
     genetic_value_to_fitness/GSSmo.cc
+    genetic_value_to_fitness/GaussianStabilizingSelection.cc
     genetic_value_to_fitness/MultivariateGSSmo.cc
     genetic_value_to_fitness/Optimum.cc
     genetic_value_to_fitness/PleiotropicOptima.cc)

@@ -92,7 +92,7 @@ def set_up_quant_trait_model():
     # mu = theta/(4*N)
     r = rho / (4 * N)
     Opt = fwdpy11.Optimum
-    GSSmo = fwdpy11.GSSmo(
+    GSSmo = fwdpy11.GaussianStabilizingSelection.single_trait(
         [Opt(when=0, optimum=0.0, VS=1.0), Opt(when=N, optimum=1.0, VS=1.0)]
     )
     a = fwdpy11.Additive(2.0, GSSmo)

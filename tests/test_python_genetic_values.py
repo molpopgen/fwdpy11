@@ -93,8 +93,8 @@ class TestCustomGeneticValueisTrait(unittest.TestCase):
             # ndemes=2, scaling=2, gvalue_to_fitness=
             ndemes=2,
             scaling=2,
-            gvalue_to_fitness=fwdpy11.GSS(
-                fwdpy11.Optimum(optimum=0.0, VS=1.0)),
+            gvalue_to_fitness=fwdpy11.GaussianStabilizingSelection.single_trait([
+                fwdpy11.Optimum(optimum=0.0, VS=1.0)]),
         )
         params = fwdpy11.ModelParams(**pdict)
         pop2 = fwdpy11.DiploidPopulation([1000, 1000], 1.0)
@@ -124,7 +124,8 @@ class TestCustomGeneticValueNoise(unittest.TestCase):
 
         import pynoise
 
-        GSS = fwdpy11.GSS(optimum=0.0, VS=1.0)
+        GSS = fwdpy11.fwdpy11.GaussianStabilizingSelection.single_trait(
+            [fwdpy11.Optimum(optimum=0.0, VS=1.0, when=0)])
         Noise = pynoise.PyNoise()
         pdict = build_model(GSS, Noise, 5, [1000, 1000])
         params = fwdpy11.ModelParams(**pdict)
@@ -202,7 +203,7 @@ class TestCustomPyGeneticValueOverloadGeneticValueToFitness(unittest.TestCase):
         md = np.array(pop.diploid_metadata)
 
         pdict["gvalue"] = fwdpy11.Additive(
-            2.0, fwdpy11.GSS(optimum=0.0, VS=1.0))
+            2.0, fwdpy11.GaussianStabilizingSelection.single_trait([fwdpy11.Optimum(optimum=0.0, VS=1.0, when=0)]))
         params = fwdpy11.ModelParams(**pdict)
         pop2 = fwdpy11.DiploidPopulation(1000, 1.0)
         rng = fwdpy11.GSLrng(1010)

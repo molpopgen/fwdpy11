@@ -8,9 +8,10 @@ class testAdditive(unittest.TestCase):
     def setUp(self):
         GN = fwdpy11.GaussianNoise
         self.w = fwdpy11.Additive(2.0)
-        self.t = fwdpy11.Additive(2.0, fwdpy11.GSS(0.0, 1.0))
+        self.t = fwdpy11.Additive(2.0, fwdpy11.GaussianStabilizingSelection.single_trait(
+            [fwdpy11.Optimum(0.0, 1.0, 0)]))
         self.tn = fwdpy11.Additive(
-            1.0, fwdpy11.GSS(0.0, 1.0), GN(mean=0.1, sd=2.0))
+            1.0, fwdpy11.GaussianStabilizingSelection.single_trait([fwdpy11.Optimum(0.0, 1.0, 0)]), GN(mean=0.1, sd=2.0))
 
     def testScaling(self):
         self.assertEqual(self.w.scaling, 2.0)
@@ -74,13 +75,15 @@ class testAdditive(unittest.TestCase):
 
 
 class testMultiplicative(unittest.TestCase):
-    @classmethod
+    @ classmethod
     def setUp(self):
         GN = fwdpy11.GaussianNoise
         self.w = fwdpy11.Multiplicative(2.0)
-        self.t = fwdpy11.Multiplicative(2.0, fwdpy11.GSS(0.0, 1.0))
+        self.t = fwdpy11.Multiplicative(
+            2.0, fwdpy11.GaussianStabilizingSelection.single_trait([fwdpy11.Optimum(0.0, 1.0)]))
         self.tn = fwdpy11.Multiplicative(
-            1.0, fwdpy11.GSS(0.0, 1.0), GN(mean=0.1, sd=2.0)
+            1.0, fwdpy11.GaussianStabilizingSelection.single_trait(
+                [fwdpy11.Optimum(0.0, 1.0, 0)]), GN(mean=0.1, sd=2.0)
         )
 
     def testScaling(self):
@@ -131,9 +134,10 @@ class testMultiplicative(unittest.TestCase):
 
 
 class testGBR(unittest.TestCase):
-    @classmethod
+    @ classmethod
     def setUp(self):
-        self.gss = fwdpy11.GSS(0.0, 1.0)
+        self.gss = fwdpy11.GaussianStabilizingSelection.single_trait(
+            [fwdpy11.Optimum(0.0, 1.0, 0)])
         self.gnoise = fwdpy11.GaussianNoise(mean=0.0, sd=1.0)
         self.nonoise = fwdpy11.NoNoise()
 
@@ -158,16 +162,6 @@ class testGBR(unittest.TestCase):
         up = pickle.loads(p)
         self.assertEqual(type(self.gnoise), type(up.noise))
         self.assertEqual(type(self.gss), type(up.gvalue_to_fitness))
-
-
-class testGSS(unittest.TestCase):
-    @classmethod
-    def setUp(self):
-        self.x = fwdpy11.GSS(0.0, 1.0)
-
-    def testProperties(self):
-        self.assertEqual(self.x.optimum, 0.0)
-        self.assertEqual(self.x.VS, 1.0)
 
 
 if __name__ == "__main__":

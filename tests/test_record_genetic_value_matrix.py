@@ -38,7 +38,7 @@ def set_up_quant_trait_model():
     rho = 1.0
     r = rho / (4 * N)
     Opt = fwdpy11.Optimum
-    GSSmo = fwdpy11.GSSmo(
+    GSSmo = fwdpy11.GaussianStabilizingSelection.single_trait(
         [Opt(when=0, optimum=0.0, VS=1.0), Opt(
             when=N, optimum=1.0, VS=1.0)]
     )
@@ -72,7 +72,7 @@ def set_up_two_trait_quant_trait_model():
             when=N, optima=np.array([np.sqrt(2.0), 0]), VS=2.0
         ),
     ]
-    GSSmo = fwdpy11.MultivariateGSSmo(optima)
+    GSSmo = fwdpy11.GaussianStabilizingSelection.pleiotropy(optima)
     a = fwdpy11.StrictAdditiveMultivariateEffects(2, 0, GSSmo)
     vcov = np.identity(2)
     np.fill_diagonal(vcov, 0.25)

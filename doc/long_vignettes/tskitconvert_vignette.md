@@ -138,11 +138,13 @@ assert "model_params" not in ts.metadata
 Here is an example of Gaussian stabilizing selection around an optimum trait value of `0.0`:
 
 ```{code-cell} python
+optimum = fwdpy11.Optimum(optimum=0.0, VS=10.0, when=0)
+gss = fwdpy11.GaussianStabilizingSelection.single_trait([optimum])
 pdict = {
     'nregions': [],
     'sregions': [fwdpy11.GaussianS(0, 1, 1, 0.10)],
     'recregions': [fwdpy11.PoissonInterval(0, 1, 1e-3)],
-    'gvalue': fwdpy11.Additive(2., fwdpy11.GSS(optimum=0.0, VS=10.0)),
+    'gvalue': fwdpy11.Additive(2., gss),
     'rates': (0.0, 1e-3, None),
     'simlen': 10 * pop.N,
     'prune_selected': False,
@@ -165,16 +167,18 @@ Imagine, for example, that we simulate the above model until equilibrium, and th
 The details are omitted here:
 
 1. This simulation requires two calls to {func}`fwdpy11.evolvets`
-2. It could have been done instead with a single call to {func}`fwdpy11.evolvets` and using
-   {class}`fwdpy11.GSSmo` and one `ModelParams` object instead of {class}`fwdpy11.GSS`
-   and two parameters objects.
+2. It could have been done instead with a single call to {func}`fwdpy11.evolvets` 
+   by passing a list of {class}`fwdpy11.Optimum` to {class}`fwdpy11.GaussianStabilizingSelection`.
+   This approach would have required one `ModelParams` instance.
 :::
 
 ```{code-cell} python
 import copy
 pdict2 = copy.deepcopy(pdict)
 
-pdict2['gvalue'] = fwdpy11.Additive(2., fwdpy11.GSS(optimum=5.0, VS=10.0)),
+optimum = fwdpy11.Optimum(optimum=5.0, VS=10.0, when=0)
+gss = fwdpy11.GaussianStabilizingSelection.single_trait([optimum])
+pdict2['gvalue'] = fwdpy11.Additive(2., gss),
 pdict2['simlen'] = 100
 
 params2 = fwdpy11.ModelParams(**pdict2)
