@@ -43,23 +43,24 @@ To specify an additive effects model of a trait under Gaussian stabilizing selec
 ```{code-cell} python
 import fwdpy11
 
+gss = fwdpy11.GaussianStabilizingSelection.single_trait([fwdpy11.Optimum(optimum=0.0, VS=1.0, when=0)])
 gvalue = fwdpy11.Additive(
-    scaling=2.0, gvalue_to_fitness=fwdpy11.GSS(optimum=0.0, VS=1.0)
+    scaling=2.0, gvalue_to_fitness=gss,
 )
 ```
 
 Here, we are using a second parameter to initialize a "genetic value to fitness" map stored in an instance of {class}`fwdpy11.Additive`.
 ({class}`fwdpy11.Multiplicative` also supports such maps.)
-See {class}`fwdpy11.GSS` for details.
+See {class}`fwdpy11.GaussianStabilizingSelection` for details.
 
 We can also add Gaussian noise to an individual's trait value:
 
 ```{code-cell} python
 import numpy as np
-
+gss = fwdpy11.GaussianStabilizingSelection.single_trait([fwdpy11.Optimum(optimum=0.0, VS=2.0 / 3.0, when=0)])
 gvalue = fwdpy11.Additive(
     scaling=2.0,
-    gvalue_to_fitness=fwdpy11.GSS(optimum=0.0, VS=2.0 / 3.0),
+    gvalue_to_fitness=gss,
     noise=fwdpy11.GaussianNoise(mean=0.0, sd=np.sqrt(1.0 / 3.0)),
     )
 ```
@@ -69,23 +70,14 @@ The last example requires some explanation:
 * We want `VS = 1.0`.  We can decompose `VS = VW + VE`, where `VW` and `VE` are the additive contributions of genetic and environmental effects.
 * Here, the environmental effect is a Gaussian with mean zero and variance `1/3`.
   The class is parameterized with the standard deviation, however, so we need to pass on the square root.
-* We then set `VS = 1 - 1/3 = 2/3` when initializing {class}`fwdpy11.GSS`.
+* We then set `VS = 1 - 1/3 = 2/3` when initializing {class}`fwdpy11.Optimum`.
 
 Yes, this is a nomenclature issue!
-The `VS` argument to {class}`fwdpy11.GSS` really should be called `VW` and we'll fix that in a future version and hopefully not break people's code.
+The `VS` argument to {class}`fwdpy11.Optimum` really should be called `VW` and we'll fix that in a future version and hopefully not break people's code.
 
 In general, there's a good bit of subtlety to properly modeling quantitative traits.
 The machinery described here was used in {cite}`Thornton2019-nu`. {cite}`Burger2000-ul` is an excellent technical reference on the topic.
 {cite}`Walsh2018-ux` also thoroughly covers a lot of relevant material.
-
-:::{note}
-
-Under the hood, the `GSS` and `GSSmo` classes aren't that different.
-Their multivariate analogs are rather similar, too.
-Thus, we envision a future with one single `fwdpy11.GaussianStabilizingSelection` class to handle all cases.
-The types discussed here would remain as simple Python wrappers so that we don't break existing simulations.
-
-:::
 
 For an example of another approach to modeling phenotypes often attributed to {cite}`Eyre-Walker2010-rs`, see {ref}`here <eyre-walker>`.
 
@@ -98,11 +90,11 @@ Write (and refer to) an advanced section on pleiotropic models.
 ### A sudden optimum shift
 
 The previous example set up a model where the optimum is stable for the entire simulation.
-We can parameterize a shifting optimum using {class}`fwdpy11.GSSmo`.
+We can parameterize a shifting optimum using {class}`fwdpy11.GaussianStabilizingSelection`.
 For example, to shift the optimum from `0.0` to `1.0` at generation `100`:
 
 ```{code-cell} python
-moving_optimum = fwdpy11.GSSmo(
+moving_optimum = fwdpy11.GaussianStabilizingSelection.single_trait(
     [
         fwdpy11.Optimum(when=0, optimum=0.0, VS=1.0),
         fwdpy11.Optimum(when=100, optimum=1.0, VS=1.0),
@@ -137,7 +129,7 @@ while last_time < 1000:
     if last_time < 1000:
         optima.append(fwdpy11.Optimum(when=last_time, optimum=last_optimum, VS=10.0))
 
-random_moving_optimum = fwdpy11.GSSmo(optima)
+random_moving_optimum = fwdpy11.GaussianStabilizingSelection.single_trait(optima)
 random_moving_optimum
 ```
 
@@ -147,4 +139,4 @@ Note the cast to `int` when updating the time.
 {class}`fwdpy11.Optimum` is very picky about its input.
 It requires `int` for `when` and will raise an exception if the {attr}`numpy.int64` from {func}`numpy.random.geometric` gets passed in.
 
-:::
+S

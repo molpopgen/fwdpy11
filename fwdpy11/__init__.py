@@ -48,6 +48,7 @@ from .mutation_dominance import (  # NOQA
 from .genetic_values import (  # NOQA
     PleiotropicOptima,
     Optimum,
+    GaussianStabilizingSelection,
     GSS,
     GSSmo,
     MultivariateGSS,

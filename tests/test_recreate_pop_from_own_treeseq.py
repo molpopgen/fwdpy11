@@ -69,7 +69,7 @@ def pop_rng_params():
         "recregions": [fwdpy11.BinomialInterval(0, L, 1)],
         "rates": (0.0, mu, None),
         "gvalue": fwdpy11.Additive(
-            scaling=2, gvalue_to_fitness=fwdpy11.GSS(optimum=optimum, VS=VS)
+            scaling=2, gvalue_to_fitness=fwdpy11.GaussianStabilizingSelection.single_trait([fwdpy11.Optimum(optimum=optimum, VS=VS, when=0)])
         ),
         "simlen": simlen,
         "prune_selected": False,

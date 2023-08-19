@@ -162,7 +162,7 @@ gv.noise_function.update(pop)
 The definition of our classes and the way that `update` functions are applied
 implies that all three objects are updated *independently from one another*.
 This independence covers a large number of use cases.  For example, a moving
-trait optimum ({class}`fwdpy11.GSSmo`) only needs acces to
+trait optimum ({class}`fwdpy11.GaussianStabilizingSelection`) only needs acces to
 {attr}`fwdpy11.DiploidPopulation.generation` to know if it needs to update its
 internal state.
 
