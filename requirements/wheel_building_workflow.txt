@@ -8,3 +8,6 @@ attrs >= 20.3.0
 demes == 0.2.2
 tskit
 scipy
+# NOTE: this jsonschema pin is a hack until tskit issue 2840
+# is resolved
+jsonschema<=4.18.6
