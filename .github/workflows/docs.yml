@@ -39,7 +39,7 @@ jobs:
         uses: baptiste0928/cargo-install@v2
         with:
           crate: cbindgen
-          version: "=0.24.3" 
+          version: "=0.26.0" 
       # We install the R dependencies first
       # Later, Python dependencies will go into the same place.
       # Python will silently update dependencies if needed,

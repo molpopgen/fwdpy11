@@ -37,7 +37,7 @@ jobs:
         uses: baptiste0928/cargo-install@v2
         with:
           crate: cbindgen
-          version: "=0.24.3" 
+          version: "=0.26.0" 
       - name: Install GSL
         run: |
           brew install gsl
