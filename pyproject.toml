@@ -3,7 +3,7 @@
 requires = [
     "setuptools>=30.3.0",
     "wheel",
-    "setuptools_scm",
+    "setuptools_scm<8",
     "pybind11[global]==2.11.1",
     "cmake>=3.27.2"
 ]
