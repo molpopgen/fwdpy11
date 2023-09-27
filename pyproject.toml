@@ -6,9 +6,6 @@ requires = [
     "setuptools_scm",
     "pybind11[global]==2.11.1",
     "cmake>=3.27.2"
-# NOTE: this jsonschema pin is a hack until tskit issue 2840
-# is resolved
-    "jsonschema<=4.18.6"
 ]
 build-backend = "setuptools.build_meta"
 
