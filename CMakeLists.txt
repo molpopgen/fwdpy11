@@ -16,7 +16,8 @@ if (APPLE)
     set(CMAKE_MACOSX_RPATH 1)
 endif()
 
-find_package(Python COMPONENTS Interpreter Development)
+# See https://github.com/pypa/manylinux/issues/1347#issuecomment-1179776736
+find_package(Python COMPONENTS Interpreter Development.Module)
 find_package(pybind11 CONFIG)
 
 message(STATUS "Found pybind11: ${pybind11_VERSION}")
