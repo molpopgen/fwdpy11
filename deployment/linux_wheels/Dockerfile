@@ -17,7 +17,7 @@ RUN yum update -y && yum install -y cmake curl gsl-devel \
   # so we need to be careful in general.
   && rustup override set 1.62.1 \
   # Pin cbindgen 
-  && cargo install cbindgen@0.24.3 \
+  && cargo install --locked cbindgen@0.24.3 \
   && rustc --version \
   && cbindgen --version \
   # The GSL version available from yum install is too old so we manually install.
