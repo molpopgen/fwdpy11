@@ -8,7 +8,7 @@ cd test_wheels
 # Copy tests over b/c some of the test rely on paths
 cp -r ../tests .
 pwd
-for py in cp37-cp37m cp38-cp38 cp39-cp39 cp310-cp310
+for py in cp38-cp38 cp39-cp39 cp310-cp310 cp311-cp311
 do
     PYPATH=/opt/python/${py}
     PYBIN=${PYPATH}/bin/python 
