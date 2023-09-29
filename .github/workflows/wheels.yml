@@ -6,7 +6,7 @@ on:
   release:
     types: [created]
   pull_request:
-    branches: [main]
+    branches: [main, dev]
 
 jobs:
   macOS_wheel:
