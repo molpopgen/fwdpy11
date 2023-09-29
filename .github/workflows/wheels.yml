@@ -10,6 +10,7 @@ on:
 
 jobs:
   macOS_wheel:
+    name: Build macOS/x86 wheels
     runs-on: macos-latest
     strategy:
       matrix:
@@ -64,7 +65,8 @@ jobs:
           name: macOS-wheel-${{ matrix.python }}
           path: dist
 
-  manylinux2_28:
+  build_sdist:
+    name: Build source distribution
     runs-on: ubuntu-latest
     steps:
       - name: Cancel Previous Runs
@@ -95,10 +97,29 @@ jobs:
           name: sdist
           path: dist
 
+  manylinux2_28:
+    name: Build and test Linux wheels
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ["python3.8", "python3.9", "python3.10", "python3.11"]
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.11.0
+        with:
+          access_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+            submodules: true
+            fetch-depth: 0
+
       - name: Build wheels in docker
         shell: bash
         run: |
-          docker run --rm -v `pwd`:/project -w /project quay.io/pypa/manylinux_2_28_x86_64:2022-10-02-69a0972 bash .github/workflows/manylinux/buildwheels.sh
+          bash deployment/linux_wheels/run_wheel_workflow.sh ${{ matrix.python }}
+          #docker run --rm -v `pwd`:/project -w /project quay.io/pypa/manylinux_2_28_x86_64:2022-10-02-69a0972 bash .github/workflows/manylinux/buildwheels.sh
 
       - name: Upload Wheels
         uses: actions/upload-artifact@v3
@@ -107,8 +128,9 @@ jobs:
           path: dist/wheelhouse
 
   manylinux2_28_test:
+    name: Build package from source dist
     runs-on: ubuntu-latest
-    needs: ['manylinux2_28']
+    needs: ['build_sdist']
     strategy:
       matrix:
         python: [3.8, 3.9, "3.10", "3.11"]
@@ -119,10 +141,6 @@ jobs:
           access_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Download wheels
-        uses: actions/download-artifact@v3.0.2
-        with:
-          name: linux-wheels
       - name: Download sdist
         uses: actions/download-artifact@v3.0.2
         with:
@@ -144,21 +162,22 @@ jobs:
           deactivate
           rm -rf sdist_venv
 
-      - name: Install wheel and test
-        run: |
-          python -VV
-          # pip install minimal dependencies
-          pip install --upgrade pip
-          pip install wheel
-          pip install -r requirements/wheel_building_workflow.txt
-          # delete the source dir to prevent pip from mistaking it for 
-          # the package
-          rm -rf fwdpy11
-          # Install the local wheel
-          pip install fwdpy11 --no-deps --no-index --pre --only-binary fwdpy11 -f .
-          python -c "import fwdpy11;print(fwdpy11.__version__)"
+          # - name: Install wheel and test
+          #   run: |
+          #     python -VV
+          #     # pip install minimal dependencies
+          #     pip install --upgrade pip
+          #     pip install wheel
+          #     pip install -r requirements/wheel_building_workflow.txt
+          #     # delete the source dir to prevent pip from mistaking it for 
+          #     # the package
+          #     rm -rf fwdpy11
+          #     # Install the local wheel
+          #     pip install fwdpy11 --no-deps --no-index --pre --only-binary fwdpy11 -f .
+          #     python -c "import fwdpy11;print(fwdpy11.__version__)"
 
   macOS_test:
+    name: Test macOS/x86 wheels
     needs: ['macOS_wheel']
     runs-on: macos-latest
     strategy:
@@ -197,8 +216,9 @@ jobs:
           python -c "import fwdpy11;print(fwdpy11.__version__)"
       
   upload_to_PyPI:
+    name: Upload to PyPI
     runs-on: ubuntu-latest
-    needs: ['macOS_test', 'manylinux2_28_test']
+    needs: ['macOS_test', 'manylinux2_28', 'manylinux2_28_test']
     steps:
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.11.0
