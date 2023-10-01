@@ -161,19 +161,26 @@ docker run --rm -v $HOME/tmp:/app IMAGE_NAME /bin/bash -c ". /venv/bin/activate;
 ## Linux wheel building
 
 The directory `deployment/linux_wheels` defines a `Docker` work flow to build binary wheels on Linux.
-Although this work flow *could* be used to make wheels for each new release, its main purposes are for testing and easily getting development versions to collaborators.
+These scripts are what we use to build wheels for each release.
+They may also be used to make wheels for development versions on a local machine.
 
-From the `root` of the `fwdpy11` repository:
+From the `root` of the `fwdpy11` repository.
 
 ```sh
-bash deployment/linux_wheels/build_docker_image.sh
+bash deployment/linux_wheels/run_wheel_workflow.sh VERSION
 ```
+
+`VERSION` must be a valid Python version present in the docker image.
+For example, `python3.10`.
 
 The above command will require `sudo` on some systems.
 On trusted machines, you may wish to add yourself to the `docker` group as described [here](https://docs.docker.com/engine/install/linux-postinstall/).
 
 This work flow builds binary wheels for Python [manylinux](https://github.com/pypa/manylinux).
-After building and auditing each wheel, the wheels are installed into virtual environments and the `fwdpy11` test suite is run.
+
+The wheels will be found in `dist/wheelhouse` upon completion.
+
+**Do not** run this work flow in parallel on the same filesystem.
 
 ### Extracting the wheels
 
