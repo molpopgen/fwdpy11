@@ -179,7 +179,7 @@ simulate(const command_line_options& options)
                                   nullptr);
     fwdpy11::dgvalue_pointer_vector_ gvalue_pointers(fitness);
 
-    fwdpy11::no_ancient_samples no_ancient_samples();
+    fwdpy11::no_ancient_samples no_ancient_samples{};
     RecordNothing record_nothing;
     fwdpy11::SampleRecorder sample_recorder;
 
