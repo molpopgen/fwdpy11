@@ -133,7 +133,11 @@ jobs:
         run: |
           CPPFLAGS=$CPPFLAGS CC=$CC CXX=$CXX PYTHONPATH=. cmake examples/plugin
           make
-          PYTHONPATH=. python examples/plugin/test_plugin.py
+          PYTHONPATH=. python -We examples/plugin/test_plugin.py
+
+      - name: Run Python divergent optima example
+        run: |
+          PYTHONPATH=. python -We examples/gss_divergent_optima/gss_divergent_optima.py 100 0
 
       - name: Validate the sdist
         run: |
