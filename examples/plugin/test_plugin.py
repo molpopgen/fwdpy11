@@ -22,7 +22,12 @@ pdict = {
     "sregions": [fwdpy11.GaussianS(0, 1, 1, 0.25)],
     "recregions": [fwdpy11.PoissonInterval(0, 1, 5e-3)],
     "rates": (0.0, 5e-3, None),
-    "gvalue": fwdpy11.Additive(2.0, fwdpy11.GSS(VS=1.0, optimum=1.0)),
+    "gvalue": fwdpy11.Additive(
+        2.0,
+        fwdpy11.GaussianStabilizingSelection.single_trait(
+            optima=[fwdpy11.Optimum(VS=1.0, optimum=1.0, when=0)]
+        ),
+    ),
     "prune_selected": False,
 }
 
