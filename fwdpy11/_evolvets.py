@@ -155,11 +155,19 @@ def evolvets(
                 assert isinstance(r, fwdpy11.mvDES), f"{type(r)}"
                 assert isinstance(r.des, fwdpy11.Sregion)  # type: ignore
                 nd = demographic_model.number_of_demes()
-                if nd > params.gvalue.ndemes:
-                    msg = f"maxmimum number of demes in model ({nd})"
-                    msg += " is not compatible with genetic value"
-                    msg += f" number of demes {params.gvalue.ndemes}"
-                    raise ValueError(msg)
+                if isinstance(params.gvalue, list):
+                    for g in params.gvalue:
+                        if nd > g.ndemes:
+                            msg = f"maxmimum number of demes in model ({nd})"
+                            msg += " is not compatible with genetic value"
+                            msg += f" number of demes {params.gvalue.ndemes}"
+                            raise ValueError(msg)
+                else:
+                    if nd > params.gvalue.ndemes:
+                        msg = f"maxmimum number of demes in model ({nd})"
+                        msg += " is not compatible with genetic value"
+                        msg += f" number of demes {params.gvalue.ndemes}"
+                        raise ValueError(msg)
                 if r.des.beg < 0:
                     raise ValueError(f"{r} has begin value < 0.0")
                 if r.des.end > pop.tables.genome_length:
