@@ -3,7 +3,29 @@
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
-## Next release
+## 0.21.1
+
+Bug fixes
+
+* Fix internal error validating distributions of effect sizes for multi-deme models
+  with correlations in effect sizes between demes.
+  PR {pr}`1210`.
+
+Examples
+
+* Update examples to latest API and run them in CI.
+  PR {pr}`1211`.
+
+Dependencies
+
+* Bump pybind11 to 2.11.11.
+  PR {pr}`1172`.
+* Require tskit >= 0.5.6
+  PR {pr}`1206`.
+* Add cmake dependency to pyproject.toml.
+  PR {pr}`1177`.
+* Bump `demes-forward-capi` to depend on latest version.
+  PR {pr}`1182`.
 
 Deprecations
 
