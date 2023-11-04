@@ -522,7 +522,7 @@ distributions and there is no correlation in the effect size in the two demes.</
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="../_images/fc59e654f871d70387cd66d70d0d2501213221e8d61a51d78d4a9a8341b615c3.png" src="../_images/fc59e654f871d70387cd66d70d0d2501213221e8d61a51d78d4a9a8341b615c3.png" />
+<img alt="../_images/6f8fe239350e3c26ef8a8e50898fe53af5a1bbd535e388536649f54986ada87d.png" src="../_images/6f8fe239350e3c26ef8a8e50898fe53af5a1bbd535e388536649f54986ada87d.png" />
 </div>
 </div>
 <p>Let’s set up a dictionary to hold the parameters of our model:</p>
@@ -540,7 +540,8 @@ distributions and there is no correlation in the effect size in the two demes.</
     <span class="s2">&quot;demography&quot;</span><span class="p">:</span> <span class="n">model</span><span class="p">,</span>
     <span class="s2">&quot;simlen&quot;</span><span class="p">:</span> <span class="n">model</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;total_simulation_length&quot;</span><span class="p">],</span>
     <span class="s2">&quot;gvalue&quot;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Additive</span><span class="p">(</span>
-        <span class="n">ndemes</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">scaling</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">gvalue_to_fitness</span><span class="o">=</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSS</span><span class="p">(</span><span class="n">optimum</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">VS</span><span class="o">=</span><span class="mf">10.0</span><span class="p">)</span>
+        <span class="n">ndemes</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">scaling</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="n">gvalue_to_fitness</span><span class="o">=</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">GaussianStabilizingSelection</span><span class="o">.</span><span class="n">single_trait</span><span class="p">([</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">Optimum</span><span class="p">(</span><span class="n">optimum</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">VS</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="mi">0</span><span class="p">)])</span>
     <span class="p">),</span>
 <span class="p">}</span>
 </pre></div>

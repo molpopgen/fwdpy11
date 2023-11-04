@@ -487,17 +487,17 @@ document.write(`
 <p>This section illustrates the technical details of genetic value objects
 by presenting a mock up of their <code class="docutils literal notranslate"><span class="pre">API</span></code> in Python. To help document
 key concepts, we make use of Python 3’s type hinting features from
-<a class="reference external" href="https://docs.python.org/3/library/typing.html#module-typing" title="(in Python v3.11)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">typing</span></code></a> and decorators from <a class="reference external" href="https://docs.python.org/3/library/abc.html#module-abc" title="(in Python v3.11)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">abc</span></code></a>:</p>
+<a class="reference external" href="https://docs.python.org/3/library/typing.html#module-typing" title="(in Python v3.12)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">typing</span></code></a> and decorators from <a class="reference external" href="https://docs.python.org/3/library/abc.html#module-abc" title="(in Python v3.12)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">abc</span></code></a>:</p>
 <ul class="simple">
-<li><p>A class inheriting from <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.ABC" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></a> is an abstract base class.
+<li><p>A class inheriting from <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.ABC" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></a> is an abstract base class.
 It is not possible to create instances of ABCs.  Rather, you must
 subclass them.</p></li>
-<li><p>A function decorated with <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.abstractmethod" title="(in Python v3.11)"><code class="xref py py-func docutils literal notranslate"><span class="pre">abc.abstractmethod()</span></code></a> is
+<li><p>A function decorated with <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.abstractmethod" title="(in Python v3.12)"><code class="xref py py-func docutils literal notranslate"><span class="pre">abc.abstractmethod()</span></code></a> is
 a part of an ABC’s interface that must be defined by a subclass.
 In other words, to be a valid <code class="docutils literal notranslate"><span class="pre">MockDiploidGeneticValue</span></code>, subclasses
 must define the abstract methods.  In C++ terminology,
 these are “pure virtual” functions.</p></li>
-<li><p>A function decorated with <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.final" title="(in Python v3.11)"><code class="xref py py-func docutils literal notranslate"><span class="pre">typing.final()</span></code></a> must not be redefined
+<li><p>A function decorated with <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.final" title="(in Python v3.12)"><code class="xref py py-func docutils literal notranslate"><span class="pre">typing.final()</span></code></a> must not be redefined
 in a subclass. Doing so is considered an error, although Python
 will allow it.</p></li>
 <li><p>In Python, any undecorated functions are viewed as default implementations
@@ -618,7 +618,7 @@ would look like this:</p>
 <p>The definition of our classes and the way that <code class="docutils literal notranslate"><span class="pre">update</span></code> functions are applied
 implies that all three objects are updated <em>independently from one another</em>.
 This independence covers a large number of use cases.  For example, a moving
-trait optimum (<a class="reference internal" href="../pages/gvalue_to_fitness.html#fwdpy11.GSSmo" title="fwdpy11.GSSmo"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GSSmo</span></code></a>) only needs acces to
+trait optimum (<a class="reference internal" href="../pages/gvalue_to_fitness.html#fwdpy11.GaussianStabilizingSelection" title="fwdpy11.GaussianStabilizingSelection"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GaussianStabilizingSelection</span></code></a>) only needs acces to
 <a class="reference internal" href="../pages/types.html#fwdpy11.DiploidPopulation.generation" title="fwdpy11.DiploidPopulation.generation"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.DiploidPopulation.generation</span></code></a> to know if it needs to update its
 internal state.</p>
 <p>For some models, this independent updating doesn’t do the job.  For example, if
@@ -761,7 +761,7 @@ the Python-only side in order to promote thread safety.</p>
 <ul>
 <li><p>Only functions marked <code class="docutils literal notranslate"><span class="pre">virtual</span></code> may be overridden by a subclass.</p></li>
 <li><p>A function with the following form is a “pure virtual function”, which
-is the C++ analogue of <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.abstractmethod" title="(in Python v3.11)"><code class="xref py py-func docutils literal notranslate"><span class="pre">abc.abstractmethod()</span></code></a>:</p>
+is the C++ analogue of <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.abstractmethod" title="(in Python v3.12)"><code class="xref py py-func docutils literal notranslate"><span class="pre">abc.abstractmethod()</span></code></a>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">virtual</span> <span class="n">void</span> <span class="n">member_function</span><span class="p">()</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 </pre></div>
 </div>

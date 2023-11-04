@@ -490,7 +490,7 @@ See <a class="reference internal" href="../short_vignettes/recorders_vignette.ht
 </div>
 </div>
 <p>Now, we will set up and simulate the model.
-We use <a class="reference internal" href="../pages/gvalue_to_fitness.html#fwdpy11.GSSmo" title="fwdpy11.GSSmo"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GSSmo</span></code></a> to specify when/how the optimum value shifts.</p>
+We use <a class="reference internal" href="../pages/gvalue_to_fitness.html#fwdpy11.GaussianStabilizingSelection" title="fwdpy11.GaussianStabilizingSelection"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GaussianStabilizingSelection</span></code></a> to specify when/how the optimum value shifts.</p>
 <p>We will simulate the population for <span class="math notranslate nohighlight">\(10N\)</span> generations around an optimum of zero.
 Then, we shift the optimum to 1 and evolve another 200 generations.
 We set our <code class="docutils literal notranslate"><span class="pre">Recorder</span></code> type defined above to start tracking things after the initial “burn in”.</p>
@@ -502,7 +502,7 @@ We set our <code class="docutils literal notranslate"><span class="pre">Recorder
 
 <span class="n">rng</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSLrng</span><span class="p">(</span><span class="mi">54321</span><span class="p">)</span>
 
-<span class="n">GSSmo</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSSmo</span><span class="p">(</span>
+<span class="n">gssmo</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GaussianStabilizingSelection</span><span class="o">.</span><span class="n">single_trait</span><span class="p">(</span>
     <span class="p">[</span>
         <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Optimum</span><span class="p">(</span><span class="n">when</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">optimum</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">VS</span><span class="o">=</span><span class="mf">1.0</span><span class="p">),</span>
         <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Optimum</span><span class="p">(</span><span class="n">when</span><span class="o">=</span><span class="mi">10</span> <span class="o">*</span> <span class="n">pop</span><span class="o">.</span><span class="n">N</span> <span class="o">-</span> <span class="mi">200</span><span class="p">,</span> <span class="n">optimum</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">VS</span><span class="o">=</span><span class="mf">1.0</span><span class="p">),</span>
@@ -513,7 +513,7 @@ We set our <code class="docutils literal notranslate"><span class="pre">Recorder
 
 <span class="n">p</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;nregions&quot;</span><span class="p">:</span> <span class="p">[],</span>
-    <span class="s2">&quot;gvalue&quot;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Additive</span><span class="p">(</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">GSSmo</span><span class="p">),</span>
+    <span class="s2">&quot;gvalue&quot;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Additive</span><span class="p">(</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">gssmo</span><span class="p">),</span>
     <span class="s2">&quot;sregions&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">GaussianS</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)],</span>
     <span class="s2">&quot;recregions&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">PoissonInterval</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="n">rho</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">pop</span><span class="o">.</span><span class="n">N</span><span class="p">))],</span>
     <span class="s2">&quot;rates&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1e-3</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
@@ -530,7 +530,7 @@ We set our <code class="docutils literal notranslate"><span class="pre">Recorder
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_5920/2252095922.py:30: UserWarning: Applying a default demographic model where deme sizes are [500] and the burn-in length is 10*500
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_5868/3211716.py:30: UserWarning: Applying a default demographic model where deme sizes are [500] and the burn-in length is 10*500
   fwdpy11.evolvets(rng, pop, params, 100, recorder=r, suppress_table_indexing=True)
 </pre></div>
 </div>
@@ -552,7 +552,7 @@ We set our <code class="docutils literal notranslate"><span class="pre">Recorder
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/699eb4b7b73eabf1d075a0578523b124d8d1a38a258c424ce359bab691748d64.png" src="../_images/699eb4b7b73eabf1d075a0578523b124d8d1a38a258c424ce359bab691748d64.png" />
+<img alt="../_images/b45b818b5b3aacd5e1634485c5f99b44298a270524f1e8e9b779bedfbf49673c.png" src="../_images/b45b818b5b3aacd5e1634485c5f99b44298a270524f1e8e9b779bedfbf49673c.png" />
 </div>
 </div>
 </section>

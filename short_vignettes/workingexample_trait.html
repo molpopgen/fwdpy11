@@ -482,7 +482,7 @@ document.write(`
 <span class="n">mu_neutral</span> <span class="o">=</span> <span class="mf">0.0</span>
 <span class="n">mu_selected</span> <span class="o">=</span> <span class="mf">1e-3</span>
 
-<span class="n">GSSmo</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSSmo</span><span class="p">(</span>
+<span class="n">GSSmo</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GaussianStabilizingSelection</span><span class="o">.</span><span class="n">single_trait</span><span class="p">(</span>
     <span class="p">[</span>
         <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Optimum</span><span class="p">(</span><span class="n">when</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">optimum</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">VS</span><span class="o">=</span><span class="mf">1.0</span><span class="p">),</span>
         <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Optimum</span><span class="p">(</span><span class="n">when</span><span class="o">=</span><span class="mi">10</span> <span class="o">*</span> <span class="n">N</span> <span class="o">-</span> <span class="mi">200</span><span class="p">,</span> <span class="n">optimum</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">VS</span><span class="o">=</span><span class="mf">1.0</span><span class="p">),</span>
@@ -532,11 +532,12 @@ document.write(`
     ),
     gvalue=fwdpy11.Additive(
         scaling=2.0,
-        gvalue_to_fitness=fwdpy11.GSSmo(
+        gvalue_to_fitness=fwdpy11.GaussianStabilizingSelection(
+            is_single_trait=True,
             optima=[
                 fwdpy11.Optimum(optimum=0.0, VS=1.0, when=0),
                 fwdpy11.Optimum(optimum=1.0, VS=1.0, when=9800),
-            ]
+            ],
         ),
         noise=None,
         ndemes=1,

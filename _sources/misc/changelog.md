@@ -3,6 +3,44 @@
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+## 0.21.1
+
+Bug fixes
+
+* Fix internal error validating distributions of effect sizes for multi-deme models
+  with correlations in effect sizes between demes.
+  PR {pr}`1210`.
+
+Examples
+
+* Update examples to latest API and run them in CI.
+  PR {pr}`1211`.
+
+Dependencies
+
+* Bump pybind11 to 2.11.11.
+  PR {pr}`1172`.
+* Require tskit >= 0.5.6
+  PR {pr}`1206`.
+* Add cmake dependency to pyproject.toml.
+  PR {pr}`1177`.
+* Bump `demes-forward-capi` to depend on latest version.
+  PR {pr}`1182`.
+
+Deprecations
+
+The following are deprecated:
+
+* `fwdpy11.GSS`
+* `fwdpy11.GSSmo`
+* `fwdpy11.MutivariateGSS`
+* `fwdpy11.MutivariateGSSmo`
+
+Their functionality is replaced with {class}`fwdpy11.GaussianStabilizingSelection`.
+
+PR {pr}`1166`.
+Issue {issue}{`463`}.
+
 ## 0.21.0
 
 Breaking changes
@@ -643,12 +681,12 @@ Changes to `fwdpy11.conditional_models`:
 
 Bug fixes
 
-* Fixed bug in updating {class}`fwdpy11.MultivariateGSSmo`.
+* Fixed bug in updating `fwdpy11.MultivariateGSSmo`.
   PR {pr}`867`.
 
 Back end changes:
 
-* {class}`fwdpy11.GSSmo` and {class}`fwdpy11.MultivariateGSSmo` now handle cases where population start time is greater than zero.
+* `fwdpy11.GSSmo` and `fwdpy11.MultivariateGSSmo` now handle cases where population start time is greater than zero.
   PR {pr}`867`.
 
 Build system:
@@ -1260,7 +1298,7 @@ Maintenance release and one new feature:
 
 * Allow the first generation of a simulation to be preserved. PR {pr}`470`
   See {ref}`recapitation`.
-* Parameterizing classes like {class}`fwdpy11.GSSmo` is now more Pythonic,
+* Parameterizing classes like `fwdpy11.GSSmo` is now more Pythonic,
   and some existing `init` methods are deprecated in favor of the
   new approach. PR {pr}`461`.
 
@@ -1479,7 +1517,7 @@ Miscellaneous changes:
 The following bugs are fixed:
 
 * Mutations were not being recycled properly during simulations with tree sequences, resulting in excessive memory consumption. PR {pr}`317`
-* Several interface issues with {class}`fwdpy11.MultivariateGSSmo` are fixed. PR {pr}`313`
+* Several interface issues with `fwdpy11.MultivariateGSSmo` are fixed. PR {pr}`313`
 * Fix a bug that could lead to fixations with tree sequences not "pruning" selected fixations when that behavior is desired. {issue}`287`, fixed in PR {pr}`289`
 * A memory safety issue was fixed in the implementation of {attr}`fwdpy11.TreeIterator.samples_below`. PR {pr}`300`.  {issue}`299`
 

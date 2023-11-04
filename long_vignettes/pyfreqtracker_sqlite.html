@@ -486,18 +486,18 @@ This vignette uses low-level <a class="reference external" href="https://www.sql
 <section id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">#</a></h2>
 <p>The previous vignette tracking mutation frequencies was straightforward to implement.
-However, using <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> to key <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>s of frequencies risks running out of memory.</p>
+However, using <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> to key <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>s of frequencies risks running out of memory.</p>
 <p>This vignette reimplements the previous method using much more powerful techniques:</p>
 <ul class="simple">
-<li><p>Instead of the <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>, we record data into fixed-length <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.25)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a> objects.</p></li>
+<li><p>Instead of the <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>, we record data into fixed-length <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a> objects.</p></li>
 <li><p>During the simulation, we preserve all individuals of each generation as ancient samples.<br />
 See <a class="reference internal" href="../short_vignettes/recorders_vignette.html#recorders-vignette"><span class="std std-ref">here</span></a> for background.
 The trick is that we will only keep these ancient samples until the table collection is simplified!</p></li>
 <li><p>We populate those arrays immediately after simplification.
 We use the <code class="docutils literal notranslate"><span class="pre">post_simplification_recorder</span></code> argument to <a class="reference internal" href="../pages/functions.html#fwdpy11.evolvets" title="fwdpy11.evolvets"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.evolvets()</span></code></a>, passing in a class that gets frequencies from the tree sequences.
 Once our callback is finished, the ancient samples are purged.</p></li>
-<li><p>When the <code class="docutils literal notranslate"><span class="pre">numpy</span></code> arrays get full, we transfer their data to a relational database using the <a class="reference external" href="https://docs.python.org/3/library/sqlite3.html#module-sqlite3" title="(in Python v3.11)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sqlite3</span></code></a> module that is built in to the Python language.
-We will take advantage of the <a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a> function <a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.to_sql.html#pandas.DataFrame.to_sql" title="(in pandas v2.0.3)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pandas.DataFrame.to_sql()</span></code></a>, which can transfer in-memory data to <code class="docutils literal notranslate"><span class="pre">SQL</span></code> databases via a convenient <code class="docutils literal notranslate"><span class="pre">API</span></code>.</p></li>
+<li><p>When the <code class="docutils literal notranslate"><span class="pre">numpy</span></code> arrays get full, we transfer their data to a relational database using the <a class="reference external" href="https://docs.python.org/3/library/sqlite3.html#module-sqlite3" title="(in Python v3.12)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sqlite3</span></code></a> module that is built in to the Python language.
+We will take advantage of the <a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.1.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a> function <a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.to_sql.html#pandas.DataFrame.to_sql" title="(in pandas v2.1.2)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pandas.DataFrame.to_sql()</span></code></a>, which can transfer in-memory data to <code class="docutils literal notranslate"><span class="pre">SQL</span></code> databases via a convenient <code class="docutils literal notranslate"><span class="pre">API</span></code>.</p></li>
 </ul>
 <p>We will need the following imports:</p>
 <div class="cell docutils container">
@@ -530,7 +530,7 @@ This class is trivial (see <a class="reference internal" href="../short_vignette
 <p>The second class will be a callable that gets executed immediately after simplification.
 This type is responsible for processing trees, getting data into <code class="docutils literal notranslate"><span class="pre">numpy</span></code> arrays, and transferring the data to the database.</p>
 <p>This class has a lot of responsibilities.
-In order to shorten the code, we define a <code class="docutils literal notranslate"><span class="pre">TableBuffer</span></code> class that holds the <code class="docutils literal notranslate"><span class="pre">numpy</span></code> arrays and handles the mechanics of calling <a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.to_sql.html#pandas.DataFrame.to_sql" title="(in pandas v2.0.3)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pandas.DataFrame.to_sql()</span></code></a>.
+In order to shorten the code, we define a <code class="docutils literal notranslate"><span class="pre">TableBuffer</span></code> class that holds the <code class="docutils literal notranslate"><span class="pre">numpy</span></code> arrays and handles the mechanics of calling <a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.to_sql.html#pandas.DataFrame.to_sql" title="(in pandas v2.1.2)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pandas.DataFrame.to_sql()</span></code></a>.
 The definition of this class is shown below, and you may click to see it.</p>
 <div class="cell tag_hide-input docutils container">
 <details class="hide above-input">
@@ -627,7 +627,7 @@ We follow the Python tradition of using function names beginning with an undersc
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This example uses an in-memory <code class="docutils literal notranslate"><span class="pre">SQL</span></code> database named <code class="docutils literal notranslate"><span class="pre">:memory:</span></code>.
-(See <a class="reference external" href="https://docs.python.org/3/library/sqlite3.html#sqlite3.connect" title="(in Python v3.11)"><code class="xref py py-func docutils literal notranslate"><span class="pre">sqlite3.connect()</span></code></a> for details.)
+(See <a class="reference external" href="https://docs.python.org/3/library/sqlite3.html#sqlite3.connect" title="(in Python v3.12)"><code class="xref py py-func docutils literal notranslate"><span class="pre">sqlite3.connect()</span></code></a> for details.)
 We use this approach because this example may be run on a cloud server.
 In practice, it is much more efficient to use an on-disk database!
 Doing so requires some simple modifications that are left as an “exercise for the reader”.</p>
@@ -819,7 +819,7 @@ The differences are:</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_5965/1492076354.py:16: UserWarning: Applying a default demographic model where deme sizes are [100] and the burn-in length is 10*100
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_5911/1492076354.py:16: UserWarning: Applying a default demographic model where deme sizes are [100] and the burn-in length is 10*100
   fwdpy11.evolvets(
 </pre></div>
 </div>
@@ -836,7 +836,7 @@ The differences are:</p>
 </div>
 </div>
 </div>
-<p>We are going to use <a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_sql.html#pandas.read_sql" title="(in pandas v2.0.3)"><code class="xref py py-func docutils literal notranslate"><span class="pre">pandas.read_sql()</span></code></a> to pull data from our database into <a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a> objects.
+<p>We are going to use <a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_sql.html#pandas.read_sql" title="(in pandas v2.1.2)"><code class="xref py py-func docutils literal notranslate"><span class="pre">pandas.read_sql()</span></code></a> to pull data from our database into <a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.1.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a> objects.
 Our approach here is not optimal and we discuss alternatives below.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -869,7 +869,7 @@ Our approach here is not optimal and we discuss alternatives below.</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/d2b6e60b595367805a52645facc711d8a86d4050765b50887eeca50f69b3dcde.png" src="../_images/d2b6e60b595367805a52645facc711d8a86d4050765b50887eeca50f69b3dcde.png" />
+<img alt="../_images/1f365385834ca9b7a822f333f6010eef9351d340c9813550eb4b0a49597441f5.png" src="../_images/1f365385834ca9b7a822f333f6010eef9351d340c9813550eb4b0a49597441f5.png" />
 </div>
 </div>
 <p>The figure should be identical to <a class="reference internal" href="pyfreqtracker.html#pyfreqtrackfigneutral"><span class="std std-numref">Fig. 2</span></a>.</p>

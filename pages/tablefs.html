@@ -486,14 +486,14 @@ frequency spectra, or <code class="docutils literal notranslate"><span class="pr
 <p>We have to define some conventions:</p>
 <ul class="simple">
 <li><p>A sample list is a list of node indexes.  The node indexes
-are stored in a <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.25)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a> with <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v1.25)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.dtype</span></code></a>
+are stored in a <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a> with <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.dtype</span></code></a>
 <code class="docutils literal notranslate"><span class="pre">numpy.int32</span></code>.</p></li>
 <li><p>We support <code class="docutils literal notranslate"><span class="pre">fs</span></code> calculated from multiple lists of samples.</p></li>
 <li><p>An <code class="docutils literal notranslate"><span class="pre">fs</span></code> always contains the zero and fixed bins.  Thus, for
 a sample of <code class="docutils literal notranslate"><span class="pre">n</span></code> nodes, there are <code class="docutils literal notranslate"><span class="pre">n</span> <span class="pre">+</span> <span class="pre">1</span></code> entries in the <code class="docutils literal notranslate"><span class="pre">fs</span></code>.
 The first and last values are for frequencies zero and <code class="docutils literal notranslate"><span class="pre">n</span></code>, respectively.
 Singletons start in bin <code class="docutils literal notranslate"><span class="pre">1</span></code>, etc..</p></li>
-<li><p>An <code class="docutils literal notranslate"><span class="pre">fs</span></code> from a single sample list is represented by a <a class="reference external" href="https://numpy.org/doc/stable/reference/maskedarray.baseclass.html#numpy.ma.MaskedArray" title="(in NumPy v1.25)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ma.MaskedArray</span></code></a>,
+<li><p>An <code class="docutils literal notranslate"><span class="pre">fs</span></code> from a single sample list is represented by a <a class="reference external" href="https://numpy.org/doc/stable/reference/maskedarray.baseclass.html#numpy.ma.MaskedArray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ma.MaskedArray</span></code></a>,
 object with the zero and fixed bins masked.</p></li>
 <li><p>An <code class="docutils literal notranslate"><span class="pre">fs</span></code> from more than one sample list is stored in a <code class="docutils literal notranslate"><span class="pre">scipy.sparse.coo_matrix</span></code> sparse
 matrix.</p></li>
@@ -581,7 +581,7 @@ First, let’s get the lists of nodes from the two demes in our population:</p>
 </div>
 </div>
 </div>
-<p>Obtain the full <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.25)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a> for the joint <code class="docutils literal notranslate"><span class="pre">fs</span></code>:</p>
+<p>Obtain the full <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a> for the joint <code class="docutils literal notranslate"><span class="pre">fs</span></code>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">fs</span><span class="o">.</span><span class="n">todense</span><span class="p">())</span>
@@ -627,7 +627,7 @@ First, let’s get the lists of nodes from the two demes in our population:</p>
 </div>
 </div>
 <p>The marginalization can be tedious for many samples, so you can have it happen automatically,
-in which case a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> is returned, keyed by sample list index:</p>
+in which case a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> is returned, keyed by sample list index:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fs</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">fs</span><span class="p">([</span><span class="n">deme0_nodes</span><span class="p">[:</span><span class="mi">10</span><span class="p">],</span> <span class="n">deme1_nodes</span><span class="p">[</span><span class="mi">50</span><span class="p">:</span><span class="mi">55</span><span class="p">]],</span> <span class="n">marginalize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -652,9 +652,9 @@ in which case a <a class="reference external" href="https://docs.python.org/3/li
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Marginalizing in this way preserves the convention that the 1-d <code class="docutils literal notranslate"><span class="pre">fs</span></code>
-objects are instances of <a class="reference external" href="https://numpy.org/doc/stable/reference/maskedarray.baseclass.html#numpy.ma.MaskedArray" title="(in NumPy v1.25)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ma.MaskedArray</span></code></a>.</p>
+objects are instances of <a class="reference external" href="https://numpy.org/doc/stable/reference/maskedarray.baseclass.html#numpy.ma.MaskedArray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ma.MaskedArray</span></code></a>.</p>
 </div>
-<p>To see how the <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> keying works, let’s flip the sample lists:</p>
+<p>To see how the <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> keying works, let’s flip the sample lists:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fs</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">fs</span><span class="p">([</span><span class="n">deme1_nodes</span><span class="p">[</span><span class="mi">50</span><span class="p">:</span><span class="mi">55</span><span class="p">],</span> <span class="n">deme0_nodes</span><span class="p">[:</span><span class="mi">10</span><span class="p">]],</span> <span class="n">marginalize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -719,8 +719,8 @@ the <code class="docutils literal notranslate"><span class="pre">fs</span></code
 </div>
 </div>
 <p>You can also get a joint <code class="docutils literal notranslate"><span class="pre">fs</span></code> marginalized by sample list and separated
-by window.  In this case, the return value is a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> containing
-the <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> for each window:</p>
+by window.  In this case, the return value is a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> containing
+the <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> for each window:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pop</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">fs</span><span class="p">(</span>

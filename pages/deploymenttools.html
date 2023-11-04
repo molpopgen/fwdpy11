@@ -616,15 +616,19 @@ If you have a script <code class="docutils literal notranslate"><span class="pre
 <section id="linux-wheel-building">
 <h2>Linux wheel building<a class="headerlink" href="#linux-wheel-building" title="Permalink to this heading">#</a></h2>
 <p>The directory <code class="docutils literal notranslate"><span class="pre">deployment/linux_wheels</span></code> defines a <code class="docutils literal notranslate"><span class="pre">Docker</span></code> work flow to build binary wheels on Linux.
-Although this work flow <em>could</em> be used to make wheels for each new release, its main purposes are for testing and easily getting development versions to collaborators.</p>
-<p>From the <code class="docutils literal notranslate"><span class="pre">root</span></code> of the <code class="docutils literal notranslate"><span class="pre">fwdpy11</span></code> repository:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>bash<span class="w"> </span>deployment/linux_wheels/build_docker_image.sh
+These scripts are what we use to build wheels for each release.
+They may also be used to make wheels for development versions on a local machine.</p>
+<p>From the <code class="docutils literal notranslate"><span class="pre">root</span></code> of the <code class="docutils literal notranslate"><span class="pre">fwdpy11</span></code> repository.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>bash<span class="w"> </span>deployment/linux_wheels/run_wheel_workflow.sh<span class="w"> </span>VERSION
 </pre></div>
 </div>
+<p><code class="docutils literal notranslate"><span class="pre">VERSION</span></code> must be a valid Python version present in the docker image.
+For example, <code class="docutils literal notranslate"><span class="pre">python3.10</span></code>.</p>
 <p>The above command will require <code class="docutils literal notranslate"><span class="pre">sudo</span></code> on some systems.
 On trusted machines, you may wish to add yourself to the <code class="docutils literal notranslate"><span class="pre">docker</span></code> group as described <a class="reference external" href="https://docs.docker.com/engine/install/linux-postinstall/">here</a>.</p>
-<p>This work flow builds binary wheels for Python <a class="reference external" href="https://github.com/pypa/manylinux">manylinux</a>.
-After building and auditing each wheel, the wheels are installed into virtual environments and the <code class="docutils literal notranslate"><span class="pre">fwdpy11</span></code> test suite is run.</p>
+<p>This work flow builds binary wheels for Python <a class="reference external" href="https://github.com/pypa/manylinux">manylinux</a>.</p>
+<p>The wheels will be found in <code class="docutils literal notranslate"><span class="pre">dist/wheelhouse</span></code> upon completion.</p>
+<p><strong>Do not</strong> run this work flow in parallel on the same filesystem.</p>
 <section id="extracting-the-wheels">
 <h3>Extracting the wheels<a class="headerlink" href="#extracting-the-wheels" title="Permalink to this heading">#</a></h3>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>bash<span class="w"> </span>deployment/linux_wheels/extract_wheels.sh

@@ -517,7 +517,7 @@ document.write(`
 For example, you could write a single Python script plus a shell script
 that your local cluster understands, sending your simulation to hundreds
 of compute nodes.</p>
-<p>This section introduces <a class="reference external" href="https://docs.python.org/3/library/concurrent.futures.html#module-concurrent.futures" title="(in Python v3.11)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">concurrent.futures</span></code></a> as a method to execute
+<p>This section introduces <a class="reference external" href="https://docs.python.org/3/library/concurrent.futures.html#module-concurrent.futures" title="(in Python v3.12)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">concurrent.futures</span></code></a> as a method to execute
 many replicates in separate Python <em>processes</em> using a single script.</p>
 <p>Fully worked-out examples of varying complexity can be found here:</p>
 <ul class="simple">
@@ -535,8 +535,8 @@ than returning them.</p></li>
 <li><p>If you do return something to the main “collector”
 process, keep it simple!</p></li>
 <li><p>Random number seeds are set in <code class="docutils literal notranslate"><span class="pre">__main__</span></code> using
-<a class="reference external" href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.randint.html#numpy.random.randint" title="(in NumPy v1.25)"><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.random.randint()</span></code></a> after calling
-<a class="reference external" href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.seed.html#numpy.random.seed" title="(in NumPy v1.25)"><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.random.seed()</span></code></a> using a user-provided seed.</p></li>
+<a class="reference external" href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.randint.html#numpy.random.randint" title="(in NumPy v1.26)"><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.random.randint()</span></code></a> after calling
+<a class="reference external" href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.seed.html#numpy.random.seed" title="(in NumPy v1.26)"><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.random.seed()</span></code></a> using a user-provided seed.</p></li>
 </ul>
 </section>
 <section id="how-long-to-run-the-simulation">
@@ -631,7 +631,7 @@ near equilibrium, but we’re just using it as an example:</p>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>16
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_6026/116052154.py:20: UserWarning: Applying a default demographic model where deme sizes are [1000] and the burn-in length is 10*1000
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_5975/116052154.py:20: UserWarning: Applying a default demographic model where deme sizes are [1000] and the burn-in length is 10*1000
   fwdpy11.evolvets(rng, pop, params, 100)
 </pre></div>
 </div>
@@ -669,16 +669,16 @@ near equilibrium, but we’re just using it as an example:</p>
 -0.010349104565670205 -2.2118130398591935
 -0.011602139413926871 -7.084718822750244
 -0.0032279509968761435 -1.737328013826212
--0.015449207258832993 -5.131892545676068
+-0.015449207258832993 -5.131892545676067
 -0.0077168400201644664 4.512341872600712
--0.0022531736886723442 -4.096721449329499
+-0.0022531736886723442 -4.0967214493294986
 -0.006044053890735736 -8.652700112679995
 -0.0023465570676289957 0.6320311886584215
 -0.0007746986635068075 2.2164750099025436
 -0.021502039265014553 9.597464398344142
 -0.009716042965590406 -7.443653191909565
 -0.0008560999958330585 0.26396822983492146
--0.01597600966131924 4.994348870871331
+-0.01597600966131924 4.99434887087133
 -0.003548690338568886 1.3665737289445181
 -0.005819804232148941 8.384444628613952
 </pre></div>
@@ -1087,9 +1087,10 @@ we can simplify a bit with another decorator:</p>
 </pre></div>
 </div>
 <p>Two complete examples come from the test suite.  The first example reimplements
-<a class="reference internal" href="gvalue_to_fitness.html#fwdpy11.GSS" title="fwdpy11.GSS"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GSS</span></code></a> in Python.  The second example implements a model
+<a class="reference internal" href="gvalue_to_fitness.html#fwdpy11.GaussianStabilizingSelection" title="fwdpy11.GaussianStabilizingSelection"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GaussianStabilizingSelection</span></code></a> in Python for a single trait.
+The second example implements a model
 where the optimum changes to a new value each generation. (Note that
-the second model requires that <a class="reference external" href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.seed.html#numpy.random.seed" title="(in NumPy v1.25)"><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.random.seed()</span></code></a> be called elsewhere
+the second model requires that <a class="reference external" href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.seed.html#numpy.random.seed" title="(in NumPy v1.26)"><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.random.seed()</span></code></a> be called elsewhere
 so that results are reproducible.)</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">math</span>
 
@@ -1341,7 +1342,7 @@ responsibilities:</p>
 <ol class="arabic simple">
 <li><p>It must return a value that will populate the genetic value
 field of the offspring’s metadata (<a class="reference internal" href="types.html#fwdpy11.DiploidMetadata.g" title="fwdpy11.DiploidMetadata.g"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.DiploidMetadata.g</span></code></a>).</p></li>
-<li><p>It also needs to populate an array of <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> that represents
+<li><p>It also needs to populate an array of <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> that represents
 the genetic values for all trait dimensions. See <a class="reference internal" href="#python-genetic-value-dimensions"><span class="std std-ref">here</span></a>.
 For the common case of a one-dimensional genetic value,
 you populate element <code class="docutils literal notranslate"><span class="pre">0</span></code> of this array with value that you
@@ -1362,9 +1363,9 @@ resistance in the short term was to implement the current approach.</p>
 <h4>Example: strictly additive effects on a trait<a class="headerlink" href="#example-strictly-additive-effects-on-a-trait" title="Permalink to this heading">#</a></h4>
 <p>Here is an example of a strict additive model of a trait,
 taken from the test suite. You’ll notice that we are accessing
-arrays on the <code class="docutils literal notranslate"><span class="pre">C++</span></code> using Python <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#memoryview" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">memoryview</span></code></a> objects.
+arrays on the <code class="docutils literal notranslate"><span class="pre">C++</span></code> using Python <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#memoryview" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">memoryview</span></code></a> objects.
 This is a <em>very</em> efficient method, and much faster
-than creating a temporary, non-owning <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.25)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>.</p>
+than creating a temporary, non-owning <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fwdpy11</span>
 <span class="kn">import</span> <span class="nn">fwdpy11.custom_genetic_value_decorators</span>
 
@@ -1383,7 +1384,7 @@ than creating a temporary, non-owning <a class="reference external" href="https:
 </pre></div>
 </div>
 <p>If you want to account for the heterozygous effect of mutations, then the
-most explicit approach is probably to use <a class="reference external" href="https://docs.python.org/3/library/collections.html#collections.Counter" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">collections.Counter</span></code></a>:</p>
+most explicit approach is probably to use <a class="reference external" href="https://docs.python.org/3/library/collections.html#collections.Counter" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">collections.Counter</span></code></a>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">calculate_gvalue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
     <span class="n">s</span> <span class="o">=</span> <span class="mf">0.0</span>
     <span class="n">c</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
@@ -1429,7 +1430,7 @@ in <a class="reference internal" href="../technical/genetic_values.html#gvalue-s
 </div>
 <p>This class supports the buffer protocol, which exposes the
 genetic values array.  The most efficient access will
-be via a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#memoryview" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">memoryview</span></code></a>.</p>
+be via a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#memoryview" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">memoryview</span></code></a>.</p>
 <p>Instances of this class have the following attributes:</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="rng">

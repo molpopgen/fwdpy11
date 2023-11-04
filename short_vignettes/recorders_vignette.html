@@ -510,7 +510,7 @@ The latter allows one to record “ancient samples” during a simulation, which
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Given that you can pass in any valid Python object, you can record anything you can imagine based on attributes of <a class="reference internal" href="../pages/types.html#fwdpy11.DiploidPopulation" title="fwdpy11.DiploidPopulation"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiploidPopulation</span></code></a>.
-Further, as many of those attributes can be viewed as <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.25)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a> or <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.recarray.html#numpy.recarray" title="(in NumPy v1.25)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.recarray</span></code></a>, you may use any Python library compatible with those types.</p>
+Further, as many of those attributes can be viewed as <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a> or <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.recarray.html#numpy.recarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.recarray</span></code></a>, you may use any Python library compatible with those types.</p>
 <p>You can also process the genealogy of the population.
 Doing so is an advanced topic, which we deal with in a later vignette.</p>
 </div>
@@ -590,7 +590,7 @@ We will implement a recorder to track the mean trait value and fitness of the en
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_6519/1469769122.py:2: UserWarning: Applying a default demographic model where deme sizes are [500] and the burn-in length is 10*500
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_6468/1469769122.py:2: UserWarning: Applying a default demographic model where deme sizes are [500] and the burn-in length is 10*500
   fwdpy11.evolvets(rng, pop, params, recorder=recorder, simplification_interval=100)
 </pre></div>
 </div>
@@ -611,7 +611,7 @@ We will implement a recorder to track the mean trait value and fitness of the en
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/8001632d08d83d2953a8660614ad811f232bad7e4082fdc32c217a81151a6add.png" src="../_images/8001632d08d83d2953a8660614ad811f232bad7e4082fdc32c217a81151a6add.png" />
+<img alt="../_images/1511e6b0bd2dcb530f369cb5c33fa927becd1d45855f1b3b473ef8967502745b.png" src="../_images/1511e6b0bd2dcb530f369cb5c33fa927becd1d45855f1b3b473ef8967502745b.png" />
 </div>
 </div>
 <section id="recording-ancient-samples">
@@ -654,7 +654,7 @@ Thus, we need to rebuild the <code class="docutils literal notranslate"><span cl
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_6519/2266145962.py:7: UserWarning: Applying a default demographic model where deme sizes are [500] and the burn-in length is 10*500
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_6468/2266145962.py:7: UserWarning: Applying a default demographic model where deme sizes are [500] and the burn-in length is 10*500
   fwdpy11.evolvets(rng, pop, params, recorder=recorder, simplification_interval=100)
 </pre></div>
 </div>
@@ -696,7 +696,7 @@ Analyzing each time point separately is a common operation made easier by <a cla
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/8089bb898ef505260e1502737ca4e9508bb9f6dbc6f4fe001d311bbe07c2c6b9.png" src="../_images/8089bb898ef505260e1502737ca4e9508bb9f6dbc6f4fe001d311bbe07c2c6b9.png" />
+<img alt="../_images/d4582f8d8ae00cb7db48fa96860c78eff868e5de4ef5cbfc837eb0c0c4a87755.png" src="../_images/d4582f8d8ae00cb7db48fa96860c78eff868e5de4ef5cbfc837eb0c0c4a87755.png" />
 </div>
 </div>
 <section id="built-in-ancient-sample-recorders">

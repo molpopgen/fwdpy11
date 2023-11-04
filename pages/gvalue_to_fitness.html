@@ -61,8 +61,6 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
-    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
-    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'pages/gvalue_to_fitness';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -513,95 +511,6 @@ False otherwise.</p>
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="fwdpy11.GSS">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">GSS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">optimum</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">VS</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.GSS" title="Permalink to this definition">#</a></dt>
-<dd><p>Gaussian stabilizing selection on a single trait.</p>
-<p>This class has the following attributes, whose names
-are also <cite>kwargs</cite> for intitialization.  The attribute names
-also determine the order of positional arguments:</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>optimum</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a><em> or </em><a class="reference internal" href="#fwdpy11.Optimum" title="fwdpy11.Optimum"><em>fwdpy11.Optimum</em></a>) – The optimal trait value</p></li>
-<li><p><strong>VS</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a><em> or </em><em>None</em>) – Inverse strength of stabilizing selection</p></li>
-</ul>
-</dd>
-</dl>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>VS should be None if optimum is an instance
-of <a class="reference internal" href="#fwdpy11.Optimum" title="fwdpy11.Optimum"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.Optimum</span></code></a></p>
-</div>
-<div class="versionchanged">
-<p><span class="versionmodified changed">Changed in version 0.7.1: </span>Allow instances of fwdpy11.Optimum for intitialization</p>
-</div>
-<div class="versionchanged">
-<p><span class="versionmodified changed">Changed in version 0.8.0: </span>Refactored to use attrs and inherit from
-low-level C++ class</p>
-</div>
-<dl class="py method">
-<dt class="sig sig-object py" id="fwdpy11.GSS.asblack">
-<span class="sig-name descname"><span class="pre">asblack</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.GSS.asblack" title="Permalink to this definition">#</a></dt>
-<dd><p>Return a string representation formatted with black</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fwdpy11.GSS.asdict">
-<span class="sig-name descname"><span class="pre">asdict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.GSS.asdict" title="Permalink to this definition">#</a></dt>
-<dd><p>Return dict representation</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fwdpy11.GSS.fromdict">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fromdict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.GSS.fromdict" title="Permalink to this definition">#</a></dt>
-<dd><p>Build an instance from a dictionary</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="fwdpy11.GSSmo">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">GSSmo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">optima</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.GSSmo" title="Permalink to this definition">#</a></dt>
-<dd><p>Gaussian stabilizing selection on a single trait with moving
-optimum.</p>
-<p>This class has the following attributes, whose names
-are also <cite>kwargs</cite> for intitialization.  The attribute names
-also determine the order of positional arguments:</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>optima</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>[</em><a class="reference internal" href="#fwdpy11.Optimum" title="fwdpy11.Optimum"><em>fwdpy11.Optimum</em></a><em>]</em>) – The optimal trait values</p>
-</dd>
-</dl>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Instances of fwdpy11.Optimum must have valid
-values for <cite>when</cite>.</p>
-</div>
-<div class="versionchanged">
-<p><span class="versionmodified changed">Changed in version 0.8.0: </span>Refactored to use attrs and inherit from
-low-level C++ class</p>
-</div>
-<dl class="py method">
-<dt class="sig sig-object py" id="fwdpy11.GSSmo.asblack">
-<span class="sig-name descname"><span class="pre">asblack</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.GSSmo.asblack" title="Permalink to this definition">#</a></dt>
-<dd><p>Return a string representation formatted with black</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fwdpy11.GSSmo.asdict">
-<span class="sig-name descname"><span class="pre">asdict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.GSSmo.asdict" title="Permalink to this definition">#</a></dt>
-<dd><p>Return dict representation</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fwdpy11.GSSmo.fromdict">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fromdict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.GSSmo.fromdict" title="Permalink to this definition">#</a></dt>
-<dd><p>Build an instance from a dictionary</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
 <dt class="sig sig-object py" id="fwdpy11.Optimum">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">Optimum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">optimum</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">VS</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">when</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.Optimum" title="Permalink to this definition">#</a></dt>
 <dd><p>Parameters for a trait optimum.</p>
@@ -611,19 +520,12 @@ also determine the order of positional arguments:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>optimum</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – The trait value</p></li>
-<li><p><strong>VS</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – Strength of stabilizing selection</p></li>
-<li><p><strong>when</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em> or </em><em>None</em>) – The time when the optimum shifts</p></li>
+<li><p><strong>optimum</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – The trait value</p></li>
+<li><p><strong>VS</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – Strength of stabilizing selection</p></li>
+<li><p><strong>when</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em> or </em><em>None</em>) – The time when the optimum shifts</p></li>
 </ul>
 </dd>
 </dl>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>When used to model a stable optimum (e.g.,
-<a class="reference internal" href="#fwdpy11.GSS" title="fwdpy11.GSS"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GSS</span></code></a>), the <cite>when</cite> parameter is omitted.
-The <cite>when</cite> parameter is used for moving optima
-(<a class="reference internal" href="#fwdpy11.GSSmo" title="fwdpy11.GSSmo"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GSSmo</span></code></a>).</p>
-</div>
 <div class="versionadded">
 <p><span class="versionmodified added">New in version 0.7.1.</span></p>
 </div>
@@ -661,19 +563,12 @@ also determine the order of positional arguments:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>optima</strong> (<em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a><em>]</em>) – The trait values</p></li>
-<li><p><strong>VS</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – Strength of stabilizing selection</p></li>
-<li><p><strong>when</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em> or </em><em>None</em>) – The time when the optimum shifts</p></li>
+<li><p><strong>optima</strong> (<em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a><em>]</em>) – The trait values</p></li>
+<li><p><strong>VS</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – Strength of stabilizing selection</p></li>
+<li><p><strong>when</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em> or </em><em>None</em>) – The time when the optimum shifts</p></li>
 </ul>
 </dd>
 </dl>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>When used to model stable optima (e.g.,
-<a class="reference internal" href="#fwdpy11.MultivariateGSS" title="fwdpy11.MultivariateGSS"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.MultivariateGSS</span></code></a>), the <cite>when</cite> parameter is omitted.
-The <cite>when</cite> parameter is used for moving optima
-(<a class="reference internal" href="#fwdpy11.MultivariateGSSmo" title="fwdpy11.MultivariateGSSmo"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.MultivariateGSSmo</span></code></a>).</p>
-</div>
 <div class="versionadded">
 <p><span class="versionmodified added">New in version 0.7.1.</span></p>
 </div>
@@ -702,95 +597,34 @@ low-level C++ class</p>
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="fwdpy11.MultivariateGSS">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">MultivariateGSS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">optima</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">VS</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.MultivariateGSS" title="Permalink to this definition">#</a></dt>
-<dd><p>Multivariate gaussian stablizing selection.</p>
-<p>Maps a multidimensional trait to fitness using the Euclidian
-distance of a vector of trait values to a vector of optima.</p>
-<p>Essentially, this is Equation 1 of</p>
-<p>Simons, Yuval B., Kevin Bullaughey, Richard R. Hudson, and Guy Sella. 2018.
-“A Population Genetic Interpretation of GWAS Findings
-for Human Quantitative Traits.”
-PLoS Biology 16 (3): e2002985.</p>
-<p>For the case of moving optima, see <a class="reference internal" href="#fwdpy11.MultivariateGSSmo" title="fwdpy11.MultivariateGSSmo"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.MultivariateGSSmo</span></code></a>.
-This class has the following attributes, whose names
-are also <cite>kwargs</cite> for intitialization.  The attribute names
-also determine the order of positional arguments:</p>
+<dt class="sig sig-object py" id="fwdpy11.GaussianStabilizingSelection">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">GaussianStabilizingSelection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_single_trait</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optima</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.GaussianStabilizingSelection" title="Permalink to this definition">#</a></dt>
+<dd><p>Define a mapping of phenotype-to-fitness according to a 
+Gaussian stabilizing selection model.</p>
+<p>Instances of this trait must be constructed by one of the
+various class methods available.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="fwdpy11.GaussianStabilizingSelection.pleiotropy">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pleiotropy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">optima</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.GaussianStabilizingSelection.pleiotropy" title="Permalink to this definition">#</a></dt>
+<dd><p>Stabilizing selection with pleiotropy.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>optima</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.25)"><em>numpy.ndarray</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>[</em><a class="reference internal" href="#fwdpy11.PleiotropicOptima" title="fwdpy11.PleiotropicOptima"><em>fwdpy11.PleiotropicOptima</em></a><em>]</em>) – The optimum value for each trait over time</p></li>
-<li><p><strong>VS</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a><em> or </em><em>None</em>) – Inverse strength of stablizing selection</p></li>
-</ul>
+<dd class="field-odd"><p><strong>optima</strong> (<em>List</em><em>[</em><a class="reference internal" href="#fwdpy11.PleiotropicOptima" title="fwdpy11.PleiotropicOptima"><em>fwdpy11.PleiotropicOptima</em></a><em>]</em>) – The optimum values.
+Multiple values specify a moving optimum.</p>
 </dd>
 </dl>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p><cite>VS</cite> should be <cite>None</cite> if <cite>optima</cite> is list[fwdpy11.PleiotropicOptima]</p>
-<p><cite>VS</cite> is <span class="math notranslate nohighlight">\(\omega^2\)</span> in the Simons et al. notation</p>
-</div>
-<div class="versionchanged">
-<p><span class="versionmodified changed">Changed in version 0.7.1: </span>Allow initialization with list of fwdpy11.PleiotropicOptima</p>
-</div>
-<div class="versionchanged">
-<p><span class="versionmodified changed">Changed in version 0.8.0: </span>Refactored to use attrs and inherit from
-low-level C++ class</p>
-</div>
-<dl class="py method">
-<dt class="sig sig-object py" id="fwdpy11.MultivariateGSS.asblack">
-<span class="sig-name descname"><span class="pre">asblack</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.MultivariateGSS.asblack" title="Permalink to this definition">#</a></dt>
-<dd><p>Return a string representation formatted with black</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="fwdpy11.MultivariateGSS.asdict">
-<span class="sig-name descname"><span class="pre">asdict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.MultivariateGSS.asdict" title="Permalink to this definition">#</a></dt>
-<dd><p>Return dict representation</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fwdpy11.MultivariateGSS.fromdict">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fromdict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.MultivariateGSS.fromdict" title="Permalink to this definition">#</a></dt>
-<dd><p>Build an instance from a dictionary</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="fwdpy11.MultivariateGSSmo">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">MultivariateGSSmo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">optima</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.MultivariateGSSmo" title="Permalink to this definition">#</a></dt>
-<dd><p>Multivariate gaussian stablizing selection with moving optima
-This class has the following attributes, whose names
-are also <cite>kwargs</cite> for intitialization.  The attribute names
-also determine the order of positional arguments:</p>
+<dt class="sig sig-object py" id="fwdpy11.GaussianStabilizingSelection.single_trait">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">single_trait</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">optima</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.GaussianStabilizingSelection.single_trait" title="Permalink to this definition">#</a></dt>
+<dd><p>Stabilizing selection on a single trait</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>optima</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>[</em><a class="reference internal" href="#fwdpy11.PleiotropicOptima" title="fwdpy11.PleiotropicOptima"><em>fwdpy11.PleiotropicOptima</em></a><em>]</em>) – list of optima over time</p>
+<dd class="field-odd"><p><strong>optima</strong> (<em>List</em><em>[</em><a class="reference internal" href="#fwdpy11.Optimum" title="fwdpy11.Optimum"><em>fwdpy11.Optimum</em></a><em>]</em>) – The optimum values.
+Multiple values specify a moving optimum.</p>
 </dd>
 </dl>
-<div class="versionchanged">
-<p><span class="versionmodified changed">Changed in version 0.7.1: </span>Allow initialization with list of fwdpy11.PleiotropicOptima</p>
-</div>
-<div class="versionchanged">
-<p><span class="versionmodified changed">Changed in version 0.8.0: </span>Refactored to use attrs and inherit from
-low-level C++ class</p>
-</div>
-<dl class="py method">
-<dt class="sig sig-object py" id="fwdpy11.MultivariateGSSmo.asblack">
-<span class="sig-name descname"><span class="pre">asblack</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.MultivariateGSSmo.asblack" title="Permalink to this definition">#</a></dt>
-<dd><p>Return a string representation formatted with black</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fwdpy11.MultivariateGSSmo.asdict">
-<span class="sig-name descname"><span class="pre">asdict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.MultivariateGSSmo.asdict" title="Permalink to this definition">#</a></dt>
-<dd><p>Return dict representation</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fwdpy11.MultivariateGSSmo.fromdict">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fromdict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.MultivariateGSSmo.fromdict" title="Permalink to this definition">#</a></dt>
-<dd><p>Build an instance from a dictionary</p>
 </dd></dl>
 
 </dd></dl>

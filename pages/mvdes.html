@@ -685,7 +685,7 @@ used to produce deviates.  Then, the quantiles from the cummulative distribution
 of each marginal Gaussian are used to generate a deviate from the desired output distribution of interest.</p>
 <p>For a simulation with <code class="docutils literal notranslate"><span class="pre">n</span></code> populations we need:</p>
 <ul class="simple">
-<li><p>A <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> of <code class="docutils literal notranslate"><span class="pre">n</span></code> <a class="reference internal" href="regiontypes.html#fwdpy11.Sregion" title="fwdpy11.Sregion"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.Sregion</span></code></a> objects</p></li>
+<li><p>A <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> of <code class="docutils literal notranslate"><span class="pre">n</span></code> <a class="reference internal" href="regiontypes.html#fwdpy11.Sregion" title="fwdpy11.Sregion"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.Sregion</span></code></a> objects</p></li>
 <li><p>An array of <code class="docutils literal notranslate"><span class="pre">n</span></code> means for the multivariate Gaussian</p></li>
 <li><p>An <code class="docutils literal notranslate"><span class="pre">n-by-n</span></code> covariance matrix for the multivariate
 Gaussian</p></li>
@@ -830,7 +830,7 @@ correlations such that deleterious mutations in deme 0 are less deleterious in d
 </div>
 </div>
 <p>In the output, we see that an effect size in deme <code class="docutils literal notranslate"><span class="pre">i</span></code> has a corresponding effect size in deme <code class="docutils literal notranslate"><span class="pre">j</span></code> that is a about an order of magnitude smaller in absolute value.</p>
-<p>For the general approach, simply create a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> of objects with the desired mean (or constant) effect sizes.  For example:</p>
+<p>For the general approach, simply create a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> of objects with the desired mean (or constant) effect sizes.  For example:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sregions</span> <span class="o">=</span> <span class="p">[</span>

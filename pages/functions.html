@@ -471,14 +471,14 @@ document.write(`
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>rng</strong> (<a class="reference internal" href="types.html#fwdpy11.GSLrng" title="fwdpy11.GSLrng"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GSLrng</span></code></a>) – Random number generator</p></li>
 <li><p><strong>pop</strong> (<a class="reference internal" href="types.html#fwdpy11.DiploidPopulation" title="fwdpy11.DiploidPopulation"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiploidPopulation</span></code></a>) – A population</p></li>
-<li><p><strong>mu</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – The mutation rate, per haploid genome per generation</p></li>
+<li><p><strong>mu</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – The mutation rate, per haploid genome per generation</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Number of mutations added</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)">int</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -499,7 +499,7 @@ document.write(`
 IDs to output IDS</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)">tuple</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)">tuple</a></p>
 </dd>
 </dl>
 <p>Note that the samples argument is agnostic with respect to the time of
@@ -543,7 +543,7 @@ the population’s metadata containers.</p>
 <dd class="field-even"><p>A simplified TableCollection and an array containing remapped sample ids.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)">tuple</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)">tuple</a></p>
 </dd>
 </dl>
 <div class="versionadded">
@@ -561,16 +561,16 @@ the population’s metadata containers.</p>
 <li><p><strong>rng</strong> (<a class="reference internal" href="types.html#fwdpy11.GSLrng" title="fwdpy11.GSLrng"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GSLrng</span></code></a>) – random number generator</p></li>
 <li><p><strong>pop</strong> (<a class="reference internal" href="types.html#fwdpy11.DiploidPopulation" title="fwdpy11.DiploidPopulation"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiploidPopulation</span></code></a>) – A population</p></li>
 <li><p><strong>params</strong> (<a class="reference internal" href="model_params.html#fwdpy11.ModelParams" title="fwdpy11.ModelParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.ModelParams</span></code></a>) – simulation parameters</p></li>
-<li><p><strong>simplification_interval</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Number of generations
+<li><p><strong>simplification_interval</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Number of generations
 between simplifications.</p></li>
-<li><p><strong>recorder</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.11)"><em>Callable</em></a>) – (None) A temporal sampler/data recorder.</p></li>
-<li><p><strong>post_simplification_recorder</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.11)"><em>Callable</em></a>) – (None) A temporal sampler</p></li>
-<li><p><strong>suppress_table_indexing</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>]</em>) – (<cite>None</cite>) Prevents edge table indexing until
+<li><p><strong>recorder</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.12)"><em>Callable</em></a>) – (None) A temporal sampler/data recorder.</p></li>
+<li><p><strong>post_simplification_recorder</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.12)"><em>Callable</em></a>) – (None) A temporal sampler</p></li>
+<li><p><strong>suppress_table_indexing</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>]</em>) – (<cite>None</cite>) Prevents edge table indexing until
 end of simulation.  The default value
 (<cite>None</cite>) will be interpreted as <cite>True</cite></p></li>
-<li><p><strong>record_gvalue_matrix</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – (False) Whether to record genetic values into
+<li><p><strong>record_gvalue_matrix</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – (False) Whether to record genetic values into
 <a class="reference internal" href="types.html#fwdpy11.DiploidPopulation.genetic_values" title="fwdpy11.DiploidPopulation.genetic_values"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.DiploidPopulation.genetic_values</span></code></a>.</p></li>
-<li><p><strong>preserve_first_generation</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – (False) Whether to record generation 0 as
+<li><p><strong>preserve_first_generation</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – (False) Whether to record generation 0 as
 ancient samples. Must be <cite>True</cite> for
 tree sequence “recapitation”. See
 <a class="reference internal" href="../short_vignettes/recapitation.html#recapitation"><span class="std std-ref">Finishing a simulation with msprime</span></a>.</p></li>
@@ -610,10 +610,10 @@ Added <code class="docutils literal notranslate"><span class="pre">check_demogra
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>tables</strong> (<a class="reference internal" href="types.html#fwdpy11.TableCollection" title="fwdpy11.TableCollection"><em>fwdpy11.TableCollection</em></a>) – A TableCollection</p></li>
-<li><p><strong>samples</strong> (list or <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.25)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – A list of sample nodes</p></li>
-<li><p><strong>record_neutral</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – (True) If True, generate data for neutral variants</p></li>
-<li><p><strong>record_selected</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – (True) If True, generate data for selected variants</p></li>
-<li><p><strong>include_selected</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – (False) Whether to include variants fixed in the sample</p></li>
+<li><p><strong>samples</strong> (list or <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – A list of sample nodes</p></li>
+<li><p><strong>record_neutral</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – (True) If True, generate data for neutral variants</p></li>
+<li><p><strong>record_selected</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – (True) If True, generate data for selected variants</p></li>
+<li><p><strong>include_selected</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – (False) Whether to include variants fixed in the sample</p></li>
 <li><p><strong>begin</strong> – (0.0) Start of range, inclusive</p></li>
 <li><p><strong>end</strong> – (max float) End of range, exclusive</p></li>
 </ul>
@@ -642,8 +642,8 @@ filepath to a demes-specifiend YAML demography.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>dg</strong> (<a class="reference external" href="https://popsim-consortium.github.io/demes-docs/main/api.html#demes.Graph" title="(in Python)"><em>demes.Graph</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – The demes Graph to convert.</p></li>
-<li><p><strong>burnin</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – A factor for how many generations to burn in the simulation.
+<li><p><strong>dg</strong> (<a class="reference external" href="https://popsim-consortium.github.io/demes-docs/main/api.html#demes.Graph" title="(in Python)"><em>demes.Graph</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – The demes Graph to convert.</p></li>
+<li><p><strong>burnin</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – A factor for how many generations to burn in the simulation.
 For a typical demography with a single root, the number of generations
 of burn in is <cite>burnin</cite> times the root deme’s population size. For
 models with multiple root demes joined by migration, that population

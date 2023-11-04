@@ -482,7 +482,7 @@ You may use instances of classes derived from <a class="reference internal" href
 <p>The available classes are:</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="../pages/regiontypes.html#fwdpy11.FixedDominance" title="fwdpy11.FixedDominance"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.FixedDominance</span></code></a>
-This class is equivalent to passing in a <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> to the <code class="docutils literal notranslate"><span class="pre">h</span></code> <code class="docutils literal notranslate"><span class="pre">kwarg</span></code>.
+This class is equivalent to passing in a <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> to the <code class="docutils literal notranslate"><span class="pre">h</span></code> <code class="docutils literal notranslate"><span class="pre">kwarg</span></code>.
 See <a class="reference internal" href="des_vignette.html#des-vignette"><span class="std std-ref">here</span></a></p></li>
 <li><p><a class="reference internal" href="../pages/regiontypes.html#fwdpy11.ExponentialDominance" title="fwdpy11.ExponentialDominance"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.ExponentialDominance</span></code></a></p></li>
 <li><p><a class="reference internal" href="../pages/regiontypes.html#fwdpy11.UniformDominance" title="fwdpy11.UniformDominance"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.UniformDominance</span></code></a></p></li>
@@ -539,7 +539,7 @@ See <a class="reference internal" href="des_vignette.html#des-vignette"><span cl
 </div>
 </details>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_6418/3929228882.py:26: UserWarning: Applying a default demographic model where deme sizes are [500] and the burn-in length is 10*500
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_6359/3929228882.py:26: UserWarning: Applying a default demographic model where deme sizes are [500] and the burn-in length is 10*500
   fwdpy11.evolvets(rng, pop, params, 100, suppress_table_indexing=True)
 </pre></div>
 </div>
@@ -566,14 +566,14 @@ See <a class="reference internal" href="des_vignette.html#des-vignette"><span cl
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="../_images/8676b0d2cb80908c961f3edfb20defc036636096c31013ae66496532d4c403f2.png" src="../_images/8676b0d2cb80908c961f3edfb20defc036636096c31013ae66496532d4c403f2.png" />
+<img alt="../_images/a0327da2d32e69816ae62c234230db59ebec3cb243fc678033aa945e90b968f8.png" src="../_images/a0327da2d32e69816ae62c234230db59ebec3cb243fc678033aa945e90b968f8.png" />
 </div>
 </div>
 </section>
 <section id="using-discrete-distributions">
 <h2>Using discrete distributions<a class="headerlink" href="#using-discrete-distributions" title="Permalink to this heading">#</a></h2>
 <p><a class="reference internal" href="../pages/regiontypes.html#fwdpy11.DiscreteDESD" title="fwdpy11.DiscreteDESD"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiscreteDESD</span></code></a> specifies a <em>D</em>iscrete <em>E</em>ffect <em>S</em>ize and <em>D</em>ominance joint distribution.
-A <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a> of <code class="docutils literal notranslate"><span class="pre">(effect</span> <span class="pre">size,</span> <span class="pre">dominance,</span> <span class="pre">weight)</span></code> specify the joint distribution.
+A <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a> of <code class="docutils literal notranslate"><span class="pre">(effect</span> <span class="pre">size,</span> <span class="pre">dominance,</span> <span class="pre">weight)</span></code> specify the joint distribution.
 For example:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">

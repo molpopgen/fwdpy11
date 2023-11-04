@@ -701,11 +701,13 @@ The examples listed below will work with types provided by <code class="docutils
 <p>Here is an example of Gaussian stabilizing selection around an optimum trait value of <code class="docutils literal notranslate"><span class="pre">0.0</span></code>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pdict</span> <span class="o">=</span> <span class="p">{</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">optimum</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Optimum</span><span class="p">(</span><span class="n">optimum</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">VS</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">gss</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GaussianStabilizingSelection</span><span class="o">.</span><span class="n">single_trait</span><span class="p">([</span><span class="n">optimum</span><span class="p">])</span>
+<span class="n">pdict</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s1">&#39;nregions&#39;</span><span class="p">:</span> <span class="p">[],</span>
     <span class="s1">&#39;sregions&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">GaussianS</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.10</span><span class="p">)],</span>
     <span class="s1">&#39;recregions&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">PoissonInterval</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">1e-3</span><span class="p">)],</span>
-    <span class="s1">&#39;gvalue&#39;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Additive</span><span class="p">(</span><span class="mf">2.</span><span class="p">,</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSS</span><span class="p">(</span><span class="n">optimum</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">VS</span><span class="o">=</span><span class="mf">10.0</span><span class="p">)),</span>
+    <span class="s1">&#39;gvalue&#39;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Additive</span><span class="p">(</span><span class="mf">2.</span><span class="p">,</span> <span class="n">gss</span><span class="p">),</span>
     <span class="s1">&#39;rates&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1e-3</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
     <span class="s1">&#39;simlen&#39;</span><span class="p">:</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">pop</span><span class="o">.</span><span class="n">N</span><span class="p">,</span>
     <span class="s1">&#39;prune_selected&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
@@ -732,9 +734,9 @@ Imagine, for example, that we simulate the above model until equilibrium, and th
 <p>The details are omitted here:</p>
 <ol class="arabic simple">
 <li><p>This simulation requires two calls to <a class="reference internal" href="../pages/functions.html#fwdpy11.evolvets" title="fwdpy11.evolvets"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.evolvets()</span></code></a></p></li>
-<li><p>It could have been done instead with a single call to <a class="reference internal" href="../pages/functions.html#fwdpy11.evolvets" title="fwdpy11.evolvets"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.evolvets()</span></code></a> and using
-<a class="reference internal" href="../pages/gvalue_to_fitness.html#fwdpy11.GSSmo" title="fwdpy11.GSSmo"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GSSmo</span></code></a> and one <code class="docutils literal notranslate"><span class="pre">ModelParams</span></code> object instead of <a class="reference internal" href="../pages/gvalue_to_fitness.html#fwdpy11.GSS" title="fwdpy11.GSS"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GSS</span></code></a>
-and two parameters objects.</p></li>
+<li><p>It could have been done instead with a single call to <a class="reference internal" href="../pages/functions.html#fwdpy11.evolvets" title="fwdpy11.evolvets"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.evolvets()</span></code></a>
+by passing a list of <a class="reference internal" href="../pages/gvalue_to_fitness.html#fwdpy11.Optimum" title="fwdpy11.Optimum"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.Optimum</span></code></a> to <a class="reference internal" href="../pages/gvalue_to_fitness.html#fwdpy11.GaussianStabilizingSelection" title="fwdpy11.GaussianStabilizingSelection"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GaussianStabilizingSelection</span></code></a>.
+This approach would have required one <code class="docutils literal notranslate"><span class="pre">ModelParams</span></code> instance.</p></li>
 </ol>
 </div>
 <div class="cell docutils container">
@@ -742,7 +744,9 @@ and two parameters objects.</p></li>
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">copy</span>
 <span class="n">pdict2</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">pdict</span><span class="p">)</span>
 
-<span class="n">pdict2</span><span class="p">[</span><span class="s1">&#39;gvalue&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Additive</span><span class="p">(</span><span class="mf">2.</span><span class="p">,</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSS</span><span class="p">(</span><span class="n">optimum</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span> <span class="n">VS</span><span class="o">=</span><span class="mf">10.0</span><span class="p">)),</span>
+<span class="n">optimum</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Optimum</span><span class="p">(</span><span class="n">optimum</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span> <span class="n">VS</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">gss</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GaussianStabilizingSelection</span><span class="o">.</span><span class="n">single_trait</span><span class="p">([</span><span class="n">optimum</span><span class="p">])</span>
+<span class="n">pdict2</span><span class="p">[</span><span class="s1">&#39;gvalue&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Additive</span><span class="p">(</span><span class="mf">2.</span><span class="p">,</span> <span class="n">gss</span><span class="p">),</span>
 <span class="n">pdict2</span><span class="p">[</span><span class="s1">&#39;simlen&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">100</span>
 
 <span class="n">params2</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="n">pdict2</span><span class="p">)</span>
@@ -750,7 +754,7 @@ and two parameters objects.</p></li>
 </div>
 </div>
 </div>
-<p>We can pass both objects to <code class="docutils literal notranslate"><span class="pre">tskit</span></code> via a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>:</p>
+<p>We can pass both objects to <code class="docutils literal notranslate"><span class="pre">tskit</span></code> via a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ts</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">dump_tables_to_tskit</span><span class="p">(</span><span class="n">model_params</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;burnin&#39;</span><span class="p">:</span> <span class="n">params</span><span class="p">,</span> <span class="s1">&#39;adaptation&#39;</span><span class="p">:</span> <span class="n">params2</span><span class="p">})</span>
@@ -867,7 +871,7 @@ With the graph as metadata, you can extract it and reconstruct the original <cod
 <section id="user-defined-metadata">
 <h3>User-defined metadata<a class="headerlink" href="#user-defined-metadata" title="Permalink to this heading">#</a></h3>
 <p>It may be useful to store arbitrary data in the output.
-For example, this could be a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> containing information obtained from a <a class="reference internal" href="../short_vignettes/recorders_vignette.html#recorders-vignette"><span class="std std-ref">time series</span></a> analysis of a simulation.</p>
+For example, this could be a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> containing information obtained from a <a class="reference internal" href="../short_vignettes/recorders_vignette.html#recorders-vignette"><span class="std std-ref">time series</span></a> analysis of a simulation.</p>
 <p>The simplest situation is to use a <code class="docutils literal notranslate"><span class="pre">dict</span></code> containing simple objects:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -917,7 +921,7 @@ Further, if the data are very large, then other output formats are likely more a
 <section id="setting-population-table-metadata">
 <h2>Setting population table metadata<a class="headerlink" href="#setting-population-table-metadata" title="Permalink to this heading">#</a></h2>
 <p>You can also set the population table metadata when exporting data.
-Doing so requires a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> mapping the integer label for each population to another <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>.</p>
+Doing so requires a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> mapping the integer label for each population to another <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>.</p>
 <p>For example, let’s create an demographic model from the <code class="docutils literal notranslate"><span class="pre">demes</span></code> graph that used above:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
