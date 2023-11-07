@@ -24,7 +24,7 @@ pydata-sphinx-theme==0.13.1
 matplotlib
 pandas
 sphinx-issues
-demesdraw~=0.3.0
+demesdraw~=0.4.0
 
 #below are for formatting, linting,
 #etc.
