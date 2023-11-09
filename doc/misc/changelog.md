@@ -1236,7 +1236,7 @@ etc., that are collected under the 0.8.0 milestone on `Github`.
 
 `API`/`UI` changes:
 
-This release brings Python classes that have been reimplemented using [attrs](<https://www.attrs.org>).  These changes have a lot of benefits:
+This release brings Python classes that have been reimplemented using [attrs](https://www.attrs.org).  These changes have a lot of benefits:
 
 * A lot of C++ code got removed (yay!) because we can use `attrs` for the pickling
   machinery, `__repr__`, etc..
@@ -1274,14 +1274,14 @@ Improved behavior:
 Changes to implementation of Python classes
 
 * {class}`fwdpy11.ModelParams` has been reimplemented
-  using [attrs](<https://www.attrs.org>). {pr}`484`, {pr}`486`, {pr}`487`.
-* Demographic model types are now implemented using [attrs](<https://www.attrs.org>) and
+  using [attrs](https://www.attrs.org). {pr}`484`, {pr}`486`, {pr}`487`.
+* Demographic model types are now implemented using [attrs](https://www.attrs.org) and
   inherit from the C++ back-end class. {pr}`492`
-* Region types are now implemented using [attrs](<https://www.attrs.org>) and
+* Region types are now implemented using [attrs](https://www.attrs.org) and
   inherit from the C++ back-end class. {pr}`497`
-* Genetic value types are now implemented using [attrs](<https://www.attrs.org>) and
+* Genetic value types are now implemented using [attrs](https://www.attrs.org>) and
   inherit from the C++ back-end class. {pr}`504`
-* Genetic map unit types are now implemented using [attrs](<https://www.attrs.org>) and
+* Genetic map unit types are now implemented using [attrs](https://www.attrs.org) and
   inherit from the C++ back-end class. {pr}`506`
 
 C++ back end changes:
@@ -1608,7 +1608,7 @@ This is a major refactoring:
 * Many Python class names are changed to reflect that there is only one population type now.
 * The manual has been rewritten.
 
-The details for this release are best tracked via the cards in [Project 9](<https://github.com/molpopgen/fwdpy11/projects/9>) on GitHub.
+The details for this release are best tracked via the cards in [Project 9](https://github.com/molpopgen/fwdpy11/projects/9) on GitHub.
 
 ## 0.3.1
 
@@ -1724,7 +1724,7 @@ This version breaks pickle format compatibility with files generated with versio
 
 * Fixed bug in `fwdpy11.util.sort_gamete_keys`.  The function was working on a copy, meaning data were not being
   modified. PR {pr}`93`
-* Fix a bug in updating a population's mutation lookup table. This bug was upstream in fwdpp ([fwdpp issue 130](<https://github.com/molpopgen/fwdpp/issues/130>)).  While definitely a bug, I could never find a case where simulation outputs were adversely affected.  In other words, simulation output remained the same after the fix, due to the rarity of the bug. PR {pr}`98`
+* Fix a bug in updating a population's mutation lookup table. This bug was upstream in fwdpp ([fwdpp issue 130](https://github.com/molpopgen/fwdpp/issues/130)).  While definitely a bug, I could never find a case where simulation outputs were adversely affected.  In other words, simulation output remained the same after the fix, due to the rarity of the bug. PR {pr}`98`
 
 ### API changes/new features:
 
@@ -1756,7 +1756,7 @@ This version breaks pickle format compatibility with files generated with versio
 * PR {pr}`108` changes the back-end for representing diploids and for
   calculating genetic values.
 * PR {pr}`98` changes the definition of the populaton lookup table, using
-  the same model as [fwdpp PR #132](<https://github.com/molpopgen/fwdpp/pull/132>)
+  the same model as [fwdpp PR #132](https://github.com/molpopgen/fwdpp/pull/132)
 * Refactored class hierarchy for populations. :pr`85`
 * Updated to the fwdpp 0.6.x API and cleanup various messes that resulted. PR {pr}`76`, PR {pr}`84`, PR {pr}`90`, PR {pr}`109`, PR {pr}`110`
 * The position of extinct variants is set to the max value of a C++ double. PR {pr}`105`
