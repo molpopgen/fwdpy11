@@ -204,11 +204,11 @@ def _dump_tables_to_tskit(
     individual = [-1 for i in range(len(node_view))]
     for k, v in node_to_individual.items():
         individual[k] = v
-    flags = [1] * 2 * self.N + [0] * (len(node_view) - 2 * self.N)
+    flags = [tskit.NODE_IS_SAMPLE] * 2 * self.N + [0] * (len(node_view) - 2 * self.N)
     # Bug fixed in 0.3.1: add preserved nodes to samples list
     for i in np.array(self.ancient_sample_metadata,
                       copy=False)["nodes"].flatten():
-        flags[i] = 1
+        flags[i] = tskit.NODE_IS_SAMPLE
     tc.nodes.set_columns(
         flags=flags,
         time=node_view["time"],
