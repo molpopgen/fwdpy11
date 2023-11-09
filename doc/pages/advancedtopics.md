@@ -334,36 +334,38 @@ type.
 
 `fwdpy11` provides the following helper functions to improve efficiency:
 
-```{py:function} fwdpy11.strict_additive_effects
+```{eval-rst}
+.. py:function:: fwdpy11.strict_additive_effects
 
-This function computes the sum of effect sizes in a
-diploid genome, ignoring dominance.  The return value
-is an offset from zero, so add 1.0 to convert to a
-fitness if needed.
+    This function computes the sum of effect sizes in a
+    diploid genome, ignoring dominance.  The return value
+    is an offset from zero, so add 1.0 to convert to a
+    fitness if needed.
 
-:param pop: The population
-:type pop: fwdpy11.DiploidPopulation
-:param metadata: The offspring metadata
-:type metadata: fwdpy11.DiploidMetadata
-:returns: Sum of effect sizes
-:rtype: float
+    :param pop: The population
+    :type pop: fwdpy11.DiploidPopulation
+    :param metadata: The offspring metadata
+    :type metadata: fwdpy11.DiploidMetadata
+    :returns: Sum of effect sizes
+    :rtype: float
 
 ```
 
-```{py:function} fwdpy11.additive_effects
+```{eval-rst}
+.. py:function:: fwdpy11.additive_effects
 
-This function computes the sum of effect sizes in a
-diploid genome, accounting for dominance.  The return value
-is an offset from zero, so add 1.0 to convert to a
-fitness if needed.
+    This function computes the sum of effect sizes in a
+    diploid genome, accounting for dominance.  The return value
+    is an offset from zero, so add 1.0 to convert to a
+    fitness if needed.
 
-:param pop: The population
-:type pop: fwdpy11.DiploidPopulation
-:param metadata: The offspring metadata
-:type metadata: fwdpy11.DiploidMetadata
-:type scaling: float
-:returns: Sum of effect sizes (accounting for heterozygous effects)
-:rtype: float
+    :param pop: The population
+    :type pop: fwdpy11.DiploidPopulation
+    :param metadata: The offspring metadata
+    :type metadata: fwdpy11.DiploidMetadata
+    :type scaling: float
+    :returns: Sum of effect sizes (accounting for heterozygous effects)
+    :rtype: float
 
 ```
 
@@ -438,13 +440,13 @@ guaranteed.  To quote the `pybind11` documentation:
 > things will fall apart due to differences between Python’s MRO and C++’s mechanisms.
 > 
 The source of this quote is the `pybind11` manual section on
-[Classes](<https://pybind11.readthedocs.io/en/stable/advanced/classes.html#>).
+[Classes](https://pybind11.readthedocs.io/en/stable/advanced/classes.html#).
 
 The examples that follow take their advice.
 
 #### `attrs`
 
-The [attrs](<https://www.attrs.org>) package provides a library
+The [attrs](https://www.attrs.org) package provides a library
 of convenient class decorators that significantly reduce the amount
 of "boiler plate" code needed to write Python
 classes.  Some of the examples below will use this library.  You must
@@ -461,53 +463,56 @@ Speaking of decorators, we provide several that make writing genetic
 value types a bit easier.  You will see concrete examples using them
 later.
 
-```{py:decorator} fwdpy11.custom_genetic_value_decorators.genetic_value_is_trait_default_clone(ndim=1)
+```{eval-rst}
+.. py:decorator:: fwdpy11.custom_genetic_value_decorators.genetic_value_is_trait_default_clone(ndim=1)
 
-This decorator is a *class* that adds the ability
-for custom types to be passed to classes derived from
-:class:`fwdpy11.DiploidGeneticValue`.
+    This decorator is a *class* that adds the ability
+    for custom types to be passed to classes derived from
+    :class:`fwdpy11.DiploidGeneticValue`.
 
-Because this decorator is a class, you need the ``()``
-to apply it.
+    Because this decorator is a class, you need the ``()``
+    to apply it.
 
-This decorator is required because of the very different
-object models of C++ and Python.
-See `here <https://github.com/pybind/pybind11/issues/1049>`_
-for some of the gory details.
+    This decorator is required because of the very different
+    object models of C++ and Python.
+    See [here](https://github.com/pybind/pybind11/issues/1049)
+    for some of the gory details.
 
-.. py:method:: __init__
+    .. py:method:: __init__
 
-    :param ndim: The dimensionality of the model
-    :type ndim: int
+        :param ndim: The dimensionality of the model
+        :type ndim: int
 
-    The default is ``ndim=1``.
-
-```
-
-```{py:decorator} fwdpy11.custom_genetic_value_decorators.genetic_value_noise_default_clone
-
-This is the analog to
-:attr:`fwdpy11.custom_genetic_value_decorators.genetic_value_is_trait_default_clone`
-for noise objects inheriting from :class:`fwdpy11.GeneticValueNoise`.
-
-Unlike its analog, this decorator is a *function* and not a class.
+        The default is ``ndim=1``.
 
 ```
 
-```{py:decorator} fwdpy11.custom_genetic_value_decorators.default_update
+```{eval-rst}
+.. py:decorator:: fwdpy11.custom_genetic_value_decorators.genetic_value_noise_default_clone
 
-This decorator adds the following function to ``cls``,
-which is a no-op function:
+    This is the analog to
+    :attr:`fwdpy11.custom_genetic_value_decorators.genetic_value_is_trait_default_clone`
+    for noise objects inheriting from :class:`fwdpy11.GeneticValueNoise`.
 
-.. code-block:: python
+    Unlike its analog, this decorator is a *function* and not a class.
 
-    def update(pop: fwdpy11.DiploidPopulation):
-        pass
+```
 
-.. note::
+```{eval-rst}
+.. py:decorator:: fwdpy11.custom_genetic_value_decorators.default_update
 
-    In the future, we will experiment with adding a C++
-    implementation of this no-op.
+    This decorator adds the following function to ``cls``,
+    which is a no-op function:
+
+    .. code-block:: python
+
+        def update(pop: fwdpy11.DiploidPopulation):
+            pass
+
+    .. note::
+
+        In the future, we will experiment with adding a C++
+        implementation of this no-op.
 
 ```
 
@@ -575,37 +580,38 @@ so that results are reproducible.)
 
 The type passed into the `__call__` function is:
 
-```{py:class} fwdpy11.DiploidGeneticValueToFitnessData
+```{eval-rst}
+.. py:class:: fwdpy11.DiploidGeneticValueToFitnessData
 
-.. versionadded:: 0.9.0
+    .. versionadded:: 0.9.0
 
-This class supports the buffer protocol, which exposes the
-genetic values array.  The most efficient access will
-be via a :class:`memoryview`.
+    This class supports the buffer protocol, which exposes the
+    genetic values array.  The most efficient access will
+    be via a :class:`memoryview`.
 
-Instances of this class have the following attributes:
+    Instances of this class have the following attributes:
 
-.. py:attribute:: offspring_metadata
+    .. py:attribute:: offspring_metadata
 
-    An instance of :class:`fwdpy11.DiploidMetadata`, giving you
-    access to those fields that have been assigned to the offspring.
-    (This is a *copy* of the metadata from the C++ side.)
+        An instance of :class:`fwdpy11.DiploidMetadata`, giving you
+        access to those fields that have been assigned to the offspring.
+        (This is a *copy* of the metadata from the C++ side.)
 
-.. py:attribute:: offspring_metadata_index
+    .. py:attribute:: offspring_metadata_index
 
-    A 64 bit integer that gives the location (index) of
-    ``offspring_metadata`` in :attr:`fwdpy11.DiploidPopulation.diploid_metadata`.
-    This index is useful in the event of mass migrations via copies,
-    which can cause a mismatch between :attr:`fwdpy11.DiploidMetadata.label`
-    and this value.
+        A 64 bit integer that gives the location (index) of
+        ``offspring_metadata`` in :attr:`fwdpy11.DiploidPopulation.diploid_metadata`.
+        This index is useful in the event of mass migrations via copies,
+        which can cause a mismatch between :attr:`fwdpy11.DiploidMetadata.label`
+        and this value.
 
-.. py:attribute:: parent1_metadata
+    .. py:attribute:: parent1_metadata
 
-    The first parent's metadata (:class:`fwdpy11.DiploidMetadata`).
+        The first parent's metadata (:class:`fwdpy11.DiploidMetadata`).
 
-.. py:attribute:: parent2_metadata
+    .. py:attribute:: parent2_metadata
 
-    The second parent's metadata (:class:`fwdpy11.DiploidMetadata`).
+        The second parent's metadata (:class:`fwdpy11.DiploidMetadata`).
 
 ```
 
@@ -642,38 +648,39 @@ See {func}`fwdpy11.gsl_ran_gaussian_ziggurat` for details on that function.
 
 #### The data type
 
-```{py:class} fwdpy11.DiploidGeneticValueNoiseData
+```{eval-rst}
+.. py:class:: fwdpy11.DiploidGeneticValueNoiseData
 
-.. versionadded:: 0.9.0
+    .. versionadded:: 0.9.0
 
-Instances of this class have the following attributes:
+    Instances of this class have the following attributes:
 
-.. py:attribute:: rng
+    .. py:attribute:: rng
 
-    The simulation's random number generation, an
-    instance of :class:`fwdpy11.GSLrng`
+        The simulation's random number generation, an
+        instance of :class:`fwdpy11.GSLrng`
 
-.. py:attribute:: offspring_metadata
+    .. py:attribute:: offspring_metadata
 
-    An instance of :class:`fwdpy11.DiploidMetadata`, giving you
-    access to those fields that have been assigned to the offspring.
-    (This is a *copy* of the metadata from the C++ side.)
+        An instance of :class:`fwdpy11.DiploidMetadata`, giving you
+        access to those fields that have been assigned to the offspring.
+        (This is a *copy* of the metadata from the C++ side.)
 
-.. py:attribute:: offspring_metadata_index
+    .. py:attribute:: offspring_metadata_index
 
-    A 64 bit integer that gives the location (index) of
-    ``offspring_metadata`` in :attr:`fwdpy11.DiploidPopulation.diploid_metadata`.
-    This index is useful in the event of mass migrations via copies,
-    which can cause a mismatch between :attr:`fwdpy11.DiploidMetadata.label`
-    and this value.
+        A 64 bit integer that gives the location (index) of
+        ``offspring_metadata`` in :attr:`fwdpy11.DiploidPopulation.diploid_metadata`.
+        This index is useful in the event of mass migrations via copies,
+        which can cause a mismatch between :attr:`fwdpy11.DiploidMetadata.label`
+        and this value.
 
-.. py:attribute:: parent1_metadata
+    .. py:attribute:: parent1_metadata
 
-    The first parent's metadata (:class:`fwdpy11.DiploidMetadata`).
+        The first parent's metadata (:class:`fwdpy11.DiploidMetadata`).
 
-.. py:attribute:: parent2_metadata
+    .. py:attribute:: parent2_metadata
 
-    The first parent's metadata (:class:`fwdpy11.DiploidMetadata`).
+        The first parent's metadata (:class:`fwdpy11.DiploidMetadata`).
 
 ```
 
@@ -683,60 +690,61 @@ Instances of this class have the following attributes:
 
 The ABC type is {class}`fwdpy11.PyDiploidGeneticValue`:
 
-```{py:class} fwdpy11.PyDiploidGeneticValue
+```{eval-rst}
+.. py:class:: fwdpy11.PyDiploidGeneticValue
 
-.. py:method:: __init__()
+    .. py:method:: __init__()
 
-    :param ndim:
-    :type ndim: int
-    :param genetic_value_to_fitness:
-    :type genetic_value_to_fitness: fwdpy11.GeneticValueIsTrait or None
-    :param noise:
-    :type noise: fwdpy11.GeneticValueNoise or None
+        :param ndim:
+        :type ndim: int
+        :param genetic_value_to_fitness:
+        :type genetic_value_to_fitness: fwdpy11.GeneticValueIsTrait or None
+        :param noise:
+        :type noise: fwdpy11.GeneticValueNoise or None
 
-.. py:method:: calculate_gvalue
-    :abstractmethod:
+    .. py:method:: calculate_gvalue
+        :abstractmethod:
 
-    :param data: Input data
-    :type data: fwdpy11.PyDiploidGeneticValueData
-    :returns: The value to be stored in the offspring's
-              :attr:`fwdpy11.DiploidMetadata.g`
-    :rtype: float
+        :param data: Input data
+        :type data: fwdpy11.PyDiploidGeneticValueData
+        :returns: The value to be stored in the offspring's
+                  :attr:`fwdpy11.DiploidMetadata.g`
+        :rtype: float
 
-.. py:method:: genetic_value_to_fitness
+    .. py:method:: genetic_value_to_fitness
 
-    :param data: Input data
-    :type data: fwdpy11.DiploidGeneticValueToFitnessData
+        :param data: Input data
+        :type data: fwdpy11.DiploidGeneticValueToFitnessData
 
-    :returns: fitness
-    :rtype: float
+        :returns: fitness
+        :rtype: float
 
-    .. note::
+        .. note::
 
-        This function does not need to be defined
-        by derived classes most of the time.
-        The default behavior is to apply
-        the instance of :class:`fwdpy11.GeneticValueToFitnessMap`
-        stored by the instance of :class:`fwdpy11.DiploidGeneticValue`
-        (or :class:`fwdpy11.PyDiploidGeneticValue`).  Defining
-        this function in a derived class skips calling held instance
-        in favor of the derived class implementation.
-        In general, one only needs to derive this class for models
-        where either individual genetic values depend on genotypes of the
-        rest of the population. See :ref:`here <more-complex-gvalue-models>`.
+            This function does not need to be defined
+            by derived classes most of the time.
+            The default behavior is to apply
+            the instance of :class:`fwdpy11.GeneticValueToFitnessMap`
+            stored by the instance of :class:`fwdpy11.DiploidGeneticValue`
+            (or :class:`fwdpy11.PyDiploidGeneticValue`).  Defining
+            this function in a derived class skips calling held instance
+            in favor of the derived class implementation.
+            In general, one only needs to derive this class for models
+            where either individual genetic values depend on genotypes of the
+            rest of the population. See :ref:`here <more-complex-gvalue-models>`.
 
 
-.. py:method:: update
+    .. py:method:: update
 
-    :param pop: The population being simulated
-    :type pop: fwdpy11.DiploidPopulation
-    :rtype: None
+        :param pop: The population being simulated
+        :type pop: fwdpy11.DiploidPopulation
+        :rtype: None
 
-    .. note::
+        .. note::
 
-        A default implementation can be defined using
-        the decorator
-        :attr:`fwdpy11.custom_genetic_value_decorators.genetic_value_noise_default_clone`.
+            A default implementation can be defined using
+            the decorator
+            :attr:`fwdpy11.custom_genetic_value_decorators.genetic_value_noise_default_clone`.
 
 ```
 
