@@ -10,4 +10,10 @@ python -Wd
 
 ```
 
+To treat all warning as errors:
 
+```{code-block} bash
+
+python -We
+
+```

@@ -129,8 +129,9 @@ def evolvets(
         sizes = pop.deme_sizes()[1].tolist()
         msg = "Applying a default demographic model "
         msg += f"where deme sizes are {sizes} "
-        msg += f"and the burn-in length is 10*{sum(sizes)}"
-        warnings.warn(msg, stacklevel=2)
+        msg += f"and the burn-in length is 10*{sum(sizes)}. "
+        msg += "This will raise an error in future releases."
+        warnings.warn(msg, DeprecationWarning, stacklevel=2)
         demographic_model = ForwardDemesGraph.tubes(sizes, 10)
 
     for r in params.sregions:

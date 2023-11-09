@@ -48,6 +48,9 @@ def generate_msprime_ancestry(
             "recregions": [fwdpy11.PoissonInterval(0, 1, 5e-2)],
             "gvalue": fwdpy11.Multiplicative(2.0),
             "rates": (0, 0, None),
+            "demography": fwdpy11.ForwardDemesGraph.tubes([pop.N],
+                                                          burnin=10*pop.N,
+                                                          burnin_is_exact=True),
             "prune_selected": False,
             "simlen": 10 * pop.N,
         }

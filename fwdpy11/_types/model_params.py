@@ -186,9 +186,8 @@ class ModelParams(object):
     recregions = attr.ib(factory=list)
     rates: MutationAndRecombinationRates = attr.ib(converter=_convert_rates)
     gvalue = attr.ib(default=None)
-    demography: typing.Optional[typing.Union[ForwardDemesGraph,
-                                             DemographicModelDetails]] = attr.ib(
-        default=None)
+    demography: typing.Union[ForwardDemesGraph,
+                             DemographicModelDetails] = attr.ib(default=None)
     simlen: int = attr.ib(converter=int, default=0)
     prune_selected: bool = attr.ib(default=True)
     allow_residual_selfing: bool = attr.ib(default=True)
@@ -290,6 +289,9 @@ class ModelParams(object):
     @demography.validator
     def validate_demography(self, attribute, value):
         if value is None:
+            warnings.warn("No demographic model specified."
+                          " This will be a hard error in a future release.",
+                          DeprecationWarning)
             return
 
         if isinstance(value, fwdpy11.ForwardDemesGraph):
