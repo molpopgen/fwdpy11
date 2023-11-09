@@ -4,7 +4,8 @@
 
 ## Discrete demes and Wright-Fisher life cycles
 
-Demographic models of discrete demes are declared according to the `demes specification <https://popsim-consortium.github.io/demes-spec-docs/main/tutorial.html>`.
+Demographic models of discrete demes are declared according to the
+[demes specification](https://popsim-consortium.github.io/demes-spec-docs/main/tutorial.html).
 See {class}`fwdpy11.ForwardDemesGraph` and {func}`fwdpy11.discrete_demography.from_demes` for details.
 
 Please cite the `demes` paper {cite}`Gower2022-xx` when using `fwdpy11`.
