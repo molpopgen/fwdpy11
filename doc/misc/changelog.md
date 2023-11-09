@@ -5,6 +5,28 @@ updates to latest `fwdpp` version, etc.
 
 ## 0.21.2
 
+Deprecations
+
+* Constructing {class}`fwdpy11.ModelParams` without a demographic object is now deprecated
+  and raises a warning.
+  This will be a hard error in a future release.
+  PR {pr}`1219`
+
+Documentation
+
+* Minor updates to manual.
+  Some formatting issues fixed.
+  PR {pr}`1222`
+  PR {pr}`1223`
+
+Python back end
+
+* Use `tskit.NODE_IS_SAMPLE` constant instead of relying on the numeric value
+  when exporting to `tskit`.
+  PR {pr}`1218`
+
+## 0.21.2
+
 Bug fixes
 
 * Fix internal error validating distributions of effect sizes for multi-deme models
