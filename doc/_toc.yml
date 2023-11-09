@@ -6,6 +6,7 @@ parts:
   - file: pages/userenv
   - file: pages/installation
   - file: pages/deploymenttools
+  - file: pages/invokingpython
 - caption: Short vignettes - operations on populations
   chapters:
   - file: short_vignettes/initpops_vignette
@@ -94,7 +95,6 @@ parts:
 - caption: Miscellany
   chapters:
   - file: misc/changelog
-  - file: misc/deprecated
   - file: misc/developersguide
   - file: misc/pubs
   - file: misc/upgrade_path
