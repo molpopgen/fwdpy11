@@ -155,6 +155,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="userenv.html">Setting up user environments for installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="deploymenttools.html">Deployment tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="invokingpython.html">Invoking Python</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Short vignettes - operations on populations</span></p>
 <ul class="nav bd-sidenav">
@@ -261,7 +262,6 @@ const thebe_selector_output = ".output, .cell_output"
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Miscellany</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../misc/changelog.html">Changelog</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../misc/deprecated.html">Deprecated features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../misc/developersguide.html">Developer’s guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../misc/pubs.html">Publications using fwdpy11</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../misc/upgrade_path.html">Upgrade path</a></li>
@@ -469,57 +469,95 @@ take positional arguments without names.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="fwdpy11.gsl_ran_gaussian_ziggurat">
 <span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">gsl_ran_gaussian_ziggurat</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.gsl_ran_gaussian_ziggurat" title="Permalink to this definition">#</a></dt>
-<dd><p>:param rng: Random number generator
-:type rng: fwdpy11.GSLrng
-:param sd: The standard deviation
-:type sd: float
-:returns: A gaussian deviate with mean zero and standard
-deviation <code class="docutils literal notranslate"><span class="pre">sd</span></code>
-:rtype: float</p>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rng</strong> (<a class="reference internal" href="types.html#fwdpy11.GSLrng" title="fwdpy11.GSLrng"><em>fwdpy11.GSLrng</em></a>) – Random number generator</p></li>
+<li><p><strong>sd</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – The standard deviation</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A gaussian deviate with mean zero and standard
+deviation <code class="docutils literal notranslate"><span class="pre">sd</span></code></p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)">float</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fwdpy11.gsl_rng_uniform">
 <span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">gsl_rng_uniform</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.gsl_rng_uniform" title="Permalink to this definition">#</a></dt>
-<dd><p>:param rng: Random number generator
-:type rng: fwdpy11.GSLrng
-:returns: Uniform deviate from the range <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1)</span></code>
-:rtype: float</p>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>rng</strong> (<a class="reference internal" href="types.html#fwdpy11.GSLrng" title="fwdpy11.GSLrng"><em>fwdpy11.GSLrng</em></a>) – Random number generator</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Uniform deviate from the range <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1)</span></code></p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)">float</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fwdpy11.gsl_ran_flat">
 <span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">gsl_ran_flat</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.gsl_ran_flat" title="Permalink to this definition">#</a></dt>
-<dd><p>:param rng: Random number generator
-:type rng: fwdpy11.GSLrng
-:param a: Lower bound of range, inclusive.
-:type a: float
-:param b: Upper bound of range, exclusive.
-:type b: float
-:returns: Uniform deviate from the range <code class="docutils literal notranslate"><span class="pre">[a,</span> <span class="pre">b)</span></code>.
-:rtype: float</p>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rng</strong> (<a class="reference internal" href="types.html#fwdpy11.GSLrng" title="fwdpy11.GSLrng"><em>fwdpy11.GSLrng</em></a>) – Random number generator</p></li>
+<li><p><strong>a</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – Lower bound of range, inclusive.</p></li>
+<li><p><strong>b</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – Upper bound of range, exclusive.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Uniform deviate from the range <code class="docutils literal notranslate"><span class="pre">[a,</span> <span class="pre">b)</span></code>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)">float</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fwdpy11.gsl_ran_poisson">
 <span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">gsl_ran_poisson</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.gsl_ran_poisson" title="Permalink to this definition">#</a></dt>
-<dd><p>:param rng: Random number generator
-:type rng: fwdpy11.GSLrng
-:param mean: The mean of the distribution
-:type mean: float
-:returns: The number of successes
-:rtype: int</p>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rng</strong> (<a class="reference internal" href="types.html#fwdpy11.GSLrng" title="fwdpy11.GSLrng"><em>fwdpy11.GSLrng</em></a>) – Random number generator</p></li>
+<li><p><strong>mean</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – The mean of the distribution</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The number of successes</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)">int</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fwdpy11.gsl_ran_geometric">
 <span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">gsl_ran_geometric</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.gsl_ran_geometric" title="Permalink to this definition">#</a></dt>
-<dd><p>:param rng: Random number generator
-:type rng: fwdpy11.GSLrng
-:param p: The probability of success
-:type p: float
-:returns: The waiting time until the next success
-:rtype: int</p>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rng</strong> (<a class="reference internal" href="types.html#fwdpy11.GSLrng" title="fwdpy11.GSLrng"><em>fwdpy11.GSLrng</em></a>) – Random number generator</p></li>
+<li><p><strong>p</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – The probability of success</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The waiting time until the next success</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)">int</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>

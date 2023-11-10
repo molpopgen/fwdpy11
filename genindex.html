@@ -152,6 +152,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="pages/userenv.html">Setting up user environments for installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pages/installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pages/deploymenttools.html">Deployment tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pages/invokingpython.html">Invoking Python</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Short vignettes - operations on populations</span></p>
 <ul class="nav bd-sidenav">
@@ -258,7 +259,6 @@ const thebe_selector_output = ".output, .cell_output"
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Miscellany</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="misc/changelog.html">Changelog</a></li>
-<li class="toctree-l1"><a class="reference internal" href="misc/deprecated.html">Deprecated features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="misc/developersguide.html">Developer’s guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="misc/pubs.html">Publications using fwdpy11</a></li>
 <li class="toctree-l1"><a class="reference internal" href="misc/upgrade_path.html">Upgrade path</a></li>
@@ -465,6 +465,14 @@ document.write(`
 </li>
       </ul></li>
   </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="pages/advancedtopics.html#fwdpy11.custom_genetic_value_decorators.__init__">__init__() (fwdpy11.custom_genetic_value_decorators method)</a>
+
+      <ul>
+        <li><a href="pages/advancedtopics.html#fwdpy11.PyDiploidGeneticValue.__init__">(fwdpy11.PyDiploidGeneticValue method)</a>
+</li>
+      </ul></li>
+  </ul></td>
 </tr></table>
 
 <h2 id="A">A</h2>
@@ -587,6 +595,8 @@ document.write(`
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="pages/advancedtopics.html#fwdpy11.PyDiploidGeneticValue.calculate_gvalue">calculate_gvalue() (fwdpy11.PyDiploidGeneticValue method)</a>
+</li>
       <li><a href="pages/types.html#fwdpy11.Edge.child">child (fwdpy11.Edge attribute)</a>
 </li>
       <li><a href="pages/conditional_models.html#fwdpy11.conditional_models.AncientSamplePolicy.COMPLETION">COMPLETION (fwdpy11.conditional_models.AncientSamplePolicy attribute)</a>
@@ -897,6 +907,8 @@ document.write(`
 </li>
       <li><a href="pages/definitions.html#term-genetic-value"><strong>genetic value</strong></a>
 </li>
+      <li><a href="pages/advancedtopics.html#fwdpy11.PyDiploidGeneticValue.genetic_value_to_fitness">genetic_value_to_fitness() (fwdpy11.PyDiploidGeneticValue method)</a>
+</li>
       <li><a href="pages/genetic_values.html#fwdpy11.Additive.genetic_values">genetic_values (fwdpy11.Additive property)</a>
 
       <ul>
@@ -1171,9 +1183,21 @@ document.write(`
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pages/advancedtopics.html#offspring_metadata">offspring_metadata</a>
+
+      <ul>
+        <li><a href="pages/advancedtopics.html#fwdpy11.DiploidGeneticValueNoiseData.offspring_metadata">(fwdpy11.DiploidGeneticValueNoiseData attribute)</a>
 </li>
+        <li><a href="pages/advancedtopics.html#fwdpy11.DiploidGeneticValueToFitnessData.offspring_metadata">(fwdpy11.DiploidGeneticValueToFitnessData attribute)</a>
+</li>
+      </ul></li>
       <li><a href="pages/advancedtopics.html#offspring_metadata_index">offspring_metadata_index</a>
+
+      <ul>
+        <li><a href="pages/advancedtopics.html#fwdpy11.DiploidGeneticValueNoiseData.offspring_metadata_index">(fwdpy11.DiploidGeneticValueNoiseData attribute)</a>
 </li>
+        <li><a href="pages/advancedtopics.html#fwdpy11.DiploidGeneticValueToFitnessData.offspring_metadata_index">(fwdpy11.DiploidGeneticValueToFitnessData attribute)</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pages/gvalue_to_fitness.html#fwdpy11.Optimum">Optimum (class in fwdpy11)</a>
@@ -1195,9 +1219,21 @@ document.write(`
       <li><a href="pages/types.html#fwdpy11.TreeIterator.parent">parent() (fwdpy11.TreeIterator method)</a>
 </li>
       <li><a href="pages/advancedtopics.html#parent1_metadata">parent1_metadata</a>
+
+      <ul>
+        <li><a href="pages/advancedtopics.html#fwdpy11.DiploidGeneticValueNoiseData.parent1_metadata">(fwdpy11.DiploidGeneticValueNoiseData attribute)</a>
 </li>
+        <li><a href="pages/advancedtopics.html#fwdpy11.DiploidGeneticValueToFitnessData.parent1_metadata">(fwdpy11.DiploidGeneticValueToFitnessData attribute)</a>
+</li>
+      </ul></li>
       <li><a href="pages/advancedtopics.html#parent2_metadata">parent2_metadata</a>
+
+      <ul>
+        <li><a href="pages/advancedtopics.html#fwdpy11.DiploidGeneticValueNoiseData.parent2_metadata">(fwdpy11.DiploidGeneticValueNoiseData attribute)</a>
 </li>
+        <li><a href="pages/advancedtopics.html#fwdpy11.DiploidGeneticValueToFitnessData.parent2_metadata">(fwdpy11.DiploidGeneticValueToFitnessData attribute)</a>
+</li>
+      </ul></li>
       <li><a href="pages/types.html#fwdpy11.DiploidMetadata.parents">parents (fwdpy11.DiploidMetadata property)</a>
 </li>
       <li><a href="pages/types.html#fwdpy11.DiploidPopulation.pickle_to_file">pickle_to_file() (fwdpy11.DiploidPopulation method)</a>
@@ -1206,12 +1242,12 @@ document.write(`
 </li>
       <li><a href="pages/gvalue_to_fitness.html#fwdpy11.GaussianStabilizingSelection.pleiotropy">pleiotropy() (fwdpy11.GaussianStabilizingSelection class method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pages/regiontypes.html#fwdpy11.PoissonInterval">PoissonInterval (class in fwdpy11)</a>
 </li>
       <li><a href="pages/regiontypes.html#fwdpy11.PoissonPoint">PoissonPoint (class in fwdpy11)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pages/advancedtopics.html#pop">pop</a>
 
       <ul>
@@ -1256,8 +1292,6 @@ document.write(`
 </li>
       <li><a href="pages/conditional_models.html#fwdpy11.conditional_models.SimulationStatus.Restart">Restart (fwdpy11.conditional_models.SimulationStatus attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pages/conditional_models.html#fwdpy11.conditional_models.PositionRange.right">right (fwdpy11.conditional_models.PositionRange attribute)</a>
 
       <ul>
@@ -1266,12 +1300,18 @@ document.write(`
         <li><a href="pages/types.html#fwdpy11.TreeIterator.right">(fwdpy11.TreeIterator property)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pages/types.html#fwdpy11.TreeIterator.right_child">right_child() (fwdpy11.TreeIterator method)</a>
 </li>
       <li><a href="pages/types.html#fwdpy11.TreeIterator.right_sib">right_sib() (fwdpy11.TreeIterator method)</a>
 </li>
       <li><a href="pages/advancedtopics.html#rng">rng</a>
+
+      <ul>
+        <li><a href="pages/advancedtopics.html#fwdpy11.DiploidGeneticValueNoiseData.rng">(fwdpy11.DiploidGeneticValueNoiseData attribute)</a>
 </li>
+      </ul></li>
       <li><a href="pages/types.html#fwdpy11.TreeIterator.roots">roots (fwdpy11.TreeIterator property)</a>
 </li>
   </ul></td>
@@ -1411,6 +1451,8 @@ document.write(`
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pages/regiontypes.html#fwdpy11.UniformS">UniformS (class in fwdpy11)</a>
+</li>
+      <li><a href="pages/advancedtopics.html#fwdpy11.PyDiploidGeneticValue.update">update() (fwdpy11.PyDiploidGeneticValue method)</a>
 </li>
   </ul></td>
 </tr></table>

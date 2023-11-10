@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Deprecated features &#8212; fwdpy11 manual</title>
+    <title>Invoking Python &#8212; fwdpy11 manual</title>
   
   
   
@@ -61,11 +61,11 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'misc/deprecated';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'pages/invokingpython';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Developer’s guide" href="developersguide.html" />
-    <link rel="prev" title="Changelog" href="changelog.html" />
+    <link rel="next" title="Initializing a population" href="../short_vignettes/initpops_vignette.html" />
+    <link rel="prev" title="Deployment tools" href="deploymenttools.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -151,10 +151,11 @@ const thebe_selector_output = ".output, .cell_output"
             </li>
         </ul>
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Installation and setup</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../pages/userenv.html">Setting up user environments for installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../pages/installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../pages/deploymenttools.html">Deployment tools</a></li>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="userenv.html">Setting up user environments for installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deploymenttools.html">Deployment tools</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Invoking Python</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Short vignettes - operations on populations</span></p>
 <ul class="nav bd-sidenav">
@@ -215,19 +216,19 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Concepts</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../pages/definitions.html">Definitions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="definitions.html">Definitions</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../pages/advancedtopics.html">Advanced topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advancedtopics.html">Advanced topics</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Objects and concepts</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../pages/mvdes.html">Different effect sizes of mutations in different demes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../pages/tsoverview.html">Conceptual overview of tree sequence recording</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../pages/tstypes.html">Data structures related to tree sequences</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../pages/tablefs.html">Calculating frequency spectra from tree sequences</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../pages/recorders.html">Time series analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mvdes.html">Different effect sizes of mutations in different demes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tsoverview.html">Conceptual overview of tree sequence recording</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tstypes.html">Data structures related to tree sequences</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tablefs.html">Calculating frequency spectra from tree sequences</a></li>
+<li class="toctree-l1"><a class="reference internal" href="recorders.html">Time series analysis</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Technical details</span></p>
 <ul class="nav bd-sidenav">
@@ -237,17 +238,17 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Data types and fuctions</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../pages/genetic_values.html">Genetic values</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../pages/datamatrix.html">DataMatrix and StateMatrix</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../pages/functions.html">Function documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../pages/gslrandom.html">Random number distributions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../pages/gvaluenoise.html">Adding random noise to genetic values</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../pages/gvalue_to_fitness.html">Mapping genetic values to fitness</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../pages/model_params.html">Model parameters</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../pages/regiontypes.html">Setting up genomic intervals</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../pages/tskit_tools.html">Module <code class="docutils literal notranslate"><span class="pre">fwdpy11.tskit_tools</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="../pages/conditional_models.html">Module <code class="docutils literal notranslate"><span class="pre">fwdpy11.conditional_models</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="../pages/types.html">Data types related to simulated populations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="genetic_values.html">Genetic values</a></li>
+<li class="toctree-l1"><a class="reference internal" href="datamatrix.html">DataMatrix and StateMatrix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="functions.html">Function documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gslrandom.html">Random number distributions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gvaluenoise.html">Adding random noise to genetic values</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gvalue_to_fitness.html">Mapping genetic values to fitness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model_params.html">Model parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="regiontypes.html">Setting up genomic intervals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tskit_tools.html">Module <code class="docutils literal notranslate"><span class="pre">fwdpy11.tskit_tools</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="conditional_models.html">Module <code class="docutils literal notranslate"><span class="pre">fwdpy11.conditional_models</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="types.html">Data types related to simulated populations</a></li>
 
 
 
@@ -259,13 +260,12 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="../examples/recorder.html">Example of time series analysis implemented in C++</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Miscellany</span></p>
-<ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Deprecated features</a></li>
-<li class="toctree-l1"><a class="reference internal" href="developersguide.html">Developer’s guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pubs.html">Publications using fwdpy11</a></li>
-<li class="toctree-l1"><a class="reference internal" href="upgrade_path.html">Upgrade path</a></li>
-<li class="toctree-l1"><a class="reference internal" href="bibliography.html">Literature cited</a></li>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../misc/changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/developersguide.html">Developer’s guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/pubs.html">Publications using fwdpy11</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/upgrade_path.html">Upgrade path</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/bibliography.html">Literature cited</a></li>
 </ul>
 
     </div>
@@ -337,7 +337,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="https://github.com/molpopgen/fwdpy11/issues/new?title=Issue%20on%20page%20%2Fmisc/deprecated.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/molpopgen/fwdpy11/issues/new?title=Issue%20on%20page%20%2Fpages/invokingpython.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -367,7 +367,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="../_sources/misc/deprecated.md" target="_blank"
+      <li><a href="../_sources/pages/invokingpython.md" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -447,7 +447,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Deprecated features</h1>
+    <h1>Invoking Python</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -461,14 +461,21 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="deprecated-features">
-<h1>Deprecated features<a class="headerlink" href="#deprecated-features" title="Permalink to this heading">#</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="invoking-python">
+<h1>Invoking Python<a class="headerlink" href="#invoking-python" title="Permalink to this heading">#</a></h1>
 <p>fwdpy11 is under rapid development.  As such, API features may change from version to version. Where possible, we will
 issue deprecation warnings and point you to the new API. However, Python suppresses deprecation warnings by default. To
 see deprecation warnings, invoke python like this:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-Wd
 </pre></div>
 </div>
+<p>To treat all warning as errors:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-We
+</pre></div>
+</div>
+<p>Our opinion is that is useful to use each of these options at different times.
+Treating warnings as errors forces you to update your code to what upstream developers think are best practices for their packages.
+It is also good to be able to see the deprecation warnings (<code class="docutils literal notranslate"><span class="pre">-Wd</span></code>) because they warn you that your current code will eventually break.</p>
 </section>
 
     <script type="text/x-thebe-config">
@@ -484,7 +491,7 @@ see deprecation warnings, invoke python like this:</p>
         },
         kernelOptions: {
             name: "python3",
-            path: "./misc"
+            path: "./pages"
         },
         predefinedOutput: true
     }
@@ -500,20 +507,20 @@ see deprecation warnings, invoke python like this:</p>
                   <!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
-       href="changelog.html"
+       href="deploymenttools.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Changelog</p>
+        <p class="prev-next-title">Deployment tools</p>
       </div>
     </a>
     <a class="right-next"
-       href="developersguide.html"
+       href="../short_vignettes/initpops_vignette.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Developer’s guide</p>
+        <p class="prev-next-title">Initializing a population</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
