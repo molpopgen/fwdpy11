@@ -81,8 +81,8 @@ namespace
                            fwdpp::ts::table_index_t p,
                            std::vector<fwdpp::ts::table_index_t> d, double a, double b,
                            double c)
-            : left{l}, right{r}, node{n}, parent{p},
-              descendants{std::move(d)}, node_time{a}, parent_time{b}, tree_span{c}
+            : left{l}, right{r}, node{n}, parent{p}, descendants{std::move(d)},
+              node_time{a}, parent_time{b}, tree_span{c}
         {
         }
     };
@@ -199,7 +199,9 @@ namespace
                                                             pop.tables
                                                                 ->nodes[tree.parents[n]]
                                                                 .time,
-                                                            tree.right - tree.left);
+                                                            std::min(tree.right, right)
+                                                                - std::max(left,
+                                                                           tree.left));
                                                     }
                                             }
                                     }
