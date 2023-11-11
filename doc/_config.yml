@@ -9,6 +9,7 @@ author: Kevin Thornton
 # See https://jupyterbook.org/content/execute.html
 execute:
   execute_notebooks: force
+  stderr_output: error
 
 # Add a bibtex file so that we can create citations
 bibtex_bibfiles:
