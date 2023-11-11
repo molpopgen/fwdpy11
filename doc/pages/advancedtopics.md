@@ -129,6 +129,7 @@ pdict = {
     "rates": (0.0, 1e-3, None),
     "gvalue": gvalue,
     "prune_selected": False,
+    "demography": fwdpy11.ForwardDemesGraph.tubes([N], burnin=150, burnin_is_exact=True),
     "simlen": 150,
 }
 params = fwdpy11.ModelParams(**pdict)
