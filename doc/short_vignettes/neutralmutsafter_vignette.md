@@ -42,7 +42,7 @@ p = {
     "recregions": [fwdpy11.PoissonInterval(0, 1., rho / float(4 * pop.N))],
     "rates": (0.0, 1e-3, None),
     "prune_selected": False,
-    "demography": None,
+    "demography": fwdpy11.ForwardDemesGraph.tubes([pop.N], burnin=10),
     "simlen": 10 * pop.N,
 }
 params = fwdpy11.ModelParams(**p)
