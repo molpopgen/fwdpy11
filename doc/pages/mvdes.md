@@ -76,6 +76,7 @@ pdict = {
     "gvalue": fwdpy11.Additive(
         ndemes=2, scaling=2, gvalue_to_fitness=fwdpy11.GSS(optimum=0.0, VS=10.0)
     ),
+    "prune_selected": False,
 }
 ```
 

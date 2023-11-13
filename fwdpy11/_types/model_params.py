@@ -23,8 +23,10 @@ import warnings
 import attr
 import fwdpy11
 import numpy as np
-from fwdpy11.class_decorators import (attr_add_asblack,
-                                      attr_class_to_from_dict_no_recurse)
+from fwdpy11.class_decorators import (
+    attr_add_asblack,
+    attr_class_to_from_dict_no_recurse,
+)
 
 from fwdpy11._types.demographic_model_details import DemographicModelDetails
 from fwdpy11._types.forward_demes_graph import ForwardDemesGraph
@@ -62,11 +64,9 @@ class MutationAndRecombinationRates(object):
     @selected_mutation_rate.validator
     def validate_individual_rate(self, attribute, value):
         if not np.isfinite(value):
-            raise ValueError(
-                f"{attribute} must be finite, but we got {value} instead")
+            raise ValueError(f"{attribute} must be finite, but we got {value} instead")
         if value < 0.0:
-            raise ValueError(
-                f"{attribute} must be >= 0.0, but we got {value} instead")
+            raise ValueError(f"{attribute} must be >= 0.0, but we got {value} instead")
 
     @recombination_rate.validator
     def validate_recombination_rate(self, attribute, value):
@@ -156,6 +156,27 @@ class ModelParams(object):
         recombination rates for details.
 
 
+    If ``prune_selected`` is ``True``, fixations will be remove
+    during the simulation. This removal is a sensible thing to do
+    if individual relative fitnesses are constant up to a multiplicative
+    constant.
+
+    In a multiplicative model, removing a fixation would be equivalent to dividing all values
+    by the same value, which does not affect their *relative*
+    values.
+
+    However, removing a fixation in an additive model *does* change
+    the relative values.
+    Likewise, mappings from genetic value to fitness such as Gaussian
+    stabilizing selection, or adding random noise to genetic values,
+    also changes relative values.
+
+    This class will raise a warning if ``prune_selected`` is ``True``
+    and there is a possibility that removing fixations will change
+    relative fitness.
+    Such warnings should not be ignored as they suggest that a simulation
+    may not be giving biologically sensible results.
+
     .. versionadded:: 0.1.1
 
     .. versionchanged:: 0.2.0
@@ -186,8 +207,9 @@ class ModelParams(object):
     recregions = attr.ib(factory=list)
     rates: MutationAndRecombinationRates = attr.ib(converter=_convert_rates)
     gvalue = attr.ib(default=None)
-    demography: typing.Union[ForwardDemesGraph,
-                             DemographicModelDetails] = attr.ib(default=None)
+    demography: typing.Union[ForwardDemesGraph, DemographicModelDetails] = attr.ib(
+        default=None
+    )
     simlen: int = attr.ib(converter=int, default=0)
     prune_selected: bool = attr.ib(default=True)
     allow_residual_selfing: bool = attr.ib(default=True)
@@ -219,11 +241,12 @@ class ModelParams(object):
 
     @recregions.validator
     def validate_recregions(self, attribute, value):
-        if len(value) > 0 and all([isinstance(i, fwdpy11.Region) for
-                                   i in value]):
+        if len(value) > 0 and all([isinstance(i, fwdpy11.Region) for i in value]):
             warnings.warn(
                 "using a list of Regions for recregions is deprecated",
-                UserWarning, stacklevel=2)
+                UserWarning,
+                stacklevel=2,
+            )
         try:
             for i in value:
                 attr.validators.instance_of(fwdpy11.Region)(self, attribute, i)
@@ -231,8 +254,10 @@ class ModelParams(object):
             try:
                 for i in value:
                     valid = False
-                    for k in [fwdpy11.PoissonCrossoverGenerator,
-                              fwdpy11.NonPoissonCrossoverGenerator]:
+                    for k in [
+                        fwdpy11.PoissonCrossoverGenerator,
+                        fwdpy11.NonPoissonCrossoverGenerator,
+                    ]:
                         if isinstance(i, k):
                             valid = True
                             break
@@ -243,8 +268,8 @@ class ModelParams(object):
                     [not i.discrete for i in value]
                 ):
                     warnings.warn(
-                        "genetic map has a mix of discrete=True"
-                        "and discrete=False", stacklevel=2
+                        "genetic map has a mix of discrete=True" "and discrete=False",
+                        stacklevel=2,
                     )
 
             except TypeError:
@@ -254,9 +279,9 @@ class ModelParams(object):
     def rates_validator(self, attribute, value):
         if value.recombination_rate is None:
             for i in self.recregions:
-                if not isinstance(i, fwdpy11.PoissonCrossoverGenerator) and \
-                        not isinstance(i,
-                                       fwdpy11.NonPoissonCrossoverGenerator):
+                if not isinstance(
+                    i, fwdpy11.PoissonCrossoverGenerator
+                ) and not isinstance(i, fwdpy11.NonPoissonCrossoverGenerator):
                     raise ValueError(
                         f"recombination rate of {value.recombination_rate}"
                         " must be paired with"
@@ -289,9 +314,11 @@ class ModelParams(object):
     @demography.validator
     def validate_demography(self, attribute, value):
         if value is None:
-            warnings.warn("No demographic model specified."
-                          " This will be a hard error in a future release.",
-                          DeprecationWarning)
+            warnings.warn(
+                "No demographic model specified."
+                " This will be a hard error in a future release.",
+                DeprecationWarning,
+            )
             return
 
         if isinstance(value, fwdpy11.ForwardDemesGraph):
@@ -304,5 +331,33 @@ class ModelParams(object):
     @simlen.validator
     def validate_simlen(self, attribute, value):
         if value <= 0:
-            raise ValueError(
-                f"{attribute} must be >= 0, but we got {value} instead")
+            raise ValueError(f"{attribute} must be >= 0, but we got {value} instead")
+
+    def _is_multiplicative(self, gvalue):
+        multiplicative = True
+
+        if not isinstance(gvalue, fwdpy11.Multiplicative):
+            multiplicative = False
+        if multiplicative is True:
+            if gvalue.gvalue_to_fitness is not None:
+                if not isinstance(gvalue.gvalue_to_fitness, fwdpy11.GeneticValueIsFitness):
+                    multiplicative = False
+            if gvalue.noise is not None and not isinstance(gvalue.noise, fwdpy11.NoNoise):
+                multiplicative = False
+
+        if not multiplicative and self.prune_selected is True:
+            msg = f"""
+            the genetic value {gvalue} may not be proportional to fitness
+            up to a multiplicative constant. Because prune_selected=True,
+            the removal of fixations during simulation may lead to unexpected
+            or incorrect results. See the ModelParams documentation
+            for discussion.
+            """
+            warnings.warn(fwdpy11.PruneSelectedWarning(msg))
+
+    def __attrs_post_init__(self):
+        if isinstance(self.gvalue, list):
+            for g in self.gvalue:
+                self._is_multiplicative(g)
+        else:
+            self._is_multiplicative(self.gvalue)

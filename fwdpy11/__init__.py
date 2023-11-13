@@ -72,7 +72,7 @@ from ._types import (  # NOQA
     NewMutationData,
     ForwardDemesGraph,
     DemographicModelDetails,
-    DemographicModelCitation
+    DemographicModelCitation,
 )  # NOQA
 from ._types.demography_debugger import DemographyDebugger  # NOQA
 from ._types.model_params import ModelParams, MutationAndRecombinationRates  # NOQA
@@ -86,6 +86,15 @@ from ._functions import (  # NOQA
     simplify_tables,
     _validate_regions,
 )  # NOQA
+
+
+class PruneSelectedWarning(Warning):
+    def __init__(self, message):
+        self.message = message
+
+    def __str__(self):
+        return repr(self.message)
+
 
 if sys.version_info[0] < 3:
     raise ValueError("Python3 required!")

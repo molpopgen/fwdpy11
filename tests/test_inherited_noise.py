@@ -44,6 +44,7 @@ class TestInheritNoise(unittest.TestCase):
                 2.0, fwdpy11.GaussianStabilizingSelection.single_trait(
                     [fwdpy11.Optimum(optimum=0.0, VS=1.0, when=0)]), InheritedNoise()
             ),
+            "prune_selected": False,
         }
 
     def test_noise_values_tree_sequences(self):

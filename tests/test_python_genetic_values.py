@@ -79,6 +79,7 @@ class TestCustomGeneticValueisTrait(unittest.TestCase):
 
         GSS = pygss.PyGSS(opt=0.0, VS=1.0)
         pdict = build_model(GSS, None, 100, [1000, 1000])
+        pdict["prune_selected"] = False
 
         params = fwdpy11.ModelParams(**pdict)
         pop = fwdpy11.DiploidPopulation([1000, 1000], 1.0)
@@ -109,6 +110,7 @@ class TestCustomGeneticValueisTrait(unittest.TestCase):
 
         GSS = pygss.PyGSSRandomOptimum(opt=0.0, VS=1.0)
         pdict = build_model(GSS, None, 5, [1000, 1000])
+        pdict["prune_selected"] = False
         params = fwdpy11.ModelParams(**pdict)
         pop = fwdpy11.DiploidPopulation([1000, 1000], 1.0)
 
@@ -128,6 +130,7 @@ class TestCustomGeneticValueNoise(unittest.TestCase):
             [fwdpy11.Optimum(optimum=0.0, VS=1.0, when=0)])
         Noise = pynoise.PyNoise()
         pdict = build_model(GSS, Noise, 5, [1000, 1000])
+        pdict["prune_selected"] = False
         params = fwdpy11.ModelParams(**pdict)
         pop = fwdpy11.DiploidPopulation([1000, 1000], 1.0)
 
@@ -158,6 +161,7 @@ class TestCustomPyGeneticValue(unittest.TestCase):
             fwdpy11.ForwardDemesGraph.tubes(pop_PyA.deme_sizes()[1],
                                             burnin=self.pdict_PyA["simlen"],
                                             burnin_is_exact=True)
+        self.pdict_PyA["prune_selected"] = False
         mparams_PyA = fwdpy11.ModelParams(**self.pdict_PyA)
         rng_PyA = fwdpy11.GSLrng(42 * 666)
 
@@ -179,6 +183,7 @@ class TestCustomPyGeneticValueOverloadGeneticValueToFitness(unittest.TestCase):
             "demography": None,
             "simlen": simlen,
             "gvalue": gvalue,
+            "prune_selected": False,
         }
         return pdict
 
