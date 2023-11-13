@@ -30,7 +30,7 @@ from ._fwdpy11 import (GeneticValueIsTrait, GeneticValueNoise, _ll_Additive,
                        _ll_GSSmo,
                        _ll_Multiplicative, _ll_MultivariateGSSmo, _ll_NoNoise,
                        _ll_Optimum, _ll_PleiotropicOptima,
-                       _ll_StrictAdditiveMultivariateEffects)
+                       _ll_StrictAdditiveMultivariateEffects, _PyDiploidGeneticValue)
 from .class_decorators import (attr_add_asblack, attr_class_pickle_with_super,
                                attr_class_to_from_dict,
                                attr_class_to_from_dict_no_recurse)
@@ -631,4 +631,13 @@ class StrictAdditiveMultivariateEffects(_ll_StrictAdditiveMultivariateEffects):
             self.focal_trait,
             self.gvalue_to_fitness,
             self.noise
+        )
+
+
+class PyDiploidGeneticValue(_PyDiploidGeneticValue):
+    def __init__(self, ndim: int, gvalue_to_fitness=None, noise=None):
+        super(PyDiploidGeneticValue, self).__init__(
+            ndim,
+            gvalue_to_fitness,
+            noise,
         )

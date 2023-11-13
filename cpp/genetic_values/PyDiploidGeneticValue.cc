@@ -119,11 +119,11 @@ void
 init_PyDiploidGeneticValue(py::module& m)
 {
     py::class_<PyDiploidGeneticValue, fwdpy11::DiploidGeneticValue,
-               PyDiploidGeneticValueTrampoline>(m, "PyDiploidGeneticValue")
+               PyDiploidGeneticValueTrampoline>(m, "_PyDiploidGeneticValue")
         .def(py::init<std::size_t, const fwdpy11::GeneticValueToFitnessMap*,
                       const fwdpy11::GeneticValueNoise*>(),
-             py::arg("ndim"), py::arg("genetic_value_to_fitness").none(true),
-             py::arg("noise").none(true));
+             py::arg("ndim"), py::arg("genetic_value_to_fitness"),
+             py::arg("noise"));
 
     py::class_<PyDiploidGeneticValueData>(m, "PyDiploidGeneticValueData",
                                           py::buffer_protocol())
