@@ -17,6 +17,8 @@
 # along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+import attr
+
 import math
 
 import fwdpy11
@@ -24,11 +26,13 @@ import fwdpy11.custom_genetic_value_decorators
 
 
 @fwdpy11.custom_genetic_value_decorators.default_update
+@attr.s(auto_attribs=True, frozen=True)
 class PyAdditiveGSS(fwdpy11.PyDiploidGeneticValue):
-    def __init__(self, opt, VS):
-        self.opt = opt
-        self.VS = VS
-        fwdpy11.PyDiploidGeneticValue.__init__(self, 1, None, None)
+    opt: float
+    VS: float
+
+    def __attrs_post_init__(self):
+        super(PyAdditiveGSS, self).__init__(1, None, None)
 
     def genetic_value_to_fitness(
         self, data: fwdpy11.DiploidGeneticValueToFitnessData
