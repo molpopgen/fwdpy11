@@ -636,6 +636,8 @@ class StrictAdditiveMultivariateEffects(_ll_StrictAdditiveMultivariateEffects):
 
 class PyDiploidGeneticValue(_PyDiploidGeneticValue):
     def __init__(self, ndim: int, gvalue_to_fitness=None, noise=None):
+        self.gvalue_to_fitness = gvalue_to_fitness
+        self.noise = noise
         super(PyDiploidGeneticValue, self).__init__(
             ndim,
             gvalue_to_fitness,

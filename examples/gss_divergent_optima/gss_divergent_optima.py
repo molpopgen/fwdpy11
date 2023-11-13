@@ -73,6 +73,7 @@ pdict = {
         ),
         fwdpy11.Additive(ndemes=2, scaling=2, gvalue_to_fitness=moving_optimum_deme_1),
     ],
+    "prune_selected": False,
 }
 
 params = fwdpy11.ModelParams(**pdict)

@@ -31,6 +31,7 @@ def pdict1():
         "gvalue": [fwdpy11.Additive(2.0)],
         "rates": (0, 1e-4, None),
         "simlen": 1000,
+        "prune_selected": False,
     }
     return pd
 
@@ -44,6 +45,7 @@ def pdict2():
         "gvalue": [fwdpy11.Additive(2.0)],
         "rates": (0, 1e-4, None),
         "simlen": 1000,
+        "prune_selected": False,
     }
     return pd
 

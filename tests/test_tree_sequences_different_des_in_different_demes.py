@@ -137,6 +137,7 @@ class TestGaussianStabilizingSelection(unittest.TestCase):
             "gvalue": fwdpy11.Additive(
                 ndemes=2, scaling=2, gvalue_to_fitness=fwdpy11.GaussianStabilizingSelection.single_trait([fwdpy11.Optimum(optimum=0.0, VS=1.0, when=0)])
             ),
+            "prune_selected": False
         }
 
         self.params = fwdpy11.ModelParams(**pdict)
@@ -261,6 +262,9 @@ demes:
 
     g = demes.loads(demog)
     model = fwdpy11.discrete_demography.from_demes(g, burnin=1)
+    prune_selected = True
+    if isinstance(gvalue, fwdpy11.Additive):
+        prune_selected = False
     pdict = {
         "nregions": [],
         "sregions": [mvDES],
@@ -269,7 +273,7 @@ demes:
         "gvalue": gvalue,
         "demography": model,
         "simlen": model.metadata["total_simulation_length"],
-        "prune_selected": True,
+        "prune_selected": prune_selected,
     }
     params = fwdpy11.ModelParams(**pdict)
     rng = fwdpy11.GSLrng(918273)
@@ -349,6 +353,7 @@ def test_two_demes_divergent_optima():
             fwdpy11.Additive(ndemes=2, scaling=2,
                              gvalue_to_fitness=moving_optimum_deme_1),
         ],
+        "prune_selected": False,
     }
 
     params = fwdpy11.ModelParams(**pdict)

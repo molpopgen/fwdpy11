@@ -13,14 +13,13 @@ class testCustomAdditive(unittest.TestCase):
     def setUp(self):
         self.pop = fwdpy11.DiploidPopulation(1000, 1.0)
         self.pdict = mslike(
-            self.pop, dfe=fwdpy11.ExpS(0, 1, 1, -0.05),
-            pneutral=0.95, simlen=10
+            self.pop, dfe=fwdpy11.ExpS(0, 1, 1, -0.05), pneutral=0.95, simlen=10
         )
+        self.pdict["prune_selected"] = False
         self.pdict["gvalue"] = ca.additive()
-        self.pdict["demography"] = \
-            fwdpy11.ForwardDemesGraph.tubes(self.pop.deme_sizes()[1],
-                                            burnin=self.pdict["simlen"],
-                                            burnin_is_exact=True)
+        self.pdict["demography"] = fwdpy11.ForwardDemesGraph.tubes(
+            self.pop.deme_sizes()[1], burnin=self.pdict["simlen"], burnin_is_exact=True
+        )
         self.rng = fwdpy11.GSLrng(42)
         self.params = fwdpy11.ModelParams(**self.pdict)
 
@@ -44,11 +43,11 @@ class testGeneralModule(unittest.TestCase):
             pneutral=0.95,
             simlen=10,
         )
+        self.pdict["prune_selected"] = False
         self.pdict["gvalue"] = general.GeneralW()
-        self.pdict["demography"] =\
-            fwdpy11.ForwardDemesGraph.tubes(self.pop.deme_sizes()[1],
-                                            burnin=self.pdict["simlen"],
-                                            burnin_is_exact=True)
+        self.pdict["demography"] = fwdpy11.ForwardDemesGraph.tubes(
+            self.pop.deme_sizes()[1], burnin=self.pdict["simlen"], burnin_is_exact=True
+        )
         self.rng = fwdpy11.GSLrng(42)
         self.params = fwdpy11.ModelParams(**self.pdict)
 

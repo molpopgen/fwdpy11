@@ -26,7 +26,7 @@ import fwdpy11.custom_genetic_value_decorators
 
 
 @fwdpy11.custom_genetic_value_decorators.default_update
-@attr.s(auto_attribs=True, frozen=True)
+@attr.s(auto_attribs=True, frozen=False)
 class PyAdditiveGSS(fwdpy11.PyDiploidGeneticValue):
     opt: float
     VS: float

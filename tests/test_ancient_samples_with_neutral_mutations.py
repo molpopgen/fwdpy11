@@ -16,6 +16,8 @@
 # You should have received a copy of the GNU General Public License
 # along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 #
+import warnings
+
 from hypothesis import settings, given, HealthCheck
 from hypothesis.strategies import booleans, integers
 
@@ -137,6 +139,7 @@ def test_ancient_samples_and_neutral_mutations(
     pdict["prune_selected"] = prune_selected
     pdict["demography"] = demography
     params = fwdpy11.ModelParams(**pdict)
+
     fwdpy11.evolvets(
         rng,
         mslike_pop,
