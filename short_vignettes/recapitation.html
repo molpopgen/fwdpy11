@@ -477,6 +477,7 @@ In order for recapitation to work correctly, we must pass <code class="docutils 
 <span class="n">pdict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;rates&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
          <span class="s2">&quot;gvalue&quot;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Multiplicative</span><span class="p">(</span><span class="mf">2.</span><span class="p">),</span>
          <span class="s2">&quot;simlen&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+         <span class="s2">&quot;demography&quot;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ForwardDemesGraph</span><span class="o">.</span><span class="n">tubes</span><span class="p">([</span><span class="mi">100</span><span class="p">],</span> <span class="n">burnin</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">burnin_is_exact</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
         <span class="p">}</span>
 <span class="n">params</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="n">pdict</span><span class="p">)</span>
 <span class="n">rng</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSLrng</span><span class="p">(</span><span class="mi">54321</span><span class="p">)</span>
@@ -485,12 +486,6 @@ In order for recapitation to work correctly, we must pass <code class="docutils 
 <span class="n">fwdpy11</span><span class="o">.</span><span class="n">evolvets</span><span class="p">(</span><span class="n">rng</span><span class="p">,</span> <span class="n">pop</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">preserve_first_generation</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="k">assert</span> <span class="n">pop</span><span class="o">.</span><span class="n">generation</span> <span class="o">==</span> <span class="mi">10</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_6483/2763561539.py:13: DeprecationWarning: Applying a default demographic model where deme sizes are [100] and the burn-in length is 10*100. This will raise an error in future releases.
-  fwdpy11.evolvets(rng, pop, params, 100, preserve_first_generation=True)
 </pre></div>
 </div>
 </div>

@@ -178,7 +178,7 @@ pdict2 = copy.deepcopy(pdict)
 
 optimum = fwdpy11.Optimum(optimum=5.0, VS=10.0, when=0)
 gss = fwdpy11.GaussianStabilizingSelection.single_trait([optimum])
-pdict2['gvalue'] = fwdpy11.Additive(2., gss),
+pdict2['gvalue'] = fwdpy11.Additive(2., gss)
 pdict2['simlen'] = 100
 
 params2 = fwdpy11.ModelParams(**pdict2)

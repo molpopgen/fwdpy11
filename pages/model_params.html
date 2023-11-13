@@ -515,6 +515,23 @@ then the final element in <code class="docutils literal notranslate"><span class
 See the <a class="reference internal" href="../short_vignettes/geneticmaps_vignette.html#geneticmaps-vignette"><span class="std std-ref">section</span></a> on setting
 recombination rates for details.</p>
 </div>
+<p>If <code class="docutils literal notranslate"><span class="pre">prune_selected</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>, fixations will be remove
+during the simulation. This removal is a sensible thing to do
+if individual relative fitnesses are constant up to a multiplicative
+constant.</p>
+<p>In a multiplicative model, removing a fixation would be equivalent to dividing all values
+by the same value, which does not affect their <em>relative</em>
+values.</p>
+<p>However, removing a fixation in an additive model <em>does</em> change
+the relative values.
+Likewise, mappings from genetic value to fitness such as Gaussian
+stabilizing selection, or adding random noise to genetic values,
+also changes relative values.</p>
+<p>This class will raise a warning if <code class="docutils literal notranslate"><span class="pre">prune_selected</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>
+and there is a possibility that removing fixations will change
+relative fitness.
+Such warnings should not be ignored as they suggest that a simulation
+may not be giving biologically sensible results.</p>
 <div class="versionadded">
 <p><span class="versionmodified added">New in version 0.1.1.</span></p>
 </div>

@@ -519,19 +519,13 @@ We set our <code class="docutils literal notranslate"><span class="pre">Recorder
     <span class="s2">&quot;rates&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1e-3</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
     <span class="c1"># Keep mutations at frequency 1 in the pop if they affect fitness.</span>
     <span class="s2">&quot;prune_selected&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-    <span class="s2">&quot;demography&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="s2">&quot;demography&quot;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ForwardDemesGraph</span><span class="o">.</span><span class="n">tubes</span><span class="p">([</span><span class="n">pop</span><span class="o">.</span><span class="n">N</span><span class="p">],</span> <span class="n">burnin</span><span class="o">=</span><span class="mi">10</span><span class="o">*</span><span class="n">pop</span><span class="o">.</span><span class="n">N</span><span class="p">,</span> <span class="n">burnin_is_exact</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
     <span class="s2">&quot;simlen&quot;</span><span class="p">:</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">pop</span><span class="o">.</span><span class="n">N</span><span class="p">,</span>
 <span class="p">}</span>
 <span class="n">params</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="n">p</span><span class="p">)</span>
 
-<span class="n">r</span> <span class="o">=</span> <span class="n">Recorder</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="mi">10</span> <span class="o">*</span> <span class="n">pop</span><span class="o">.</span><span class="n">N</span><span class="p">)</span>
+<span class="n">r</span> <span class="o">=</span> <span class="n">Recorder</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="mi">10</span> <span class="o">*</span> <span class="n">pop</span><span class="o">.</span><span class="n">N</span> <span class="o">-</span> <span class="mi">200</span><span class="p">)</span>
 <span class="n">fwdpy11</span><span class="o">.</span><span class="n">evolvets</span><span class="p">(</span><span class="n">rng</span><span class="p">,</span> <span class="n">pop</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">recorder</span><span class="o">=</span><span class="n">r</span><span class="p">,</span> <span class="n">suppress_table_indexing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_5904/3211716.py:30: DeprecationWarning: Applying a default demographic model where deme sizes are [500] and the burn-in length is 10*500. This will raise an error in future releases.
-  fwdpy11.evolvets(rng, pop, params, 100, recorder=r, suppress_table_indexing=True)
 </pre></div>
 </div>
 </div>
@@ -552,7 +546,7 @@ We set our <code class="docutils literal notranslate"><span class="pre">Recorder
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/b45b818b5b3aacd5e1634485c5f99b44298a270524f1e8e9b779bedfbf49673c.png" src="../_images/b45b818b5b3aacd5e1634485c5f99b44298a270524f1e8e9b779bedfbf49673c.png" />
+<img alt="../_images/803e215475653ddde90b398933c358ab109433a5d05e03e1427143ef86826579.png" src="../_images/803e215475653ddde90b398933c358ab109433a5d05e03e1427143ef86826579.png" />
 </div>
 </div>
 </section>

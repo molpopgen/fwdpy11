@@ -68,12 +68,12 @@ p = {
     "rates": (0.0, 1e-3, None),
     # Keep mutations at frequency 1 in the pop if they affect fitness.
     "prune_selected": False,
-    "demography": None,
+    "demography": fwdpy11.ForwardDemesGraph.tubes([pop.N], burnin=10*pop.N, burnin_is_exact=True),
     "simlen": 10 * pop.N,
 }
 params = fwdpy11.ModelParams(**p)
 
-r = Recorder(start=10 * pop.N)
+r = Recorder(start=10 * pop.N - 200)
 fwdpy11.evolvets(rng, pop, params, 100, recorder=r, suppress_table_indexing=True)
 ```
 

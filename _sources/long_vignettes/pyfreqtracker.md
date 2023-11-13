@@ -71,6 +71,7 @@ pdict = {
     "sregions": [fwdpy11.ExpS(beg=0, end=1, weight=1, mean=0.2)],
     "recregions": [fwdpy11.PoissonInterval(0, 1, 1e-2)],
     "gvalue": [fwdpy11.Multiplicative(2.0)],
+    "demography": fwdpy11.ForwardDemesGraph.tubes([100], burnin=100, burnin_is_exact=True),
     "rates": (0.0, 1e-3, None),
     "simlen": 100,
 }
@@ -190,6 +191,7 @@ pdict = {
     "sregions": [fwdpy11.ExpS(beg=0, end=1, weight=1, mean=0.2)],
     "recregions": [fwdpy11.PoissonInterval(0, 1, 1e-2)],
     "gvalue": [fwdpy11.Multiplicative(2.0)],
+    "demography": fwdpy11.ForwardDemesGraph.tubes([100], burnin=100, burnin_is_exact=True),
     # Add a mutation rate for neutral mutations:
     "rates": (5e-3, 1e-3, None),
     "simlen": 100,

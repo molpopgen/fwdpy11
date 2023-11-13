@@ -518,7 +518,7 @@ The simulation done here is taken from <a class="reference internal" href="../lo
     <span class="s2">&quot;recregions&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">PoissonInterval</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="n">rho</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">pop</span><span class="o">.</span><span class="n">N</span><span class="p">))],</span>
     <span class="s2">&quot;rates&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1e-3</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
     <span class="s2">&quot;prune_selected&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-    <span class="s2">&quot;demography&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="s2">&quot;demography&quot;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ForwardDemesGraph</span><span class="o">.</span><span class="n">tubes</span><span class="p">([</span><span class="n">pop</span><span class="o">.</span><span class="n">N</span><span class="p">],</span> <span class="n">burnin</span><span class="o">=</span><span class="mi">10</span><span class="p">),</span>
     <span class="s2">&quot;simlen&quot;</span><span class="p">:</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">pop</span><span class="o">.</span><span class="n">N</span><span class="p">,</span>
 <span class="p">}</span>
 <span class="n">params</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="n">p</span><span class="p">)</span>
@@ -528,12 +528,6 @@ The simulation done here is taken from <a class="reference internal" href="../lo
 </div>
 </div>
 </details>
-<div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_6462/1427492698.py:28: DeprecationWarning: Applying a default demographic model where deme sizes are [500] and the burn-in length is 10*500. This will raise an error in future releases.
-  fwdpy11.evolvets(rng, pop, params, 100, suppress_table_indexing=True)
-</pre></div>
-</div>
-</div>
 </div>
 <section id="basic-properties">
 <h2>Basic properties<a class="headerlink" href="#basic-properties" title="Permalink to this heading">#</a></h2>
@@ -563,11 +557,11 @@ These objects do not have nice representations in Python:</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&lt;fwdpy11._fwdpy11.Mutation at 0x7f9c78e4d930&gt;,
- &lt;fwdpy11._fwdpy11.Mutation at 0x7f9c78e4dfb0&gt;,
- &lt;fwdpy11._fwdpy11.Mutation at 0x7f9c78e4e170&gt;,
- &lt;fwdpy11._fwdpy11.Mutation at 0x7f9c78e4dd70&gt;,
- &lt;fwdpy11._fwdpy11.Mutation at 0x7f9c78e4dc70&gt;]
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&lt;fwdpy11._fwdpy11.Mutation at 0x7f9990a1dbf0&gt;,
+ &lt;fwdpy11._fwdpy11.Mutation at 0x7f9990a1ddb0&gt;,
+ &lt;fwdpy11._fwdpy11.Mutation at 0x7f9990a1dfb0&gt;,
+ &lt;fwdpy11._fwdpy11.Mutation at 0x7f9990a1df70&gt;,
+ &lt;fwdpy11._fwdpy11.Mutation at 0x7f9990a1ce30&gt;]
 </pre></div>
 </div>
 </div>

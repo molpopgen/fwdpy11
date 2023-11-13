@@ -30,6 +30,7 @@ pop = fwdpy11.DiploidPopulation(100, 1000.0)
 pdict = {"rates": (0.0, 0.0, 0.0),
          "gvalue": fwdpy11.Multiplicative(2.),
          "simlen": 10,
+         "demography": fwdpy11.ForwardDemesGraph.tubes([100], burnin=10, burnin_is_exact=True),
         }
 params = fwdpy11.ModelParams(**pdict)
 rng = fwdpy11.GSLrng(54321)

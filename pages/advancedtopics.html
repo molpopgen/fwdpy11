@@ -617,6 +617,7 @@ near equilibrium, but we’re just using it as an example:</p>
     <span class="s2">&quot;rates&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1e-3</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
     <span class="s2">&quot;gvalue&quot;</span><span class="p">:</span> <span class="n">gvalue</span><span class="p">,</span>
     <span class="s2">&quot;prune_selected&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="s2">&quot;demography&quot;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ForwardDemesGraph</span><span class="o">.</span><span class="n">tubes</span><span class="p">([</span><span class="n">N</span><span class="p">],</span> <span class="n">burnin</span><span class="o">=</span><span class="mi">150</span><span class="p">,</span> <span class="n">burnin_is_exact</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
     <span class="s2">&quot;simlen&quot;</span><span class="p">:</span> <span class="mi">150</span><span class="p">,</span>
 <span class="p">}</span>
 <span class="n">params</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="n">pdict</span><span class="p">)</span>
@@ -629,10 +630,6 @@ near equilibrium, but we’re just using it as an example:</p>
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>16
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_6012/116052154.py:20: DeprecationWarning: Applying a default demographic model where deme sizes are [1000] and the burn-in length is 10*1000. This will raise an error in future releases.
-  fwdpy11.evolvets(rng, pop, params, 100)
 </pre></div>
 </div>
 </div>
@@ -669,16 +666,16 @@ near equilibrium, but we’re just using it as an example:</p>
 -0.010349104565670205 -2.2118130398591935
 -0.011602139413926871 -7.084718822750244
 -0.0032279509968761435 -1.737328013826212
--0.015449207258832993 -5.131892545676067
+-0.015449207258832993 -5.131892545676068
 -0.0077168400201644664 4.512341872600712
--0.0022531736886723442 -4.0967214493294986
+-0.0022531736886723442 -4.096721449329499
 -0.006044053890735736 -8.652700112679995
 -0.0023465570676289957 0.6320311886584215
 -0.0007746986635068075 2.2164750099025436
 -0.021502039265014553 9.597464398344142
 -0.009716042965590406 -7.443653191909565
 -0.0008560999958330585 0.26396822983492146
--0.01597600966131924 4.99434887087133
+-0.01597600966131924 4.994348870871331
 -0.003548690338568886 1.3665737289445181
 -0.005819804232148941 8.384444628613952
 </pre></div>
