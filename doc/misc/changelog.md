@@ -3,6 +3,23 @@
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+## 0.21.4
+
+Behavior changes:
+
+* {func}`fwdpy11.DiploidPopulation.add_mutation` now considers the overlap
+  with the desired interval when calculating weights.
+  PR {pr}`1228`
+  Issue {issue}`1180`
+* Raise warnings when removing selected fixations may
+  not be the right thing to do during a simulation.
+  PR {pr}`1235`
+
+Documentation
+
+* Remove deprecated API use from manual.
+  PR {pr}`1233`
+
 ## 0.21.3
 
 Deprecations
