@@ -1,7 +1,6 @@
 import sys
 
 import numpy as np
-import pandas as pd
 
 import fwdpy11
 
@@ -82,6 +81,8 @@ rng = fwdpy11.GSLrng(1010)
 fwdpy11.evolvets(rng, pop, params, 100)
 assert pop.generation == 10 * N + 200
 md = np.array(pop.diploid_metadata, copy=False)
-df = pd.DataFrame.from_records(md[["deme", "g", "w"]])
-g = df.groupby(["deme"])
-print(g.mean())
+
+for deme in np.unique(md["deme"]):
+    mean_genetic_value = md["g"][np.where(md["deme"] == deme)].mean()
+    mean_fitness = md["w"][np.where(md["deme"] == deme)].mean()
+    print(f"{deme} {mean_genetic_value} {mean_fitness}")

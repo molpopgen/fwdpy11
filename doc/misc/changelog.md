@@ -3,6 +3,10 @@
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+## 0.21.5
+
+Add support for Python 3.12
+
 ## 0.21.4
 
 Behavior changes:

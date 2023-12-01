@@ -9,7 +9,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        python: [ 3.8, 3.9, "3.10", "3.11" ]
+        python: [ 3.8, 3.9, "3.10", "3.11", "3.12" ]
         os:  [ ubuntu-22.04 ]
         compiler: [gcc, clang14]
         rust: [1.62.1]
@@ -154,7 +154,9 @@ jobs:
             python -m venv venv
             source venv/bin/activate
             which python
-            python -m pip install --no-cache-dir ./fwdpy11*-linux*.whl
+            # The CPPFLAGS contain stuff for C++ that makes no sense for C.
+            # The flags are also too strict for tskit to build under Py 3.12
+            CPPFLAGS= python -m pip install --no-cache-dir ./fwdpy11*-linux*.whl
             python -m fwdpy11 --includes
             python -c "import fwdpy11;print(fwdpy11.__version__)"
             python -c "import fwdpy11;print(fwdpy11.__file__)"
