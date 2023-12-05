@@ -3,7 +3,6 @@
 # a successful wheel installation
 # in the "test wheels" step of .github/workflows/wheels.yml
 black
-intervaltree
 attrs >= 20.3.0 
 demes == 0.2.2
 tskit >= 0.5.6
