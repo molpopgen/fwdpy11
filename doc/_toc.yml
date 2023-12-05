@@ -54,6 +54,7 @@ parts:
   chapters:
   - file: long_vignettes/bgs_vignette
   - file: long_vignettes/gss_vignette
+  - file: long_vignettes/gss_vignette_different_optima
   - file: long_vignettes/pyfreqtracker
   - file: long_vignettes/pyfreqtracker_sqlite
 - caption: Concepts
