@@ -33,7 +33,7 @@ class TestBadInput(unittest.TestCase):
         a = fwdpy11.Additive(2.0)
         mvgss = fwdpy11.GaussianStabilizingSelection.pleiotropy(
             [fwdpy11.PleiotropicOptima(np.zeros(2), 10.0, when=0)])
-        mv = fwdpy11.StrictAdditiveMultivariateEffects(2, 0, mvgss)
+        mv = fwdpy11.AdditivePleiotropy(2, 0, mvgss)
         from fwdpy11._fwdpy11 import _dgvalue_pointer_vector
 
         with self.assertRaises(ValueError):

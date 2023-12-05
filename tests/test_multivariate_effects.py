@@ -20,7 +20,7 @@ def set_up_quant_trait_model():
     GSSmo = fwdpy11.GaussianStabilizingSelection.pleiotropy(po)
     cmat = np.identity(ntraits)
     np.fill_diagonal(cmat, 0.1)
-    a = fwdpy11.StrictAdditiveMultivariateEffects(ntraits, 0, GSSmo)
+    a = fwdpy11.AdditivePleiotropy(ntraits, 0, GSSmo)
     demography = fwdpy11.ForwardDemesGraph.tubes([N], burnin=100,
                                                  burnin_is_exact=True)
     p = {

@@ -73,7 +73,7 @@ def set_up_two_trait_quant_trait_model():
         ),
     ]
     GSSmo = fwdpy11.GaussianStabilizingSelection.pleiotropy(optima)
-    a = fwdpy11.StrictAdditiveMultivariateEffects(2, 0, GSSmo)
+    a = fwdpy11.AdditivePleiotropy(2, 0, GSSmo)
     vcov = np.identity(2)
     np.fill_diagonal(vcov, 0.25)
     DES = fwdpy11.MultivariateGaussianEffects(0, 1, 1, vcov)
