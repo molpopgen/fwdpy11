@@ -162,6 +162,7 @@ def _dump_tables_to_tskit(
     edge_view = np.array(self.tables.edges, copy=False)
 
     tc = tskit.TableCollection(self.tables.genome_length)
+    tc.time_units = "generations"
 
     tc.metadata_schema = fwdpy11.tskit_tools.metadata_schema.TopLevelMetadata
 

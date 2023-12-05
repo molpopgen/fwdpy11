@@ -186,6 +186,7 @@ class TestTreeSequencesNoAncientSamplesKeepFixations(unittest.TestCase):
             max(self.pop.mcounts) == 2 * self.pop.N
         ), "Nothing fixed, so test case is not helpful"
         self.dumped_ts = self.pop.dump_tables_to_tskit()
+        assert self.dumped_ts.time_units == "generations"
 
     def test_mut_lookup(self):
         self.assertEqual(len(self.pop.mut_lookup),
@@ -853,6 +854,7 @@ class TestTreeSequencesNoAncientSamplesPruneFixations(unittest.TestCase):
 
     def test_dump_to_tskit(self):
         ts = self.pop.dump_tables_to_tskit()
+        assert ts.time_units == "generations"
         self.assertEqual(mcounts_comparison(self.pop, ts), True)
 
     def test_binary_round_trip(self):
@@ -949,6 +951,7 @@ class TestTreeSequencesWithAncientSamplesPruneFixations(unittest.TestCase):
 
     def test_dump_to_tskit(self):
         ts = self.pop.dump_tables_to_tskit()
+        assert ts.time_units == "generations"
         self.assertEqual(mcounts_comparison(self.pop, ts), True)
 
     def test_binary_round_trip(self):
@@ -1479,6 +1482,7 @@ class TestRecapitation(unittest.TestCase):
         )
         self.amd = np.array(self.pop.ancient_sample_metadata, copy=False)
         self.tskit_ts = self.pop.dump_tables_to_tskit()
+        assert self.tskit_ts.time_units == "generations"
 
     def test_ancient_sample_records(self):
         self.assertEqual(len(self.pop.ancient_sample_metadata), self.pop.N)
