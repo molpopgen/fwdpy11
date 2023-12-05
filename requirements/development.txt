@@ -8,6 +8,7 @@ scipy
 attrs
 black
 demes~=0.2.2
+Deprecated
 
 #below are for building package
 #and running tests

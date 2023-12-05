@@ -24,6 +24,8 @@ import warnings
 import attr
 import numpy as np
 
+from deprecated import deprecated
+
 from ._fwdpy11 import (GeneticValueIsTrait, GeneticValueNoise, _ll_Additive,
                        _ll_GaussianNoise, _ll_GBR,
                        _ll_GaussianStabilizingSelection,
@@ -589,7 +591,7 @@ class GBR(_ll_GBR):
 @attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
 @attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
-class StrictAdditiveMultivariateEffects(_ll_StrictAdditiveMultivariateEffects):
+class AdditivePleiotropy(_ll_StrictAdditiveMultivariateEffects):
     """
     Multivariate trait values under strictly additive effects.
 
@@ -626,12 +628,17 @@ class StrictAdditiveMultivariateEffects(_ll_StrictAdditiveMultivariateEffects):
     noise: object = None
 
     def __attrs_post_init__(self):
-        super(StrictAdditiveMultivariateEffects, self).__init__(
+        super(AdditivePleiotropy, self).__init__(
             self.ndimensions,
             self.focal_trait,
             self.gvalue_to_fitness,
             self.noise
         )
+
+
+@deprecated(reason="Use AdditivePleiotropy instead.")
+class StrictAdditiveMultivariateEffects(AdditivePleiotropy):
+    pass
 
 
 class PyDiploidGeneticValue(_PyDiploidGeneticValue):

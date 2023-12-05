@@ -59,6 +59,7 @@ from .genetic_values import (  # NOQA
     Multiplicative,
     GBR,
     StrictAdditiveMultivariateEffects,
+    AdditivePleiotropy,
     PyDiploidGeneticValue
 )
 
