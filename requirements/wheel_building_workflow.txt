@@ -2,9 +2,4 @@
 # requirements file needed to generate
 # a successful wheel installation
 # in the "test wheels" step of .github/workflows/wheels.yml
-black
-attrs >= 20.3.0 
-demes == 0.2.2
-tskit >= 0.5.6
-scipy
-Deprecated
+-r minimal_install_requirements.txt
