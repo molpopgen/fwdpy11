@@ -1,30 +1,10 @@
 # NOTE: any pinning should also be coordinated
 # with requirements.in and doc/requirements.in
 # and may require regenerating the .txt files.
-pybind11[global]==2.11.1
-numpy
-scipy
-attrs
-black
-demes~=0.2.2
-Deprecated
-
-#below are for building package
-#and running tests
-msprime~=1.0
-tskit>=0.5.6
-setuptools_scm<8
-pytest
-pytest-xdist
-hypothesis==6.56.4
-
-# Docs
-jupyter-book~=0.15.1
-pydata-sphinx-theme==0.13.1
-matplotlib
-pandas
-sphinx-issues
-demesdraw~=0.4.0
+-r build.txt
+-r minimal_install_requirements.txt
+-r tests.txt
+-r docs.txt
 
 #below are for formatting, linting,
 #etc.
