@@ -1465,9 +1465,14 @@ class TestRecapitation(unittest.TestCase):
         Recapitation w/o recombination means we can predict
         exactly how many new nodes there will be.
         """
-        coalesced_ts = msprime.simulate(
-            Ne=self.pop.N,
-            from_ts=self.tskit_ts,
+        # NOTE: the dump, clear, add row bit is to make msprime
+        # happy
+        tables = self.tskit_ts.tables
+        tables.populations.clear()
+        tables.populations.add_row()
+        coalesced_ts = msprime.sim_ancestry(
+            population_size=self.pop.N,
+            initial_state=tables,
             recombination_rate=self.params.rates.recombination_rate,
         )
         self.assertTrue(
@@ -1486,7 +1491,7 @@ class TestRecapitation(unittest.TestCase):
 
 class TestInvalidAttemptAtRecapitation(unittest.TestCase):
     def test_after_starting_from_msprime(self):
-        ts = msprime.simulate(100, Ne=100)
+        ts = msprime.sim_ancestry(100, population_size=100)
         pop = fwdpy11.DiploidPopulation.create_from_tskit(ts)
 
         a = fwdpy11.Multiplicative(2.0)

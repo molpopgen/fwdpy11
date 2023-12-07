@@ -293,7 +293,7 @@ def test_encoding_neutral_mutations_with_msprime_tree_sequences(
     import fwdpy11
     import msprime
 
-    ts = msprime.simulate(500, Ne=1000, random_seed=msprime_seed)
+    ts = msprime.sim_ancestry(500, population_size=1000, random_seed=msprime_seed)
     pop = fwdpy11.DiploidPopulation.create_from_tskit(ts)
     rng = fwdpy11.GSLrng(fp11_seed)
     _ = fwdpy11.infinite_sites(rng, pop, 1e-3)

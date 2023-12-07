@@ -19,9 +19,11 @@
 
 import unittest
 
-import fwdpy11
+import demes
 import msprime
 import numpy as np
+
+import fwdpy11
 
 # NOTE: these tests can all be improved in the future
 # by having a conversion from msprime/tskit that lifts
@@ -44,8 +46,14 @@ class TestSingleDemeCase(unittest.TestCase):
     def setUpClass(self):
         Ne = 1000
         Nr = 100.0
-        ts = msprime.simulate(
-            2 * Ne, Ne=Ne, recombination_rate=Nr / Ne, random_seed=666
+        L = 1
+        ts = msprime.sim_ancestry(
+            2 * Ne,
+            population_size=Ne,
+            recombination_rate=Nr / Ne / L,
+            sequence_length=L,
+            random_seed=666,
+            discrete_genome=False,
         )
         self.pop = fwdpy11.DiploidPopulation.create_from_tskit(ts)
         rng = fwdpy11.GSLrng(12343)
@@ -137,18 +145,28 @@ class TestTwoDemeCase(unittest.TestCase):
     def setUpClass(self):
         Ne = 1000
         Nr = 100.0
-        nodes_per_deme = 1000
-        config = [
-            msprime.PopulationConfiguration(nodes_per_deme),
-            msprime.PopulationConfiguration(nodes_per_deme),
-        ]
-
-        events = [msprime.MassMigration(1 * Ne, 1, 0, 1.0)]
-        ts = msprime.simulate(
-            population_configurations=config,
-            demographic_events=events,
-            Ne=Ne,
+        yaml = f"""
+        time_units: generations
+        demes:
+         - name: deme0
+           epochs:
+            - start_size: {Ne/2}
+         - name: deme1
+           epochs:
+            - start_size: {Ne/2}
+        pulses:
+         - sources: [deme1]
+           dest: deme0
+           proportions: [1.0]
+           time: {Ne}
+        """
+        demography = msprime.Demography.from_demes(demes.loads(yaml))
+        ts = msprime.sim_ancestry(
+            samples={0: Ne / 2, 1: Ne / 2},
+            demography=demography,
             recombination_rate=Nr / Ne,
+            sequence_length=1.0,
+            discrete_genome=False,
             random_seed=666,
         )
         self.pop = fwdpy11.DiploidPopulation.create_from_tskit(ts)
