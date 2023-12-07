@@ -211,6 +211,7 @@ const thebe_selector_output = ".output, .cell_output"
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../long_vignettes/bgs_vignette.html">Background selection</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../long_vignettes/gss_vignette.html">Gaussian stabilizing selection with an optimum shift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../long_vignettes/gss_vignette_different_optima.html">Adaptation of a trait to different optima in different demes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../long_vignettes/pyfreqtracker.html">Tracking mutations over time</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../long_vignettes/pyfreqtracker_sqlite.html">Tracking mutations over time using <code class="docutils literal notranslate"><span class="pre">sqlite3</span></code></a></li>
 </ul>
@@ -521,9 +522,9 @@ so multiply by that value for the generation.</span><a class="headerlink" href="
         <span class="n">zpair</span> <span class="o">=</span> <span class="n">zself</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">phenotypes</span><span class="p">[</span><span class="n">other</span><span class="p">]</span>
         <span class="n">a</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">+</span> <span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">b1</span> <span class="o">*</span> <span class="n">zpair</span>
-            <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">b2</span> <span class="o">*</span> <span class="p">(</span><span class="n">zpair</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">b2</span> <span class="o">*</span> <span class="p">(</span><span class="n">zpair</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
             <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">c1</span> <span class="o">*</span> <span class="n">zself</span>
-            <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">c2</span> <span class="o">*</span> <span class="p">(</span><span class="n">zself</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">c2</span> <span class="o">*</span> <span class="p">(</span><span class="n">zself</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
 
@@ -568,7 +569,11 @@ so multiply by that value for the generation.</span><a class="headerlink" href="
 
     <span class="n">phist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nruns</span><span class="p">,</span> <span class="n">bins</span><span class="p">))</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nruns</span><span class="p">):</span>
-        <span class="n">ph</span><span class="p">,</span> <span class="n">xe</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="n">parr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">bins</span><span class="o">=</span><span class="n">bins</span><span class="p">,</span> <span class="nb">range</span><span class="o">=</span><span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],)</span>
+        <span class="n">ph</span><span class="p">,</span> <span class="n">xe</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span>
+            <span class="n">parr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span>
+            <span class="n">bins</span><span class="o">=</span><span class="n">bins</span><span class="p">,</span>
+            <span class="nb">range</span><span class="o">=</span><span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span>
+        <span class="p">)</span>
         <span class="n">phist</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">ph</span>
 
     <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span>

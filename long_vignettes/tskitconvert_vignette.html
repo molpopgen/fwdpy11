@@ -211,6 +211,7 @@ const thebe_selector_output = ".output, .cell_output"
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="bgs_vignette.html">Background selection</a></li>
 <li class="toctree-l1"><a class="reference internal" href="gss_vignette.html">Gaussian stabilizing selection with an optimum shift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gss_vignette_different_optima.html">Adaptation of a trait to different optima in different demes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pyfreqtracker.html">Tracking mutations over time</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pyfreqtracker_sqlite.html">Tracking mutations over time using <code class="docutils literal notranslate"><span class="pre">sqlite3</span></code></a></li>
 </ul>
@@ -649,9 +650,9 @@ You do not know the state of the <code class="docutils literal notranslate"><spa
 <span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">ts</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">dump_tables_to_tskit</span><span class="p">(</span><span class="n">seed</span><span class="o">=-</span><span class="mi">4616</span><span class="p">)</span>
 
 <span class="nn">File ~/work/fwdpy11/fwdpy11/fwdpy11/_types/diploid_population.py:378,</span> in <span class="ni">DiploidPopulation.dump_tables_to_tskit</span><span class="nt">(self, model_params, demes_graph, population_metadata, data, seed, parameters, destructive)</span>
-<span class="g g-Whitespace">    </span><span class="mi">290</span> <span class="k">def</span> <span class="nf">dump_tables_to_tskit</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">291</span>     <span class="bp">self</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">292</span>     <span class="o">*</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">291</span> <span class="k">def</span> <span class="nf">dump_tables_to_tskit</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">292</span>     <span class="bp">self</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">293</span>     <span class="o">*</span><span class="p">,</span>
    <span class="p">(</span><span class="o">...</span><span class="p">)</span>
 <span class="g g-Whitespace">    </span><span class="mi">300</span>     <span class="n">destructive</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 <span class="g g-Whitespace">    </span><span class="mi">301</span> <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">tskit</span><span class="o">.</span><span class="n">TreeSequence</span><span class="p">:</span>
@@ -672,12 +673,12 @@ You do not know the state of the <code class="docutils literal notranslate"><spa
 <span class="g g-Whitespace">    </span><span class="mi">386</span>         <span class="n">destructive</span><span class="o">=</span><span class="n">destructive</span><span class="p">,</span>
 <span class="g g-Whitespace">    </span><span class="mi">387</span>     <span class="p">)</span>
 
-<span class="nn">File ~/work/fwdpy11/fwdpy11/fwdpy11/tskit_tools/_dump_tables_to_tskit.py:188,</span> in <span class="ni">_dump_tables_to_tskit</span><span class="nt">(self, model_params, demes_graph, population_metadata, data, seed, parameters, destructive)</span>
-<span class="g g-Whitespace">    </span><span class="mi">186</span> <span class="k">if</span> <span class="n">seed</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">187</span>     <span class="k">if</span> <span class="n">seed</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">188</span>         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;seed must be &gt;=0, got </span><span class="si">{</span><span class="n">seed</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">189</span>     <span class="n">top_level_metadata</span><span class="p">[</span><span class="s2">&quot;seed&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">seed</span>
-<span class="g g-Whitespace">    </span><span class="mi">191</span> <span class="n">tc</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="n">top_level_metadata</span>
+<span class="nn">File ~/work/fwdpy11/fwdpy11/fwdpy11/tskit_tools/_dump_tables_to_tskit.py:183,</span> in <span class="ni">_dump_tables_to_tskit</span><span class="nt">(self, model_params, demes_graph, population_metadata, data, seed, parameters, destructive)</span>
+<span class="g g-Whitespace">    </span><span class="mi">181</span> <span class="k">if</span> <span class="n">seed</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">182</span>     <span class="k">if</span> <span class="n">seed</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">183</span>         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;seed must be &gt;=0, got </span><span class="si">{</span><span class="n">seed</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">184</span>     <span class="n">top_level_metadata</span><span class="p">[</span><span class="s2">&quot;seed&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">seed</span>
+<span class="g g-Whitespace">    </span><span class="mi">186</span> <span class="n">tc</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="n">top_level_metadata</span>
 
 <span class="ne">ValueError</span>: seed must be &gt;=0, got -4616
 </pre></div>

@@ -213,6 +213,7 @@ const thebe_selector_output = ".output, .cell_output"
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../long_vignettes/bgs_vignette.html">Background selection</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../long_vignettes/gss_vignette.html">Gaussian stabilizing selection with an optimum shift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../long_vignettes/gss_vignette_different_optima.html">Adaptation of a trait to different optima in different demes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../long_vignettes/pyfreqtracker.html">Tracking mutations over time</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../long_vignettes/pyfreqtracker_sqlite.html">Tracking mutations over time using <code class="docutils literal notranslate"><span class="pre">sqlite3</span></code></a></li>
 </ul>
@@ -1150,7 +1151,11 @@ so that results are reproducible.)</p>
         <span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pop</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">opt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">opt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span>
+            <span class="mf">0.0</span><span class="p">,</span>
+            <span class="mf">1.0</span><span class="p">,</span>
+            <span class="mi">1</span><span class="p">,</span>
+        <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">optima</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">pop</span><span class="o">.</span><span class="n">generation</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">opt</span><span class="p">))</span>
 </pre></div>
 </div>
@@ -1438,11 +1443,9 @@ than creating a temporary, non-owning <a class="reference external" href="https:
 <span class="nd">@fwdpy11</span><span class="o">.</span><span class="n">custom_genetic_value_decorators</span><span class="o">.</span><span class="n">default_update</span>
 <span class="k">class</span> <span class="nc">PyAdditive</span><span class="p">(</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">PyDiploidGeneticValue</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gvalue_to_fitness</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">noise</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="n">fwdpy11</span><span class="o">.</span><span class="n">PyDiploidGeneticValue</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>
-                                               <span class="n">gvalue_to_fitness</span><span class="p">,</span> <span class="n">noise</span><span class="p">)</span>
+        <span class="n">fwdpy11</span><span class="o">.</span><span class="n">PyDiploidGeneticValue</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">gvalue_to_fitness</span><span class="p">,</span> <span class="n">noise</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">calculate_gvalue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
-                         <span class="n">data</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">PyDiploidGeneticValueData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">calculate_gvalue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">PyDiploidGeneticValueData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="n">s</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">strict_additive_effects</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">offspring_metadata</span><span class="p">)</span>
         <span class="nb">memoryview</span><span class="p">(</span><span class="n">data</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span>
         <span class="k">return</span> <span class="n">s</span>
