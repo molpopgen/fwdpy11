@@ -31,10 +31,8 @@ def quick_neutral_slocus(N=1000, simlen=100):
     from fwdpy11 import Multiplicative
     from fwdpy11 import evolvets
 
-    pop = DiploidPopulation(N, 1.)
-    demography = ForwardDemesGraph.tubes([N],
-                                         burnin=simlen,
-                                         burnin_is_exact=True)
+    pop = DiploidPopulation(N, 1.0)
+    demography = ForwardDemesGraph.tubes([N], burnin=simlen, burnin_is_exact=True)
     params_dict = mslike(pop, simlen=simlen)
     params_dict["gvalue"] = Multiplicative(2.0)
     params_dict["demography"] = demography
@@ -52,13 +50,12 @@ def quick_nonneutral_slocus(N=1000, simlen=100, dfe=None):
     from fwdpy11 import ExpS
     from fwdpy11 import Multiplicative
 
-    pop = DiploidPopulation(N, 1.)
+    pop = DiploidPopulation(N, 1.0)
     if dfe is None:
         dfe = ExpS(0, 1, 1, -0.1)
     demography = ForwardDemesGraph.tubes(
-        pop.deme_sizes()[1],
-        burnin=simlen,
-        burnin_is_exact=True)
+        pop.deme_sizes()[1], burnin=simlen, burnin_is_exact=True
+    )
     params_dict = mslike(pop, simlen=simlen, dfe=dfe, pneutral=0.95)
     params_dict["gvalue"] = Multiplicative(2.0)
     params_dict["demography"] = demography
@@ -83,5 +80,5 @@ def quick_slocus_qtrait_pop_params(N=1000, simlen=100):
         "gvalue": Additive(2.0, GSS(VS=1.0, optimum=0.0)),
         "prune_selected": False,
     }
-    pop = DiploidPopulation(N, 1.)
+    pop = DiploidPopulation(N, 1.0)
     return (pop, p)

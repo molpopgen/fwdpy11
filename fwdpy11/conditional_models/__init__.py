@@ -82,8 +82,7 @@ def _right_greater_left(instance, attribute, value):
 
 def _is_polymorphic_frequency(_, attribute, value):
     if not 0.0 < value < 1.0:
-        raise ValueError(
-            f"{attribute.name} must be 0.0 < {attribute.name} < 1.0")
+        raise ValueError(f"{attribute.name} must be 0.0 < {attribute.name} < 1.0")
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -140,8 +139,7 @@ class FrequencyRange:
     """
 
     minimum: float = attr.ib(
-        validator=[attr.validators.instance_of(
-            float), _is_polymorphic_frequency]
+        validator=[attr.validators.instance_of(float), _is_polymorphic_frequency]
     )
     maximum: float = attr.ib(
         validator=[
@@ -233,9 +231,7 @@ class GlobalFixation(object):
     the mutation.
     """
 
-    def __call__(
-        self, pop, index: int, key: tuple
-    ) -> SimulationStatus:
+    def __call__(self, pop, index: int, key: tuple) -> SimulationStatus:
         if pop.mcounts[index] == 0:
             return SimulationStatus.Restart
         if pop.mcounts[index] == 2 * pop.N:

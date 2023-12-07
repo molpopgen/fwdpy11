@@ -27,7 +27,9 @@ from fwdpy11._types.demographic_model_details import DemographicModelDetails
 
 
 def from_demes(
-    dg: typing.Union[str, demes.Graph], burnin: int = 10, *,
+    dg: typing.Union[str, demes.Graph],
+    burnin: int = 10,
+    *,
     round_non_integer_sizes: typing.Optional[bool] = None
 ) -> DemographicModelDetails:
     """
@@ -51,5 +53,6 @@ def from_demes(
     from ._functions import demography_from_demes
 
     demog = demography_from_demes(
-        dg, burnin, round_non_integer_sizes=round_non_integer_sizes)
+        dg, burnin, round_non_integer_sizes=round_non_integer_sizes
+    )
     return demog

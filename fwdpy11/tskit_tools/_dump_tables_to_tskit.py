@@ -27,9 +27,7 @@ import tskit  # type: ignore
 
 
 def _initializePopulationTable(
-    node_view,
-    population_metadata: typing.Optional[typing.Dict[int, object]],
-    tc
+    node_view, population_metadata: typing.Optional[typing.Dict[int, object]], tc
 ):
     tc.populations.metadata_schema = (
         fwdpy11.tskit_tools.metadata_schema.PopulationMetadata
@@ -88,14 +86,10 @@ def _initializeIndividualTable(self, tc):
     return individal_nodes
 
 
-def _dump_mutation_site_and_site_tables(self,
-                                        tc: tskit.TableCollection) -> None:
-    mpos = np.array(
-        [self.mutations[mr.key].pos for mr in self.tables.mutations])
-    ancestral_state = np.zeros(
-        len(self.tables.mutations), dtype=np.int8) + ord("0")
-    ancestral_state_offset = np.arange(
-        len(self.tables.mutations) + 1, dtype=np.uint32)
+def _dump_mutation_site_and_site_tables(self, tc: tskit.TableCollection) -> None:
+    mpos = np.array([self.mutations[mr.key].pos for mr in self.tables.mutations])
+    ancestral_state = np.zeros(len(self.tables.mutations), dtype=np.int8) + ord("0")
+    ancestral_state_offset = np.arange(len(self.tables.mutations) + 1, dtype=np.uint32)
     tc.sites.set_columns(
         position=mpos,
         ancestral_state=ancestral_state,
@@ -207,8 +201,7 @@ def _dump_tables_to_tskit(
         individual[k] = v
     flags = [tskit.NODE_IS_SAMPLE] * 2 * self.N + [0] * (len(node_view) - 2 * self.N)
     # Bug fixed in 0.3.1: add preserved nodes to samples list
-    for i in np.array(self.ancient_sample_metadata,
-                      copy=False)["nodes"].flatten():
+    for i in np.array(self.ancient_sample_metadata, copy=False)["nodes"].flatten():
         flags[i] = tskit.NODE_IS_SAMPLE
     tc.nodes.set_columns(
         flags=flags,

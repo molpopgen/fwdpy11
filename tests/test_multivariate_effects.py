@@ -21,8 +21,7 @@ def set_up_quant_trait_model():
     cmat = np.identity(ntraits)
     np.fill_diagonal(cmat, 0.1)
     a = fwdpy11.AdditivePleiotropy(ntraits, 0, GSSmo)
-    demography = fwdpy11.ForwardDemesGraph.tubes([N], burnin=100,
-                                                 burnin_is_exact=True)
+    demography = fwdpy11.ForwardDemesGraph.tubes([N], burnin=100, burnin_is_exact=True)
     p = {
         "nregions": [],
         "sregions": [fwdpy11.MultivariateGaussianEffects(0, 1, 1, cmat)],
@@ -31,7 +30,7 @@ def set_up_quant_trait_model():
         "gvalue": a,
         "prune_selected": False,
         "demography": demography,
-        "simlen": demography.final_generation
+        "simlen": demography.final_generation,
     }
     params = fwdpy11.ModelParams(**p)
     rng = fwdpy11.GSLrng(101 * 45 * 110 * 210)

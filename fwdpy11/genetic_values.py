@@ -26,16 +26,28 @@ import numpy as np
 
 from deprecated import deprecated
 
-from ._fwdpy11 import (GeneticValueIsTrait, GeneticValueNoise, _ll_Additive,
-                       _ll_GaussianNoise, _ll_GBR,
-                       _ll_GaussianStabilizingSelection,
-                       _ll_GSSmo,
-                       _ll_Multiplicative, _ll_MultivariateGSSmo, _ll_NoNoise,
-                       _ll_Optimum, _ll_PleiotropicOptima,
-                       _ll_StrictAdditiveMultivariateEffects, _PyDiploidGeneticValue)
-from .class_decorators import (attr_add_asblack, attr_class_pickle_with_super,
-                               attr_class_to_from_dict,
-                               attr_class_to_from_dict_no_recurse)
+from ._fwdpy11 import (
+    GeneticValueIsTrait,
+    GeneticValueNoise,
+    _ll_Additive,
+    _ll_GaussianNoise,
+    _ll_GBR,
+    _ll_GaussianStabilizingSelection,
+    _ll_GSSmo,
+    _ll_Multiplicative,
+    _ll_MultivariateGSSmo,
+    _ll_NoNoise,
+    _ll_Optimum,
+    _ll_PleiotropicOptima,
+    _ll_StrictAdditiveMultivariateEffects,
+    _PyDiploidGeneticValue,
+)
+from .class_decorators import (
+    attr_add_asblack,
+    attr_class_pickle_with_super,
+    attr_class_to_from_dict,
+    attr_class_to_from_dict_no_recurse,
+)
 
 
 @attr_add_asblack
@@ -115,9 +127,7 @@ class PleiotropicOptima(_ll_PleiotropicOptima):
             attr.validators.instance_of(int)(self, attribute, value)
 
     def __attrs_post_init__(self):
-        super(PleiotropicOptima, self).__init__(self.optima,
-                                                self.VS,
-                                                self.when)
+        super(PleiotropicOptima, self).__init__(self.optima, self.VS, self.when)
 
     def __eq__(self, other):
         optima_equal = np.array_equal(self.optima, other.optima)
@@ -132,12 +142,13 @@ class PleiotropicOptima(_ll_PleiotropicOptima):
 @attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
 class GaussianStabilizingSelection(_ll_GaussianStabilizingSelection):
     """
-    Define a mapping of phenotype-to-fitness according to a 
+    Define a mapping of phenotype-to-fitness according to a
     Gaussian stabilizing selection model.
 
     Instances of this trait must be constructed by one of the
     various class methods available.
     """
+
     is_single_trait: bool
     optima: list
 
@@ -229,12 +240,10 @@ class GSS(_ll_GSSmo):
     VS: typing.Optional[float] = None
 
     def __attrs_post_init__(self):
-        warnings.warn("use GaussianStabilizingSelection instead",
-                      DeprecationWarning)
+        warnings.warn("use GaussianStabilizingSelection instead", DeprecationWarning)
         if self.VS is None:
             super(GSS, self).__init__(
-                [Optimum(optimum=self.optimum.optimum,
-                         VS=self.optimum.VS, when=0)]
+                [Optimum(optimum=self.optimum.optimum, VS=self.optimum.VS, when=0)]
             )
         else:
             super(GSS, self).__init__(
@@ -248,8 +257,7 @@ class GSS(_ll_GSSmo):
         self.__dict__.update(d)
         if self.VS is None:
             super(GSS, self).__init__(
-                [Optimum(optimum=self.optimum.optimum,
-                         VS=self.optimum.VS, when=0)]
+                [Optimum(optimum=self.optimum.optimum, VS=self.optimum.VS, when=0)]
             )
         else:
             super(GSS, self).__init__(
@@ -296,8 +304,7 @@ class GSSmo(_ll_GSSmo):
                 raise ValueError("Optimum.when is None")
 
     def __attrs_post_init__(self):
-        warnings.warn("use GaussianStabilizingSelection instead",
-                      DeprecationWarning)
+        warnings.warn("use GaussianStabilizingSelection instead", DeprecationWarning)
         super(GSSmo, self).__init__(self.optima)
 
 
@@ -347,8 +354,7 @@ class MultivariateGSS(_ll_MultivariateGSSmo):
     VS: typing.Optional[float] = None
 
     def __attrs_post_init__(self):
-        warnings.warn("use GaussianStabilizingSelection instead",
-                      DeprecationWarning)
+        warnings.warn("use GaussianStabilizingSelection instead", DeprecationWarning)
         if self.VS is None:
             super(MultivariateGSS, self).__init__([self.optima])
         else:
@@ -405,8 +411,7 @@ class MultivariateGSSmo(_ll_MultivariateGSSmo):
                 raise ValueError("PleiotropicOptima.when is None")
 
     def __attrs_post_init__(self):
-        warnings.warn("use GaussianStabilizingSelection instead",
-                      DeprecationWarning)
+        warnings.warn("use GaussianStabilizingSelection instead", DeprecationWarning)
         super(MultivariateGSSmo, self).__init__(self.optima)
 
 
@@ -629,10 +634,7 @@ class AdditivePleiotropy(_ll_StrictAdditiveMultivariateEffects):
 
     def __attrs_post_init__(self):
         super(AdditivePleiotropy, self).__init__(
-            self.ndimensions,
-            self.focal_trait,
-            self.gvalue_to_fitness,
-            self.noise
+            self.ndimensions, self.focal_trait, self.gvalue_to_fitness, self.noise
         )
 
 

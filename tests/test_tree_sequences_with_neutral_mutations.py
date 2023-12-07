@@ -74,8 +74,7 @@ class TestKeepFixations(unittest.TestCase):
         fwdpy11.evolvets(
             self.rng, self.pop, self.params, 100, suppress_table_indexing=True
         )
-        ti = fwdpy11.TreeIterator(
-            self.pop.tables, [i for i in range(2 * self.pop.N)])
+        ti = fwdpy11.TreeIterator(self.pop.tables, [i for i in range(2 * self.pop.N)])
         mc = _count_mutations_from_diploids(self.pop)
         # This assert was added when working
         # on GitHub isuse 954
@@ -138,8 +137,7 @@ class TestNeutralMutRegions(unittest.TestCase):
             self.params.rates.selected_mutation_rate,
             self.params.rates.recombination_rate,
         )
-        pdict["nregions"] = [fwdpy11.Region(
-            0, 0.25, 1), fwdpy11.Region(0.5, 1, 1)]
+        pdict["nregions"] = [fwdpy11.Region(0, 0.25, 1), fwdpy11.Region(0.5, 1, 1)]
         self.params = fwdpy11.ModelParams(**pdict)
 
     def test_neutral_mut_locations(self):
@@ -167,9 +165,9 @@ def test_trigger_final_simplification_with_fixations_to_remove():
         "gvalue": [fwdpy11.Multiplicative(2.0)],
         "rates": (1e-3, 1e-3, None),
         "simlen": burnin * N,
-        "demography": fwdpy11.ForwardDemesGraph.tubes([N],
-                                                      burnin=10*N,
-                                                      burnin_is_exact=True),
+        "demography": fwdpy11.ForwardDemesGraph.tubes(
+            [N], burnin=10 * N, burnin_is_exact=True
+        ),
         "prune_selected": True,
     }
     params = fwdpy11.ModelParams(**pdict)

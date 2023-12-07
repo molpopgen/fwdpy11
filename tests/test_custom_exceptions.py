@@ -29,6 +29,7 @@ class TestFwdppExceptions(unittest.TestCase):
 
     def test_tables_error_from_cpp(self):
         import fwdpy11._fwdpy11
+
         with self.assertRaises(fwdpy11.TablesError):
             fwdpy11._fwdpy11._throw_TablesError()
 
@@ -38,6 +39,7 @@ class TestFwdppExceptions(unittest.TestCase):
 
     def test_samples_error_from_cpp(self):
         import fwdpy11._fwdpy11
+
         with self.assertRaises(fwdpy11.SamplesError):
             fwdpy11._fwdpy11._throw_SamplesError()
 

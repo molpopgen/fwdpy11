@@ -59,5 +59,9 @@ class PyGSSRandomOptimum(fwdpy11.GeneticValueIsTrait):
         )
 
     def update(self, pop: fwdpy11.DiploidPopulation) -> None:
-        self.opt = np.random.normal(0.0, 1.0, 1,)[0]
+        self.opt = np.random.normal(
+            0.0,
+            1.0,
+            1,
+        )[0]
         self.optima.append((pop.generation, self.opt))

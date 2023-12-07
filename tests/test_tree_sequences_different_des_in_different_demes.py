@@ -32,8 +32,7 @@ import numpy as np
 def gvalue_multiplicative(pop, ind, scaling):
     g = 1.0
     keys = [k for k in pop.haploid_genomes[pop.diploids[ind].first].smutations]
-    keys.extend(
-        [k for k in pop.haploid_genomes[pop.diploids[ind].second].smutations])
+    keys.extend([k for k in pop.haploid_genomes[pop.diploids[ind].second].smutations])
     keys = np.array(keys, dtype=np.uint32)
     key_counts = np.unique(keys, return_counts=True)
 
@@ -77,18 +76,15 @@ class TestMultiplicativeWithExpSNoMigration(unittest.TestCase):
         n0 = 0
         n1 = 0
         for i, md in enumerate(self.pop.diploid_metadata):
-            ng0 = len(
-                self.pop.haploid_genomes[self.pop.diploids[i].first].smutations)
-            ng1 = len(
-                self.pop.haploid_genomes[self.pop.diploids[i].second].smutations)
+            ng0 = len(self.pop.haploid_genomes[self.pop.diploids[i].first].smutations)
+            ng1 = len(self.pop.haploid_genomes[self.pop.diploids[i].second].smutations)
             if ng0 + ng1 > 0:
                 if md.deme == 0:
                     n0 += 1
                 elif md.deme == 1:
                     n1 += 1
         if n0 == 0 or n1 == 0:
-            self.assertFail(
-                "we don't have individuals with mutations in each deme")
+            self.assertFail("we don't have individuals with mutations in each deme")
 
     def test_it(self):
         gv = np.zeros(self.pop.N)
@@ -104,7 +100,7 @@ class TestGaussianStabilizingSelection(unittest.TestCase):
     to put the same mutation in both demes.
     """
 
-    @ classmethod
+    @classmethod
     def setUpClass(self):
         yaml = """
         time_units: generations
@@ -135,9 +131,13 @@ class TestGaussianStabilizingSelection(unittest.TestCase):
             "demography": demography,
             "simlen": 100,
             "gvalue": fwdpy11.Additive(
-                ndemes=2, scaling=2, gvalue_to_fitness=fwdpy11.GaussianStabilizingSelection.single_trait([fwdpy11.Optimum(optimum=0.0, VS=1.0, when=0)])
+                ndemes=2,
+                scaling=2,
+                gvalue_to_fitness=fwdpy11.GaussianStabilizingSelection.single_trait(
+                    [fwdpy11.Optimum(optimum=0.0, VS=1.0, when=0)]
+                ),
             ),
-            "prune_selected": False
+            "prune_selected": False,
         }
 
         self.params = fwdpy11.ModelParams(**pdict)
@@ -155,8 +155,7 @@ class TestGaussianStabilizingSelection(unittest.TestCase):
                 demes = np.unique(nt["deme"][t.samples_below(m.node)])
                 for d in demes:
                     demes_with_muts[d] += 1
-        assert np.all(demes_with_muts >
-                      0), "test requires mutations in both demes"
+        assert np.all(demes_with_muts > 0), "test requires mutations in both demes"
 
     def test_genetic_values(self):
         for m in self.pop.diploid_metadata:
@@ -176,7 +175,7 @@ class TestMultivariateLogNormalS(unittest.TestCase):
     to put the same mutation in both demes.
     """
 
-    @ classmethod
+    @classmethod
     def setUpClass(self):
         yaml = """
         time_units: generations
@@ -218,8 +217,7 @@ class TestMultivariateLogNormalS(unittest.TestCase):
                 demes = np.unique(nt["deme"][t.samples_below(m.node)])
                 for d in demes:
                     demes_with_muts[d] += 1
-        assert np.all(demes_with_muts >
-                      0), "test requires mutations in both demes"
+        assert np.all(demes_with_muts > 0), "test requires mutations in both demes"
 
     def test_genetic_values(self):
         for i, m in enumerate(self.pop.diploid_metadata):
@@ -227,16 +225,22 @@ class TestMultivariateLogNormalS(unittest.TestCase):
             self.assertAlmostEqual(m.g, g)
 
 
-@ pytest.mark.parametrize("mvDES",
-                          [fwdpy11.mvDES(fwdpy11.MultivariateGaussianEffects(0, 1, 1, np.identity(2)), np.zeros(2)),  # NOQA
-                           fwdpy11.mvDES(
-                              [fwdpy11.ConstantS(0, 1, 1, 0.1),
-                               fwdpy11.ConstantS(0, 1, 1, -0.1)],
-                              np.zeros(2),
-                              np.identity(2),
-                          )])
-@ pytest.mark.parametrize("gvalue", [fwdpy11.Multiplicative(2., ndemes=2),
-                                     fwdpy11.Additive(2., ndemes=2)])
+@pytest.mark.parametrize(
+    "mvDES",
+    [
+        fwdpy11.mvDES(
+            fwdpy11.MultivariateGaussianEffects(0, 1, 1, np.identity(2)), np.zeros(2)
+        ),  # NOQA
+        fwdpy11.mvDES(
+            [fwdpy11.ConstantS(0, 1, 1, 0.1), fwdpy11.ConstantS(0, 1, 1, -0.1)],
+            np.zeros(2),
+            np.identity(2),
+        ),
+    ],
+)
+@pytest.mark.parametrize(
+    "gvalue", [fwdpy11.Multiplicative(2.0, ndemes=2), fwdpy11.Additive(2.0, ndemes=2)]
+)
 def test_invalid_model(mvDES, gvalue):
     demog = """
 description: trigger exception
@@ -301,7 +305,8 @@ def test_two_demes_divergent_optima():
     """
 
     demography = fwdpy11.ForwardDemesGraph.from_demes(
-        yaml, burnin=N + 50, burnin_is_exact=True)
+        yaml, burnin=N + 50, burnin_is_exact=True
+    )
 
     moving_optimum_deme_0 = fwdpy11.GaussianStabilizingSelection(
         optima=[
@@ -314,7 +319,7 @@ def test_two_demes_divergent_optima():
         optima=[
             fwdpy11.Optimum(when=0, optimum=0.0, VS=1.0),
             fwdpy11.Optimum(when=N, optimum=-1.0, VS=1.0),
-            ],
+        ],
         is_single_trait=True,
     )
 
@@ -350,8 +355,9 @@ def test_two_demes_divergent_optima():
                 # Mapping of trait (genetic) value to fitness
                 gvalue_to_fitness=moving_optimum_deme_0,
             ),
-            fwdpy11.Additive(ndemes=2, scaling=2,
-                             gvalue_to_fitness=moving_optimum_deme_1),
+            fwdpy11.Additive(
+                ndemes=2, scaling=2, gvalue_to_fitness=moving_optimum_deme_1
+            ),
         ],
         "prune_selected": False,
     }

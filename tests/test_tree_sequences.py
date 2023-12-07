@@ -52,7 +52,8 @@ def set_up_quant_trait_model(simlen=1.0):
     # TODO add neutral variants
     N = 1000
     demography = fwdpy11.ForwardDemesGraph.tubes(
-        [N], int(np.rint(simlen*N)), burnin_is_exact=True)
+        [N], int(np.rint(simlen * N)), burnin_is_exact=True
+    )
     rho = 2.0
     # theta = 100.
     # nreps = 500
@@ -95,7 +96,8 @@ def set_up_standard_pop_gen_model(simlen=1.0):
     r = rho / (4 * N)
 
     demography = fwdpy11.ForwardDemesGraph.tubes(
-        [N], int(np.rint(simlen*N)), burnin_is_exact=True)
+        [N], int(np.rint(simlen * N)), burnin_is_exact=True
+    )
 
     a = fwdpy11.Multiplicative(2.0)
     pselected = 5e-3
@@ -115,7 +117,7 @@ def set_up_standard_pop_gen_model(simlen=1.0):
         "simlen": np.rint(simlen * N).astype(int),
     }
     params = fwdpy11.ModelParams(**p)
-    rng = fwdpy11.GSLrng(666 ** 2)
+    rng = fwdpy11.GSLrng(666**2)
     pop = fwdpy11.DiploidPopulation(N, 1.0)
     return params, rng, pop
 
@@ -189,14 +191,12 @@ class TestTreeSequencesNoAncientSamplesKeepFixations(unittest.TestCase):
         assert self.dumped_ts.time_units == "generations"
 
     def test_mut_lookup(self):
-        self.assertEqual(len(self.pop.mut_lookup),
-                         len(self.pop.tables.mutations))
+        self.assertEqual(len(self.pop.mut_lookup), len(self.pop.tables.mutations))
         self.assertEqual(len(self.pop.mut_lookup), len(self.pop.tables.sites))
         self.assertTrue(validate_mut_lookup_content(self.pop))
 
     def test_simplify_tables(self):
-        tables, idmap = fwdpy11.simplify_tables(
-            self.pop.tables, [i for i in range(10)])
+        tables, idmap = fwdpy11.simplify_tables(self.pop.tables, [i for i in range(10)])
         for i in range(10):
             self.assertTrue(idmap[i] != fwdpy11.NULL_NODE)
 
@@ -208,26 +208,19 @@ class TestTreeSequencesNoAncientSamplesKeepFixations(unittest.TestCase):
             self.assertTrue(idmap[i] != fwdpy11.NULL_NODE)
 
     def test_dump_to_tskit(self):
-        self.assertEqual(len(self.dumped_ts.tables.nodes),
-                         len(self.pop.tables.nodes))
-        self.assertEqual(len(self.dumped_ts.tables.edges),
-                         len(self.pop.tables.edges))
+        self.assertEqual(len(self.dumped_ts.tables.nodes), len(self.pop.tables.nodes))
+        self.assertEqual(len(self.dumped_ts.tables.edges), len(self.pop.tables.edges))
         self.assertEqual(
-            len(self.dumped_ts.tables.mutations), len(
-                self.pop.tables.mutations)
+            len(self.dumped_ts.tables.mutations), len(self.pop.tables.mutations)
         )
         eview = np.array(self.pop.tables.edges, copy=False)
         self.assertEqual(
             eview["parent"].sum(), self.dumped_ts.tables.edges.parent.sum()
         )
-        self.assertEqual(eview["child"].sum(),
-                         self.dumped_ts.tables.edges.child.sum())
-        self.assertEqual(eview["left"].sum(),
-                         self.dumped_ts.tables.edges.left.sum())
-        self.assertEqual(eview["right"].sum(),
-                         self.dumped_ts.tables.edges.right.sum())
-        tv = fwdpy11.TreeIterator(
-            self.pop.tables, [i for i in range(2 * self.pop.N)])
+        self.assertEqual(eview["child"].sum(), self.dumped_ts.tables.edges.child.sum())
+        self.assertEqual(eview["left"].sum(), self.dumped_ts.tables.edges.left.sum())
+        self.assertEqual(eview["right"].sum(), self.dumped_ts.tables.edges.right.sum())
+        tv = fwdpy11.TreeIterator(self.pop.tables, [i for i in range(2 * self.pop.N)])
         tt_fwd = 0
         for t in tv:
             tt_fwd += t.total_time()
@@ -237,10 +230,8 @@ class TestTreeSequencesNoAncientSamplesKeepFixations(unittest.TestCase):
         self.assertEqual(tt_fwd, tt_tskit)
 
         for i, j in enumerate(self.pop.diploid_metadata):
-            self.assertEqual(
-                self.dumped_ts.tables.nodes.individual[j.nodes[0]], i)
-            self.assertEqual(
-                self.dumped_ts.tables.nodes.individual[j.nodes[1]], i)
+            self.assertEqual(self.dumped_ts.tables.nodes.individual[j.nodes[0]], i)
+            self.assertEqual(self.dumped_ts.tables.nodes.individual[j.nodes[1]], i)
 
         self.assertEqual(mcounts_comparison(self.pop, self.dumped_ts), True)
 
@@ -304,8 +295,7 @@ class TestTreeSequencesNoAncientSamplesKeepFixations(unittest.TestCase):
         # TODO: need test of empty tree sequence
         # and tree sequence where mutations aren't
         # on every tree
-        tv = fwdpy11.TreeIterator(
-            self.pop.tables, [i for i in range(2 * self.pop.N)])
+        tv = fwdpy11.TreeIterator(self.pop.tables, [i for i in range(2 * self.pop.N)])
         nsites_visited = 0
         for tree in tv:
             for s in tree.sites():
@@ -325,8 +315,7 @@ class TestTreeSequencesNoAncientSamplesKeepFixations(unittest.TestCase):
             )
             nsites_visited = 0
             idx = np.where(
-                (site_table["position"] >= i) & (
-                    site_table["position"] < i + 0.1)
+                (site_table["position"] >= i) & (site_table["position"] < i + 0.1)
             )[0]
             nsites_in_interval = len(idx)
             for tree in tv:
@@ -337,8 +326,7 @@ class TestTreeSequencesNoAncientSamplesKeepFixations(unittest.TestCase):
             self.assertEqual(nsites_visited, nsites_in_interval)
 
     def test_TreeIterator_iterate_mutations(self):
-        tv = fwdpy11.TreeIterator(
-            self.pop.tables, [i for i in range(2 * self.pop.N)])
+        tv = fwdpy11.TreeIterator(self.pop.tables, [i for i in range(2 * self.pop.N)])
         sites = np.array(self.pop.tables.sites, copy=False)
         nsites_visited = 0
         for tree in tv:
@@ -357,8 +345,7 @@ class TestTreeSequencesNoAncientSamplesKeepFixations(unittest.TestCase):
                 end=i + 0.1,
             )
             nsites_visited = 0
-            idx = np.where((sites["position"] >= i) &
-                           (sites["position"] < i + 0.1))[0]
+            idx = np.where((sites["position"] >= i) & (sites["position"] < i + 0.1))[0]
             nsites_in_interval = len(idx)
             for tree in tv:
                 for m in tree.mutations():
@@ -368,8 +355,7 @@ class TestTreeSequencesNoAncientSamplesKeepFixations(unittest.TestCase):
             self.assertEqual(nsites_visited, nsites_in_interval)
 
     def test_leaf_counts_vs_mcounts(self):
-        tv = fwdpy11.TreeIterator(
-            self.pop.tables, [i for i in range(2 * self.pop.N)])
+        tv = fwdpy11.TreeIterator(self.pop.tables, [i for i in range(2 * self.pop.N)])
         mv = np.array(self.pop.tables.mutations, copy=False)
         muts = self.pop.mutations_ndarray
         p = muts["pos"]
@@ -408,8 +394,7 @@ class TestTreeSequencesNoAncientSamplesKeepFixations(unittest.TestCase):
         self.assertEqual(tt_fwd, tt_tskit)
 
         self.assertEqual(len(fp11ts.mutations), len(mspts.tables.mutations))
-        fp11_pos = np.array(
-            [self.pop.mutations[i.key].pos for i in fp11ts.mutations])
+        fp11_pos = np.array([self.pop.mutations[i.key].pos for i in fp11ts.mutations])
         fp11_pos = np.sort(fp11_pos)
         msp_pos = np.sort(mspts.tables.sites.position)
         self.assertTrue(np.array_equal(fp11_pos, msp_pos))
@@ -465,8 +450,7 @@ class TestTreeSequencesNoAncientSamplesKeepFixations(unittest.TestCase):
                 end=i + 0.1,
             )
             w = np.where((spos >= i) & (spos < i + 0.1))[0]
-            self.assertTrue(np.array_equal(
-                spos[w], np.array(dmi.selected.positions)))
+            self.assertTrue(np.array_equal(spos[w], np.array(dmi.selected.positions)))
 
     def test_VariantIterator(self):
         """
@@ -549,8 +533,7 @@ class TestTreeSequencesNoAncientSamplesKeepFixations(unittest.TestCase):
             )
 
     def test_count_mutations(self):
-        mc = fwdpy11.count_mutations(
-            self.pop, [i for i in range(2 * self.pop.N)])
+        mc = fwdpy11.count_mutations(self.pop, [i for i in range(2 * self.pop.N)])
         pmc = np.array(self.pop.mcounts)
         self.assertTrue(np.array_equal(mc, pmc))
 
@@ -592,8 +575,7 @@ class TestTreeSequencesWithAncientSamplesKeepFixations(unittest.TestCase):
         ), "Nothing fixed, so test case is not helpful"
 
     def test_mut_lookup(self):
-        self.assertEqual(len(self.pop.mut_lookup),
-                         len(self.pop.tables.mutations))
+        self.assertEqual(len(self.pop.mut_lookup), len(self.pop.tables.mutations))
         self.assertEqual(len(self.pop.mut_lookup), len(self.pop.tables.sites))
         self.assertTrue(validate_mut_lookup_content(self.pop))
 
@@ -615,10 +597,12 @@ class TestTreeSequencesWithAncientSamplesKeepFixations(unittest.TestCase):
     def test_count_mutations_preserved_samples(self):
         mc = fwdpy11.count_mutations(self.pop, self.pop.preserved_nodes)
         pmc = np.array(self.pop.mcounts_ancient_samples)
-        ti = fwdpy11.TreeIterator(self.pop.tables,
-                                  self.pop.alive_nodes,
-                                  ancient_samples=self.pop.ancient_sample_nodes,
-                                  update_samples=True)
+        ti = fwdpy11.TreeIterator(
+            self.pop.tables,
+            self.pop.alive_nodes,
+            ancient_samples=self.pop.ancient_sample_nodes,
+            update_samples=True,
+        )
         mc_tree = np.zeros(len(self.pop.mutations))
         amc_tree = np.zeros(len(self.pop.mutations))
         alive_nodes = self.pop.alive_nodes
@@ -631,9 +615,9 @@ class TestTreeSequencesWithAncientSamplesKeepFixations(unittest.TestCase):
                     if node in ancient_nodes:
                         amc_tree[mut.key] += 1
         self.assertTrue(np.array_equal(mc, amc_tree))
-        self.assertTrue(np.array_equal(fwdpy11.count_mutations(self.pop,
-                                                               alive_nodes),
-                                       mc_tree))
+        self.assertTrue(
+            np.array_equal(fwdpy11.count_mutations(self.pop, alive_nodes), mc_tree)
+        )
         self.assertTrue(np.array_equal(mc, pmc))
 
     def test_ancient_sample_times(self):
@@ -658,8 +642,7 @@ class TestTreeSequencesWithAncientSamplesKeepFixations(unittest.TestCase):
         vi = fwdpy11.VariantIterator(self.pop.tables, self.pop.preserved_nodes)
         for v in vi:
             k = v.records[0]
-            self.assertEqual(
-                self.pop.mcounts_ancient_samples[k.key], v.genotypes.sum())
+            self.assertEqual(self.pop.mcounts_ancient_samples[k.key], v.genotypes.sum())
 
     def test_sample_traverser(self):
         timepoints = [i for i in range(1, 101)]
@@ -737,8 +720,7 @@ class TestMutationCounts(unittest.TestCase):
         )
 
     def test_mut_lookup(self):
-        self.assertEqual(len(self.pop.mut_lookup),
-                         len(self.pop.tables.mutations))
+        self.assertEqual(len(self.pop.mut_lookup), len(self.pop.tables.mutations))
         self.assertEqual(len(self.pop.mut_lookup), len(self.pop.tables.sites))
         self.assertTrue(validate_mut_lookup_content(self.pop))
 
@@ -747,8 +729,7 @@ class TestMutationCounts(unittest.TestCase):
 
     def test_mutation_counts_details(self):
         mc = [i for i in self.pop2.mcounts if i > 0]
-        self.assertTrue(
-            all([i == j for i, j in zip(self.pop.mcounts, mc)]) is True)
+        self.assertTrue(all([i == j for i, j in zip(self.pop.mcounts, mc)]) is True)
 
     def test_mutation_counts_from_genomes(self):
         """
@@ -767,10 +748,8 @@ class TestMutationCounts(unittest.TestCase):
             if g.n > 0:
                 for k in g.smutations:
                     mc2[k] += g.n
-        self.assertTrue(
-            all([i == j for i, j in zip(mc, self.pop.mcounts)]) is True)
-        self.assertTrue(
-            all([i == j for i, j in zip(mc2, self.pop2.mcounts)]) is True)
+        self.assertTrue(all([i == j for i, j in zip(mc, self.pop.mcounts)]) is True)
+        self.assertTrue(all([i == j for i, j in zip(mc2, self.pop2.mcounts)]) is True)
 
 
 class TestUpdateTiming(unittest.TestCase):
@@ -821,12 +800,10 @@ class TestTreeSequencesNoAncientSamplesPruneFixations(unittest.TestCase):
         fwdpy11.evolvets(
             self.rng, self.pop, self.params, 100, track_mutation_counts=True
         )
-        assert len(
-            self.pop.fixations) > 0, "Nothing fixed, so test case is not helpful"
+        assert len(self.pop.fixations) > 0, "Nothing fixed, so test case is not helpful"
 
     def test_mut_lookup(self):
-        self.assertEqual(len(self.pop.mut_lookup),
-                         len(self.pop.tables.mutations))
+        self.assertEqual(len(self.pop.mut_lookup), len(self.pop.tables.mutations))
         self.assertEqual(len(self.pop.mut_lookup), len(self.pop.tables.sites))
         self.assertTrue(validate_mut_lookup_content(self.pop))
 
@@ -834,8 +811,7 @@ class TestTreeSequencesNoAncientSamplesPruneFixations(unittest.TestCase):
         self.assertTrue(max(self.pop.mcounts) < 2 * self.pop.N)
 
     def test_mutation_table_contents(self):
-        self.assertEqual(len(self.pop.mcounts), len(
-            self.pop.mcounts_ancient_samples))
+        self.assertEqual(len(self.pop.mcounts), len(self.pop.mcounts_ancient_samples))
         for m in self.pop.tables.mutations:
             self.assertTrue(m.key < len(self.pop.mutations))
             self.assertTrue(self.pop.mcounts[m.key] < 2 * self.pop.N)
@@ -910,18 +886,15 @@ class TestTreeSequencesWithAncientSamplesPruneFixations(unittest.TestCase):
             suppress_table_indexing=False,
             track_mutation_counts=True,
         )
-        assert len(
-            self.pop.fixations) > 0, "Nothing fixed, so test case is not helpful"
+        assert len(self.pop.fixations) > 0, "Nothing fixed, so test case is not helpful"
 
     def test_mut_lookup(self):
-        self.assertEqual(len(self.pop.mut_lookup),
-                         len(self.pop.tables.mutations))
+        self.assertEqual(len(self.pop.mut_lookup), len(self.pop.tables.mutations))
         self.assertEqual(len(self.pop.mut_lookup), len(self.pop.tables.sites))
         self.assertTrue(validate_mut_lookup_content(self.pop))
 
     def test_mutation_table_contents(self):
-        self.assertEqual(len(self.pop.mcounts), len(
-            self.pop.mcounts_ancient_samples))
+        self.assertEqual(len(self.pop.mcounts), len(self.pop.mcounts_ancient_samples))
         for m in self.pop.tables.mutations:
             self.assertTrue(m.key < len(self.pop.mutations))
             if self.pop.mcounts[m.key] < 2 * self.pop.N:
@@ -933,8 +906,7 @@ class TestTreeSequencesWithAncientSamplesPruneFixations(unittest.TestCase):
             else:
                 is_found_ancient = False
             self.assertTrue(
-                is_fixed is False or (
-                    is_fixed is True and is_found_ancient is True)
+                is_fixed is False or (is_fixed is True and is_found_ancient is True)
             )
 
         for f in self.pop.fixations:
@@ -1002,7 +974,8 @@ class TestSimplificationInterval(unittest.TestCase):
         self.mu = self.theta / (4 * self.N)
         self.r = self.rho / (4 * self.N)
         self.GSS = fwdpy11.fwdpy11.GaussianStabilizingSelection.single_trait(
-            [fwdpy11.Optimum(VS=1.0, optimum=0.0, when=0)])
+            [fwdpy11.Optimum(VS=1.0, optimum=0.0, when=0)]
+        )
         a = fwdpy11.Additive(2.0, self.GSS)
         self.p = {
             "nregions": [],
@@ -1023,8 +996,7 @@ class TestSimplificationInterval(unittest.TestCase):
         fwdpy11.evolvets(self.rng, self.pop, self.params, 1, self.recorder)
 
     def test_mut_lookup(self):
-        self.assertEqual(len(self.pop.mut_lookup),
-                         len(self.pop.tables.mutations))
+        self.assertEqual(len(self.pop.mut_lookup), len(self.pop.tables.mutations))
         self.assertEqual(len(self.pop.mut_lookup), len(self.pop.tables.sites))
         self.assertTrue(validate_mut_lookup_content(self.pop))
 
@@ -1036,7 +1008,8 @@ class TestFixationPreservation(unittest.TestCase):
         r = rho / (4 * N)
 
         GSS = fwdpy11.GaussianStabilizingSelection.single_trait(
-            [fwdpy11.Optimum(VS=1.0, optimum=1.0, when=0)])
+            [fwdpy11.Optimum(VS=1.0, optimum=1.0, when=0)]
+        )
         a = fwdpy11.Additive(2.0, GSS)
         p = {
             "nregions": [],
@@ -1121,7 +1094,8 @@ class TestMetaData(unittest.TestCase):
         r = rho / (4 * N)
 
         GSS = fwdpy11.GaussianStabilizingSelection.single_trait(
-            [fwdpy11.Optimum(VS=1.0, optimum=1.0, when=0)])
+            [fwdpy11.Optimum(VS=1.0, optimum=1.0, when=0)]
+        )
         a = fwdpy11.Additive(2.0, GSS)
         p = {
             "nregions": [],
@@ -1153,15 +1127,13 @@ class TestMetaData(unittest.TestCase):
             def __call__(self, pop, recorder):
                 if pop.generation % 100 == 0.0:
                     for i in pop.diploid_metadata:
-                        self.data.append(
-                            (pop.generation, MD(i.g, i.e, i.w, i.label)))
+                        self.data.append((pop.generation, MD(i.g, i.e, i.w, i.label)))
                     recorder.assign(np.arange(pop.N, dtype=np.int32))
 
         recorder = Recorder()
         fwdpy11.evolvets(rng, pop, params, 100, recorder)
 
-        ancient_sample_metadata = np.array(
-            pop.ancient_sample_metadata, copy=False)
+        ancient_sample_metadata = np.array(pop.ancient_sample_metadata, copy=False)
         alive_sample_metadata = np.array(pop.diploid_metadata, copy=False)
         metadata = np.hstack((ancient_sample_metadata, alive_sample_metadata))
 
@@ -1173,8 +1145,7 @@ class TestMetaData(unittest.TestCase):
         genetic_trait_values_from_sim = []
         genetic_values_from_ts = []
         for u in np.unique(metadata_node_times):
-            samples_at_time_u = metadata_nodes[np.where(
-                metadata_node_times == u)]
+            samples_at_time_u = metadata_nodes[np.where(metadata_node_times == u)]
             vi = fwdpy11.VariantIterator(pop.tables, samples_at_time_u)
             sum_esizes = np.zeros(len(samples_at_time_u))
             for variant in vi:
@@ -1215,7 +1186,8 @@ class TestDataMatrixIterator(unittest.TestCase):
         self.r = self.rho / (4 * self.N)
 
         self.GSS = fwdpy11.GaussianStabilizingSelection.single_trait(
-            [fwdpy11.Optimum(VS=1.0, optimum=0.0, when=0)])
+            [fwdpy11.Optimum(VS=1.0, optimum=0.0, when=0)]
+        )
         a = fwdpy11.Additive(2.0, self.GSS)
         self.p = {
             "nregions": [],
@@ -1249,8 +1221,7 @@ class TestDataMatrixIterator(unittest.TestCase):
             niterations += 1
             for i in dm.selected_keys:
                 self.assertFalse(self.pop.mutations[i].neutral)
-            self.assertTrue(np.array_equal(
-                self.dm.selected_keys, dm.selected_keys))
+            self.assertTrue(np.array_equal(self.dm.selected_keys, dm.selected_keys))
             self.assertTrue(np.array_equal(dm.neutral, self.neutral))
             self.assertTrue(np.array_equal(dm.selected, self.selected))
         self.assertEqual(niterations, 1)
@@ -1262,9 +1233,7 @@ class TestDataMatrixIterator(unittest.TestCase):
         dm = next(dm)
         rows = np.where((self.spos >= 0.1) & (self.spos < 0.2))[0]
         pos_slice = self.spos[rows]
-        selected_slice = self.selected[
-            rows,
-        ]
+        selected_slice = self.selected[rows,]
         self.assertTrue(np.array_equal(dm.selected_positions, pos_slice))
         self.assertTrue(np.array_equal(dm.selected, selected_slice))
 
@@ -1278,16 +1247,13 @@ class TestDataMatrixIterator(unittest.TestCase):
             niterations += 1
             rows = np.where((self.spos >= r[0]) & (self.spos < r[1]))[0]
             pos_slice = self.spos[rows]
-            selected_slice = self.selected[
-                rows,
-            ]
+            selected_slice = self.selected[rows,]
             self.assertTrue(np.array_equal(dm.selected_positions, pos_slice))
             self.assertTrue(np.array_equal(dm.selected, selected_slice))
         self.assertEqual(niterations, len(slices))
 
     def test_complex_slices(self):
-        slices = [(0.1, 0.2), (0.15, 0.23), (0.21, 0.37),
-                  (0.38, 0.5337), (0.5, 0.55)]
+        slices = [(0.1, 0.2), (0.15, 0.23), (0.21, 0.37), (0.38, 0.5337), (0.5, 0.55)]
         dmi = fwdpy11.DataMatrixIterator(
             self.pop.tables, self.all_samples, slices, True, True
         )
@@ -1296,9 +1262,7 @@ class TestDataMatrixIterator(unittest.TestCase):
             niterations += 1
             rows = np.where((self.spos >= r[0]) & (self.spos < r[1]))[0]
             pos_slice = self.spos[rows]
-            selected_slice = self.selected[
-                rows,
-            ]
+            selected_slice = self.selected[rows,]
             self.assertTrue(np.array_equal(dm.selected_positions, pos_slice))
             self.assertTrue(np.array_equal(dm.selected, selected_slice))
         self.assertEqual(niterations, len(slices))
@@ -1318,9 +1282,7 @@ class TestDataMatrixIterator(unittest.TestCase):
         for r, dm in zip(slices, dmi):
             rows = np.where((self.spos >= r[0]) & (self.spos < r[1]))[0]
             pos_slice = self.spos[rows]
-            selected_slice = self.selected[
-                rows,
-            ]
+            selected_slice = self.selected[rows,]
             self.assertTrue(np.array_equal(dm.selected_positions, pos_slice))
             self.assertTrue(np.array_equal(dm.selected, selected_slice))
 
@@ -1335,9 +1297,7 @@ class TestTreeSequenceResettingDuringTimeSeriesAnalysis(unittest.TestCase):
                 self.timepoint_seen = {}
 
             def __call__(self, pop):
-                assert len(
-                    pop.preserved_nodes) // 2 == \
-                    len(pop.ancient_sample_metadata)
+                assert len(pop.preserved_nodes) // 2 == len(pop.ancient_sample_metadata)
                 # Get the most recent ancient samples
                 # and record their number.  We do this
                 # by a "brute-force" approach
@@ -1361,7 +1321,8 @@ class TestTreeSequenceResettingDuringTimeSeriesAnalysis(unittest.TestCase):
         self.r = self.rho / (4 * self.N)
 
         self.GSS = fwdpy11.GaussianStabilizingSelection.single_trait(
-            [fwdpy11.Optimum(VS=1.0, optimum=0.0, when=0)])
+            [fwdpy11.Optimum(VS=1.0, optimum=0.0, when=0)]
+        )
         a = fwdpy11.Additive(2.0, self.GSS)
         self.p = {
             "nregions": [],
@@ -1401,12 +1362,10 @@ class TestTreeSequenceResettingDuringTimeSeriesAnalysis(unittest.TestCase):
             self.assertEqual(j, 1)
 
     def test_all_expected_timepoints_are_present(self):
-        self.assertEqual(self.resetter.sample_timepoints,
-                         [i for i in range(1, 101)])
+        self.assertEqual(self.resetter.sample_timepoints, [i for i in range(1, 101)])
 
     def test_all_sample_sizes_are_correct(self):
-        self.assertTrue(
-            all([i == 10 for i in self.resetter.sample_sizes]) is True)
+        self.assertTrue(all([i == 10 for i in self.resetter.sample_sizes]) is True)
 
 
 class TestDiploidPopulationInitialization(unittest.TestCase):
@@ -1454,8 +1413,7 @@ class TestTrackMutationCounts(unittest.TestCase):
             track_mutation_counts=True,
             suppress_table_indexing=True,
         )
-        assert len(
-            self.pop.fixations) > 0, "Nothing fixed, so test case is not helpful"
+        assert len(self.pop.fixations) > 0, "Nothing fixed, so test case is not helpful"
 
         for i, j in zip(self.pop.fixations, self.pop.fixation_times):
             self.assertTrue(i.key in self.ft.freqs)
@@ -1465,8 +1423,7 @@ class TestTrackMutationCounts(unittest.TestCase):
         fwdpy11.evolvets(
             self.rng, self.pop, self.params, 1, self.ft, track_mutation_counts=True
         )
-        assert len(
-            self.pop.fixations) > 0, "Nothing fixed, so test case is not helpful"
+        assert len(self.pop.fixations) > 0, "Nothing fixed, so test case is not helpful"
 
         for i, j in zip(self.pop.fixations, self.pop.fixation_times):
             self.assertTrue(i.key in self.ft.freqs)
@@ -1490,14 +1447,12 @@ class TestRecapitation(unittest.TestCase):
 
     def test_ancient_sample_times(self):
         nodes = np.array(self.pop.tables.nodes, copy=False)
-        self.assertTrue(
-            np.all(nodes["time"][self.amd["nodes"].flatten()] == 0))
+        self.assertTrue(np.all(nodes["time"][self.amd["nodes"].flatten()] == 0))
 
     def test_number_of_roots(self):
         tv = fwdpy11.TreeIterator(
             self.pop.tables,
-            np.concatenate(
-                (self.pop.alive_nodes, self.amd["nodes"].flatten())),
+            np.concatenate((self.pop.alive_nodes, self.amd["nodes"].flatten())),
         )
         for t in tv:
             self.assertEqual(len(t.roots), 2 * len(self.amd))
@@ -1546,10 +1501,9 @@ class TestInvalidAttemptAtRecapitation(unittest.TestCase):
             "simlen": 100,
         }
         params = fwdpy11.ModelParams(**p)
-        rng = fwdpy11.GSLrng(666 ** 2)
+        rng = fwdpy11.GSLrng(666**2)
         with self.assertRaises(ValueError):
-            fwdpy11.evolvets(rng, pop, params, 100,
-                             preserve_first_generation=True)
+            fwdpy11.evolvets(rng, pop, params, 100, preserve_first_generation=True)
 
 
 class TouchTrees(object):
@@ -1564,8 +1518,7 @@ class TouchTrees(object):
         exception_happened = False
 
         try:
-            _ = fwdpy11.TreeIterator(
-                pop.tables, pop.alive_nodes, update_samples=True)
+            _ = fwdpy11.TreeIterator(pop.tables, pop.alive_nodes, update_samples=True)
         except ValueError:
             exception_happened = True
 
@@ -1592,7 +1545,7 @@ def test_table_indexing_during_sim(test_table_indexing_during_sim_recorder):
         "simlen": 50,
     }
     params = fwdpy11.ModelParams(**p)
-    rng = fwdpy11.GSLrng(666 ** 2)
+    rng = fwdpy11.GSLrng(666**2)
     pop = fwdpy11.DiploidPopulation(100, 1.0)
     fwdpy11.evolvets(
         rng,

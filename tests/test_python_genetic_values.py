@@ -50,11 +50,15 @@ migrations:
         ],
         "recregions": [fwdpy11.PoissonInterval(0, 1, 0.5)],
         "rates": (0, 1e-2, None),
-        "demography": fwdpy11.ForwardDemesGraph.from_demes(yaml, burnin=simlen,
-                                                           burnin_is_exact=True),
+        "demography": fwdpy11.ForwardDemesGraph.from_demes(
+            yaml, burnin=simlen, burnin_is_exact=True
+        ),
         "simlen": simlen,
         "gvalue": fwdpy11.Additive(
-            ndemes=2, scaling=2, gvalue_to_fitness=gvalue_to_fitness, noise=noise,
+            ndemes=2,
+            scaling=2,
+            gvalue_to_fitness=gvalue_to_fitness,
+            noise=noise,
         ),
     }
     return pdict
@@ -74,7 +78,6 @@ def build_single_trait_model(gvalue, simlen):
 
 class TestCustomGeneticValueisTrait(unittest.TestCase):
     def test_run(self):
-
         import pygss
 
         GSS = pygss.PyGSS(opt=0.0, VS=1.0)
@@ -94,8 +97,9 @@ class TestCustomGeneticValueisTrait(unittest.TestCase):
             # ndemes=2, scaling=2, gvalue_to_fitness=
             ndemes=2,
             scaling=2,
-            gvalue_to_fitness=fwdpy11.GaussianStabilizingSelection.single_trait([
-                fwdpy11.Optimum(optimum=0.0, VS=1.0)]),
+            gvalue_to_fitness=fwdpy11.GaussianStabilizingSelection.single_trait(
+                [fwdpy11.Optimum(optimum=0.0, VS=1.0)]
+            ),
         )
         params = fwdpy11.ModelParams(**pdict)
         pop2 = fwdpy11.DiploidPopulation([1000, 1000], 1.0)
@@ -105,7 +109,6 @@ class TestCustomGeneticValueisTrait(unittest.TestCase):
         self.assertAlmostEqual(md["g"].mean(), md2["g"].mean())
 
     def test_run_stateful(self):
-
         import pygss
 
         GSS = pygss.PyGSSRandomOptimum(opt=0.0, VS=1.0)
@@ -123,11 +126,11 @@ class TestCustomGeneticValueisTrait(unittest.TestCase):
 
 class TestCustomGeneticValueNoise(unittest.TestCase):
     def test_run(self):
-
         import pynoise
 
         GSS = fwdpy11.fwdpy11.GaussianStabilizingSelection.single_trait(
-            [fwdpy11.Optimum(optimum=0.0, VS=1.0, when=0)])
+            [fwdpy11.Optimum(optimum=0.0, VS=1.0, when=0)]
+        )
         Noise = pynoise.PyNoise()
         pdict = build_model(GSS, Noise, 5, [1000, 1000])
         pdict["prune_selected"] = False
@@ -157,10 +160,11 @@ class TestCustomPyGeneticValue(unittest.TestCase):
 
     def test_run(self):
         pop_PyA = fwdpy11.DiploidPopulation(1000, 1.0)
-        self.pdict_PyA["demography"] = \
-            fwdpy11.ForwardDemesGraph.tubes(pop_PyA.deme_sizes()[1],
-                                            burnin=self.pdict_PyA["simlen"],
-                                            burnin_is_exact=True)
+        self.pdict_PyA["demography"] = fwdpy11.ForwardDemesGraph.tubes(
+            pop_PyA.deme_sizes()[1],
+            burnin=self.pdict_PyA["simlen"],
+            burnin_is_exact=True,
+        )
         self.pdict_PyA["prune_selected"] = False
         mparams_PyA = fwdpy11.ModelParams(**self.pdict_PyA)
         rng_PyA = fwdpy11.GSLrng(42 * 666)
@@ -188,16 +192,14 @@ class TestCustomPyGeneticValueOverloadGeneticValueToFitness(unittest.TestCase):
         return pdict
 
     def test_run(self):
-
         import pyadditivegss
 
         pygv = pyadditivegss.PyAdditiveGSS(opt=0.0, VS=1.0)
         pdict = self.build_model(pygv, 100)
         pop = fwdpy11.DiploidPopulation(1000, 1.0)
-        pdict["demography"] = \
-            fwdpy11.ForwardDemesGraph.tubes(pop.deme_sizes()[1],
-                                            burnin=pdict["simlen"],
-                                            burnin_is_exact=True)
+        pdict["demography"] = fwdpy11.ForwardDemesGraph.tubes(
+            pop.deme_sizes()[1], burnin=pdict["simlen"], burnin_is_exact=True
+        )
 
         params = fwdpy11.ModelParams(**pdict)
 
@@ -208,7 +210,11 @@ class TestCustomPyGeneticValueOverloadGeneticValueToFitness(unittest.TestCase):
         md = np.array(pop.diploid_metadata)
 
         pdict["gvalue"] = fwdpy11.Additive(
-            2.0, fwdpy11.GaussianStabilizingSelection.single_trait([fwdpy11.Optimum(optimum=0.0, VS=1.0, when=0)]))
+            2.0,
+            fwdpy11.GaussianStabilizingSelection.single_trait(
+                [fwdpy11.Optimum(optimum=0.0, VS=1.0, when=0)]
+            ),
+        )
         params = fwdpy11.ModelParams(**pdict)
         pop2 = fwdpy11.DiploidPopulation(1000, 1.0)
         rng = fwdpy11.GSLrng(1010)

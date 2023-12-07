@@ -37,8 +37,7 @@ from .metadata import (  # NOQA
 )
 
 
-def get_toplevel_metadata(ts: tskit.TreeSequence,
-                          name: str) -> typing.Optional[object]:
+def get_toplevel_metadata(ts: tskit.TreeSequence, name: str) -> typing.Optional[object]:
     """
     Extract top-level metadata from a tree sequence.
 
@@ -54,9 +53,7 @@ def get_toplevel_metadata(ts: tskit.TreeSequence,
     return None
 
 
-def iterate_timepoints_with_individuals(
-    ts, *, decode_metadata=False
-):
+def iterate_timepoints_with_individuals(ts, *, decode_metadata=False):
     """
     Return an iterator over all unique time points with individuals.
 
@@ -91,8 +88,7 @@ def iterate_timepoints_with_individuals(
         # Get the node tables rows in individuals at this time
         x = np.where(node_times == utime)
         node_table_rows = nodes_in_individuals[x]
-        assert np.all(
-            np.array([ts.node(i).time for i in node_table_rows]) == utime)
+        assert np.all(np.array([ts.node(i).time for i in node_table_rows]) == utime)
 
         # Get the individuals
         individuals = np.unique(

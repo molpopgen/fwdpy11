@@ -1,15 +1,16 @@
 import attr
 
-from fwdpy11.class_decorators import (attr_add_asblack, attr_class_pickle,
-                                      attr_class_to_from_dict,)
+from fwdpy11.class_decorators import (
+    attr_add_asblack,
+    attr_class_pickle,
+    attr_class_to_from_dict,
+)
 
 
 @attr_add_asblack
 @attr_class_pickle
 @attr_class_to_from_dict
-@attr.s(
-    kw_only=True, frozen=True, auto_attribs=True, repr_ns="fwdpy11"
-)
+@attr.s(kw_only=True, frozen=True, auto_attribs=True, repr_ns="fwdpy11")
 class DemographicModelCitation(object):
     """
     Citation information for a demographic model

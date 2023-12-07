@@ -79,7 +79,7 @@ def test_LargeEffectExponentiallyRecessive_bad_construction(k):
         fwdpy11.FixedDominance(h=0.667),
         fwdpy11.ExponentialDominance(m=-0.23),
         fwdpy11.LargeEffectExponentiallyRecessive(k=1.0),
-        fwdpy11.LargeEffectExponentiallyRecessive(k=1.0, scaling=1.),
+        fwdpy11.LargeEffectExponentiallyRecessive(k=1.0, scaling=1.0),
         fwdpy11.UniformDominance(lo=-2 / 3, hi=2 / 3),
     ],
 )

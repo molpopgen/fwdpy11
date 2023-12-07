@@ -37,13 +37,16 @@ def make_position(sites, edge):
 
 
 def generate_mutation_origin_time(tables, edge):
-    origin_time = int(tables.nodes.time[edge.child] +
-                      (tables.nodes.time[edge.parent] -
-                       tables.nodes.time[edge.child])/2.0)
+    origin_time = int(
+        tables.nodes.time[edge.child]
+        + (tables.nodes.time[edge.parent] - tables.nodes.time[edge.child]) / 2.0
+    )
     # Sometimes a branch is too short to assign an integer
     # time, so we just bail
-    if origin_time >= tables.nodes.time[edge.parent] or \
-            origin_time < tables.nodes.time[edge.child]:
+    if (
+        origin_time >= tables.nodes.time[edge.parent]
+        or origin_time < tables.nodes.time[edge.child]
+    ):
         return None
 
     assert origin_time >= tables.nodes.time[edge.child]
@@ -52,12 +55,15 @@ def generate_mutation_origin_time(tables, edge):
 
 
 def make_generic_mutation_metadata(origin_time):
-    return {'s': 1e-3, 'h': 1.0, 'origin':
-            origin_time,
-            'label': 0,
-            'neutral': 0,
-            # fwdpy11 will have to figure out a real key value later.
-            'key': 0}
+    return {
+        "s": 1e-3,
+        "h": 1.0,
+        "origin": origin_time,
+        "label": 0,
+        "neutral": 0,
+        # fwdpy11 will have to figure out a real key value later.
+        "key": 0,
+    }
 
 
 def make_treeseq_with_one_row_containing_bad_metadata(seed, callback):
@@ -65,18 +71,20 @@ def make_treeseq_with_one_row_containing_bad_metadata(seed, callback):
 
     tables = ts.tables
 
-    tables.mutations.metadata_schema = \
+    tables.mutations.metadata_schema = (
         fwdpy11.tskit_tools.metadata_schema.MutationMetadata
+    )
     sites = set()
     for edge in tables.edges:
         position, sites = make_position(sites, edge)
-        site = tables.sites.add_row(position, '0')
+        site = tables.sites.add_row(position, "0")
         origin_time = generate_mutation_origin_time(tables, edge)
         if origin_time is not None:
             md = make_generic_mutation_metadata(origin_time)
             callback(md)
             tables.mutations.add_row(
-                site, edge.child, '1', time=origin_time, metadata=md)
+                site, edge.child, "1", time=origin_time, metadata=md
+            )
             sites.add(position)
             break
 
@@ -88,6 +96,7 @@ def make_treeseq_with_one_row_containing_bad_metadata(seed, callback):
 
     return ts
 
+
 # Failures:
 #           recrate=0.00010693073272705097, seed2=1, seed=1,
 
@@ -95,39 +104,51 @@ def make_treeseq_with_one_row_containing_bad_metadata(seed, callback):
 @given(integers(1, int(2**32 - 1)), integers(1, int(2**32 - 1)))
 @settings(deadline=None, max_examples=10)
 def test_import_msprime_mutations(seed, seed2):
-    ts = msprime.sim_ancestry(5, population_size=10000,
-                              recombination_rate=1e-5, sequence_length=1.0,
-                              discrete_genome=False, random_seed=seed)
+    ts = msprime.sim_ancestry(
+        5,
+        population_size=10000,
+        recombination_rate=1e-5,
+        sequence_length=1.0,
+        discrete_genome=False,
+        random_seed=seed,
+    )
     np.random.seed(seed2)
     tables = ts.tables
-    tables.mutations.metadata_schema = \
+    tables.mutations.metadata_schema = (
         fwdpy11.tskit_tools.metadata_schema.MutationMetadata
+    )
     sites = set()
     for edge in tables.edges:
         position, sites = make_position(sites, edge)
         origin_time = generate_mutation_origin_time(tables, edge)
         if origin_time is not None:
             md = make_generic_mutation_metadata(origin_time)
-            site = tables.sites.add_row(position, '0')
+            site = tables.sites.add_row(position, "0")
             tables.mutations.add_row(
-                site, edge.child, '1', time=origin_time, metadata=md)
+                site, edge.child, "1", time=origin_time, metadata=md
+            )
 
     tables.sort()
 
     ts = tables.tree_sequence()
-    pop = fwdpy11.DiploidPopulation.create_from_tskit(
-        ts, import_mutations=True)
+    pop = fwdpy11.DiploidPopulation.create_from_tskit(ts, import_mutations=True)
 
     assert len(pop.mutations) == ts.num_mutations
     assert len(pop.tables.sites) == ts.num_sites
 
     for site in ts.sites():
         assert len([i for i in pop.mutations if i.pos == site.position]) == 1
-        assert len(
-            [i for i in pop.tables.sites if i.position == site.position]) == 1
-        assert len(
-            [i for i in pop.tables.mutations if
-             pop.tables.sites[i.key].position == site.position]) == 1
+        assert len([i for i in pop.tables.sites if i.position == site.position]) == 1
+        assert (
+            len(
+                [
+                    i
+                    for i in pop.tables.mutations
+                    if pop.tables.sites[i.key].position == site.position
+                ]
+            )
+            == 1
+        )
 
     # All origin times must be < the time of the mutation time
     for m in pop.tables.mutations:
@@ -146,7 +167,8 @@ def test_import_msprime_mutations(seed, seed2):
         assert pop.mcounts[i] == j
 
     assert np.array(pop.diploids).flatten().tolist() == [
-        (2*i, 2*i+1) for i in range(pop.N)]
+        (2 * i, 2 * i + 1) for i in range(pop.N)
+    ]
 
     # Finally make sure that which samples have mutations
     # matches up with the tskit input
@@ -179,10 +201,10 @@ def test_import_msprime_mutations_bad_metadata(seed1, seed2):
     np.random.seed(seed1)
 
     def bad_effect_size(md):
-        md['s'] = np.nan
+        md["s"] = np.nan
 
     def bad_dominance(md):
-        md['h'] = np.nan
+        md["h"] = np.nan
 
     # The "origin time" in the metadata
     # must equal the mutation's time value
@@ -215,5 +237,4 @@ def test_import_msprime_mutations_bad_metadata(seed1, seed2):
     for callback in [bad_effect_size, bad_dominance]:
         ts = make_treeseq_with_one_row_containing_bad_metadata(seed2, callback)
         with pytest.raises(ValueError):
-            _ = fwdpy11.DiploidPopulation.create_from_tskit(
-                ts, import_mutations=True)
+            _ = fwdpy11.DiploidPopulation.create_from_tskit(ts, import_mutations=True)
