@@ -52,7 +52,7 @@ def mslike(pop, **kwargs):
         "rates": (
             (defaults["pneutral"] * defaults["theta"]) / (4.0 * pop.N),
             ((1.0 - defaults["pneutral"]) * defaults["theta"]) / (4.0 * pop.N),
-            None
+            None,
         ),
         "gvalue": fwdpy11.Multiplicative(2.0),
     }

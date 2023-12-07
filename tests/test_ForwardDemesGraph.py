@@ -37,35 +37,42 @@ def test_valid_demes_spec_modules():
                     yaml = "".join(f.readlines())
                     _ = fwdpy11.ForwardDemesGraph.from_demes(yaml, burnin=0)
                     _ = fwdpy11.ForwardDemesGraph.from_demes(
-                        demes.loads(yaml), burnin=0)
+                        demes.loads(yaml), burnin=0
+                    )
                     with pytest.raises(TypeError):
-                        _ = fwdpy11.ForwardDemesGraph.from_demes(
-                            yaml, burnin=-1)
+                        _ = fwdpy11.ForwardDemesGraph.from_demes(yaml, burnin=-1)
             else:
                 with open(good, "r") as f:
                     yaml = "".join(f.readlines())
                     with pytest.raises(ValueError):
                         _ = fwdpy11.ForwardDemesGraph.from_demes(
-                            yaml, burnin=0, round_non_integer_sizes=False)
+                            yaml, burnin=0, round_non_integer_sizes=False
+                        )
                     if all(i > 0.5 for i in non_integer_deme_sizes):
                         for round_it in [True]:
                             _ = fwdpy11.ForwardDemesGraph.from_demes(
-                                yaml, burnin=0, round_non_integer_sizes=round_it)
+                                yaml, burnin=0, round_non_integer_sizes=round_it
+                            )
                             _ = fwdpy11.discrete_demography.from_demes(
-                                good, burnin=0, round_non_integer_sizes=round_it)
+                                good, burnin=0, round_non_integer_sizes=round_it
+                            )
                         for round_it in [None, False]:
                             with pytest.raises(ValueError):
                                 _ = fwdpy11.ForwardDemesGraph.from_demes(
-                                    yaml, burnin=0, round_non_integer_sizes=round_it)
+                                    yaml, burnin=0, round_non_integer_sizes=round_it
+                                )
                                 _ = fwdpy11.discrete_demography.from_demes(
-                                    good, burnin=0, round_non_integer_sizes=round_it)
+                                    good, burnin=0, round_non_integer_sizes=round_it
+                                )
                     else:
                         for round_it in [None, False]:
                             with pytest.raises(ValueError):
                                 _ = fwdpy11.ForwardDemesGraph.from_demes(
-                                    yaml, burnin=0, round_non_integer_sizes=round_it)
+                                    yaml, burnin=0, round_non_integer_sizes=round_it
+                                )
                                 _ = fwdpy11.discrete_demography.from_demes(
-                                    good, burnin=0, round_non_integer_sizes=round_it)
+                                    good, burnin=0, round_non_integer_sizes=round_it
+                                )
 
 
 def test_pickle():
@@ -85,7 +92,8 @@ pulses:
 migrations: []
     """
     g = fwdpy11.ForwardDemesGraph.from_demes(
-        yaml, 93, burnin_is_exact=True, round_non_integer_sizes=True)
+        yaml, 93, burnin_is_exact=True, round_non_integer_sizes=True
+    )
     p = pickle.dumps(g)
     up = pickle.loads(p)
     assert g == up

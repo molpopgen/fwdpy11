@@ -44,7 +44,8 @@ class testGSS(unittest.TestCase):
         self.VS = 1.0
         self.opt = 0.0
         self.g = fwdpy11.GaussianStabilizingSelection.single_trait(
-            [fwdpy11.Optimum(VS=self.VS, optimum=self.opt, when=None)])
+            [fwdpy11.Optimum(VS=self.VS, optimum=self.opt, when=None)]
+        )
 
     def testPickle(self):
         import pickle
@@ -93,8 +94,7 @@ class testMultivariateGSSmo(unittest.TestCase):
         timepoints = [0, 100]
         po = []
         for i, t in enumerate(timepoints):
-            po.append(fwdpy11.PleiotropicOptima(
-                when=t, optima=optima[i, :], VS=1.0))
+            po.append(fwdpy11.PleiotropicOptima(when=t, optima=optima[i, :], VS=1.0))
         self.mvgssmo = fwdpy11.GaussianStabilizingSelection.pleiotropy(po)
 
     def test_pickle(self):
@@ -111,7 +111,8 @@ class testMultivariateGSSmo(unittest.TestCase):
 
 def test_gaussian_stabilizing_selection_single_trait():
     gss = fwdpy11.GaussianStabilizingSelection.single_trait(
-        [fwdpy11.Optimum(0.0, 10.0, None)])
+        [fwdpy11.Optimum(0.0, 10.0, None)]
+    )
     d = gss.asdict()
     gss2 = gss.fromdict(d)
     assert gss == gss2
@@ -122,7 +123,8 @@ def test_gaussian_stabilizing_selection_single_trait():
 
 def test_gaussian_stabilizing_selection_pleiotropy():
     gss = fwdpy11.GaussianStabilizingSelection.pleiotropy(
-        [fwdpy11.PleiotropicOptima([0, 0, 0, 0], 1.0, 0)])
+        [fwdpy11.PleiotropicOptima([0, 0, 0, 0], 1.0, 0)]
+    )
     d = gss.asdict()
     gss2 = gss.fromdict(d)
     assert gss == gss2

@@ -55,8 +55,7 @@ def make_data_matrix(
         " Please use fwdpy11.data_matrix_from_tables.",
         FutureWarning,
     )
-    return DataMatrix(_make_data_matrix(pop, samples,
-                                        record_neutral, record_selected))
+    return DataMatrix(_make_data_matrix(pop, samples, record_neutral, record_selected))
 
 
 def data_matrix_from_tables(

@@ -60,9 +60,9 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
         return self.__class__(0, 0.0, ll_pop=ll_pop)
 
     @classmethod
-    def create_from_tskit(cls, ts: tskit.TreeSequence,
-                          *, import_mutations=False,
-                          import_individuals=False):
+    def create_from_tskit(
+        cls, ts: tskit.TreeSequence, *, import_mutations=False, import_individuals=False
+    ):
         """
         Create a new object from an tskit.TreeSequence
 
@@ -117,6 +117,7 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
         ll = ll_DiploidPopulation._create_from_tskit(ts, generation)
         if import_mutations is True:
             import fwdpy11.tskit_tools
+
             for mutation in ts.mutations():
                 # if mutation.metadata["origin"] < 0.0:
                 #     msg = "all origin fields in mutation metadata"
@@ -141,7 +142,7 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
                 keys = set([i.key for i in decoded_md])
                 for i in ts.mutations():
                     md = i.metadata
-                    key = (ts.site(i.site).position, md['s'], md['origin'])
+                    key = (ts.site(i.site).position, md["s"], md["origin"])
                     if key not in keys:
                         raise ValueError(f"{key}")
 
@@ -156,15 +157,16 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
 
             def liftover(input, output):
                 for i in range(len(input)):
-                    output['g'][i] = input[i].g
-                    output['w'][i] = input[i].w
-                    output['e'][i] = input[i].e
-                    output['sex'][i] = input[i].sex
-                    output['deme'][i] = input[i].deme
-                    output['parents'][i] = input[i].parents
-                    output['nodes'][i] = input[i].nodes
-                    output['geography'][i] = input[i].geography
-                    output['label'][i] = input[i].label
+                    output["g"][i] = input[i].g
+                    output["w"][i] = input[i].w
+                    output["e"][i] = input[i].e
+                    output["sex"][i] = input[i].sex
+                    output["deme"][i] = input[i].deme
+                    output["parents"][i] = input[i].parents
+                    output["nodes"][i] = input[i].nodes
+                    output["geography"][i] = input[i].geography
+                    output["label"][i] = input[i].label
+
             decoded_md = fwdpy11.tskit_tools.decode_individual_metadata(ts)
             # Take a writeable VIEW of the C++-side data...
             md = np.array(ll._diploid_metadata, copy=False)
@@ -177,7 +179,7 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
             liftover(ancient_sample_md, amd)
         return cls(0, 0.0, ll_pop=ll)
 
-    @ classmethod
+    @classmethod
     def load_from_file(cls, filename: str):
         """
         Load population from the output of
@@ -189,7 +191,7 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
         ll = ll_DiploidPopulation._load_from_file(filename)
         return cls(0, 0.0, ll_pop=ll)
 
-    @ classmethod
+    @classmethod
     def load_from_pickle_file(cls, filename: IO):
         """
         Read in a pickled population from a file.
@@ -204,7 +206,7 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
         ll = ll_DiploidPopulation._load_from_pickle_file(filename)
         return cls(0, 0.0, ll_pop=ll)
 
-    @ property
+    @property
     def alive_nodes(self) -> np.ndarray:
         """
         List of alive nodes corresponding to individuals.
@@ -214,7 +216,7 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
         md = np.array(self.diploid_metadata, copy=False)
         return md["nodes"].flatten()
 
-    @ property
+    @property
     def ancient_sample_nodes(self) -> np.ndarray:
         """
         Return an array of nodes associated with preserved/ancient samples.
@@ -225,22 +227,22 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
         """
         return self.preserved_nodes
 
-    @ property
+    @property
     def ancient_sample_metadata(self) -> Iterable[DiploidMetadata]:
         """Supports buffer protocol"""
         return self._ancient_sample_metadata
 
-    @ property
+    @property
     def diploids(self) -> Iterable[DiploidGenotype]:
         """Supports buffer protocol"""
         return self._diploids
 
-    @ property
+    @property
     def diploid_metadata(self) -> Iterable[DiploidMetadata]:
         """Supports buffer protocol"""
         return self._diploid_metadata
 
-    @ property
+    @property
     def preserved_nodes(self) -> np.ndarray:
         """
         Return an array of nodes associated with preserved/ancient samples.
@@ -250,10 +252,9 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
         .. versionadded:: 0.13.0
 
         """
-        return np.array(self.ancient_sample_metadata,
-                        copy=False)["nodes"].flatten()
+        return np.array(self.ancient_sample_metadata, copy=False)["nodes"].flatten()
 
-    @ property
+    @property
     def tables(self) -> TableCollection:
         """Access the :class:`fwdpy11.TableCollection`"""
         return self._pytables
@@ -290,8 +291,7 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
     def dump_tables_to_tskit(
         self,
         *,
-        model_params: Optional[Union[ModelParams,
-                                     Dict[str, ModelParams]]] = None,
+        model_params: Optional[Union[ModelParams, Dict[str, ModelParams]]] = None,
         demes_graph: Optional[demes.Graph] = None,
         population_metadata: Optional[Dict[int, object]] = None,
         data: Optional[object] = None,
@@ -410,9 +410,7 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
         """
         self._pickle_to_file(filename)
 
-    def sample_timepoints(
-        self, include_alive=True
-    ):
+    def sample_timepoints(self, include_alive=True):
         """
         Return an iterator over all sample time points.
         The iterator yields time, nodes, and metadata.

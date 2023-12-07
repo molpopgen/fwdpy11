@@ -2,8 +2,11 @@ import typing
 
 import attr
 
-from ..class_decorators import (attr_add_asblack, attr_class_pickle,
-                                attr_class_to_from_dict_no_recurse)
+from ..class_decorators import (
+    attr_add_asblack,
+    attr_class_pickle,
+    attr_class_to_from_dict_no_recurse,
+)
 
 
 from .demographic_model_citation import DemographicModelCitation
@@ -13,9 +16,7 @@ from .forward_demes_graph import ForwardDemesGraph
 @attr_add_asblack
 @attr_class_pickle
 @attr_class_to_from_dict_no_recurse
-@attr.s(
-    kw_only=True, frozen=True, auto_attribs=True, repr_ns="fwdpy11"
-)
+@attr.s(kw_only=True, frozen=True, auto_attribs=True, repr_ns="fwdpy11")
 class DemographicModelDetails(object):
     """
     Stores rich information about a demographic model.
@@ -41,12 +42,12 @@ class DemographicModelDetails(object):
 
     .. versionadded:: 0.8.0
     """
+
     model: ForwardDemesGraph
     name: str
     source: typing.Dict
     parameters: object
-    citation: typing.Optional[typing.Union[DemographicModelCitation,
-                                           typing.Dict]]
+    citation: typing.Optional[typing.Union[DemographicModelCitation, typing.Dict]]
     metadata: typing.Optional[object] = None
 
     @property

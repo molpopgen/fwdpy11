@@ -52,7 +52,8 @@ def simplify(pop, samples):
     warnings.warn(
         "This function is deprecated and will be removed soon."
         "Please use fwdpy11.simplify_tables instead",
-        category=FutureWarning, stacklevel=2
+        category=FutureWarning,
+        stacklevel=2,
     )
 
     ll_t, idmap = fwdpy11._fwdpy11._simplify(pop, samples)

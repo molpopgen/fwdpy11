@@ -60,7 +60,7 @@ from .genetic_values import (  # NOQA
     GBR,
     StrictAdditiveMultivariateEffects,
     AdditivePleiotropy,
-    PyDiploidGeneticValue
+    PyDiploidGeneticValue,
 )
 
 from ._types import (  # NOQA

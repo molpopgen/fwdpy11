@@ -340,9 +340,13 @@ class ModelParams(object):
             multiplicative = False
         if multiplicative is True:
             if gvalue.gvalue_to_fitness is not None:
-                if not isinstance(gvalue.gvalue_to_fitness, fwdpy11.GeneticValueIsFitness):
+                if not isinstance(
+                    gvalue.gvalue_to_fitness, fwdpy11.GeneticValueIsFitness
+                ):
                     multiplicative = False
-            if gvalue.noise is not None and not isinstance(gvalue.noise, fwdpy11.NoNoise):
+            if gvalue.noise is not None and not isinstance(
+                gvalue.noise, fwdpy11.NoNoise
+            ):
                 multiplicative = False
 
         if not multiplicative and self.prune_selected is True:

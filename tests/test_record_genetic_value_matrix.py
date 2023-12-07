@@ -39,11 +39,11 @@ def set_up_quant_trait_model():
     r = rho / (4 * N)
     Opt = fwdpy11.Optimum
     GSSmo = fwdpy11.GaussianStabilizingSelection.single_trait(
-        [Opt(when=0, optimum=0.0, VS=1.0), Opt(
-            when=N, optimum=1.0, VS=1.0)]
+        [Opt(when=0, optimum=0.0, VS=1.0), Opt(when=N, optimum=1.0, VS=1.0)]
     )
     demography = fwdpy11.ForwardDemesGraph.tubes(
-        [N], 10*N+100, burnin_is_exact=True)
+        [N], 10 * N + 100, burnin_is_exact=True
+    )
     a = fwdpy11.Additive(2.0, GSSmo)
     p = {
         "nregions": [],
@@ -68,17 +68,14 @@ def set_up_two_trait_quant_trait_model():
 
     optima = [
         fwdpy11.PleiotropicOptima(when=0, optima=np.zeros(2), VS=2.0),
-        fwdpy11.PleiotropicOptima(
-            when=N, optima=np.array([np.sqrt(2.0), 0]), VS=2.0
-        ),
+        fwdpy11.PleiotropicOptima(when=N, optima=np.array([np.sqrt(2.0), 0]), VS=2.0),
     ]
     GSSmo = fwdpy11.GaussianStabilizingSelection.pleiotropy(optima)
     a = fwdpy11.AdditivePleiotropy(2, 0, GSSmo)
     vcov = np.identity(2)
     np.fill_diagonal(vcov, 0.25)
     DES = fwdpy11.MultivariateGaussianEffects(0, 1, 1, vcov)
-    demography = fwdpy11.ForwardDemesGraph.tubes(
-        [N], N+100, burnin_is_exact=True)
+    demography = fwdpy11.ForwardDemesGraph.tubes([N], N + 100, burnin_is_exact=True)
     p = {
         "nregions": [],
         "sregions": [DES],
@@ -149,8 +146,7 @@ class TestNoPleiotropy(unittest.TestCase):
             gvslice = as_gv[w].flatten()
             ti = fwdpy11.TreeIterator(self.pop.tables, n, update_samples=True)
             gv = np.zeros(len(n))
-            node_map = np.array([np.iinfo(np.int32).max]
-                                * len(nt), dtype=np.int32)
+            node_map = np.array([np.iinfo(np.int32).max] * len(nt), dtype=np.int32)
             for i, j in enumerate(n):
                 node_map[j] = i
             for t in ti:
@@ -232,8 +228,7 @@ class TestTwoTraitsIsotropy(unittest.TestCase):
         for i, j, w in zip(gv0, gv1, md["w"]):
             d0 = np.power(i - self.zopt, 2.0)
             d1 = np.power(j - 0.0, 2.0)
-            self.assertTrue(np.isclose(
-                np.exp(-(d0 + d1) / (2.0 * self.VS)), w))
+            self.assertTrue(np.isclose(np.exp(-(d0 + d1) / (2.0 * self.VS)), w))
 
     def test_ancient_sample_genetic_values_focal_trait(self):
         gv = self.pop.ancient_sample_genetic_values
@@ -252,8 +247,7 @@ class TestTwoTraitsIsotropy(unittest.TestCase):
             ti = fwdpy11.TreeIterator(self.pop.tables, n, update_samples=True)
             gv0 = np.zeros(len(n))
             gv1 = np.zeros(len(n))
-            node_map = np.array([np.iinfo(np.int32).max]
-                                * len(nt), dtype=np.int32)
+            node_map = np.array([np.iinfo(np.int32).max] * len(nt), dtype=np.int32)
             for i, j in enumerate(n):
                 node_map[j] = i
             for t in ti:
@@ -274,8 +268,7 @@ class TestTwoTraitsIsotropy(unittest.TestCase):
             for i, j, w in zip(gv0, gv1, md["w"]):
                 d0 = np.power(i - self.zopt, 2.0)
                 d1 = np.power(j - 0.0, 2.0)
-                self.assertTrue(np.isclose(
-                    np.exp(-(d0 + d1) / (2.0 * self.VS)), w))
+                self.assertTrue(np.isclose(np.exp(-(d0 + d1) / (2.0 * self.VS)), w))
 
     def test_pickling(self):
         pp = pickle.dumps(self.pop, -1)
@@ -335,8 +328,7 @@ class TestWithFirstGenerationPreserved(unittest.TestCase):
 
     def test_ancient_sample_genetic_values(self):
         for i, j in zip(
-            self.pop.ancient_sample_genetic_values,
-            self.pop.ancient_sample_metadata
+            self.pop.ancient_sample_genetic_values, self.pop.ancient_sample_metadata
         ):
             self.assertEqual(i, j.g)
 
@@ -351,8 +343,7 @@ class TestWithFirstGenerationPreserved(unittest.TestCase):
             gvslice = as_gv[w].flatten()
             ti = fwdpy11.TreeIterator(self.pop.tables, n, update_samples=True)
             gv = np.zeros(len(n))
-            node_map = np.array([np.iinfo(np.int32).max]
-                                * len(nt), dtype=np.int32)
+            node_map = np.array([np.iinfo(np.int32).max] * len(nt), dtype=np.int32)
             for i, j in enumerate(n):
                 node_map[j] = i
             for t in ti:

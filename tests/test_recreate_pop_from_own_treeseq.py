@@ -28,7 +28,7 @@ import tskit
 # different code paths on the C++ side.
 def validate_mutation_table(pop):
     # assert(all([i.time > 0 for i in pop.tables.nodes]))
-    ti = fwdpy11.TreeIterator(pop.tables, [i for i in range(2*pop.N)])
+    ti = fwdpy11.TreeIterator(pop.tables, [i for i in range(2 * pop.N)])
 
     for t in ti:
         for m in t.mutations():
@@ -69,13 +69,16 @@ def pop_rng_params():
         "recregions": [fwdpy11.BinomialInterval(0, L, 1)],
         "rates": (0.0, mu, None),
         "gvalue": fwdpy11.Additive(
-            scaling=2, gvalue_to_fitness=fwdpy11.GaussianStabilizingSelection.single_trait([fwdpy11.Optimum(optimum=optimum, VS=VS, when=0)])
+            scaling=2,
+            gvalue_to_fitness=fwdpy11.GaussianStabilizingSelection.single_trait(
+                [fwdpy11.Optimum(optimum=optimum, VS=VS, when=0)]
+            ),
         ),
         "simlen": simlen,
         "prune_selected": False,
-        "demography": fwdpy11.ForwardDemesGraph.tubes(pop.deme_sizes()[1],
-                                                      burnin=30,
-                                                      burnin_is_exact=True)
+        "demography": fwdpy11.ForwardDemesGraph.tubes(
+            pop.deme_sizes()[1], burnin=30, burnin_is_exact=True
+        ),
     }
     params = fwdpy11.ModelParams(**pdict)
 
@@ -102,8 +105,9 @@ def pop_with_ancient_samples():
     def preserver(pop, sampler):
         sampler.assign(np.arange(pop.N, dtype=np.uint32))
 
-    fwdpy11.evolvets(rng, pop, params, 100, recorder=preserver,
-                     suppress_table_indexing=True)
+    fwdpy11.evolvets(
+        rng, pop, params, 100, recorder=preserver, suppress_table_indexing=True
+    )
 
     return pop
 
@@ -115,22 +119,20 @@ def test_recreate_pop_from_own_treeseq(pop):
     nm = ts.num_mutations
     assert nm > 0
 
-    pop = fwdpy11.DiploidPopulation.create_from_tskit(
-        ts, import_mutations=True)
+    pop = fwdpy11.DiploidPopulation.create_from_tskit(ts, import_mutations=True)
     assert pop.generation == gen
     assert len(pop.tables.mutations) == nm
     validate_mutation_table(pop)
-    assert (all([pop.mutations[i.key].g >= 0 for i in pop.tables.mutations]))  # NOQA
+    assert all([pop.mutations[i.key].g >= 0 for i in pop.tables.mutations])  # NOQA
 
 
 def test_rebuild_individual_metadata(pop):
     md = np.array(pop.diploid_metadata)
     ts = pop.dump_tables_to_tskit()
-    pop2 = fwdpy11.DiploidPopulation.create_from_tskit(
-        ts, import_individuals=True)
+    pop2 = fwdpy11.DiploidPopulation.create_from_tskit(ts, import_individuals=True)
     md2 = np.array(pop2.diploid_metadata)
     assert len(md) == len(md2)
-    assert np.array_equal(md['w'], md2['w'])
+    assert np.array_equal(md["w"], md2["w"])
 
 
 def test_rebuild_individual_metadata_with_ancient_samples(pop_with_ancient_samples):
@@ -138,14 +140,13 @@ def test_rebuild_individual_metadata_with_ancient_samples(pop_with_ancient_sampl
     amd = np.array(pop_with_ancient_samples.ancient_sample_metadata)
     assert len(amd) > 0
     ts = pop_with_ancient_samples.dump_tables_to_tskit()
-    pop2 = fwdpy11.DiploidPopulation.create_from_tskit(
-        ts, import_individuals=True)
+    pop2 = fwdpy11.DiploidPopulation.create_from_tskit(ts, import_individuals=True)
     md2 = np.array(pop2.diploid_metadata)
     assert len(md) == len(md2)
-    assert np.array_equal(md['w'], md2['w'])
+    assert np.array_equal(md["w"], md2["w"])
     amd2 = np.array(pop2.ancient_sample_metadata)
     assert len(amd) == len(amd2)
-    assert np.array_equal(amd['w'], amd2['w'])
+    assert np.array_equal(amd["w"], amd2["w"])
 
 
 def test_multiple_export_recreate_evolve_steps():
@@ -153,9 +154,8 @@ def test_multiple_export_recreate_evolve_steps():
     for i in range(5):
         fwdpy11.evolvets(rng, pop, params, 100, suppress_table_indexing=True)
         ts = pop.dump_tables_to_tskit()
-        pop = fwdpy11.DiploidPopulation.create_from_tskit(
-            ts, import_mutations=True)
-        assert (all([pop.mutations[i.key].g >= 0 for i in pop.tables.mutations]))  # NOQA
+        pop = fwdpy11.DiploidPopulation.create_from_tskit(ts, import_mutations=True)
+        assert all([pop.mutations[i.key].g >= 0 for i in pop.tables.mutations])  # NOQA
     assert pop.generation == 15
 
 
@@ -170,8 +170,13 @@ def test_start_pop_from_treeseq_without_mutations(pop):
     ts = tables.tree_sequence()
 
     t = ts.first()
-    nodes = [i for i in t.nodes() if t.parent(i) != tskit.NULL and i >
-             2000 and (ts.node(t.parent(i)).time - ts.node(i).time) > 1]
+    nodes = [
+        i
+        for i in t.nodes()
+        if t.parent(i) != tskit.NULL
+        and i > 2000
+        and (ts.node(t.parent(i)).time - ts.node(i).time) > 1
+    ]
 
     np.random.seed(42)
     rnodes = np.random.choice(nodes, size=nm, replace=False)
@@ -183,21 +188,21 @@ def test_start_pop_from_treeseq_without_mutations(pop):
         while pos in sites:
             pos = np.random.uniform(t.interval.left, t.interval.right)
         sites.add(pos)
-        site = tables.sites.add_row(pos, ancestral_state='0')
+        site = tables.sites.add_row(pos, ancestral_state="0")
         mtime = np.floor(np.random.uniform(time, ptime))
         assert mtime >= time and mtime < ptime
-        md = {'s': 1e-3,
-              'h': 1.0,
-              'origin': int(mtime),
-              'label': np.uint16(0),
-              'neutral': 0,
-              'key': np.uint64(0),
-              }
-        tables.mutations.add_row(site, n, '1', time=mtime, metadata=md)
+        md = {
+            "s": 1e-3,
+            "h": 1.0,
+            "origin": int(mtime),
+            "label": np.uint16(0),
+            "neutral": 0,
+            "key": np.uint64(0),
+        }
+        tables.mutations.add_row(site, n, "1", time=mtime, metadata=md)
     tables.sort()
     ts = tables.tree_sequence()
-    pop = fwdpy11.DiploidPopulation.create_from_tskit(
-        ts, import_mutations=True)
+    pop = fwdpy11.DiploidPopulation.create_from_tskit(ts, import_mutations=True)
 
 
 def test_complex_start_stop_workflow():
@@ -223,15 +228,17 @@ demes:
       end_size: 50
 """
     demography = fwdpy11.ForwardDemesGraph.from_demes(
-        yaml, burnin=10, burnin_is_exact=True)
-    pdict = {'recregions': [],
-             'nregions': [],
-             'sregions': [],
-             'rates': (0, 0, 0),
-             'gvalue': fwdpy11.Multiplicative(2.),
-             'simlen': 11,
-             'demography': demography
-             }
+        yaml, burnin=10, burnin_is_exact=True
+    )
+    pdict = {
+        "recregions": [],
+        "nregions": [],
+        "sregions": [],
+        "rates": (0, 0, 0),
+        "gvalue": fwdpy11.Multiplicative(2.0),
+        "simlen": 11,
+        "demography": demography,
+    }
     params = fwdpy11.ModelParams(**pdict)
     pop = fwdpy11.DiploidPopulation(demography.initial_sizes, 1.0)
     rng = fwdpy11.GSLrng(10)
@@ -240,7 +247,7 @@ demes:
     assert pop.generation == 11
     ts = pop.dump_tables_to_tskit()
     restored = fwdpy11.DiploidPopulation.create_from_tskit(ts)
-    pdict['simlen'] = 100
+    pdict["simlen"] = 100
     params = fwdpy11.ModelParams(**pdict)
     # Evolve rest of model
     fwdpy11.evolvets(rng, restored, params, 10)

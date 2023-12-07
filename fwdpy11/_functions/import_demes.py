@@ -8,7 +8,8 @@ from fwdpy11._types.forward_demes_graph import ForwardDemesGraph
 
 
 def demography_from_demes(
-    dg: Union[str, demes.Graph], burnin: int,
+    dg: Union[str, demes.Graph],
+    burnin: int,
     round_non_integer_sizes=Optional[bool],
 ) -> DemographicModelDetails:
     """
@@ -34,7 +35,8 @@ def demography_from_demes(
         raise ValueError("Burn in factor must be non-negative")
 
     fg = ForwardDemesGraph.from_demes(
-        g, burnin, round_non_integer_sizes=round_non_integer_sizes)
+        g, burnin, round_non_integer_sizes=round_non_integer_sizes
+    )
 
     demography = _build_from_foward_demes_graph(fg, burnin, source)
     return demography
@@ -53,19 +55,19 @@ def _build_from_foward_demes_graph(
     else:
         doi = None
 
-    _initial_sizes = {i: j for i, j in enumerate(
-        fg._parental_deme_sizes_at_time_zero()) if j > 0}
+    _initial_sizes = {
+        i: j for i, j in enumerate(fg._parental_deme_sizes_at_time_zero()) if j > 0
+    }
     return DemographicModelDetails(
         model=fg,
         name=fg.graph.description,
         source=source,
         parameters=None,
-        citation=DemographicModelCitation(
-            DOI=doi, full_citation=None, metadata=None),
+        citation=DemographicModelCitation(DOI=doi, full_citation=None, metadata=None),
         metadata={
             "deme_labels": idmap,
             "initial_sizes": _initial_sizes,
             "burnin_time": fg.burnin_generation,
-            "total_simulation_length": fg.final_generation
+            "total_simulation_length": fg.final_generation,
         },
     )

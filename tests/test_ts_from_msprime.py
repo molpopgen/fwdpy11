@@ -74,7 +74,7 @@ class TestConversionFromMultipleDemes(unittest.TestCase):
         alive_nodes = pop.alive_nodes
         self.assertEqual(len(alive_nodes), 2 * pop.N)
         for i in range(3):
-            for j in alive_nodes[i * nodes_per_deme: (i + 1) * nodes_per_deme]:
+            for j in alive_nodes[i * nodes_per_deme : (i + 1) * nodes_per_deme]:
                 self.assertEqual(pop.tables.nodes[j].deme, i)
             k, el = i * nodes_per_deme // 2, (i + 1) * nodes_per_deme // 2
             for j in pop.diploid_metadata[k:el]:

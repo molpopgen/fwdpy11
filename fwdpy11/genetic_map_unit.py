@@ -23,8 +23,11 @@ import attr
 
 import fwdpy11._fwdpy11
 
-from .class_decorators import (attr_add_asblack, attr_class_pickle_with_super,
-                               attr_class_to_from_dict)
+from .class_decorators import (
+    attr_add_asblack,
+    attr_class_pickle_with_super,
+    attr_class_to_from_dict,
+)
 
 
 def _is_integer_if_discrete(self, attribute, value):
@@ -130,8 +133,7 @@ class PoissonPoint(fwdpy11._fwdpy11._ll_PoissonPoint):
         Added `discrete` option to initializer.
     """
 
-    position: typing.Union[int, float] = \
-        attr.ib(validator=_is_integer_if_discrete)
+    position: typing.Union[int, float] = attr.ib(validator=_is_integer_if_discrete)
     mean: float
     discrete: bool = attr.ib(kw_only=True, default=False)
 
@@ -245,15 +247,13 @@ class BinomialPoint(fwdpy11._fwdpy11._ll_BinomialPoint):
         Added `discrete` option to initializer.
     """
 
-    position: typing.Union[int, float] = attr.ib(
-        validator=_is_integer_if_discrete)
+    position: typing.Union[int, float] = attr.ib(validator=_is_integer_if_discrete)
     probability: typing.Union[int, float]
     discrete: bool = attr.ib(kw_only=True, default=False)
 
     def __attrs_post_init__(self):
         super(BinomialPoint, self).__init__(
-            position=self.position, probability=self.probability,
-            discrete=self.discrete
+            position=self.position, probability=self.probability, discrete=self.discrete
         )
 
 
@@ -345,13 +345,12 @@ class BinomialIntervalMap(fwdpy11._fwdpy11._ll_BinomialIntervalMap):
 
     .. versionadded:: 0.20.0
     """
+
     probability: float
     regions: typing.List[fwdpy11.Region]
     discrete: bool = attr.ib(kw_only=True, default=False)
 
     def __attrs_post_init__(self):
         super(BinomialIntervalMap, self).__init__(
-            probability=self.probability,
-            regions=self.regions,
-            discrete=self.discrete
+            probability=self.probability, regions=self.regions, discrete=self.discrete
         )

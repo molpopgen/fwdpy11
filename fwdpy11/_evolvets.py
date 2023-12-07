@@ -31,15 +31,12 @@ def evolvets(
     pop: DiploidPopulation,
     params: ModelParams,
     simplification_interval: int,
-    recorder: Optional[Callable[[
-        DiploidPopulation, SampleRecorder], None]] = None,
+    recorder: Optional[Callable[[DiploidPopulation, SampleRecorder], None]] = None,
     *,
-    post_simplification_recorder: Optional[Callable[[
-        DiploidPopulation], None]] = None,
+    post_simplification_recorder: Optional[Callable[[DiploidPopulation], None]] = None,
     suppress_table_indexing: Optional[bool] = None,
     record_gvalue_matrix: bool = False,
-    stopping_criterion: Optional[Callable[[
-        DiploidPopulation, bool], bool]] = None,
+    stopping_criterion: Optional[Callable[[DiploidPopulation, bool], bool]] = None,
     track_mutation_counts: bool = False,
     remove_extinct_variants: bool = True,
     preserve_first_generation: bool = False,
@@ -126,6 +123,7 @@ def evolvets(
     else:
         # Build a default model of "tubes"
         from fwdpy11 import ForwardDemesGraph
+
         sizes = pop.deme_sizes()[1].tolist()
         msg = "Applying a default demographic model "
         msg += f"where deme sizes are {sizes} "
@@ -196,10 +194,11 @@ def evolvets(
             )
 
     for r in params.recregions:
-        assert isinstance(r, fwdpy11._fwdpy11.PoissonCrossoverGenerator) or \
-            isinstance(
-                r, fwdpy11._fwdpy11.NonPoissonCrossoverGenerator) or \
-            isinstance(r, fwdpy11.Region), f"{type(r)}"
+        assert (
+            isinstance(r, fwdpy11._fwdpy11.PoissonCrossoverGenerator)
+            or isinstance(r, fwdpy11._fwdpy11.NonPoissonCrossoverGenerator)
+            or isinstance(r, fwdpy11.Region)
+        ), f"{type(r)}"
         if hasattr(r, "beg") and hasattr(r, "end"):
             if r.beg < 0:
                 raise ValueError(f"{r} has begin value < 0.0")
@@ -262,12 +261,19 @@ def evolvets(
 
     if all([isinstance(i, fwdpy11.Region) for i in params.recregions]):
         rm = dispatch_create_GeneticMap(
-            params.rates.recombination_rate, params.recregions)
+            params.rates.recombination_rate, params.recregions
+        )
     else:
-        poisson = [i for i in params.recregions if isinstance(
-            i, fwdpy11._fwdpy11.PoissonCrossoverGenerator)]
-        non_poisson = [i for i in params.recregions if isinstance(
-            i, fwdpy11._fwdpy11.NonPoissonCrossoverGenerator)]
+        poisson = [
+            i
+            for i in params.recregions
+            if isinstance(i, fwdpy11._fwdpy11.PoissonCrossoverGenerator)
+        ]
+        non_poisson = [
+            i
+            for i in params.recregions
+            if isinstance(i, fwdpy11._fwdpy11.NonPoissonCrossoverGenerator)
+        ]
         rm = dispatch_create_GeneticMap_non_Region(poisson, non_poisson)
         assert rm._num_poisson_callbacks() == len(poisson)
         assert rm._num_non_poisson_callbacks() == len(non_poisson)
@@ -287,13 +293,15 @@ def evolvets(
     options.record_gvalue_matrix = record_gvalue_matrix
     options.track_mutation_counts_during_sim = track_mutation_counts
     options.remove_extinct_mutations_at_finish = remove_extinct_variants
-    options.reset_treeseqs_to_alive_nodes_after_simplification = \
+    options.reset_treeseqs_to_alive_nodes_after_simplification = (
         reset_treeseqs_after_simplify
+    )
     options.preserve_first_generation = preserve_first_generation
     options.allow_residual_selfing = params.allow_residual_selfing
 
     if options.allow_residual_selfing is False:
         from fwdpy11._types.forward_demes_graph import _round_via_decimal
+
         for d, deme in enumerate(demographic_model.graph.demes):
             for e, epoch in enumerate(deme.epochs):
                 start_size = _round_via_decimal(epoch.start_size)

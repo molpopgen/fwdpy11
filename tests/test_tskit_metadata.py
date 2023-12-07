@@ -50,8 +50,7 @@ def pdict2():
     return pd
 
 
-@pytest.mark.parametrize("pop", [{"N": 100, "genome_length": 1}],
-                         indirect=["pop"])
+@pytest.mark.parametrize("pop", [{"N": 100, "genome_length": 1}], indirect=["pop"])
 def test_single_model_params(pop, pdict1):
     demography = fwdpy11.ForwardDemesGraph.tubes([100], 1)
     pdict1["demography"] = demography
@@ -65,8 +64,7 @@ def test_single_model_params(pop, pdict1):
     assert mp == mp_rebuilt
 
 
-@pytest.mark.parametrize("pop", [{"N": 100, "genome_length": 1}],
-                         indirect=["pop"])
+@pytest.mark.parametrize("pop", [{"N": 100, "genome_length": 1}], indirect=["pop"])
 def test_multiple_model_params(pop, pdict1, pdict2):
     demography = fwdpy11.ForwardDemesGraph.tubes([100], 1)
     pdict1["demography"] = demography
@@ -78,10 +76,8 @@ def test_multiple_model_params(pop, pdict1, pdict2):
     ts = pop.dump_tables_to_tskit(model_params={"phase1": mp1, "phase2": mp2})
 
     # reconstruct
-    mp1_rebuilt = fwdpy11.ModelParams(
-        **eval(ts.metadata["model_params"]["phase1"]))
-    mp2_rebuilt = fwdpy11.ModelParams(
-        **eval(ts.metadata["model_params"]["phase2"]))
+    mp1_rebuilt = fwdpy11.ModelParams(**eval(ts.metadata["model_params"]["phase1"]))
+    mp2_rebuilt = fwdpy11.ModelParams(**eval(ts.metadata["model_params"]["phase2"]))
 
     assert mp1 == mp1_rebuilt
     assert mp2 == mp2_rebuilt

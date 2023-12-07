@@ -46,6 +46,7 @@ class ForwardDemesGraph(fwdpy11._fwdpy11._ForwardDemesGraph):
 
     .. versionadded:: 0.20.0
     """
+
     yaml: str = attr.ib()
     burnin: int = attr.ib()
     burnin_is_exact: int = attr.ib()
@@ -60,10 +61,11 @@ class ForwardDemesGraph(fwdpy11._fwdpy11._ForwardDemesGraph):
         if self.burnin_is_exact is True:
             burnin = self.burnin
         else:
-            burnin = self.burnin*Nref
+            burnin = self.burnin * Nref
         self.burnin_generation = burnin
         super(ForwardDemesGraph, self).__init__(
-            self.yaml, burnin, self.round_non_integer_sizes)
+            self.yaml, burnin, self.round_non_integer_sizes
+        )
         x = self._sum_deme_sizes_at_time_zero()
         assert Nref == x, f"{Nref}, {x}, {self.yaml}"
 
@@ -89,17 +91,21 @@ class ForwardDemesGraph(fwdpy11._fwdpy11._ForwardDemesGraph):
             ]
         )
         if rv == 0:
-            raise ValueError(
-                "could not determinine ancestral metapopulation size")
+            raise ValueError("could not determinine ancestral metapopulation size")
         return rv
 
     def number_of_demes(self) -> int:
         return len(self.graph.demes)
 
     @classmethod
-    def from_demes(cls, model: typing.Union[str, demes.Graph], burnin: int, *,
-                   burnin_is_exact: typing.Optional[bool] = None,
-                   round_non_integer_sizes: typing.Optional[bool] = None):
+    def from_demes(
+        cls,
+        model: typing.Union[str, demes.Graph],
+        burnin: int,
+        *,
+        burnin_is_exact: typing.Optional[bool] = None,
+        round_non_integer_sizes: typing.Optional[bool] = None,
+    ):
         """
         Build from a demes graph.
 
@@ -141,9 +147,14 @@ class ForwardDemesGraph(fwdpy11._fwdpy11._ForwardDemesGraph):
         return cls(yaml, burnin, exact, round_sizes)
 
     @classmethod
-    def tubes(cls, sizes: typing.List[int], burnin: int, *,
-              burnin_is_exact: typing.Optional[bool] = None,
-              round_non_integer_sizes: typing.Optional[bool] = None):
+    def tubes(
+        cls,
+        sizes: typing.List[int],
+        burnin: int,
+        *,
+        burnin_is_exact: typing.Optional[bool] = None,
+        round_non_integer_sizes: typing.Optional[bool] = None,
+    ):
         """
         Build a demographic model for one or more demes of constant size.
 
@@ -168,9 +179,12 @@ class ForwardDemesGraph(fwdpy11._fwdpy11._ForwardDemesGraph):
         for i, j in enumerate(sizes):
             builder.add_deme(f"deme{i}", epochs=[dict(start_size=j)])
         graph = builder.resolve()
-        return cls.from_demes(graph, burnin,
-                              burnin_is_exact=burnin_is_exact,
-                              round_non_integer_sizes=round_non_integer_sizes)
+        return cls.from_demes(
+            graph,
+            burnin,
+            burnin_is_exact=burnin_is_exact,
+            round_non_integer_sizes=round_non_integer_sizes,
+        )
 
     @property
     def initial_sizes(self) -> typing.List:

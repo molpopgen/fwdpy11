@@ -54,9 +54,9 @@ def inception():
 @pytest.mark.parametrize("pdict", [{"simlen": 10}], indirect=["pdict"])
 @pytest.mark.parametrize("pop", [{"N": 100, "L": 1}], indirect=["pop"])
 def test_metadata_roundtrip_single_sim(rng, pdict, pop):
-    demography = fwdpy11.ForwardDemesGraph.tubes(pop.deme_sizes()[1],
-                                                 burnin=pdict["simlen"],
-                                                 burnin_is_exact=True)
+    demography = fwdpy11.ForwardDemesGraph.tubes(
+        pop.deme_sizes()[1], burnin=pdict["simlen"], burnin_is_exact=True
+    )
     pdict["demography"] = demography
     params = fwdpy11.ModelParams(**pdict)
 
@@ -145,9 +145,9 @@ def test_metadata_roundtrip_single_sim(rng, pdict, pop):
 @pytest.mark.parametrize("pdict", [{"simlen": 10}], indirect=["pdict"])
 @pytest.mark.parametrize("pop", [{"N": 100, "L": 1}], indirect=["pop"])
 def test_metadata_roundtrip_single_sim_with_first_gen_preserved(rng, pdict, pop):
-    demography = fwdpy11.ForwardDemesGraph.tubes(pop.deme_sizes()[1],
-                                                 burnin=pdict["simlen"],
-                                                 burnin_is_exact=True)
+    demography = fwdpy11.ForwardDemesGraph.tubes(
+        pop.deme_sizes()[1], burnin=pdict["simlen"], burnin_is_exact=True
+    )
     pdict["demography"] = demography
     params = fwdpy11.ModelParams(**pdict)
 
@@ -186,9 +186,9 @@ def test_metadata_roundtrip_single_sim_with_first_gen_preserved(rng, pdict, pop)
 @pytest.mark.parametrize("pdict", [{"simlen": 10}], indirect=["pdict"])
 @pytest.mark.parametrize("pop", [{"N": 100, "L": 1}], indirect=["pop"])
 def test_metadata_roundtrip_single_deme_sim_with_parameters(rng, pdict, pop, inception):
-    demography = fwdpy11.ForwardDemesGraph.tubes(pop.deme_sizes()[1],
-                                                 burnin=pdict["simlen"],
-                                                 burnin_is_exact=True)
+    demography = fwdpy11.ForwardDemesGraph.tubes(
+        pop.deme_sizes()[1], burnin=pdict["simlen"], burnin_is_exact=True
+    )
     pdict["demography"] = demography
     params = fwdpy11.ModelParams(**pdict)
 

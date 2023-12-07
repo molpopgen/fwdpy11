@@ -53,9 +53,9 @@ def evolve_snowdrift(args):
         "gvalue": snowdrift.DiploidSnowdrift(0.2, -0.2, 1, -2, 1, 0.3),
         # evolve for 100 generations so that unit tests are
         # fast
-        "demography": fp11.ForwardDemesGraph.tubes(pop.deme_sizes()[1],
-                                                   burnin=20,
-                                                   burnin_is_exact=True),
+        "demography": fp11.ForwardDemesGraph.tubes(
+            pop.deme_sizes()[1], burnin=20, burnin_is_exact=True
+        ),
         "simlen": 20,
         "rates": (0.0, 0.0025, None),
         "prune_selected": False,

@@ -30,11 +30,9 @@ def _validate_windows(windows, genome_length):
             raise ValueError("windows must be [a, b) and a < b")
         for i in w:
             if i < 0 or i > genome_length:
-                raise ValueError(
-                    "window coordinates must be [0, genome_length)")
+                raise ValueError("window coordinates must be [0, genome_length)")
     for i in range(1, len(windows), 2):
-        if windows[i - 1][0] < windows[i][1] and \
-                windows[i][0] < windows[i - 1][1]:
+        if windows[i - 1][0] < windows[i][1] and windows[i][0] < windows[i - 1][1]:
             raise ValueError("windows cannot overlap")
 
 
@@ -74,6 +72,7 @@ def _position_in_window(pos, window):
 
 def _simplify(tables, samples, simplify):
     import fwdpy11
+
     if simplify is False:
         return tables, samples
 
@@ -184,8 +183,7 @@ class TableCollection(ll_TableCollection):
         from . import TreeIterator
 
         shapes = tuple(len(i) + 1 for i in samples)
-        dok_JFS = [scipy.sparse.dok_matrix(
-            shapes, dtype=np.int32) for i in windows]
+        dok_JFS = [scipy.sparse.dok_matrix(shapes, dtype=np.int32) for i in windows]
 
         sample_list = np.where(sample_groups != NOT_A_SAMPLE)[0]
         t, s = _simplify(self, sample_list, simplify)
@@ -224,8 +222,7 @@ class TableCollection(ll_TableCollection):
         if len(samples) == 1:
             return self._1dfs(samples[0], windows, include_function, simplify)
 
-        sample_groups = np.array(
-            [NOT_A_SAMPLE] * len(self.nodes), dtype=np.int32)
+        sample_groups = np.array([NOT_A_SAMPLE] * len(self.nodes), dtype=np.int32)
         for i, j in enumerate(samples):
             if np.any(sample_groups[j] != NOT_A_SAMPLE):
                 raise ValueError(
@@ -314,8 +311,7 @@ class TableCollection(ll_TableCollection):
 
         if include_neutral is False and include_selected is False:
             raise ValueError(
-                "One or both of include_neutral "
-                "and include_selected must be True"
+                "One or both of include_neutral " "and include_selected must be True"
             )
 
         include_function = _include_both
@@ -324,17 +320,14 @@ class TableCollection(ll_TableCollection):
         elif include_selected is False:
             include_function = _include_neutral
 
-        lfs = self._fs_implementation(
-            samples, windows, include_function, simplify)
+        lfs = self._fs_implementation(samples, windows, include_function, simplify)
         if separate_windows is True:
-            lfs = _handle_fs_marginalizing(
-                lfs, marginalize, len(windows), len(samples))
+            lfs = _handle_fs_marginalizing(lfs, marginalize, len(windows), len(samples))
             return lfs
         fs = lfs[0]
         for i in lfs[1:]:
             fs += i
-        fs = _handle_fs_marginalizing(
-            fs, marginalize, len(windows), len(samples))
+        fs = _handle_fs_marginalizing(fs, marginalize, len(windows), len(samples))
         return fs
 
     def preserved_nodes(self):

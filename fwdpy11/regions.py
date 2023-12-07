@@ -629,6 +629,7 @@ class mvDES(fwdpy11._fwdpy11._ll_mvDES):
         Refactored to use attrs and inherit from
         low-level C++ class
     """
+
     des: typing.Union[typing.List, fwdpy11._fwdpy11.Sregion]
     means: np.ndarray
     matrix: typing.Optional[np.ndarray] = None

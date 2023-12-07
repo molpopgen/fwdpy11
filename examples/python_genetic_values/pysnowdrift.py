@@ -42,9 +42,9 @@ class PySnowdrift(fwdpy11.PyDiploidGeneticValue):
         zpair = zself + self.phenotypes[other]
         a = 1.0 + (
             self.b1 * zpair
-            + self.b2 * (zpair ** 2)
+            + self.b2 * (zpair**2)
             - self.c1 * zself
-            - self.c2 * (zself ** 2)
+            - self.c2 * (zself**2)
         )
         return max(a, 0.0)
 
@@ -89,7 +89,11 @@ def plot_trait_values(
 
     phist = np.zeros((nruns, bins))
     for i in range(nruns):
-        ph, xe = np.histogram(parr[i].ravel(), bins=bins, range=[0.0, 1.0],)
+        ph, xe = np.histogram(
+            parr[i].ravel(),
+            bins=bins,
+            range=[0.0, 1.0],
+        )
         phist[i] = ph
 
     plt.imshow(

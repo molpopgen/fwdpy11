@@ -109,14 +109,19 @@ def prune_selected(request):
     return request.param
 
 
-@given(popsize=integers(50, 200),
-       simlen=integers(5, 102),
-       simplification_inteval=integers(1, 50),
-       seed=integers(1, int(2**32 - 1)),
-       prune_selected=booleans(),
-       resetter=booleans())
-@settings(suppress_health_check=[HealthCheck.function_scoped_fixture],
-          deadline=None, max_examples=5)
+@given(
+    popsize=integers(50, 200),
+    simlen=integers(5, 102),
+    simplification_inteval=integers(1, 50),
+    seed=integers(1, int(2**32 - 1)),
+    prune_selected=booleans(),
+    resetter=booleans(),
+)
+@settings(
+    suppress_health_check=[HealthCheck.function_scoped_fixture],
+    deadline=None,
+    max_examples=5,
+)
 def test_ancient_samples_and_neutral_mutations(
     pdict, simlen, simplification_inteval, prune_selected, seed, popsize, resetter
 ):
@@ -124,9 +129,9 @@ def test_ancient_samples_and_neutral_mutations(
     The test involving neutral mutations test GitHub issue 639 and 646
     """
     mslike_pop = fwdpy11.DiploidPopulation(popsize, 1.0)
-    demography = fwdpy11.ForwardDemesGraph.tubes(mslike_pop.deme_sizes()[1],
-                                                 burnin=simlen,
-                                                 burnin_is_exact=True)
+    demography = fwdpy11.ForwardDemesGraph.tubes(
+        mslike_pop.deme_sizes()[1], burnin=simlen, burnin_is_exact=True
+    )
     if resetter is False:
         ancient_sample_resetter = None
     else:
@@ -156,8 +161,7 @@ def test_ancient_samples_and_neutral_mutations(
         for _, j in ancient_sample_resetter.timepoint_seen.items():
             assert j == 1
 
-        assert all(
-            [i == 10 for i in ancient_sample_resetter.sample_sizes]) is True
+        assert all([i == 10 for i in ancient_sample_resetter.sample_sizes]) is True
     else:
         assert (
             len(mslike_pop.ancient_sample_metadata)

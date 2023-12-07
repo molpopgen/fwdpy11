@@ -19,9 +19,11 @@
 import typing
 
 import fwdpy11
-from fwdpy11.conditional_models import (ConditionalModelOutput,
-                                        NewMutationParameters,
-                                        SimulationStatus)
+from fwdpy11.conditional_models import (
+    ConditionalModelOutput,
+    NewMutationParameters,
+    SimulationStatus,
+)
 
 from ._track_added_mutation import _track_added_mutation
 

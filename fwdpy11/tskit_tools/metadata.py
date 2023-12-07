@@ -22,8 +22,11 @@ import attr
 import tskit  # type: ignore
 
 from .._fwdpy11 import Mutation
-from ._flags import (INDIVIDUAL_IS_ALIVE, INDIVIDUAL_IS_FIRST_GENERATION,
-                     INDIVIDUAL_IS_PRESERVED)
+from ._flags import (
+    INDIVIDUAL_IS_ALIVE,
+    INDIVIDUAL_IS_FIRST_GENERATION,
+    INDIVIDUAL_IS_PRESERVED,
+)
 
 
 @attr.s(auto_attribs=True, frozen=True, kw_only=True, eq=True)
@@ -96,8 +99,7 @@ class DiploidMetadata(object):
 
 
 def decode_individual_metadata(
-    ts: tskit.TreeSequence,
-    rows=None
+    ts: tskit.TreeSequence, rows=None
 ) -> typing.List[DiploidMetadata]:
     """
     Decodes a :class:`tskit.IndividualTable`.
@@ -171,8 +173,7 @@ def _append_mutation_metadata(ts, site, md, mutations):
 
 
 def decode_mutation_metadata(
-    ts: tskit.TreeSequence,
-    rows=None
+    ts: tskit.TreeSequence, rows=None
 ) -> typing.List[typing.Optional[Mutation]]:
     """
     Decodes metadata from a :class:`tskit.MutationTable`.
