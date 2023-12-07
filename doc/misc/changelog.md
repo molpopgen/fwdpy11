@@ -3,6 +3,17 @@
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+## 0.21.6
+
+Behavior changes:
+
+* Set `time_units` to `generations` when exporting to tskit
+  PR {pr}`1242`
+
+The other changes in this release are various documentation updates
+and some changes to undocumented Python types that are used to model
+pleiotropic effects.
+
 ## 0.21.5
 
 Add support for Python 3.12
