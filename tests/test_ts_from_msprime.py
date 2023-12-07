@@ -19,15 +19,24 @@
 
 import unittest
 
-import fwdpy11
+import demes
 import msprime
 import numpy as np
+
+import fwdpy11
 
 
 class TestConversion(unittest.TestCase):
     @classmethod
     def setUp(self):
-        self.ts = msprime.simulate(10, recombination_rate=0.025, Ne=1000)
+        self.ts = msprime.sim_ancestry(
+            10,
+            ploidy=1,
+            recombination_rate=0.025,
+            sequence_length=1,
+            population_size=1000,
+            discrete_genome=False,
+        )
 
     # def testGetTablesDiscretizeTime(self):
     #     n, e, ntips, l = fwdpy11.ts_from_msprime._convert_tables(self.ts)
@@ -49,25 +58,38 @@ class TestConversion(unittest.TestCase):
 class TestConversionFromMultipleDemes(unittest.TestCase):
     def test_deme_field_of_metadata(self):
         nodes_per_deme = 500
-        Ne = 3 * nodes_per_deme // 2
-        Nr = 50.0
-        config = [
-            msprime.PopulationConfiguration(nodes_per_deme),
-            msprime.PopulationConfiguration(nodes_per_deme),
-            msprime.PopulationConfiguration(nodes_per_deme),
-        ]
+        yaml = f"""
+        time_units: generations
+        demes:
+         - name: deme0
+           epochs:
+            - start_size: {nodes_per_deme/2}
+         - name: deme1
+           epochs:
+            - start_size: {nodes_per_deme/2}
+         - name: deme2
+           epochs:
+            - start_size: {nodes_per_deme/2}
+        pulses:
+         - sources: [deme0]
+           dest: deme1
+           proportions: [1.0]
+           time: 100
+         - sources: [deme0]
+           dest: deme2
+           proportions: [1.0]
+           time: 150
+        """
+        demography = msprime.Demography.from_demes(demes.loads(yaml))
 
-        events = [
-            msprime.MassMigration(1 * Ne, 1, 0, 1.0),
-            msprime.MassMigration(1.5 * Ne, 2, 0, 1.0),
-        ]
-
-        ts = msprime.simulate(
-            population_configurations=config,
-            Ne=Ne,
+        ts = msprime.sim_ancestry(
+            samples={
+                0: nodes_per_deme / 2,
+                1: nodes_per_deme / 2,
+                2: nodes_per_deme / 2,
+            },
             random_seed=98765,
-            recombination_rate=Nr / Ne,
-            demographic_events=events,
+            demography=demography,
         )
         pop = fwdpy11.DiploidPopulation.create_from_tskit(ts)
         self.assertEqual(pop.N, 750)
