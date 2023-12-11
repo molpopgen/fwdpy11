@@ -1,0 +1,15 @@
+time_units: generations
+demes:
+ - name: deme0
+   epochs:
+    - start_size: 100
+ - name: deme1
+   epochs:
+    - start_size: 100
+migrations:
+ - source: deme0
+   dest: deme1
+   rate: 1.0
+   start_time: 10
+   end_time: 5
+

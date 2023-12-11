@@ -1,0 +1,15 @@
+time_units: generations
+demes:
+ - name: deme0
+   epochs:
+    - end_time: 50
+      start_size: 100
+ - name: deme1
+   ancestors: [deme0]
+   epochs:
+    - end_time: 25
+      start_size: 100
+ - name: deme2
+   ancestors: [deme1]
+   epochs:
+    - start_size: 100

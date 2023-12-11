@@ -147,3 +147,8 @@ for deme in demography.demes_at_final_generation:
 
 It is probably useful to read more about how ``fwdpy11`` handles ``demes``
 models {ref}`here <demes_details>`.
+
+# More information
+
+See [here](demes_event_timings) for concrete examples about reasoning through
+when demographic events occur.
