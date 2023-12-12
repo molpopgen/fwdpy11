@@ -71,6 +71,7 @@ from ._types import (  # NOQA
     TreeIterator,
     VariantIterator,
     NewMutationData,
+    ForwardTimeInterval,
     ForwardDemesGraph,
     DemographicModelDetails,
     DemographicModelCitation,

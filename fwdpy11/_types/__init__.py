@@ -31,3 +31,4 @@ from .new_mutation_data import NewMutationData  # NOQA
 from .demographic_model_citation import DemographicModelCitation  # NOQA
 from .demographic_model_details import DemographicModelDetails  # NOQA
 from .forward_demes_graph import ForwardDemesGraph  # NOQA
+from .forward_demes_graph import ForwardTimeInterval  # NOQA

@@ -263,6 +263,11 @@ that is handled on the C++ side.
 # Types related to discrete demographic events
 
 ```{eval-rst}
+.. autoclass:: fwdpy11.ForwardTimeInterval
+    :members:
+```
+
+```{eval-rst}
 .. autoclass:: fwdpy11.ForwardDemesGraph
     :members:
 ```
