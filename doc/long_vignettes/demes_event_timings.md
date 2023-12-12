@@ -126,7 +126,7 @@ Given this model:
   the proportion of `deme1` ancestry that comes from `deme0` is 1.0, which is all of it.
 * The time interval $[11, \infty)$ generations ago is the *pre* pulse interval 
   (thinking forwards in time).
-  During this interval, all individuals in `deme0` have parents from that same dime.
+  During this interval, all individuals in `deme0` have parents from that same deme.
   Likewise for `deme1`.
 
 Using the reasoning about the pre and post epochs with respect to the timing of 
