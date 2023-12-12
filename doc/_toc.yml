@@ -46,6 +46,9 @@ parts:
   - file: short_vignettes/trackmutationfates
   - file: short_vignettes/selective_sweep
   - file: short_vignettes/incomplete_sweep
+- caption: Longer vignettes - demographic models
+  chapters:
+  - file: long_vignettes/demes_event_timings
 - caption: Longer vignettes - exporting data to tskit
   chapters:
   - file: long_vignettes/tskitconvert_vignette

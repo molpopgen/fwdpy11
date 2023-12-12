@@ -1,0 +1,13 @@
+time_units: generations
+demes:
+ - name: deme0
+   epochs:
+    - start_size: 100
+ - name: deme1
+   epochs:
+    - start_size: 100
+pulses:
+ - sources: [deme0]
+   dest: deme1
+   proportions: [1.0]
+   time: 10
