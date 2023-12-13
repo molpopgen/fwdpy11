@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 import decimal
 import typing
 
@@ -17,6 +18,18 @@ def _round_via_decimal(value):
     with decimal.localcontext() as ctx:
         ctx.rounding = decimal.ROUND_HALF_UP
         return int(decimal.Decimal(value).to_integral_value())
+
+
+@dataclass
+class ForwardTimeInterval:
+    """
+    A half-open interval [start_time, end_time).
+    The times represent values moving forward in time,
+    in generations since the begining of a model.
+    """
+
+    start_time: int
+    end_time: int
 
 
 @attr.s(repr_ns="fwdpy11")
@@ -93,6 +106,11 @@ class ForwardDemesGraph(fwdpy11._fwdpy11._ForwardDemesGraph):
         if rv == 0:
             raise ValueError("could not determinine ancestral metapopulation size")
         return rv
+
+    def _minimal_end_time_from_demes_graph(self):
+        return min(
+            [_round_via_decimal(i.end_time) for i in self.graph.in_generations().demes]
+        )
 
     def number_of_demes(self) -> int:
         return len(self.graph.demes)
@@ -185,6 +203,93 @@ class ForwardDemesGraph(fwdpy11._fwdpy11._ForwardDemesGraph):
             burnin_is_exact=burnin_is_exact,
             round_non_integer_sizes=round_non_integer_sizes,
         )
+
+    def to_backwards_time(self, forwards_time: int) -> typing.Optional[int]:
+        """
+        Convert an integer value representing time moving in the
+        forward direction to time in the past ("backwards time").
+
+        If no conversion is possible, `None` is returned.
+
+        :param forwards_time: The value to convert
+        :type forwards_time: int
+
+        :returns: The converted time
+        :type: typing.Optional[int]
+        """
+        if forwards_time >= 0 and forwards_time <= self.final_generation:
+            minimal_end_time = self._minimal_end_time_from_demes_graph()
+            return self.final_generation - forwards_time + minimal_end_time
+        return None
+
+    def to_forwards_time(self, backwards_time: int) -> typing.Optional[int]:
+        """
+        Convert an integer value representing time moving in the
+        backward direction to time in the forward direction.
+
+        If no conversion is possible, `None` is returned.
+
+        :param backwards_time: The value to convert
+        :type backwards_time: int
+
+        :returns: The converted time
+        :type: typing.Optional[int]
+        """
+        if backwards_time >= 0 and self.final_generation - backwards_time >= 0:
+            minimal_end_time = self._minimal_end_time_from_demes_graph()
+            return self.final_generation - backwards_time + minimal_end_time
+        return None
+
+    def deme_time_intervals(self) -> typing.List[ForwardTimeInterval]:
+        """
+        :returns: a list of the time intervals during which each deme exists.
+        :rtype: list[fwdpy11.ForwardTimeInterval]
+
+        The order of the demes is the same as in the input :class:`demes.Graph`.
+        """
+        rv = []
+        graph_in_generations = self.graph.in_generations()
+        for deme in graph_in_generations.demes:
+            start = deme.start_time
+            if start == float("inf"):
+                start = 0
+            else:
+                # The +1 takes the 1/2 open backwards time
+                # interval and gives us the first generation
+                # when individuals are born in this deme
+                start = self.to_forwards_time(_round_via_decimal(start)) + 1
+            # The +1 makes it a 1/2-open interval
+            end = self.to_forwards_time(_round_via_decimal(deme.end_time)) + 1
+            rv.append(ForwardTimeInterval(start, end))
+        return rv
+
+    def epoch_time_intervals(self) -> typing.List[typing.List[ForwardTimeInterval]]:
+        """
+        :returns: a list of the time intervals during which
+                  each epoch of each deme exists.
+        :rtype: list[list[fwdpy11.ForwardTimeInterval]]
+
+        The order of the demes is the same as in the input :class:`demes.Graph`.
+        Within each deme, the epoch order is the same as in the input graph.
+        """
+        rv = []
+        graph_in_generations = self.graph.in_generations()
+        for deme in graph_in_generations.demes:
+            temp = []
+            for epoch in deme.epochs:
+                start = epoch.start_time
+                if start == float("inf"):
+                    start = 0
+                else:
+                    # The +1 takes the 1/2 open backwards time
+                    # interval and gives us the first generation
+                    # when individuals are born in this deme
+                    start = self.to_forwards_time(_round_via_decimal(start)) + 1
+                # The +1 makes it a 1/2-open interval
+                end = self.to_forwards_time(_round_via_decimal(epoch.end_time)) + 1
+                temp.append(ForwardTimeInterval(start, end))
+            rv.append(temp)
+        return rv
 
     @property
     def initial_sizes(self) -> typing.List:

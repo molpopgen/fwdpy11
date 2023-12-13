@@ -91,3 +91,77 @@ def test_deme_existence():
         [i.population == 1 for i in ts.nodes() if i.time >= 25.0 and i.time < 50]
     )
     assert all([i.population == 0 for i in ts.nodes() if i.time >= 50])
+
+
+# WARNING: all code above is included in the manual.
+# Any edits to those lines require that the manual be checked
+# to see if it renders correctly.
+
+
+@dataclass
+class DemeSizes:
+    generation: int
+    sizes: dict
+
+
+@dataclass
+class RecordDemeSizes:
+    deme_sizes: list
+
+    def __call__(self, pop: fwdpy11.DiploidPopulation, _):
+        self.deme_sizes.append(DemeSizes(pop.generation, pop.deme_sizes(as_dict=True)))
+
+
+def run_model_return_demography(yaml, recorder):
+    pop = run_model(yaml, recorder)
+    graph = demes.load(yaml)
+    demog = fwdpy11.ForwardDemesGraph.from_demes(
+        graph, burnin=100, burnin_is_exact=True
+    )
+    return pop, demog
+
+
+def validate_recorder(recorder, demog):
+    for i, deme in enumerate(demog.deme_time_intervals()):
+        # If a deme is a founder deme, generation 0
+        # is not seen by our recorder due to the way
+        # we have set up our tests. Therefore, 1 fewer
+        # generations is seen.
+        if deme.start_time == 0:
+            offset = 1
+        else:
+            offset = 0
+        recorded = [d.generation for d in recorder.deme_sizes if i in d.sizes]
+        assert len(recorded) > 0
+        assert (
+            len([j for j in recorded if j >= deme.start_time and j < deme.end_time])
+            == deme.end_time - deme.start_time - offset
+        )
+        for j in range(deme.start_time + offset, deme.end_time):
+            assert j in recorded
+
+
+def validate_deme_existence(yaml):
+    recorder = RecordDemeSizes([])
+    pop, demog = run_model_return_demography(yaml, recorder)
+    validate_recorder(recorder, demog)
+
+
+def test_single_pulse_deme_sizes():
+    yaml = "tests/demes_event_examples/single_pulse.yaml"
+    validate_deme_existence(yaml)
+
+
+def test_burst_of_migration_deme_sizes():
+    yaml = "tests/demes_event_examples/burst_of_migration.yaml"
+    validate_deme_existence(yaml)
+
+
+def test_deme_existence_deme_sizes():
+    yaml = "tests/demes_event_examples/deme_existence.yaml"
+    validate_deme_existence(yaml)
+
+
+def test_generation_times_deme_sizes():
+    yaml = "tests/demes_event_examples/deme_existence_generation_time.yaml"
+    validate_deme_existence(yaml)
