@@ -92,7 +92,7 @@ jobs:
         with:
           path: |
             ~/.local
-          key: ${{ runner.os }}-${{ matrix.python }}-ubuntu-V3-${{ hashFiles('requirements/development.txt') }}
+          key: ${{ runner.os }}-${{ matrix.python }}-ubuntu-V4-${{ hashFiles('requirements/development.txt') }}
 
       - name: Install pip dependencies
         # if: steps.cache.outputs.cache-hit != 'true'
