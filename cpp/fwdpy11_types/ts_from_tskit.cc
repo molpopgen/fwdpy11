@@ -49,18 +49,24 @@ convert_tables_from_tskit(py::object ts, std::uint32_t generation)
 
     std::vector<fwdpp::ts::node> nodes;
     nodes.reserve(time_.shape(0));
+    double min_time = std::numeric_limits<double>::max();
+    for (py::ssize_t i = 0; i < time_.shape(0); ++i)
+        {
+            min_time = std::min(min_time, time_(i));
+        }
     int ntips = 0;
     for (py::ssize_t i = 0; i < time_.shape(0); ++i)
         {
             // reverse direction of time
             auto t = time_(i);
+            if (t == min_time)
+                {
+                    ++ntips;
+                }
             if (t != 0.0)
                 {
                     t *= -1.0;
-                }
-            else
-                {
-                    ++ntips;
+                    t += min_time;
                 }
             t += generation;
             nodes.push_back(fwdpp::ts::node{population_(i), t});

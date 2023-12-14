@@ -148,6 +148,7 @@ pdict = {
     'rates': (0.0, 1e-3, None),
     'simlen': 10 * pop.N,
     'prune_selected': False,
+    'demography': fwdpy11.ForwardDemesGraph.tubes([pop.N], 1)
 }
 
 params = fwdpy11.ModelParams(**pdict)
@@ -160,47 +161,11 @@ ts = pop.dump_tables_to_tskit(model_params=params)
 assert fwdpy11.ModelParams(**eval(ts.metadata["model_params"])) == params
 ```
 
-Some simulation designs make use of multiple `ModelParams` objects.
-Imagine, for example, that we simulate the above model until equilibrium, and then simulate another 100 generations while adapting to a new optimum:
-
-:::{note}
-The details are omitted here:
-
-1. This simulation requires two calls to {func}`fwdpy11.evolvets`
-2. It could have been done instead with a single call to {func}`fwdpy11.evolvets` 
-   by passing a list of {class}`fwdpy11.Optimum` to {class}`fwdpy11.GaussianStabilizingSelection`.
-   This approach would have required one `ModelParams` instance.
-:::
-
-```{code-cell} python
-import copy
-pdict2 = copy.deepcopy(pdict)
-
-optimum = fwdpy11.Optimum(optimum=5.0, VS=10.0, when=0)
-gss = fwdpy11.GaussianStabilizingSelection.single_trait([optimum])
-pdict2['gvalue'] = fwdpy11.Additive(2., gss)
-pdict2['simlen'] = 100
-
-params2 = fwdpy11.ModelParams(**pdict2)
-```
-
-We can pass both objects to `tskit` via a {class}`dict`:
-
-```{code-cell} python
-ts = pop.dump_tables_to_tskit(model_params={'burnin': params, 'adaptation': params2})
-type(ts.metadata["model_params"])
-```
-
-```{code-cell} python
-assert fwdpy11.ModelParams(**eval(ts.metadata["model_params"]["burnin"])) == params
-assert fwdpy11.ModelParams(**eval(ts.metadata["model_params"]["adaptation"])) == params2
-```
-
 ### Including a `demes` graph
 
 You may include a {class}`demes.Graph` in the top-level metadata.
 If you also include a {class}`fwdpy11.ModelParams` (see above), including the `demes` graph gives redundant information.
-However, including the graph may be useful if downstream analysis will involve other tools compatible with the `deme` specification.
+However, including the graph may be useful if downstream analysis will involve other tools compatible with the `demes` specification.
 With the graph as metadata, you can extract it and reconstruct the original `YAML` file, or send it to another Python package that understands it.
 
 The following hidden code block defines a function to return a {class}`demes.Graph` from `YAML` input stored in a string literal.
