@@ -15,7 +15,7 @@ jobs:
       run:
         shell: bash
     steps:
-      - uses: actions/setup-python@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python }}
       - name: Cancel Previous Runs
