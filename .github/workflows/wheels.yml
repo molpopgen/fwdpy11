@@ -26,7 +26,7 @@ jobs:
             submodules: true
             fetch-depth: 0
       - name: Set up Python ${{ matrix.python }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python }}
       - name: Install deps
@@ -81,7 +81,7 @@ jobs:
             fetch-depth: 0
 
       - name: Set up Python 3.8
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: 3.8
 
@@ -146,7 +146,7 @@ jobs:
         with:
           name: sdist
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python }}
       - name: Install sdist into venv
@@ -195,7 +195,7 @@ jobs:
         with:
           name: macOS-wheel-${{ matrix.python }}
       - name: Set up Python ${{ matrix.python }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python }}
       - name: ls
