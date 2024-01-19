@@ -115,6 +115,7 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
             if "generation" in ts.metadata:
                 generation = ts.metadata["generation"]
         ll = ll_DiploidPopulation._create_from_tskit(ts, generation)
+        min_node_time = min([i.time for i in ts.nodes()])
         if import_mutations is True:
             import fwdpy11.tskit_tools
 
@@ -150,7 +151,10 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
             for i in decoded_md:
                 if i is not None:
                     mvec.append(i)
-            times = [int(i.time) - ll._generation for i in ts.mutations()]
+            times = [
+                int(i.time) - (ll._generation + int(min_node_time))
+                for i in ts.mutations()
+            ]
             ll._set_mutations(mvec, mutation_nodes, times)
         if import_individuals is True:
             import fwdpy11.tskit_tools

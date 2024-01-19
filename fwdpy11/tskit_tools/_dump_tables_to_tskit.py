@@ -86,7 +86,9 @@ def _initializeIndividualTable(self, tc):
     return individal_nodes
 
 
-def _dump_mutation_site_and_site_tables(self, tc: tskit.TableCollection) -> None:
+def _dump_mutation_site_and_site_tables(
+    self, tc: tskit.TableCollection, demographic_model_time_offset: float
+) -> None:
     mpos = np.array([self.mutations[mr.key].pos for mr in self.tables.mutations])
     ancestral_state = np.zeros(len(self.tables.mutations), dtype=np.int8) + ord("0")
     ancestral_state_offset = np.arange(len(self.tables.mutations) + 1, dtype=np.uint32)
@@ -103,7 +105,11 @@ def _dump_mutation_site_and_site_tables(self, tc: tskit.TableCollection) -> None
     )
     for m in self.tables.mutations:
         if self.mutations[m.key].g != np.iinfo(np.int32).min:
-            origin_time = self.generation - self.mutations[m.key].g
+            origin_time = (
+                self.generation
+                - self.mutations[m.key].g
+                + demographic_model_time_offset
+            )
         else:
             origin_time = tc.nodes.time[m.node]
 
@@ -203,9 +209,26 @@ def _dump_tables_to_tskit(
     # Bug fixed in 0.3.1: add preserved nodes to samples list
     for i in np.array(self.ancient_sample_metadata, copy=False)["nodes"].flatten():
         flags[i] = tskit.NODE_IS_SAMPLE
+
+    demographic_model_time_offset = 0.0
+    if model_params is not None:
+        try:
+            demographic_model_time_offset = float(
+                model_params.demography._minimal_end_time_from_demes_graph()
+            )
+            end_time = model_params.demography.final_generation
+        except AttributeError:
+            demographic_model_time_offset = float(
+                model_params.demography.model._minimal_end_time_from_demes_graph()
+            )
+            end_time = model_params.demography.model.final_generation
+        # Account for demographic models that haven't
+        # been simulated all the way through.
+        demographic_model_time_offset += end_time - self.generation
+    assert demographic_model_time_offset >= 0.0
     tc.nodes.set_columns(
         flags=flags,
-        time=node_view["time"],
+        time=node_view["time"] + demographic_model_time_offset,
         population=node_view["deme"],
         individual=individual,
     )
@@ -214,7 +237,7 @@ def _dump_tables_to_tskit(
         self._clear_ancient_sample_metadata()
         self.tables._clear_nodes()
 
-    _dump_mutation_site_and_site_tables(self, tc)
+    _dump_mutation_site_and_site_tables(self, tc, demographic_model_time_offset)
     if destructive is True:
         self._clear_mutations()
         self.tables._clear_sites()

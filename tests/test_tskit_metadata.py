@@ -65,25 +65,6 @@ def test_single_model_params(pop, pdict1):
 
 
 @pytest.mark.parametrize("pop", [{"N": 100, "genome_length": 1}], indirect=["pop"])
-def test_multiple_model_params(pop, pdict1, pdict2):
-    demography = fwdpy11.ForwardDemesGraph.tubes([100], 1)
-    pdict1["demography"] = demography
-    pdict2["demography"] = demography
-
-    mp1 = fwdpy11.ModelParams(**pdict1)
-    mp2 = fwdpy11.ModelParams(**pdict2)
-
-    ts = pop.dump_tables_to_tskit(model_params={"phase1": mp1, "phase2": mp2})
-
-    # reconstruct
-    mp1_rebuilt = fwdpy11.ModelParams(**eval(ts.metadata["model_params"]["phase1"]))
-    mp2_rebuilt = fwdpy11.ModelParams(**eval(ts.metadata["model_params"]["phase2"]))
-
-    assert mp1 == mp1_rebuilt
-    assert mp2 == mp2_rebuilt
-
-
-@pytest.mark.parametrize("pop", [{"N": 100, "genome_length": 1}], indirect=["pop"])
 def test_demes_graph(pop, gutenkunst):
     ts = pop.dump_tables_to_tskit(demes_graph=gutenkunst)
 

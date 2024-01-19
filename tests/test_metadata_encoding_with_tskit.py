@@ -209,7 +209,7 @@ def test_mutation_metadata_without_vectors(mock_population, tables):
     )
 
     fwdpy11.tskit_tools._dump_tables_to_tskit._dump_mutation_site_and_site_tables(
-        mock_population, tables
+        mock_population, tables, 0.0
     )
 
     tables.nodes.add_row(time=0.0)
@@ -253,7 +253,7 @@ def test_mutation_metadata_with_vectors(mock_population, tables):
     assert len(mock_population.mutations[0].esizes) == 4
 
     fwdpy11.tskit_tools._dump_tables_to_tskit._dump_mutation_site_and_site_tables(
-        mock_population, tables
+        mock_population, tables, 0.0
     )
 
     tables.nodes.add_row(time=0.0)
