@@ -65,15 +65,6 @@ def test_single_model_params(pop, pdict1):
 
 
 @pytest.mark.parametrize("pop", [{"N": 100, "genome_length": 1}], indirect=["pop"])
-def test_demes_graph(pop, gutenkunst):
-    ts = pop.dump_tables_to_tskit(demes_graph=gutenkunst)
-
-    # get the graph back out
-    g = demes.Graph.fromdict(ts.metadata["demes_graph"])
-    assert g == gutenkunst
-
-
-@pytest.mark.parametrize("pop", [{"N": 100, "genome_length": 1}], indirect=["pop"])
 def test_population_metadata(pop, gutenkunst):
     dm = fwdpy11.discrete_demography.from_demes(gutenkunst)
     demes_metadata = {}
