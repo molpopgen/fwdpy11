@@ -19,6 +19,7 @@
 
 import json
 import typing
+import warnings
 
 import fwdpy11.tskit_tools
 import fwdpy11.tskit_tools.metadata_schema
@@ -137,6 +138,11 @@ def _dump_tables_to_tskit(
 ) -> tskit.TreeSequence:
     from .._fwdpy11 import gsl_version, pybind11_version
 
+    if demes_graph is not None:
+        msg = "The demes_graph option is deprecated."
+        msg += " The demographic details should be passed in with model_params"
+        warnings.warn(msg, DeprecationWarning, stacklevel=2)
+
     environment = tskit.provenance.get_environment(
         extra_libs={
             "gsl": {"version": gsl_version()["gsl_version"]},
@@ -173,6 +179,9 @@ def _dump_tables_to_tskit(
         try:
             top_level_metadata["model_params"] = str(model_params.asdict())
         except Exception:
+            msg = "Passing a dict for model_params is deprecated."
+            msg += " Pass an instance of fwdpy11.ModelParams instead."
+            warnings.warn(msg, DeprecationWarning, stacklevel=2)
             mp = {}
             for key, value in model_params.items():
                 mp[key] = str(value.asdict())
