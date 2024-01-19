@@ -74,6 +74,18 @@ These topics are covered in the user manual:
 * People wishing to run `fwpdy11` should see `this section <https://molpopgen.github.io/fwdpy11/pages/userenv.html>`_.
 * Those who need to build the package from source should look `the developer's guide <https://molpopgen.github.io/fwdpy11/misc/developersguide.html>`_.
 
+Citation
+----------------------------------
+
+If you use this software for research, please cite the following publications:
+
+* Kevin R Thornton. Polygenic adaptation to an environmental shift: temporal dynamics of variation under gaussian stabilizing selection and additive effects on a single trait. Genetics, 213(4):1513–1530, December 2019.
+
+* Kevin R Thornton. A c++ template library for efficient forward-time population genetic simulation of large populations. Genetics, 198(1):157–166, September 2014.
+
+This software was developed for the first paper.
+The second paper describes a key part of this software's back end.
+
 
 .. _fwdpy11: https://github.com/molpopgen/fwdpy11
 .. _fwdpp: https://github.com/molpopgen/fwdpp

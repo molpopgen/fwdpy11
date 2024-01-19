@@ -7,6 +7,7 @@ parts:
   - file: pages/installation
   - file: pages/deploymenttools
   - file: pages/invokingpython
+  - file: pages/citation
 - caption: Short vignettes - operations on populations
   chapters:
   - file: short_vignettes/initpops_vignette
