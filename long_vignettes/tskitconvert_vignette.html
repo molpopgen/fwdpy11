@@ -65,7 +65,7 @@ const thebe_selector_output = ".output, .cell_output"
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Working with data in tskit format" href="tskit_metadata_vignette.html" />
-    <link rel="prev" title="Incomplete selective sweeps" href="../short_vignettes/incomplete_sweep.html" />
+    <link rel="prev" title="Timing of events in demographic models" href="demes_event_timings.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -156,6 +156,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="../pages/installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../pages/deploymenttools.html">Deployment tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../pages/invokingpython.html">Invoking Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pages/citation.html">Citation</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Short vignettes - operations on populations</span></p>
 <ul class="nav bd-sidenav">
@@ -186,6 +187,7 @@ const thebe_selector_output = ".output, .cell_output"
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../short_vignettes/demography_vignettes_intro.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../short_vignettes/demes_vignette.html">Using <code class="docutils literal notranslate"><span class="pre">demes</span></code> to specify demographic models.</a></li>
+
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Short vignettes - varying fitness conditions across demes</span></p>
 <ul class="nav bd-sidenav">
@@ -201,6 +203,10 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="../short_vignettes/trackmutationfates.html">Tracking user-specified new mutations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../short_vignettes/selective_sweep.html">Selective sweeps</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../short_vignettes/incomplete_sweep.html">Incomplete selective sweeps</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Longer vignettes - demographic models</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="demes_event_timings.html">Timing of events in demographic models</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Longer vignettes - exporting data to tskit</span></p>
 <ul class="current nav bd-sidenav">
@@ -649,36 +655,36 @@ You do not know the state of the <code class="docutils literal notranslate"><spa
 <span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
 <span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">ts</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">dump_tables_to_tskit</span><span class="p">(</span><span class="n">seed</span><span class="o">=-</span><span class="mi">4616</span><span class="p">)</span>
 
-<span class="nn">File ~/work/fwdpy11/fwdpy11/fwdpy11/_types/diploid_population.py:378,</span> in <span class="ni">DiploidPopulation.dump_tables_to_tskit</span><span class="nt">(self, model_params, demes_graph, population_metadata, data, seed, parameters, destructive)</span>
-<span class="g g-Whitespace">    </span><span class="mi">291</span> <span class="k">def</span> <span class="nf">dump_tables_to_tskit</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">292</span>     <span class="bp">self</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">293</span>     <span class="o">*</span><span class="p">,</span>
+<span class="nn">File ~/work/fwdpy11/fwdpy11/fwdpy11/_types/diploid_population.py:382,</span> in <span class="ni">DiploidPopulation.dump_tables_to_tskit</span><span class="nt">(self, model_params, demes_graph, population_metadata, data, seed, parameters, destructive)</span>
+<span class="g g-Whitespace">    </span><span class="mi">295</span> <span class="k">def</span> <span class="nf">dump_tables_to_tskit</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">296</span>     <span class="bp">self</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">297</span>     <span class="o">*</span><span class="p">,</span>
    <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">300</span>     <span class="n">destructive</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">301</span> <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">tskit</span><span class="o">.</span><span class="n">TreeSequence</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">302</span><span class="w">     </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="g g-Whitespace">    </span><span class="mi">303</span><span class="sd">     Dump the population&#39;s TableCollection into</span>
-<span class="g g-Whitespace">    </span><span class="mi">304</span><span class="sd">     an tskit TreeSequence</span>
+<span class="g g-Whitespace">    </span><span class="mi">304</span>     <span class="n">destructive</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">305</span> <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">tskit</span><span class="o">.</span><span class="n">TreeSequence</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">306</span><span class="w">     </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="g g-Whitespace">    </span><span class="mi">307</span><span class="sd">     Dump the population&#39;s TableCollection into</span>
+<span class="g g-Whitespace">    </span><span class="mi">308</span><span class="sd">     an tskit TreeSequence</span>
 <span class="sd">   (...)</span>
-<span class="g g-Whitespace">    </span><span class="mi">376</span><span class="sd"> </span>
-<span class="g g-Whitespace">    </span><span class="mi">377</span><span class="sd">     &quot;&quot;&quot;</span>
-<span class="ne">--&gt; </span><span class="mi">378</span>     <span class="k">return</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">tskit_tools</span><span class="o">.</span><span class="n">_dump_tables_to_tskit</span><span class="o">.</span><span class="n">_dump_tables_to_tskit</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">379</span>         <span class="bp">self</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">380</span>         <span class="n">model_params</span><span class="o">=</span><span class="n">model_params</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">381</span>         <span class="n">demes_graph</span><span class="o">=</span><span class="n">demes_graph</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">382</span>         <span class="n">population_metadata</span><span class="o">=</span><span class="n">population_metadata</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">383</span>         <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">384</span>         <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">385</span>         <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">386</span>         <span class="n">destructive</span><span class="o">=</span><span class="n">destructive</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">387</span>     <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">380</span><span class="sd"> </span>
+<span class="g g-Whitespace">    </span><span class="mi">381</span><span class="sd">     &quot;&quot;&quot;</span>
+<span class="ne">--&gt; </span><span class="mi">382</span>     <span class="k">return</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">tskit_tools</span><span class="o">.</span><span class="n">_dump_tables_to_tskit</span><span class="o">.</span><span class="n">_dump_tables_to_tskit</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">383</span>         <span class="bp">self</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">384</span>         <span class="n">model_params</span><span class="o">=</span><span class="n">model_params</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">385</span>         <span class="n">demes_graph</span><span class="o">=</span><span class="n">demes_graph</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">386</span>         <span class="n">population_metadata</span><span class="o">=</span><span class="n">population_metadata</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">387</span>         <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">388</span>         <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">389</span>         <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">390</span>         <span class="n">destructive</span><span class="o">=</span><span class="n">destructive</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">391</span>     <span class="p">)</span>
 
-<span class="nn">File ~/work/fwdpy11/fwdpy11/fwdpy11/tskit_tools/_dump_tables_to_tskit.py:183,</span> in <span class="ni">_dump_tables_to_tskit</span><span class="nt">(self, model_params, demes_graph, population_metadata, data, seed, parameters, destructive)</span>
-<span class="g g-Whitespace">    </span><span class="mi">181</span> <span class="k">if</span> <span class="n">seed</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">182</span>     <span class="k">if</span> <span class="n">seed</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">183</span>         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;seed must be &gt;=0, got </span><span class="si">{</span><span class="n">seed</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">184</span>     <span class="n">top_level_metadata</span><span class="p">[</span><span class="s2">&quot;seed&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">seed</span>
-<span class="g g-Whitespace">    </span><span class="mi">186</span> <span class="n">tc</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="n">top_level_metadata</span>
+<span class="nn">File ~/work/fwdpy11/fwdpy11/fwdpy11/tskit_tools/_dump_tables_to_tskit.py:198,</span> in <span class="ni">_dump_tables_to_tskit</span><span class="nt">(self, model_params, demes_graph, population_metadata, data, seed, parameters, destructive)</span>
+<span class="g g-Whitespace">    </span><span class="mi">196</span> <span class="k">if</span> <span class="n">seed</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">197</span>     <span class="k">if</span> <span class="n">seed</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">198</span>         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;seed must be &gt;=0, got </span><span class="si">{</span><span class="n">seed</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">199</span>     <span class="n">top_level_metadata</span><span class="p">[</span><span class="s2">&quot;seed&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">seed</span>
+<span class="g g-Whitespace">    </span><span class="mi">201</span> <span class="n">tc</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="n">top_level_metadata</span>
 
 <span class="ne">ValueError</span>: seed must be &gt;=0, got -4616
 </pre></div>
@@ -712,6 +718,7 @@ The examples listed below will work with types provided by <code class="docutils
     <span class="s1">&#39;rates&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1e-3</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
     <span class="s1">&#39;simlen&#39;</span><span class="p">:</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">pop</span><span class="o">.</span><span class="n">N</span><span class="p">,</span>
     <span class="s1">&#39;prune_selected&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="s1">&#39;demography&#39;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ForwardDemesGraph</span><span class="o">.</span><span class="n">tubes</span><span class="p">([</span><span class="n">pop</span><span class="o">.</span><span class="n">N</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
 <span class="p">}</span>
 
 <span class="n">params</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="n">pdict</span><span class="p">)</span>
@@ -728,61 +735,12 @@ The examples listed below will work with types provided by <code class="docutils
 </div>
 </div>
 </div>
-<p>Some simulation designs make use of multiple <code class="docutils literal notranslate"><span class="pre">ModelParams</span></code> objects.
-Imagine, for example, that we simulate the above model until equilibrium, and then simulate another 100 generations while adapting to a new optimum:</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The details are omitted here:</p>
-<ol class="arabic simple">
-<li><p>This simulation requires two calls to <a class="reference internal" href="../pages/functions.html#fwdpy11.evolvets" title="fwdpy11.evolvets"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.evolvets()</span></code></a></p></li>
-<li><p>It could have been done instead with a single call to <a class="reference internal" href="../pages/functions.html#fwdpy11.evolvets" title="fwdpy11.evolvets"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.evolvets()</span></code></a>
-by passing a list of <a class="reference internal" href="../pages/gvalue_to_fitness.html#fwdpy11.Optimum" title="fwdpy11.Optimum"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.Optimum</span></code></a> to <a class="reference internal" href="../pages/gvalue_to_fitness.html#fwdpy11.GaussianStabilizingSelection" title="fwdpy11.GaussianStabilizingSelection"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GaussianStabilizingSelection</span></code></a>.
-This approach would have required one <code class="docutils literal notranslate"><span class="pre">ModelParams</span></code> instance.</p></li>
-</ol>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">copy</span>
-<span class="n">pdict2</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">pdict</span><span class="p">)</span>
-
-<span class="n">optimum</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Optimum</span><span class="p">(</span><span class="n">optimum</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span> <span class="n">VS</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">gss</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GaussianStabilizingSelection</span><span class="o">.</span><span class="n">single_trait</span><span class="p">([</span><span class="n">optimum</span><span class="p">])</span>
-<span class="n">pdict2</span><span class="p">[</span><span class="s1">&#39;gvalue&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Additive</span><span class="p">(</span><span class="mf">2.</span><span class="p">,</span> <span class="n">gss</span><span class="p">)</span>
-<span class="n">pdict2</span><span class="p">[</span><span class="s1">&#39;simlen&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">100</span>
-
-<span class="n">params2</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="n">pdict2</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<p>We can pass both objects to <code class="docutils literal notranslate"><span class="pre">tskit</span></code> via a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>:</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ts</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">dump_tables_to_tskit</span><span class="p">(</span><span class="n">model_params</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;burnin&#39;</span><span class="p">:</span> <span class="n">params</span><span class="p">,</span> <span class="s1">&#39;adaptation&#39;</span><span class="p">:</span> <span class="n">params2</span><span class="p">})</span>
-<span class="nb">type</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;model_params&quot;</span><span class="p">])</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>dict
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">assert</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="nb">eval</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;model_params&quot;</span><span class="p">][</span><span class="s2">&quot;burnin&quot;</span><span class="p">]))</span> <span class="o">==</span> <span class="n">params</span>
-<span class="k">assert</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="nb">eval</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;model_params&quot;</span><span class="p">][</span><span class="s2">&quot;adaptation&quot;</span><span class="p">]))</span> <span class="o">==</span> <span class="n">params2</span>
-</pre></div>
-</div>
-</div>
-</div>
 </section>
 <section id="including-a-demes-graph">
 <h3>Including a <code class="docutils literal notranslate"><span class="pre">demes</span></code> graph<a class="headerlink" href="#including-a-demes-graph" title="Permalink to this heading">#</a></h3>
 <p>You may include a <a class="reference external" href="https://popsim-consortium.github.io/demes-docs/main/api.html#demes.Graph" title="(in Python)"><code class="xref py py-class docutils literal notranslate"><span class="pre">demes.Graph</span></code></a> in the top-level metadata.
 If you also include a <a class="reference internal" href="../pages/model_params.html#fwdpy11.ModelParams" title="fwdpy11.ModelParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.ModelParams</span></code></a> (see above), including the <code class="docutils literal notranslate"><span class="pre">demes</span></code> graph gives redundant information.
-However, including the graph may be useful if downstream analysis will involve other tools compatible with the <code class="docutils literal notranslate"><span class="pre">deme</span></code> specification.
+However, including the graph may be useful if downstream analysis will involve other tools compatible with the <code class="docutils literal notranslate"><span class="pre">demes</span></code> specification.
 With the graph as metadata, you can extract it and reconstruct the original <code class="docutils literal notranslate"><span class="pre">YAML</span></code> file, or send it to another Python package that understands it.</p>
 <p>The following hidden code block defines a function to return a <a class="reference external" href="https://popsim-consortium.github.io/demes-docs/main/api.html#demes.Graph" title="(in Python)"><code class="xref py py-class docutils literal notranslate"><span class="pre">demes.Graph</span></code></a> from <code class="docutils literal notranslate"><span class="pre">YAML</span></code> input stored in a string literal.</p>
 <div class="cell tag_hide-input docutils container">
@@ -1055,12 +1013,12 @@ Doing so requires a <a class="reference external" href="https://docs.python.org/
                   <!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
-       href="../short_vignettes/incomplete_sweep.html"
+       href="demes_event_timings.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Incomplete selective sweeps</p>
+        <p class="prev-next-title">Timing of events in demographic models</p>
       </div>
     </a>
     <a class="right-next"

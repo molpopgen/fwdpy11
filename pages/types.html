@@ -158,6 +158,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="deploymenttools.html">Deployment tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="invokingpython.html">Invoking Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="citation.html">Citation</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Short vignettes - operations on populations</span></p>
 <ul class="nav bd-sidenav">
@@ -188,6 +189,7 @@ const thebe_selector_output = ".output, .cell_output"
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../short_vignettes/demography_vignettes_intro.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../short_vignettes/demes_vignette.html">Using <code class="docutils literal notranslate"><span class="pre">demes</span></code> to specify demographic models.</a></li>
+
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Short vignettes - varying fitness conditions across demes</span></p>
 <ul class="nav bd-sidenav">
@@ -203,6 +205,10 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="../short_vignettes/trackmutationfates.html">Tracking user-specified new mutations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../short_vignettes/selective_sweep.html">Selective sweeps</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../short_vignettes/incomplete_sweep.html">Incomplete selective sweeps</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Longer vignettes - demographic models</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../long_vignettes/demes_event_timings.html">Timing of events in demographic models</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Longer vignettes - exporting data to tskit</span></p>
 <ul class="nav bd-sidenav">
@@ -1828,6 +1834,14 @@ instance of <a class="reference internal" href="datamatrix.html#fwdpy11.DataMatr
 <section class="tex2jax_ignore mathjax_ignore" id="types-related-to-discrete-demographic-events">
 <h1>Types related to discrete demographic events<a class="headerlink" href="#types-related-to-discrete-demographic-events" title="Permalink to this heading">#</a></h1>
 <dl class="py class">
+<dt class="sig sig-object py" id="fwdpy11.ForwardTimeInterval">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">ForwardTimeInterval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_time</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.ForwardTimeInterval" title="Permalink to this definition">#</a></dt>
+<dd><p>A half-open interval [start_time, end_time).
+The times represent values moving forward in time,
+in generations since the begining of a model.</p>
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="fwdpy11.ForwardDemesGraph">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">ForwardDemesGraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">yaml</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">burnin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">burnin_is_exact</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">round_non_integer_sizes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.ForwardDemesGraph" title="Permalink to this definition">#</a></dt>
 <dd><p>A forward-in-time representation of a <cite>demes.Graph</cite></p>
@@ -1865,11 +1879,41 @@ have those values rounded to the nearest integer.</p></li>
 (strings).</p>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="fwdpy11.ForwardDemesGraph.deme_time_intervals">
+<span class="sig-name descname"><span class="pre">deme_time_intervals</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.ForwardDemesGraph.deme_time_intervals" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>a list of the time intervals during which each deme exists.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[<a class="reference internal" href="#fwdpy11.ForwardTimeInterval" title="fwdpy11.ForwardTimeInterval">fwdpy11.ForwardTimeInterval</a>]</p>
+</dd>
+</dl>
+<p>The order of the demes is the same as in the input <a class="reference external" href="https://popsim-consortium.github.io/demes-docs/main/api.html#demes.Graph" title="(in Python)"><code class="xref py py-class docutils literal notranslate"><span class="pre">demes.Graph</span></code></a>.</p>
+</dd></dl>
+
 <dl class="py property">
 <dt class="sig sig-object py" id="fwdpy11.ForwardDemesGraph.demes_at_final_generation">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">demes_at_final_generation</span></span><a class="headerlink" href="#fwdpy11.ForwardDemesGraph.demes_at_final_generation" title="Permalink to this definition">#</a></dt>
 <dd><p>List of integer ids of extant demes in the final generation
 of the demes graph.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fwdpy11.ForwardDemesGraph.epoch_time_intervals">
+<span class="sig-name descname"><span class="pre">epoch_time_intervals</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.ForwardDemesGraph.epoch_time_intervals" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>a list of the time intervals during which
+each epoch of each deme exists.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[<a class="reference internal" href="#fwdpy11.ForwardTimeInterval" title="fwdpy11.ForwardTimeInterval">fwdpy11.ForwardTimeInterval</a>]]</p>
+</dd>
+</dl>
+<p>The order of the demes is the same as in the input <a class="reference external" href="https://popsim-consortium.github.io/demes-docs/main/api.html#demes.Graph" title="(in Python)"><code class="xref py py-class docutils literal notranslate"><span class="pre">demes.Graph</span></code></a>.
+Within each deme, the epoch order is the same as in the input graph.</p>
 </dd></dl>
 
 <dl class="py property">
@@ -1922,6 +1966,44 @@ be used as-is.</p></li>
 are the deme integer identifiers.</p>
 <p>This property is useful for setting up a
 <a class="reference internal" href="#fwdpy11.DiploidPopulation" title="fwdpy11.DiploidPopulation"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiploidPopulation</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fwdpy11.ForwardDemesGraph.to_backwards_time">
+<span class="sig-name descname"><span class="pre">to_backwards_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">forwards_time</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.ForwardDemesGraph.to_backwards_time" title="Permalink to this definition">#</a></dt>
+<dd><p>Convert an integer value representing time moving in the
+forward direction to time in the past (“backwards time”).</p>
+<p>If no conversion is possible, <cite>None</cite> is returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>forwards_time</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – The value to convert</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The converted time</p>
+</dd>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.12)"><em>Optional</em></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)">int</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fwdpy11.ForwardDemesGraph.to_forwards_time">
+<span class="sig-name descname"><span class="pre">to_forwards_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">backwards_time</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.ForwardDemesGraph.to_forwards_time" title="Permalink to this definition">#</a></dt>
+<dd><p>Convert an integer value representing time moving in the
+backward direction to time in the forward direction.</p>
+<p>If no conversion is possible, <cite>None</cite> is returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>backwards_time</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – The value to convert</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The converted time</p>
+</dd>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.12)"><em>Optional</em></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)">int</a>]</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">

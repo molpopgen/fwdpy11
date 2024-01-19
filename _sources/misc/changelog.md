@@ -3,6 +3,23 @@
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+## 0.22.0
+
+Bug fixes:
+
+* Fixed incorrect handling of models with end times > 0 in a demes Graph.
+  When exporting to tskit, alive node times were treated as 0.0, causing
+  potential problems for some use cases.
+  Issue {issue}`1253`
+  PR {issue}`1255`
+
+Deprecations
+
+* Deprecate the `demes_graph` argument to {func}`fwdpy11.DiploidPopulation.dump_tables_to_tskit`
+  PR {issue}`1265`
+* Deprecate using a dict for the the `model_params` argument to {func}`fwdpy11.DiploidPopulation.dump_tables_to_tskit`
+  PR {issue}`1265`
+
 ## 0.21.6
 
 Behavior changes:

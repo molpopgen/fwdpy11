@@ -153,6 +153,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="pages/installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pages/deploymenttools.html">Deployment tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pages/invokingpython.html">Invoking Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pages/citation.html">Citation</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Short vignettes - operations on populations</span></p>
 <ul class="nav bd-sidenav">
@@ -183,6 +184,7 @@ const thebe_selector_output = ".output, .cell_output"
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="short_vignettes/demography_vignettes_intro.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="short_vignettes/demes_vignette.html">Using <code class="docutils literal notranslate"><span class="pre">demes</span></code> to specify demographic models.</a></li>
+
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Short vignettes - varying fitness conditions across demes</span></p>
 <ul class="nav bd-sidenav">
@@ -198,6 +200,10 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="short_vignettes/trackmutationfates.html">Tracking user-specified new mutations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="short_vignettes/selective_sweep.html">Selective sweeps</a></li>
 <li class="toctree-l1"><a class="reference internal" href="short_vignettes/incomplete_sweep.html">Incomplete selective sweeps</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Longer vignettes - demographic models</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="long_vignettes/demes_event_timings.html">Timing of events in demographic models</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Longer vignettes - exporting data to tskit</span></p>
 <ul class="nav bd-sidenav">
@@ -650,14 +656,16 @@ document.write(`
       </ul></li>
       <li><a href="pages/types.html#fwdpy11.DiploidPopulation.deme_sizes">deme_sizes() (fwdpy11.DiploidPopulation method)</a>
 </li>
+      <li><a href="pages/types.html#fwdpy11.ForwardDemesGraph.deme_time_intervals">deme_time_intervals() (fwdpy11.ForwardDemesGraph method)</a>
+</li>
       <li><a href="pages/types.html#fwdpy11.ForwardDemesGraph.demes_at_final_generation">demes_at_final_generation (fwdpy11.ForwardDemesGraph property)</a>
 </li>
       <li><a href="pages/types.html#fwdpy11.DemographicModelCitation">DemographicModelCitation (class in fwdpy11)</a>
 </li>
-      <li><a href="pages/types.html#fwdpy11.DemographicModelDetails">DemographicModelDetails (class in fwdpy11)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="pages/types.html#fwdpy11.DemographicModelDetails">DemographicModelDetails (class in fwdpy11)</a>
+</li>
       <li><a href="pages/types.html#fwdpy11.DemographyDebugger">DemographyDebugger (class in fwdpy11)</a>
 </li>
       <li><a href="pages/types.html#fwdpy11.MutationRecord.derived_state">derived_state (fwdpy11.MutationRecord attribute)</a>
@@ -706,6 +714,8 @@ document.write(`
 </li>
       <li><a href="pages/types.html#fwdpy11.EdgeTable">EdgeTable (class in fwdpy11)</a>
 </li>
+      <li><a href="pages/types.html#fwdpy11.ForwardDemesGraph.epoch_time_intervals">epoch_time_intervals() (fwdpy11.ForwardDemesGraph method)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pages/types.html#fwdpy11.Mutation.esizes">esizes (fwdpy11.Mutation attribute)</a>
@@ -743,6 +753,8 @@ document.write(`
       <li><a href="pages/conditional_models.html#fwdpy11.conditional_models.FocalDemeFixation">FocalDemeFixation (class in fwdpy11.conditional_models)</a>
 </li>
       <li><a href="pages/types.html#fwdpy11.ForwardDemesGraph">ForwardDemesGraph (class in fwdpy11)</a>
+</li>
+      <li><a href="pages/types.html#fwdpy11.ForwardTimeInterval">ForwardTimeInterval (class in fwdpy11)</a>
 </li>
       <li><a href="pages/conditional_models.html#fwdpy11.conditional_models.NewMutationParameters.frequency">frequency (fwdpy11.conditional_models.NewMutationParameters attribute)</a>
 </li>
@@ -1427,10 +1439,14 @@ document.write(`
       </ul></li>
       <li><a href="pages/types.html#fwdpy11.Node.time">time (fwdpy11.Node attribute)</a>
 </li>
-      <li><a href="pages/types.html#fwdpy11.DemographicModelDetails.total_simulation_length">total_simulation_length (fwdpy11.DemographicModelDetails property)</a>
+      <li><a href="pages/types.html#fwdpy11.ForwardDemesGraph.to_backwards_time">to_backwards_time() (fwdpy11.ForwardDemesGraph method)</a>
+</li>
+      <li><a href="pages/types.html#fwdpy11.ForwardDemesGraph.to_forwards_time">to_forwards_time() (fwdpy11.ForwardDemesGraph method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="pages/types.html#fwdpy11.DemographicModelDetails.total_simulation_length">total_simulation_length (fwdpy11.DemographicModelDetails property)</a>
+</li>
       <li><a href="pages/types.html#fwdpy11.TreeIterator.total_time">total_time() (fwdpy11.TreeIterator method)</a>
 </li>
       <li><a href="pages/conditional_models.html#fwdpy11.conditional_models.track_added_mutation">track_added_mutation() (in module fwdpy11.conditional_models)</a>

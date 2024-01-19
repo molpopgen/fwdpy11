@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Definitions &#8212; fwdpy11 manual</title>
+    <title>Citation &#8212; fwdpy11 manual</title>
   
   
   
@@ -61,13 +61,11 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
-    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
-    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'pages/definitions';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'pages/citation';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Advanced topics" href="advancedtopics.html" />
-    <link rel="prev" title="Tracking mutations over time using sqlite3" href="../long_vignettes/pyfreqtracker_sqlite.html" />
+    <link rel="next" title="Initializing a population" href="../short_vignettes/initpops_vignette.html" />
+    <link rel="prev" title="Invoking Python" href="invokingpython.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -153,12 +151,12 @@ const thebe_selector_output = ".output, .cell_output"
             </li>
         </ul>
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Installation and setup</span></p>
-<ul class="nav bd-sidenav">
+<ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="userenv.html">Setting up user environments for installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="deploymenttools.html">Deployment tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="invokingpython.html">Invoking Python</a></li>
-<li class="toctree-l1"><a class="reference internal" href="citation.html">Citation</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Citation</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Short vignettes - operations on populations</span></p>
 <ul class="nav bd-sidenav">
@@ -224,8 +222,8 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="../long_vignettes/pyfreqtracker_sqlite.html">Tracking mutations over time using <code class="docutils literal notranslate"><span class="pre">sqlite3</span></code></a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Concepts</span></p>
-<ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Definitions</a></li>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="definitions.html">Definitions</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
 <ul class="nav bd-sidenav">
@@ -346,7 +344,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="https://github.com/molpopgen/fwdpy11/issues/new?title=Issue%20on%20page%20%2Fpages/definitions.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/molpopgen/fwdpy11/issues/new?title=Issue%20on%20page%20%2Fpages/citation.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -376,7 +374,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="../_sources/pages/definitions.md" target="_blank"
+      <li><a href="../_sources/pages/citation.md" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -445,9 +443,7 @@ document.write(`
   </button>
 `);
 </script>
-<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="fa-solid fa-list"></span>
-</label>
+
 </div></div>
       
     </div>
@@ -458,20 +454,11 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Definitions</h1>
+    <h1>Citation</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
             
-            <div>
-                <h2> Contents </h2>
-            </div>
-            <nav aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#simulation-types">Simulation types</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#genetic-values-fitness-etc">Genetic values, fitness, etc.</a></li>
-</ul>
-            </nav>
         </div>
     </div>
 </div>
@@ -481,92 +468,15 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="definitions">
-<span id="id1"></span><h1>Definitions<a class="headerlink" href="#definitions" title="Permalink to this heading">#</a></h1>
-<p>We need to start out by defining some terms that will be used throughout the documentation.</p>
-<section id="simulation-types">
-<span id="simtypes"></span><h2>Simulation types<a class="headerlink" href="#simulation-types" title="Permalink to this heading">#</a></h2>
-<p>When it comes to the effect of mutations on fitness, we have two types:</p>
-<dl class="simple glossary">
-<dt id="term-direct">direct<a class="headerlink" href="#term-direct" title="Permalink to this term">#</a></dt><dd><p>The mutation’s effect size(s) affects fitness directly.
-This is the <span class="math notranslate nohighlight">\(s\)</span> of standard population genetic models.</p>
-</dd>
-<dt id="term-indirect">indirect<a class="headerlink" href="#term-indirect" title="Permalink to this term">#</a></dt><dd><p>The mutation’s effect size(s) affect one or more traits.
-The trait vector/matrix of a diploid then determines fitness.</p>
-</dd>
-</dl>
-<p>Thus, we have two types of simulation:</p>
-<dl class="simple glossary">
-<dt id="term-Standard-population-genetic-simulation">“Standard population genetic simulation”<a class="headerlink" href="#term-Standard-population-genetic-simulation" title="Permalink to this term">#</a></dt><dd><p>A simulation where mutations directly affect fitness</p>
-</dd>
-<dt id="term-Quantitative-genetic-simulation">“Quantitative genetic simulation”<a class="headerlink" href="#term-Quantitative-genetic-simulation" title="Permalink to this term">#</a></dt><dd><p>A simulation where mutations affect trait (phenotype) values first,
-which in turn affects fitness.</p>
-</dd>
-</dl>
-</section>
-<section id="genetic-values-fitness-etc">
-<h2>Genetic values, fitness, etc.<a class="headerlink" href="#genetic-values-fitness-etc" title="Permalink to this heading">#</a></h2>
-<p>Ultimately, the simulations work by sampling parents proportional to their fitnesses
-and generating offspring. Because fwdpy11 supports both “standard population genetic”
-simulations as well as simulation of quantitative traits,
-we need to be precise about the terms we’re using.</p>
-<p>We apply the following definitions here:</p>
-<dl class="simple glossary">
-<dt id="term-genetic-value">genetic value<a class="headerlink" href="#term-genetic-value" title="Permalink to this term">#</a></dt><dd><p>A <em>genetic value</em>, or <span class="math notranslate nohighlight">\(G\)</span>, is the result of applying a function
-to the gamete data at a locus.</p>
-</dd>
-<dt id="term-trait-value">trait value<a class="headerlink" href="#term-trait-value" title="Permalink to this term">#</a></dt><dd><p>A <em>trait value</em>, or <em>phenotype</em>, <span class="math notranslate nohighlight">\(P\)</span>, reflects any adjustment
-made to <span class="math notranslate nohighlight">\(G\)</span>.  For example, the addition of random noise such
-that <span class="math notranslate nohighlight">\(P=G+E\)</span>, where <span class="math notranslate nohighlight">\(E\)</span> is the noise.</p>
-</dd>
-<dt id="term-fitness">fitness<a class="headerlink" href="#term-fitness" title="Permalink to this term">#</a></dt><dd><p>A <em>fitness</em>, or <span class="math notranslate nohighlight">\(w\)</span> results from applying a function mapping
-<span class="math notranslate nohighlight">\(P\)</span> to fitness. <span class="math notranslate nohighlight">\(w\)</span> is a non-negative float.</p>
-</dd>
-</dl>
-<p>Consider the following two cases:</p>
-<p>First,  standard population genetic models of the sort that [sfs_code][sfs_code] or [SLiM2][slim2]
-are typically used for.  Mutations affecting fitness interact multiplicatively.
-Here, mutations directly affect fitness.  In our terms, <span class="math notranslate nohighlight">\(G = w\)</span>.</p>
-<p>Next, we think about a quantitative trait under Gaussian stabilizing selection
-with respect to an optimum.  Mutations interact additively (or multiplicatively) to
-generate <span class="math notranslate nohighlight">\(G\)</span> and the final trait value is <span class="math notranslate nohighlight">\(P = G + N(0,\sigma)\)</span>,
-reflecting environmental variation with mean zero and standard deviation
-<span class="math notranslate nohighlight">\(\sigma\)</span>.  For an optimum trait value <span class="math notranslate nohighlight">\(O\)</span>, fitness is calculated as</p>
-<div class="math notranslate nohighlight">
-\[w = e^{-\frac{(O-P)^2}{2VS}},
-\]</div>
-<p>where <span class="math notranslate nohighlight">\(VS\)</span> reflects the intensity of selection against extreme values
-of <span class="math notranslate nohighlight">\(P\)</span>.</p>
-<p>We can see from these two examples that some modeling scenarios allow us to go
-straight from a diploid’s data to fitness while others require multiple functions
-to go from genotype to genetic value to trait value and then, finally, to
-fitness.</p>
-<p>More details on these topics can be found in:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Give links to where details can be found.
-Discuss fitness having default value of 1 and traits 0.
-</pre></div>
-</div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
-## Stateful vs stateless genetic value calculations
-
-A genetic value calculation that only requires a diploid, a gamete container,
-and a mutation container as arguments is considered &quot;stateless&quot;.
-In contrast, if a calculation requires knowledge of the rest of the state of
-the population, or somehow depends on an externally-defined object,
-then it is &quot;stateful&quot;.  For example, if fitness depends on the mean
-genetic distance to all other individuals in the population,
-then that is something that would need to be updated and
-recorded each generation, making genetic value calculations &quot;stateful&quot;.
-Another example is the snowdrift model, which is shown in {ref}`pysnowdrift`.
-
-[sfs_code]: http://sfscode.sourceforge.net/SFS_CODE/index/index.html
-
-[slim2]: https://messerlab.org/slim/
-
-
-</pre></div>
-</div>
-</section>
+  <section class="tex2jax_ignore mathjax_ignore" id="citation">
+<h1>Citation<a class="headerlink" href="#citation" title="Permalink to this heading">#</a></h1>
+<p>If you use this software for research, please cite the following publications:</p>
+<ul class="simple">
+<li><p><span id="id1">[<a class="reference internal" href="../misc/bibliography.html#id11" title="Kevin R Thornton. Polygenic adaptation to an environmental shift: temporal dynamics of variation under gaussian stabilizing selection and additive effects on a single trait. Genetics, 213(4):1513–1530, December 2019.">Tho19</a>]</span></p></li>
+<li><p><span id="id2">[<a class="reference internal" href="../misc/bibliography.html#id31" title="Kevin R Thornton. A c++ template library for efficient forward-time population genetic simulation of large populations. Genetics, 198(1):157–166, September 2014.">Tho14</a>]</span></p></li>
+</ul>
+<p>This software was developed for the first paper.
+The second paper describes a key part of this software’s back end.</p>
 </section>
 
     <script type="text/x-thebe-config">
@@ -598,20 +508,20 @@ Another example is the snowdrift model, which is shown in {ref}`pysnowdrift`.
                   <!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
-       href="../long_vignettes/pyfreqtracker_sqlite.html"
+       href="invokingpython.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Tracking mutations over time using <code class="docutils literal notranslate"><span class="pre">sqlite3</span></code></p>
+        <p class="prev-next-title">Invoking Python</p>
       </div>
     </a>
     <a class="right-next"
-       href="advancedtopics.html"
+       href="../short_vignettes/initpops_vignette.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Advanced topics</p>
+        <p class="prev-next-title">Initializing a population</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -621,21 +531,6 @@ Another example is the snowdrift model, which is shown in {ref}`pysnowdrift`.
             </div>
             
             
-              
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
-
-  <div class="sidebar-secondary-item">
-  <div class="page-toc tocsection onthispage">
-    <i class="fa-solid fa-list"></i> Contents
-  </div>
-  <nav class="bd-toc-nav page-toc">
-    <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#simulation-types">Simulation types</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#genetic-values-fitness-etc">Genetic values, fitness, etc.</a></li>
-</ul>
-  </nav></div>
-
-</div></div>
               
             
           </div>

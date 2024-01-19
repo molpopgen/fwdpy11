@@ -1,0 +1,838 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Timing of events in demographic models &#8212; fwdpy11 manual</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d" />
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'long_vignettes/demes_event_timings';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Converting data to tskit format" href="tskitconvert_vignette.html" />
+    <link rel="prev" title="Incomplete selective sweeps" href="../short_vignettes/incomplete_sweep.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">fwdpy11 manual</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Introduction
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Installation and setup</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../pages/userenv.html">Setting up user environments for installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pages/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pages/deploymenttools.html">Deployment tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pages/invokingpython.html">Invoking Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pages/citation.html">Citation</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Short vignettes - operations on populations</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../short_vignettes/initpops_vignette.html">Initializing a population</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../short_vignettes/poptour_vignette.html">Properties of populations</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Short vignettes - setting up the genetics</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../short_vignettes/genetics_vignettes_intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../short_vignettes/geneticmaps_vignette.html">Genetic maps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../short_vignettes/des_vignette.html">Distributions of effect sizes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../short_vignettes/mutationdominance_vignette.html">Mutations with variable dominance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../short_vignettes/neutralmuts_vignette.html">Neutral mutations during a simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../short_vignettes/gvalues_fitness.html">Genetic values - mutations with direct effects on fitness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../short_vignettes/gvalues_traits.html">Genetic values - simulating phenotypes/traits.</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../short_vignettes/workingexample_fitness.html">Working example - parameters for simulating direct effects on fitness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../short_vignettes/workingexample_trait.html">Working example - parameters for the simulation of a trait</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Short vignettes - simulation with tree sequence recording</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../short_vignettes/evolvets_vignette.html">Evolving with tree sequence recording</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../short_vignettes/recorders_vignette.html">Recording data during a simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../short_vignettes/recapitation.html">Finishing a simulation with msprime</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../short_vignettes/neutralmutsafter_vignette.html">Adding neutral mutations to a population with existing ancestry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../short_vignettes/import_mutations_from_tskit.html">Importing mutations from tskit</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Short vignettes - demographic modeling</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../short_vignettes/demography_vignettes_intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../short_vignettes/demes_vignette.html">Using <code class="docutils literal notranslate"><span class="pre">demes</span></code> to specify demographic models.</a></li>
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Short vignettes - varying fitness conditions across demes</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../short_vignettes/varying_fitness_conditions_across_demes_intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../short_vignettes/multivariate_gaussian_effect_sizes_across_demes.html">The multivariate Gaussian distribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../short_vignettes/multivariate_lognormal_effect_sizes.html">The multivariate lognormal distribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../short_vignettes/custom_multivarate_distributions.html">“Custom” multivariate distributions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../short_vignettes/special_considerations_demes_models.html">Special considerations for demes models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../short_vignettes/genetic_values_multi_deme_models_advanced.html">Advanced topics</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Short vignettes - conditional models</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../short_vignettes/trackmutationfates.html">Tracking user-specified new mutations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../short_vignettes/selective_sweep.html">Selective sweeps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../short_vignettes/incomplete_sweep.html">Incomplete selective sweeps</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Longer vignettes - demographic models</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Timing of events in demographic models</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Longer vignettes - exporting data to tskit</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="tskitconvert_vignette.html">Converting data to tskit format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tskit_metadata_vignette.html">Working with data in tskit format</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Longer vignettes - complete examples</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="bgs_vignette.html">Background selection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gss_vignette.html">Gaussian stabilizing selection with an optimum shift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gss_vignette_different_optima.html">Adaptation of a trait to different optima in different demes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pyfreqtracker.html">Tracking mutations over time</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pyfreqtracker_sqlite.html">Tracking mutations over time using <code class="docutils literal notranslate"><span class="pre">sqlite3</span></code></a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Concepts</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../pages/definitions.html">Definitions</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../pages/advancedtopics.html">Advanced topics</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Objects and concepts</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../pages/mvdes.html">Different effect sizes of mutations in different demes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pages/tsoverview.html">Conceptual overview of tree sequence recording</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pages/tstypes.html">Data structures related to tree sequences</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pages/tablefs.html">Calculating frequency spectra from tree sequences</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pages/recorders.html">Time series analysis</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Technical details</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../technical/demes.html">Details of <code class="docutils literal notranslate"><span class="pre">demes</span></code> integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../technical/genetic_values.html">Technical overview of genetic value calculations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../technical/writingplugins.html">Writing “plugins” with C++</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Data types and fuctions</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../pages/genetic_values.html">Genetic values</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pages/datamatrix.html">DataMatrix and StateMatrix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pages/functions.html">Function documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pages/gslrandom.html">Random number distributions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pages/gvaluenoise.html">Adding random noise to genetic values</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pages/gvalue_to_fitness.html">Mapping genetic values to fitness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pages/model_params.html">Model parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pages/regiontypes.html">Setting up genomic intervals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pages/tskit_tools.html">Module <code class="docutils literal notranslate"><span class="pre">fwdpy11.tskit_tools</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pages/conditional_models.html">Module <code class="docutils literal notranslate"><span class="pre">fwdpy11.conditional_models</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pages/types.html">Data types related to simulated populations</a></li>
+
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../examples/gss_divergent_optima.html">Adaptation to different optima with multivariate distribution of effect sizes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/pysnowdrift.html">Snowdrift model in python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/recorder.html">Example of time series analysis implemented in C++</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Miscellany</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../misc/changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/developersguide.html">Developer’s guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/pubs.html">Publications using fwdpy11</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/upgrade_path.html">Upgrade path</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/bibliography.html">Literature cited</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/molpopgen/fwdpy11" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/molpopgen/fwdpy11/issues/new?title=Issue%20on%20page%20%2Flong_vignettes/demes_event_timings.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/long_vignettes/demes_event_timings.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Timing of events in demographic models</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#some-setup">Some setup</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#intervals-when-demes-exist">Intervals when demes exist</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-single-pulse-event">A single pulse event</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-multi-generation-burst-of-migration">A multi-generation “burst” of migration</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="timing-of-events-in-demographic-models">
+<span id="demes-event-timings"></span><h1>Timing of events in demographic models<a class="headerlink" href="#timing-of-events-in-demographic-models" title="Permalink to this heading">#</a></h1>
+<p>This document provides several examples showing <em>when</em> events happen in demographic models.</p>
+<p>We will define very simple setups that allow very simple assertions about their outcomes.
+While most simulations will involve more complex setups, the advantage of simplicity here
+is that we can easily validate the results because we can easily reason about the models.</p>
+<p>These examples come from the <code class="docutils literal notranslate"><span class="pre">fwdpy11</span></code> test suite.</p>
+<p>The key concept here is that the <a class="reference external" href="https://popsim-consortium.github.io/demes-spec-docs/main/introduction.html">demes specification</a>
+defines an epoch as a half open interval on <code class="docutils literal notranslate"><span class="pre">[present,</span> <span class="pre">past)</span></code>.
+Our reasoning about the outcomes of data that we record during simulation involves breaking our models up into half open intervals and asking questions about them.</p>
+<p>Why do we spend time going over this?
+Imagine that you want to know the details about the ancestry of a given generation in your simulation.
+For example, the ancestry of the generation born during a pulse.
+One way to do that would be to preserve both the pulse generation and its parent generation as ancient samples.
+(See <a class="reference internal" href="../short_vignettes/recorders_vignette.html#recorders-vignette"><span class="std std-ref">here</span></a>.)
+To do such sampling you need to know when to sample!</p>
+<section id="some-setup">
+<h2>Some setup<a class="headerlink" href="#some-setup" title="Permalink to this heading">#</a></h2>
+<p>During some of our simulations, we will record the current time point
+and the part of the metadata containing individual parents.</p>
+<p>We can use a simple data class to record this information:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Parents</span><span class="p">:</span>
+    <span class="n">generation</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">parents</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span>
+
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">RecordParents</span><span class="p">:</span>
+    <span class="n">parents</span><span class="p">:</span> <span class="nb">list</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pop</span><span class="p">,</span> <span class="n">_</span><span class="p">):</span>
+        <span class="n">md</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">diploid_metadata</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>There will be no genetics happening during the simulation.
+All that happens is that we apply our recorder.
+We will always “burn in” the demographic model with 100
+generations of matings.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">run_model</span><span class="p">(</span><span class="n">yaml</span><span class="p">,</span> <span class="n">recorder</span><span class="p">):</span>
+    <span class="n">graph</span> <span class="o">=</span> <span class="n">demes</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">yaml</span><span class="p">)</span>
+    <span class="n">demog</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ForwardDemesGraph</span><span class="o">.</span><span class="n">from_demes</span><span class="p">(</span>
+        <span class="n">graph</span><span class="p">,</span> <span class="n">burnin</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">burnin_is_exact</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span>
+    <span class="n">pdict</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;nregions&quot;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s2">&quot;recregions&quot;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s2">&quot;sregions&quot;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s2">&quot;rates&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+        <span class="s2">&quot;gvalue&quot;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Multiplicative</span><span class="p">(</span><span class="n">scaling</span><span class="o">=</span><span class="mf">2.0</span><span class="p">),</span>
+        <span class="s2">&quot;simlen&quot;</span><span class="p">:</span> <span class="n">demog</span><span class="o">.</span><span class="n">final_generation</span><span class="p">,</span>
+        <span class="s2">&quot;demography&quot;</span><span class="p">:</span> <span class="n">demog</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="n">pdict</span><span class="p">)</span>
+    <span class="n">rng</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSLrng</span><span class="p">(</span><span class="mi">101</span><span class="p">)</span>
+    <span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">(</span><span class="n">demog</span><span class="o">.</span><span class="n">initial_sizes</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">fwdpy11</span><span class="o">.</span><span class="n">evolvets</span><span class="p">(</span><span class="n">rng</span><span class="p">,</span> <span class="n">pop</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">simplification_interval</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">recorder</span><span class="o">=</span><span class="n">recorder</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">pop</span>
+</pre></div>
+</div>
+<div class="cell tag_remove-input docutils container">
+</div>
+</section>
+<section id="intervals-when-demes-exist">
+<h2>Intervals when demes exist<a class="headerlink" href="#intervals-when-demes-exist" title="Permalink to this heading">#</a></h2>
+<p>In the following graph, demes completely replace one another over time:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">time_units</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">generations</span>
+<span class="nt">demes</span><span class="p">:</span>
+<span class="w"> </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">deme0</span>
+<span class="w">   </span><span class="nt">epochs</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">end_time</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">50</span>
+<span class="w">      </span><span class="nt">start_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100</span>
+<span class="w"> </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">deme1</span>
+<span class="w">   </span><span class="nt">ancestors</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">deme0</span><span class="p p-Indicator">]</span>
+<span class="w">   </span><span class="nt">epochs</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">end_time</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">25</span>
+<span class="w">      </span><span class="nt">start_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100</span>
+<span class="w"> </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">deme2</span>
+<span class="w">   </span><span class="nt">ancestors</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">deme1</span><span class="p p-Indicator">]</span>
+<span class="w">   </span><span class="nt">epochs</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">start_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100</span>
+</pre></div>
+</div>
+<p>The following graphic depicts the model:</p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<img alt="../_images/fc753ba937fd8a5efaf362f5e6b0a185b98fe777258119914362e2131a32fa66.png" src="../_images/fc753ba937fd8a5efaf362f5e6b0a185b98fe777258119914362e2131a32fa66.png" />
+</div>
+</div>
+<p>The intervals of a deme’s existence are from <span class="math notranslate nohighlight">\([i, j)\)</span> generations ago, where <span class="math notranslate nohighlight">\(j &gt; i\)</span>.
+Therefore <code class="docutils literal notranslate"><span class="pre">deme2</span></code> exists from <span class="math notranslate nohighlight">\([0, 25)\)</span> generations ago, etc..</p>
+<p>During simulation, a node’s birth time and deme are recorded.
+Therefore, we can export the simulation to a tree sequence and check that the node
+times match up with their expected deme labels:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_deme_existence</span><span class="p">():</span>
+    <span class="n">yaml</span> <span class="o">=</span> <span class="s2">&quot;tests/demes_event_examples/deme_existence.yaml&quot;</span>
+    <span class="n">recorder</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">pop</span> <span class="o">=</span> <span class="n">run_model</span><span class="p">(</span><span class="n">yaml</span><span class="p">,</span> <span class="n">recorder</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">pop</span><span class="o">.</span><span class="n">generation</span> <span class="o">==</span> <span class="mi">150</span>
+    <span class="n">ts</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">dump_tables_to_tskit</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="nb">all</span><span class="p">([</span><span class="n">i</span><span class="o">.</span><span class="n">population</span> <span class="o">==</span> <span class="mi">2</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ts</span><span class="o">.</span><span class="n">nodes</span><span class="p">()</span> <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">time</span> <span class="o">&lt;</span> <span class="mf">25.0</span><span class="p">])</span>
+    <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">population</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ts</span><span class="o">.</span><span class="n">nodes</span><span class="p">()</span> <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">time</span> <span class="o">&gt;=</span> <span class="mf">25.0</span> <span class="ow">and</span> <span class="n">i</span><span class="o">.</span><span class="n">time</span> <span class="o">&lt;</span> <span class="mi">50</span><span class="p">]</span>
+    <span class="p">)</span>
+    <span class="k">assert</span> <span class="nb">all</span><span class="p">([</span><span class="n">i</span><span class="o">.</span><span class="n">population</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ts</span><span class="o">.</span><span class="n">nodes</span><span class="p">()</span> <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">time</span> <span class="o">&gt;=</span> <span class="mi">50</span><span class="p">])</span>
+</pre></div>
+</div>
+</section>
+<section id="a-single-pulse-event">
+<h2>A single pulse event<a class="headerlink" href="#a-single-pulse-event" title="Permalink to this heading">#</a></h2>
+<p>The following graph defines a two deme model with a single pulse event 10 generations ago.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">time_units</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">generations</span>
+<span class="nt">demes</span><span class="p">:</span>
+<span class="w"> </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">deme0</span>
+<span class="w">   </span><span class="nt">epochs</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">start_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100</span>
+<span class="w"> </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">deme1</span>
+<span class="w">   </span><span class="nt">epochs</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">start_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100</span>
+<span class="nt">pulses</span><span class="p">:</span>
+<span class="w"> </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">sources</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">deme0</span><span class="p p-Indicator">]</span>
+<span class="w">   </span><span class="nt">dest</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">deme1</span>
+<span class="w">   </span><span class="nt">proportions</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">1.0</span><span class="p p-Indicator">]</span>
+<span class="w">   </span><span class="nt">time</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
+</pre></div>
+</div>
+<p>The following graphic depicts the model:</p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<img alt="../_images/13473bc7d205a928f71e5c1d3d0717972b62371001610395c0be859bfef01100.png" src="../_images/13473bc7d205a928f71e5c1d3d0717972b62371001610395c0be859bfef01100.png" />
+</div>
+</div>
+<p>Given this model:</p>
+<ul class="simple">
+<li><p>The time interval <span class="math notranslate nohighlight">\([0, 10)\)</span> generations ago is the <em>post</em> pulse interval
+(thinking forwards in time).
+During this interval, all individuals in <code class="docutils literal notranslate"><span class="pre">deme0</span></code> have parents from that same deme.
+Likewise for <code class="docutils literal notranslate"><span class="pre">deme1</span></code>.</p></li>
+<li><p>All individuals born in the pulse generation (10 generations ago) have all of their
+parents drawn from <code class="docutils literal notranslate"><span class="pre">deme0</span></code>.
+The reason for this is that there are no events affecting the ancestry of <code class="docutils literal notranslate"><span class="pre">deme0</span></code> and
+the proportion of <code class="docutils literal notranslate"><span class="pre">deme1</span></code> ancestry that comes from <code class="docutils literal notranslate"><span class="pre">deme0</span></code> is 1.0, which is all of it.</p></li>
+<li><p>The time interval <span class="math notranslate nohighlight">\([11, \infty)\)</span> generations ago is the <em>pre</em> pulse interval
+(thinking forwards in time).
+During this interval, all individuals in <code class="docutils literal notranslate"><span class="pre">deme0</span></code> have parents from that same deme.
+Likewise for <code class="docutils literal notranslate"><span class="pre">deme1</span></code>.</p></li>
+</ul>
+<p>Using the reasoning about the pre and post epochs with respect to the timing of
+the pulse, we can make the following assertions:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_single_pulse</span><span class="p">():</span>
+    <span class="n">yaml</span> <span class="o">=</span> <span class="s2">&quot;tests/demes_event_examples/single_pulse.yaml&quot;</span>
+    <span class="n">recorder</span> <span class="o">=</span> <span class="n">RecordParents</span><span class="p">([])</span>
+    <span class="n">pop</span> <span class="o">=</span> <span class="n">run_model</span><span class="p">(</span><span class="n">yaml</span><span class="p">,</span> <span class="n">recorder</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">pop</span><span class="o">.</span><span class="n">generation</span> <span class="o">==</span> <span class="mi">110</span>
+    <span class="k">assert</span> <span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">parents</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">recorder</span><span class="o">.</span><span class="n">parents</span>
+        <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">generation</span> <span class="o">==</span> <span class="n">pop</span><span class="o">.</span><span class="n">generation</span> <span class="o">-</span> <span class="mi">10</span>
+    <span class="p">)</span>
+    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">recorder</span><span class="o">.</span><span class="n">parents</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">generation</span> <span class="o">!=</span> <span class="n">pop</span><span class="o">.</span><span class="n">generation</span> <span class="o">-</span> <span class="mi">10</span><span class="p">:</span>
+            <span class="n">flat</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">parents</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+            <span class="n">deme0</span> <span class="o">=</span> <span class="n">flat</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">flat</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">)]</span>
+            <span class="n">deme1</span> <span class="o">=</span> <span class="n">flat</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">flat</span> <span class="o">&gt;=</span> <span class="mi">100</span><span class="p">)]</span>
+            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">deme0</span><span class="p">)</span> <span class="o">==</span> <span class="mi">200</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">p</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">deme1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">200</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">p</span><span class="si">}</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+<p>Let’s work through the logic behind assertions in detail:</p>
+<ul class="simple">
+<li><p>The size of each deme is 100 diploids.</p></li>
+<li><p>The metadata are ordered by deme id.
+Thus, the first 100 entries are the indexes parents of individuals in <code class="docutils literal notranslate"><span class="pre">deme0</span></code>, etc..</p></li>
+<li><p>Due to the metadata ordering, an index <span class="math notranslate nohighlight">\(&lt; 100\)</span> (or, <span class="math notranslate nohighlight">\([0, 100)\)</span>) indicates
+a parent from <code class="docutils literal notranslate"><span class="pre">deme0</span></code>.
+An index in <span class="math notranslate nohighlight">\([100, 200)\)</span> indicates a parent from <code class="docutils literal notranslate"><span class="pre">deme1</span></code>.</p></li>
+</ul>
+</section>
+<section id="a-multi-generation-burst-of-migration">
+<h2>A multi-generation “burst” of migration<a class="headerlink" href="#a-multi-generation-burst-of-migration" title="Permalink to this heading">#</a></h2>
+<p>This model is a slight twist on the previous.
+Rather than a single generation pulse, there are several consecutive generations of migration
+in one direction:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">time_units</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">generations</span>
+<span class="nt">demes</span><span class="p">:</span>
+<span class="w"> </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">deme0</span>
+<span class="w">   </span><span class="nt">epochs</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">start_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100</span>
+<span class="w"> </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">deme1</span>
+<span class="w">   </span><span class="nt">epochs</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">start_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100</span>
+<span class="nt">migrations</span><span class="p">:</span>
+<span class="w"> </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">deme0</span>
+<span class="w">   </span><span class="nt">dest</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">deme1</span>
+<span class="w">   </span><span class="nt">rate</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.0</span>
+<span class="w">   </span><span class="nt">start_time</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
+<span class="w">   </span><span class="nt">end_time</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
+</pre></div>
+</div>
+<p>The following graphic depicts the model:</p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<img alt="../_images/69cffa7397f87f8ac377541203dcb7248912994739f29079271685c28c078438.png" src="../_images/69cffa7397f87f8ac377541203dcb7248912994739f29079271685c28c078438.png" />
+</div>
+</div>
+<p>In this model, migration occurs during the interval <span class="math notranslate nohighlight">\([5, 10)\)</span> generations ago.
+Because the migration is one way (<code class="docutils literal notranslate"><span class="pre">deme0</span></code> to <code class="docutils literal notranslate"><span class="pre">deme1</span></code>) and the rate is 1.0, the parents
+of all offspring born in this interval have their parents sampled from <code class="docutils literal notranslate"><span class="pre">deme0</span></code>.</p>
+<p>Outside of this interval, the parents of any individual are drawn from that
+individual’s deme.</p>
+<p>The following code asserts that these intervals are what we expect:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_burst_of_migration</span><span class="p">():</span>
+    <span class="n">yaml</span> <span class="o">=</span> <span class="s2">&quot;tests/demes_event_examples/burst_of_migration.yaml&quot;</span>
+    <span class="n">recorder</span> <span class="o">=</span> <span class="n">RecordParents</span><span class="p">([])</span>
+    <span class="n">pop</span> <span class="o">=</span> <span class="n">run_model</span><span class="p">(</span><span class="n">yaml</span><span class="p">,</span> <span class="n">recorder</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">pop</span><span class="o">.</span><span class="n">generation</span> <span class="o">==</span> <span class="mi">110</span>
+    <span class="k">assert</span> <span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">parents</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">recorder</span><span class="o">.</span><span class="n">parents</span>
+        <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">generation</span> <span class="o">&gt;</span> <span class="n">pop</span><span class="o">.</span><span class="n">generation</span> <span class="o">-</span> <span class="mi">10</span> <span class="ow">and</span> <span class="n">p</span><span class="o">.</span><span class="n">generation</span> <span class="o">&lt;=</span> <span class="n">pop</span><span class="o">.</span><span class="n">generation</span> <span class="o">-</span> <span class="mi">5</span>
+    <span class="p">)</span>
+    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">recorder</span><span class="o">.</span><span class="n">parents</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">generation</span> <span class="o">&lt;=</span> <span class="n">pop</span><span class="o">.</span><span class="n">generation</span> <span class="o">-</span> <span class="mi">10</span> <span class="ow">or</span> <span class="n">p</span><span class="o">.</span><span class="n">generation</span> <span class="o">&gt;</span> <span class="n">pop</span><span class="o">.</span><span class="n">generation</span> <span class="o">-</span> <span class="mi">5</span><span class="p">:</span>
+            <span class="n">flat</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">parents</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+            <span class="n">deme0</span> <span class="o">=</span> <span class="n">flat</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">flat</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">)]</span>
+            <span class="n">deme1</span> <span class="o">=</span> <span class="n">flat</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">flat</span> <span class="o">&gt;=</span> <span class="mi">100</span><span class="p">)]</span>
+            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">deme0</span><span class="p">)</span> <span class="o">==</span> <span class="mi">200</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">p</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">deme1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">200</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">p</span><span class="si">}</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./long_vignettes"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  <!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../short_vignettes/incomplete_sweep.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Incomplete selective sweeps</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="tskitconvert_vignette.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Converting data to tskit format</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#some-setup">Some setup</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#intervals-when-demes-exist">Intervals when demes exist</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-single-pulse-event">A single pulse event</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-multi-generation-burst-of-migration">A multi-generation “burst” of migration</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            <div class="bd-footer-content__inner">
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Kevin Thornton
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div></div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
