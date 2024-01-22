@@ -4,6 +4,9 @@ pydata-sphinx-theme==0.13.1
 matplotlib
 msprime
 pandas
+# pyarrow will be a requirement of pandas soon.
+# right now, not having it raises a warning
+pyarrow
 sphinx-issues
 demesdraw~=0.4.0
 
