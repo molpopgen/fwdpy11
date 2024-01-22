@@ -110,6 +110,9 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
               of fwdpy11.
 
         """
+        # NOTE: this assert will intentionally fail if we ever support
+        # export to tskit for models where time units are something else
+        assert ts.time_units == "generations"
         generation = 0
         if len(ts.metadata) > 0:
             if "generation" in ts.metadata:
