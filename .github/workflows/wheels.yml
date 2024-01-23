@@ -35,9 +35,6 @@ jobs:
           # Upgrade pip to get bdist_wheel
           pip install --upgrade pip
           pip install setuptools wheel build
-          # Instead of letting setup.py install a newer numpy we install it here
-          # using the oldest supported version for ABI compatibility
-          pip install oldest-supported-numpy
       - name: Build Wheel
         run: |
           python -m build --wheel

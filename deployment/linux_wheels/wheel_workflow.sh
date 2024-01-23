@@ -29,7 +29,7 @@ git config --global --add safe.directory /project
 
 $(which $PYTHON) -m venv venv
 source venv/bin/activate
-python -m pip install --upgrade pip setuptools build oldest-supported-numpy
+python -m pip install --upgrade pip setuptools build
 python -m build .
 deactivate
 rm -rf build venv
