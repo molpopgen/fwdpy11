@@ -199,6 +199,12 @@ evolve_generation_ts(
     offspring.clear();
     offspring_metadata.clear();
 
+    // Clear table indexes each generation.
+    // This is a "safety" guard against erroneous use
+    // at runtime.
+    pop.tables->input_left.clear();
+    pop.tables->output_right.clear();
+
     // Generate the offspring
     auto next_index_local = next_index;
 
