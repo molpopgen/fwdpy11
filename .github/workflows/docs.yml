@@ -46,7 +46,7 @@ jobs:
       # and they'll get cached, too.
       - name: Cache dependancies
         id: cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/.local
