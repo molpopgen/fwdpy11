@@ -8,6 +8,8 @@ import fwdpy11
 import numpy as np
 import pytest
 
+from utils import make_path
+
 
 def run_model_round_trip(cls):
     def _test_evolvets_roundtrip(self):
@@ -50,7 +52,7 @@ class TestBadBurnin(unittest.TestCase):
 class TestLoadGraph(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        self.g = demes.load("tests/test_demog.yaml")
+        self.g = demes.load(make_path("test_demog.yaml"))
         self.demog = fwdpy11.discrete_demography.from_demes(self.g, 1)
 
 
@@ -58,7 +60,9 @@ class TestLoadGraph(unittest.TestCase):
 class TestLoadYAML(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        self.demog = fwdpy11.discrete_demography.from_demes("tests/test_demog.yaml", 1)
+        self.demog = fwdpy11.discrete_demography.from_demes(
+            make_path("test_demog.yaml"), 1
+        )
 
 
 @run_model_round_trip

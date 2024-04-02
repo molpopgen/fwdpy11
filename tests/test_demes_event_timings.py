@@ -5,6 +5,8 @@ import numpy as np
 
 import fwdpy11
 
+from utils import make_path
+
 
 @dataclass
 class Parents:
@@ -43,7 +45,7 @@ def run_model(yaml, recorder):
 
 
 def test_single_pulse():
-    yaml = "tests/demes_event_examples/single_pulse.yaml"
+    yaml = make_path("demes_event_examples/single_pulse.yaml")
     recorder = RecordParents([])
     pop = run_model(yaml, recorder)
     assert pop.generation == 110
@@ -62,7 +64,7 @@ def test_single_pulse():
 
 
 def test_burst_of_migration():
-    yaml = "tests/demes_event_examples/burst_of_migration.yaml"
+    yaml = make_path("demes_event_examples/burst_of_migration.yaml")
     recorder = RecordParents([])
     pop = run_model(yaml, recorder)
     assert pop.generation == 110
@@ -81,7 +83,7 @@ def test_burst_of_migration():
 
 
 def test_deme_existence():
-    yaml = "tests/demes_event_examples/deme_existence.yaml"
+    yaml = make_path("demes_event_examples/deme_existence.yaml")
     recorder = None
     pop = run_model(yaml, recorder)
     assert pop.generation == 150
@@ -148,20 +150,20 @@ def validate_deme_existence(yaml):
 
 
 def test_single_pulse_deme_sizes():
-    yaml = "tests/demes_event_examples/single_pulse.yaml"
+    yaml = make_path("demes_event_examples/single_pulse.yaml")
     validate_deme_existence(yaml)
 
 
 def test_burst_of_migration_deme_sizes():
-    yaml = "tests/demes_event_examples/burst_of_migration.yaml"
+    yaml = make_path("demes_event_examples/burst_of_migration.yaml")
     validate_deme_existence(yaml)
 
 
 def test_deme_existence_deme_sizes():
-    yaml = "tests/demes_event_examples/deme_existence.yaml"
+    yaml = make_path("demes_event_examples/deme_existence.yaml")
     validate_deme_existence(yaml)
 
 
 def test_generation_times_deme_sizes():
-    yaml = "tests/demes_event_examples/deme_existence_generation_time.yaml"
+    yaml = make_path("demes_event_examples/deme_existence_generation_time.yaml")
     validate_deme_existence(yaml)
