@@ -20,7 +20,7 @@ jobs:
         shell: bash
     steps:
       - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.12.0
+        uses: styfle/cancel-workflow-action@0.12.1
         with:
           access_token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -36,7 +36,7 @@ jobs:
           toolchain: ${{ matrix.rust }}
 
       - name: Install cbindgen
-        uses: baptiste0928/cargo-install@v2
+        uses: baptiste0928/cargo-install@v3
         with:
           crate: cbindgen
           version: "=0.24.3" 
@@ -46,7 +46,7 @@ jobs:
       # and they'll get cached, too.
       - name: Cache dependancies
         id: cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/.local
@@ -109,7 +109,7 @@ jobs:
 
       - name: Upload artifacts
         if: github.event_name == 'release'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: docs_output
           path: docs_output/
@@ -126,7 +126,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Download artifact
-        uses: actions/download-artifact@v3.0.2
+        uses: actions/download-artifact@v4.1.4
         with:
           # Artifact name
           name: docs_output # optional
