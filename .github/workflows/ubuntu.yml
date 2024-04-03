@@ -39,7 +39,7 @@ jobs:
             sudo apt install --fix-missing -y libgsl-dev cmake autoconf libboost-test-dev libboost-program-options-dev
 
       - name: Install cbindgen
-        uses: baptiste0928/cargo-install@v2
+        uses: baptiste0928/cargo-install@v3
         with:
           crate: cbindgen
           version: "=0.24.3" 

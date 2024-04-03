@@ -36,7 +36,7 @@ jobs:
           toolchain: ${{ matrix.rust }}
 
       - name: Install cbindgen
-        uses: baptiste0928/cargo-install@v2
+        uses: baptiste0928/cargo-install@v3
         with:
           crate: cbindgen
           version: "=0.24.3" 
