@@ -132,3 +132,5 @@ if (ENABLE_PROFILING)
     set_target_properties(_fwdpy11 PROPERTIES CXX_VISIBILITY_PRESET "default")
 endif()
 target_link_libraries(_fwdpy11 PRIVATE GSL::gsl GSL::gslcblas fwdpy11core)
+# The install directory is the output (wheel) directory
+install(TARGETS _fwdpy11 DESTINATION fwdpy11)

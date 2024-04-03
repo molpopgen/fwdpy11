@@ -71,7 +71,7 @@ class TreeIterator(ll_TreeIterator):
         update_samples: bool = False,
         ancient_samples: Union[List[int], np.ndarray] = None,
         begin: float = 0.0,
-        end: Optional[float] = None
+        end: Optional[float] = None,
     ):
         _end = end
         if _end is None:

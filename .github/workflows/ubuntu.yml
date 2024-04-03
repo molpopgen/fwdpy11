@@ -120,6 +120,10 @@ jobs:
         run: |
           cmake --build build -t test
 
+      - name: Clean cmake build
+        run: |
+          rm -rf build
+
       - name: Manualy run setuptools_scm
         run: |
           python -m setuptools_scm
@@ -148,15 +152,16 @@ jobs:
 
       - name: Test pip install from dist in fresh venv
         run: |
-            python -m pip install --upgrade setuptools pip wheel build
-            python -m build . --config-setting=--disable_lto
+            python -m pip install build
+            python -m build -o dist -w .
             cd dist
             python -m venv venv
             source venv/bin/activate
             which python
             # The CPPFLAGS contain stuff for C++ that makes no sense for C.
             # The flags are also too strict for tskit to build under Py 3.12
-            CPPFLAGS= python -m pip install --no-cache-dir ./fwdpy11*-linux*.whl
+            ls
+            CPPFLAGS= python -m pip install --no-cache-dir ./fwdpy11*-*linux*.whl
             python -m fwdpy11 --includes
             python -c "import fwdpy11;print(fwdpy11.__version__)"
             python -c "import fwdpy11;print(fwdpy11.__file__)"
