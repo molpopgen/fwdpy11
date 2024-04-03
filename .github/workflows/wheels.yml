@@ -36,7 +36,7 @@ jobs:
           python setup.py sdist
 
       - name: Upload sdist
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: sdist
           path: dist
@@ -66,9 +66,9 @@ jobs:
           #docker run --rm -v `pwd`:/project -w /project quay.io/pypa/manylinux_2_28_x86_64:2022-10-02-69a0972 bash .github/workflows/manylinux/buildwheels.sh
 
       - name: Upload Wheels
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: linux-wheels
+          name: linux-wheels-${{ matrix.python }}
           path: dist/wheelhouse
 
   manylinux2_28_test:
