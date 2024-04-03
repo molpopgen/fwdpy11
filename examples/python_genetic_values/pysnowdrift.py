@@ -6,6 +6,7 @@ Final output is a plot of the phenotypes
 over time, based on sampling every 100
 generations.
 """
+
 import math
 import sys
 

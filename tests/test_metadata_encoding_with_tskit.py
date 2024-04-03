@@ -275,9 +275,7 @@ def test_mutation_metadata_with_vectors(mock_population, tables):
         assert np.array_equal(i.heffects, j.heffects)
 
 
-@given(
-    msprime_seed=integers(1, int(2**32 - 1)), fp11_seed=integers(1, int(2**32 - 1))
-)
+@given(msprime_seed=integers(1, int(2**32 - 1)), fp11_seed=integers(1, int(2**32 - 1)))
 @settings(deadline=None, max_examples=5)
 def test_encoding_neutral_mutations_with_msprime_tree_sequences(
     msprime_seed, fp11_seed
