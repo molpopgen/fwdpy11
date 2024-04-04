@@ -43,7 +43,7 @@ We can use a simple data class to record this information:
 
 ```{literalinclude} ../../tests/test_demes_event_timings.py
 :language: python
-:lines: 8-20
+:lines: 11-23
 ```
 
 There will be no genetics happening during the simulation.
@@ -53,7 +53,7 @@ generations of matings.
 
 ```{literalinclude} ../../tests/test_demes_event_timings.py
 :language: python
-:lines: 24-42
+:lines: 26-45
 ```
 
 ```{code-cell} python
@@ -91,7 +91,7 @@ times match up with their expected deme labels:
 
 ```{literalinclude} ../../tests/test_demes_event_timings.py
 :language: python
-:lines: 83-93
+:lines: 86-96
 ```
 
 ## A single pulse event
@@ -134,7 +134,7 @@ the pulse, we can make the following assertions:
 
 ```{literalinclude} ../../tests/test_demes_event_timings.py
 :language: python
-:lines: 45-61
+:lines: 48-64
 ```
 
 Let's work through the logic behind assertions in detail:
@@ -177,5 +177,5 @@ The following code asserts that these intervals are what we expect:
 
 ```{literalinclude} ../../tests/test_demes_event_timings.py
 :language: python
-:lines: 64-80
+:lines: 67-83
 ```

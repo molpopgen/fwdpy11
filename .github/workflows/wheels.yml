@@ -44,9 +44,6 @@ jobs:
   manylinux2_28:
     name: Build and test Linux wheels
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python: ["python3.8", "python3.9", "python3.10", "python3.11", "python3.12"]
     steps:
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.12.1
@@ -59,17 +56,14 @@ jobs:
             submodules: true
             fetch-depth: 0
 
-      - name: Build wheels in docker
-        shell: bash
-        run: |
-          bash deployment/linux_wheels/run_wheel_workflow.sh ${{ matrix.python }}
-          #docker run --rm -v `pwd`:/project -w /project quay.io/pypa/manylinux_2_28_x86_64:2022-10-02-69a0972 bash .github/workflows/manylinux/buildwheels.sh
+      - name: Build wheels
+        uses: pypa/cibuildwheel@v2.17.0
 
       - name: Upload Wheels
         uses: actions/upload-artifact@v4
         with:
-          name: linux-wheels-${{ matrix.python }}
-          path: dist/wheelhouse
+          name: linux-wheels
+          path: wheelhouse
 
   manylinux2_28_test:
     name: Build package from source dist
@@ -106,24 +100,40 @@ jobs:
           deactivate
           rm -rf sdist_venv
 
-          # - name: Install wheel and test
-          #   run: |
-          #     python -VV
-          #     # pip install minimal dependencies
-          #     pip install --upgrade pip
-          #     pip install wheel
-          #     pip install -r requirements/wheel_building_workflow.txt
-          #     # delete the source dir to prevent pip from mistaking it for 
-          #     # the package
-          #     rm -rf fwdpy11
-          #     # Install the local wheel
-          #     pip install fwdpy11 --no-deps --no-index --pre --only-binary fwdpy11 -f .
-          #     python -c "import fwdpy11;print(fwdpy11.__version__)"
-
+  # Test that wheels build in the docker cibuildwheel workflow
+  # can be installed on Ubuntu Linux, which is a different distro.
+  manylinux2_28_test_install_wheel:
+    name: Install the wheel on github runner
+    runs-on: ubuntu-latest
+    needs: ['manylinux2_28']
+    strategy:
+      matrix:
+        python: [3.8, 3.9, "3.10", "3.11", "3.12"]
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.12.1
+        with:
+          access_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Download sdist
+        uses: actions/download-artifact@v4.1.4
+        with:
+          name: linux-wheels
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: install into venv
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+          python -m pip install --no-cache-dir --only-binary=fwdpy11 --pre --find-links . fwdpy11
+          python -m fwdpy11 --includes
+          python -c "import fwdpy11;print(fwdpy11.__version__)"
+          python -c "import fwdpy11;print(fwdpy11.__file__)"
+              
   upload_to_PyPI:
     name: Upload to PyPI
     runs-on: ubuntu-latest
-    needs: ['manylinux2_28', 'manylinux2_28_test']
+    needs: ['manylinux2_28', 'manylinux2_28_test', 'manylinux2_28_test_install_wheel']
     steps:
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.12.1

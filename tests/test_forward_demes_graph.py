@@ -4,7 +4,12 @@ import fwdpy11
 
 
 def into_graph(yaml, burnin=100, burnin_is_exact=True) -> fwdpy11.ForwardDemesGraph:
-    graph = demes.load(yaml)
+    import os
+
+    path_to_current_file = os.path.realpath(__file__)
+    current_directory = os.path.split(path_to_current_file)[0]
+    path_to_file = os.path.join(current_directory, yaml)
+    graph = demes.load(path_to_file)
     return fwdpy11.ForwardDemesGraph.from_demes(
         graph, burnin=burnin, burnin_is_exact=burnin_is_exact
     )
@@ -30,7 +35,7 @@ def validate_deme_times(demog):
 
 
 def test_single_pulse():
-    yaml = "tests/demes_event_examples/single_pulse.yaml"
+    yaml = "demes_event_examples/single_pulse.yaml"
     demog = into_graph(yaml)
     assert demog.to_forwards_time(demog.final_generation) == 0
     assert demog.to_forwards_time(-1) is None
@@ -42,7 +47,7 @@ def test_single_pulse():
 
 
 def test_burst_of_migration():
-    yaml = "tests/demes_event_examples/burst_of_migration.yaml"
+    yaml = "demes_event_examples/burst_of_migration.yaml"
     demog = into_graph(yaml)
     assert demog.to_forwards_time(demog.final_generation) == 0
     assert demog.to_forwards_time(-1) is None
@@ -52,7 +57,7 @@ def test_burst_of_migration():
 
 
 def test_deme_existence():
-    yaml = "tests/demes_event_examples/deme_existence.yaml"
+    yaml = "demes_event_examples/deme_existence.yaml"
     demog = into_graph(yaml)
     assert demog.to_forwards_time(demog.final_generation) == 0
     assert demog.to_forwards_time(-1) is None
