@@ -65,3 +65,21 @@ jobs:
           python -m pytest -n 4 tests
           python -m pytest -n 2 tests_with_cpp
 
+      - name: Clean up build and venv
+        run: |
+          rm -rf build venv
+
+      - name: Test pip install from dist in fresh venv
+        run: |
+            python -m pip install build
+            python -m build -o dist -w .
+            cd dist
+            python -m venv venv
+            source venv/bin/activate
+            which python
+            python -m pip install --no-cache-dir ./fwdpy11*.whl
+            python -m fwdpy11 --includes
+            python -c "import fwdpy11;print(fwdpy11.__version__)"
+            python -c "import fwdpy11;print(fwdpy11.__file__)"
+
+

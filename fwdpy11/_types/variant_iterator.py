@@ -74,7 +74,7 @@ class VariantIterator(ll_VariantIterator):
         begin: float = 0.0,
         end: Optional[float] = None,
         include_neutral_variants: bool = True,
-        include_selected_variants: bool = True
+        include_selected_variants: bool = True,
     ):
         if end is not None:
             _end = end

@@ -35,3 +35,5 @@ add_library(fwdpy11core SHARED ${ALL_SOURCES})
 add_dependencies(fwdpy11core cargo-build_fp11rust header)
 target_link_libraries(fwdpy11core LINK_PRIVATE ${CMAKE_BINARY_DIR}/rust/libfp11rust.a)
 target_link_libraries(fwdpy11core PRIVATE GSL::gsl GSL::gslcblas)
+# The install directory is the output (wheel) directory
+install(TARGETS fwdpy11core DESTINATION fwdpy11)

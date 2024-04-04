@@ -27,12 +27,12 @@ git config --global --add safe.directory /project
 
 # BUILD WHEEL INSIDE A VENV
 
-$(which $PYTHON) -m venv venv
-source venv/bin/activate
+$(which $PYTHON) -m venv /venv
+source /venv/bin/activate
 python -m pip install --upgrade pip setuptools build
 python -m build .
 deactivate
-rm -rf build venv
+rm -rf build /venv
 
 cd dist
 for whl in *.whl; do
@@ -45,8 +45,8 @@ cd ..
 
 # INSTALL WHEEL INTO VENV FOR TESTING
 
-$(which $PYTHON) -m venv venv
-source venv/bin/activate
+$(which $PYTHON) -m venv /venv
+source /venv/bin/activate
 python -m pip install --upgrade pip
 python -m pip install wheel
 python -m pip install fwdpy11 --pre --no-cache-dir --only-binary fwdpy11 --find-links dist/wheelhouse
@@ -67,4 +67,4 @@ python -m pytest tests -n 4
 rm -rf $TESTDIR
 cd ..
 deactivate
-rm -rf venv
+rm -rf /venv

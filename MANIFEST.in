@@ -14,3 +14,4 @@ include doc/fwdpp.doxygen
 include doc/Makefile
 recursive-include doc *.md *.png
 recursive-include tests *.yaml
+recursive-include tests_with_cpp *.txt *.cc *.py

@@ -94,7 +94,7 @@ class DiploidMetadata(object):
             **ind.metadata,
             alive=alive,
             preserved=preserved,
-            first_generation=first_generation
+            first_generation=first_generation,
         )
 
 

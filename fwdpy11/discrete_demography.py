@@ -30,7 +30,7 @@ def from_demes(
     dg: typing.Union[str, demes.Graph],
     burnin: int = 10,
     *,
-    round_non_integer_sizes: typing.Optional[bool] = None
+    round_non_integer_sizes: typing.Optional[bool] = None,
 ) -> DemographicModelDetails:
     """
     Build a :class:`fwdpy11.DemographicModelDetails` object using demes.
