@@ -43,6 +43,8 @@ jobs:
         with:
           crate: cbindgen
           version: "=0.24.3" 
+          locked: true
+          cache-key: ${{ matrix.os }}
 
       - name: rustc version
         run: |

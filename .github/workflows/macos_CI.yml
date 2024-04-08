@@ -2,19 +2,19 @@
 # test suite. We don't do these tests
 # b/c boost from brew has proven tricky
 # to work with here.
-name: macOS_x86
+name: macOS_CI
 
 on:
   pull_request:
 
 jobs:
-  test_macos_x86:
-    name: macOS_x86
+  test_macos:
+    name: macOS_CI
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        python: [ 3.8, 3.9, "3.10", "3.11", "3.12" ]
-        os:  [ macos-latest ]
+        python: [ "3.11", "3.12" ]
+        os:  [ macos-14, macos-13 ]
         rust: [1.62.1]
     defaults:
       run:
@@ -38,6 +38,8 @@ jobs:
         with:
           crate: cbindgen
           version: "=0.24.3" 
+          locked: true
+          cache-key: ${{ matrix.os }}
       - name: Install GSL
         run: |
           brew install gsl
