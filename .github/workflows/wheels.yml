@@ -41,6 +41,46 @@ jobs:
           name: sdist
           path: dist
 
+  macos-wheels:
+    name: Build and test macOS wheels
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        rust: [1.62.1]
+        os: [macos-14, macos-13]
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.12.1
+        with:
+          access_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+            submodules: true
+            fetch-depth: 0
+
+      - name: Install cbindgen
+        uses: baptiste0928/cargo-install@v3
+        with:
+          crate: cbindgen
+          version: "=0.24.3" 
+          locked: true
+          cache-key: ${{ matrix.os }}
+
+      - name: Install GSL
+        run: |
+          brew install gsl
+
+      - name: Build wheels
+        uses: pypa/cibuildwheel@v2.17.0
+
+      - name: Upload Wheels
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.os }}-wheels
+          path: wheelhouse
+
   manylinux2_28:
     name: Build and test Linux wheels
     runs-on: ubuntu-latest
@@ -129,11 +169,40 @@ jobs:
           python -m fwdpy11 --includes
           python -c "import fwdpy11;print(fwdpy11.__version__)"
           python -c "import fwdpy11;print(fwdpy11.__file__)"
+
+  macos_test_install_wheel:
+    name: Install the wheel on github runner
+    runs-on: ${{ matrix.os }}
+    needs: ['macos-wheels']
+    strategy:
+      matrix:
+        python: ["3.11", "3.12"]
+        os: [macos-14, macos-13]
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.12.1
+        with:
+          access_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Download sdist
+        uses: actions/download-artifact@v4.1.4
+        with:
+          name: ${{ matrix.os }}-wheels
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: install into venv
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+          python -m pip install --no-cache-dir --only-binary=fwdpy11 --pre --find-links . fwdpy11
+          python -m fwdpy11 --includes
+          python -c "import fwdpy11;print(fwdpy11.__version__)"
+          python -c "import fwdpy11;print(fwdpy11.__file__)"
               
   upload_to_PyPI:
     name: Upload to PyPI
     runs-on: ubuntu-latest
-    needs: ['manylinux2_28', 'manylinux2_28_test', 'manylinux2_28_test_install_wheel']
+    needs: ['manylinux2_28', 'manylinux2_28_test', 'manylinux2_28_test_install_wheel', 'macos_test_install_wheel']
     steps:
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.12.1
