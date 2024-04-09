@@ -158,10 +158,42 @@ If you have a script `$HOME/tmp/foo.py`, you can run it via:
 docker run --rm -v $HOME/tmp:/app IMAGE_NAME /bin/bash -c ". /venv/bin/activate; python /app/foo.py"
 ```
 
-## Linux wheel building
+## Wheel building
+
+### Using `build`
+
+The simplest method is to use `build` to build a wheel for your local system:
+
+```{code-block} bash
+python -m pip install build
+python -m build -w .
+```
+
+This approach requires that rust and the GNU Scientific Library (GSL) are installed on your system.
+
+### Using `cibuildwheel`
+
+```{code-block} bash
+python -m pip install cibuildwheel
+python -m cibuildwheel 
+```
+
+This will build wheels for the Python versions declared in `pyproject.toml` in the root
+of the `fwdpy11` source repo.
+We use this method to automatically generate wheels for each release.
+
+On Linux, the work is done in a Docker container.
+Therefore, your system must be configured to allow your user to use `docker`.
+(`podman` may also be used via `podman-docker`.)
+
+On macos, you will need to have the GSL and rust installed using whatever method you prefer,
+so long as the installs are visible to the `fwdpy11` build system.
+
+
+### Alternate method for Linux
 
 The directory `deployment/linux_wheels` defines a `Docker` work flow to build binary wheels on Linux.
-These scripts are what we use to build wheels for each release.
+These scripts were used to build wheels for each release but were recently replaced with `cibuildwheel` (see above).
 They may also be used to make wheels for development versions on a local machine.
 
 From the `root` of the `fwdpy11` repository.

@@ -52,13 +52,17 @@ python3 -m pip install -r requirements/development.txt
 It may be useful to add `--upgrade --no-cache-dir` to the above command.
 ```
 
-### Building the code
+### Building the code for development
+
+To generate an "editable" (in-place) installation for development work:
 
 ```sh
 git submodule init
 git submodule update
-python3 setup.py build_ext -i
+python -m pip install -e .
 ```
+
+The above command is equivalent to the deprecated `python setup.py build_ext -i`.
 
 ## Installing from a clone of the source repository
 
@@ -87,6 +91,8 @@ pip install fwdpy11 --no-binary
 ```
 
 ## Running the Python test suite
+
+After completing an editable build (see above):
 
 ```sh
 python3 -p pytest tests -n 6
@@ -154,7 +160,7 @@ To generate this file, execute the following steps from the root of the source c
 ```sh
 cmake -Bccommands . -DCMAKE_EXPORT_COMPILE_COMMANDS=1
 mv ccommands/compile_commands.json ..
-rm -rf ccomands
+rm -rf ccommands
 ```
 
 Now, language servers supporting `clangd` will have nice error checking and code completion for the C++ code!
@@ -185,7 +191,8 @@ To override these defaults:
 
 ```{code-block} bash
 
-python setup.py build_ext -i --enable-profiling
+cmake -DENABLE_PROFILING=On -Bbuild -S.
+cmake --build build
 
 ```
 
@@ -206,7 +213,8 @@ To disable it:
 
 ```{code-block} bash
 
-python setup.py build_ext -i --disable_lto
+cmake -DDISALBE_LTO=On -Bbuild -S.
+cmake --build build
 
 ```
 
@@ -219,8 +227,8 @@ This option only affects the main package and not the unit tests.
 ### Enabling debugging symbols in the C++ code
 
 ```{code-block} bash
-
-python setup.py build_ext -i --debug
+cmake -DCMAKE_BUILD_TYPE=Debug -Bbuild -S. 
+cmake --build build
 
 ```
 
@@ -260,7 +268,7 @@ Use the following flags to enable an "extreme" debugging mode of the C++ standar
 ```{code-block} bash
 
 CXXFLAGS="-D_GLIBCXX_CONCEPT_CHECKS -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC" \
-   CPPFLAGS="-D_GLIBCXX_CONCEPT_CHECKS -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC" python3 setup.py build_ext -i
+   CPPFLAGS="-D_GLIBCXX_CONCEPT_CHECKS -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC" python3 -m pip install -e .
 
 ```
 

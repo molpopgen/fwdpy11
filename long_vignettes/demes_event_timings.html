@@ -504,8 +504,7 @@ To do such sampling you need to know when to sample!</p>
 <p>During some of our simulations, we will record the current time point
 and the part of the metadata containing individual parents.</p>
 <p>We can use a simple data class to record this information:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
-<span class="nd">@dataclass</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">Parents</span><span class="p">:</span>
     <span class="n">generation</span><span class="p">:</span> <span class="nb">int</span>
     <span class="n">parents</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span>
@@ -517,6 +516,7 @@ and the part of the metadata containing individual parents.</p>
 
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pop</span><span class="p">,</span> <span class="n">_</span><span class="p">):</span>
         <span class="n">md</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">diploid_metadata</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parents</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Parents</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">generation</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">md</span><span class="p">[</span><span class="s2">&quot;parents&quot;</span><span class="p">])))</span>
 </pre></div>
 </div>
 <p>There will be no genetics happening during the simulation.
@@ -542,6 +542,7 @@ generations of matings.</p>
     <span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">(</span><span class="n">demog</span><span class="o">.</span><span class="n">initial_sizes</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
     <span class="n">fwdpy11</span><span class="o">.</span><span class="n">evolvets</span><span class="p">(</span><span class="n">rng</span><span class="p">,</span> <span class="n">pop</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">simplification_interval</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">recorder</span><span class="o">=</span><span class="n">recorder</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">pop</span>
+
 </pre></div>
 </div>
 <div class="cell tag_remove-input docutils container">
@@ -570,7 +571,7 @@ generations of matings.</p>
 <p>The following graphic depicts the model:</p>
 <div class="cell tag_remove-input docutils container">
 <div class="cell_output docutils container">
-<img alt="../_images/fc753ba937fd8a5efaf362f5e6b0a185b98fe777258119914362e2131a32fa66.png" src="../_images/fc753ba937fd8a5efaf362f5e6b0a185b98fe777258119914362e2131a32fa66.png" />
+<img alt="../_images/d391b6867733521536aff99d8b080fcbb95bf6eea88550c908a7f0960f3cbd9e.png" src="../_images/d391b6867733521536aff99d8b080fcbb95bf6eea88550c908a7f0960f3cbd9e.png" />
 </div>
 </div>
 <p>The intervals of a deme’s existence are from <span class="math notranslate nohighlight">\([i, j)\)</span> generations ago, where <span class="math notranslate nohighlight">\(j &gt; i\)</span>.
@@ -578,8 +579,7 @@ Therefore <code class="docutils literal notranslate"><span class="pre">deme2</sp
 <p>During simulation, a node’s birth time and deme are recorded.
 Therefore, we can export the simulation to a tree sequence and check that the node
 times match up with their expected deme labels:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_deme_existence</span><span class="p">():</span>
-    <span class="n">yaml</span> <span class="o">=</span> <span class="s2">&quot;tests/demes_event_examples/deme_existence.yaml&quot;</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>    <span class="n">yaml</span> <span class="o">=</span> <span class="n">make_path</span><span class="p">(</span><span class="s2">&quot;demes_event_examples/deme_existence.yaml&quot;</span><span class="p">)</span>
     <span class="n">recorder</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">pop</span> <span class="o">=</span> <span class="n">run_model</span><span class="p">(</span><span class="n">yaml</span><span class="p">,</span> <span class="n">recorder</span><span class="p">)</span>
     <span class="k">assert</span> <span class="n">pop</span><span class="o">.</span><span class="n">generation</span> <span class="o">==</span> <span class="mi">150</span>
@@ -589,6 +589,7 @@ times match up with their expected deme labels:</p>
         <span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">population</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ts</span><span class="o">.</span><span class="n">nodes</span><span class="p">()</span> <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">time</span> <span class="o">&gt;=</span> <span class="mf">25.0</span> <span class="ow">and</span> <span class="n">i</span><span class="o">.</span><span class="n">time</span> <span class="o">&lt;</span> <span class="mi">50</span><span class="p">]</span>
     <span class="p">)</span>
     <span class="k">assert</span> <span class="nb">all</span><span class="p">([</span><span class="n">i</span><span class="o">.</span><span class="n">population</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ts</span><span class="o">.</span><span class="n">nodes</span><span class="p">()</span> <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">time</span> <span class="o">&gt;=</span> <span class="mi">50</span><span class="p">])</span>
+
 </pre></div>
 </div>
 </section>
@@ -613,7 +614,7 @@ times match up with their expected deme labels:</p>
 <p>The following graphic depicts the model:</p>
 <div class="cell tag_remove-input docutils container">
 <div class="cell_output docutils container">
-<img alt="../_images/13473bc7d205a928f71e5c1d3d0717972b62371001610395c0be859bfef01100.png" src="../_images/13473bc7d205a928f71e5c1d3d0717972b62371001610395c0be859bfef01100.png" />
+<img alt="../_images/eeed37063596df41797679b1e1628be15d168b173ae8ed5c40ba894f628c76ce.png" src="../_images/eeed37063596df41797679b1e1628be15d168b173ae8ed5c40ba894f628c76ce.png" />
 </div>
 </div>
 <p>Given this model:</p>
@@ -633,8 +634,7 @@ Likewise for <code class="docutils literal notranslate"><span class="pre">deme1<
 </ul>
 <p>Using the reasoning about the pre and post epochs with respect to the timing of
 the pulse, we can make the following assertions:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_single_pulse</span><span class="p">():</span>
-    <span class="n">yaml</span> <span class="o">=</span> <span class="s2">&quot;tests/demes_event_examples/single_pulse.yaml&quot;</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>    <span class="n">yaml</span> <span class="o">=</span> <span class="n">make_path</span><span class="p">(</span><span class="s2">&quot;demes_event_examples/single_pulse.yaml&quot;</span><span class="p">)</span>
     <span class="n">recorder</span> <span class="o">=</span> <span class="n">RecordParents</span><span class="p">([])</span>
     <span class="n">pop</span> <span class="o">=</span> <span class="n">run_model</span><span class="p">(</span><span class="n">yaml</span><span class="p">,</span> <span class="n">recorder</span><span class="p">)</span>
     <span class="k">assert</span> <span class="n">pop</span><span class="o">.</span><span class="n">generation</span> <span class="o">==</span> <span class="mi">110</span>
@@ -650,6 +650,7 @@ the pulse, we can make the following assertions:</p>
             <span class="n">deme1</span> <span class="o">=</span> <span class="n">flat</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">flat</span> <span class="o">&gt;=</span> <span class="mi">100</span><span class="p">)]</span>
             <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">deme0</span><span class="p">)</span> <span class="o">==</span> <span class="mi">200</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">p</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">deme1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">200</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">p</span><span class="si">}</span><span class="s2">&quot;</span>
+
 </pre></div>
 </div>
 <p>Let’s work through the logic behind assertions in detail:</p>
@@ -686,7 +687,7 @@ in one direction:</p>
 <p>The following graphic depicts the model:</p>
 <div class="cell tag_remove-input docutils container">
 <div class="cell_output docutils container">
-<img alt="../_images/69cffa7397f87f8ac377541203dcb7248912994739f29079271685c28c078438.png" src="../_images/69cffa7397f87f8ac377541203dcb7248912994739f29079271685c28c078438.png" />
+<img alt="../_images/e5f6f731dea065b7a1565cf6f0280d17fe644b335a47b41d640beaef385ce32b.png" src="../_images/e5f6f731dea065b7a1565cf6f0280d17fe644b335a47b41d640beaef385ce32b.png" />
 </div>
 </div>
 <p>In this model, migration occurs during the interval <span class="math notranslate nohighlight">\([5, 10)\)</span> generations ago.
@@ -695,8 +696,7 @@ of all offspring born in this interval have their parents sampled from <code cla
 <p>Outside of this interval, the parents of any individual are drawn from that
 individual’s deme.</p>
 <p>The following code asserts that these intervals are what we expect:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_burst_of_migration</span><span class="p">():</span>
-    <span class="n">yaml</span> <span class="o">=</span> <span class="s2">&quot;tests/demes_event_examples/burst_of_migration.yaml&quot;</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>    <span class="n">yaml</span> <span class="o">=</span> <span class="n">make_path</span><span class="p">(</span><span class="s2">&quot;demes_event_examples/burst_of_migration.yaml&quot;</span><span class="p">)</span>
     <span class="n">recorder</span> <span class="o">=</span> <span class="n">RecordParents</span><span class="p">([])</span>
     <span class="n">pop</span> <span class="o">=</span> <span class="n">run_model</span><span class="p">(</span><span class="n">yaml</span><span class="p">,</span> <span class="n">recorder</span><span class="p">)</span>
     <span class="k">assert</span> <span class="n">pop</span><span class="o">.</span><span class="n">generation</span> <span class="o">==</span> <span class="mi">110</span>
@@ -712,6 +712,7 @@ individual’s deme.</p>
             <span class="n">deme1</span> <span class="o">=</span> <span class="n">flat</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">flat</span> <span class="o">&gt;=</span> <span class="mi">100</span><span class="p">)]</span>
             <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">deme0</span><span class="p">)</span> <span class="o">==</span> <span class="mi">200</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">p</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">deme1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">200</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">p</span><span class="si">}</span><span class="s2">&quot;</span>
+
 </pre></div>
 </div>
 </section>

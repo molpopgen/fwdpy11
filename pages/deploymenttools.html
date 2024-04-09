@@ -477,7 +477,10 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#building-images-from-scratch">Building images from scratch</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#linux-wheel-building">Linux wheel building</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#wheel-building">Wheel building</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-build">Using <code class="docutils literal notranslate"><span class="pre">build</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-cibuildwheel">Using <code class="docutils literal notranslate"><span class="pre">cibuildwheel</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#alternate-method-for-linux">Alternate method for Linux</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#extracting-the-wheels">Extracting the wheels</a></li>
 </ul>
 </li>
@@ -620,10 +623,36 @@ If you have a script <code class="docutils literal notranslate"><span class="pre
 </div>
 </section>
 </section>
-<section id="linux-wheel-building">
-<h2>Linux wheel building<a class="headerlink" href="#linux-wheel-building" title="Permalink to this heading">#</a></h2>
+<section id="wheel-building">
+<h2>Wheel building<a class="headerlink" href="#wheel-building" title="Permalink to this heading">#</a></h2>
+<section id="using-build">
+<h3>Using <code class="docutils literal notranslate"><span class="pre">build</span></code><a class="headerlink" href="#using-build" title="Permalink to this heading">#</a></h3>
+<p>The simplest method is to use <code class="docutils literal notranslate"><span class="pre">build</span></code> to build a wheel for your local system:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>build
+python<span class="w"> </span>-m<span class="w"> </span>build<span class="w"> </span>-w<span class="w"> </span>.
+</pre></div>
+</div>
+<p>This approach requires that rust and the GNU Scientific Library (GSL) are installed on your system.</p>
+</section>
+<section id="using-cibuildwheel">
+<h3>Using <code class="docutils literal notranslate"><span class="pre">cibuildwheel</span></code><a class="headerlink" href="#using-cibuildwheel" title="Permalink to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>cibuildwheel
+python<span class="w"> </span>-m<span class="w"> </span>cibuildwheel<span class="w"> </span>
+</pre></div>
+</div>
+<p>This will build wheels for the Python versions declared in <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> in the root
+of the <code class="docutils literal notranslate"><span class="pre">fwdpy11</span></code> source repo.
+We use this method to automatically generate wheels for each release.</p>
+<p>On Linux, the work is done in a Docker container.
+Therefore, your system must be configured to allow your user to use <code class="docutils literal notranslate"><span class="pre">docker</span></code>.
+(<code class="docutils literal notranslate"><span class="pre">podman</span></code> may also be used via <code class="docutils literal notranslate"><span class="pre">podman-docker</span></code>.)</p>
+<p>On macos, you will need to have the GSL and rust installed using whatever method you prefer,
+so long as the installs are visible to the <code class="docutils literal notranslate"><span class="pre">fwdpy11</span></code> build system.</p>
+</section>
+<section id="alternate-method-for-linux">
+<h3>Alternate method for Linux<a class="headerlink" href="#alternate-method-for-linux" title="Permalink to this heading">#</a></h3>
 <p>The directory <code class="docutils literal notranslate"><span class="pre">deployment/linux_wheels</span></code> defines a <code class="docutils literal notranslate"><span class="pre">Docker</span></code> work flow to build binary wheels on Linux.
-These scripts are what we use to build wheels for each release.
+These scripts were used to build wheels for each release but were recently replaced with <code class="docutils literal notranslate"><span class="pre">cibuildwheel</span></code> (see above).
 They may also be used to make wheels for development versions on a local machine.</p>
 <p>From the <code class="docutils literal notranslate"><span class="pre">root</span></code> of the <code class="docutils literal notranslate"><span class="pre">fwdpy11</span></code> repository.</p>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>bash<span class="w"> </span>deployment/linux_wheels/run_wheel_workflow.sh<span class="w"> </span>VERSION
@@ -636,6 +665,7 @@ On trusted machines, you may wish to add yourself to the <code class="docutils l
 <p>This work flow builds binary wheels for Python <a class="reference external" href="https://github.com/pypa/manylinux">manylinux</a>.</p>
 <p>The wheels will be found in <code class="docutils literal notranslate"><span class="pre">dist/wheelhouse</span></code> upon completion.</p>
 <p><strong>Do not</strong> run this work flow in parallel on the same filesystem.</p>
+</section>
 <section id="extracting-the-wheels">
 <h3>Extracting the wheels<a class="headerlink" href="#extracting-the-wheels" title="Permalink to this heading">#</a></h3>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>bash<span class="w"> </span>deployment/linux_wheels/extract_wheels.sh
@@ -718,7 +748,10 @@ On trusted machines, you may wish to add yourself to the <code class="docutils l
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#building-images-from-scratch">Building images from scratch</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#linux-wheel-building">Linux wheel building</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#wheel-building">Wheel building</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-build">Using <code class="docutils literal notranslate"><span class="pre">build</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-cibuildwheel">Using <code class="docutils literal notranslate"><span class="pre">cibuildwheel</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#alternate-method-for-linux">Alternate method for Linux</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#extracting-the-wheels">Extracting the wheels</a></li>
 </ul>
 </li>
