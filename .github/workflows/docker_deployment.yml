@@ -48,16 +48,16 @@ jobs:
           tags: molpopgen/fwdpy11:latest, molpopgen/fwdpy11:${{ github.event.release.tag_name }}
           file: deployment/docker/Dockerfile
           context: .
-      -
-        name: Build and push from main
-        if: github.ref == 'refs/heads/main'
-        id: docker_bfild_main
-        uses: docker/build-push-action@v5
-        with:
-          push: true
-          tags: molpopgen/fwdpy11:latest
-          file: deployment/docker/Dockerfile
-          context: .
+      # -
+      #   name: Build and push from main
+      #   if: github.ref == 'refs/heads/main'
+      #   id: docker_bfild_main
+      #   uses: docker/build-push-action@v5
+      #   with:
+      #     push: true
+      #     tags: molpopgen/fwdpy11:latest
+      #     file: deployment/docker/Dockerfile
+      #     context: .
       -
         name: Build image
         if: github.event_name == 'pull_request'

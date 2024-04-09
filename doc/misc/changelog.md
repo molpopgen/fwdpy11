@@ -27,6 +27,8 @@ Several PRs resulted in the following changes:
 * macos wheels are now built for two recent Python versions for both
   x86 and arm64 platforms
 * [cibuildwheel](https://cibuildwheel.pypa.io/en/stable/) is used to build wheels.
+* `docker` images are only pushed for releases and not for each commit
+  to `main`.
 
 ## 0.22.0
 
