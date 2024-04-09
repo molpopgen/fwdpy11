@@ -18,6 +18,8 @@ Build system
   PR {pr}`1284`
 * Remove boutique arguments from `setup.py`.
   PR {pr}`1288`
+* Remove `setup.py`.
+  PR {pr}`1291`
 
 CI and deployment
 

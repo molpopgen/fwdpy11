@@ -104,7 +104,7 @@ jobs:
             python -m pip install --user --upgrade setuptools wheel 
             python -m pip install --user -r requirements/development.txt
             # For sdist validation
-            python -m pip install --user --upgrade twine
+            python -m pip install --user --upgrade twine build
 
       # Needed so that we don't affect building any pip dependencies with these flags
       - name: Set CPPFLAGS for C++ builds
@@ -147,14 +147,13 @@ jobs:
 
       - name: Validate the sdist
         run: |
-            python setup.py sdist
-            python setup.py check
+            python -m build -s .
+            #python setup.py check
             python -m twine check dist/*.tar.gz
             rm -rf dist/*.tar.gz
 
       - name: Test pip install from dist in fresh venv
         run: |
-            python -m pip install build
             python -m build -o dist -w .
             cd dist
             python -m venv venv
