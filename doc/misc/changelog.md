@@ -3,6 +3,31 @@
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+## 0.22.1
+
+Maintenance release
+
+C++ back end:
+
+* Clear table collection indexes early each generation.
+  PR {pr}`1272`
+
+Build system
+
+* Use scikit-build as the build backend.
+  PR {pr}`1284`
+* Remove boutique arguments from `setup.py`.
+  PR {pr}`1288`
+
+CI and deployment
+
+Several PRs resulted in the following changes:
+
+* macos CI now runs on Apple Silicon runners
+* macos wheels are now built for two recent Python versions for both
+  x86 and arm64 platforms
+* [cibuildwheel](https://cibuildwheel.pypa.io/en/stable/) is used to build wheels.
+
 ## 0.22.0
 
 Bug fixes:
