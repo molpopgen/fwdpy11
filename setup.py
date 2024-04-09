@@ -9,42 +9,6 @@ from distutils.version import LooseVersion
 from setuptools import Extension, setup
 from setuptools.command.build_ext import build_ext
 
-if "--debug" in sys.argv:
-    DEBUG_MODE = True
-    sys.argv.remove("--debug")
-else:
-    DEBUG_MODE = False
-
-if "--enable-profiling" in sys.argv:
-    ENABLE_PROFILING = True
-    sys.argv.remove("--enable-profiling")
-else:
-    ENABLE_PROFILING = False
-
-if "--skip_tests" in sys.argv:
-    SKIP_BUILDING_TESTS = True
-    sys.argv.remove("--skip_tests")
-else:
-    SKIP_BUILDING_TESTS = False
-
-if "--disable_lto" in sys.argv:
-    SKIP_LTO = True
-    sys.argv.remove("--disable_lto")
-else:
-    SKIP_LTO = False
-
-if "--cpp17" in sys.argv:
-    USE_CPP17 = True
-    sys.argv.remove("--cpp17")
-else:
-    USE_CPP17 = False
-
-# if '--assert' in sys.argv:
-#     ASSERT_MODE = True
-#     sys.argv.remove('--assert')
-# else:
-#     ASSERT_MODE = False
-
 
 class CMakeExtension(Extension):
     def __init__(self, name, sourcedir=""):
@@ -81,7 +45,7 @@ class CMakeBuild(build_ext):
             "-DCMAKE_BUILD=OFF",
         ]
 
-        cfg = "Debug" if DEBUG_MODE is True else "Release"
+        cfg = "Release"
 
         build_args = ["--config", cfg]
 
@@ -96,9 +60,6 @@ class CMakeBuild(build_ext):
             cmake_args += ["-DCMAKE_BUILD_TYPE=" + cfg]
             build_args += ["--", "-j2"]
 
-        if ENABLE_PROFILING is True:
-            cmake_args += ["-DENABLE_PROFILING=ON"]
-
         env = os.environ.copy()
         env["CXXFLAGS"] = '{} -DVERSION_INFO=\\"{}\\"'.format(
             env.get("CXXFLAGS", ""), self.distribution.get_version()
@@ -106,14 +67,6 @@ class CMakeBuild(build_ext):
 
         if not os.path.exists(self.build_temp):
             os.makedirs(self.build_temp)
-        if SKIP_BUILDING_TESTS is True:
-            cmake_args.append("-DBUILD_PYTHON_UNIT_TESTS=OFF")
-
-        if SKIP_LTO is True:
-            cmake_args.append("-DDISABLE_LTO=ON")
-
-        if USE_CPP17 is True:
-            cmake_args.append("-DUSECPP17=ON")
 
         subprocess.check_call(
             ["cmake", ext.sourcedir] + cmake_args, cwd=self.build_temp, env=env
