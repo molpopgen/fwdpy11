@@ -1,7 +1,7 @@
+from deprecated import deprecated
 from typing import Iterable
 
 import numpy as np
-import scipy.sparse  # type: ignore
 
 from .._fwdpy11 import Edge, MutationRecord, Node, Site, ll_TableCollection
 
@@ -181,6 +181,7 @@ class TableCollection(ll_TableCollection):
         later.
         """
         from . import TreeIterator
+        import scipy.sparse  # type: ignore
 
         shapes = tuple(len(i) + 1 for i in samples)
         dok_JFS = [scipy.sparse.dok_matrix(shapes, dtype=np.int32) for i in windows]
@@ -240,6 +241,7 @@ class TableCollection(ll_TableCollection):
             simplify,
         )
 
+    @deprecated(reason="dependency on scikit is a problem")
     def fs(
         self,
         samples,
