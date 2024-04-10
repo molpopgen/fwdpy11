@@ -72,7 +72,7 @@ parts:
   - file: pages/mvdes
   - file: pages/tsoverview
   - file: pages/tstypes
-  - file: pages/tablefs
+  # - file: pages/tablefs
   - file: pages/recorders
 - caption: Technical details
   chapters:

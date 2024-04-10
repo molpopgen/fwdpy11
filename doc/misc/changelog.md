@@ -1494,7 +1494,7 @@ release candidates (see below) plus the following:
   {issue}`389`
   {issue}`390`
   {issue}`392`
-* {func}`fwdpy11.TableCollection.fs` added.  See {ref}`tablefs`.
+* {func}`fwdpy11.TableCollection.fs` added.  See `tablefs`.
   PR {pr}`387`
   PR {pr}`399`
 * Creating populations from `msprime` input improved.
