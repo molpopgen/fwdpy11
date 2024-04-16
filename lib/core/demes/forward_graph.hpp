@@ -57,5 +57,6 @@ namespace fwdpy11_core
         // gets a fn to handle this
         std::uint32_t sum_deme_sizes_at_time_zero();
         std::vector<std::uint32_t> parental_deme_sizes_at_time_zero() const;
+        std::string demes_graph() const;
     };
 }
