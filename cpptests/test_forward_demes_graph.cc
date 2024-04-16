@@ -24,6 +24,7 @@ BOOST_FIXTURE_TEST_CASE(test_zero_length_single_deme_model, SingleDemeModel)
             pop.generation += 1;
         }
     BOOST_REQUIRE_EQUAL(pop.generation, 0);
+    auto graph = g.demes_graph();
 }
 
 BOOST_FIXTURE_TEST_CASE(single_deme_model_with_burn_in, SingleDemeModel)

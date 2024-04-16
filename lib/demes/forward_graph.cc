@@ -312,4 +312,19 @@ namespace fwdpy11_core
 
         return rv;
     }
+
+    std::string
+    ForwardDemesGraph::demes_graph() const
+    {
+        std::int32_t status;
+        auto temp = demes_forward_graph_get_demes_graph(&status, pimpl->graph.get());
+        if (status != 0)
+            {
+                free(const_cast<char *>(temp));
+            }
+        pimpl->handle_error_code(status);
+        auto rv = std::string(temp);
+        free(const_cast<char *>(temp));
+        return rv;
+    }
 }

@@ -148,6 +148,14 @@ pub unsafe extern "C" fn demes_forward_graph_model_end_time(
     forward_graph_model_end_time(status, graph)
 }
 
+#[no_mangle]
+pub unsafe extern "C" fn demes_forward_graph_get_demes_graph(
+    status: *mut i32,
+    graph: *const OpaqueForwardGraph,
+) -> *const c_char {
+    forward_graph_get_demes_graph(graph, status)
+}
+
 // Below are functions defined only for fwdpy11.
 // These make use of demes_forward_capi.
 
@@ -175,6 +183,6 @@ pub unsafe extern "C" fn demes_forward_graph_sum_sizes_at_time_zero(
         return f64::NAN;
     }
     let size_slice = std::slice::from_raw_parts(ptr, num_demes as usize);
-    assert_eq!(size_slice.len(), num_demes as usize); 
+    assert_eq!(size_slice.len(), num_demes as usize);
     size_slice.iter().sum()
 }
