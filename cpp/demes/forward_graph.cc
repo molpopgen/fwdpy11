@@ -17,5 +17,6 @@ init_forward_graph(py::module &m)
              &fwdpy11_core::ForwardDemesGraph::sum_deme_sizes_at_time_zero)
         .def("_model_end_time", &fwdpy11_core::ForwardDemesGraph::model_end_time)
         .def("_parental_deme_sizes_at_time_zero",
-             &fwdpy11_core::ForwardDemesGraph::parental_deme_sizes_at_time_zero);
+             &fwdpy11_core::ForwardDemesGraph::parental_deme_sizes_at_time_zero)
+        .def("_demes_graph", &fwdpy11_core::ForwardDemesGraph::demes_graph);
 }

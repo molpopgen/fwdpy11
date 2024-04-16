@@ -341,3 +341,15 @@ class ForwardDemesGraph(fwdpy11._fwdpy11._ForwardDemesGraph):
                 if epoch.end_time == min_end_time:
                     rv.append(deme)
         return rv
+
+    @property
+    def demes_graph(self) -> demes.Graph:
+        """
+        Obtain the internal representation of the :class:`demes.Graph`
+
+        This object is not necessarily equivalent to the input graph:
+
+        * It is fully resolved.
+        * It has been rounded to discrete time and deme sizes.
+        """
+        return demes.loads(self._demes_graph())
