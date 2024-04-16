@@ -10,9 +10,9 @@ checksum = "d468802bab17cbc0cc575e9b053f41e72aa36bfa6b7f55e3529ffa43161b97fa"
 
 [[package]]
 name = "demes"
-version = "0.5.0"
+version = "0.6.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "21ac80782d22d8d728988ef57bb72e40e60404c86b6ef42ef6ca99e09242e755"
+checksum = "7394c9fa4c0ad7b4bf8443227432a889e47cd53994f33760c0f64cd4a29cde7b"
 dependencies = [
  "regex",
  "serde",
@@ -22,9 +22,9 @@ dependencies = [
 
 [[package]]
 name = "demes-forward"
-version = "0.4.0"
+version = "0.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "95b22a06091ef181817da572747886b8c9132a70040cba031144c8fa36f290ab"
+checksum = "97bb067c1e35b5e0423685bf5f922a11980aceb249e9ecf1a65edf93ebf049fc"
 dependencies = [
  "demes",
  "thiserror",
@@ -32,9 +32,9 @@ dependencies = [
 
 [[package]]
 name = "demes-forward-capi"
-version = "0.4.1"
+version = "0.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fa684e8eb4377a4ef7cb318d8908e644ca99220c67a34cb14d591b2eb9c06aac"
+checksum = "cb33061453c99d40d8c4ff6bf7440e3e89067214117d69256cb8949a3b9f6e09"
 dependencies = [
  "demes-forward",
  "libc",
