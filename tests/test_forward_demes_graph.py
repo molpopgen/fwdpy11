@@ -75,6 +75,13 @@ def test_deme_existence():
     )
 
 
+def test_retrieve_demes_graph():
+    yaml = "demes_event_examples/deme_existence.yaml"
+    demog = into_graph(yaml)
+    g = demog.demes_graph
+    _ = fwdpy11.ForwardDemesGraph.from_demes(g, burnin=1)
+
+
 def test_model_that_ends_before_zero():
     yaml = """
     time_units: generations
