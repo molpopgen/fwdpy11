@@ -36,7 +36,7 @@ jobs:
 
       - name: Install apt dependencies
         run: |
-            sudo apt install --fix-missing -y libgsl-dev cmake autoconf libboost-test-dev libboost-program-options-dev
+            sudo apt install --fix-missing -y libgsl-dev cmake autoconf libboost-test-dev libboost-program-options-dev valgrind
 
       - name: Install cbindgen
         uses: baptiste0928/cargo-install@v3
@@ -121,6 +121,14 @@ jobs:
       - name: Run C++ tests
         run: |
           cmake --build build -t test
+
+      - name: Run C++ tests through valgrind
+        run: |
+          # NOTE: applying valgrind at the cmake level
+          # using the command in the previous step gives
+          # "leaks", but they come from cmake and not our
+          # test binary.  So, we run it manually.
+          valgrind ./build/cpptests/fwdpy11_cpp_tests
 
       - name: Clean cmake build
         run: |
