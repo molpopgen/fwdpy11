@@ -22,9 +22,11 @@ import typing
 import warnings
 
 import attr
+import demes
 import numpy as np
 
 from deprecated import deprecated
+
 
 from ._fwdpy11 import (
     GeneticValueIsTrait,
@@ -48,6 +50,12 @@ from .class_decorators import (
     attr_class_to_from_dict,
     attr_class_to_from_dict_no_recurse,
 )
+
+from ._types.forward_demes_graph import ForwardDemesGraph
+
+
+class TimingError(Exception):
+    pass
 
 
 @attr_add_asblack
@@ -203,6 +211,20 @@ class GaussianStabilizingSelection(_ll_GaussianStabilizingSelection):
     @classmethod
     def fromdict(cls, data):
         return cls(**data)
+
+    def validate_timings(self, deme: int, demography: ForwardDemesGraph) -> None:
+        graph = demography.demes_graph
+        deme_obj = graph.demes[deme]
+        if deme_obj.start_time == float("inf"):
+            start_time = demography.to_backwards_time(0)
+        else:
+            start_time = deme_obj.start_time
+        for i in self.optima[:1]:
+            btime = demography.to_backwards_time(i.when)
+            if btime < start_time:
+                msg = f"deme {deme_obj.name}, event {i} is at time {btime} in the past "
+                msg += f", but the deme starts at {int(start_time)}"
+                raise TimingError(msg)
 
 
 @attr_add_asblack
@@ -508,6 +530,11 @@ class Additive(_ll_Additive):
             self.scaling, self.gvalue_to_fitness, self.noise, self.ndemes
         )
 
+    def validate_timings(self, deme: int, demography: ForwardDemesGraph) -> None:
+        if self.gvalue_to_fitness is None:
+            return
+        self.gvalue_to_fitness.validate_timings(deme, demography)
+
 
 @attr_add_asblack
 @attr_class_pickle_with_super
@@ -555,6 +582,11 @@ class Multiplicative(_ll_Multiplicative):
             self.scaling, self.gvalue_to_fitness, self.noise, self.ndemes
         )
 
+    def validate_timings(self, deme: int, demography: ForwardDemesGraph) -> None:
+        if self.gvalue_to_fitness is None:
+            return
+        self.gvalue_to_fitness.validate_timings(deme, demography)
+
 
 @attr_add_asblack
 @attr_class_pickle_with_super
@@ -590,6 +622,11 @@ class GBR(_ll_GBR):
 
     def __attrs_post_init__(self):
         super(GBR, self).__init__(self.gvalue_to_fitness, self.noise)
+
+    def validate_timings(self, deme: int, demography: ForwardDemesGraph) -> None:
+        if self.gvalue_to_fitness is None:
+            return
+        self.gvalue_to_fitness.validate_timings(deme, demography)
 
 
 @attr_add_asblack
@@ -637,6 +674,11 @@ class AdditivePleiotropy(_ll_StrictAdditiveMultivariateEffects):
             self.ndimensions, self.focal_trait, self.gvalue_to_fitness, self.noise
         )
 
+    def validate_timings(self, deme: int, demography: ForwardDemesGraph) -> None:
+        if self.gvalue_to_fitness is None:
+            return
+        self.gvalue_to_fitness.validate_timings(deme, demography)
+
 
 @deprecated(reason="Use AdditivePleiotropy instead.")
 class StrictAdditiveMultivariateEffects(AdditivePleiotropy):
@@ -652,3 +694,8 @@ class PyDiploidGeneticValue(_PyDiploidGeneticValue):
             gvalue_to_fitness,
             noise,
         )
+
+    def validate_timings(self, deme: int, demography: ForwardDemesGraph) -> None:
+        if self.gvalue_to_fitness is None:
+            return
+        self.gvalue_to_fitness.validate_timings(deme, demography)

@@ -13,7 +13,7 @@ demes:
 """
 
 graph = demes.loads(yaml)
-demography = fwdpy11.discrete_demography.from_demes(graph, 1)
+demography = fwdpy11.ForwardDemesGraph.from_demes(graph, 1)
 
 pdict = {
     "demography": demography,

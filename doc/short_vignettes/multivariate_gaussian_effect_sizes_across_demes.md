@@ -59,7 +59,7 @@ migrations:
     rate: 0.10
 """
 g = demes.loads(yaml)
-model = fwdpy11.discrete_demography.from_demes(g, burnin=1)
+model = fwdpy11.ForwardDemesGraph.from_demes(g, burnin=1)
 demesdraw.tubes(g);
 ```
 
@@ -76,7 +76,7 @@ pdict = {
     ],
     "rates": (0, 2.5e-3, None),
     "demography": model,
-    "simlen": model.metadata["total_simulation_length"],
+    "simlen": model.final_generation,
     "gvalue": fwdpy11.Additive(
         ndemes=3, scaling=2,
         gvalue_to_fitness=fwdpy11.GaussianStabilizingSelection.single_trait([fwdpy11.Optimum(optimum=0.0, VS=10.0, when=0)])
@@ -105,7 +105,7 @@ Let's evolve the model now:
 params = fwdpy11.ModelParams(**pdict)
 # TODO: update this once we have a function to pull the sizes
 # automatically from demes-derived models:
-initial_sizes = [v for v in model.metadata["initial_sizes"].values()]
+initial_sizes = model.initial_sizes
 pop = fwdpy11.DiploidPopulation(initial_sizes, 1.0)
 rng = fwdpy11.GSLrng(1010)
 fwdpy11.evolvets(rng, pop, params, 10)
@@ -138,7 +138,7 @@ pdict["sregions"] = [
 params = fwdpy11.ModelParams(**pdict)
 # TODO: update this once we have a function to pull the sizes
 # automatically from demes-derived models:
-initial_sizes = [v for v in model.metadata["initial_sizes"].values()]
+initial_sizes = model.initial_sizes
 pop = fwdpy11.DiploidPopulation(initial_sizes, 1.0)
 fwdpy11.evolvets(rng, pop, params, 10)
 for i in pop.tables.mutations:

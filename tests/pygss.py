@@ -24,6 +24,8 @@ import numpy as np
 import fwdpy11
 import fwdpy11.custom_genetic_value_decorators
 
+from fwdpy11._types import ForwardDemesGraph
+
 
 @fwdpy11.custom_genetic_value_decorators.default_update
 @fwdpy11.custom_genetic_value_decorators.genetic_value_is_trait_default_clone()
@@ -40,6 +42,9 @@ class PyGSS(fwdpy11.GeneticValueIsTrait):
             -((data.offspring_metadata.g + data.offspring_metadata.e - self.opt) ** 2)
             / (2 * self.VS)
         )
+
+    def validate_timings(self, deme: int, demography: ForwardDemesGraph) -> None:
+        pass
 
 
 @fwdpy11.custom_genetic_value_decorators.genetic_value_is_trait_default_clone()
@@ -65,3 +70,6 @@ class PyGSSRandomOptimum(fwdpy11.GeneticValueIsTrait):
             1,
         )[0]
         self.optima.append((pop.generation, self.opt))
+
+    def validate_timings(self, deme: int, demography: ForwardDemesGraph) -> None:
+        pass

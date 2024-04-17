@@ -61,6 +61,7 @@ from .genetic_values import (  # NOQA
     StrictAdditiveMultivariateEffects,
     AdditivePleiotropy,
     PyDiploidGeneticValue,
+    TimingError,
 )
 
 from ._types import (  # NOQA

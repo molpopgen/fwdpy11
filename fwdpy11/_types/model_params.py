@@ -17,10 +17,12 @@
 # along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+import abc
 import typing
 import warnings
 
 import attr
+import demes
 import fwdpy11
 import numpy as np
 from fwdpy11.class_decorators import (
@@ -94,6 +96,20 @@ def _convert_rates(value):
         )
     except KeyError:
         return MutationAndRecombinationRates(**value)
+
+
+@typing.runtime_checkable
+class ValidateEventTimings(typing.Protocol):
+    @abc.abstractmethod
+    def validate_timings(self, deme: int, demography: ForwardDemesGraph) -> None:
+        raise NotImplementedError
+
+
+def validate_timings(
+    gvalue: ValidateEventTimings, deme: int, demography: ForwardDemesGraph
+) -> None:
+    assert isinstance(gvalue, ValidateEventTimings)
+    return gvalue.validate_timings(deme, demography)
 
 
 @attr_add_asblack
@@ -299,15 +315,17 @@ class ModelParams(object):
     @gvalue.validator
     def validate_gvalue(self, attribute, value):
         try:
-            for i in value:
+            for deme, i in enumerate(value):
                 attr.validators.instance_of(fwdpy11.DiploidGeneticValue)(
                     self, attribute, i
                 )
+                validate_timings(i, deme, self.demography)
         except TypeError:
             try:
                 attr.validators.instance_of(fwdpy11.DiploidGeneticValue)(
                     self, attribute, value
                 )
+                validate_timings(value, 0, self.demography)
             except TypeError:
                 raise
 

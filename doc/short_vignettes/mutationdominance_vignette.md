@@ -48,18 +48,18 @@ pop = fwdpy11.DiploidPopulation(500, 1.0)
 
 rng = fwdpy11.GSLrng(54321)
 
-GSSmo = fwdpy11.GSSmo(
-    [
-        fwdpy11.Optimum(when=0, optimum=0.0, VS=1.0),
-        fwdpy11.Optimum(when=10 * pop.N - 200, optimum=1.0, VS=1.0),
-    ]
-)
+optima = [
+    fwdpy11.Optimum(when=0, optimum=0.0, VS=1.0),
+    fwdpy11.Optimum(when=10 * pop.N - 200, optimum=1.0, VS=1.0),
+]
+
+GSS = fwdpy11.GaussianStabilizingSelection.single_trait(optima)
 
 rho = 1000.
 
 p = {
     "nregions": [],
-    "gvalue": fwdpy11.Additive(2.0, GSSmo),
+    "gvalue": fwdpy11.Additive(2.0, GSS),
     "sregions": [des],
     "recregions": [fwdpy11.PoissonInterval(0, 1., rho / float(4 * pop.N))],
     "rates": (0.0, 1e-3, None),
