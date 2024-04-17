@@ -37,7 +37,7 @@ p = {
     "rates": (mu_neutral, mu_selected, None),
     # Keep mutations at frequency 1 in the pop if they affect fitness.
     "prune_selected": False,
-    "demography": None,
+    "demography": fwdpy11.ForwardDemesGraph.tubes([N], burnin=1),
     "simlen": 10 * N,
 }
 params = fwdpy11.ModelParams(**p)

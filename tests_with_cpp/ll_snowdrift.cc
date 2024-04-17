@@ -105,5 +105,6 @@ PYBIND11_MODULE(ll_snowdrift, m)
         .def(py::init<double, double, double, double, double, double>(), py::arg("b1"),
              py::arg("b2"), py::arg("c1"), py::arg("c2"), py::arg("slope"),
              py::arg("p0"))
-        .def_readwrite("phenotypes", &snowdrift::phenotypes);
+        .def_readwrite("phenotypes", &snowdrift::phenotypes)
+        .def("validate_timings", [](const snowdrift &, int, pybind11::object) {});
 }

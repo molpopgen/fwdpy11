@@ -51,5 +51,6 @@ PYBIND11_MODULE(custom_stateless_genotype, m)
                                               "invalid object state");
                                       }
                                   return GeneralW();
-                              }));
+                              }))
+        .def("validate_timings", [](const GeneralW&, int, pybind11::object) {});
 }

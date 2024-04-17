@@ -52,5 +52,6 @@ PYBIND11_MODULE(custom_additive, m)
                                               "invalid object state");
                                       }
                                   return additive();
-                              }));
+                              }))
+        .def("validate_timings", [](const additive&, int, pybind11::object) {});
 }
