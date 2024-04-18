@@ -76,7 +76,6 @@ def generate_msprime_ancestry(
 )
 @settings(deadline=None, max_examples=25)
 def test_ndescendants(msprime_seed, fp11_seed, ndescendants):
-    print(msprime_seed, fp11_seed, ndescendants)
     pop, idx = generate_msprime_ancestry(msprime_seed, fp11_seed, ndescendants)
     if pop is not None:
         _ = pop.dump_tables_to_tskit()
