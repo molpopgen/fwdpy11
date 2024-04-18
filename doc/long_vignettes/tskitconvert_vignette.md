@@ -158,7 +158,17 @@ We can pass the `params` object on when exporting the data to `tskit`:
 
 ```{code-cell} python
 ts = pop.dump_tables_to_tskit(model_params=params)
-assert fwdpy11.ModelParams(**eval(ts.metadata["model_params"])) == params
+recovered_params = fwdpy11.ModelParams(**eval(ts.metadata["model_params"])) 
+assert recovered_params == params
+```
+Note that we can recover our demographic model from the restored parameters:
+
+```{code-cell} python
+print(recovered_params.demography)
+```
+
+```{code-cell} python
+print(recovered_params.demography.demes_graph)
 ```
 
 ### User-defined metadata
@@ -201,4 +211,85 @@ Further, if the data are very large, then other output formats are likely more a
 
 ## Setting population table metadata
 
-TODO
+This example involves simulating a multi-deme model.
+
+```{code-cell} python
+---
+tags: ["hide-input"]
+---
+
+# Example 07 from the demes tutorial
+yaml = """
+time_units: generations
+demes:
+  - name: X
+    epochs:
+      - end_time: 1000
+        start_size: 2000
+  - name: A
+    ancestors:
+      - X
+    epochs:
+      - start_size: 2000
+  - name: B
+    ancestors:
+      - X
+    epochs:
+      - start_size: 2000
+"""
+demography = fwdpy11.ForwardDemesGraph.from_demes(
+    yaml,
+    burnin=100,
+    burnin_is_exact=True,
+)
+Opt = fwdpy11.Optimum
+GSSmo_ancestor = fwdpy11.GaussianStabilizingSelection.single_trait(
+    [Opt(when=0, optimum=0.0, VS=1.0), Opt(when=100, optimum=1.0, VS=1.0)]
+)
+gvalue_ancestor = fwdpy11.Additive(2.0, GSSmo_ancestor)
+GSSmo_daughter_1 = fwdpy11.GaussianStabilizingSelection.single_trait(
+    [Opt(when=100, optimum=1.0, VS=1.0)]
+)
+gvalue_daughter_1 = fwdpy11.Additive(2.0, GSSmo_daughter_1)
+
+GSSmo_daughter_2 = fwdpy11.GaussianStabilizingSelection.single_trait(
+    [Opt(when=100, optimum=1.0, VS=1.0)]
+)
+gvalue_daughter_2 = fwdpy11.Additive(2.0, GSSmo_daughter_2)
+p = {
+    "nregions": [],
+    "sregions": [fwdpy11.GaussianS(0, 1, 1, 0.25)],
+    "recregions": [fwdpy11.PoissonInterval(0, 1, 1e-3)],
+    "rates": (0.0, 0.025, None),
+    "gvalue": [gvalue_ancestor, gvalue_daughter_1, gvalue_daughter_2],
+    "prune_selected": False,
+    "demography": demography,
+    "simlen": demography.final_generation,
+}
+
+rng = fwdpy11.GSLrng(12351235)
+params = fwdpy11.ModelParams(**p)
+pop = fwdpy11.DiploidPopulation(demography.initial_sizes, 1)
+
+fwdpy11.evolvets(rng, pop, params, simplification_interval=100)
+```
+
+By default, deme names are placed in the metadata:
+
+```{code-cell} python
+ts = pop.dump_tables_to_tskit()
+for p in ts.populations():
+    print(p.metadata)
+```
+
+We can override this behavior by providing a dictionary
+mapping a deme's integer id (index) to data.
+
+```{code-cell} python
+md = {}
+for i, deme in enumerate(demography.demes_graph.demes):
+    md[i] = {'name': deme.name, 'end_time': deme.end_time}
+ts = pop.dump_tables_to_tskit(population_metadata=md)
+for p in ts.populations():
+    print(p.metadata)
+```

@@ -76,7 +76,6 @@ class ForwardDemesGraph(fwdpy11._fwdpy11._ForwardDemesGraph):
             burnin = self.burnin
         else:
             burnin = self.burnin * Nref
-        print(Nref, burnin)
         self.burnin_generation = burnin
         super(ForwardDemesGraph, self).__init__(
             self.yaml, burnin, self.round_non_integer_sizes
