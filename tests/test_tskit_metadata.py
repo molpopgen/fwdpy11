@@ -66,7 +66,7 @@ def test_single_model_params(pop, pdict1):
 
 @pytest.mark.parametrize("pop", [{"N": 100, "genome_length": 1}], indirect=["pop"])
 def test_population_metadata(pop, gutenkunst):
-    dm = fwdpy11.discrete_demography.from_demes(gutenkunst)
+    dm = fwdpy11.ForwardDemesGraph.from_demes(gutenkunst, burnin=10)
     demes_metadata = {}
     for key, value in dm.deme_labels.items():
         demes_metadata[key] = {"name": value}

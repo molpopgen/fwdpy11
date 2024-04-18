@@ -440,8 +440,8 @@ def test_sweep_from_new_mutation_in_single_deme_using_API(
     fp11_seed, demes_yaml, alpha, prune_selected
 ):
     g = demes.loads(demes_yaml)
-    model = fwdpy11.discrete_demography.from_demes(g, burnin=1)
-    isizes = model.initial_sizes_list
+    model = fwdpy11.ForwardDemesGraph.from_demes(g, burnin=1)
+    isizes = model.initial_sizes
     pop = fwdpy11.DiploidPopulation(isizes, 1.0)
     pdict = {
         "recregions": [fwdpy11.PoissonInterval(0, 1, 5e-2)],
@@ -449,7 +449,7 @@ def test_sweep_from_new_mutation_in_single_deme_using_API(
         "rates": (0, 0, None),
         "demography": model,
         "prune_selected": prune_selected,
-        "simlen": model.metadata["total_simulation_length"],
+        "simlen": model.model_duration,
     }
     params = fwdpy11.ModelParams(**pdict)
     mutation_data = fwdpy11.conditional_models.NewMutationParameters(
@@ -464,7 +464,7 @@ def test_sweep_from_new_mutation_in_single_deme_using_API(
         params,
         mutation_data,
         fwdpy11.conditional_models.GlobalFixation(),
-        when=model.metadata["burnin_time"] + 50,
+        when=model.burnin_duration + 50,
     )
     assert output.num_descendant_nodes == 1
     assert output.pop.generation > pop.generation
@@ -472,13 +472,13 @@ def test_sweep_from_new_mutation_in_single_deme_using_API(
         if output.mutation_index is not None:
             assert (
                 output.pop.mutations[output.mutation_index].g
-                == model.metadata["burnin_time"] + 50
+                == model.burnin_duration + 50
             )
             assert output.pop.mcounts[output.mutation_index] == 2 * output.pop.N
         else:
             assert (
                 output.pop.fixations[output.fixation_index].g
-                == model.metadata["burnin_time"] + 50
+                == model.burnin_duration + 50
             )
         _ = output.pop.dump_tables_to_tskit()
     else:
@@ -493,8 +493,8 @@ def test_sweep_from_new_mutation_with_demography_using_API(
     fp11_seed, demes_yaml, alpha, prune_selected
 ):
     g = demes.loads(demes_yaml)
-    model = fwdpy11.discrete_demography.from_demes(g, burnin=1)
-    isizes = model.initial_sizes_list
+    model = fwdpy11.ForwardDemesGraph.from_demes(g, burnin=1)
+    isizes = model.initial_sizes
     pop = fwdpy11.DiploidPopulation(isizes, 1.0)
     pdict = {
         "recregions": [fwdpy11.PoissonInterval(0, 1, 5e-2)],
@@ -502,7 +502,7 @@ def test_sweep_from_new_mutation_with_demography_using_API(
         "rates": (0, 0, None),
         "demography": model,
         "prune_selected": prune_selected,
-        "simlen": model.metadata["total_simulation_length"],
+        "simlen": model.model_duration,
     }
     params = fwdpy11.ModelParams(**pdict)
     mutation_data = fwdpy11.conditional_models.NewMutationParameters(
@@ -517,7 +517,7 @@ def test_sweep_from_new_mutation_with_demography_using_API(
         params,
         mutation_data,
         fwdpy11.conditional_models.GlobalFixation(),
-        when=model.metadata["burnin_time"] + 50,
+        when=model.burnin_duration + 50,
     )
     assert output.num_descendant_nodes == 1
     assert output.pop.generation > pop.generation
@@ -526,13 +526,13 @@ def test_sweep_from_new_mutation_with_demography_using_API(
         if output.mutation_index is not None:
             assert (
                 output.pop.mutations[output.mutation_index].g
-                == model.metadata["burnin_time"] + 50
+                == model.burnin_duration + 50
             )
             assert output.pop.mcounts[output.mutation_index] == 2 * output.pop.N
         else:
             assert (
                 output.pop.fixations[output.fixation_index].g
-                == model.metadata["burnin_time"] + 50
+                == model.burnin_duration + 50
             )
         _ = output.pop.dump_tables_to_tskit()
     else:
@@ -547,8 +547,8 @@ def test_origination_deme1_fixation_in_deme_2(
     fp11_seed, demes_yaml, alpha, prune_selected
 ):
     g = demes.loads(demes_yaml)
-    model = fwdpy11.discrete_demography.from_demes(g, burnin=1)
-    isizes = model.initial_sizes_list
+    model = fwdpy11.ForwardDemesGraph.from_demes(g, burnin=1)
+    isizes = model.initial_sizes
     pop = fwdpy11.DiploidPopulation(isizes, 1.0)
     pdict = {
         "recregions": [fwdpy11.PoissonInterval(0, 1, 5e-2)],
@@ -556,7 +556,7 @@ def test_origination_deme1_fixation_in_deme_2(
         "demography": model,
         "rates": (0, 0, None),
         "prune_selected": prune_selected,
-        "simlen": model.metadata["total_simulation_length"],
+        "simlen": model.model_duration,
     }
     params = fwdpy11.ModelParams(**pdict)
     mutation_data = fwdpy11.conditional_models.NewMutationParameters(
@@ -572,7 +572,7 @@ def test_origination_deme1_fixation_in_deme_2(
         params,
         mutation_data,
         fwdpy11.conditional_models.FocalDemeFixation(deme=2),
-        when=model.metadata["burnin_time"] + 50,
+        when=model.burnin_duration + 50,
     )
     assert output.num_descendant_nodes == 1
     assert output.pop.generation > pop.generation
@@ -580,7 +580,7 @@ def test_origination_deme1_fixation_in_deme_2(
         if output.mutation_index is not None:
             assert (
                 output.pop.mutations[output.mutation_index].g
-                == model.metadata["burnin_time"] + 50
+                == model.burnin_duration + 50
             )
             assert (
                 count_mutation(output.pop, output.mutation_index, 2)
@@ -589,7 +589,7 @@ def test_origination_deme1_fixation_in_deme_2(
         else:
             assert (
                 output.pop.fixations[output.fixation_index].g
-                == model.metadata["burnin_time"] + 50
+                == model.burnin_duration + 50
             )
         _ = output.pop.dump_tables_to_tskit()
 
@@ -602,8 +602,8 @@ def test_origination_deme1_fixation_in_deme_2_with_growth(
     fp11_seed, demes_yaml, alpha, prune_selected
 ):
     g = demes.loads(demes_yaml)
-    model = fwdpy11.discrete_demography.from_demes(g, burnin=1)
-    isizes = model.initial_sizes_list
+    model = fwdpy11.ForwardDemesGraph.from_demes(g, burnin=1)
+    isizes = model.initial_sizes
     pop = fwdpy11.DiploidPopulation(isizes, 1.0)
     pdict = {
         "recregions": [fwdpy11.PoissonInterval(0, 1, 5e-2)],
@@ -611,7 +611,7 @@ def test_origination_deme1_fixation_in_deme_2_with_growth(
         "demography": model,
         "rates": (0, 0, None),
         "prune_selected": prune_selected,
-        "simlen": model.metadata["total_simulation_length"],
+        "simlen": model.model_duration,
     }
     params = fwdpy11.ModelParams(**pdict)
     mutation_data = fwdpy11.conditional_models.NewMutationParameters(
@@ -627,7 +627,7 @@ def test_origination_deme1_fixation_in_deme_2_with_growth(
         params,
         mutation_data,
         fwdpy11.conditional_models.FocalDemeFixation(deme=2),
-        when=model.metadata["burnin_time"] + 50,
+        when=model.burnin_duration + 50,
     )
     assert output.num_descendant_nodes == 1
     assert output.pop.generation > pop.generation
@@ -636,7 +636,7 @@ def test_origination_deme1_fixation_in_deme_2_with_growth(
         if output.mutation_index is not None:
             assert (
                 output.pop.mutations[output.mutation_index].g
-                == model.metadata["burnin_time"] + 50
+                == model.burnin_duration + 50
             )
 
             deme_sizes = output.pop.deme_sizes(as_dict=True)
@@ -652,7 +652,7 @@ def test_origination_deme1_fixation_in_deme_2_with_growth(
             assert output.fixation_index is not None
             assert (
                 output.pop.fixations[output.fixation_index].g
-                == model.metadata["burnin_time"] + 50
+                == model.burnin_duration + 50
             )
         _ = output.pop.dump_tables_to_tskit()
     else:
@@ -667,8 +667,8 @@ def test_origination_deme2_fixation_in_deme_2_no_migration(
     fp11_seed, demes_yaml, alpha, prune_selected
 ):
     g = demes.loads(demes_yaml)
-    model = fwdpy11.discrete_demography.from_demes(g, burnin=1)
-    isizes = model.initial_sizes_list
+    model = fwdpy11.ForwardDemesGraph.from_demes(g, burnin=1)
+    isizes = model.initial_sizes
     pop = fwdpy11.DiploidPopulation(isizes, 1.0)
     pdict = {
         "recregions": [fwdpy11.PoissonInterval(0, 1, 5e-2)],
@@ -676,7 +676,7 @@ def test_origination_deme2_fixation_in_deme_2_no_migration(
         "demography": model,
         "rates": (0, 0, None),
         "prune_selected": prune_selected,
-        "simlen": model.metadata["total_simulation_length"],
+        "simlen": model.model_duration,
     }
     params = fwdpy11.ModelParams(**pdict)
     mutation_data = fwdpy11.conditional_models.NewMutationParameters(
@@ -692,14 +692,13 @@ def test_origination_deme2_fixation_in_deme_2_no_migration(
         params,
         mutation_data,
         fwdpy11.conditional_models.FocalDemeFixation(deme=2),
-        when=model.metadata["burnin_time"] + 50,
+        when=model.burnin_duration + 50,
     )
     assert output.num_descendant_nodes == 1
     assert output.pop.generation > pop.generation
     if output.pop is not None:
         assert (
-            output.pop.mutations[output.mutation_index].g
-            == model.metadata["burnin_time"] + 50
+            output.pop.mutations[output.mutation_index].g == model.burnin_duration + 50
         )
         deme_sizes = output.pop.deme_sizes(as_dict=True)
         assert count_mutation(output.pop, output.mutation_index, 2) == 2 * deme_sizes[2]

@@ -1,6 +1,7 @@
 import typing
 
 import attr
+from deprecated import deprecated
 
 from ..class_decorators import (
     attr_add_asblack,
@@ -17,6 +18,7 @@ from .forward_demes_graph import ForwardDemesGraph
 @attr_class_pickle
 @attr_class_to_from_dict_no_recurse
 @attr.s(kw_only=True, frozen=True, auto_attribs=True, repr_ns="fwdpy11")
+@deprecated(reason="prefer ForwardDemesGraph")
 class DemographicModelDetails(object):
     """
     Stores rich information about a demographic model.

@@ -44,7 +44,7 @@ def roundtrip(regions):
         - {end_time: 0, start_size: 10}
     """
     graph = demes.loads(yaml)
-    demog = fwdpy11.discrete_demography.from_demes(graph, burnin=1)
+    demog = fwdpy11.ForwardDemesGraph.from_demes(graph, burnin=1)
     pdict = {
         "recregions": regions,
         "nregions": [],

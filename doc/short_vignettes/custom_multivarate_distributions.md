@@ -63,15 +63,15 @@ migrations:
     rate: 0.10
 """
 g = demes.loads(yaml)
-model = fwdpy11.discrete_demography.from_demes(g, burnin=1)
-initial_sizes = [v for v in model.metadata["initial_sizes"].values()]
+model = fwdpy11.ForwardDemesGraph.from_demes(g, burnin=1)
+initial_sizes = model.initial_sizes
 pdict = {
     "nregions": [],
     "recregions": [],
     "sregions": None, # Will get filled in below
     "rates": (0, 5e-3, None),
     "demography": model,
-    "simlen": model.metadata["total_simulation_length"],
+    "simlen": model.model_duration,
     "gvalue": fwdpy11.Multiplicative(ndemes=2, scaling=2),
 }
 rng = fwdpy11.GSLrng(123512)
