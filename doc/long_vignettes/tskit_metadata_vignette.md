@@ -164,7 +164,7 @@ fwdpy11.evolvets(rng, pop, params,
                  simplification_interval=100,
                  suppress_table_indexing=True)
 
-ts = pop.dump_tables_to_tskit(demes_graph=graph)
+ts = pop.dump_tables_to_tskit()
 ```
 
 Now that we have some data, let's look at how the `fwdpy11` mutation and individual information got encoded as `tskit` metadata!

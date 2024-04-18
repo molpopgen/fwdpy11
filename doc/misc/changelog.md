@@ -641,7 +641,7 @@ Bug fixes
 
 Breaking changes
 
-* {func}`fwdpy11.TableCollection.fs` no longer accepts more than two sample sets.
+* `fwdpy11.TableCollection.fs` no longer accepts more than two sample sets.
   This change allowed us to drop `sparse` as a dependency that was causing
   headaches when new Python point releases come out.
   PR {pr}`924`. Issues {issue}`876`, {issue}`919`.
@@ -1055,7 +1055,7 @@ Fixes:
 This is a point release adding more documentation:
 
 * {ref}`Demes vignette <demes_vignette>` updated.
-* {func}`fwdpy11.TableCollection.fs` docstring updated regarding some perhaps unexpected behavior of `sparse.COO`.
+* `fwdpy11.TableCollection.fs` docstring updated regarding some perhaps unexpected behavior of `sparse.COO`.
 
 ## 0.14.0
 
@@ -1494,7 +1494,7 @@ release candidates (see below) plus the following:
   {issue}`389`
   {issue}`390`
   {issue}`392`
-* {func}`fwdpy11.TableCollection.fs` added.  See `tablefs`.
+* `fwdpy11.TableCollection.fs` added.  See `tablefs`.
   PR {pr}`387`
   PR {pr}`399`
 * Creating populations from `msprime` input improved.

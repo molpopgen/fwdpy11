@@ -298,8 +298,7 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
     def dump_tables_to_tskit(
         self,
         *,
-        model_params: Optional[Union[ModelParams, Dict[str, ModelParams]]] = None,
-        demes_graph: Optional[demes.Graph] = None,
+        model_params: Optional[ModelParams] = None,
         population_metadata: Optional[Dict[int, object]] = None,
         data: Optional[object] = None,
         seed: Optional[int] = None,
@@ -312,10 +311,7 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
 
         :param model_params: Model parameters to be stored as top-level
                              metadata
-        :type model_params: :class:`fwdpy11.ModelParams` or :class:`dict`
-
-        :param demes_graph: A demographic model specified via `demes`.
-        :type demes_graph: :class:`demes.Graph`
+        :type model_params: :class:`fwdpy11.ModelParams`
 
         :param population_metadata: A mapping from integer id of a
                                     deme/population to metadata
@@ -381,11 +377,14 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
 
             Removed deprecated `wrapped` keyword argument.
 
+        .. versionadded:: 0.23.0
+
+            Remove deprecated `demes_graph` argument and update type hints.
+
         """
         return fwdpy11.tskit_tools._dump_tables_to_tskit._dump_tables_to_tskit(
             self,
             model_params=model_params,
-            demes_graph=demes_graph,
             population_metadata=population_metadata,
             data=data,
             seed=seed,

@@ -332,12 +332,7 @@ class ModelParams(object):
     @demography.validator
     def validate_demography(self, attribute, value):
         if value is None:
-            warnings.warn(
-                "No demographic model specified."
-                " This will be a hard error in a future release.",
-                DeprecationWarning,
-            )
-            return
+            raise ValueError("no demographic model specified")
 
         if isinstance(value, fwdpy11.ForwardDemesGraph):
             return

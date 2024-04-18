@@ -121,16 +121,7 @@ def evolvets(
         except Exception as e:
             raise e
     else:
-        # Build a default model of "tubes"
-        from fwdpy11 import ForwardDemesGraph
-
-        sizes = pop.deme_sizes()[1].tolist()
-        msg = "Applying a default demographic model "
-        msg += f"where deme sizes are {sizes} "
-        msg += f"and the burn-in length is 10*{sum(sizes)}. "
-        msg += "This will raise an error in future releases."
-        warnings.warn(msg, DeprecationWarning, stacklevel=2)
-        demographic_model = ForwardDemesGraph.tubes(sizes, 10)
+        raise ValueError("params.demography cannot be None")
 
     for r in params.sregions:
         if isinstance(r, fwdpy11.mvDES):

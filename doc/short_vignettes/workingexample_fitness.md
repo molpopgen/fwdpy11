@@ -32,6 +32,7 @@ p = {
     "prune_selected": True,
     "demography": None,
     "simlen": 10 * N,
+    "demography": fwdpy11.ForwardDemesGraph.tubes([N], burnin=10)
 }
 params = fwdpy11.ModelParams(**p)
 ```

@@ -15,10 +15,6 @@
 ```
 
 ```{eval-rst}
-.. autofunction:: fwdpy11.simplify
-```
-
-```{eval-rst}
 .. autofunction:: fwdpy11.simplify_tables
 ```
 

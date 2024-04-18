@@ -23,8 +23,6 @@ For some background, see {ref}`definitions`.
 ```
 
 ```{eval-rst}
-.. autoclass:: fwdpy11.StrictAdditiveMultivariateEffects
+.. autoclass:: fwdpy11.AdditivePleiotropy
     :members: asdict, fromdict, asblack, shape, genetic_values, maps_to_fitness, maps_to_trait_value
 ```
-
-

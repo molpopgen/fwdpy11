@@ -1,6 +1,6 @@
-from .data_matrix_from_tables import data_matrix_from_tables, make_data_matrix  # NOQA
+from .data_matrix_from_tables import data_matrix_from_tables  # NOQA
 from .import_demes import demography_from_demes  # NOQa
-from .simplify_tables import simplify, simplify_tables  # NOQA
+from .simplify_tables import simplify_tables  # NOQA
 
 from fwdpy11._fwdpy11 import _infinite_sites
 from fwdpy11 import GSLrng, DiploidPopulation
