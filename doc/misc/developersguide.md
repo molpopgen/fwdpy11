@@ -403,4 +403,49 @@ Although this is a bit more work, it provides better support for tools like `myp
 
 [isort]: https://github.com/timothycrosley/isort
 
+## Deprecating Python features
+
+When deprecating something, we want to:
+
+1. Stop testing it
+2. Stop documenting it
+3. Remove all examples of its use
+
+In theory, doing this is simple.
+We can just run python with `-We` and the deprecation warnings will become errors.
+However, this does not work well in the manual.
+
+To address this problem, we take a two part approach when deprecating.
+Consider the following class:
+
+```python
+@dataclass
+class Foo:
+    x: int
+```
+
+To deprecate it:
+
+```python
+from deprecated import deprecated
+
+# This is our DeprecationWarning.
+# The Python test suite will now fail.
+@deprecated(reason="a good one")
+@dataclass
+class Foo:
+    x: int
+
+    def __post_init__(self):
+        # For cases like our manual,
+        # we simply terminate execution
+        # whenever this type is instantiated
+        assert False
+```
+
+Our approach involves:
+
+* A warning and a hard error at the point of deprecation
+* Update all tests, docs, etc., to stop using this type.
+* When the previous step passes, remove the `assert False`
 
