@@ -53,25 +53,16 @@ def test_valid_demes_spec_modules():
                             _ = fwdpy11.ForwardDemesGraph.from_demes(
                                 yaml, burnin=0, round_non_integer_sizes=round_it
                             )
-                            _ = fwdpy11.discrete_demography.from_demes(
-                                good, burnin=0, round_non_integer_sizes=round_it
-                            )
                         for round_it in [None, False]:
                             with pytest.raises(ValueError):
                                 _ = fwdpy11.ForwardDemesGraph.from_demes(
                                     yaml, burnin=0, round_non_integer_sizes=round_it
-                                )
-                                _ = fwdpy11.discrete_demography.from_demes(
-                                    good, burnin=0, round_non_integer_sizes=round_it
                                 )
                     else:
                         for round_it in [None, False]:
                             with pytest.raises(ValueError):
                                 _ = fwdpy11.ForwardDemesGraph.from_demes(
                                     yaml, burnin=0, round_non_integer_sizes=round_it
-                                )
-                                _ = fwdpy11.discrete_demography.from_demes(
-                                    good, burnin=0, round_non_integer_sizes=round_it
                                 )
 
 

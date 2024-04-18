@@ -265,7 +265,7 @@ demes:
     """
 
     g = demes.loads(demog)
-    model = fwdpy11.discrete_demography.from_demes(g, burnin=1)
+    model = fwdpy11.ForwardDemesGraph.from_demes(g, burnin=1)
     prune_selected = True
     if isinstance(gvalue, fwdpy11.Additive):
         prune_selected = False
@@ -276,7 +276,7 @@ demes:
         "rates": (0, 1, None),
         "gvalue": gvalue,
         "demography": model,
-        "simlen": model.metadata["total_simulation_length"],
+        "simlen": model.model_duration,
         "prune_selected": prune_selected,
     }
     params = fwdpy11.ModelParams(**pdict)
@@ -366,6 +366,7 @@ def test_two_demes_divergent_optima():
     pop = fwdpy11.DiploidPopulation([N, N], 1.0)
     rng = fwdpy11.GSLrng(1010)
     fwdpy11.evolvets(rng, pop, params, 100)
+    assert pop.generation == demography.final_generation
 
 
 if __name__ == "__main__":

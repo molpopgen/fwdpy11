@@ -21,11 +21,13 @@ import typing
 
 import demes
 import demes.demes
+from deprecated import deprecated
 
 
 from fwdpy11._types.demographic_model_details import DemographicModelDetails
 
 
+@deprecated(reason="prefer ForwardDemesGraph.from_demes")
 def from_demes(
     dg: typing.Union[str, demes.Graph],
     burnin: int = 10,

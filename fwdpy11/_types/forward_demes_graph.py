@@ -5,6 +5,7 @@ import typing
 import attr
 import demes
 import numpy as np
+from deprecated import deprecated
 
 from ..class_decorators import (
     attr_class_pickle_with_super,
@@ -75,6 +76,7 @@ class ForwardDemesGraph(fwdpy11._fwdpy11._ForwardDemesGraph):
             burnin = self.burnin
         else:
             burnin = self.burnin * Nref
+        print(Nref, burnin)
         self.burnin_generation = burnin
         super(ForwardDemesGraph, self).__init__(
             self.yaml, burnin, self.round_non_integer_sizes
@@ -306,6 +308,11 @@ class ForwardDemesGraph(fwdpy11._fwdpy11._ForwardDemesGraph):
         return [i for i in self._parental_deme_sizes_at_time_zero() if i > 0]
 
     @property
+    @deprecated(reason="prefer initial_sizes")
+    def initial_sizes_list(self) -> typing.List:
+        return self.initial_sizes
+
+    @property
     def final_generation(self) -> int:
         """
         This is the final offspring generation of the model.
@@ -315,6 +322,27 @@ class ForwardDemesGraph(fwdpy11._fwdpy11._ForwardDemesGraph):
         the value of this property.
         """
         return self._model_end_time() - 1
+
+    @property
+    def burnin_duration(self) -> int:
+        """
+        The length of the burning time.
+        Equal to `burnin_generation` + 1.
+        """
+        return self.burnin_generation + 1
+
+    @property
+    @deprecated(reason="prefer final_generation")
+    def total_simulation_length(self) -> int:
+        return self.final_generation
+
+    @property
+    def model_duration(self) -> int:
+        """
+        The duration of the model from time 0 until the
+        most recent time point.
+        """
+        return self.final_generation
 
     @property
     def deme_labels(self) -> typing.Dict[int, str]:
