@@ -59,6 +59,7 @@ def setup(prune_selected=False):
         "rates": (0, 0, None),
         "prune_selected": False,
         "simlen": 200,
+        "demography": fwdpy11.ForwardDemesGraph.tubes([pop.N], burnin=10)
     }
     params = fwdpy11.ModelParams(**pdict)
 

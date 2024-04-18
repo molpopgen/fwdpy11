@@ -25,39 +25,6 @@ from .._fwdpy11 import _data_matrix_from_tables, _make_data_matrix
 from .._types import DataMatrix, DiploidPopulation, TableCollection
 
 
-def make_data_matrix(
-    pop: DiploidPopulation,
-    samples: Union[List, np.ndarray],
-    record_neutral: bool,
-    record_selected: bool,
-) -> DataMatrix:
-    """
-    Create a :class:`fwdpy11.DataMatrix` from a table collection.
-
-    :param pop: A population
-    :type pop: :class:`fwdpy11.PopulationBase`
-    :param samples: A list of sample nodes
-    :type samples: list
-    :param record_neutral: If True, generate data for neutral variants
-    :type record_neutral: bool
-    :param record_selected: If True, generate data for selected variants
-    :type record_selected: bool
-
-    .. deprecated:: 0.3.0
-
-       Prefer :func:`fwdpy11.data_matrix_from_tables`.
-
-    """
-    from warnings import warn
-
-    warn(
-        "fwdpy11.make_data_matrix is deprecated."
-        " Please use fwdpy11.data_matrix_from_tables.",
-        FutureWarning,
-    )
-    return DataMatrix(_make_data_matrix(pop, samples, record_neutral, record_selected))
-
-
 def data_matrix_from_tables(
     tables: TableCollection,
     samples: Union[List, np.ndarray],
