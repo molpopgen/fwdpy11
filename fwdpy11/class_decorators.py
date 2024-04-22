@@ -19,6 +19,8 @@
 
 import attr
 
+from deprecated import deprecated
+
 
 def _fromdict(cls):
     """
@@ -125,11 +127,13 @@ def attr_add_asblack(cls):
     formatting rules
     """
 
+    @deprecated(reason="use black module directly")
     def _asblack(self):
         """
         Return a string representation formatted with black
         """
         import black
+        assert False
 
         # The try/except is to handle black's changing API
         try:

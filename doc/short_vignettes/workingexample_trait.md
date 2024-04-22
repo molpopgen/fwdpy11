@@ -44,7 +44,7 @@ params = fwdpy11.ModelParams(**p)
 ```
 
 ```{code-cell}
-print(params.asblack())
+print(params.asdict())
 ```
 
 ## Modifying model parameters
