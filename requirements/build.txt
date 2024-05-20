@@ -1,5 +1,5 @@
 # VERY minimal requirements
 # to build the package
-pybind11[global] == 2.11.1
+pybind11[global] == 2.12.0
 cmake >= 3.27.2
 setuptools_scm<8
