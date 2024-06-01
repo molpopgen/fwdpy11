@@ -73,7 +73,7 @@ jobs:
           brew install gsl
 
       - name: Build wheels
-        uses: pypa/cibuildwheel@v2.17.0
+        uses: pypa/cibuildwheel@v2.18.1
 
       - name: Upload Wheels
         uses: actions/upload-artifact@v4
@@ -97,7 +97,7 @@ jobs:
             fetch-depth: 0
 
       - name: Build wheels
-        uses: pypa/cibuildwheel@v2.17.0
+        uses: pypa/cibuildwheel@v2.18.1
 
       - name: Upload Wheels
         uses: actions/upload-artifact@v4
