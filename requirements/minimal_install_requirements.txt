@@ -1,6 +1,6 @@
 black
 attrs >= 20.3.0 
 demes == 0.2.2
-numpy < 2
+numpy >= 2
 tskit >= 0.5.6
 Deprecated
