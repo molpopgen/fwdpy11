@@ -64,7 +64,7 @@ build = "cp3{11,12}-*"
 before-all = "./deployment/macos_wheels/install_gsl.sh"
 
 [tool.cibuildwheel.linux]
-build = "cp*manylinux*"
+build = "cp3{9,10,11,12}-manylinux*"
 manylinux-x86_64-image = "manylinux_2_28"
 before-all = "./deployment/linux_wheels/cibuildwheel.sh"
 archs = "x86_64"
