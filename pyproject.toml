@@ -60,6 +60,7 @@ build-frontend = "build"
 
 [tool.cibuildwheel.macos]
 build = "cp3{11,12}-*"
+before-all = "./deployment/macos_wheels/install_gsl.sh"
 
 [tool.cibuildwheel.linux]
 build = "cp*manylinux*"
