@@ -9,7 +9,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        python: [ 3.8, 3.9, "3.10", "3.11", "3.12" ]
+        python: [ 3.9, "3.10", "3.11", "3.12" ]
         os:  [ ubuntu-22.04 ]
         compiler: [gcc, clang14]
         rust: [1.62.1]
