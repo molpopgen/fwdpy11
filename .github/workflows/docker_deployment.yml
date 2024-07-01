@@ -42,7 +42,7 @@ jobs:
         name: Build and push stable release
         if: github.event_name == 'release'
         id: docker_build_release
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           push: true
           tags: molpopgen/fwdpy11:latest, molpopgen/fwdpy11:${{ github.event.release.tag_name }}
@@ -52,7 +52,7 @@ jobs:
       #   name: Build and push from main
       #   if: github.ref == 'refs/heads/main'
       #   id: docker_bfild_main
-      #   uses: docker/build-push-action@v5
+      #   uses: docker/build-push-action@v6
       #   with:
       #     push: true
       #     tags: molpopgen/fwdpy11:latest
@@ -62,7 +62,7 @@ jobs:
         name: Build image
         if: github.event_name == 'pull_request'
         id: docker_build_pull_request
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           push: false
           tags: molpopgen/fwdpy11:stable
