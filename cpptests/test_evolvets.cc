@@ -14,6 +14,7 @@
 #include <fwdpy11/regions/MutationRegions.hpp>
 #include <fwdpy11/genetic_values/fwdpp_wrappers/fwdpp_genetic_value.hpp>
 #include <fwdpy11/genetic_value_to_fitness/GeneticValueIsTrait.hpp>
+#include <fwdpy11/genetic_values/DiploidAdditive.hpp>
 #include <fwdpy11/regions/RecombinationRegions.hpp>
 #include <fwdpy11/rng.hpp>
 #include <fwdpy11/types/DiploidPopulation.hpp>
@@ -36,79 +37,7 @@
  *      correct
  */
 
-namespace
-{
-    // NOTE: all of this is a copy/paste
-    // from code internal to the pybind11 module.
-
-    struct single_deme_additive_het
-    {
-        inline void
-        operator()(double& d, const fwdpy11::Mutation& m) const
-        {
-            d += m.s * m.h;
-        }
-    };
-
-    struct multi_deme_additive_het
-    {
-        inline void
-        operator()(const std::size_t deme, double& d, const fwdpy11::Mutation& m) const
-        {
-            d += m.esizes[deme] * m.heffects[deme];
-        }
-    };
-
-    struct single_deme_additive_hom
-    {
-        double scaling;
-        single_deme_additive_hom(double s) : scaling(s)
-        {
-        }
-
-        inline void
-        operator()(double& d, const fwdpy11::Mutation& m) const
-        {
-            d += scaling * m.s;
-        }
-    };
-
-    struct multi_deme_additive_hom
-    {
-        double scaling;
-        multi_deme_additive_hom(double s) : scaling(s)
-        {
-        }
-
-        inline void
-        operator()(const std::size_t deme, double& d, const fwdpy11::Mutation& m) const
-        {
-            d += scaling * m.esizes[deme];
-        }
-    };
-
-    struct final_additive_trait
-    {
-        inline double
-        operator()(double d) const
-        {
-            return d;
-        }
-    };
-
-    struct final_additive_fitness
-    {
-        inline double
-        operator()(double d) const
-        {
-            return std::max(0.0, 1. + d);
-        }
-    };
-
-    using DiploidAdditive = fwdpy11::stateless_site_dependent_genetic_value_wrapper<
-        single_deme_additive_het, single_deme_additive_hom, multi_deme_additive_het,
-        multi_deme_additive_hom, 0>;
-}
+using fwdpy11::DiploidAdditive;
 
 template <typename T> struct common_setup
 {
@@ -128,7 +57,12 @@ template <typename T> struct common_setup
 
     common_setup()
         : rng{42}, pop{100, 10.0}, mregions{{}, {}}, recregions{0., {}},
-          additive{1, 2.0, final_additive_fitness(), nullptr, nullptr},
+          additive{1,
+                   2.0,
+                   fwdpy11::final_additive_fitness(),
+                   [](const auto) { return false; },
+                   nullptr,
+                   nullptr},
           gvalue_ptrs{additive}, recorder{},
           post_simplification_recorder{[](const fwdpy11::DiploidPopulation&) {}},
           sample_recorder_callback{
