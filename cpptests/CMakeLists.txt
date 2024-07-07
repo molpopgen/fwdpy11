@@ -8,6 +8,7 @@ SET(CPPTEST_SOURCES
     forward_demes_graph_fixtures.cc
     test_evolvets.cc
     test_core_genetic_map_regions.cc
+    test_site_dependent_genetic_value.cc
 )
 
 add_executable(fwdpy11_cpp_tests ${CPPTEST_SOURCES})

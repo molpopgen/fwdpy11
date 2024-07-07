@@ -6,6 +6,7 @@
 #include <fwdpy11/genetic_value_to_fitness/GeneticValueIsTrait.hpp>
 #include <fwdpy11/genetic_values/dgvalue_pointer_vector.hpp>
 #include <fwdpy11/genetic_values/fwdpp_wrappers/fwdpp_genetic_value.hpp>
+#include <fwdpy11/genetic_values/DiploidMultiplicative.hpp>
 #include <fwdpy11/regions/RecombinationRegions.hpp>
 #include <fwdpy11/regions/MutationRegions.hpp>
 #include <fwdpy11/evolvets/SampleRecorder.hpp>
@@ -21,73 +22,7 @@ namespace po = boost::program_options;
 // the Python library C++ code. They are needed
 // to define how Multiplicative works.
 
-struct single_deme_multiplicative_het
-{
-    inline void
-    operator()(double& d, const fwdpy11::Mutation& m) const
-    {
-        d *= (1. + m.s * m.h);
-    }
-};
-
-struct multi_deme_multiplicative_het
-{
-    inline void
-    operator()(const std::size_t deme, double& d, const fwdpy11::Mutation& m) const
-    {
-        d *= (1. + m.esizes[deme] * m.heffects[deme]);
-    }
-};
-
-struct single_deme_multiplicative_hom
-{
-    double scaling;
-    single_deme_multiplicative_hom(double s) : scaling(s)
-    {
-    }
-
-    inline void
-    operator()(double& d, const fwdpy11::Mutation& m) const
-    {
-        d *= (1. + scaling * m.s);
-    }
-};
-
-struct multi_deme_multiplicative_hom
-{
-    double scaling;
-    multi_deme_multiplicative_hom(double s) : scaling(s)
-    {
-    }
-
-    inline void
-    operator()(const std::size_t deme, double& d, const fwdpy11::Mutation& m) const
-    {
-        d *= (1. + scaling * m.esizes[deme]);
-    }
-};
-
-struct final_multiplicative_trait
-{
-    inline double
-    operator()(double d) const
-    {
-        return d - 1.0;
-    }
-};
-
-struct final_multiplicative_fitness
-{
-    inline double
-    operator()(double d) const
-    {
-        return std::max(0.0, d);
-    }
-};
-
-using DiploidMultiplicative = fwdpy11::stateless_site_dependent_genetic_value_wrapper<
-    single_deme_multiplicative_het, single_deme_multiplicative_hom,
-    multi_deme_multiplicative_het, multi_deme_multiplicative_hom, 1>;
+using fwdpy11::DiploidMultiplicative;
 
 struct RecordNothing
 // copied from internal code
@@ -175,8 +110,9 @@ simulate(const command_line_options& options)
 
     fwdpy11_core::ForwardDemesGraph forward_demes_graph(o.str(), options.nsteps);
 
-    DiploidMultiplicative fitness(1, 2., final_multiplicative_fitness(), nullptr,
-                                  nullptr);
+    DiploidMultiplicative fitness(
+        1, 2., fwdpy11::final_multiplicative_fitness(),
+        [](const double) { return false; }, nullptr, nullptr);
     fwdpy11::dgvalue_pointer_vector_ gvalue_pointers(fitness);
 
     fwdpy11::no_ancient_samples no_ancient_samples{};
@@ -199,9 +135,7 @@ simulate(const command_line_options& options)
 
     evolve_with_tree_sequences(
         rng, pop, sample_recorder, options.simplification_interval, forward_demes_graph,
-        options.nsteps, 0., 0., mmodel, genetic_map, gvalue_pointers,
-        [](const fwdpy11::DiploidPopulation& /*pop*/, fwdpy11::SampleRecorder& /*sr*/) {
-        },
+        options.nsteps, 0., 0., mmodel, genetic_map, gvalue_pointers, no_ancient_samples,
         stopping_criteron, record_nothing, tsoptions);
     std::cout << pop.generation << ' ' << pop.N << ' ' << pop.tables->edges.size() << ' '
               << pop.tables->nodes.size() << '\n';

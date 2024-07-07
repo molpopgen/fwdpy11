@@ -1,10 +1,11 @@
 #ifndef FWDPY11_GENETIC_VALUES_WRAPPERS_FWDPP__GVALUE_HPP__
 #define FWDPY11_GENETIC_VALUES_WRAPPERS_FWDPP__GVALUE_HPP__
 
+#include <limits>
 #include <type_traits>
 #include <functional>
 #include "../DiploidGeneticValue.hpp"
-#include <fwdpp/fitness_models.hpp>
+#include <fwdpy11/genetic_values/site_dependent_genetic_value.hpp>
 #include <fwdpy11/genetic_value_noise/GeneticValueNoise.hpp>
 
 namespace fwdpy11
@@ -26,7 +27,7 @@ namespace fwdpy11
             }
 
             inline double
-            operator()(const fwdpp::site_dependent_genetic_value& gv,
+            operator()(const fwdpy11::site_dependent_genetic_value& gv,
                        const std::size_t diploid_index,
                        const DiploidMetadata& /*metadata*/,
                        const DiploidPopulation& pop) const
@@ -47,7 +48,7 @@ namespace fwdpy11
             }
 
             inline double
-            operator()(const fwdpp::site_dependent_genetic_value& gv,
+            operator()(const fwdpy11::site_dependent_genetic_value& gv,
                        const std::size_t diploid_index, const DiploidMetadata& metadata,
                        const DiploidPopulation& pop) const
             {
@@ -75,7 +76,7 @@ namespace fwdpy11
         };
 
         using callback_type = std::function<double(
-            const fwdpp::site_dependent_genetic_value&, const std::size_t,
+            const fwdpy11::site_dependent_genetic_value&, const std::size_t,
             const DiploidMetadata&, const DiploidPopulation&)>;
 
         using make_return_value_t = std::function<double(double)>;
@@ -90,7 +91,7 @@ namespace fwdpy11
             return multi_deme_callback(aa_scaling);
         }
 
-        fwdpp::site_dependent_genetic_value gv;
+        fwdpy11::site_dependent_genetic_value gv;
         double aa_scaling;
         make_return_value_t make_return_value;
         callback_type callback;
@@ -99,8 +100,9 @@ namespace fwdpy11
       public:
         stateless_site_dependent_genetic_value_wrapper(
             std::size_t ndim, double scaling, make_return_value_t mrv,
-            const GeneticValueToFitnessMap* gv2w_, const GeneticValueNoise* noise_)
-            : DiploidGeneticValue{ndim, gv2w_, noise_}, gv{}, aa_scaling(scaling),
+            std::function<bool(double)> clamp, const GeneticValueToFitnessMap* gv2w_,
+            const GeneticValueNoise* noise_)
+            : DiploidGeneticValue{ndim, gv2w_, noise_}, gv{clamp}, aa_scaling(scaling),
               make_return_value(std::move(mrv)),
               callback(init_callback(ndim, aa_scaling)), isfitness(gv2w->isfitness)
         {
