@@ -236,7 +236,6 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="../pages/mvdes.html">Different effect sizes of mutations in different demes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../pages/tsoverview.html">Conceptual overview of tree sequence recording</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../pages/tstypes.html">Data structures related to tree sequences</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../pages/tablefs.html">Calculating frequency spectra from tree sequences</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../pages/recorders.html">Time series analysis</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Technical details</span></p>
@@ -522,14 +521,14 @@ distributions and there is no correlation in the effect size in the two demes.</
 <span class="s2">    rate: 0.10</span>
 <span class="s2">&quot;&quot;&quot;</span>
 <span class="n">g</span> <span class="o">=</span> <span class="n">demes</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">yaml</span><span class="p">)</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">discrete_demography</span><span class="o">.</span><span class="n">from_demes</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">burnin</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ForwardDemesGraph</span><span class="o">.</span><span class="n">from_demes</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">burnin</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">demesdraw</span><span class="o">.</span><span class="n">tubes</span><span class="p">(</span><span class="n">g</span><span class="p">);</span>
 </pre></div>
 </div>
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="../_images/45f1e6f9de9566c5c7e0806c595f70e0633a099393cd8fa513f54f435643a73e.png" src="../_images/45f1e6f9de9566c5c7e0806c595f70e0633a099393cd8fa513f54f435643a73e.png" />
+<img alt="../_images/e08be484f1ec9df80bc6397045ddd5fdea27be05aee301b4ad5eacb20da911bd.png" src="../_images/e08be484f1ec9df80bc6397045ddd5fdea27be05aee301b4ad5eacb20da911bd.png" />
 </div>
 </div>
 <p>Let’s set up a dictionary to hold the parameters of our model:</p>
@@ -545,7 +544,7 @@ distributions and there is no correlation in the effect size in the two demes.</
     <span class="p">],</span>
     <span class="s2">&quot;rates&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">2.5e-3</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
     <span class="s2">&quot;demography&quot;</span><span class="p">:</span> <span class="n">model</span><span class="p">,</span>
-    <span class="s2">&quot;simlen&quot;</span><span class="p">:</span> <span class="n">model</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;total_simulation_length&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;simlen&quot;</span><span class="p">:</span> <span class="n">model</span><span class="o">.</span><span class="n">final_generation</span><span class="p">,</span>
     <span class="s2">&quot;gvalue&quot;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Additive</span><span class="p">(</span>
         <span class="n">ndemes</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">scaling</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
         <span class="n">gvalue_to_fitness</span><span class="o">=</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">GaussianStabilizingSelection</span><span class="o">.</span><span class="n">single_trait</span><span class="p">([</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">Optimum</span><span class="p">(</span><span class="n">optimum</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">VS</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="mi">0</span><span class="p">)])</span>
@@ -576,7 +575,7 @@ number of demes that will exist during a simulation.</p></li>
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">params</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="n">pdict</span><span class="p">)</span>
 <span class="c1"># TODO: update this once we have a function to pull the sizes</span>
 <span class="c1"># automatically from demes-derived models:</span>
-<span class="n">initial_sizes</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;initial_sizes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
+<span class="n">initial_sizes</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">initial_sizes</span>
 <span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">(</span><span class="n">initial_sizes</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
 <span class="n">rng</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSLrng</span><span class="p">(</span><span class="mi">1010</span><span class="p">)</span>
 <span class="n">fwdpy11</span><span class="o">.</span><span class="n">evolvets</span><span class="p">(</span><span class="n">rng</span><span class="p">,</span> <span class="n">pop</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
@@ -626,7 +625,7 @@ number of demes that will exist during a simulation.</p></li>
 <span class="n">params</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="n">pdict</span><span class="p">)</span>
 <span class="c1"># TODO: update this once we have a function to pull the sizes</span>
 <span class="c1"># automatically from demes-derived models:</span>
-<span class="n">initial_sizes</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;initial_sizes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
+<span class="n">initial_sizes</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">initial_sizes</span>
 <span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">(</span><span class="n">initial_sizes</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
 <span class="n">fwdpy11</span><span class="o">.</span><span class="n">evolvets</span><span class="p">(</span><span class="n">rng</span><span class="p">,</span> <span class="n">pop</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">pop</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">mutations</span><span class="p">:</span>

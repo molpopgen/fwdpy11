@@ -231,7 +231,6 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="pages/mvdes.html">Different effect sizes of mutations in different demes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pages/tsoverview.html">Conceptual overview of tree sequence recording</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pages/tstypes.html">Data structures related to tree sequences</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pages/tablefs.html">Calculating frequency spectra from tree sequences</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pages/recorders.html">Time series analysis</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Technical details</span></p>
@@ -489,6 +488,8 @@ document.write(`
 </li>
       <li><a href="pages/genetic_values.html#fwdpy11.Additive">Additive (class in fwdpy11)</a>
 </li>
+      <li><a href="pages/genetic_values.html#fwdpy11.AdditivePleiotropy">AdditivePleiotropy (class in fwdpy11)</a>
+</li>
       <li><a href="pages/conditional_models.html#fwdpy11.conditional_models.AddMutationFailure">AddMutationFailure</a>
 </li>
       <li><a href="pages/types.html#fwdpy11.DiploidPopulation.alive_nodes">alive_nodes (fwdpy11.DiploidPopulation property)</a>
@@ -510,6 +511,8 @@ document.write(`
       <li><a href="pages/genetic_values.html#fwdpy11.Additive.asblack">asblack() (fwdpy11.Additive method)</a>
 
       <ul>
+        <li><a href="pages/genetic_values.html#fwdpy11.AdditivePleiotropy.asblack">(fwdpy11.AdditivePleiotropy method)</a>
+</li>
         <li><a href="pages/types.html#fwdpy11.DemographicModelDetails.asblack">(fwdpy11.DemographicModelDetails method)</a>
 </li>
         <li><a href="pages/gvaluenoise.html#fwdpy11.GaussianNoise.asblack">(fwdpy11.GaussianNoise method)</a>
@@ -526,14 +529,14 @@ document.write(`
 </li>
         <li><a href="pages/gvalue_to_fitness.html#fwdpy11.PleiotropicOptima.asblack">(fwdpy11.PleiotropicOptima method)</a>
 </li>
-        <li><a href="pages/genetic_values.html#fwdpy11.StrictAdditiveMultivariateEffects.asblack">(fwdpy11.StrictAdditiveMultivariateEffects method)</a>
-</li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pages/genetic_values.html#fwdpy11.Additive.asdict">asdict() (fwdpy11.Additive method)</a>
 
       <ul>
+        <li><a href="pages/genetic_values.html#fwdpy11.AdditivePleiotropy.asdict">(fwdpy11.AdditivePleiotropy method)</a>
+</li>
         <li><a href="pages/conditional_models.html#fwdpy11.conditional_models.EvolveOptions.asdict">(fwdpy11.conditional_models.EvolveOptions method)</a>
 </li>
         <li><a href="pages/types.html#fwdpy11.DemographicModelDetails.asdict">(fwdpy11.DemographicModelDetails method)</a>
@@ -553,8 +556,6 @@ document.write(`
         <li><a href="pages/gvalue_to_fitness.html#fwdpy11.Optimum.asdict">(fwdpy11.Optimum method)</a>
 </li>
         <li><a href="pages/gvalue_to_fitness.html#fwdpy11.PleiotropicOptima.asdict">(fwdpy11.PleiotropicOptima method)</a>
-</li>
-        <li><a href="pages/genetic_values.html#fwdpy11.StrictAdditiveMultivariateEffects.asdict">(fwdpy11.StrictAdditiveMultivariateEffects method)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -596,6 +597,10 @@ document.write(`
         <li><a href="pages/advancedtopics.html#fwdpy11.strict_additive_effects">fwdpy11.strict_additive_effects()</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="pages/types.html#fwdpy11.ForwardDemesGraph.burnin_duration">burnin_duration (fwdpy11.ForwardDemesGraph property)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -659,6 +664,8 @@ document.write(`
       <li><a href="pages/types.html#fwdpy11.ForwardDemesGraph.deme_time_intervals">deme_time_intervals() (fwdpy11.ForwardDemesGraph method)</a>
 </li>
       <li><a href="pages/types.html#fwdpy11.ForwardDemesGraph.demes_at_final_generation">demes_at_final_generation (fwdpy11.ForwardDemesGraph property)</a>
+</li>
+      <li><a href="pages/types.html#fwdpy11.ForwardDemesGraph.demes_graph">demes_graph (fwdpy11.ForwardDemesGraph property)</a>
 </li>
       <li><a href="pages/types.html#fwdpy11.DemographicModelCitation">DemographicModelCitation (class in fwdpy11)</a>
 </li>
@@ -761,14 +768,12 @@ document.write(`
       <li><a href="pages/conditional_models.html#fwdpy11.conditional_models.FrequencyRange">FrequencyRange (class in fwdpy11.conditional_models)</a>
 </li>
       <li><a href="pages/types.html#fwdpy11.ForwardDemesGraph.from_demes">from_demes() (fwdpy11.ForwardDemesGraph class method)</a>
-
-      <ul>
-        <li><a href="pages/functions.html#fwdpy11.discrete_demography.from_demes">(in module fwdpy11.discrete_demography)</a>
 </li>
-      </ul></li>
       <li><a href="pages/genetic_values.html#fwdpy11.Additive.fromdict">fromdict() (fwdpy11.Additive class method)</a>
 
       <ul>
+        <li><a href="pages/genetic_values.html#fwdpy11.AdditivePleiotropy.fromdict">(fwdpy11.AdditivePleiotropy class method)</a>
+</li>
         <li><a href="pages/conditional_models.html#fwdpy11.conditional_models.EvolveOptions.fromdict">(fwdpy11.conditional_models.EvolveOptions class method)</a>
 </li>
         <li><a href="pages/types.html#fwdpy11.DemographicModelDetails.fromdict">(fwdpy11.DemographicModelDetails class method)</a>
@@ -789,11 +794,7 @@ document.write(`
 </li>
         <li><a href="pages/gvalue_to_fitness.html#fwdpy11.PleiotropicOptima.fromdict">(fwdpy11.PleiotropicOptima class method)</a>
 </li>
-        <li><a href="pages/genetic_values.html#fwdpy11.StrictAdditiveMultivariateEffects.fromdict">(fwdpy11.StrictAdditiveMultivariateEffects class method)</a>
-</li>
       </ul></li>
-      <li><a href="pages/types.html#fwdpy11.TableCollection.fs">fs() (fwdpy11.TableCollection method)</a>
-</li>
       <li>
     fwdpy11.additive_effects()
 
@@ -925,6 +926,8 @@ document.write(`
       <li><a href="pages/genetic_values.html#fwdpy11.Additive.genetic_values">genetic_values (fwdpy11.Additive property)</a>
 
       <ul>
+        <li><a href="pages/genetic_values.html#fwdpy11.AdditivePleiotropy.genetic_values">(fwdpy11.AdditivePleiotropy property)</a>
+</li>
         <li><a href="pages/genetic_values.html#fwdpy11.DiploidGeneticValue.genetic_values">(fwdpy11.DiploidGeneticValue property)</a>
 </li>
         <li><a href="pages/types.html#fwdpy11.DiploidPopulation.genetic_values">(fwdpy11.DiploidPopulation attribute)</a>
@@ -932,8 +935,6 @@ document.write(`
         <li><a href="pages/genetic_values.html#fwdpy11.GBR.genetic_values">(fwdpy11.GBR property)</a>
 </li>
         <li><a href="pages/genetic_values.html#fwdpy11.Multiplicative.genetic_values">(fwdpy11.Multiplicative property)</a>
-</li>
-        <li><a href="pages/genetic_values.html#fwdpy11.StrictAdditiveMultivariateEffects.genetic_values">(fwdpy11.StrictAdditiveMultivariateEffects property)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -1049,6 +1050,8 @@ document.write(`
       <li><a href="pages/genetic_values.html#fwdpy11.Additive.maps_to_fitness">maps_to_fitness (fwdpy11.Additive property)</a>
 
       <ul>
+        <li><a href="pages/genetic_values.html#fwdpy11.AdditivePleiotropy.maps_to_fitness">(fwdpy11.AdditivePleiotropy property)</a>
+</li>
         <li><a href="pages/genetic_values.html#fwdpy11.DiploidGeneticValue.maps_to_fitness">(fwdpy11.DiploidGeneticValue property)</a>
 </li>
         <li><a href="pages/genetic_values.html#fwdpy11.GBR.maps_to_fitness">(fwdpy11.GBR property)</a>
@@ -1057,12 +1060,12 @@ document.write(`
 </li>
         <li><a href="pages/genetic_values.html#fwdpy11.Multiplicative.maps_to_fitness">(fwdpy11.Multiplicative property)</a>
 </li>
-        <li><a href="pages/genetic_values.html#fwdpy11.StrictAdditiveMultivariateEffects.maps_to_fitness">(fwdpy11.StrictAdditiveMultivariateEffects property)</a>
-</li>
       </ul></li>
       <li><a href="pages/genetic_values.html#fwdpy11.Additive.maps_to_trait_value">maps_to_trait_value (fwdpy11.Additive property)</a>
 
       <ul>
+        <li><a href="pages/genetic_values.html#fwdpy11.AdditivePleiotropy.maps_to_trait_value">(fwdpy11.AdditivePleiotropy property)</a>
+</li>
         <li><a href="pages/genetic_values.html#fwdpy11.DiploidGeneticValue.maps_to_trait_value">(fwdpy11.DiploidGeneticValue property)</a>
 </li>
         <li><a href="pages/genetic_values.html#fwdpy11.GBR.maps_to_trait_value">(fwdpy11.GBR property)</a>
@@ -1070,8 +1073,6 @@ document.write(`
         <li><a href="pages/gvalue_to_fitness.html#fwdpy11.GeneticValueToFitnessMap.maps_to_trait_value">(fwdpy11.GeneticValueToFitnessMap property)</a>
 </li>
         <li><a href="pages/genetic_values.html#fwdpy11.Multiplicative.maps_to_trait_value">(fwdpy11.Multiplicative property)</a>
-</li>
-        <li><a href="pages/genetic_values.html#fwdpy11.StrictAdditiveMultivariateEffects.maps_to_trait_value">(fwdpy11.StrictAdditiveMultivariateEffects property)</a>
 </li>
       </ul></li>
       <li><a href="pages/conditional_models.html#fwdpy11.conditional_models.AlleleCountRange.maximum">maximum (fwdpy11.conditional_models.AlleleCountRange attribute)</a>
@@ -1088,10 +1089,12 @@ document.write(`
         <li><a href="pages/conditional_models.html#fwdpy11.conditional_models.FrequencyRange.minimum">(fwdpy11.conditional_models.FrequencyRange attribute)</a>
 </li>
       </ul></li>
-      <li><a href="pages/model_params.html#fwdpy11.ModelParams">ModelParams (class in fwdpy11)</a>
+      <li><a href="pages/types.html#fwdpy11.ForwardDemesGraph.model_duration">model_duration (fwdpy11.ForwardDemesGraph property)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="pages/model_params.html#fwdpy11.ModelParams">ModelParams (class in fwdpy11)</a>
+</li>
       <li>
     module
 
@@ -1372,6 +1375,8 @@ document.write(`
       <li><a href="pages/genetic_values.html#fwdpy11.Additive.shape">shape (fwdpy11.Additive property)</a>
 
       <ul>
+        <li><a href="pages/genetic_values.html#fwdpy11.AdditivePleiotropy.shape">(fwdpy11.AdditivePleiotropy property)</a>
+</li>
         <li><a href="pages/genetic_values.html#fwdpy11.DiploidGeneticValue.shape">(fwdpy11.DiploidGeneticValue property)</a>
 </li>
         <li><a href="pages/genetic_values.html#fwdpy11.GBR.shape">(fwdpy11.GBR property)</a>
@@ -1382,14 +1387,10 @@ document.write(`
 </li>
         <li><a href="pages/datamatrix.html#fwdpy11.StateMatrix.shape">(fwdpy11.StateMatrix property)</a>
 </li>
-        <li><a href="pages/genetic_values.html#fwdpy11.StrictAdditiveMultivariateEffects.shape">(fwdpy11.StrictAdditiveMultivariateEffects property)</a>
-</li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pages/conditional_models.html#fwdpy11.conditional_models.EvolveOptions.simplification_interval">simplification_interval (fwdpy11.conditional_models.EvolveOptions attribute)</a>
-</li>
-      <li><a href="pages/functions.html#fwdpy11.simplify">simplify() (in module fwdpy11)</a>
 </li>
       <li><a href="pages/functions.html#fwdpy11.simplify_tables">simplify_tables() (in module fwdpy11)</a>
 </li>
@@ -1416,8 +1417,6 @@ document.write(`
       <li><a href="pages/regiontypes.html#fwdpy11.Sregion">Sregion (class in fwdpy11)</a>
 </li>
       <li><a href="pages/datamatrix.html#fwdpy11.StateMatrix">StateMatrix (class in fwdpy11)</a>
-</li>
-      <li><a href="pages/genetic_values.html#fwdpy11.StrictAdditiveMultivariateEffects">StrictAdditiveMultivariateEffects (class in fwdpy11)</a>
 </li>
       <li><a href="pages/conditional_models.html#fwdpy11.conditional_models.SimulationStatus.Success">Success (fwdpy11.conditional_models.SimulationStatus attribute)</a>
 </li>

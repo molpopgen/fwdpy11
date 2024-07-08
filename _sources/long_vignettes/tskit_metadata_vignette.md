@@ -120,7 +120,7 @@ The rest is standard.
 We will generate the model from a {class}`demes.Graph`:
 
 ```{code-cell} python
-demog = fwdpy11.discrete_demography.from_demes(graph, burnin=1)
+demog = fwdpy11.ForwardDemesGraph.from_demes(graph, burnin=1)
 ```
 
 Set up the parameters dictionary:
@@ -133,7 +133,7 @@ pdict = {
     'rates': (0., 1e-3, None),
     'gvalue': fwdpy11.Multiplicative(ndemes=3, scaling=2.0),
     'demography': demog,
-    'simlen': demog.metadata['total_simulation_length'],
+    'simlen': demog.model_duration,
     }
 
 params = fwdpy11.ModelParams(**pdict)
@@ -160,11 +160,11 @@ pop = fwdpy11.DiploidPopulation.create_from_tskit(initial_history)
 rng = fwdpy11.GSLrng(54321)
 
 fwdpy11.evolvets(rng, pop, params,
-                 recorder=Recorder(when=demog.metadata["burnin_time"] + 1),
+                 recorder=Recorder(when=demog.burnin_duration),
                  simplification_interval=100,
                  suppress_table_indexing=True)
 
-ts = pop.dump_tables_to_tskit(demes_graph=graph)
+ts = pop.dump_tables_to_tskit()
 ```
 
 Now that we have some data, let's look at how the `fwdpy11` mutation and individual information got encoded as `tskit` metadata!

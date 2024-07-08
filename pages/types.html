@@ -236,7 +236,6 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="mvdes.html">Different effect sizes of mutations in different demes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tsoverview.html">Conceptual overview of tree sequence recording</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tstypes.html">Data structures related to tree sequences</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tablefs.html">Calculating frequency spectra from tree sequences</a></li>
 <li class="toctree-l1"><a class="reference internal" href="recorders.html">Time series analysis</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Technical details</span></p>
@@ -748,15 +747,14 @@ If False, numpy arrays are returned</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fwdpy11.DiploidPopulation.dump_tables_to_tskit">
-<span class="sig-name descname"><span class="pre">dump_tables_to_tskit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">demes_graph</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">population_metadata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">destructive</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.DiploidPopulation.dump_tables_to_tskit" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">dump_tables_to_tskit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">population_metadata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">destructive</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.DiploidPopulation.dump_tables_to_tskit" title="Permalink to this definition">#</a></dt>
 <dd><p>Dump the population’s TableCollection into
 an tskit TreeSequence</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>model_params</strong> (<a class="reference internal" href="model_params.html#fwdpy11.ModelParams" title="fwdpy11.ModelParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.ModelParams</span></code></a> or <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>) – Model parameters to be stored as top-level
+<li><p><strong>model_params</strong> (<a class="reference internal" href="model_params.html#fwdpy11.ModelParams" title="fwdpy11.ModelParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.ModelParams</span></code></a>) – Model parameters to be stored as top-level
 metadata</p></li>
-<li><p><strong>demes_graph</strong> (<a class="reference external" href="https://popsim-consortium.github.io/demes-docs/main/api.html#demes.Graph" title="(in Python)"><code class="xref py py-class docutils literal notranslate"><span class="pre">demes.Graph</span></code></a>) – A demographic model specified via <cite>demes</cite>.</p></li>
 <li><p><strong>population_metadata</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a>) – A mapping from integer id of a
 deme/population to metadata</p></li>
 <li><p><strong>data</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.12)"><em>object</em></a>) – User-generated data to add to top-level metadata</p></li>
@@ -806,6 +804,9 @@ with an incorrect number of rows.</p>
 </div>
 <div class="versionadded">
 <p><span class="versionmodified added">New in version 0.19.0: </span>Removed deprecated <cite>wrapped</cite> keyword argument.</p>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 0.23.0: </span>Remove deprecated <cite>demes_graph</cite> argument and update type hints.</p>
 </div>
 </dd></dl>
 
@@ -865,7 +866,7 @@ memory.  It is, however, slower.</p>
 <dd><p>Return an array of nodes associated with preserved/ancient samples.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)">numpy.ndarray</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0)">numpy.ndarray</a></p>
 </dd>
 </dl>
 <div class="versionadded">
@@ -1163,61 +1164,6 @@ that is handled on the C++ side.</p>
 <dd><p>Supports buffer protocol</p>
 </dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="fwdpy11.TableCollection.fs">
-<span class="sig-name descname"><span class="pre">fs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">samples</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">marginalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">simplify</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">windows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">separate_windows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_neutral</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_selected</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.TableCollection.fs" title="Permalink to this definition">#</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>samples</strong> – lists of numpy arrays of sample nodes</p></li>
-<li><p><strong>marginalize</strong> – For <code class="docutils literal notranslate"><span class="pre">FS</span></code> involving multiple samples,
-extract out the marginal <code class="docutils literal notranslate"><span class="pre">FS</span></code> per sample.</p></li>
-<li><p><strong>simplify</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, simplify with respect to the sample
-set prior to calculating the <code class="docutils literal notranslate"><span class="pre">FS</span></code>.</p></li>
-<li><p><strong>windows</strong> – A list of non-overlapping intervals from which
-the <code class="docutils literal notranslate"><span class="pre">FS</span></code> is calculated.</p></li>
-<li><p><strong>separate_windows</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, return <code class="docutils literal notranslate"><span class="pre">FS</span></code> separately for
-each interval in <code class="docutils literal notranslate"><span class="pre">windows</span></code>.</p></li>
-<li><p><strong>include_neutral</strong> – Include neutral mutations?</p></li>
-<li><p><strong>include_selected</strong> – Include selected mutations?</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The mutation frequency spectrum.  The <cite>dtype</cite> is <cite>int32</cite>.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.12)">object</a></p>
-</dd>
-</dl>
-<p>The details of the return value depend heavily on the options.</p>
-<ul class="simple">
-<li><p>If a single sample list is provided, the return value is a
-1-d ndarray with the first and last bins masked.  The unmasked
-bins correspond to frequencies 1 to n-1, where n is the number
-of sample nodes.</p></li>
-<li><p>If multiple sample lists are provided, the return value is a
-<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.coo_matrix.html#scipy.sparse.coo_matrix" title="(in SciPy v1.13.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">scipy.sparse.coo_matrix</span></code></a>.  For each dimension, the 0 and n
-bins are included.</p></li>
-<li><p>If <code class="docutils literal notranslate"><span class="pre">marginalize</span> <span class="pre">==</span> <span class="pre">True</span></code> and more than one sample bin is provided,
-the <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.coo_matrix.html#scipy.sparse.coo_matrix" title="(in SciPy v1.13.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">scipy.sparse.coo_matrix</span></code></a> matrix is converted into a dict
-where the key is the index of the sample list and the
-value is a dense 1-d array,
-masked as described above.</p></li>
-<li><p>If multiple windows are provided and <code class="docutils literal notranslate"><span class="pre">separate_windows</span> <span class="pre">==</span> <span class="pre">False</span></code>,
-then the return value is a single frequency spectrum summed over
-windows.
-If <code class="docutils literal notranslate"><span class="pre">separate_windows</span> <span class="pre">==</span> <span class="pre">True</span></code>, then a list of frequency spectra is
-returned, indexed in the same order as the input windows.</p></li>
-</ul>
-<div class="versionadded">
-<p><span class="versionmodified added">New in version 0.6.0: </span>Python implementation added</p>
-</div>
-<div class="versionchanged">
-<p><span class="versionmodified changed">Changed in version 0.18.0: </span>Dropped <cite>sparse</cite> as a dependency, using types from <cite>scipy.sparse</cite>
-instead. This change drops support for more than 2 sample lists.</p>
-</div>
-</dd></dl>
-
 <dl class="py property">
 <dt class="sig sig-object py" id="fwdpy11.TableCollection.genome_length">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">genome_length</span></span><a class="headerlink" href="#fwdpy11.TableCollection.genome_length" title="Permalink to this definition">#</a></dt>
@@ -1446,7 +1392,7 @@ when generating such views.</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>tables</strong> (<a class="reference internal" href="#fwdpy11.TableCollection" title="fwdpy11.TableCollection"><em>TableCollection</em></a>) – A table collection</p></li>
-<li><p><strong>samples</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em> or </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><em>numpy.ndarray</em></a>) – List of sample nodes</p></li>
+<li><p><strong>samples</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em> or </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0)"><em>numpy.ndarray</em></a>) – List of sample nodes</p></li>
 </ul>
 </dd>
 </dl>
@@ -1454,7 +1400,7 @@ when generating such views.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>ancient_samples</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em> or </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><em>numpy.ndarray</em></a>) – List of ancient_samples nodes</p></li>
+<li><p><strong>ancient_samples</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em> or </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0)"><em>numpy.ndarray</em></a>) – List of ancient_samples nodes</p></li>
 <li><p><strong>begin</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – Start iteration at this position</p></li>
 <li><p><strong>end</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a><em> or </em><em>None</em>) – End iteration at this position</p></li>
 </ul>
@@ -1626,7 +1572,7 @@ on the current tree.</p>
 <dd class="field-odd"><p>The samples list</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)">numpy.ndarray</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0)">numpy.ndarray</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1690,7 +1636,7 @@ on the current tree.</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>tables</strong> (<a class="reference internal" href="#fwdpy11.TableCollection" title="fwdpy11.TableCollection"><em>fwdpy11.TableCollection</em></a>) – The table collection</p></li>
-<li><p><strong>samples</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em> or </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><em>numpy.ndarray</em></a>) – Samples list</p></li>
+<li><p><strong>samples</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em> or </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0)"><em>numpy.ndarray</em></a>) – Samples list</p></li>
 </ul>
 </dd>
 </dl>
@@ -1758,7 +1704,7 @@ as properties.</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>tables</strong> (<a class="reference internal" href="#fwdpy11.TableCollection" title="fwdpy11.TableCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.TableCollection</span></code></a>) – A table collection</p></li>
-<li><p><strong>samples</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em> or </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><em>numpy.ndarray</em></a>) – A list of samples</p></li>
+<li><p><strong>samples</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em> or </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0)"><em>numpy.ndarray</em></a>) – A list of samples</p></li>
 <li><p><strong>intervals</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><em>tuple</em></a><em>]</em>) – The <span class="math notranslate nohighlight">\([start, stop)\)</span> positions of each interval</p></li>
 <li><p><strong>neutral</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – If True, include neutral variants</p></li>
 <li><p><strong>selected</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – If True, include selected variants</p></li>
@@ -1873,6 +1819,13 @@ have those values rounded to the nearest integer.</p></li>
 </dd></dl>
 
 <dl class="py property">
+<dt class="sig sig-object py" id="fwdpy11.ForwardDemesGraph.burnin_duration">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">burnin_duration</span></span><a class="headerlink" href="#fwdpy11.ForwardDemesGraph.burnin_duration" title="Permalink to this definition">#</a></dt>
+<dd><p>The length of the burning time.
+Equal to <cite>burnin_generation</cite> + 1.</p>
+</dd></dl>
+
+<dl class="py property">
 <dt class="sig sig-object py" id="fwdpy11.ForwardDemesGraph.deme_labels">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">deme_labels</span></span><a class="headerlink" href="#fwdpy11.ForwardDemesGraph.deme_labels" title="Permalink to this definition">#</a></dt>
 <dd><p>A dictionary mapping integer deme IDs to deme names
@@ -1898,6 +1851,17 @@ have those values rounded to the nearest integer.</p></li>
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">demes_at_final_generation</span></span><a class="headerlink" href="#fwdpy11.ForwardDemesGraph.demes_at_final_generation" title="Permalink to this definition">#</a></dt>
 <dd><p>List of integer ids of extant demes in the final generation
 of the demes graph.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="fwdpy11.ForwardDemesGraph.demes_graph">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">demes_graph</span></span><a class="headerlink" href="#fwdpy11.ForwardDemesGraph.demes_graph" title="Permalink to this definition">#</a></dt>
+<dd><p>Obtain the internal representation of the <a class="reference external" href="https://popsim-consortium.github.io/demes-docs/main/api.html#demes.Graph" title="(in Python)"><code class="xref py py-class docutils literal notranslate"><span class="pre">demes.Graph</span></code></a></p>
+<p>This object is not necessarily equivalent to the input graph:</p>
+<ul class="simple">
+<li><p>It is fully resolved.</p></li>
+<li><p>It has been rounded to discrete time and deme sizes.</p></li>
+</ul>
 </dd></dl>
 
 <dl class="py method">
@@ -1966,6 +1930,13 @@ be used as-is.</p></li>
 are the deme integer identifiers.</p>
 <p>This property is useful for setting up a
 <a class="reference internal" href="#fwdpy11.DiploidPopulation" title="fwdpy11.DiploidPopulation"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiploidPopulation</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="fwdpy11.ForwardDemesGraph.model_duration">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">model_duration</span></span><a class="headerlink" href="#fwdpy11.ForwardDemesGraph.model_duration" title="Permalink to this definition">#</a></dt>
+<dd><p>The duration of the model from time 0 until the
+most recent time point.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -2067,7 +2038,7 @@ A list of initial deme sizes is now accepted.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fwdpy11.DemographicModelDetails">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">DemographicModelDetails</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">citation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.DemographicModelDetails" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">DemographicModelDetails</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.DemographicModelDetails" title="Permalink to this definition">#</a></dt>
 <dd><p>Stores rich information about a demographic model.
 Instances of this class get returned by functions
 generating pre-calculated models.</p>
@@ -2135,7 +2106,7 @@ from time 0 (forwards in time).</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fwdpy11.DemographicModelCitation">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">DemographicModelCitation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DOI</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">full_citation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.DemographicModelCitation" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">DemographicModelCitation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.DemographicModelCitation" title="Permalink to this definition">#</a></dt>
 <dd><p>Citation information for a demographic model</p>
 <p>This class has the following attributes, whose names
 are also <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> for intitialization.  The attribute names

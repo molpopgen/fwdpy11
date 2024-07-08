@@ -234,7 +234,6 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="../pages/mvdes.html">Different effect sizes of mutations in different demes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../pages/tsoverview.html">Conceptual overview of tree sequence recording</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../pages/tstypes.html">Data structures related to tree sequences</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../pages/tablefs.html">Calculating frequency spectra from tree sequences</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../pages/recorders.html">Time series analysis</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Technical details</span></p>
@@ -517,7 +516,7 @@ The latter allows one to record “ancient samples” during a simulation, which
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Given that you can pass in any valid Python object, you can record anything you can imagine based on attributes of <a class="reference internal" href="../pages/types.html#fwdpy11.DiploidPopulation" title="fwdpy11.DiploidPopulation"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiploidPopulation</span></code></a>.
-Further, as many of those attributes can be viewed as <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a> or <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.recarray.html#numpy.recarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.recarray</span></code></a>, you may use any Python library compatible with those types.</p>
+Further, as many of those attributes can be viewed as <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a> or <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.recarray.html#numpy.recarray" title="(in NumPy v2.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.recarray</span></code></a>, you may use any Python library compatible with those types.</p>
 <p>You can also process the genealogy of the population.
 Doing so is an advanced topic, which we deal with in a later vignette.</p>
 </div>
@@ -560,12 +559,12 @@ We will implement a recorder to track the mean trait value and fitness of the en
 
 <span class="n">rng</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSLrng</span><span class="p">(</span><span class="mi">54321</span><span class="p">)</span>
 
-<span class="n">GSSmo</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSSmo</span><span class="p">(</span>
-    <span class="p">[</span>
-        <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Optimum</span><span class="p">(</span><span class="n">when</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">optimum</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">VS</span><span class="o">=</span><span class="mf">1.0</span><span class="p">),</span>
-        <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Optimum</span><span class="p">(</span><span class="n">when</span><span class="o">=</span><span class="n">pop</span><span class="o">.</span><span class="n">N</span> <span class="o">-</span> <span class="mi">200</span><span class="p">,</span> <span class="n">optimum</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">VS</span><span class="o">=</span><span class="mf">1.0</span><span class="p">),</span>
-    <span class="p">]</span>
-<span class="p">)</span>
+<span class="n">optima</span><span class="o">=</span> <span class="p">[</span>
+    <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Optimum</span><span class="p">(</span><span class="n">when</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">optimum</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">VS</span><span class="o">=</span><span class="mf">1.0</span><span class="p">),</span>
+    <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Optimum</span><span class="p">(</span><span class="n">when</span><span class="o">=</span><span class="n">pop</span><span class="o">.</span><span class="n">N</span> <span class="o">-</span> <span class="mi">200</span><span class="p">,</span> <span class="n">optimum</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">VS</span><span class="o">=</span><span class="mf">1.0</span><span class="p">),</span>
+<span class="p">]</span>
+
+<span class="n">GSS</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GaussianStabilizingSelection</span><span class="o">.</span><span class="n">single_trait</span><span class="p">(</span><span class="n">optima</span><span class="p">)</span>
 
 <span class="n">rho</span> <span class="o">=</span> <span class="mf">1000.</span>
 
@@ -574,7 +573,7 @@ We will implement a recorder to track the mean trait value and fitness of the en
 
 <span class="n">p</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;nregions&quot;</span><span class="p">:</span> <span class="p">[],</span>
-    <span class="s2">&quot;gvalue&quot;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Additive</span><span class="p">(</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">GSSmo</span><span class="p">),</span>
+    <span class="s2">&quot;gvalue&quot;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Additive</span><span class="p">(</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">GSS</span><span class="p">),</span>
     <span class="s2">&quot;sregions&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">des</span><span class="p">],</span>
     <span class="s2">&quot;recregions&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">PoissonInterval</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="n">rho</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">pop</span><span class="o">.</span><span class="n">N</span><span class="p">))],</span>
     <span class="s2">&quot;rates&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1e-3</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
@@ -612,7 +611,7 @@ We will implement a recorder to track the mean trait value and fitness of the en
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/8d6d22d958f9a9b87ce12244a93fa193672912972838d221860f4c6955f6af45.png" src="../_images/8d6d22d958f9a9b87ce12244a93fa193672912972838d221860f4c6955f6af45.png" />
+<img alt="../_images/878998b8c8b70c867ee29f9954dd42527b93d4fa0bfaa38f9216f34731b9ccda.png" src="../_images/878998b8c8b70c867ee29f9954dd42527b93d4fa0bfaa38f9216f34731b9ccda.png" />
 </div>
 </div>
 <section id="recording-ancient-samples">
@@ -647,7 +646,7 @@ Thus, we need to rebuild the <code class="docutils literal notranslate"><span cl
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pickle</span>
 <span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
 <span class="n">rng</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSLrng</span><span class="p">(</span><span class="mi">54321</span><span class="p">)</span>
-<span class="n">p</span><span class="p">[</span><span class="s1">&#39;gvalue&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Additive</span><span class="p">(</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">GSSmo</span><span class="p">)</span>
+<span class="n">p</span><span class="p">[</span><span class="s1">&#39;gvalue&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Additive</span><span class="p">(</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">GSS</span><span class="p">)</span>
 <span class="n">params</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="n">p</span><span class="p">)</span>
 <span class="n">recorder</span> <span class="o">=</span> <span class="n">RandomSamples</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
 <span class="n">fwdpy11</span><span class="o">.</span><span class="n">evolvets</span><span class="p">(</span><span class="n">rng</span><span class="p">,</span> <span class="n">pop</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">recorder</span><span class="o">=</span><span class="n">recorder</span><span class="p">,</span> <span class="n">simplification_interval</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span> 
@@ -691,7 +690,7 @@ Analyzing each time point separately is a common operation made easier by <a cla
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/0da165a462844935c75183d8f887255e044f58aa75ae3718cc238b06e6680fa0.png" src="../_images/0da165a462844935c75183d8f887255e044f58aa75ae3718cc238b06e6680fa0.png" />
+<img alt="../_images/a4cd08e0d31e156a1f5e362235716ae88f29ad95be43778da878cf3fa9086049.png" src="../_images/a4cd08e0d31e156a1f5e362235716ae88f29ad95be43778da878cf3fa9086049.png" />
 </div>
 </div>
 <section id="built-in-ancient-sample-recorders">

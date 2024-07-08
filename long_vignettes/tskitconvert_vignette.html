@@ -234,7 +234,6 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="../pages/mvdes.html">Different effect sizes of mutations in different demes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../pages/tsoverview.html">Conceptual overview of tree sequence recording</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../pages/tstypes.html">Data structures related to tree sequences</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../pages/tablefs.html">Calculating frequency spectra from tree sequences</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../pages/recorders.html">Time series analysis</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Technical details</span></p>
@@ -474,7 +473,6 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#populating-top-level-metadata">Populating top-level metadata</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-random-number-seeds">Adding random number seeds</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-modelparams-objects">Adding <code class="docutils literal notranslate"><span class="pre">ModelParams</span></code> objects</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#including-a-demes-graph">Including a <code class="docutils literal notranslate"><span class="pre">demes</span></code> graph</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#user-defined-metadata">User-defined metadata</a></li>
 </ul>
 </li>
@@ -655,36 +653,35 @@ You do not know the state of the <code class="docutils literal notranslate"><spa
 <span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
 <span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">ts</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">dump_tables_to_tskit</span><span class="p">(</span><span class="n">seed</span><span class="o">=-</span><span class="mi">4616</span><span class="p">)</span>
 
-<span class="nn">File ~/work/fwdpy11/fwdpy11/fwdpy11/_types/diploid_population.py:385,</span> in <span class="ni">DiploidPopulation.dump_tables_to_tskit</span><span class="nt">(self, model_params, demes_graph, population_metadata, data, seed, parameters, destructive)</span>
+<span class="nn">File ~/work/fwdpy11/fwdpy11/fwdpy11/_types/diploid_population.py:385,</span> in <span class="ni">DiploidPopulation.dump_tables_to_tskit</span><span class="nt">(self, model_params, population_metadata, data, seed, parameters, destructive)</span>
 <span class="g g-Whitespace">    </span><span class="mi">298</span> <span class="k">def</span> <span class="nf">dump_tables_to_tskit</span><span class="p">(</span>
 <span class="g g-Whitespace">    </span><span class="mi">299</span>     <span class="bp">self</span><span class="p">,</span>
 <span class="g g-Whitespace">    </span><span class="mi">300</span>     <span class="o">*</span><span class="p">,</span>
    <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">307</span>     <span class="n">destructive</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">308</span> <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">tskit</span><span class="o">.</span><span class="n">TreeSequence</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">309</span><span class="w">     </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="g g-Whitespace">    </span><span class="mi">310</span><span class="sd">     Dump the population&#39;s TableCollection into</span>
-<span class="g g-Whitespace">    </span><span class="mi">311</span><span class="sd">     an tskit TreeSequence</span>
+<span class="g g-Whitespace">    </span><span class="mi">306</span>     <span class="n">destructive</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">307</span> <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">tskit</span><span class="o">.</span><span class="n">TreeSequence</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">308</span><span class="w">     </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="g g-Whitespace">    </span><span class="mi">309</span><span class="sd">     Dump the population&#39;s TableCollection into</span>
+<span class="g g-Whitespace">    </span><span class="mi">310</span><span class="sd">     an tskit TreeSequence</span>
 <span class="sd">   (...)</span>
 <span class="g g-Whitespace">    </span><span class="mi">383</span><span class="sd"> </span>
 <span class="g g-Whitespace">    </span><span class="mi">384</span><span class="sd">     &quot;&quot;&quot;</span>
 <span class="ne">--&gt; </span><span class="mi">385</span>     <span class="k">return</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">tskit_tools</span><span class="o">.</span><span class="n">_dump_tables_to_tskit</span><span class="o">.</span><span class="n">_dump_tables_to_tskit</span><span class="p">(</span>
 <span class="g g-Whitespace">    </span><span class="mi">386</span>         <span class="bp">self</span><span class="p">,</span>
 <span class="g g-Whitespace">    </span><span class="mi">387</span>         <span class="n">model_params</span><span class="o">=</span><span class="n">model_params</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">388</span>         <span class="n">demes_graph</span><span class="o">=</span><span class="n">demes_graph</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">389</span>         <span class="n">population_metadata</span><span class="o">=</span><span class="n">population_metadata</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">390</span>         <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">391</span>         <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">392</span>         <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">393</span>         <span class="n">destructive</span><span class="o">=</span><span class="n">destructive</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">394</span>     <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">388</span>         <span class="n">population_metadata</span><span class="o">=</span><span class="n">population_metadata</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">389</span>         <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">390</span>         <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">391</span>         <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">392</span>         <span class="n">destructive</span><span class="o">=</span><span class="n">destructive</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">393</span>     <span class="p">)</span>
 
-<span class="nn">File ~/work/fwdpy11/fwdpy11/fwdpy11/tskit_tools/_dump_tables_to_tskit.py:198,</span> in <span class="ni">_dump_tables_to_tskit</span><span class="nt">(self, model_params, demes_graph, population_metadata, data, seed, parameters, destructive)</span>
-<span class="g g-Whitespace">    </span><span class="mi">196</span> <span class="k">if</span> <span class="n">seed</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">197</span>     <span class="k">if</span> <span class="n">seed</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">198</span>         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;seed must be &gt;=0, got </span><span class="si">{</span><span class="n">seed</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">199</span>     <span class="n">top_level_metadata</span><span class="p">[</span><span class="s2">&quot;seed&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">seed</span>
-<span class="g g-Whitespace">    </span><span class="mi">201</span> <span class="n">tc</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="n">top_level_metadata</span>
+<span class="nn">File ~/work/fwdpy11/fwdpy11/fwdpy11/tskit_tools/_dump_tables_to_tskit.py:183,</span> in <span class="ni">_dump_tables_to_tskit</span><span class="nt">(self, model_params, population_metadata, data, seed, parameters, destructive)</span>
+<span class="g g-Whitespace">    </span><span class="mi">181</span> <span class="k">if</span> <span class="n">seed</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">182</span>     <span class="k">if</span> <span class="n">seed</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">183</span>         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;seed must be &gt;=0, got </span><span class="si">{</span><span class="n">seed</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">184</span>     <span class="n">top_level_metadata</span><span class="p">[</span><span class="s2">&quot;seed&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">seed</span>
+<span class="g g-Whitespace">    </span><span class="mi">186</span> <span class="n">tc</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="n">top_level_metadata</span>
 
 <span class="ne">ValueError</span>: seed must be &gt;=0, got -4616
 </pre></div>
@@ -730,98 +727,38 @@ The examples listed below will work with types provided by <code class="docutils
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ts</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">dump_tables_to_tskit</span><span class="p">(</span><span class="n">model_params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span>
-<span class="k">assert</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="nb">eval</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;model_params&quot;</span><span class="p">]))</span> <span class="o">==</span> <span class="n">params</span>
+<span class="n">recovered_params</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="nb">eval</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;model_params&quot;</span><span class="p">]))</span> 
+<span class="k">assert</span> <span class="n">recovered_params</span> <span class="o">==</span> <span class="n">params</span>
 </pre></div>
 </div>
 </div>
 </div>
-</section>
-<section id="including-a-demes-graph">
-<h3>Including a <code class="docutils literal notranslate"><span class="pre">demes</span></code> graph<a class="headerlink" href="#including-a-demes-graph" title="Permalink to this heading">#</a></h3>
-<p>You may include a <a class="reference external" href="https://popsim-consortium.github.io/demes-docs/main/api.html#demes.Graph" title="(in Python)"><code class="xref py py-class docutils literal notranslate"><span class="pre">demes.Graph</span></code></a> in the top-level metadata.
-If you also include a <a class="reference internal" href="../pages/model_params.html#fwdpy11.ModelParams" title="fwdpy11.ModelParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.ModelParams</span></code></a> (see above), including the <code class="docutils literal notranslate"><span class="pre">demes</span></code> graph gives redundant information.
-However, including the graph may be useful if downstream analysis will involve other tools compatible with the <code class="docutils literal notranslate"><span class="pre">demes</span></code> specification.
-With the graph as metadata, you can extract it and reconstruct the original <code class="docutils literal notranslate"><span class="pre">YAML</span></code> file, or send it to another Python package that understands it.</p>
-<p>The following hidden code block defines a function to return a <a class="reference external" href="https://popsim-consortium.github.io/demes-docs/main/api.html#demes.Graph" title="(in Python)"><code class="xref py py-class docutils literal notranslate"><span class="pre">demes.Graph</span></code></a> from <code class="docutils literal notranslate"><span class="pre">YAML</span></code> input stored in a string literal.</p>
-<div class="cell tag_hide-input docutils container">
-<details class="hide above-input">
-<summary aria-label="Toggle hidden content">
-<span class="collapsed">Show code cell source</span>
-<span class="expanded">Hide code cell source</span>
-</summary>
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">gutenkunst</span><span class="p">():</span>
-    <span class="kn">import</span> <span class="nn">demes</span>
-    <span class="n">yaml</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">description: The Gutenkunst et al. (2009) OOA model.</span>
-<span class="s2">doi:</span>
-<span class="s2">- https://doi.org/10.1371/journal.pgen.1000695</span>
-<span class="s2">time_units: years</span>
-<span class="s2">generation_time: 25</span>
-
-<span class="s2">demes:</span>
-<span class="s2">- name: ancestral</span>
-<span class="s2">  description: Equilibrium/root population</span>
-<span class="s2">  epochs:</span>
-<span class="s2">  - {end_time: 220e3, start_size: 7300}</span>
-<span class="s2">- name: AMH</span>
-<span class="s2">  description: Anatomically modern humans</span>
-<span class="s2">  ancestors: [ancestral]</span>
-<span class="s2">  epochs:</span>
-<span class="s2">  - {end_time: 140e3, start_size: 12300}</span>
-<span class="s2">- name: OOA</span>
-<span class="s2">  description: Bottleneck out-of-Africa population</span>
-<span class="s2">  ancestors: [AMH]</span>
-<span class="s2">  epochs:</span>
-<span class="s2">  - {end_time: 21.2e3, start_size: 2100}</span>
-<span class="s2">- name: YRI</span>
-<span class="s2">  description: Yoruba in Ibadan, Nigeria</span>
-<span class="s2">  ancestors: [AMH]</span>
-<span class="s2">  epochs:</span>
-<span class="s2">  - start_size: 12300</span>
-<span class="s2">- name: CEU</span>
-<span class="s2">  description: Utah Residents (CEPH) with Northern and Western European Ancestry</span>
-<span class="s2">  ancestors: [OOA]</span>
-<span class="s2">  epochs:</span>
-<span class="s2">  - {start_size: 1000, end_size: 29725}</span>
-<span class="s2">- name: CHB</span>
-<span class="s2">  description: Han Chinese in Beijing, China</span>
-<span class="s2">  ancestors: [OOA]</span>
-<span class="s2">  epochs:</span>
-<span class="s2">  - {start_size: 510, end_size: 54090}</span>
-
-<span class="s2">migrations:</span>
-<span class="s2">- {demes: [YRI, OOA], rate: 25e-5}</span>
-<span class="s2">- {demes: [YRI, CEU], rate: 3e-5}</span>
-<span class="s2">- {demes: [YRI, CHB], rate: 1.9e-5}</span>
-<span class="s2">- {demes: [CEU, CHB], rate: 9.6e-5}</span>
-<span class="s2">&quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">demes</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">yaml</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</details>
-</div>
+<p>Note that we can recover our demographic model from the restored parameters:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">graph</span> <span class="o">=</span> <span class="n">gutenkunst</span><span class="p">()</span>
-<span class="n">ts</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">dump_tables_to_tskit</span><span class="p">(</span><span class="n">demes_graph</span><span class="o">=</span><span class="n">graph</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">recovered_params</span><span class="o">.</span><span class="n">demography</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>fwdpy11.ForwardDemesGraph(yaml=&#39;time_units: generations\ngeneration_time: 1\ndemes:\n- name: deme0\n  epochs:\n  - {end_time: 0, start_size: 1000}\n&#39;, burnin=1, burnin_is_exact=False, round_non_integer_sizes=False)
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">assert</span> <span class="n">demes</span><span class="o">.</span><span class="n">Graph</span><span class="o">.</span><span class="n">fromdict</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;demes_graph&quot;</span><span class="p">])</span> <span class="o">==</span> <span class="n">graph</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">recovered_params</span><span class="o">.</span><span class="n">demography</span><span class="o">.</span><span class="n">demes_graph</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-</div>
-<p>Since this is an optional metadata field, accessing it will return <code class="docutils literal notranslate"><span class="pre">None</span></code> if no graph was provided:</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ts</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">dump_tables_to_tskit</span><span class="p">()</span>
-<span class="k">assert</span> <span class="s2">&quot;demes_graph&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ts</span><span class="o">.</span><span class="n">metadata</span>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>time_units: generations
+generation_time: 1.0
+demes:
+- name: deme0
+  epochs:
+  - {end_time: 0.0, start_size: 1000.0}
 </pre></div>
 </div>
 </div>
@@ -879,104 +816,107 @@ Further, if the data are very large, then other output formats are likely more a
 </section>
 <section id="setting-population-table-metadata">
 <h2>Setting population table metadata<a class="headerlink" href="#setting-population-table-metadata" title="Permalink to this heading">#</a></h2>
-<p>You can also set the population table metadata when exporting data.
-Doing so requires a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> mapping the integer label for each population to another <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>.</p>
-<p>For example, let’s create an demographic model from the <code class="docutils literal notranslate"><span class="pre">demes</span></code> graph that used above:</p>
-<div class="cell docutils container">
+<p>This example involves simulating a multi-deme model.</p>
+<div class="cell tag_hide-input docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">discrete_demography</span><span class="o">.</span><span class="n">from_demes</span><span class="p">(</span><span class="n">gutenkunst</span><span class="p">())</span>
-<span class="nb">type</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>fwdpy11._types.demographic_model_details.DemographicModelDetails
-</pre></div>
-</div>
-</div>
-</div>
-<p>This object contains a mapping from integer labels to the deme names:</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;deme_labels&#39;</span><span class="p">]</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{0: &#39;ancestral&#39;, 1: &#39;AMH&#39;, 2: &#39;OOA&#39;, 3: &#39;YRI&#39;, 4: &#39;CEU&#39;, 5: &#39;CHB&#39;}
-</pre></div>
-</div>
-</div>
-</div>
-<p>We can make the required <code class="docutils literal notranslate"><span class="pre">dict</span></code> like this:</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pop_md</span> <span class="o">=</span> <span class="p">{}</span>
-<span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;deme_labels&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-    <span class="n">pop_md</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">value</span><span class="p">}</span>
-</pre></div>
-</div>
-</div>
-</div>
-<p>To actually illustrate the use of this metadata, we need to make sure that our <code class="docutils literal notranslate"><span class="pre">tskit</span></code> output actually has a population table:</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># initialize a population with the right number of demes...</span>
-<span class="n">multideme_pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">([</span><span class="mi">100</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">pop_md</span><span class="p">),</span> <span class="mf">1.</span><span class="p">)</span>
-<span class="n">ts</span> <span class="o">=</span> <span class="n">multideme_pop</span><span class="o">.</span><span class="n">dump_tables_to_tskit</span><span class="p">(</span><span class="n">population_metadata</span><span class="o">=</span><span class="n">pop_md</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">pop</span> <span class="ow">in</span> <span class="n">ts</span><span class="o">.</span><span class="n">populations</span><span class="p">():</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">metadata</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;name&#39;: &#39;ancestral&#39;}
-{&#39;name&#39;: &#39;AMH&#39;}
-{&#39;name&#39;: &#39;OOA&#39;}
-{&#39;name&#39;: &#39;YRI&#39;}
-{&#39;name&#39;: &#39;CEU&#39;}
-{&#39;name&#39;: &#39;CHB&#39;}
-</pre></div>
-</div>
-</div>
-</div>
-<p>We could also easily add the deme description to the metadata from the <code class="docutils literal notranslate"><span class="pre">demes</span></code> graph:</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">graph</span> <span class="o">=</span> <span class="n">gutenkunst</span><span class="p">()</span>
-<span class="n">graph</span><span class="o">.</span><span class="n">demes</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[Deme(name=&#39;ancestral&#39;, description=&#39;Equilibrium/root population&#39;, start_time=inf, ancestors=[], proportions=[], epochs=[Epoch(start_time=inf, end_time=220000.0, start_size=7300, end_size=7300, size_function=&#39;constant&#39;, selfing_rate=0, cloning_rate=0)]),
- Deme(name=&#39;AMH&#39;, description=&#39;Anatomically modern humans&#39;, start_time=220000.0, ancestors=[&#39;ancestral&#39;], proportions=[1.0], epochs=[Epoch(start_time=220000.0, end_time=140000.0, start_size=12300, end_size=12300, size_function=&#39;constant&#39;, selfing_rate=0, cloning_rate=0)]),
- Deme(name=&#39;OOA&#39;, description=&#39;Bottleneck out-of-Africa population&#39;, start_time=140000.0, ancestors=[&#39;AMH&#39;], proportions=[1.0], epochs=[Epoch(start_time=140000.0, end_time=21200.0, start_size=2100, end_size=2100, size_function=&#39;constant&#39;, selfing_rate=0, cloning_rate=0)]),
- Deme(name=&#39;YRI&#39;, description=&#39;Yoruba in Ibadan, Nigeria&#39;, start_time=140000.0, ancestors=[&#39;AMH&#39;], proportions=[1.0], epochs=[Epoch(start_time=140000.0, end_time=0, start_size=12300, end_size=12300, size_function=&#39;constant&#39;, selfing_rate=0, cloning_rate=0)]),
- Deme(name=&#39;CEU&#39;, description=&#39;Utah Residents (CEPH) with Northern and Western European Ancestry&#39;, start_time=21200.0, ancestors=[&#39;OOA&#39;], proportions=[1.0], epochs=[Epoch(start_time=21200.0, end_time=0, start_size=1000, end_size=29725, size_function=&#39;exponential&#39;, selfing_rate=0, cloning_rate=0)]),
- Deme(name=&#39;CHB&#39;, description=&#39;Han Chinese in Beijing, China&#39;, start_time=21200.0, ancestors=[&#39;OOA&#39;], proportions=[1.0], epochs=[Epoch(start_time=21200.0, end_time=0, start_size=510, end_size=54090, size_function=&#39;exponential&#39;, selfing_rate=0, cloning_rate=0)])]
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pop_md</span> <span class="o">=</span> <span class="p">{}</span>
-<span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">deme</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">demes</span><span class="p">):</span>
-    <span class="n">pop_md</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">deme</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="n">deme</span><span class="o">.</span><span class="n">description</span><span class="p">}</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example 07 from the demes tutorial</span>
+<span class="n">yaml</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">time_units: generations</span>
+<span class="s2">demes:</span>
+<span class="s2">  - name: X</span>
+<span class="s2">    epochs:</span>
+<span class="s2">      - end_time: 1000</span>
+<span class="s2">        start_size: 2000</span>
+<span class="s2">  - name: A</span>
+<span class="s2">    ancestors:</span>
+<span class="s2">      - X</span>
+<span class="s2">    epochs:</span>
+<span class="s2">      - start_size: 2000</span>
+<span class="s2">  - name: B</span>
+<span class="s2">    ancestors:</span>
+<span class="s2">      - X</span>
+<span class="s2">    epochs:</span>
+<span class="s2">      - start_size: 2000</span>
+<span class="s2">&quot;&quot;&quot;</span>
+<span class="n">demography</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ForwardDemesGraph</span><span class="o">.</span><span class="n">from_demes</span><span class="p">(</span>
+    <span class="n">yaml</span><span class="p">,</span>
+    <span class="n">burnin</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+    <span class="n">burnin_is_exact</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">Opt</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Optimum</span>
+<span class="n">GSSmo_ancestor</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GaussianStabilizingSelection</span><span class="o">.</span><span class="n">single_trait</span><span class="p">(</span>
+    <span class="p">[</span><span class="n">Opt</span><span class="p">(</span><span class="n">when</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">optimum</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">VS</span><span class="o">=</span><span class="mf">1.0</span><span class="p">),</span> <span class="n">Opt</span><span class="p">(</span><span class="n">when</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">optimum</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">VS</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)]</span>
+<span class="p">)</span>
+<span class="n">gvalue_ancestor</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Additive</span><span class="p">(</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">GSSmo_ancestor</span><span class="p">)</span>
+<span class="n">GSSmo_daughter_1</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GaussianStabilizingSelection</span><span class="o">.</span><span class="n">single_trait</span><span class="p">(</span>
+    <span class="p">[</span><span class="n">Opt</span><span class="p">(</span><span class="n">when</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">optimum</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">VS</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)]</span>
+<span class="p">)</span>
+<span class="n">gvalue_daughter_1</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Additive</span><span class="p">(</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">GSSmo_daughter_1</span><span class="p">)</span>
 
-<span class="n">pop_md</span>
+<span class="n">GSSmo_daughter_2</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GaussianStabilizingSelection</span><span class="o">.</span><span class="n">single_trait</span><span class="p">(</span>
+    <span class="p">[</span><span class="n">Opt</span><span class="p">(</span><span class="n">when</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">optimum</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">VS</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)]</span>
+<span class="p">)</span>
+<span class="n">gvalue_daughter_2</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Additive</span><span class="p">(</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">GSSmo_daughter_2</span><span class="p">)</span>
+<span class="n">p</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;nregions&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="s2">&quot;sregions&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">GaussianS</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">)],</span>
+    <span class="s2">&quot;recregions&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">PoissonInterval</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">1e-3</span><span class="p">)],</span>
+    <span class="s2">&quot;rates&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.025</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="s2">&quot;gvalue&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">gvalue_ancestor</span><span class="p">,</span> <span class="n">gvalue_daughter_1</span><span class="p">,</span> <span class="n">gvalue_daughter_2</span><span class="p">],</span>
+    <span class="s2">&quot;prune_selected&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="s2">&quot;demography&quot;</span><span class="p">:</span> <span class="n">demography</span><span class="p">,</span>
+    <span class="s2">&quot;simlen&quot;</span><span class="p">:</span> <span class="n">demography</span><span class="o">.</span><span class="n">final_generation</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="n">rng</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSLrng</span><span class="p">(</span><span class="mi">12351235</span><span class="p">)</span>
+<span class="n">params</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="n">p</span><span class="p">)</span>
+<span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">(</span><span class="n">demography</span><span class="o">.</span><span class="n">initial_sizes</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="n">fwdpy11</span><span class="o">.</span><span class="n">evolvets</span><span class="p">(</span><span class="n">rng</span><span class="p">,</span> <span class="n">pop</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">simplification_interval</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</details>
+</div>
+<p>By default, deme names are placed in the metadata:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ts</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">dump_tables_to_tskit</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">ts</span><span class="o">.</span><span class="n">populations</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">metadata</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{0: {&#39;name&#39;: &#39;ancestral&#39;, &#39;description&#39;: &#39;Equilibrium/root population&#39;},
- 1: {&#39;name&#39;: &#39;AMH&#39;, &#39;description&#39;: &#39;Anatomically modern humans&#39;},
- 2: {&#39;name&#39;: &#39;OOA&#39;, &#39;description&#39;: &#39;Bottleneck out-of-Africa population&#39;},
- 3: {&#39;name&#39;: &#39;YRI&#39;, &#39;description&#39;: &#39;Yoruba in Ibadan, Nigeria&#39;},
- 4: {&#39;name&#39;: &#39;CEU&#39;,
-  &#39;description&#39;: &#39;Utah Residents (CEPH) with Northern and Western European Ancestry&#39;},
- 5: {&#39;name&#39;: &#39;CHB&#39;, &#39;description&#39;: &#39;Han Chinese in Beijing, China&#39;}}
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;name&#39;: &#39;deme0&#39;}
+{&#39;name&#39;: &#39;deme1&#39;}
+{&#39;name&#39;: &#39;deme2&#39;}
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can override this behavior by providing a dictionary
+mapping a deme’s integer id (index) to data.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">md</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">deme</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">demography</span><span class="o">.</span><span class="n">demes_graph</span><span class="o">.</span><span class="n">demes</span><span class="p">):</span>
+    <span class="n">md</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">deme</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s1">&#39;end_time&#39;</span><span class="p">:</span> <span class="n">deme</span><span class="o">.</span><span class="n">end_time</span><span class="p">}</span>
+<span class="n">ts</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">dump_tables_to_tskit</span><span class="p">(</span><span class="n">population_metadata</span><span class="o">=</span><span class="n">md</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">ts</span><span class="o">.</span><span class="n">populations</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">metadata</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;end_time&#39;: 1000.0, &#39;name&#39;: &#39;X&#39;}
+{&#39;end_time&#39;: 0.0, &#39;name&#39;: &#39;A&#39;}
+{&#39;end_time&#39;: 0.0, &#39;name&#39;: &#39;B&#39;}
 </pre></div>
 </div>
 </div>
@@ -1053,7 +993,6 @@ Doing so requires a <a class="reference external" href="https://docs.python.org/
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#populating-top-level-metadata">Populating top-level metadata</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-random-number-seeds">Adding random number seeds</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-modelparams-objects">Adding <code class="docutils literal notranslate"><span class="pre">ModelParams</span></code> objects</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#including-a-demes-graph">Including a <code class="docutils literal notranslate"><span class="pre">demes</span></code> graph</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#user-defined-metadata">User-defined metadata</a></li>
 </ul>
 </li>

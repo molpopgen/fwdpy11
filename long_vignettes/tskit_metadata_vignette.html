@@ -234,7 +234,6 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="../pages/mvdes.html">Different effect sizes of mutations in different demes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../pages/tsoverview.html">Conceptual overview of tree sequence recording</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../pages/tstypes.html">Data structures related to tree sequences</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../pages/tablefs.html">Calculating frequency spectra from tree sequences</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../pages/recorders.html">Time series analysis</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Technical details</span></p>
@@ -538,7 +537,7 @@ We will simulate the following demographic model:</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/3f7f47875eff5ccc94c72e6dbd5ed8f2256d72a54db21e5649bdef2fc1373ea4.png" src="../_images/3f7f47875eff5ccc94c72e6dbd5ed8f2256d72a54db21e5649bdef2fc1373ea4.png" />
+<img alt="../_images/344c2c52e54dda79a5d1572fac5d1d5398380c6333705884a03464bfdfe84c19.png" src="../_images/344c2c52e54dda79a5d1572fac5d1d5398380c6333705884a03464bfdfe84c19.png" />
 </div>
 </div>
 <p>(<code class="docutils literal notranslate"><span class="pre">graph</span></code> is a <a class="reference external" href="https://popsim-consortium.github.io/demes-docs/main/api.html#demes.Graph" title="(in Python)"><code class="xref py py-class docutils literal notranslate"><span class="pre">demes.Graph</span></code></a>.)</p>
@@ -609,7 +608,7 @@ Our solution is to use off-diagonal values very very close to 1:</p>
 We will generate the model from a <a class="reference external" href="https://popsim-consortium.github.io/demes-docs/main/api.html#demes.Graph" title="(in Python)"><code class="xref py py-class docutils literal notranslate"><span class="pre">demes.Graph</span></code></a>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">demog</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">discrete_demography</span><span class="o">.</span><span class="n">from_demes</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">burnin</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">demog</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ForwardDemesGraph</span><span class="o">.</span><span class="n">from_demes</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">burnin</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -624,7 +623,7 @@ We will generate the model from a <a class="reference external" href="https://po
     <span class="s1">&#39;rates&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1e-3</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
     <span class="s1">&#39;gvalue&#39;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Multiplicative</span><span class="p">(</span><span class="n">ndemes</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">scaling</span><span class="o">=</span><span class="mf">2.0</span><span class="p">),</span>
     <span class="s1">&#39;demography&#39;</span><span class="p">:</span> <span class="n">demog</span><span class="p">,</span>
-    <span class="s1">&#39;simlen&#39;</span><span class="p">:</span> <span class="n">demog</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;total_simulation_length&#39;</span><span class="p">],</span>
+    <span class="s1">&#39;simlen&#39;</span><span class="p">:</span> <span class="n">demog</span><span class="o">.</span><span class="n">model_duration</span><span class="p">,</span>
     <span class="p">}</span>
 
 <span class="n">params</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="n">pdict</span><span class="p">)</span>
@@ -653,11 +652,11 @@ We will generate the model from a <a class="reference external" href="https://po
 <span class="n">rng</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSLrng</span><span class="p">(</span><span class="mi">54321</span><span class="p">)</span>
 
 <span class="n">fwdpy11</span><span class="o">.</span><span class="n">evolvets</span><span class="p">(</span><span class="n">rng</span><span class="p">,</span> <span class="n">pop</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span>
-                 <span class="n">recorder</span><span class="o">=</span><span class="n">Recorder</span><span class="p">(</span><span class="n">when</span><span class="o">=</span><span class="n">demog</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;burnin_time&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
+                 <span class="n">recorder</span><span class="o">=</span><span class="n">Recorder</span><span class="p">(</span><span class="n">when</span><span class="o">=</span><span class="n">demog</span><span class="o">.</span><span class="n">burnin_duration</span><span class="p">),</span>
                  <span class="n">simplification_interval</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
                  <span class="n">suppress_table_indexing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-<span class="n">ts</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">dump_tables_to_tskit</span><span class="p">(</span><span class="n">demes_graph</span><span class="o">=</span><span class="n">graph</span><span class="p">)</span>
+<span class="n">ts</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">dump_tables_to_tskit</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>

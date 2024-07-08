@@ -234,7 +234,6 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="../pages/mvdes.html">Different effect sizes of mutations in different demes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../pages/tsoverview.html">Conceptual overview of tree sequence recording</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../pages/tstypes.html">Data structures related to tree sequences</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../pages/tablefs.html">Calculating frequency spectra from tree sequences</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../pages/recorders.html">Time series analysis</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Technical details</span></p>
@@ -505,6 +504,7 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#docstrings-in-c-code">Docstrings in C++ code</a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deprecating-python-features">Deprecating Python features</a></li>
 </ul>
             </nav>
         </div>
@@ -843,6 +843,48 @@ Then, the Python classes contain the docstrings.</p>
 <p>Although this is a bit more work, it provides better support for tools like <code class="docutils literal notranslate"><span class="pre">mypy</span></code>, <code class="docutils literal notranslate"><span class="pre">jedi</span></code>, etc..</p>
 </section>
 </section>
+<section id="deprecating-python-features">
+<h2>Deprecating Python features<a class="headerlink" href="#deprecating-python-features" title="Permalink to this heading">#</a></h2>
+<p>When deprecating something, we want to:</p>
+<ol class="arabic simple">
+<li><p>Stop testing it</p></li>
+<li><p>Stop documenting it</p></li>
+<li><p>Remove all examples of its use</p></li>
+</ol>
+<p>In theory, doing this is simple.
+We can just run python with <code class="docutils literal notranslate"><span class="pre">-We</span></code> and the deprecation warnings will become errors.
+However, this does not work well in the manual.</p>
+<p>To address this problem, we take a two part approach when deprecating.
+Consider the following class:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Foo</span><span class="p">:</span>
+    <span class="n">x</span><span class="p">:</span> <span class="nb">int</span>
+</pre></div>
+</div>
+<p>To deprecate it:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">deprecated</span> <span class="kn">import</span> <span class="n">deprecated</span>
+
+<span class="c1"># This is our DeprecationWarning.</span>
+<span class="c1"># The Python test suite will now fail.</span>
+<span class="nd">@deprecated</span><span class="p">(</span><span class="n">reason</span><span class="o">=</span><span class="s2">&quot;a good one&quot;</span><span class="p">)</span>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Foo</span><span class="p">:</span>
+    <span class="n">x</span><span class="p">:</span> <span class="nb">int</span>
+
+    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># For cases like our manual,</span>
+        <span class="c1"># we simply terminate execution</span>
+        <span class="c1"># whenever this type is instantiated</span>
+        <span class="k">assert</span> <span class="kc">False</span>
+</pre></div>
+</div>
+<p>Our approach involves:</p>
+<ul class="simple">
+<li><p>A warning and a hard error at the point of deprecation</p></li>
+<li><p>Update all tests, docs, etc., to stop using this type.</p></li>
+<li><p>When the previous step passes, remove the <code class="docutils literal notranslate"><span class="pre">assert</span> <span class="pre">False</span></code></p></li>
+</ul>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -945,6 +987,7 @@ Then, the Python classes contain the docstrings.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#docstrings-in-c-code">Docstrings in C++ code</a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deprecating-python-features">Deprecating Python features</a></li>
 </ul>
   </nav></div>
 

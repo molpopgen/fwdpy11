@@ -234,7 +234,6 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="../pages/mvdes.html">Different effect sizes of mutations in different demes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../pages/tsoverview.html">Conceptual overview of tree sequence recording</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../pages/tstypes.html">Data structures related to tree sequences</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../pages/tablefs.html">Calculating frequency spectra from tree sequences</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../pages/recorders.html">Time series analysis</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Technical details</span></p>
@@ -519,18 +518,18 @@ See <a class="reference internal" href="des_vignette.html#des-vignette"><span cl
 
 <span class="n">rng</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSLrng</span><span class="p">(</span><span class="mi">54321</span><span class="p">)</span>
 
-<span class="n">GSSmo</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSSmo</span><span class="p">(</span>
-    <span class="p">[</span>
-        <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Optimum</span><span class="p">(</span><span class="n">when</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">optimum</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">VS</span><span class="o">=</span><span class="mf">1.0</span><span class="p">),</span>
-        <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Optimum</span><span class="p">(</span><span class="n">when</span><span class="o">=</span><span class="mi">10</span> <span class="o">*</span> <span class="n">pop</span><span class="o">.</span><span class="n">N</span> <span class="o">-</span> <span class="mi">200</span><span class="p">,</span> <span class="n">optimum</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">VS</span><span class="o">=</span><span class="mf">1.0</span><span class="p">),</span>
-    <span class="p">]</span>
-<span class="p">)</span>
+<span class="n">optima</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Optimum</span><span class="p">(</span><span class="n">when</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">optimum</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">VS</span><span class="o">=</span><span class="mf">1.0</span><span class="p">),</span>
+    <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Optimum</span><span class="p">(</span><span class="n">when</span><span class="o">=</span><span class="mi">10</span> <span class="o">*</span> <span class="n">pop</span><span class="o">.</span><span class="n">N</span> <span class="o">-</span> <span class="mi">200</span><span class="p">,</span> <span class="n">optimum</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">VS</span><span class="o">=</span><span class="mf">1.0</span><span class="p">),</span>
+<span class="p">]</span>
+
+<span class="n">GSS</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GaussianStabilizingSelection</span><span class="o">.</span><span class="n">single_trait</span><span class="p">(</span><span class="n">optima</span><span class="p">)</span>
 
 <span class="n">rho</span> <span class="o">=</span> <span class="mf">1000.</span>
 
 <span class="n">p</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;nregions&quot;</span><span class="p">:</span> <span class="p">[],</span>
-    <span class="s2">&quot;gvalue&quot;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Additive</span><span class="p">(</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">GSSmo</span><span class="p">),</span>
+    <span class="s2">&quot;gvalue&quot;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Additive</span><span class="p">(</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">GSS</span><span class="p">),</span>
     <span class="s2">&quot;sregions&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">des</span><span class="p">],</span>
     <span class="s2">&quot;recregions&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">PoissonInterval</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="n">rho</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">pop</span><span class="o">.</span><span class="n">N</span><span class="p">))],</span>
     <span class="s2">&quot;rates&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1e-3</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
@@ -567,7 +566,7 @@ See <a class="reference internal" href="des_vignette.html#des-vignette"><span cl
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="../_images/cb4561e8b6946f4176744f302261ea23d687500a2b01c9589521d187f744f511.png" src="../_images/cb4561e8b6946f4176744f302261ea23d687500a2b01c9589521d187f744f511.png" />
+<img alt="../_images/dc267d21a52baa64110f2b7097ccebb3d3ff309504f8412781cf511f477df083.png" src="../_images/dc267d21a52baa64110f2b7097ccebb3d3ff309504f8412781cf511f477df083.png" />
 </div>
 </div>
 </section>

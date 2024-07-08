@@ -234,7 +234,6 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="../pages/mvdes.html">Different effect sizes of mutations in different demes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../pages/tsoverview.html">Conceptual overview of tree sequence recording</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../pages/tstypes.html">Data structures related to tree sequences</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../pages/tablefs.html">Calculating frequency spectra from tree sequences</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../pages/recorders.html">Time series analysis</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Technical details</span></p>
@@ -982,7 +981,8 @@ respectively, which hold references to objects from the simulation:</p>
 <span class="w">                                              </span><span class="s">&quot;invalid object state&quot;</span><span class="p">);</span>
 <span class="w">                                      </span><span class="p">}</span>
 <span class="w">                                  </span><span class="k">return</span><span class="w"> </span><span class="n">additive</span><span class="p">();</span>
-<span class="w">                              </span><span class="p">}));</span>
+<span class="w">                              </span><span class="p">}))</span>
+<span class="w">        </span><span class="p">.</span><span class="n">def</span><span class="p">(</span><span class="s">&quot;validate_timings&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">[](</span><span class="k">const</span><span class="w"> </span><span class="n">additive</span><span class="o">&amp;</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="n">pybind11</span><span class="o">::</span><span class="n">object</span><span class="p">)</span><span class="w"> </span><span class="p">{});</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -1102,7 +1102,8 @@ respectively, which hold references to objects from the simulation:</p>
 <span class="w">        </span><span class="p">.</span><span class="n">def</span><span class="p">(</span><span class="n">py</span><span class="o">::</span><span class="n">init</span><span class="o">&lt;</span><span class="kt">double</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="o">&gt;</span><span class="p">(),</span><span class="w"> </span><span class="n">py</span><span class="o">::</span><span class="n">arg</span><span class="p">(</span><span class="s">&quot;b1&quot;</span><span class="p">),</span>
 <span class="w">             </span><span class="n">py</span><span class="o">::</span><span class="n">arg</span><span class="p">(</span><span class="s">&quot;b2&quot;</span><span class="p">),</span><span class="w"> </span><span class="n">py</span><span class="o">::</span><span class="n">arg</span><span class="p">(</span><span class="s">&quot;c1&quot;</span><span class="p">),</span><span class="w"> </span><span class="n">py</span><span class="o">::</span><span class="n">arg</span><span class="p">(</span><span class="s">&quot;c2&quot;</span><span class="p">),</span><span class="w"> </span><span class="n">py</span><span class="o">::</span><span class="n">arg</span><span class="p">(</span><span class="s">&quot;slope&quot;</span><span class="p">),</span>
 <span class="w">             </span><span class="n">py</span><span class="o">::</span><span class="n">arg</span><span class="p">(</span><span class="s">&quot;p0&quot;</span><span class="p">))</span>
-<span class="w">        </span><span class="p">.</span><span class="n">def_readwrite</span><span class="p">(</span><span class="s">&quot;phenotypes&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">snowdrift</span><span class="o">::</span><span class="n">phenotypes</span><span class="p">);</span>
+<span class="w">        </span><span class="p">.</span><span class="n">def_readwrite</span><span class="p">(</span><span class="s">&quot;phenotypes&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">snowdrift</span><span class="o">::</span><span class="n">phenotypes</span><span class="p">)</span>
+<span class="w">        </span><span class="p">.</span><span class="n">def</span><span class="p">(</span><span class="s">&quot;validate_timings&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">[](</span><span class="k">const</span><span class="w"> </span><span class="n">snowdrift</span><span class="w"> </span><span class="o">&amp;</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="n">pybind11</span><span class="o">::</span><span class="n">object</span><span class="p">)</span><span class="w"> </span><span class="p">{});</span>
 <span class="p">}</span>
 </pre></div>
 </div>

@@ -234,7 +234,6 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="mvdes.html">Different effect sizes of mutations in different demes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tsoverview.html">Conceptual overview of tree sequence recording</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tstypes.html">Data structures related to tree sequences</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tablefs.html">Calculating frequency spectra from tree sequences</a></li>
 <li class="toctree-l1"><a class="reference internal" href="recorders.html">Time series analysis</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Technical details</span></p>
@@ -491,51 +490,6 @@ document.write(`
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="fwdpy11.simplify">
-<span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">simplify</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pop</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">samples</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.simplify" title="Permalink to this definition">#</a></dt>
-<dd><p>Simplify a TableCollection stored in a Population.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>pop</strong> – A <a class="reference internal" href="types.html#fwdpy11.DiploidPopulation" title="fwdpy11.DiploidPopulation"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiploidPopulation</span></code></a></p></li>
-<li><p><strong>samples</strong> – A list of samples (node indexes).</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The simplified tables and array mapping input sample
-IDs to output IDS</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)">tuple</a></p>
-</dd>
-</dl>
-<p>Note that the samples argument is agnostic with respect to the time of
-the nodes in the input tables. Thus, you may do things like simplify
-to a set of “currently-alive” nodes plus some or all ancient samples by
-including some node IDs from
-<a class="reference internal" href="types.html#fwdpy11.DiploidPopulation.ancient_sample_metadata" title="fwdpy11.DiploidPopulation.ancient_sample_metadata"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.DiploidPopulation.ancient_sample_metadata</span></code></a>.</p>
-<p>If the input contains ancient samples,
-and you wish to include them in the output,
-then you need to include their IDs in the samples argument.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Due to node ID remapping, the metadata corresponding
-to nodes becomes a bit more difficult to look up.
-You need to use the output ID map, the original IDs, and
-the population’s metadata containers.</p>
-</div>
-<div class="deprecated">
-<p><span class="versionmodified deprecated">Deprecated since version 0.3.0: </span>Prefer <a class="reference internal" href="#fwdpy11.simplify_tables" title="fwdpy11.simplify_tables"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.simplify_tables()</span></code></a></p>
-</div>
-<div class="versionchanged">
-<p><span class="versionmodified changed">Changed in version 0.3.0: </span>Ancient samples are no longer kept by default</p>
-</div>
-<div class="versionchanged">
-<p><span class="versionmodified changed">Changed in version 0.5.0: </span>No longer requires a <a class="reference internal" href="types.html#fwdpy11.MutationVector" title="fwdpy11.MutationVector"><code class="xref py py-class docutils literal notranslate"><span class="pre">MutationVector</span></code></a> argument.</p>
-</div>
-</dd></dl>
-
-<dl class="py function">
 <dt class="sig sig-object py" id="fwdpy11.simplify_tables">
 <span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">simplify_tables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tables</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">samples</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.simplify_tables" title="Permalink to this definition">#</a></dt>
 <dd><p>Simplify a TableCollection.</p>
@@ -617,7 +571,7 @@ Added <code class="docutils literal notranslate"><span class="pre">check_demogra
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>tables</strong> (<a class="reference internal" href="types.html#fwdpy11.TableCollection" title="fwdpy11.TableCollection"><em>fwdpy11.TableCollection</em></a>) – A TableCollection</p></li>
-<li><p><strong>samples</strong> (list or <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – A list of sample nodes</p></li>
+<li><p><strong>samples</strong> (list or <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – A list of sample nodes</p></li>
 <li><p><strong>record_neutral</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – (True) If True, generate data for neutral variants</p></li>
 <li><p><strong>record_selected</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – (True) If True, generate data for selected variants</p></li>
 <li><p><strong>include_selected</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – (False) Whether to include variants fixed in the sample</p></li>
@@ -637,32 +591,6 @@ Added <code class="docutils literal notranslate"><span class="pre">check_demogra
 </div>
 <div class="versionchanged">
 <p><span class="versionmodified changed">Changed in version 0.5.0: </span>No longer requires <a class="reference internal" href="types.html#fwdpy11.MutationVector" title="fwdpy11.MutationVector"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.MutationVector</span></code></a> argument</p>
-</div>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fwdpy11.discrete_demography.from_demes">
-<span class="sig-prename descclassname"><span class="pre">fwdpy11.discrete_demography.</span></span><span class="sig-name descname"><span class="pre">from_demes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">burnin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">round_non_integer_sizes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.discrete_demography.from_demes" title="Permalink to this definition">#</a></dt>
-<dd><p>Build a <a class="reference internal" href="types.html#fwdpy11.DemographicModelDetails" title="fwdpy11.DemographicModelDetails"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DemographicModelDetails</span></code></a> object using demes.
-The deme graph can either be a demes Graph object or a string as the
-filepath to a demes-specifiend YAML demography.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>dg</strong> (<a class="reference external" href="https://popsim-consortium.github.io/demes-docs/main/api.html#demes.Graph" title="(in Python)"><em>demes.Graph</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – The demes Graph to convert.</p></li>
-<li><p><strong>burnin</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – A factor for how many generations to burn in the simulation.
-For a typical demography with a single root, the number of generations
-of burn in is <cite>burnin</cite> times the root deme’s population size. For
-models with multiple root demes joined by migration, that population
-size is determined as the size of the metapopulation.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="types.html#fwdpy11.DemographicModelDetails" title="fwdpy11.DemographicModelDetails"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DemographicModelDetails</span></code></a></p>
-</dd>
-</dl>
-<div class="versionadded">
-<p><span class="versionmodified added">New in version 0.14.0.</span></p>
 </div>
 </dd></dl>
 

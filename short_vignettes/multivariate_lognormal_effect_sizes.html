@@ -236,7 +236,6 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="../pages/mvdes.html">Different effect sizes of mutations in different demes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../pages/tsoverview.html">Conceptual overview of tree sequence recording</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../pages/tstypes.html">Data structures related to tree sequences</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../pages/tablefs.html">Calculating frequency spectra from tree sequences</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../pages/recorders.html">Time series analysis</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Technical details</span></p>
@@ -536,14 +535,14 @@ We will simulate a demographic model of migration happening into the infinite pa
 <span class="s2">    rate: 0.10</span>
 <span class="s2">&quot;&quot;&quot;</span>
 <span class="n">g</span> <span class="o">=</span> <span class="n">demes</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">yaml</span><span class="p">)</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">discrete_demography</span><span class="o">.</span><span class="n">from_demes</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">burnin</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ForwardDemesGraph</span><span class="o">.</span><span class="n">from_demes</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">burnin</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">demesdraw</span><span class="o">.</span><span class="n">tubes</span><span class="p">(</span><span class="n">g</span><span class="p">);</span>
 </pre></div>
 </div>
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="../_images/ebfc52fca01ba27a8b2bde60d9d1e9bd768d19a0a04c64f47cf91a938c3287be.png" src="../_images/ebfc52fca01ba27a8b2bde60d9d1e9bd768d19a0a04c64f47cf91a938c3287be.png" />
+<img alt="../_images/f8e7a2644769d2224d5c3bfc645ecbc59ca07f5298e2c3d62a2dee7d90ca226a.png" src="../_images/f8e7a2644769d2224d5c3bfc645ecbc59ca07f5298e2c3d62a2dee7d90ca226a.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -554,13 +553,13 @@ We will simulate a demographic model of migration happening into the infinite pa
     <span class="s2">&quot;sregions&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">mvdes</span><span class="p">],</span>
     <span class="s2">&quot;rates&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">5e-3</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
     <span class="s2">&quot;demography&quot;</span><span class="p">:</span> <span class="n">model</span><span class="p">,</span>
-    <span class="s2">&quot;simlen&quot;</span><span class="p">:</span> <span class="n">model</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;total_simulation_length&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;simlen&quot;</span><span class="p">:</span> <span class="n">model</span><span class="o">.</span><span class="n">model_duration</span><span class="p">,</span>
     <span class="s2">&quot;gvalue&quot;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Multiplicative</span><span class="p">(</span><span class="n">ndemes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">scaling</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span>
 <span class="p">}</span>
 <span class="n">params</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="n">pdict</span><span class="p">)</span>
 <span class="c1"># TODO: update this once we have a function to pull the sizes</span>
 <span class="c1"># automatically from demes-derived models:</span>
-<span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">([</span><span class="n">v</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;initial_sizes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()],</span> <span class="mf">1.0</span><span class="p">)</span>
+<span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">initial_sizes</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
 <span class="n">rng</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSLrng</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
 <span class="n">fwdpy11</span><span class="o">.</span><span class="n">evolvets</span><span class="p">(</span><span class="n">rng</span><span class="p">,</span> <span class="n">pop</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
 <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">mutations</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span>

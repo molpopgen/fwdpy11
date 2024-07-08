@@ -236,7 +236,6 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="../pages/mvdes.html">Different effect sizes of mutations in different demes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../pages/tsoverview.html">Conceptual overview of tree sequence recording</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../pages/tstypes.html">Data structures related to tree sequences</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../pages/tablefs.html">Calculating frequency spectra from tree sequences</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../pages/recorders.html">Time series analysis</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Technical details</span></p>
@@ -656,7 +655,7 @@ To do so, give a nonzero value to the <code class="docutils literal notranslate"
 </div>
 </div>
 <p>At the end of the simulation, mutations from this region will have the <code class="docutils literal notranslate"><span class="pre">label</span></code> value stored in the attribute <a class="reference internal" href="../pages/types.html#fwdpy11.Mutation.label" title="fwdpy11.Mutation.label"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.Mutation.label</span></code></a>.</p>
-<p>The value of <code class="docutils literal notranslate"><span class="pre">label</span></code> must fit into a 16-bit unsigned integer, <em>e.g.</em>, <a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.uint16" title="(in NumPy v1.26)"><code class="xref py py-attr docutils literal notranslate"><span class="pre">numpy.uint16</span></code></a>.
+<p>The value of <code class="docutils literal notranslate"><span class="pre">label</span></code> must fit into a 16-bit unsigned integer, <em>e.g.</em>, <a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.uint16" title="(in NumPy v2.0)"><code class="xref py py-attr docutils literal notranslate"><span class="pre">numpy.uint16</span></code></a>.
 Larger values, or negative values, will result in exceptions.
 The following example tries to use a value one larger than the maximum allowed:</p>
 <div class="cell tag_raises-exception docutils container">

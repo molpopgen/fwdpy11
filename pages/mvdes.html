@@ -236,7 +236,6 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Different effect sizes of mutations in different demes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tsoverview.html">Conceptual overview of tree sequence recording</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tstypes.html">Data structures related to tree sequences</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tablefs.html">Calculating frequency spectra from tree sequences</a></li>
 <li class="toctree-l1"><a class="reference internal" href="recorders.html">Time series analysis</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Technical details</span></p>
@@ -531,8 +530,9 @@ distributions and there is no correlation in the effect size in the two demes.</
 <span class="s2">&quot;&quot;&quot;</span>
 
 <span class="n">graph</span> <span class="o">=</span> <span class="n">demes</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">yaml</span><span class="p">)</span>
-<span class="n">demography</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">discrete_demography</span><span class="o">.</span><span class="n">from_demes</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">demography</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ForwardDemesGraph</span><span class="o">.</span><span class="n">from_demes</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
+<span class="n">optima</span> <span class="o">=</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">Optimum</span><span class="p">(</span><span class="n">when</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">optimum</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">VS</span><span class="o">=</span><span class="mf">10.0</span><span class="p">)]</span>
 <span class="n">pdict</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;nregions&quot;</span><span class="p">:</span> <span class="p">[],</span>
     <span class="s2">&quot;recregions&quot;</span><span class="p">:</span> <span class="p">[],</span>
@@ -545,7 +545,8 @@ distributions and there is no correlation in the effect size in the two demes.</
     <span class="s2">&quot;demography&quot;</span><span class="p">:</span> <span class="n">demography</span><span class="p">,</span>
     <span class="s2">&quot;simlen&quot;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
     <span class="s2">&quot;gvalue&quot;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Additive</span><span class="p">(</span>
-        <span class="n">ndemes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">scaling</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">gvalue_to_fitness</span><span class="o">=</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSS</span><span class="p">(</span><span class="n">optimum</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">VS</span><span class="o">=</span><span class="mf">10.0</span><span class="p">)</span>
+        <span class="n">ndemes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">scaling</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="n">gvalue_to_fitness</span><span class="o">=</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">GaussianStabilizingSelection</span><span class="o">.</span><span class="n">single_trait</span><span class="p">(</span><span class="n">optima</span><span class="p">)</span>
     <span class="p">),</span>
     <span class="s2">&quot;prune_selected&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">}</span>

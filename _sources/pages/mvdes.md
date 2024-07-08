@@ -60,8 +60,9 @@ migrations:
 """
 
 graph = demes.loads(yaml)
-demography = fwdpy11.discrete_demography.from_demes(graph, 1)
+demography = fwdpy11.ForwardDemesGraph.from_demes(graph, 1)
 
+optima = [fwdpy11.Optimum(when=0, optimum=0.0, VS=10.0)]
 pdict = {
     "nregions": [],
     "recregions": [],
@@ -74,7 +75,8 @@ pdict = {
     "demography": demography,
     "simlen": 100,
     "gvalue": fwdpy11.Additive(
-        ndemes=2, scaling=2, gvalue_to_fitness=fwdpy11.GSS(optimum=0.0, VS=10.0)
+        ndemes=2, scaling=2,
+        gvalue_to_fitness=fwdpy11.GaussianStabilizingSelection.single_trait(optima)
     ),
     "prune_selected": False,
 }

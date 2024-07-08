@@ -158,85 +158,17 @@ We can pass the `params` object on when exporting the data to `tskit`:
 
 ```{code-cell} python
 ts = pop.dump_tables_to_tskit(model_params=params)
-assert fwdpy11.ModelParams(**eval(ts.metadata["model_params"])) == params
+recovered_params = fwdpy11.ModelParams(**eval(ts.metadata["model_params"])) 
+assert recovered_params == params
 ```
-
-### Including a `demes` graph
-
-You may include a {class}`demes.Graph` in the top-level metadata.
-If you also include a {class}`fwdpy11.ModelParams` (see above), including the `demes` graph gives redundant information.
-However, including the graph may be useful if downstream analysis will involve other tools compatible with the `demes` specification.
-With the graph as metadata, you can extract it and reconstruct the original `YAML` file, or send it to another Python package that understands it.
-
-The following hidden code block defines a function to return a {class}`demes.Graph` from `YAML` input stored in a string literal.
+Note that we can recover our demographic model from the restored parameters:
 
 ```{code-cell} python
----
-tags: [ "hide-input" ]
----
-def gutenkunst():
-    import demes
-    yaml = """
-description: The Gutenkunst et al. (2009) OOA model.
-doi:
-- https://doi.org/10.1371/journal.pgen.1000695
-time_units: years
-generation_time: 25
-
-demes:
-- name: ancestral
-  description: Equilibrium/root population
-  epochs:
-  - {end_time: 220e3, start_size: 7300}
-- name: AMH
-  description: Anatomically modern humans
-  ancestors: [ancestral]
-  epochs:
-  - {end_time: 140e3, start_size: 12300}
-- name: OOA
-  description: Bottleneck out-of-Africa population
-  ancestors: [AMH]
-  epochs:
-  - {end_time: 21.2e3, start_size: 2100}
-- name: YRI
-  description: Yoruba in Ibadan, Nigeria
-  ancestors: [AMH]
-  epochs:
-  - start_size: 12300
-- name: CEU
-  description: Utah Residents (CEPH) with Northern and Western European Ancestry
-  ancestors: [OOA]
-  epochs:
-  - {start_size: 1000, end_size: 29725}
-- name: CHB
-  description: Han Chinese in Beijing, China
-  ancestors: [OOA]
-  epochs:
-  - {start_size: 510, end_size: 54090}
-
-migrations:
-- {demes: [YRI, OOA], rate: 25e-5}
-- {demes: [YRI, CEU], rate: 3e-5}
-- {demes: [YRI, CHB], rate: 1.9e-5}
-- {demes: [CEU, CHB], rate: 9.6e-5}
-"""
-    return demes.loads(yaml)
+print(recovered_params.demography)
 ```
 
 ```{code-cell} python
-graph = gutenkunst()
-ts = pop.dump_tables_to_tskit(demes_graph=graph)
-```
-
-```{code-cell} python
-assert demes.Graph.fromdict(ts.metadata["demes_graph"]) == graph
-```
-
-Since this is an optional metadata field, accessing it will return `None` if no graph was provided:
-
-```{code-cell} python
-ts = pop.dump_tables_to_tskit()
-assert "demes_graph" not in ts.metadata
+print(recovered_params.demography.demes_graph)
 ```
 
 ### User-defined metadata
@@ -279,51 +211,85 @@ Further, if the data are very large, then other output formats are likely more a
 
 ## Setting population table metadata
 
-You can also set the population table metadata when exporting data.
-Doing so requires a {class}`dict` mapping the integer label for each population to another {class}`dict`.
-
-For example, let's create an demographic model from the `demes` graph that used above:
-
-```{code-cell}python
-model = fwdpy11.discrete_demography.from_demes(gutenkunst())
-type(model)
-```
-
-This object contains a mapping from integer labels to the deme names:
+This example involves simulating a multi-deme model.
 
 ```{code-cell} python
-model.metadata['deme_labels']
+---
+tags: ["hide-input"]
+---
+
+# Example 07 from the demes tutorial
+yaml = """
+time_units: generations
+demes:
+  - name: X
+    epochs:
+      - end_time: 1000
+        start_size: 2000
+  - name: A
+    ancestors:
+      - X
+    epochs:
+      - start_size: 2000
+  - name: B
+    ancestors:
+      - X
+    epochs:
+      - start_size: 2000
+"""
+demography = fwdpy11.ForwardDemesGraph.from_demes(
+    yaml,
+    burnin=100,
+    burnin_is_exact=True,
+)
+Opt = fwdpy11.Optimum
+GSSmo_ancestor = fwdpy11.GaussianStabilizingSelection.single_trait(
+    [Opt(when=0, optimum=0.0, VS=1.0), Opt(when=100, optimum=1.0, VS=1.0)]
+)
+gvalue_ancestor = fwdpy11.Additive(2.0, GSSmo_ancestor)
+GSSmo_daughter_1 = fwdpy11.GaussianStabilizingSelection.single_trait(
+    [Opt(when=100, optimum=1.0, VS=1.0)]
+)
+gvalue_daughter_1 = fwdpy11.Additive(2.0, GSSmo_daughter_1)
+
+GSSmo_daughter_2 = fwdpy11.GaussianStabilizingSelection.single_trait(
+    [Opt(when=100, optimum=1.0, VS=1.0)]
+)
+gvalue_daughter_2 = fwdpy11.Additive(2.0, GSSmo_daughter_2)
+p = {
+    "nregions": [],
+    "sregions": [fwdpy11.GaussianS(0, 1, 1, 0.25)],
+    "recregions": [fwdpy11.PoissonInterval(0, 1, 1e-3)],
+    "rates": (0.0, 0.025, None),
+    "gvalue": [gvalue_ancestor, gvalue_daughter_1, gvalue_daughter_2],
+    "prune_selected": False,
+    "demography": demography,
+    "simlen": demography.final_generation,
+}
+
+rng = fwdpy11.GSLrng(12351235)
+params = fwdpy11.ModelParams(**p)
+pop = fwdpy11.DiploidPopulation(demography.initial_sizes, 1)
+
+fwdpy11.evolvets(rng, pop, params, simplification_interval=100)
 ```
 
-We can make the required `dict` like this:
+By default, deme names are placed in the metadata:
 
 ```{code-cell} python
-pop_md = {}
-for key, value in model.metadata['deme_labels'].items():
-    pop_md[key] = {'name': value}
+ts = pop.dump_tables_to_tskit()
+for p in ts.populations():
+    print(p.metadata)
 ```
 
-To actually illustrate the use of this metadata, we need to make sure that our `tskit` output actually has a population table:
+We can override this behavior by providing a dictionary
+mapping a deme's integer id (index) to data.
 
 ```{code-cell} python
-# initialize a population with the right number of demes...
-multideme_pop = fwdpy11.DiploidPopulation([100]*len(pop_md), 1.)
-ts = multideme_pop.dump_tables_to_tskit(population_metadata=pop_md)
-for pop in ts.populations():
-    print(pop.metadata)
-```
-
-We could also easily add the deme description to the metadata from the `demes` graph:
-
-```{code-cell} python
-graph = gutenkunst()
-graph.demes
-```
-
-```{code-cell} python
-pop_md = {}
-for i,deme in enumerate(graph.demes):
-    pop_md[i] = {'name': deme.name, "description": deme.description}
-
-pop_md
+md = {}
+for i, deme in enumerate(demography.demes_graph.demes):
+    md[i] = {'name': deme.name, 'end_time': deme.end_time}
+ts = pop.dump_tables_to_tskit(population_metadata=md)
+for p in ts.populations():
+    print(p.metadata)
 ```

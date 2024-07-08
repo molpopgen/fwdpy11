@@ -65,7 +65,7 @@ const thebe_selector_output = ".output, .cell_output"
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Details of demes integration" href="../technical/demes.html" />
-    <link rel="prev" title="Calculating frequency spectra from tree sequences" href="tablefs.html" />
+    <link rel="prev" title="Data structures related to tree sequences" href="tstypes.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -234,7 +234,6 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="mvdes.html">Different effect sizes of mutations in different demes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tsoverview.html">Conceptual overview of tree sequence recording</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tstypes.html">Data structures related to tree sequences</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tablefs.html">Calculating frequency spectra from tree sequences</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Time series analysis</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Technical details</span></p>
@@ -531,11 +530,11 @@ via a numpy array with dtype uint32:</p>
 <dd><p>Add a list of individuals to the list of samples.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>samples</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><em>numpy.ndarray</em></a>) – Array of individual indexes</p>
+<dd class="field-odd"><p><strong>samples</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0)"><em>numpy.ndarray</em></a>) – Array of individual indexes</p>
 </dd>
 </dl>
-<p>The <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.dtype</span></code></a> of <code class="docutils literal notranslate"><span class="pre">samples</span></code> must be
-<a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.uint32" title="(in NumPy v1.26)"><code class="xref py py-attr docutils literal notranslate"><span class="pre">numpy.uint32</span></code></a>.</p>
+<p>The <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v2.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.dtype</span></code></a> of <code class="docutils literal notranslate"><span class="pre">samples</span></code> must be
+<a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.uint32" title="(in NumPy v2.0)"><code class="xref py py-attr docutils literal notranslate"><span class="pre">numpy.uint32</span></code></a>.</p>
 </dd></dl>
 
 <p>The following is essentially pseudocode to illustrate the process:</p>
@@ -588,12 +587,12 @@ not they carry a specific variant, etc..  It is up to you.</p>
                   <!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
-       href="tablefs.html"
+       href="tstypes.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Calculating frequency spectra from tree sequences</p>
+        <p class="prev-next-title">Data structures related to tree sequences</p>
       </div>
     </a>
     <a class="right-next"

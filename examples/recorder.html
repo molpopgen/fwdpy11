@@ -234,7 +234,6 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="../pages/mvdes.html">Different effect sizes of mutations in different demes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../pages/tsoverview.html">Conceptual overview of tree sequence recording</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../pages/tstypes.html">Data structures related to tree sequences</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../pages/tablefs.html">Calculating frequency spectra from tree sequences</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../pages/recorders.html">Time series analysis</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Technical details</span></p>
@@ -530,7 +529,7 @@ another language (C++ in thise case).  That capsule holds our callable, which fo
 <span class="s2">&quot;&quot;&quot;</span>
 
 <span class="n">graph</span> <span class="o">=</span> <span class="n">demes</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">yaml</span><span class="p">)</span>
-<span class="n">demography</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">discrete_demography</span><span class="o">.</span><span class="n">from_demes</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">demography</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ForwardDemesGraph</span><span class="o">.</span><span class="n">from_demes</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
 <span class="n">pdict</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;demography&quot;</span><span class="p">:</span> <span class="n">demography</span><span class="p">,</span>

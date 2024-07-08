@@ -234,7 +234,6 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="../pages/mvdes.html">Different effect sizes of mutations in different demes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../pages/tsoverview.html">Conceptual overview of tree sequence recording</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../pages/tstypes.html">Data structures related to tree sequences</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../pages/tablefs.html">Calculating frequency spectra from tree sequences</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../pages/recorders.html">Time series analysis</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Technical details</span></p>
@@ -504,7 +503,7 @@ document.write(`
     <span class="s2">&quot;rates&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">mu_neutral</span><span class="p">,</span> <span class="n">mu_selected</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
     <span class="c1"># Keep mutations at frequency 1 in the pop if they affect fitness.</span>
     <span class="s2">&quot;prune_selected&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-    <span class="s2">&quot;demography&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="s2">&quot;demography&quot;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ForwardDemesGraph</span><span class="o">.</span><span class="n">tubes</span><span class="p">([</span><span class="n">N</span><span class="p">],</span> <span class="n">burnin</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
     <span class="s2">&quot;simlen&quot;</span><span class="p">:</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">N</span><span class="p">,</span>
 <span class="p">}</span>
 <span class="n">params</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="n">p</span><span class="p">)</span>
@@ -549,7 +548,12 @@ document.write(`
         noise=None,
         ndemes=1,
     ),
-    demography=None,
+    demography=fwdpy11.ForwardDemesGraph(
+        yaml=&quot;time_units: generations\ngeneration_time: 1\ndemes:\n- name: deme0\n  epochs:\n  - {end_time: 0, start_size: 1000}\n&quot;,
+        burnin=1,
+        burnin_is_exact=False,
+        round_non_integer_sizes=False,
+    ),
     simlen=10000,
     prune_selected=False,
     allow_residual_selfing=True,

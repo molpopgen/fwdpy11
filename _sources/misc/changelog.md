@@ -3,6 +3,45 @@
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+## 0.23.0
+
+Bug fixes:
+
+* For multiplicative fitness models, "super lethal" mutations ("s" < -1.0) 
+  could results in positive fitness values.
+  This is now fixed, and the fitness function returns as soon as "w" <= 0.
+  PR {pr}`1319`
+
+Deprecations
+
+* All previous deprecations have been removed. PR {pr}`1301`
+* Site frequency spectrum calculations from tables are now deprecated.
+  PR {pr}`1292`
+* Redundant methods for loading demes graphs are now deprecated.
+  PR {pr}`1304`
+
+UI improvements
+
+* Add {attr}`fwdpy11.ForwardDemesGraph.demes_graph`.
+  PR {pr}`1297`.
+  PR {pr}`1298`.
+* Improve early detection of invalid optimum values.
+  See issue {issue}`1217` for context.
+  PR {pr}`1299`.
+
+C++ back end:
+
+* Code for genetic value calculations extracted into a location available
+  for C++ unit testing.
+  PR {pr}`1319`
+* Run c++ test suite through valgrind in CI. PR {pr}`1296`
+
+Dependencies
+
+* pybind11 bumped to 2.12.0.  PR {pr}`1313`
+* demes-forward-capi bumped to 0.5.0. PR {pr}`1294`
+* scipy dropped as a dependency. PR {pr}`1292`
+
 ## 0.22.2
 
 Maintenance release
@@ -641,7 +680,7 @@ Bug fixes
 
 Breaking changes
 
-* {func}`fwdpy11.TableCollection.fs` no longer accepts more than two sample sets.
+* `fwdpy11.TableCollection.fs` no longer accepts more than two sample sets.
   This change allowed us to drop `sparse` as a dependency that was causing
   headaches when new Python point releases come out.
   PR {pr}`924`. Issues {issue}`876`, {issue}`919`.
@@ -1055,7 +1094,7 @@ Fixes:
 This is a point release adding more documentation:
 
 * {ref}`Demes vignette <demes_vignette>` updated.
-* {func}`fwdpy11.TableCollection.fs` docstring updated regarding some perhaps unexpected behavior of `sparse.COO`.
+* `fwdpy11.TableCollection.fs` docstring updated regarding some perhaps unexpected behavior of `sparse.COO`.
 
 ## 0.14.0
 
@@ -1494,7 +1533,7 @@ release candidates (see below) plus the following:
   {issue}`389`
   {issue}`390`
   {issue}`392`
-* {func}`fwdpy11.TableCollection.fs` added.  See {ref}`tablefs`.
+* `fwdpy11.TableCollection.fs` added.  See `tablefs`.
   PR {pr}`387`
   PR {pr}`399`
 * Creating populations from `msprime` input improved.

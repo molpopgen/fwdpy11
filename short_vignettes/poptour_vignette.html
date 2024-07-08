@@ -234,7 +234,6 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="../pages/mvdes.html">Different effect sizes of mutations in different demes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../pages/tsoverview.html">Conceptual overview of tree sequence recording</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../pages/tstypes.html">Data structures related to tree sequences</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../pages/tablefs.html">Calculating frequency spectra from tree sequences</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../pages/recorders.html">Time series analysis</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Technical details</span></p>
@@ -509,18 +508,18 @@ The simulation done here is taken from <a class="reference internal" href="../lo
 
 <span class="n">rng</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSLrng</span><span class="p">(</span><span class="mi">54321</span><span class="p">)</span>
 
-<span class="n">GSSmo</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSSmo</span><span class="p">(</span>
-    <span class="p">[</span>
-        <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Optimum</span><span class="p">(</span><span class="n">when</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">optimum</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">VS</span><span class="o">=</span><span class="mf">1.0</span><span class="p">),</span>
-        <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Optimum</span><span class="p">(</span><span class="n">when</span><span class="o">=</span><span class="mi">10</span> <span class="o">*</span> <span class="n">pop</span><span class="o">.</span><span class="n">N</span> <span class="o">-</span> <span class="mi">200</span><span class="p">,</span> <span class="n">optimum</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">VS</span><span class="o">=</span><span class="mf">1.0</span><span class="p">),</span>
-    <span class="p">]</span>
-<span class="p">)</span>
+<span class="n">optima</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Optimum</span><span class="p">(</span><span class="n">when</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">optimum</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">VS</span><span class="o">=</span><span class="mf">1.0</span><span class="p">),</span>
+    <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Optimum</span><span class="p">(</span><span class="n">when</span><span class="o">=</span><span class="mi">10</span> <span class="o">*</span> <span class="n">pop</span><span class="o">.</span><span class="n">N</span> <span class="o">-</span> <span class="mi">200</span><span class="p">,</span> <span class="n">optimum</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">VS</span><span class="o">=</span><span class="mf">1.0</span><span class="p">),</span>
+<span class="p">]</span>
+
+<span class="n">GSS</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GaussianStabilizingSelection</span><span class="o">.</span><span class="n">single_trait</span><span class="p">(</span><span class="n">optima</span><span class="p">)</span>
 
 <span class="n">rho</span> <span class="o">=</span> <span class="mf">1000.</span>
 
 <span class="n">p</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;nregions&quot;</span><span class="p">:</span> <span class="p">[],</span>
-    <span class="s2">&quot;gvalue&quot;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Additive</span><span class="p">(</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">GSSmo</span><span class="p">),</span>
+    <span class="s2">&quot;gvalue&quot;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Additive</span><span class="p">(</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">GSS</span><span class="p">),</span>
     <span class="s2">&quot;sregions&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">GaussianS</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)],</span>
     <span class="s2">&quot;recregions&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">PoissonInterval</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="n">rho</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">pop</span><span class="o">.</span><span class="n">N</span><span class="p">))],</span>
     <span class="s2">&quot;rates&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1e-3</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
@@ -564,11 +563,11 @@ These objects do not have nice representations in Python:</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&lt;fwdpy11._fwdpy11.Mutation at 0x7fd4887568f0&gt;,
- &lt;fwdpy11._fwdpy11.Mutation at 0x7fd488755a70&gt;,
- &lt;fwdpy11._fwdpy11.Mutation at 0x7fd488754bb0&gt;,
- &lt;fwdpy11._fwdpy11.Mutation at 0x7fd498a10830&gt;,
- &lt;fwdpy11._fwdpy11.Mutation at 0x7fd498a11df0&gt;]
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&lt;fwdpy11._fwdpy11.Mutation at 0x7f72383e24b0&gt;,
+ &lt;fwdpy11._fwdpy11.Mutation at 0x7f72383e2470&gt;,
+ &lt;fwdpy11._fwdpy11.Mutation at 0x7f72383e2430&gt;,
+ &lt;fwdpy11._fwdpy11.Mutation at 0x7f72383e23f0&gt;,
+ &lt;fwdpy11._fwdpy11.Mutation at 0x7f72383e23b0&gt;]
 </pre></div>
 </div>
 </div>
@@ -618,7 +617,7 @@ Diploids store the indexes of their individual genomes, which we describe below.
 <h2>Diploid meta data<a class="headerlink" href="#diploid-meta-data" title="Permalink to this heading">#</a></h2>
 <p>Diploid individuals have associated data, stored in <a class="reference internal" href="../pages/types.html#fwdpy11.DiploidPopulation.diploid_metadata" title="fwdpy11.DiploidPopulation.diploid_metadata"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.DiploidPopulation.diploid_metadata</span></code></a>.
 The meta data are instances of <a class="reference internal" href="../pages/types.html#fwdpy11.DiploidMetadata" title="fwdpy11.DiploidMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiploidMetadata</span></code></a>.
-That class is also a <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.dtype</span></code></a>, allowing us to access the raw data efficiently as a <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.recarray.html#numpy.recarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.recarray</span></code></a>:</p>
+That class is also a <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v2.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.dtype</span></code></a>, allowing us to access the raw data efficiently as a <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.recarray.html#numpy.recarray" title="(in NumPy v2.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.recarray</span></code></a>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -700,7 +699,7 @@ effect size = 0.0508, origin time = 4740
 <h2>Tables<a class="headerlink" href="#tables" title="Permalink to this heading">#</a></h2>
 <p>A population contains an instance of <a class="reference internal" href="../pages/types.html#fwdpy11.TableCollection" title="fwdpy11.TableCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.TableCollection</span></code></a> which is used to represent the genetic ancestry of the sample using the methods described in <span id="id1">[<a class="reference internal" href="../misc/bibliography.html#id12" title="Jerome Kelleher, Kevin R Thornton, Jaime Ashander, and Peter L Ralph. Efficient pedigree recording for fast population genetics simulation. PLoS Comput. Biol., 14(11):e1006581, November 2018.">KTAR18</a>]</span>.</p>
 <p>The table contents are described in the class documentation.
-All tables can be accessed either as Python objects or as <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.recarray.html#numpy.recarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.recarray</span></code></a> objects as we say above for diploid meta data.</p>
+All tables can be accessed either as Python objects or as <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.recarray.html#numpy.recarray" title="(in NumPy v2.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.recarray</span></code></a> objects as we say above for diploid meta data.</p>
 </section>
 </section>
 

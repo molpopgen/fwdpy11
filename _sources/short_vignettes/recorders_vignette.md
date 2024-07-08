@@ -91,12 +91,12 @@ pop = fwdpy11.DiploidPopulation(500, 1.0)
 
 rng = fwdpy11.GSLrng(54321)
 
-GSSmo = fwdpy11.GSSmo(
-    [
-        fwdpy11.Optimum(when=0, optimum=0.0, VS=1.0),
-        fwdpy11.Optimum(when=pop.N - 200, optimum=1.0, VS=1.0),
-    ]
-)
+optima= [
+    fwdpy11.Optimum(when=0, optimum=0.0, VS=1.0),
+    fwdpy11.Optimum(when=pop.N - 200, optimum=1.0, VS=1.0),
+]
+
+GSS = fwdpy11.GaussianStabilizingSelection.single_trait(optima)
 
 rho = 1000.
 
@@ -105,7 +105,7 @@ des = fwdpy11.GaussianS(beg=0, end=1, weight=1, sd=0.1,
 
 p = {
     "nregions": [],
-    "gvalue": fwdpy11.Additive(2.0, GSSmo),
+    "gvalue": fwdpy11.Additive(2.0, GSS),
     "sregions": [des],
     "recregions": [fwdpy11.PoissonInterval(0, 1., rho / float(4 * pop.N))],
     "rates": (0.0, 1e-3, None),
@@ -169,7 +169,7 @@ Thus, we need to rebuild the `gvalue` field.
 import pickle
 pop = fwdpy11.DiploidPopulation(500, 1.0)
 rng = fwdpy11.GSLrng(54321)
-p['gvalue'] = fwdpy11.Additive(2.0, GSSmo)
+p['gvalue'] = fwdpy11.Additive(2.0, GSS)
 params = fwdpy11.ModelParams(**p)
 recorder = RandomSamples(5)
 fwdpy11.evolvets(rng, pop, params, recorder=recorder, simplification_interval=100) 

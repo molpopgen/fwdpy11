@@ -234,7 +234,6 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="mvdes.html">Different effect sizes of mutations in different demes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tsoverview.html">Conceptual overview of tree sequence recording</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tstypes.html">Data structures related to tree sequences</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tablefs.html">Calculating frequency spectra from tree sequences</a></li>
 <li class="toctree-l1"><a class="reference internal" href="recorders.html">Time series analysis</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Technical details</span></p>
@@ -770,29 +769,53 @@ False otherwise.</p>
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="fwdpy11.StrictAdditiveMultivariateEffects">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">StrictAdditiveMultivariateEffects</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.StrictAdditiveMultivariateEffects" title="Permalink to this definition">#</a></dt>
-<dd><dl class="py method">
-<dt class="sig sig-object py" id="fwdpy11.StrictAdditiveMultivariateEffects.asblack">
-<span class="sig-name descname"><span class="pre">asblack</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.StrictAdditiveMultivariateEffects.asblack" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="fwdpy11.AdditivePleiotropy">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">AdditivePleiotropy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ndimensions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">focal_trait</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gvalue_to_fitness</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.AdditivePleiotropy" title="Permalink to this definition">#</a></dt>
+<dd><p>Multivariate trait values under strictly additive effects.</p>
+<p>Calculate the trait value for a diploid in a
+<a class="reference internal" href="types.html#fwdpy11.DiploidPopulation" title="fwdpy11.DiploidPopulation"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiploidPopulation</span></code></a> for a multidimensional trait.</p>
+<p>This class is restricted to the case of simple additive effects, meaning
+that any dominance terms associated with mutations are ignored.</p>
+<p>During a simulation, <a class="reference internal" href="types.html#fwdpy11.DiploidMetadata.g" title="fwdpy11.DiploidMetadata.g"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.DiploidMetadata.g</span></code></a> is filled with the
+genetic value corresponding to a “focal” trait specified upon
+object construction. This class has the following attributes, whose names
+are also <cite>kwargs</cite> for intitialization.  The attribute names
+also determine the order of positional arguments:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ndimensions</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Number of trait dimensions</p></li>
+<li><p><strong>focal_trait</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Index of the focal trait</p></li>
+<li><p><strong>gvalue_to_fitness</strong> (<a class="reference internal" href="gvalue_to_fitness.html#fwdpy11.GeneticValueToFitnessMap" title="fwdpy11.GeneticValueToFitnessMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GeneticValueToFitnessMap</span></code></a>) – Function mapping trait value to fitness</p></li>
+<li><p><strong>noise</strong> (<a class="reference internal" href="gvaluenoise.html#fwdpy11.GeneticValueNoise" title="fwdpy11.GeneticValueNoise"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GeneticValueNoise</span></code></a>) – Function adding random additive noise to trait value</p></li>
+</ul>
+</dd>
+</dl>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 0.8.0: </span>Refactored to use attrs and inherit from
+low-level C++ class</p>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="fwdpy11.AdditivePleiotropy.asblack">
+<span class="sig-name descname"><span class="pre">asblack</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.AdditivePleiotropy.asblack" title="Permalink to this definition">#</a></dt>
 <dd><p>Return a string representation formatted with black</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="fwdpy11.StrictAdditiveMultivariateEffects.asdict">
-<span class="sig-name descname"><span class="pre">asdict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.StrictAdditiveMultivariateEffects.asdict" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="fwdpy11.AdditivePleiotropy.asdict">
+<span class="sig-name descname"><span class="pre">asdict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.AdditivePleiotropy.asdict" title="Permalink to this definition">#</a></dt>
 <dd><p>Return dict representation</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="fwdpy11.StrictAdditiveMultivariateEffects.fromdict">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fromdict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.StrictAdditiveMultivariateEffects.fromdict" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="fwdpy11.AdditivePleiotropy.fromdict">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fromdict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.AdditivePleiotropy.fromdict" title="Permalink to this definition">#</a></dt>
 <dd><p>Build an instance from a dictionary</p>
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="fwdpy11.StrictAdditiveMultivariateEffects.genetic_values">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">genetic_values</span></span><a class="headerlink" href="#fwdpy11.StrictAdditiveMultivariateEffects.genetic_values" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="fwdpy11.AdditivePleiotropy.genetic_values">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">genetic_values</span></span><a class="headerlink" href="#fwdpy11.AdditivePleiotropy.genetic_values" title="Permalink to this definition">#</a></dt>
 <dd><p>Return the list of genetic values.</p>
 <div class="versionadded">
 <p><span class="versionmodified added">New in version 0.3.0.</span></p>
@@ -800,8 +823,8 @@ False otherwise.</p>
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="fwdpy11.StrictAdditiveMultivariateEffects.maps_to_fitness">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">maps_to_fitness</span></span><a class="headerlink" href="#fwdpy11.StrictAdditiveMultivariateEffects.maps_to_fitness" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="fwdpy11.AdditivePleiotropy.maps_to_fitness">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">maps_to_fitness</span></span><a class="headerlink" href="#fwdpy11.AdditivePleiotropy.maps_to_fitness" title="Permalink to this definition">#</a></dt>
 <dd><p>Returns True if object represents a mapping directly to fitness, and
 False otherwise.</p>
 <div class="versionadded">
@@ -810,8 +833,8 @@ False otherwise.</p>
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="fwdpy11.StrictAdditiveMultivariateEffects.maps_to_trait_value">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">maps_to_trait_value</span></span><a class="headerlink" href="#fwdpy11.StrictAdditiveMultivariateEffects.maps_to_trait_value" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="fwdpy11.AdditivePleiotropy.maps_to_trait_value">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">maps_to_trait_value</span></span><a class="headerlink" href="#fwdpy11.AdditivePleiotropy.maps_to_trait_value" title="Permalink to this definition">#</a></dt>
 <dd><p>Returns True if object represents a trait value, and
 False otherwise.</p>
 <div class="versionadded">
@@ -820,8 +843,8 @@ False otherwise.</p>
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="fwdpy11.StrictAdditiveMultivariateEffects.shape">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">shape</span></span><a class="headerlink" href="#fwdpy11.StrictAdditiveMultivariateEffects.shape" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="fwdpy11.AdditivePleiotropy.shape">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">shape</span></span><a class="headerlink" href="#fwdpy11.AdditivePleiotropy.shape" title="Permalink to this definition">#</a></dt>
 <dd><p>Return the dimensions of the genetic values.</p>
 <div class="versionadded">
 <p><span class="versionmodified added">New in version 0.3.0.</span></p>
