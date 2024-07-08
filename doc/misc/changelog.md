@@ -3,6 +3,45 @@
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+## 0.23.0
+
+Bug fixes:
+
+* For multiplicative fitness models, "super lethal" mutations ("s" < -1.0) 
+  could results in positive fitness values.
+  This is now fixed, and the fitness function returns as soon as "w" <= 0.
+  PR {pr}`1319`
+
+Deprecations
+
+* All previous deprecations have been removed. PR {pr}`1301`
+* Site frequency spectrum calculations from tables are now deprecated.
+  PR {pr}`1292`
+* Redundant methods for loading demes graphs are now deprecated.
+  PR {pr}`1304`
+
+UI improvements
+
+* Add {attr}`fwdpy11.ForwardDemesGraph.demes_graph`.
+  PR {pr}`1297`.
+  PR {pr}`1298`.
+* Improve early detection of invalid optimum values.
+  See issue {issue}`1217` for context.
+  PR {pr}`1299`.
+
+C++ back end:
+
+* Code for genetic value calculations extracted into a location available
+  for C++ unit testing.
+  PR {pr}`1319`
+* Run c++ test suite through valgrind in CI. PR {pr}`1296`
+
+Dependencies
+
+* pybind11 bumped to 2.12.0.  PR {pr}`1313`
+* demes-forward-capi bumped to 0.5.0. PR {pr}`1294`
+* scipy dropped as a dependency. PR {pr}`1292`
+
 ## 0.22.2
 
 Maintenance release
