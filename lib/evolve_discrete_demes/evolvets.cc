@@ -450,6 +450,7 @@ evolve_with_tree_sequences(
                                 && gen < simlen && !stopping_criteron_met;
          ++gen)
         {
+            auto fixations_removed = false;
             if (demography.in_error_state())
                 {
                     throw std::runtime_error("forward graph is in an error state");
@@ -540,6 +541,7 @@ evolve_with_tree_sequences(
                                         pop.mcounts_from_preserved_nodes,
                                         2 * pop.diploids.size(),
                                         options.preserve_selected_fixations);
+                                    fixations_removed = true;
                                 }
                             for (auto &i : simplification_output.preserved_mutations)
                                 {
@@ -584,6 +586,63 @@ evolve_with_tree_sequences(
                             genetics.mutation_recycling_bin = fwdpp::ts::make_mut_queue(
                                 simplification_output.preserved_mutations,
                                 pop.mutations.size());
+                        }
+                }
+            else
+                {
+                    if (options.preserve_selected_fixations == false)
+                        {
+                            if (options.track_mutation_counts_during_sim == true)
+                                {
+                                    if (fixations_removed == false)
+                                        {
+                                            auto itr = std::remove_if(
+                                                pop.tables->mutations.begin(),
+                                                pop.tables->mutations.end(),
+                                                [&pop](const fwdpp::ts::mutation_record
+                                                           &mr) {
+                                                    return pop.mcounts[mr.key]
+                                                               == 2 * pop.diploids.size()
+                                                           && pop.mcounts_from_preserved_nodes
+                                                                      [mr.key]
+                                                                  == 0;
+                                                });
+                                            auto d = std::distance(
+                                                itr, end(pop.tables->mutations));
+                                            pop.tables->mutations.erase(
+                                                itr, end(pop.tables->mutations));
+                                            if (d)
+                                                {
+                                                    fwdpp::ts::rebuild_site_table(
+                                                        *pop.tables);
+                                                }
+                                            fwdpp::ts::
+                                                remove_fixations_from_haploid_genomes(
+                                                    pop.haploid_genomes, pop.mutations,
+                                                    pop.mcounts,
+                                                    pop.mcounts_from_preserved_nodes,
+                                                    2 * pop.diploids.size(),
+                                                    options.preserve_selected_fixations);
+                                            fixations_removed = true;
+                                            // NOTE: this is hacky and should be better-handled upstream
+                                            for (std::size_t i = 0;
+                                                 i < pop.mcounts.size(); ++i)
+                                                {
+                                                    if (pop.mcounts[i] == 2 * pop.N
+                                                        && pop.mcounts_from_preserved_nodes
+                                                                   [i]
+                                                               == 0)
+                                                        {
+                                                            pop.mcounts[i] = 0;
+                                                        }
+                                                }
+                                            genetics.mutation_recycling_bin
+                                                = fwdpp::ts::make_mut_queue(
+                                                    pop.mcounts,
+                                                    pop.mcounts_from_preserved_nodes);
+                                            ///throw std::runtime_error("need logic frim line 113");
+                                        }
+                                }
                         }
                 }
 

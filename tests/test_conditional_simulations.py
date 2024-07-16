@@ -183,7 +183,7 @@ def test_deleterious_mutation_remains_present_with_final_recording(
     prune_selected=booleans(),
 )
 @settings(deadline=None)
-@pytest.mark.parametrize("alpha", [1000.0])
+@pytest.mark.parametrize("alpha", [100.0, 1000.0])
 def test_sweep_from_new_mutation_using_API(
     msprime_seed, fp11_seed, alpha, prune_selected
 ):
@@ -217,29 +217,36 @@ def test_sweep_from_new_mutation_using_API(
     assert output.num_descendant_nodes == 1
     assert output.pop.generation > pop.generation
     if output.pop is not None:
-        assert output.pop.mcounts[output.mutation_index] == 2 * output.pop.N
-        _ = output.pop.dump_tables_to_tskit()
-        if output.pop.fixation_times[output.mutation_index] < output.pop.generation:
-            for md in output.pop.ancient_sample_metadata:
-                for n in md.nodes:
-                    assert (
-                        output.pop.tables.nodes[n].time
-                        == output.pop.fixation_times[output.mutation_index]
-                    )
-            ti = fwdpy11.TreeIterator(
-                output.pop.tables,
-                output.pop.ancient_sample_nodes,
-                update_samples=True,
-            )
-            for t in ti:
-                for mutation in t.mutations():
-                    assert mutation.key == output.mutation_index
-                    assert t.leaf_counts(mutation.node) == 2 * pop.N
-                    for s in t.samples_below(mutation.node):
+        if output.mutation_index is not None:
+            assert prune_selected is False
+            assert output.pop.mcounts[output.mutation_index] == 2 * output.pop.N
+            _ = output.pop.dump_tables_to_tskit()
+            if output.pop.fixation_times[output.fixation_index] < output.pop.generation:
+                for md in output.pop.ancient_sample_metadata:
+                    for n in md.nodes:
                         assert (
-                            output.pop.tables.nodes[s].time
+                            output.pop.tables.nodes[n].time
                             == output.pop.fixation_times[output.mutation_index]
                         )
+                ti = fwdpy11.TreeIterator(
+                    output.pop.tables,
+                    output.pop.ancient_sample_nodes,
+                    update_samples=True,
+                )
+                for t in ti:
+                    for mutation in t.mutations():
+                        assert mutation.key == output.mutation_index
+                        assert t.leaf_counts(mutation.node) == 2 * pop.N
+                        for s in t.samples_below(mutation.node):
+                            assert (
+                                output.pop.tables.nodes[s].time
+                                == output.pop.fixation_times[output.fixation_index]
+                            )
+        else:
+            assert prune_selected is True
+            assert len(output.pop.fixations) > 0
+            assert output.fixation_index is not None
+            assert output.fixation_index < len(output.pop.fixations)
 
         ti = fwdpy11.TreeIterator(output.pop.tables, output.pop.alive_nodes)
         for t in ti:
