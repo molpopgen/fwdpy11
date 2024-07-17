@@ -7,6 +7,25 @@ updates to latest `fwdpp` version, etc.
 
 Bug fixes:
 
+Fix bug in handling fixation removal (PR {pr}`1323`)
+
+* In effect, flags to remove fixations were ignored.
+  This likely occurred when modifying the back end
+  to support demes graphs, but I have not bothered to
+  bisect out the source of the error.
+* Added explicit C++ and Python tests of removing fixations
+* Updated Python tests of selective sweeps, including
+  fixing some logic errors in the tests that led them
+  to pass "by luck" rather than by design.
+
+This bug does not affect simulation results for multiplicative
+models.  For such models, relative fitness is what matters
+and not removing fixations still maintains relative fitness.
+
+## 0.23.0
+
+Bug fixes:
+
 * For multiplicative fitness models, "super lethal" mutations ("s" < -1.0) 
   could results in positive fitness values.
   This is now fixed, and the fitness function returns as soon as "w" <= 0.
