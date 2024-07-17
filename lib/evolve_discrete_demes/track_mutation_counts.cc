@@ -4,7 +4,7 @@
 #include <fwdpp/internal/sample_diploid_helpers.hpp>
 #include "util.hpp"
 
-void
+bool
 track_mutation_counts(fwdpy11::Population &pop, const bool simplified,
                       const bool suppress_edge_table_indexing)
 {
@@ -44,4 +44,5 @@ track_mutation_counts(fwdpy11::Population &pop, const bool simplified,
                         }
                 }
         }
+    return true;
 }
