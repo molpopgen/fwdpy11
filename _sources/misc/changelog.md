@@ -3,6 +3,25 @@
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+## 0.24.0
+
+Bug fixes:
+
+Fix bug in handling fixation removal (PR {pr}`1323`)
+
+* In effect, flags to remove fixations were ignored.
+  This likely occurred when modifying the back end
+  to support demes graphs, but I have not bothered to
+  bisect out the source of the error.
+* Added explicit C++ and Python tests of removing fixations
+* Updated Python tests of selective sweeps, including
+  fixing some logic errors in the tests that led them
+  to pass "by luck" rather than by design.
+
+This bug does not affect simulation results for multiplicative
+models.  For such models, relative fitness is what matters
+and not removing fixations still maintains relative fitness.
+
 ## 0.23.0
 
 Bug fixes:
