@@ -99,6 +99,52 @@ def test_popgen_model_multiplicative_fitness_with_pruning_and_track_mutations():
     assert len(pop.fixations) > 0
 
 
+def test_popgen_model_multiplicative_fitness_with_pruning_and_track_mutations_simplify_each_generation():
+    L = 1e6
+    N = 1000
+    pdict = {
+        "sregions": [fwdpy11.ExpS(0, L, 1, mean=0.025)],
+        "recregions": [fwdpy11.PoissonInterval(0, L, 0.01)],
+        "rates": (0, 1e-3, None),
+        "demography": fwdpy11.ForwardDemesGraph.tubes([N], burnin=10),
+        "gvalue": fwdpy11.Multiplicative(scaling=2.0),
+        "prune_selected": True,
+        "simlen": N,
+    }
+    params = fwdpy11.ModelParams(**pdict)
+    pop = fwdpy11.DiploidPopulation(N, L)
+    rng = fwdpy11.GSLrng(54321)
+
+    class Recorder:
+        def __call__(self, pop, _):
+            for i, d in enumerate(pop.diploids):
+                # NOTE: not checking fitness calculations
+                # here b/c it really slows things down
+
+                for g in [d.first, d.second]:
+                    for m in pop.haploid_genomes[g].smutations:
+                        if pop.mcounts[m] == 2 * pop.N:
+                            key = pop.mutations[m].key
+                            found = False
+                            for f, ft in zip(pop.fixations, pop.fixation_times):
+                                if f.key == key:
+                                    found = True
+                                    assert ft == pop.generation, f"{pop.fixation_times}"
+                                    break
+                            assert found is True
+
+    fwdpy11.evolvets(
+        rng,
+        pop,
+        params,
+        track_mutation_counts=True,
+        simplification_interval=1,
+        recorder=Recorder(),
+        stopping_criterion=None,
+    )
+    assert len(pop.fixations) > 0
+
+
 def test_popgen_model_multiplicative_fitness_without_pruning_and_track_mutations():
     L = 1e6
     N = 1000
