@@ -208,7 +208,30 @@ BOOST_FIXTURE_TEST_CASE(test_remove_fixations_simplify_each_generation, common_s
     BOOST_REQUIRE(!pop.fixations.empty());
 }
 
-BOOST_FIXTURE_TEST_CASE(test_remove_fixations_simplify_each_generation_index_tables_after_simplify, common_setup)
+BOOST_FIXTURE_TEST_CASE(
+    test_remove_fixations_simplify_each_generation_use_trees_for_counts, common_setup)
+{
+    BOOST_REQUIRE_EQUAL(pop.N, 1000);
+    BOOST_REQUIRE_EQUAL(mregions.weights.size(), mregions.regions.size());
+    BOOST_REQUIRE_EQUAL(mregions.weights.size(), 1);
+    options.track_mutation_counts_during_sim = true;
+    BOOST_REQUIRE_EQUAL(options.preserve_selected_fixations, false);
+    BOOST_REQUIRE_EQUAL(options.track_mutation_counts_during_sim, true);
+    // Differs from previous test
+    options.suppress_edge_table_indexing = false;
+    BOOST_REQUIRE_EQUAL(options.suppress_edge_table_indexing, false);
+    evolve_with_tree_sequences(rng, pop, recorder, 1, forward_demes_graph, 1000, 0.,
+                               1e-3, mregions, recregions, gvalue_ptrs,
+                               sample_recorder_callback, stopping_criterion,
+                               post_simplification_recorder, options);
+    BOOST_REQUIRE_EQUAL(pop.generation, 1000);
+    BOOST_REQUIRE_EQUAL(pop.fixations.size(), pop.fixation_times.size());
+    BOOST_REQUIRE(!pop.fixations.empty());
+}
+
+BOOST_FIXTURE_TEST_CASE(
+    test_remove_fixations_simplify_each_generation_index_tables_after_simplify,
+    common_setup)
 {
     BOOST_REQUIRE_EQUAL(pop.N, 1000);
     BOOST_REQUIRE_EQUAL(mregions.weights.size(), mregions.regions.size());
