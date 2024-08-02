@@ -33,6 +33,9 @@ namespace fwdpy11
      * The handler is restored via the destructor,
      * so this class is like a "smart pointer" for
      * turning off the handler.
+     *
+     * NOTE: this object is instantiated at the START
+     * of evolvets.
      */
     {
       private:

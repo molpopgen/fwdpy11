@@ -27,5 +27,6 @@ init_discrete_demography_exceptions(py::module& m)
 {
     py::register_exception<ddemog::EmptyDeme>(m, "EmptyDeme");
     py::register_exception<ddemog::GlobalExtinction>(m, "GlobalExtinction");
+    py::register_exception<ddemog::LocalExtinction>(m, "LocalExtinction");
     py::register_exception<ddemog::DemographyError>(m, "DemographyError");
 }

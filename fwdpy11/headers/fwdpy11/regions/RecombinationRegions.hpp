@@ -13,6 +13,7 @@
 #include "Region.hpp"
 #include "fwdpp/util/validators.hpp"
 #include "fwdpy11/gsl/gsl_error_handler_wrapper.hpp"
+#include <core/gsl/gsl_discrete.hpp>
 
 namespace fwdpy11
 {
@@ -42,8 +43,8 @@ namespace fwdpy11
                 }
             if (!weights.empty())
                 {
-                    lookup.reset(
-                        gsl_ran_discrete_preproc(weights.size(), weights.data()));
+                    fwdpy11_core::update_lookup_table(weights.data(), weights.size(),
+                                                      lookup);
                 }
             else if (rate > 0.0)
                 {
@@ -111,13 +112,16 @@ namespace fwdpy11
             std::vector<double> means;
             for (auto& i : poisson_callbacks)
                 {
-                    sum_poisson_means += i->mean_number_xovers();
-                    means.push_back(i->mean_number_xovers());
+                    if (i->mean_number_xovers() > 0.0)
+                        {
+                            sum_poisson_means += i->mean_number_xovers();
+                            means.push_back(i->mean_number_xovers());
+                        }
                 }
             if (!means.empty())
                 {
-                    poisson_lookup.reset(
-                        gsl_ran_discrete_preproc(means.size(), means.data()));
+                    fwdpy11_core::update_lookup_table(means.data(), means.size(),
+                                                      poisson_lookup);
                 }
         }
 

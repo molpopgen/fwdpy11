@@ -38,6 +38,7 @@
 #include <fwdpp/ts/recording/edge_buffer.hpp>
 #include <fwdpp/ts/recording/mutations.hpp>
 #include <fwdpy11/types/Diploid.hpp>
+#include <core/gsl/gsl_discrete.hpp>
 #include "discrete_demography/discrete_demography.hpp"
 
 template <typename poptype, typename rng_t, typename genetic_param_holder>
@@ -232,8 +233,8 @@ evolve_generation_ts(
                     auto ancestry_proportion_iter
                         = demography.offspring_ancestry_proportions(
                             offspring_deme_index);
-                    ancestor_deme_lookup.reset(gsl_ran_discrete_preproc(
-                        ndemes, std::begin(ancestry_proportion_iter)));
+                    fwdpy11_core::update_lookup_table(std::begin(ancestry_proportion_iter),
+                                                 ndemes, ancestor_deme_lookup);
                     for (decltype(next_N_deme) ind = 0; ind < next_N_deme; ++ind)
                         {
                             // NOTE: this API changes

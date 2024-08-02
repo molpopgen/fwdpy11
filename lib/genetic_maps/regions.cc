@@ -1,4 +1,5 @@
 #include "fwdpy11/regions/RecombinationRegions.hpp"
+#include <core/gsl/gsl_discrete.hpp>
 #include <cmath>
 #include <gsl/gsl_randist.h>
 #include <limits>
@@ -152,7 +153,7 @@ namespace fwdpy11_core
                 weights.push_back(w);
                 segments.push_back(Segment{r.beg, r.end});
             }
-        lookup.reset(gsl_ran_discrete_preproc(segments.size(), weights.data()));
+        fwdpy11_core::update_lookup_table(weights.data(), weights.size(), lookup);
     }
 
     double

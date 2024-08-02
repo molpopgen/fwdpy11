@@ -24,7 +24,7 @@ classifiers = [
 ]
 dynamic = ["version"]
 dependencies = [
-    "attrs >= 20.3.0",
+    "attrs >= 20.3.0, < 24.1.0",
     "black",
     "numpy>=1.23.5",
     "tskit >= 0.5.6",

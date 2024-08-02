@@ -288,7 +288,7 @@ demes:
 
 def test_two_demes_divergent_optima():
     N = 500
-    rho = 0
+    rho = 10.0
 
     yaml = f"""
     time_units: generations
