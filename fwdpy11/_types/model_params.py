@@ -34,7 +34,7 @@ from fwdpy11._types.forward_demes_graph import ForwardDemesGraph
 
 
 @attr_class_to_from_dict_no_recurse
-@attr.s(kw_only=True, frozen=True, slots=True, repr_ns="fwdpy11")
+@attr.s(kw_only=True, frozen=True, slots=True)
 class MutationAndRecombinationRates(object):
     """
     Stores and validates the mutation and recombination rate parameters
@@ -111,7 +111,7 @@ def validate_timings(
 
 
 @attr_class_to_from_dict_no_recurse
-@attr.s(kw_only=True, frozen=True, slots=True, repr_ns="fwdpy11")
+@attr.s(kw_only=True, frozen=True, slots=True)
 class ModelParams(object):
     """
     This class stores and validates the parameters of a simulation.

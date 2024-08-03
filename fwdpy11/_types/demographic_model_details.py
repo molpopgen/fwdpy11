@@ -15,7 +15,7 @@ from .forward_demes_graph import ForwardDemesGraph
 
 @attr_class_pickle
 @attr_class_to_from_dict_no_recurse
-@attr.s(kw_only=True, frozen=True, auto_attribs=True, repr_ns="fwdpy11")
+@attr.s(kw_only=True, frozen=True, auto_attribs=True)
 @deprecated(reason="prefer ForwardDemesGraph")
 class DemographicModelDetails(object):
     """

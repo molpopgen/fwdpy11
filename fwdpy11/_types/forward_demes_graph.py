@@ -33,7 +33,7 @@ class ForwardTimeInterval:
     end_time: int
 
 
-@attr.s(repr_ns="fwdpy11")
+@attr.s()
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
 class ForwardDemesGraph(fwdpy11._fwdpy11._ForwardDemesGraph):

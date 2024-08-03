@@ -36,7 +36,7 @@ def _is_integer_if_discrete(self, attribute, value):
 
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
-@attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
+@attr.s(auto_attribs=True, frozen=True)
 class PoissonInterval(fwdpy11._fwdpy11._ll_PoissonInterval):
     """
     Generate poisson number of crossover breakpoints.
@@ -90,7 +90,7 @@ class PoissonInterval(fwdpy11._fwdpy11._ll_PoissonInterval):
 
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
-@attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
+@attr.s(auto_attribs=True, frozen=True)
 class PoissonPoint(fwdpy11._fwdpy11._ll_PoissonPoint):
     """
     Generate a recombination breakpoint at a fixed position if the
@@ -149,7 +149,7 @@ class PoissonPoint(fwdpy11._fwdpy11._ll_PoissonPoint):
 
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
-@attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
+@attr.s(auto_attribs=True, frozen=True)
 class BinomialInterval(fwdpy11._fwdpy11._ll_BinomialInterval):
     """
     Generate exactly one crossover with a given probability
@@ -202,7 +202,7 @@ class BinomialInterval(fwdpy11._fwdpy11._ll_BinomialInterval):
 
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
-@attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
+@attr.s(auto_attribs=True, frozen=True)
 class BinomialPoint(fwdpy11._fwdpy11._ll_BinomialPoint):
     """
     Generate a crossover breakpoint at a fixed position with a
@@ -255,7 +255,7 @@ class BinomialPoint(fwdpy11._fwdpy11._ll_BinomialPoint):
 
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
-@attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
+@attr.s(auto_attribs=True, frozen=True)
 class FixedCrossovers(fwdpy11._fwdpy11._ll_FixedCrossovers):
     """
     Generate a fixed number of crossover breakpoints.
@@ -312,7 +312,7 @@ class FixedCrossovers(fwdpy11._fwdpy11._ll_FixedCrossovers):
 
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
-@attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
+@attr.s(auto_attribs=True, frozen=True)
 class BinomialIntervalMap(fwdpy11._fwdpy11._ll_BinomialIntervalMap):
     """
     Generate exactly one crossover with a given probability

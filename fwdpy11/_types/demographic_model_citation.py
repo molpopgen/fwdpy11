@@ -10,7 +10,7 @@ from fwdpy11.class_decorators import (
 
 @attr_class_pickle
 @attr_class_to_from_dict
-@attr.s(kw_only=True, frozen=True, auto_attribs=True, repr_ns="fwdpy11")
+@attr.s(kw_only=True, frozen=True, auto_attribs=True)
 @deprecated(reason="prefer ForwardDemesGraph")
 class DemographicModelCitation(object):
     """
