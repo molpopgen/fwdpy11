@@ -59,7 +59,7 @@ class TimingError(Exception):
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
-@attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
+@attr.s(auto_attribs=True, frozen=True)
 class Optimum(_ll_Optimum):
     """
     Parameters for a trait optimum.
@@ -99,7 +99,7 @@ class Optimum(_ll_Optimum):
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
-@attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11", eq=False)
+@attr.s(auto_attribs=True, frozen=True, eq=False)
 class PleiotropicOptima(_ll_PleiotropicOptima):
     """
     Parameters for multiple trait optima
@@ -145,7 +145,7 @@ class PleiotropicOptima(_ll_PleiotropicOptima):
         return optima_equal and VS_equal and when_equal
 
 
-@attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
+@attr.s(auto_attribs=True, frozen=True)
 class GaussianStabilizingSelection(_ll_GaussianStabilizingSelection):
     """
     Define a mapping of phenotype-to-fitness according to a
@@ -228,7 +228,7 @@ class GaussianStabilizingSelection(_ll_GaussianStabilizingSelection):
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
-@attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
+@attr.s(auto_attribs=True, frozen=True)
 class NoNoise(_ll_NoNoise):
     """
     No random effects on genetic values
@@ -246,7 +246,7 @@ class NoNoise(_ll_NoNoise):
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
-@attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
+@attr.s(auto_attribs=True, frozen=True)
 class GaussianNoise(_ll_GaussianNoise):
     """
     Gaussian noise added to genetic values.
@@ -275,7 +275,7 @@ class GaussianNoise(_ll_GaussianNoise):
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
-@attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
+@attr.s(auto_attribs=True, frozen=True)
 class Additive(_ll_Additive):
     """
     Additive effects on genetic values.
@@ -327,7 +327,7 @@ class Additive(_ll_Additive):
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
-@attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
+@attr.s(auto_attribs=True, frozen=True)
 class Multiplicative(_ll_Multiplicative):
     """
     Multiplicative effects on genetic values.
@@ -379,7 +379,7 @@ class Multiplicative(_ll_Multiplicative):
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
-@attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
+@attr.s(auto_attribs=True, frozen=True)
 class GBR(_ll_GBR):
     """
     The "gene-based recessive" trait model described in Thornton et al.
@@ -420,7 +420,7 @@ class GBR(_ll_GBR):
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
-@attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
+@attr.s(auto_attribs=True, frozen=True)
 class AdditivePleiotropy(_ll_StrictAdditiveMultivariateEffects):
     """
     Multivariate trait values under strictly additive effects.
