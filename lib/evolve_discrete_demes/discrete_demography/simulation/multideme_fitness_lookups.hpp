@@ -26,7 +26,9 @@
 #include <limits>
 #include <fwdpy11/discrete_demography/exceptions.hpp>
 #include <fwdpy11/rng.hpp>
+#include <core/gsl/gsl_discrete.hpp>
 #include <fwdpp/gsl_discrete.hpp>
+#include <stdexcept>
 #include "multideme_fitness_bookmark.hpp"
 
 namespace fwdpy11_core
@@ -97,11 +99,31 @@ namespace fwdpy11_core
                                 //
                                 // FIXME: this is the cause of the segfault
                                 // in testing
-                                lookups[i].reset(gsl_ran_discrete_preproc(
+                                auto first = fitness_bookmark.individual_fitness.data()
+                                             + fitness_bookmark.starts[i];
+                                auto last = first
+                                            + (fitness_bookmark.stops[i]
+                                               - fitness_bookmark.starts[i]
+
+                                            );
+
+                                // generate a more useful error message here...
+                                if (std::all_of(first, last,
+                                                [](const double d) { return d == 0.0; }))
+                                    {
+                                        std::ostringstream o;
+                                        o << "all fitness values in deme " << i
+                                          << " are zero.";
+                                        throw fwdpy11::discrete_demography::
+                                            LocalExtinction(o.str());
+                                    }
+                                // ...then use the call that skips the same check
+                                fwdpy11_core::update_lookup_table_skip_zero_check(
+                                    fitness_bookmark.individual_fitness.data()
+                                        + fitness_bookmark.starts[i],
                                     fitness_bookmark.stops[i]
                                         - fitness_bookmark.starts[i],
-                                    fitness_bookmark.individual_fitness.data()
-                                        + fitness_bookmark.starts[i]));
+                                    lookups[i]);
                             }
                         else
                             {

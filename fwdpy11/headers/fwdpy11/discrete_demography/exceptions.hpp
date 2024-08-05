@@ -76,6 +76,23 @@ namespace fwdpy11
                 return message_.c_str();
             }
         };
+
+        class __attribute__((visibility("default"))) LocalExtinction
+            : public std::exception
+        {
+          private:
+            std::string message_;
+
+          public:
+            explicit LocalExtinction(std::string message) : message_(std::move(message))
+            {
+            }
+            virtual const char*
+            what() const noexcept
+            {
+                return message_.c_str();
+            }
+        };
     } // namespace discrete_demography
 } // namespace fwdpy11
 

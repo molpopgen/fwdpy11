@@ -199,6 +199,7 @@ def test_metadata_roundtrip_single_deme_sim_with_parameters(rng, pdict, pop, inc
     )
 
     provenance = json.loads(ts.provenance(0).record)
+    print(provenance["parameters"]["params_dict"])
     params_dict = eval(provenance["parameters"]["params_dict"])
 
     assert params_dict == params.asdict()

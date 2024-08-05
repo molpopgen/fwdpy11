@@ -1,5 +1,5 @@
 black
-attrs >= 20.3.0 
+attrs < 20.4
 demes == 0.2.2
 numpy >= 1.23.5
 tskit >= 0.5.6

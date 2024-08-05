@@ -36,6 +36,7 @@ init_RecombinationRegions(py::module& m)
 
     m.def("dispatch_create_GeneticMap_non_Region",
           [](py::list poisson, py::list non_poisson) {
+          py::print(poisson, non_poisson);
               std::vector<std::unique_ptr<fwdpy11::PoissonCrossoverGenerator>>
                   poisson_callbacks;
               std::vector<std::unique_ptr<fwdpy11::NonPoissonCrossoverGenerator>>
