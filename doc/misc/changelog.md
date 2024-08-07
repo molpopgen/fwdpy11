@@ -3,6 +3,22 @@
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+## 0.24.1
+
+Bug fixes:
+
+Fix bug in handling fixation removal in generations
+when simplification occurs. (PR {pr}`1326`)
+
+Back end changes:
+
+* Improve runtime validation of inputs to GSL discrete
+lookup tables. (PR {pr}`1330`)
+* Throw an exception if ALL diploid fitness values are 0. (PR {pr}`1330`)
+* Throw an exception if ALL diploid fitness values are 0 within a single deme. (PR {pr}`1330`)
+* Fix a warning relating to code not accepted in C++20. (PR {pr}`1333`)
+
+
 ## 0.24.0
 
 Bug fixes:
