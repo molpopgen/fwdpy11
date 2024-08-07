@@ -562,6 +562,11 @@ The value will be the count of the mutation each generation.</p></li>
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[fwdpy11.PoissonInterval(beg=0, end=1, mean=0.01, discrete=False)] []
+</pre></div>
+</div>
+</div>
 </div>
 <p>The arguments to <code class="docutils literal notranslate"><span class="pre">fwdpy11.evolvets</span></code> need some explanation.
 We simplify every 10 generations.
@@ -650,7 +655,7 @@ However, there are good reasons to convert things into common formats for analys
 </details>
 </div>
 <figure class="align-default" id="pyfreqtrackfig">
-<img alt="../_images/902dd8fbec3744c1ed23c800509c5e3d14dbee7946ae7d398403274f0c392a6a.png" src="../_images/902dd8fbec3744c1ed23c800509c5e3d14dbee7946ae7d398403274f0c392a6a.png" />
+<img alt="../_images/57e408b1d7a8ff4fe62a592fd27c0496c3b2e33391c3c8680063d5f1816d1ba6.png" src="../_images/57e408b1d7a8ff4fe62a592fd27c0496c3b2e33391c3c8680063d5f1816d1ba6.png" />
 <figcaption>
 <p><span class="caption-number">Fig. 1 </span><span class="caption-text">Some sweeps from new mutations.</span><a class="headerlink" href="#pyfreqtrackfig" title="Permalink to this image">#</a></p>
 </figcaption>
@@ -693,6 +698,11 @@ The solution is:</p>
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[fwdpy11.PoissonInterval(beg=0, end=1, mean=0.01, discrete=False)] []
+</pre></div>
+</div>
+</div>
 </div>
 <p>Here, we do not need <code class="docutils literal notranslate"><span class="pre">track_mutation_counts=True</span></code> because simplifying each generation ends up accomplishing the same thing (for neutral and for selected variants).</p>
 <p>Let’s take a look at the plot.
@@ -713,7 +723,7 @@ We will reduce the opacity of selected variants to make the neutral ones pop a b
 </details>
 </div>
 <figure class="align-default" id="pyfreqtrackfigneutral">
-<img alt="../_images/028055413156beedd3c145941d9826cb0665ae34af35370336f1bcd503502cf0.png" src="../_images/028055413156beedd3c145941d9826cb0665ae34af35370336f1bcd503502cf0.png" />
+<img alt="../_images/21b6f0bdeea0562c06ca9302fc1200968951c0dcb637a81bd39bdcb4c634f855.png" src="../_images/21b6f0bdeea0562c06ca9302fc1200968951c0dcb637a81bd39bdcb4c634f855.png" />
 <figcaption>
 <p><span class="caption-number">Fig. 2 </span><span class="caption-text">The hitch-hiking effect.
 Dotted lines show the trajectories of neutral mutations.
