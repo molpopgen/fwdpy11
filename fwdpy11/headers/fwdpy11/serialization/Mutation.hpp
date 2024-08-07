@@ -32,7 +32,7 @@ namespace fwdpp
         template <> struct serialize_mutation<fwdpy11::Mutation>
         {
             io::scalar_writer writer;
-            serialize_mutation<fwdpy11::Mutation>() : writer{}
+            serialize_mutation() : writer{}
             {
             }
             template <typename streamtype>
@@ -62,7 +62,7 @@ namespace fwdpp
         template <> struct deserialize_mutation<fwdpy11::Mutation>
         {
             io::scalar_reader reader;
-            deserialize_mutation<fwdpy11::Mutation>() : reader{}
+            deserialize_mutation() : reader{}
             {
             }
             template <typename streamtype>
