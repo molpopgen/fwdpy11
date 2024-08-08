@@ -59,7 +59,7 @@ class TimingError(Exception):
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
-@attr.s(auto_attribs=True, frozen=True)
+@attr.s(auto_attribs=True, frozen=True, auto_detect=True)
 class Optimum(_ll_Optimum):
     """
     Parameters for a trait optimum.
@@ -95,11 +95,16 @@ class Optimum(_ll_Optimum):
     def __attrs_post_init__(self):
         super(Optimum, self).__init__(self.optimum, self.VS, self.when)
 
+    def __repr__(self) -> str:
+        return (
+            f"fwdpy11.Optimum(optimum={self.optimum}, VS={self.VS}, when={self.when})"
+        )
+
 
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
-@attr.s(auto_attribs=True, frozen=True, eq=False)
+@attr.s(auto_attribs=True, frozen=True, eq=False, auto_detect=True)
 class PleiotropicOptima(_ll_PleiotropicOptima):
     """
     Parameters for multiple trait optima
@@ -143,6 +148,10 @@ class PleiotropicOptima(_ll_PleiotropicOptima):
             when_equal = self.when == other.when
 
         return optima_equal and VS_equal and when_equal
+
+    def __repr__(self) -> str:
+        args = f"optima={self.optima}, VS={self.VS}, when={self.when}"
+        return f"(fwdpy11.PleiotropicOptima({args}))"
 
 
 @attr.s(auto_attribs=True, frozen=True)
