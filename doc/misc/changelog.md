@@ -3,6 +3,13 @@
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+## 0.24.2
+
+Back end changes:
+
+* Remove unintended print statement from C++ code.
+  (PR {pr}`1339`)
+
 ## 0.24.1
 
 Bug fixes:
