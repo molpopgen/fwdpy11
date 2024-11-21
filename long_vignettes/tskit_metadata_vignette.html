@@ -486,7 +486,7 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="working-with-data-in-tskit-format">
 <span id="tskit-metadata-vignette"></span><h1>Working with data in tskit format<a class="headerlink" href="#working-with-data-in-tskit-format" title="Permalink to this heading">#</a></h1>
-<p>This vignette discusses how to process simulations stored in a <a class="reference external" href="https://tskit.dev/tskit/docs/stable/python-api.html#tskit.TreeSequence" title="(in Python)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tskit.TreeSequence</span></code></a>.
+<p>This vignette discusses how to process simulations stored in a <a class="reference external" href="https://tskit.dev/tskit/docs/stable/python-api.html#tskit.TreeSequence" title="(in Project name not set)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tskit.TreeSequence</span></code></a>.
 A main goal of this vignette is to describe how to access data from the forward simulation stored as metadata in the tree sequence.</p>
 <p>This example will be fairly rich in terms of features:</p>
 <ol class="arabic simple">
@@ -537,7 +537,7 @@ We will simulate the following demographic model:</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/c9a85604a546eb2f971de13796d262708be777f14da0474cb0b936eb4f64ceef.png" src="../_images/c9a85604a546eb2f971de13796d262708be777f14da0474cb0b936eb4f64ceef.png" />
+<img alt="../_images/24e513e15ce59debd8ee7191a53d07a72bcfa6a073fe2c39fdf978becd911f63.png" src="../_images/24e513e15ce59debd8ee7191a53d07a72bcfa6a073fe2c39fdf978becd911f63.png" />
 </div>
 </div>
 <p>(<code class="docutils literal notranslate"><span class="pre">graph</span></code> is a <a class="reference external" href="https://popsim-consortium.github.io/demes-docs/main/api.html#demes.Graph" title="(in Python)"><code class="xref py py-class docutils literal notranslate"><span class="pre">demes.Graph</span></code></a>.)</p>
@@ -660,17 +660,12 @@ We will generate the model from a <a class="reference external" href="https://po
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[fwdpy11.PoissonInterval(beg=0, end=1000, mean=2.5, discrete=True)] []
-</pre></div>
-</div>
-</div>
 </div>
 <p>Now that we have some data, let’s look at how the <code class="docutils literal notranslate"><span class="pre">fwdpy11</span></code> mutation and individual information got encoded as <code class="docutils literal notranslate"><span class="pre">tskit</span></code> metadata!</p>
 </section>
 <section id="exploring-the-mutation-metadata">
 <h2>Exploring the mutation metadata<a class="headerlink" href="#exploring-the-mutation-metadata" title="Permalink to this heading">#</a></h2>
-<p>By default, the metadata decode as a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>:</p>
+<p>By default, the metadata decode as a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">ts</span><span class="o">.</span><span class="n">mutations</span><span class="p">():</span>
@@ -695,7 +690,7 @@ We will generate the model from a <a class="reference external" href="https://po
 </div>
 </div>
 </div>
-<p>We can call <a class="reference internal" href="../pages/tskit_tools.html#fwdpy11.tskit_tools.decode_mutation_metadata" title="fwdpy11.tskit_tools.decode_mutation_metadata"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.tskit_tools.decode_mutation_metadata()</span></code></a> to convert the <code class="docutils literal notranslate"><span class="pre">dict</span></code> to a <a class="reference internal" href="../pages/types.html#fwdpy11.Mutation" title="fwdpy11.Mutation"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.Mutation</span></code></a>.  Thus function returns a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> because it can be accessed using a <a class="reference external" href="https://docs.python.org/3/library/functions.html#slice" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">slice</span></code></a>:</p>
+<p>We can call <a class="reference internal" href="../pages/tskit_tools.html#fwdpy11.tskit_tools.decode_mutation_metadata" title="fwdpy11.tskit_tools.decode_mutation_metadata"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.tskit_tools.decode_mutation_metadata()</span></code></a> to convert the <code class="docutils literal notranslate"><span class="pre">dict</span></code> to a <a class="reference internal" href="../pages/types.html#fwdpy11.Mutation" title="fwdpy11.Mutation"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.Mutation</span></code></a>.  Thus function returns a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> because it can be accessed using a <a class="reference external" href="https://docs.python.org/3/library/functions.html#slice" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">slice</span></code></a>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">m</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">tskit_tools</span><span class="o">.</span><span class="n">decode_mutation_metadata</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
@@ -742,7 +737,7 @@ When converted to a <a class="reference internal" href="../pages/types.html#fwdp
 <section id="adding-mutation-with-msprime">
 <h3>Adding mutation with <code class="docutils literal notranslate"><span class="pre">msprime</span></code>.<a class="headerlink" href="#adding-mutation-with-msprime" title="Permalink to this heading">#</a></h3>
 <p>Mutations generated by <code class="docutils literal notranslate"><span class="pre">fwdpy11</span></code> contain metadata, allowing you to get their effect sizes, etc..
-When we add mutations to the tree sequence with <a class="reference external" href="https://tskit.dev/msprime/docs/latest/api.html#msprime.sim_mutations" title="(in Python)"><code class="xref py py-func docutils literal notranslate"><span class="pre">msprime.sim_mutations()</span></code></a>, the new mutation table rows have <em>no metadata</em>.</p>
+When we add mutations to the tree sequence with <a class="reference external" href="https://tskit.dev/msprime/docs/latest/api.html#msprime.sim_mutations" title="(in Project name not set)"><code class="xref py py-func docutils literal notranslate"><span class="pre">msprime.sim_mutations()</span></code></a>, the new mutation table rows have <em>no metadata</em>.</p>
 <p>Let’s mutate a copy of our tree sequence.
 We will apply a binary, infinite-site model to add neutral mutations:</p>
 <div class="cell docutils container">
@@ -778,7 +773,7 @@ Our new number of mutations = 29495
 </section>
 <section id="exploring-the-individual-metadata">
 <h2>Exploring the individual metadata<a class="headerlink" href="#exploring-the-individual-metadata" title="Permalink to this heading">#</a></h2>
-<p>As with mutations, individual metadata automatically decode to <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>:</p>
+<p>As with mutations, individual metadata automatically decode to <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">individual</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">metadata</span><span class="p">)</span>

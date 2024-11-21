@@ -523,7 +523,7 @@ document.write(`
 For example, you could write a single Python script plus a shell script
 that your local cluster understands, sending your simulation to hundreds
 of compute nodes.</p>
-<p>This section introduces <a class="reference external" href="https://docs.python.org/3/library/concurrent.futures.html#module-concurrent.futures" title="(in Python v3.12)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">concurrent.futures</span></code></a> as a method to execute
+<p>This section introduces <a class="reference external" href="https://docs.python.org/3/library/concurrent.futures.html#module-concurrent.futures" title="(in Python v3.13)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">concurrent.futures</span></code></a> as a method to execute
 many replicates in separate Python <em>processes</em> using a single script.</p>
 <p>Fully worked-out examples of varying complexity can be found here:</p>
 <ul class="simple">
@@ -541,8 +541,8 @@ than returning them.</p></li>
 <li><p>If you do return something to the main “collector”
 process, keep it simple!</p></li>
 <li><p>Random number seeds are set in <code class="docutils literal notranslate"><span class="pre">__main__</span></code> using
-<a class="reference external" href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.randint.html#numpy.random.randint" title="(in NumPy v2.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.random.randint()</span></code></a> after calling
-<a class="reference external" href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.seed.html#numpy.random.seed" title="(in NumPy v2.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.random.seed()</span></code></a> using a user-provided seed.</p></li>
+<a class="reference external" href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.randint.html#numpy.random.randint" title="(in NumPy v2.1)"><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.random.randint()</span></code></a> after calling
+<a class="reference external" href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.seed.html#numpy.random.seed" title="(in NumPy v2.1)"><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.random.seed()</span></code></a> using a user-provided seed.</p></li>
 </ul>
 </section>
 <section id="how-long-to-run-the-simulation">
@@ -635,8 +635,7 @@ near equilibrium, but we’re just using it as an example:</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[fwdpy11.PoissonInterval(beg=0.0, end=0.1, mean=0.001, discrete=False)] []
-16
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>16
 </pre></div>
 </div>
 </div>
@@ -893,7 +892,7 @@ fitness if needed.</p>
 <dd class="field-even"><p>Sum of effect sizes</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)">float</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)">float</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -916,7 +915,7 @@ fitness if needed.</p>
 <dd class="field-even"><p>Sum of effect sizes (accounting for heterozygous effects)</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)">float</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)">float</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1035,7 +1034,7 @@ for some of the gory details.</p>
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.custom_genetic_value_decorators.__init__" title="Permalink to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>ndim</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – The dimensionality of the model</p>
+<dd class="field-odd"><p><strong>ndim</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – The dimensionality of the model</p>
 </dd>
 </dl>
 <p>The default is <code class="docutils literal notranslate"><span class="pre">ndim=1</span></code>.</p>
@@ -1112,7 +1111,7 @@ we can simplify a bit with another decorator:</p>
 <a class="reference internal" href="gvalue_to_fitness.html#fwdpy11.GaussianStabilizingSelection" title="fwdpy11.GaussianStabilizingSelection"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GaussianStabilizingSelection</span></code></a> in Python for a single trait.
 The second example implements a model
 where the optimum changes to a new value each generation. (Note that
-the second model requires that <a class="reference external" href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.seed.html#numpy.random.seed" title="(in NumPy v2.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.random.seed()</span></code></a> be called elsewhere
+the second model requires that <a class="reference external" href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.seed.html#numpy.random.seed" title="(in NumPy v2.1)"><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.random.seed()</span></code></a> be called elsewhere
 so that results are reproducible.)</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">math</span>
 
@@ -1184,7 +1183,7 @@ so that results are reproducible.)</p>
 </div>
 <p>This class supports the buffer protocol, which exposes the
 genetic values array.  The most efficient access will
-be via a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#memoryview" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">memoryview</span></code></a>.</p>
+be via a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#memoryview" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">memoryview</span></code></a>.</p>
 <p>Instances of this class have the following attributes:</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fwdpy11.DiploidGeneticValueToFitnessData.offspring_metadata">
@@ -1317,7 +1316,7 @@ and this value.</p>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>ndim</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – </p></li>
+<li><p><strong>ndim</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – </p></li>
 <li><p><strong>genetic_value_to_fitness</strong> (<a class="reference internal" href="gvalue_to_fitness.html#fwdpy11.GeneticValueIsTrait" title="fwdpy11.GeneticValueIsTrait"><em>fwdpy11.GeneticValueIsTrait</em></a><em> or </em><em>None</em>) – </p></li>
 <li><p><strong>noise</strong> (<a class="reference internal" href="gvaluenoise.html#fwdpy11.GeneticValueNoise" title="fwdpy11.GeneticValueNoise"><em>fwdpy11.GeneticValueNoise</em></a><em> or </em><em>None</em>) – </p></li>
 </ul>
@@ -1337,7 +1336,7 @@ and this value.</p>
 <a class="reference internal" href="types.html#fwdpy11.DiploidMetadata.g" title="fwdpy11.DiploidMetadata.g"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.DiploidMetadata.g</span></code></a></p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)">float</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)">float</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1353,7 +1352,7 @@ and this value.</p>
 <dd class="field-even"><p>fitness</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)">float</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)">float</a></p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -1426,7 +1425,7 @@ responsibilities:</p>
 <ol class="arabic simple">
 <li><p>It must return a value that will populate the genetic value
 field of the offspring’s metadata (<a class="reference internal" href="types.html#fwdpy11.DiploidMetadata.g" title="fwdpy11.DiploidMetadata.g"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.DiploidMetadata.g</span></code></a>).</p></li>
-<li><p>It also needs to populate an array of <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> that represents
+<li><p>It also needs to populate an array of <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> that represents
 the genetic values for all trait dimensions. See <a class="reference internal" href="#python-genetic-value-dimensions"><span class="std std-ref">here</span></a>.
 For the common case of a one-dimensional genetic value,
 you populate element <code class="docutils literal notranslate"><span class="pre">0</span></code> of this array with value that you
@@ -1447,9 +1446,9 @@ resistance in the short term was to implement the current approach.</p>
 <h4>Example: strictly additive effects on a trait<a class="headerlink" href="#example-strictly-additive-effects-on-a-trait" title="Permalink to this heading">#</a></h4>
 <p>Here is an example of a strict additive model of a trait,
 taken from the test suite. You’ll notice that we are accessing
-arrays on the <code class="docutils literal notranslate"><span class="pre">C++</span></code> using Python <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#memoryview" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">memoryview</span></code></a> objects.
+arrays on the <code class="docutils literal notranslate"><span class="pre">C++</span></code> using Python <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#memoryview" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">memoryview</span></code></a> objects.
 This is a <em>very</em> efficient method, and much faster
-than creating a temporary, non-owning <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>.</p>
+than creating a temporary, non-owning <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fwdpy11</span>
 <span class="kn">import</span> <span class="nn">fwdpy11.custom_genetic_value_decorators</span>
 
@@ -1466,7 +1465,7 @@ than creating a temporary, non-owning <a class="reference external" href="https:
 </pre></div>
 </div>
 <p>If you want to account for the heterozygous effect of mutations, then the
-most explicit approach is probably to use <a class="reference external" href="https://docs.python.org/3/library/collections.html#collections.Counter" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">collections.Counter</span></code></a>:</p>
+most explicit approach is probably to use <a class="reference external" href="https://docs.python.org/3/library/collections.html#collections.Counter" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">collections.Counter</span></code></a>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">calculate_gvalue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
     <span class="n">s</span> <span class="o">=</span> <span class="mf">0.0</span>
     <span class="n">c</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
@@ -1512,7 +1511,7 @@ in <a class="reference internal" href="../technical/genetic_values.html#gvalue-s
 </div>
 <p>This class supports the buffer protocol, which exposes the
 genetic values array.  The most efficient access will
-be via a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#memoryview" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">memoryview</span></code></a>.</p>
+be via a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#memoryview" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">memoryview</span></code></a>.</p>
 <p>Instances of this class have the following attributes:</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="rng">

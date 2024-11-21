@@ -480,18 +480,18 @@ the attribute names for instances:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>nregions</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>[</em><a class="reference internal" href="regiontypes.html#fwdpy11.Region" title="fwdpy11.Region"><em>fwdpy11.Region</em></a><em>]</em>) – List of regions where neutral mutations occur</p></li>
-<li><p><strong>sregions</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>[</em><a class="reference internal" href="regiontypes.html#fwdpy11.Sregion" title="fwdpy11.Sregion"><em>fwdpy11.Sregion</em></a><em>]</em>) – List of regions where selected mutations occur</p></li>
-<li><p><strong>recregions</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>[</em><a class="reference internal" href="regiontypes.html#fwdpy11.Region" title="fwdpy11.Region"><em>fwdpy11.Region</em></a><em>] or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.12)"><em>object</em></a><em>]</em>) – List of regions where recombination events occur</p></li>
-<li><p><strong>rates</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em> or </em><a class="reference internal" href="#fwdpy11.MutationAndRecombinationRates" title="fwdpy11.MutationAndRecombinationRates"><em>fwdpy11.MutationAndRecombinationRates</em></a>) – The neutral mutation rate, selected mutation rate, and
+<li><p><strong>nregions</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a><em>[</em><a class="reference internal" href="regiontypes.html#fwdpy11.Region" title="fwdpy11.Region"><em>fwdpy11.Region</em></a><em>]</em>) – List of regions where neutral mutations occur</p></li>
+<li><p><strong>sregions</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a><em>[</em><a class="reference internal" href="regiontypes.html#fwdpy11.Sregion" title="fwdpy11.Sregion"><em>fwdpy11.Sregion</em></a><em>]</em>) – List of regions where selected mutations occur</p></li>
+<li><p><strong>recregions</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a><em>[</em><a class="reference internal" href="regiontypes.html#fwdpy11.Region" title="fwdpy11.Region"><em>fwdpy11.Region</em></a><em>] or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.13)"><em>object</em></a><em>]</em>) – List of regions where recombination events occur</p></li>
+<li><p><strong>rates</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a><em> or </em><a class="reference internal" href="#fwdpy11.MutationAndRecombinationRates" title="fwdpy11.MutationAndRecombinationRates"><em>fwdpy11.MutationAndRecombinationRates</em></a>) – The neutral mutation rate, selected mutation rate, and
 total recombination rate, respectively.
 See below for more details.</p></li>
-<li><p><strong>demography</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.12)"><em>object</em></a>) – The demographic model to simulate</p></li>
-<li><p><strong>simlen</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – The number of time steps to evolve</p></li>
-<li><p><strong>prune_selected</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, remove selected fixations from
+<li><p><strong>demography</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.13)"><em>object</em></a>) – The demographic model to simulate</p></li>
+<li><p><strong>simlen</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – The number of time steps to evolve</p></li>
+<li><p><strong>prune_selected</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, remove selected fixations from
 the population when they are first detected
 as fixed.</p></li>
-<li><p><strong>allow_residual_selfing</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, then an individual may
+<li><p><strong>allow_residual_selfing</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, then an individual may
 be chosen twice as a parent.
 If <code class="docutils literal notranslate"><span class="pre">False</span></code>, two distinct parents
 are required.</p></li>
@@ -589,9 +589,9 @@ attributes of the same name:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>neutral_mutation_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – </p></li>
-<li><p><strong>selected_mutation_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – </p></li>
-<li><p><strong>recombination_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a><em> or </em><em>None</em>) – </p></li>
+<li><p><strong>neutral_mutation_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>) – </p></li>
+<li><p><strong>selected_mutation_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>) – </p></li>
+<li><p><strong>recombination_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em> or </em><em>None</em>) – </p></li>
 </ul>
 </dd>
 </dl>
