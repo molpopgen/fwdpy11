@@ -255,12 +255,12 @@ evolve_with_tree_sequences(
         {
             if (options.track_mutation_counts_during_sim)
                 {
-                    if (simplification_interval != 1)
+                    if (simplification_interval != 1 or options.suppress_edge_table_indexing == true)
                         {
                             throw std::invalid_argument(
                                 "when track_mutation_counts is True and simulating "
                                 "neutral mutations, the simplification interval must be "
-                                "1");
+                                "1 and edge table indexing must not be suppressed");
                         }
                 }
         }
