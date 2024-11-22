@@ -2,6 +2,7 @@ import copy
 import unittest
 
 import numpy as np
+import pytest
 
 import fwdpy11
 from test_tree_sequences import set_up_quant_trait_model, set_up_standard_pop_gen_model
@@ -181,6 +182,39 @@ def test_trigger_final_simplification_with_fixations_to_remove():
         37,
         suppress_table_indexing=False,
     )
+
+
+def test_track_mutation_counts():
+    burnin = 10
+    N = 100
+    pdict = {
+        # Add a region for neutral mutations:
+        "nregions": [fwdpy11.Region(0, 1, 1)],
+        "sregions": [fwdpy11.ExpS(beg=0, end=1, weight=1, mean=0.2)],
+        "recregions": [fwdpy11.PoissonInterval(0, 1, 1e-2)],
+        "gvalue": [fwdpy11.Multiplicative(2.0)],
+        "rates": (1e-3, 1e-3, None),
+        "simlen": burnin * N,
+        "demography": fwdpy11.ForwardDemesGraph.tubes(
+            [N], burnin=10 * N, burnin_is_exact=True
+        ),
+        "prune_selected": True,
+    }
+    params = fwdpy11.ModelParams(**pdict)
+    pop = fwdpy11.DiploidPopulation(N, 1.0)
+    rng = fwdpy11.GSLrng(54321)
+
+    with pytest.raises(ValueError):
+        fwdpy11.evolvets(
+            rng,
+            pop,
+            params,
+            1,
+            # This is the bad thing...
+            suppress_table_indexing=True,
+            # ...combined with this
+            track_mutation_counts=True,
+        )
 
 
 if __name__ == "__main__":
