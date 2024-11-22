@@ -3,6 +3,14 @@
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+## 0.24.3
+
+Bug fix:
+
+* Raise error when simulating neutral mutations and
+  tracking mutation counts suppresses table indexing.
+  (PR {pr}`1342`)
+
 ## 0.24.2
 
 Back end changes:
