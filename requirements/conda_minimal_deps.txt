@@ -2,7 +2,6 @@ pybind11==2.11.1
 numpy
 scipy
 attrs>=0.19.2
-black
 tskit
 msprime
 gsl

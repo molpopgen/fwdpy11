@@ -40,7 +40,7 @@ params = fwdpy11.ModelParams(**p)
 Let's take a look at what he have:
 
 ```{code-cell}
-print(params.asblack())
+print(params)
 ```
 
 Let's explain a few new things:

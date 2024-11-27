@@ -117,31 +117,6 @@ def attr_class_pickle_with_super(cls):
     return _add_getstate(cls)
 
 
-def attr_add_asblack(cls):
-    """
-    The default __repr__ from attrs isn't readable
-    for complex classes.  This adds a method
-    for pretty-printing out the class using black's
-    formatting rules
-    """
-
-    def _asblack(self):
-        """
-        Return a string representation formatted with black
-        """
-        import black
-
-        # The try/except is to handle black's changing API
-        try:
-            return black.format_str(str(self), mode=black.Mode())
-        except AttributeError:
-            return black.format_str(str(self), mode=black.FileMode())
-
-    cls.asblack = _asblack
-
-    return cls
-
-
 def region_custom_repr(cls):
     """
     Custom repr to correctly display weight for region instances

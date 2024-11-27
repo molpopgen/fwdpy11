@@ -22,13 +22,11 @@ import attr
 import fwdpy11._fwdpy11
 
 from .class_decorators import (
-    attr_add_asblack,
     attr_class_to_from_dict,
     attr_class_pickle_with_super,
 )
 
 
-@attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
 @attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
@@ -48,7 +46,6 @@ class FixedDominance(fwdpy11._fwdpy11.MutationDominance):
         super(FixedDominance, self).__init__(fwdpy11._fwdpy11._fixed_dominance(self.h))
 
 
-@attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
 @attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
@@ -70,7 +67,6 @@ class ExponentialDominance(fwdpy11._fwdpy11.MutationDominance):
         )
 
 
-@attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
 @attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
@@ -95,7 +91,6 @@ class UniformDominance(fwdpy11._fwdpy11.MutationDominance):
         )
 
 
-@attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
 @attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
