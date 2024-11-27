@@ -12,7 +12,7 @@
 
 ```{eval-rst}
 .. autoclass:: fwdpy11.GaussianNoise
-    :members: asdict, fromdict, asblack
+    :members: asdict, fromdict
 ```
 
 

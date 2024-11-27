@@ -4,7 +4,6 @@ import attr
 from deprecated import deprecated
 
 from ..class_decorators import (
-    attr_add_asblack,
     attr_class_pickle,
     attr_class_to_from_dict_no_recurse,
 )
@@ -14,7 +13,6 @@ from .demographic_model_citation import DemographicModelCitation
 from .forward_demes_graph import ForwardDemesGraph
 
 
-@attr_add_asblack
 @attr_class_pickle
 @attr_class_to_from_dict_no_recurse
 @attr.s(kw_only=True, frozen=True, auto_attribs=True, repr_ns="fwdpy11")

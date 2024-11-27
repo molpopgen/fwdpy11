@@ -25,7 +25,6 @@ import numpy as np
 import fwdpy11._fwdpy11
 
 from .class_decorators import (
-    attr_add_asblack,
     attr_class_pickle_with_super,
     attr_class_to_from_dict,
     attr_class_to_from_dict_no_recurse,
@@ -34,7 +33,6 @@ from .class_decorators import (
 
 
 @region_custom_repr
-@attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
 @attr.s(auto_attribs=True, frozen=True, repr=False, repr_ns="fwdpy11")
@@ -85,7 +83,6 @@ class Region(fwdpy11._fwdpy11._ll_Region):
 
 
 @region_custom_repr
-@attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
 @attr.s(auto_attribs=True, frozen=True, repr=False, repr_ns="fwdpy11")
@@ -146,7 +143,6 @@ class ConstantS(fwdpy11._fwdpy11._ll_ConstantS):
 
 
 @region_custom_repr
-@attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
 @attr.s(auto_attribs=True, frozen=True, repr=False, repr_ns="fwdpy11")
@@ -209,7 +205,6 @@ class ExpS(fwdpy11._fwdpy11._ll_ExpS):
 
 
 @region_custom_repr
-@attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
 @attr.s(auto_attribs=True, frozen=True, repr=False, repr_ns="fwdpy11")
@@ -274,7 +269,6 @@ class GammaS(fwdpy11._fwdpy11._ll_GammaS):
 
 
 @region_custom_repr
-@attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
 @attr.s(auto_attribs=True, frozen=True, repr=False, repr_ns="fwdpy11")
@@ -335,7 +329,6 @@ class GaussianS(fwdpy11._fwdpy11._ll_GaussianS):
 
 
 @region_custom_repr
-@attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
 @attr.s(auto_attribs=True, frozen=True, repr=False, repr_ns="fwdpy11")
@@ -446,7 +439,6 @@ class LogNormalS(fwdpy11._fwdpy11._ll_LogNormalS):
 
 
 @region_custom_repr
-@attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
 @attr.s(auto_attribs=True, frozen=True, repr=False, repr_ns="fwdpy11")
@@ -511,7 +503,6 @@ class UniformS(fwdpy11._fwdpy11._ll_UniformS):
 
 
 @region_custom_repr
-@attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
 @attr.s(eq=False, auto_attribs=True, frozen=True, repr=False, repr_ns="fwdpy11")
@@ -603,7 +594,6 @@ class MultivariateGaussianEffects(fwdpy11._fwdpy11._ll_MultivariateGaussianEffec
 
 
 @region_custom_repr
-@attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
 @attr.s(eq=False, auto_attribs=True, frozen=True, repr=False, repr_ns="fwdpy11")
@@ -639,7 +629,6 @@ class mvDES(fwdpy11._fwdpy11._ll_mvDES):
 
 
 @region_custom_repr
-@attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
 @attr.s(eq=False, auto_attribs=True, frozen=True, repr=False, repr_ns="fwdpy11")
