@@ -1,4 +1,3 @@
-black
 attrs < 20.4
 demes == 0.2.2
 numpy >= 1.23.5

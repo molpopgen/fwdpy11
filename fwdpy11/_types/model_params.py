@@ -26,7 +26,6 @@ import demes
 import fwdpy11
 import numpy as np
 from fwdpy11.class_decorators import (
-    attr_add_asblack,
     attr_class_to_from_dict_no_recurse,
 )
 
@@ -34,7 +33,6 @@ from fwdpy11._types.demographic_model_details import DemographicModelDetails
 from fwdpy11._types.forward_demes_graph import ForwardDemesGraph
 
 
-@attr_add_asblack
 @attr_class_to_from_dict_no_recurse
 @attr.s(kw_only=True, frozen=True, slots=True, repr_ns="fwdpy11")
 class MutationAndRecombinationRates(object):
@@ -112,7 +110,6 @@ def validate_timings(
     return gvalue.validate_timings(deme, demography)
 
 
-@attr_add_asblack
 @attr_class_to_from_dict_no_recurse
 @attr.s(kw_only=True, frozen=True, slots=True, repr_ns="fwdpy11")
 class ModelParams(object):

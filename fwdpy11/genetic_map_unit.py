@@ -24,7 +24,6 @@ import attr
 import fwdpy11._fwdpy11
 
 from .class_decorators import (
-    attr_add_asblack,
     attr_class_pickle_with_super,
     attr_class_to_from_dict,
 )
@@ -35,7 +34,6 @@ def _is_integer_if_discrete(self, attribute, value):
         attr.validators.instance_of(int)(self, attribute, value)
 
 
-@attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
 @attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
@@ -90,7 +88,6 @@ class PoissonInterval(fwdpy11._fwdpy11._ll_PoissonInterval):
         )
 
 
-@attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
 @attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
@@ -203,7 +200,6 @@ class BinomialInterval(fwdpy11._fwdpy11._ll_BinomialInterval):
         )
 
 
-@attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
 @attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
@@ -257,7 +253,6 @@ class BinomialPoint(fwdpy11._fwdpy11._ll_BinomialPoint):
         )
 
 
-@attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
 @attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
@@ -315,7 +310,6 @@ class FixedCrossovers(fwdpy11._fwdpy11._ll_FixedCrossovers):
         )
 
 
-@attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
 @attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")

@@ -25,7 +25,6 @@ import fwdpy11.class_decorators
 
 
 @fwdpy11.class_decorators.attr_class_to_from_dict
-@fwdpy11.class_decorators.attr_add_asblack
 @attr.s(auto_attribs=True)
 class FauxClass(object):
     a: float
@@ -36,12 +35,6 @@ class TestClassDecorators(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         self.f = FauxClass(1.0, 3.0)
-
-    def test_black_pretty_print(self):
-        try:
-            _ = self.f.asblack()
-        except:  # NOQA
-            self.fail("self.f.asblack() raised unexpected exception")
 
     def test_to_from_dict(self):
         d = self.f.asdict()

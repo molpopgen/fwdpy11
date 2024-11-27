@@ -15,12 +15,12 @@
 
 ```{eval-rst}
 .. autoclass:: fwdpy11.Optimum
-    :members: asdict, fromdict, asblack
+    :members: asdict, fromdict
 ```
 
 ```{eval-rst}
 .. autoclass:: fwdpy11.PleiotropicOptima
-    :members: asdict, fromdict, asblack
+    :members: asdict, fromdict
 ```
 
 

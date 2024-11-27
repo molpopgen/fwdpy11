@@ -43,7 +43,6 @@ from ._fwdpy11 import (
     _PyDiploidGeneticValue,
 )
 from .class_decorators import (
-    attr_add_asblack,
     attr_class_pickle_with_super,
     attr_class_to_from_dict,
     attr_class_to_from_dict_no_recurse,
@@ -56,7 +55,6 @@ class TimingError(Exception):
     pass
 
 
-@attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
 @attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
@@ -96,7 +94,6 @@ class Optimum(_ll_Optimum):
         super(Optimum, self).__init__(self.optimum, self.VS, self.when)
 
 
-@attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
 @attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11", eq=False)
@@ -225,7 +222,6 @@ class GaussianStabilizingSelection(_ll_GaussianStabilizingSelection):
                 raise TimingError(msg)
 
 
-@attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
 @attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
@@ -243,7 +239,6 @@ class NoNoise(_ll_NoNoise):
         super(NoNoise, self).__init__()
 
 
-@attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
 @attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
@@ -272,7 +267,6 @@ class GaussianNoise(_ll_GaussianNoise):
         super(GaussianNoise, self).__init__(self.sd, self.mean)
 
 
-@attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
 @attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
@@ -324,7 +318,6 @@ class Additive(_ll_Additive):
         self.gvalue_to_fitness.validate_timings(deme, demography)
 
 
-@attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
 @attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
@@ -376,7 +369,6 @@ class Multiplicative(_ll_Multiplicative):
         self.gvalue_to_fitness.validate_timings(deme, demography)
 
 
-@attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
 @attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
@@ -417,7 +409,6 @@ class GBR(_ll_GBR):
         self.gvalue_to_fitness.validate_timings(deme, demography)
 
 
-@attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
 @attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
