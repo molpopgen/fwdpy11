@@ -199,8 +199,16 @@ def test_metadata_roundtrip_single_deme_sim_with_parameters(rng, pdict, pop, inc
     )
 
     provenance = json.loads(ts.provenance(0).record)
-    print(provenance["parameters"]["params_dict"])
-    params_dict = eval(provenance["parameters"]["params_dict"])
+
+    def rebuild_pdict(provenance):
+        import fwdpy11
+
+        for i in dir(fwdpy11):
+            exec(f"from fwdpy11 import {i}")
+        params_dict = eval(provenance["parameters"]["params_dict"])
+        return params_dict
+
+    params_dict = rebuild_pdict(provenance)
 
     assert params_dict == params.asdict()
     script = provenance["parameters"]["script"]

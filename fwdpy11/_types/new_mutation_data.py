@@ -5,7 +5,7 @@ import attr
 from .._fwdpy11 import ll_NewMutationData
 
 
-@attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11", kw_only=True)
+@attr.s(auto_attribs=True, frozen=True, kw_only=True)
 class NewMutationData(ll_NewMutationData):
     """
     Data object for :func:`fwdpy11.DiploidPopulation.add_mutation`

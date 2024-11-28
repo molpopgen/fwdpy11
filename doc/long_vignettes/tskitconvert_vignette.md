@@ -158,7 +158,13 @@ We can pass the `params` object on when exporting the data to `tskit`:
 
 ```{code-cell} python
 ts = pop.dump_tables_to_tskit(model_params=params)
-recovered_params = fwdpy11.ModelParams(**eval(ts.metadata["model_params"])) 
+def rebuild_params(md):
+    import fwdpy11
+    for i in dir(fwdpy11):
+        exec(f"from fwdpy11 import {i}")
+    recovered_params = fwdpy11.ModelParams(**eval(md)) 
+    return recovered_params
+recovered_params = rebuild_params(ts.metadata["model_params"])
 assert recovered_params == params
 ```
 Note that we can recover our demographic model from the restored parameters:

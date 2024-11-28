@@ -59,6 +59,9 @@ def test_single_model_params(pop, pdict1):
     ts = pop.dump_tables_to_tskit(model_params=mp)
 
     # reconstruct
+    for i in dir(fwdpy11):
+        exec(f"from fwdpy11 import {i}")
+
     mp_rebuilt = fwdpy11.ModelParams(**eval(ts.metadata["model_params"]))
 
     assert mp == mp_rebuilt

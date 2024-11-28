@@ -1,4 +1,4 @@
-attrs < 20.4
+attrs >= 20.30.0
 demes == 0.2.2
 numpy >= 1.23.5
 tskit >= 0.5.6
