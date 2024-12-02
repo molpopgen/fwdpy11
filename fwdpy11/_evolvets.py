@@ -35,11 +35,11 @@ def evolvets(
     *,
     post_simplification_recorder: Optional[Callable[[DiploidPopulation], None]] = None,
     suppress_table_indexing: Optional[bool] = None,
-    record_gvalue_matrix: bool = False,
+    record_gvalue_matrix: Optional[bool] = None,
     stopping_criterion: Optional[Callable[[DiploidPopulation, bool], bool]] = None,
-    track_mutation_counts: bool = False,
-    remove_extinct_variants: bool = True,
-    preserve_first_generation: bool = False,
+    track_mutation_counts: Optional[bool] = None,
+    remove_extinct_variants: Optional[bool] = None,
+    preserve_first_generation: Optional[bool] = None,
 ):
     """
     Evolve a population with tree sequence recording
@@ -63,12 +63,16 @@ def evolvets(
     :type suppress_table_indexing: Optional[bool]
     :param record_gvalue_matrix: (False) Whether to record genetic values into
                                  :attr:`fwdpy11.DiploidPopulation.genetic_values`.
-    :type record_gvalue_matrix: bool
-    :param preserve_first_generation: (False) Whether to record generation 0 as
+                                 A value of `None` will be treated
+                                 as `False`.
+    :type record_gvalue_matrix: Optional[bool]
+    :param preserve_first_generation: (None) Whether to record generation 0 as
                                       ancient samples. Must be `True` for
                                       tree sequence "recapitation". See
                                       :ref:`recapitation`.
-    :type preserve_first_generation: bool
+                                      A value of `None` will be treated
+                                      as `False`.
+    :type preserve_first_generation: Optional[bool]
 
     The recording of genetic values into :attr:`fwdpy11.DiploidPopulation.genetic_values`
     is suppressed by default.  First, it is redundant with
@@ -281,13 +285,25 @@ def evolvets(
         options.suppress_edge_table_indexing = suppress_table_indexing
     else:
         options.suppress_edge_table_indexing = True
-    options.record_gvalue_matrix = record_gvalue_matrix
-    options.track_mutation_counts_during_sim = track_mutation_counts
-    options.remove_extinct_mutations_at_finish = remove_extinct_variants
+    if record_gvalue_matrix is not None:
+        options.record_gvalue_matrix = record_gvalue_matrix
+    else:
+        options.record_gvalue_matrix = False
+    if track_mutation_counts is not None:
+        options.track_mutation_counts_during_sim = track_mutation_counts
+    else:
+        options.track_mutation_counts_during_sim = False
+    if remove_extinct_variants is not None:
+        options.remove_extinct_mutations_at_finish = remove_extinct_variants
+    else:
+        options.remove_extinct_mutations_at_finish = True
     options.reset_treeseqs_to_alive_nodes_after_simplification = (
         reset_treeseqs_after_simplify
     )
-    options.preserve_first_generation = preserve_first_generation
+    if preserve_first_generation is not None:
+        options.preserve_first_generation = preserve_first_generation
+    else:
+        options.preserve_first_generation = False
     options.allow_residual_selfing = params.allow_residual_selfing
 
     if options.allow_residual_selfing is False:
