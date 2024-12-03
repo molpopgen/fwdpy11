@@ -20,6 +20,9 @@
 import demes
 import fwdpy11
 import pytest
+import tskit
+
+from dataclasses import dataclass
 
 
 @pytest.fixture
@@ -117,3 +120,64 @@ def test_seed(pop):
 
     with pytest.raises(ValueError):
         _ = pop.dump_tables_to_tskit(seed=-333)
+
+
+def test_toplevel_metadata_0():
+    tc = tskit.TableCollection(10.0)
+    tc.metadata_schema = fwdpy11.tskit_tools.metadata_schema.TopLevelMetadata
+    md = {"generation": 100, "data": {0.0: [0, 1, 2]}}
+    tc.metadata = md
+    data = tc.metadata["data"]
+    assert 0.0 not in data
+    assert "0.0" in data
+
+
+def test_toplevel_metadata_1():
+    # Same as previous test, but w/no schema
+    # and we just shove raw bytes in there
+    tc = tskit.TableCollection(10.0)
+    md = {"generation": 100, "data": {0.0: [0, 1, 2]}}
+    tc.metadata = str(md).encode()
+    decoded = eval(tc.metadata)
+    data = decoded["data"]
+    assert 0.0 in data
+
+
+def test_toplevel_metadata_2():
+    # This time w/a JSON codec
+    tc = tskit.TableCollection(10.0)
+    schema = tskit.metadata.MetadataSchema(
+        {
+            "codec": "json",
+        }
+    )
+    tc.metadata_schema = schema
+    md = {"generation": 100, "data": {0.0: [0, 1, 2]}}
+
+    tc.metadata = md
+    decoded = tc.metadata
+    data = decoded["data"]
+    assert 0.0 not in data
+    assert "0.0" in data
+
+
+@dataclass(eq=True, frozen=True)
+class FloatWrap:
+    value: float
+
+
+def test_toplevel_metadata_3():
+
+    # This time w/a JSON codec
+    tc = tskit.TableCollection(10.0)
+    schema = tskit.metadata.MetadataSchema(
+        {
+            "codec": "json",
+        }
+    )
+    tc.metadata_schema = schema
+    md = {"data": {FloatWrap(0.0): [0, 1, 2]}}
+    tc.metadata = str(md)
+    decoded = eval(tc.metadata)
+    data = decoded["data"]
+    assert FloatWrap(0.0) in data
