@@ -201,11 +201,16 @@ def test_metadata_roundtrip_single_deme_sim_with_parameters(rng, pdict, pop, inc
     provenance = json.loads(ts.provenance(0).record)
 
     def rebuild_pdict(provenance):
+        import copy
         import fwdpy11
+        import inspect
 
+        params = copy.deepcopy(provenance["parameters"]["params_dict"])
         for i in dir(fwdpy11):
-            exec(f"from fwdpy11 import {i}")
-        params_dict = eval(provenance["parameters"]["params_dict"])
+            if params.find(i) > 0:
+                if inspect.isclass(eval(f"fwdpy11.{i}")):
+                    params = params.replace(i, "fwdpy11." + i)
+        params_dict = eval(params)
         return params_dict
 
     params_dict = rebuild_pdict(provenance)

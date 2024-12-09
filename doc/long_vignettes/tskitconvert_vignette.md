@@ -159,9 +159,14 @@ We can pass the `params` object on when exporting the data to `tskit`:
 ```{code-cell} python
 ts = pop.dump_tables_to_tskit(model_params=params)
 def rebuild_params(md):
+    import copy
+    import inspect
     import fwdpy11
+    md = copy.deepcopy(md)
     for i in dir(fwdpy11):
-        exec(f"from fwdpy11 import {i}")
+        if md.find(i) > 0:
+            if inspect.isclass(eval(f"fwdpy11.{i}")):
+                md = md.replace(i, "fwdpy11." + i)
     recovered_params = fwdpy11.ModelParams(**eval(md)) 
     return recovered_params
 recovered_params = rebuild_params(ts.metadata["model_params"])
