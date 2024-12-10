@@ -16,8 +16,9 @@
 # You should have received a copy of the GNU General Public License
 # along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 #
+import copy
+import inspect
 
-import demes
 import fwdpy11
 import pytest
 import tskit
@@ -62,10 +63,12 @@ def test_single_model_params(pop, pdict1):
     ts = pop.dump_tables_to_tskit(model_params=mp)
 
     # reconstruct
+    params = copy.deepcopy(ts.metadata["model_params"])
     for i in dir(fwdpy11):
-        exec(f"from fwdpy11 import {i}")
+        if inspect.isclass(eval(f"fwdpy11.{i}")):
+            params = params.replace(i, "fwdpy11." + i)
 
-    mp_rebuilt = fwdpy11.ModelParams(**eval(ts.metadata["model_params"]))
+    mp_rebuilt = fwdpy11.ModelParams(**eval(params))
 
     assert mp == mp_rebuilt
 
