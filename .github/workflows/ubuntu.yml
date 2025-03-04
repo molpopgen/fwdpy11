@@ -10,7 +10,7 @@ jobs:
     strategy:
       matrix:
         python: [ "3.10", "3.11", "3.12", "3.13" ]
-        os:  [ ubuntu-22.04 ]
+        os:  [ ubuntu-24.04 ]
         compiler: [gcc, clang14]
         rust: [1.62.1]
     defaults:
@@ -74,8 +74,8 @@ jobs:
         run: |
           dpkg -S llvm-config
 
-      - name: Set LLVM_CONFIG on 22.04
-        if: matrix.os == 'ubuntu-22.04'
+      - name: Set LLVM_CONFIG on 24.04
+        if: matrix.os == 'ubuntu-24.04'
         run: |
             echo "LLVM_CONFIG=/usr/bin/llvm-config" >> $GITHUB_ENV
 
