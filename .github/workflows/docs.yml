@@ -40,17 +40,12 @@ jobs:
         with:
           crate: cbindgen
           version: "=0.24.3" 
-      # We install the R dependencies first
-      # Later, Python dependencies will go into the same place.
-      # Python will silently update dependencies if needed,
-      # and they'll get cached, too.
-      - name: Cache dependancies
-        id: cache
-        uses: actions/cache@v4
+
+      - name: Install the latest version of uv
+        uses: astral-sh/setup-uv@v5
         with:
-          path: |
-            ~/.local
-          key: ${{ matrix.python }}-${{ hashFiles('doc/development.txt') }}-V0
+          version: "latest"
+          python-version: ${{ matrix.python-version }}
 
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v5
@@ -63,10 +58,7 @@ jobs:
 
       - name: Install Python dependencies
         run: |
-          python -m pip install --user --upgrade pip
-          # These are needed to install black:
-          python -m pip install --user --upgrade setuptools wheel 
-          python -m pip install --user --upgrade -r requirements/development.txt
+          uv pip install -r requirements/CI_${{ matrix.python-version }}.txt
 
       - name: rustc version
         run: |
@@ -78,7 +70,7 @@ jobs:
 
       - name: Build module
         run: |
-            python -m pip install -e .
+            uv pip install -e .
 
       - name: Build the docs
         working-directory: doc

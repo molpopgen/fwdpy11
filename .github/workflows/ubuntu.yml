@@ -34,6 +34,12 @@ jobs:
         with:
           toolchain: ${{ matrix.rust }}
 
+      - name: Install the latest version of uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          version: "latest"
+          python-version: ${{ matrix.python }}
+
       - name: Install apt dependencies
         run: |
             sudo apt install --fix-missing -y libgsl-dev cmake autoconf libboost-test-dev libboost-program-options-dev valgrind
@@ -79,34 +85,15 @@ jobs:
         run: |
             echo "LLVM_CONFIG=/usr/bin/llvm-config" >> $GITHUB_ENV
 
-      # - name: Set LLVM_CONFIG on 18.04
-      #   if: matrix.os == 'ubuntu-18.04'
-      #   run: |
-      #       echo "LLVM_CONFIG=/usr/lib/llvm-9/bin/llvm-config" >> $GITHUB_ENV
-
       - name: Python version
         run: |
           python --version
 
-      - name: Cache pip dependancies
-        id: cache
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.local
-          key: ${{ runner.os }}-${{ matrix.python }}-ubuntu-V4-${{ hashFiles('requirements/development.txt') }}
-
       - name: Install pip dependencies
-        # if: steps.cache.outputs.cache-hit != 'true'
         run: |
-            python -m pip install --user --upgrade pip
-            # These are needed to install black:
-            python -m pip install --user --upgrade setuptools wheel 
-            python -m pip install --user -r requirements/development.txt
-            # For sdist validation
-            python -m pip install --user --upgrade twine build
+          uv pip install -r requirements/CI_${{ matrix.python }}.txt
 
-      # Needed so that we don't affect building any pip dependencies with these flags
+      # Need#   ed so that we don't affect building any pip dependencies with these flags
       - name: Set CPPFLAGS for C++ builds
         run: |
           echo "CPPFLAGS=-Wextra -Weffc++ -Woverloaded-virtual -Wold-style-cast -Werror=effc++ -Werror=old-style-cast -Werror=overloaded-virtual -Werror=unused-parameter" >> $GITHUB_ENV

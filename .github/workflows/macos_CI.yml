@@ -43,37 +43,37 @@ jobs:
       - name: Install GSL
         run: |
           brew install gsl
+
+      - name: Install the latest version of uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          version: "latest"
+          python-version: ${{ matrix.python }}
+
       - name: Install Python dependencies
         run: |
-          python -m venv venv
-          source venv/bin/activate
-          python -m pip install --upgrade pip
-          python -m pip install wheel
-          python -m pip install -r requirements/development.txt
+          uv pip install -r requirements/CI_${{ matrix.python }}.txt
       - name: Build extension module
         run: |
-          source venv/bin/activate
           cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release -DBUILD_PYTHON_UNIT_TESTS=ON -DDISABLE_LTO=ON
           cmake --build build -j 4
 
       - name: Manualy run setuptools_scm
         run: |
-          source venv/bin/activate
           python -m setuptools_scm
 
       - name: Run Python tests
         run: |
-          source venv/bin/activate
           python -m pytest -n 4 tests
           python -m pytest -n 2 tests_with_cpp
 
-      - name: Clean up build and venv
-        run: |
-          rm -rf build venv
+          #- name: Clean up build and venv
+          #  run: |
+          #    rm -rf build venv
 
       - name: Test pip install from dist in fresh venv
         run: |
-            python -m pip install build
+            uv pip install build
             python -m build -o dist -w .
             cd dist
             python -m venv venv
