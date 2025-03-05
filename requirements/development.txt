@@ -6,6 +6,9 @@
 -r tests.txt
 -r docs.txt
 
+build
+twine
+
 #below are for formatting, linting,
 #etc.
 flake8
