@@ -1,5 +1,0 @@
-# This is intended to be the minimal
-# requirements file needed to generate
-# a successful wheel installation
-# in the "test wheels" step of .github/workflows/wheels.yml
--r minimal_install_requirements.txt

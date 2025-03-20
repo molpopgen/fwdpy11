@@ -26,11 +26,16 @@ jobs:
         uses: actions/checkout@v4
         with:
           submodules: true
+      - name: Install the latest version of uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          version: "latest"
+          python-version: ${{ matrix.python }}
       - name: Install black
         run: |
-          python -m pip install black=="24.10.0"
+          uv sync --only-group format
       - name: Validate code
         run: |
-          find . -name '*.py'|grep -v headers|grep -v demes-spec|xargs python -m black --check
+          find fwdpy11 tests tests_with_cpp examples -name '*.py' | grep -v headers | grep -v demes-spec | xargs python -m black --check
 
 
