@@ -1,7 +1,7 @@
 # Do not change this version range!
 # Doing so can break builds in unexpected ways.
 # The manylinux wheel build seem especially sensitive!
-cmake_minimum_required(VERSION 3.4...3.18)
+cmake_minimum_required(VERSION 3.15...3.18)
 project(fwdpy11)
 
 set(CMAKE_CXX_EXTENSIONS OFF)
