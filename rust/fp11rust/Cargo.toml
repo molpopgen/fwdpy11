@@ -5,6 +5,10 @@ edition = "2021"
 license = "GPL-3.0-or-later"
 publish = false
 
+[toolchain]
+channel = "1.62.1"
+profile = "minimal"
+
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 [lib]
 crate-type = ["staticlib"]
