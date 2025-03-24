@@ -1,6 +1,0 @@
-#below are for building package
-#and running tests
-pytest
-pytest-xdist
-hypothesis==6.56.4
-msprime ~= 1.3.0

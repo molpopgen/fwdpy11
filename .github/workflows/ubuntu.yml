@@ -89,9 +89,12 @@ jobs:
         run: |
           python --version
 
-      - name: Install pip dependencies
+      - name: Install python dependencies
         run: |
-          uv pip install -r requirements/CI_${{ matrix.python }}.txt
+          # We need to build the C++ test suite, etc., so
+          # we don't let uv install the project (b/c the other
+          # stuff isn't built in that case)
+          uv sync -p ${{ matrix.python }} --no-install-project --frozen --group build
 
       # Need#   ed so that we don't affect building any pip dependencies with these flags
       - name: Set CPPFLAGS for C++ builds

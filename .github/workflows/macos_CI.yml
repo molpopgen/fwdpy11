@@ -52,7 +52,11 @@ jobs:
 
       - name: Install Python dependencies
         run: |
-          uv pip install -r requirements/CI_${{ matrix.python }}.txt
+          # We need to build the C++ test suite, etc., so
+          # we don't let uv install the project (b/c the other
+          # stuff isn't built in that case)
+          uv sync -p ${{ matrix.python }} --no-install-project --frozen --group build
+
       - name: Build extension module
         run: |
           cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release -DBUILD_PYTHON_UNIT_TESTS=ON -DDISABLE_LTO=ON

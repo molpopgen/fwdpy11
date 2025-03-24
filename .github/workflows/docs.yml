@@ -56,10 +56,6 @@ jobs:
         run: |
           sudo apt install --fix-missing -y libgsl-dev cmake 
 
-      - name: Install Python dependencies
-        run: |
-          uv pip install -r requirements/CI_${{ matrix.python-version }}.txt
-
       - name: rustc version
         run: |
             rustc --version
@@ -68,9 +64,9 @@ jobs:
         run: |
             cbindgen --version
 
-      - name: Build module
+      - name: uv sync
         run: |
-            uv pip install -e .
+          uv sync -p ${{ matrix.python-version }} --locked --group build --group doc --no-dev
 
       - name: Build the docs
         working-directory: doc
