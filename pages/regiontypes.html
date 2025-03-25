@@ -1,13 +1,12 @@
 
-
 <!DOCTYPE html>
 
 
-<html lang="en" >
+<html lang="en" data-content_root="../" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Setting up genomic intervals &#8212; fwdpy11 manual</title>
   
@@ -15,52 +14,49 @@
   
   <script data-cfasync="false">
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
-    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
-<link href="../_static/styles/bootstrap.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
 
   
-  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d" />
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/clipboard.min.js"></script>
-    <script src="../_static/copybutton.js"></script>
-    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
-    <script src="../_static/design-tabs.js"></script>
-    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
-const thebe_selector = ".thebe,.cell"
-const thebe_selector_input = "pre"
-const thebe_selector_output = ".output, .cell_output"
-</script>
-    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'pages/regiontypes';</script>
@@ -77,19 +73,23 @@ const thebe_selector_output = ".output, .cell_output"
 
   
   
-  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
   
   <input type="checkbox"
           class="sidebar-toggle"
-          name="__primary"
-          id="__primary"/>
-  <label class="overlay overlay-primary" for="__primary"></label>
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
   
   <input type="checkbox"
           class="sidebar-toggle"
-          name="__secondary"
-          id="__secondary"/>
-  <label class="overlay overlay-secondary" for="__secondary"></label>
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
   
   <div class="search-button__wrapper">
     <div class="search-button__overlay"></div>
@@ -111,12 +111,20 @@ const thebe_selector_output = ".output, .cell_output"
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
 </form></div>
   </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
   
-    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
-    </nav>
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
   
+
   <div class="bd-container">
     <div class="bd-container__inner bd-page-width">
+      
+      
       
       <div class="bd-sidebar-primary bd-sidebar">
         
@@ -131,6 +139,9 @@ const thebe_selector_output = ".output, .cell_output"
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
         <div class="sidebar-primary-item">
+
+  
+    
   
 
 <a class="navbar-brand logo" href="../intro.html">
@@ -139,10 +150,22 @@ const thebe_selector_output = ".output, .cell_output"
   
   
   
+  
     <p class="title logo__title">fwdpy11 manual</p>
   
 </a></div>
-        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         
         <ul class="nav bd-sidenav bd-sidenav__home-link">
@@ -289,7 +312,7 @@ const thebe_selector_output = ".output, .cell_output"
 
       </div>
       
-      <main id="main-content" class="bd-main">
+      <main id="main-content" class="bd-main" role="main">
         
         
 
@@ -298,14 +321,14 @@ const thebe_selector_output = ".output, .cell_output"
           <div class="bd-content">
             <div class="bd-article-container">
               
-              <div class="bd-header-article">
+              <div class="bd-header-article d-print-none">
 <div class="header-article-items header-article__inner">
   
     <div class="header-article-items__start">
       
-        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
   <span class="fa-solid fa-bars"></span>
-</label></div>
+</button></div>
       
     </div>
   
@@ -427,24 +450,28 @@ const thebe_selector_output = ".output, .cell_output"
 </button>
 
 
+
 <script>
 document.write(`
-  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
-    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
-    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
   </button>
 `);
 </script>
 
+
 <script>
 document.write(`
-  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
   </button>
 `);
 </script>
-
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
 </div></div>
       
     </div>
@@ -460,6 +487,38 @@ document.write(`
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.Region"><code class="docutils literal notranslate"><span class="pre">Region</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.Sregion"><code class="docutils literal notranslate"><span class="pre">Sregion</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.ConstantS"><code class="docutils literal notranslate"><span class="pre">ConstantS</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.UniformS"><code class="docutils literal notranslate"><span class="pre">UniformS</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.ExpS"><code class="docutils literal notranslate"><span class="pre">ExpS</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.GammaS"><code class="docutils literal notranslate"><span class="pre">GammaS</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.GaussianS"><code class="docutils literal notranslate"><span class="pre">GaussianS</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.MultivariateGaussianEffects"><code class="docutils literal notranslate"><span class="pre">MultivariateGaussianEffects</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.LogNormalS"><code class="docutils literal notranslate"><span class="pre">LogNormalS</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.LogNormalS.mv"><code class="docutils literal notranslate"><span class="pre">LogNormalS.mv()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.DiscreteDESD"><code class="docutils literal notranslate"><span class="pre">DiscreteDESD</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.mvDES"><code class="docutils literal notranslate"><span class="pre">mvDES</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.PoissonInterval"><code class="docutils literal notranslate"><span class="pre">PoissonInterval</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.PoissonPoint"><code class="docutils literal notranslate"><span class="pre">PoissonPoint</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.BinomialPoint"><code class="docutils literal notranslate"><span class="pre">BinomialPoint</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.FixedCrossovers"><code class="docutils literal notranslate"><span class="pre">FixedCrossovers</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.BinomialInterval"><code class="docutils literal notranslate"><span class="pre">BinomialInterval</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.BinomialIntervalMap"><code class="docutils literal notranslate"><span class="pre">BinomialIntervalMap</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.MutationDominance"><code class="docutils literal notranslate"><span class="pre">MutationDominance</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.FixedDominance"><code class="docutils literal notranslate"><span class="pre">FixedDominance</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.UniformDominance"><code class="docutils literal notranslate"><span class="pre">UniformDominance</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.ExponentialDominance"><code class="docutils literal notranslate"><span class="pre">ExponentialDominance</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.LargeEffectExponentiallyRecessive"><code class="docutils literal notranslate"><span class="pre">LargeEffectExponentiallyRecessive</span></code></a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -467,13 +526,13 @@ document.write(`
               
                 
 <div id="searchbox"></div>
-                <article class="bd-article" role="main">
+                <article class="bd-article">
                   
   <section class="tex2jax_ignore mathjax_ignore" id="setting-up-genomic-intervals">
-<h1>Setting up genomic intervals<a class="headerlink" href="#setting-up-genomic-intervals" title="Permalink to this heading">#</a></h1>
+<h1>Setting up genomic intervals<a class="headerlink" href="#setting-up-genomic-intervals" title="Link to this heading">#</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="fwdpy11.Region">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">Region</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coupled</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.Region" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">Region</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coupled</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.Region" title="Link to this definition">#</a></dt>
 <dd><p>A genomic region, defined by half-open interval [beg, end)</p>
 <p>This class has the following attributes, whose names
 are also <cite>kwargs</cite> for intitialization.  The attribute names
@@ -485,7 +544,7 @@ also determine the order of positional arguments:</p>
 <li><p><strong>end</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>) – the end of the region</p></li>
 <li><p><strong>weight</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>) – the weight to assign</p></li>
 <li><p><strong>coupled</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a>) – if True, the weight is converted to (end-beg)*weight</p></li>
-<li><p><strong>label</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.uint16" title="(in NumPy v2.1)"><code class="xref py py-attr docutils literal notranslate"><span class="pre">numpy.uint16</span></code></a>) – Not relevant to recombining regions.
+<li><p><strong>label</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.uint16" title="(in NumPy v2.2)"><code class="xref py py-attr docutils literal notranslate"><span class="pre">numpy.uint16</span></code></a>) – Not relevant to recombining regions.
 Otherwise, this value will be used to fill
 <a class="reference internal" href="types.html#fwdpy11.Mutation.label" title="fwdpy11.Mutation.label"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.Mutation.label</span></code></a>.</p></li>
 </ul>
@@ -504,7 +563,7 @@ low-level C++ class</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fwdpy11.Sregion">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">Sregion</span></span><a class="headerlink" href="#fwdpy11.Sregion" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">Sregion</span></span><a class="headerlink" href="#fwdpy11.Sregion" title="Link to this definition">#</a></dt>
 <dd><p>Representation of a “region” in a simulation with a dominance term.</p>
 <p>This class is an ABC.</p>
 <div class="versionchanged">
@@ -524,7 +583,7 @@ low-level C++ class</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fwdpy11.ConstantS">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">ConstantS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coupled</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaling</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.ConstantS" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">ConstantS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coupled</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaling</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.ConstantS" title="Link to this definition">#</a></dt>
 <dd><p>Mutations with fixed effect sizes</p>
 <p>This class has the following attributes, whose names
 are also <cite>kwargs</cite> for intitialization.  The attribute names
@@ -538,7 +597,7 @@ also determine the order of positional arguments:</p>
 <li><p><strong>s</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>) – the selection coefficient</p></li>
 <li><p><strong>h</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.13)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><a class="reference internal" href="#fwdpy11.MutationDominance" title="fwdpy11.MutationDominance"><em>fwdpy11.MutationDominance</em></a><em>]</em>) – the dominance</p></li>
 <li><p><strong>coupled</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a>) – if True, the weight is converted to (end-beg)*weight</p></li>
-<li><p><strong>label</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.uint16" title="(in NumPy v2.1)"><code class="xref py py-attr docutils literal notranslate"><span class="pre">numpy.uint16</span></code></a>) – Fill <a class="reference internal" href="types.html#fwdpy11.Mutation.label" title="fwdpy11.Mutation.label"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.Mutation.label</span></code></a> with this value.</p></li>
+<li><p><strong>label</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.uint16" title="(in NumPy v2.2)"><code class="xref py py-attr docutils literal notranslate"><span class="pre">numpy.uint16</span></code></a>) – Fill <a class="reference internal" href="types.html#fwdpy11.Mutation.label" title="fwdpy11.Mutation.label"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.Mutation.label</span></code></a> with this value.</p></li>
 <li><p><strong>scaling</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>) – The scaling of the DFE</p></li>
 </ul>
 </dd>
@@ -553,7 +612,7 @@ low-level C++ class</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fwdpy11.UniformS">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">UniformS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coupled</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaling</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.UniformS" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">UniformS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coupled</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaling</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.UniformS" title="Link to this definition">#</a></dt>
 <dd><p>Uniform distrubution of effect sizes</p>
 <p>This class has the following attributes, whose names
 are also <cite>kwargs</cite> for intitialization.  The attribute names
@@ -568,7 +627,7 @@ also determine the order of positional arguments:</p>
 <li><p><strong>hi</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>) – upper bound on s</p></li>
 <li><p><strong>h</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.13)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><a class="reference internal" href="#fwdpy11.MutationDominance" title="fwdpy11.MutationDominance"><em>fwdpy11.MutationDominance</em></a><em>]</em>) – the dominance</p></li>
 <li><p><strong>coupled</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a>) – if True, the weight is converted to (end-beg)*weight</p></li>
-<li><p><strong>label</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.uint16" title="(in NumPy v2.1)"><code class="xref py py-attr docutils literal notranslate"><span class="pre">numpy.uint16</span></code></a>) – Fill <a class="reference internal" href="types.html#fwdpy11.Mutation.label" title="fwdpy11.Mutation.label"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.Mutation.label</span></code></a> with this value.</p></li>
+<li><p><strong>label</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.uint16" title="(in NumPy v2.2)"><code class="xref py py-attr docutils literal notranslate"><span class="pre">numpy.uint16</span></code></a>) – Fill <a class="reference internal" href="types.html#fwdpy11.Mutation.label" title="fwdpy11.Mutation.label"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.Mutation.label</span></code></a> with this value.</p></li>
 <li><p><strong>scaling</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>) – The scaling of the DFE</p></li>
 </ul>
 </dd>
@@ -583,7 +642,7 @@ low-level C++ class</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fwdpy11.ExpS">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">ExpS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mean</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coupled</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaling</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.ExpS" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">ExpS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mean</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coupled</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaling</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.ExpS" title="Link to this definition">#</a></dt>
 <dd><p>Exponential distribution of effect sizes</p>
 <p>This class has the following attributes, whose names
 are also <cite>kwargs</cite> for intitialization.  The attribute names
@@ -597,7 +656,7 @@ also determine the order of positional arguments:</p>
 <li><p><strong>mean</strong> – the mean selection coefficient</p></li>
 <li><p><strong>h</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.13)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><a class="reference internal" href="#fwdpy11.MutationDominance" title="fwdpy11.MutationDominance"><em>fwdpy11.MutationDominance</em></a><em>]</em>) – the dominance</p></li>
 <li><p><strong>coupled</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a>) – if True, the weight is converted to (end-beg)*weight</p></li>
-<li><p><strong>label</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.uint16" title="(in NumPy v2.1)"><code class="xref py py-attr docutils literal notranslate"><span class="pre">numpy.uint16</span></code></a>) – Fill <a class="reference internal" href="types.html#fwdpy11.Mutation.label" title="fwdpy11.Mutation.label"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.Mutation.label</span></code></a> with this value.</p></li>
+<li><p><strong>label</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.uint16" title="(in NumPy v2.2)"><code class="xref py py-attr docutils literal notranslate"><span class="pre">numpy.uint16</span></code></a>) – Fill <a class="reference internal" href="types.html#fwdpy11.Mutation.label" title="fwdpy11.Mutation.label"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.Mutation.label</span></code></a> with this value.</p></li>
 <li><p><strong>scaling</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>) – The scaling of the DFE</p></li>
 </ul>
 </dd>
@@ -612,7 +671,7 @@ low-level C++ class</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fwdpy11.GammaS">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">GammaS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mean</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape_parameter</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coupled</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaling</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.GammaS" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">GammaS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mean</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape_parameter</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coupled</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaling</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.GammaS" title="Link to this definition">#</a></dt>
 <dd><p>Gamma distribution of effect sizes</p>
 <p>This class has the following attributes, whose names
 are also <cite>kwargs</cite> for intitialization.  The attribute names
@@ -627,7 +686,7 @@ also determine the order of positional arguments:</p>
 <li><p><strong>shape_parameter</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>) – the shape parameter of the distribution</p></li>
 <li><p><strong>h</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.13)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><a class="reference internal" href="#fwdpy11.MutationDominance" title="fwdpy11.MutationDominance"><em>fwdpy11.MutationDominance</em></a><em>]</em>) – the dominance</p></li>
 <li><p><strong>coupled</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a>) – if True, the weight is converted to (end-beg)*weight</p></li>
-<li><p><strong>label</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.uint16" title="(in NumPy v2.1)"><code class="xref py py-attr docutils literal notranslate"><span class="pre">numpy.uint16</span></code></a>) – Fill <a class="reference internal" href="types.html#fwdpy11.Mutation.label" title="fwdpy11.Mutation.label"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.Mutation.label</span></code></a> with this value.</p></li>
+<li><p><strong>label</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.uint16" title="(in NumPy v2.2)"><code class="xref py py-attr docutils literal notranslate"><span class="pre">numpy.uint16</span></code></a>) – Fill <a class="reference internal" href="types.html#fwdpy11.Mutation.label" title="fwdpy11.Mutation.label"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.Mutation.label</span></code></a> with this value.</p></li>
 <li><p><strong>scaling</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>) – The scaling of the DFE</p></li>
 </ul>
 </dd>
@@ -642,7 +701,7 @@ low-level C++ class</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fwdpy11.GaussianS">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">GaussianS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coupled</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaling</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.GaussianS" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">GaussianS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coupled</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaling</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.GaussianS" title="Link to this definition">#</a></dt>
 <dd><p>Gaussian distribution of effect sizes</p>
 <p>This class has the following attributes, whose names
 are also <cite>kwargs</cite> for intitialization.  The attribute names
@@ -656,7 +715,7 @@ also determine the order of positional arguments:</p>
 <li><p><strong>sd</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>) – standard deviation of effect sizes</p></li>
 <li><p><strong>h</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.13)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><a class="reference internal" href="#fwdpy11.MutationDominance" title="fwdpy11.MutationDominance"><em>fwdpy11.MutationDominance</em></a><em>]</em>) – the dominance</p></li>
 <li><p><strong>coupled</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a>) – if True, the weight is converted to (end-beg)*weight</p></li>
-<li><p><strong>label</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.uint16" title="(in NumPy v2.1)"><code class="xref py py-attr docutils literal notranslate"><span class="pre">numpy.uint16</span></code></a>) – Fill <a class="reference internal" href="types.html#fwdpy11.Mutation.label" title="fwdpy11.Mutation.label"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.Mutation.label</span></code></a> with this value.</p></li>
+<li><p><strong>label</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.uint16" title="(in NumPy v2.2)"><code class="xref py py-attr docutils literal notranslate"><span class="pre">numpy.uint16</span></code></a>) – Fill <a class="reference internal" href="types.html#fwdpy11.Mutation.label" title="fwdpy11.Mutation.label"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.Mutation.label</span></code></a> with this value.</p></li>
 <li><p><strong>scaling</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>) – The scaling of the DFE</p></li>
 </ul>
 </dd>
@@ -671,7 +730,7 @@ low-level C++ class</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fwdpy11.MultivariateGaussianEffects">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">MultivariateGaussianEffects</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cov_matrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fixed_effect</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coupled</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.MultivariateGaussianEffects" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">MultivariateGaussianEffects</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cov_matrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fixed_effect</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coupled</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.MultivariateGaussianEffects" title="Link to this definition">#</a></dt>
 <dd><p>Pleiotropic effects via a multivariate Gaussian distribution.</p>
 <p>This class can be used to generate mutations with both vectors
 of effect sizes as well as a separate fixed effect.</p>
@@ -684,11 +743,11 @@ also determine the order of positional arguments:</p>
 <li><p><strong>beg</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>) – Beginning of the region</p></li>
 <li><p><strong>end</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>) – End of the region</p></li>
 <li><p><strong>weight</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>) – Weight on the region</p></li>
-<li><p><strong>cov_matrix</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – Variance-covariance matrix</p></li>
+<li><p><strong>cov_matrix</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – Variance-covariance matrix</p></li>
 <li><p><strong>fixed_effect</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>) – Fixed effect size. Defaults to 0.0.</p></li>
 <li><p><strong>h</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.13)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><a class="reference internal" href="#fwdpy11.MutationDominance" title="fwdpy11.MutationDominance"><em>fwdpy11.MutationDominance</em></a><em>]</em>) – Dominance. Defaults to 1.0</p></li>
 <li><p><strong>coupled</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a>) – Specify if weight is function of end-beg or not. Defaults to True</p></li>
-<li><p><strong>label</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.uint16" title="(in NumPy v2.1)"><code class="xref py py-attr docutils literal notranslate"><span class="pre">numpy.uint16</span></code></a>) – Fill <a class="reference internal" href="types.html#fwdpy11.Mutation.label" title="fwdpy11.Mutation.label"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.Mutation.label</span></code></a> with this value.</p></li>
+<li><p><strong>label</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.uint16" title="(in NumPy v2.2)"><code class="xref py py-attr docutils literal notranslate"><span class="pre">numpy.uint16</span></code></a>) – Fill <a class="reference internal" href="types.html#fwdpy11.Mutation.label" title="fwdpy11.Mutation.label"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.Mutation.label</span></code></a> with this value.</p></li>
 </ul>
 </dd>
 </dl>
@@ -701,7 +760,7 @@ will also be raised if the input matrix contains any non-finite values.</p>
 drawn from a multivariate normal.</p>
 </div>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 0.3.0.</span></p>
+<p><span class="versionmodified added">Added in version 0.3.0.</span></p>
 </div>
 <div class="versionchanged">
 <p><span class="versionmodified changed">Changed in version 0.8.0: </span>Refactored to use attrs and inherit from
@@ -711,7 +770,7 @@ low-level C++ class</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fwdpy11.LogNormalS">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">LogNormalS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zeta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coupled</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaling</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.LogNormalS" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">LogNormalS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zeta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coupled</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaling</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.LogNormalS" title="Link to this definition">#</a></dt>
 <dd><p>Log-normal distribution of effect sizes.</p>
 <p>This class has the following attributes, whose names
 are also <cite>kwargs</cite> for intitialization.  The attribute names
@@ -726,7 +785,7 @@ also determine the order of positional arguments:</p>
 <li><p><strong>sigma</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>) – the sigma parameter</p></li>
 <li><p><strong>h</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.13)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><a class="reference internal" href="#fwdpy11.MutationDominance" title="fwdpy11.MutationDominance"><em>fwdpy11.MutationDominance</em></a><em>]</em>) – the dominance</p></li>
 <li><p><strong>coupled</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a>) – if True, the weight is converted to(end-beg)*weight</p></li>
-<li><p><strong>label</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.uint16" title="(in NumPy v2.1)"><code class="xref py py-attr docutils literal notranslate"><span class="pre">numpy.uint16</span></code></a>) – Fill <a class="reference internal" href="types.html#fwdpy11.Mutation.label" title="fwdpy11.Mutation.label"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.Mutation.label</span></code></a> with this value.</p></li>
+<li><p><strong>label</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.uint16" title="(in NumPy v2.2)"><code class="xref py py-attr docutils literal notranslate"><span class="pre">numpy.uint16</span></code></a>) – Fill <a class="reference internal" href="types.html#fwdpy11.Mutation.label" title="fwdpy11.Mutation.label"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.Mutation.label</span></code></a> with this value.</p></li>
 <li><p><strong>scaling</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>) – The scaling of the DFE</p></li>
 </ul>
 </dd>
@@ -734,7 +793,7 @@ also determine the order of positional arguments:</p>
 <p>When coupled is True, the “weight” may be
 interpreted as a “per base pair” (or per unit, generally speaking) term.</p>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 0.7.0.</span></p>
+<p><span class="versionmodified added">Added in version 0.7.0.</span></p>
 </div>
 <div class="versionchanged">
 <p><span class="versionmodified changed">Changed in version 0.8.0: </span>Refactored to use attrs and inherit from
@@ -742,7 +801,7 @@ low-level C++ class</p>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="fwdpy11.LogNormalS.mv">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">mv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coupled</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaling</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.LogNormalS.mv" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">mv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coupled</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaling</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.LogNormalS.mv" title="Link to this definition">#</a></dt>
 <dd><p>Factory method to create an instance compatible with
 <a class="reference internal" href="#fwdpy11.mvDES" title="fwdpy11.mvDES"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.mvDES</span></code></a>. See <a class="reference internal" href="mvdes.html#mvdes"><span class="std std-ref">Different effect sizes of mutations in different demes</span></a> for
 details.</p>
@@ -754,7 +813,7 @@ details.</p>
 <li><p><strong>weight</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>) – the weight to assign</p></li>
 <li><p><strong>h</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.13)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><a class="reference internal" href="#fwdpy11.MutationDominance" title="fwdpy11.MutationDominance"><em>fwdpy11.MutationDominance</em></a><em>]</em>) – the dominance</p></li>
 <li><p><strong>coupled</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a>) – if True, the weight is converted to(end-beg)*weight</p></li>
-<li><p><strong>label</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.uint16" title="(in NumPy v2.1)"><code class="xref py py-attr docutils literal notranslate"><span class="pre">numpy.uint16</span></code></a>) – Fill <a class="reference internal" href="types.html#fwdpy11.Mutation.label" title="fwdpy11.Mutation.label"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.Mutation.label</span></code></a> with this value.</p></li>
+<li><p><strong>label</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.uint16" title="(in NumPy v2.2)"><code class="xref py py-attr docutils literal notranslate"><span class="pre">numpy.uint16</span></code></a>) – Fill <a class="reference internal" href="types.html#fwdpy11.Mutation.label" title="fwdpy11.Mutation.label"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.Mutation.label</span></code></a> with this value.</p></li>
 <li><p><strong>scaling</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>) – The scaling of the DFE</p></li>
 </ul>
 </dd>
@@ -765,7 +824,7 @@ details.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fwdpy11.DiscreteDESD">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">DiscreteDESD</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">joint_dist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coupled</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaling</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.DiscreteDESD" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">DiscreteDESD</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">joint_dist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coupled</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaling</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.DiscreteDESD" title="Link to this definition">#</a></dt>
 <dd><p>Discretized distribution of effect sizes and dominance.</p>
 <p>This class allows you to specify a discrete joint
 distrubtion of effect size and dominance.</p>
@@ -783,19 +842,19 @@ also determine the order of positional arguments:</p>
 <li><p><strong>weight</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>) – Weight on the region</p></li>
 <li><p><strong>joint_dist</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a>) – The joint distribution + weights</p></li>
 <li><p><strong>coupled</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a>) – Specify if weight is function of end-beg or not. Defaults to True</p></li>
-<li><p><strong>label</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.uint16" title="(in NumPy v2.1)"><code class="xref py py-attr docutils literal notranslate"><span class="pre">numpy.uint16</span></code></a>) – Fill <a class="reference internal" href="types.html#fwdpy11.Mutation.label" title="fwdpy11.Mutation.label"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.Mutation.label</span></code></a> with this value.</p></li>
+<li><p><strong>label</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.uint16" title="(in NumPy v2.2)"><code class="xref py py-attr docutils literal notranslate"><span class="pre">numpy.uint16</span></code></a>) – Fill <a class="reference internal" href="types.html#fwdpy11.Mutation.label" title="fwdpy11.Mutation.label"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.Mutation.label</span></code></a> with this value.</p></li>
 <li><p><strong>scaling</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>) – The scaling of the DFE</p></li>
 </ul>
 </dd>
 </dl>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 0.10.0.</span></p>
+<p><span class="versionmodified added">Added in version 0.10.0.</span></p>
 </div>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fwdpy11.mvDES">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">mvDES</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">des</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">means</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">matrix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.mvDES" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">mvDES</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">des</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">means</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">matrix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.mvDES" title="Link to this definition">#</a></dt>
 <dd><p>General multivariate distribution of effect sizes.</p>
 <p>This class has the following attributes, whose names
 are also <cite>kwargs</cite> for intitialization.  The attribute names
@@ -804,13 +863,13 @@ also determine the order of positional arguments:</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>des</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a><em> or </em><a class="reference internal" href="#fwdpy11.mvDES" title="fwdpy11.mvDES"><em>mvDES</em></a>) – Distributions of effect sizes</p></li>
-<li><p><strong>means</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – means marginal gaussian Distributions</p></li>
-<li><p><strong>matrix</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – Variance/covariance matrix</p></li>
+<li><p><strong>means</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – means marginal gaussian Distributions</p></li>
+<li><p><strong>matrix</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – Variance/covariance matrix</p></li>
 </ul>
 </dd>
 </dl>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 0.7.0.</span></p>
+<p><span class="versionmodified added">Added in version 0.7.0.</span></p>
 </div>
 <div class="versionchanged">
 <p><span class="versionmodified changed">Changed in version 0.8.0: </span>Refactored to use attrs and inherit from
@@ -820,7 +879,7 @@ low-level C++ class</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fwdpy11.PoissonInterval">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">PoissonInterval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mean</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">discrete</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.PoissonInterval" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">PoissonInterval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mean</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">discrete</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.PoissonInterval" title="Link to this definition">#</a></dt>
 <dd><p>Generate poisson number of crossover breakpoints.</p>
 <p>This class has the following attributes, whose names
 are also <cite>kwargs</cite> for intitialization.  The attribute names
@@ -839,7 +898,7 @@ uniformly from <cite>[beg, end)</cite>.</p></li>
 </dd>
 </dl>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 0.3.0.</span></p>
+<p><span class="versionmodified added">Added in version 0.3.0.</span></p>
 </div>
 <div class="versionchanged">
 <p><span class="versionmodified changed">Changed in version 0.5.0: </span>Refactored back-end to be based on fwdpp types</p>
@@ -858,7 +917,7 @@ low-level C++ class</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fwdpy11.PoissonPoint">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">PoissonPoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mean</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">discrete</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.PoissonPoint" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">PoissonPoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mean</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">discrete</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.PoissonPoint" title="Link to this definition">#</a></dt>
 <dd><p>Generate a recombination breakpoint at a fixed position if the
 number of crossover events is odd.</p>
 <p>This class has the following attributes, whose names
@@ -877,7 +936,7 @@ from <cite>[beg, end)</cite>.</p></li>
 </dd>
 </dl>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 0.3.0.</span></p>
+<p><span class="versionmodified added">Added in version 0.3.0.</span></p>
 </div>
 <div class="versionchanged">
 <p><span class="versionmodified changed">Changed in version 0.5.0: </span>Refactored back-end to be based on fwdpp types</p>
@@ -896,7 +955,7 @@ low-level C++ class</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fwdpy11.BinomialPoint">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">BinomialPoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">probability</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">discrete</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.BinomialPoint" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">BinomialPoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">probability</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">discrete</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.BinomialPoint" title="Link to this definition">#</a></dt>
 <dd><p>Generate a crossover breakpoint at a fixed position with a
 fixed probability.  This class represents genetic distance
 as centiMorgans/100.</p>
@@ -916,7 +975,7 @@ uniformly from <cite>[beg, end)</cite>.</p></li>
 </dd>
 </dl>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 0.3.0.</span></p>
+<p><span class="versionmodified added">Added in version 0.3.0.</span></p>
 </div>
 <div class="versionchanged">
 <p><span class="versionmodified changed">Changed in version 0.5.0: </span>Refactored back-end to be based on fwdpp types</p>
@@ -935,7 +994,7 @@ low-level C++ class</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fwdpy11.FixedCrossovers">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">FixedCrossovers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_xovers</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">discrete</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.FixedCrossovers" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">FixedCrossovers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_xovers</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">discrete</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.FixedCrossovers" title="Link to this definition">#</a></dt>
 <dd><p>Generate a fixed number of crossover breakpoints.</p>
 <p>This class has the following attributes, whose names
 are also <cite>kwargs</cite> for intitialization.  The attribute names
@@ -954,7 +1013,7 @@ uniformly from <cite>[beg, end)</cite>.</p></li>
 </dd>
 </dl>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 0.3.0.</span></p>
+<p><span class="versionmodified added">Added in version 0.3.0.</span></p>
 </div>
 <div class="versionchanged">
 <p><span class="versionmodified changed">Changed in version 0.5.0: </span>Refactored back-end to be based on fwdpp types</p>
@@ -973,7 +1032,7 @@ low-level C++ class</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fwdpy11.BinomialInterval">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">BinomialInterval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">probability</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">discrete</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.BinomialInterval" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">BinomialInterval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">probability</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">discrete</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.BinomialInterval" title="Link to this definition">#</a></dt>
 <dd><p>Generate exactly one crossover with a given probability</p>
 <p>This class has the following attributes, whose names
 are also <cite>kwargs</cite> for intitialization.  The attribute names
@@ -992,7 +1051,7 @@ uniformly from <cite>[beg, end)</cite>.</p></li>
 </dd>
 </dl>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 0.5.2.</span></p>
+<p><span class="versionmodified added">Added in version 0.5.2.</span></p>
 </div>
 <div class="versionchanged">
 <p><span class="versionmodified changed">Changed in version 0.7.1: </span>Add __repr__</p>
@@ -1008,7 +1067,7 @@ low-level C++ class</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fwdpy11.BinomialIntervalMap">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">BinomialIntervalMap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">probability</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regions</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">discrete</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.BinomialIntervalMap" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">BinomialIntervalMap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">probability</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regions</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">discrete</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.BinomialIntervalMap" title="Link to this definition">#</a></dt>
 <dd><p>Generate exactly one crossover with a given probability
 and a non-uniform map to generate positions.</p>
 <p>This class has the following attributes, whose names
@@ -1031,23 +1090,23 @@ a non-uniform map to generate breakpoint positions.
 The <code class="docutils literal notranslate"><span class="pre">regions</span></code> parameter is used to generate a lookup
 table allowing efficient generation of positions.</p>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 0.20.0.</span></p>
+<p><span class="versionmodified added">Added in version 0.20.0.</span></p>
 </div>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fwdpy11.MutationDominance">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">MutationDominance</span></span><a class="headerlink" href="#fwdpy11.MutationDominance" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">MutationDominance</span></span><a class="headerlink" href="#fwdpy11.MutationDominance" title="Link to this definition">#</a></dt>
 <dd><p>ABC for classes determining the dominance of new mutations.</p>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 0.13.0.</span></p>
+<p><span class="versionmodified added">Added in version 0.13.0.</span></p>
 </div>
 <p>See <a class="reference internal" href="../short_vignettes/mutationdominance_vignette.html#mutationdominance-vignette"><span class="std std-ref">here</span></a> for details.</p>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fwdpy11.FixedDominance">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">FixedDominance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">h</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.FixedDominance" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">FixedDominance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">h</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.FixedDominance" title="Link to this definition">#</a></dt>
 <dd><p>Fixed heterozygous effects.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1055,14 +1114,14 @@ table allowing efficient generation of positions.</p>
 </dd>
 </dl>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 0.13.0.</span></p>
+<p><span class="versionmodified added">Added in version 0.13.0.</span></p>
 </div>
 <p>See <a class="reference internal" href="../short_vignettes/mutationdominance_vignette.html#mutationdominance-vignette"><span class="std std-ref">here</span></a> for details.</p>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fwdpy11.UniformDominance">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">UniformDominance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hi</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.UniformDominance" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">UniformDominance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hi</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.UniformDominance" title="Link to this definition">#</a></dt>
 <dd><p>Uniform distribution of heterozygous effects.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1073,14 +1132,14 @@ table allowing efficient generation of positions.</p>
 </dd>
 </dl>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 0.13.0.</span></p>
+<p><span class="versionmodified added">Added in version 0.13.0.</span></p>
 </div>
 <p>See <a class="reference internal" href="../short_vignettes/mutationdominance_vignette.html#mutationdominance-vignette"><span class="std std-ref">here</span></a> for details.</p>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fwdpy11.ExponentialDominance">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">ExponentialDominance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.ExponentialDominance" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">ExponentialDominance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.ExponentialDominance" title="Link to this definition">#</a></dt>
 <dd><p>Exponential distribution of heterozygous effects.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1088,14 +1147,14 @@ table allowing efficient generation of positions.</p>
 </dd>
 </dl>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 0.13.0.</span></p>
+<p><span class="versionmodified added">Added in version 0.13.0.</span></p>
 </div>
 <p>See <a class="reference internal" href="../short_vignettes/mutationdominance_vignette.html#mutationdominance-vignette"><span class="std std-ref">here</span></a> for details.</p>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fwdpy11.LargeEffectExponentiallyRecessive">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">LargeEffectExponentiallyRecessive</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaling</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.LargeEffectExponentiallyRecessive" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">LargeEffectExponentiallyRecessive</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaling</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.LargeEffectExponentiallyRecessive" title="Link to this definition">#</a></dt>
 <dd><p>Large effect mutations are more recessive according to
 the function <span class="math notranslate nohighlight">\(y \times e^{-k|s|}\)</span>, where <span class="math notranslate nohighlight">\(s\)</span> is the
 effect size and <span class="math notranslate nohighlight">\(y\)</span> is a “scaling” parameter.</p>
@@ -1105,7 +1164,7 @@ effect size and <span class="math notranslate nohighlight">\(y\)</span> is a “
 </dd>
 </dl>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 0.13.0.</span></p>
+<p><span class="versionmodified added">Added in version 0.13.0.</span></p>
 </div>
 <p>See <a class="reference internal" href="../short_vignettes/mutationdominance_vignette.html#mutationdominance-vignette"><span class="std std-ref">here</span></a> for details.</p>
 </dd></dl>
@@ -1137,8 +1196,10 @@ effect size and <span class="math notranslate nohighlight">\(y\)</span> is a “
 
               
               
-                <footer class="bd-footer-article">
-                  <!-- Previous / next buttons -->
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
 <div class="prev-next-area">
     <a class="left-prev"
        href="model_params.html"
@@ -1165,10 +1226,49 @@ effect size and <span class="math notranslate nohighlight">\(y\)</span> is a “
             
             
               
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.Region"><code class="docutils literal notranslate"><span class="pre">Region</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.Sregion"><code class="docutils literal notranslate"><span class="pre">Sregion</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.ConstantS"><code class="docutils literal notranslate"><span class="pre">ConstantS</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.UniformS"><code class="docutils literal notranslate"><span class="pre">UniformS</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.ExpS"><code class="docutils literal notranslate"><span class="pre">ExpS</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.GammaS"><code class="docutils literal notranslate"><span class="pre">GammaS</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.GaussianS"><code class="docutils literal notranslate"><span class="pre">GaussianS</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.MultivariateGaussianEffects"><code class="docutils literal notranslate"><span class="pre">MultivariateGaussianEffects</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.LogNormalS"><code class="docutils literal notranslate"><span class="pre">LogNormalS</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.LogNormalS.mv"><code class="docutils literal notranslate"><span class="pre">LogNormalS.mv()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.DiscreteDESD"><code class="docutils literal notranslate"><span class="pre">DiscreteDESD</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.mvDES"><code class="docutils literal notranslate"><span class="pre">mvDES</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.PoissonInterval"><code class="docutils literal notranslate"><span class="pre">PoissonInterval</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.PoissonPoint"><code class="docutils literal notranslate"><span class="pre">PoissonPoint</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.BinomialPoint"><code class="docutils literal notranslate"><span class="pre">BinomialPoint</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.FixedCrossovers"><code class="docutils literal notranslate"><span class="pre">FixedCrossovers</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.BinomialInterval"><code class="docutils literal notranslate"><span class="pre">BinomialInterval</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.BinomialIntervalMap"><code class="docutils literal notranslate"><span class="pre">BinomialIntervalMap</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.MutationDominance"><code class="docutils literal notranslate"><span class="pre">MutationDominance</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.FixedDominance"><code class="docutils literal notranslate"><span class="pre">FixedDominance</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.UniformDominance"><code class="docutils literal notranslate"><span class="pre">UniformDominance</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.ExponentialDominance"><code class="docutils literal notranslate"><span class="pre">ExponentialDominance</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.LargeEffectExponentiallyRecessive"><code class="docutils literal notranslate"><span class="pre">LargeEffectExponentiallyRecessive</span></code></a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
             
           </div>
           <footer class="bd-footer-content">
-            <div class="bd-footer-content__inner">
+            
 <div class="bd-footer-content__inner container">
   
   <div class="footer-item">
@@ -1181,9 +1281,10 @@ By Kevin Thornton
   
   <div class="footer-item">
     
+
   <p class="copyright">
     
-      © Copyright 2022.
+      © Copyright 2023.
       <br/>
     
   </p>
@@ -1198,7 +1299,7 @@ By Kevin Thornton
     
   </div>
   
-</div></div>
+</div>
           </footer>
         
 
@@ -1207,8 +1308,8 @@ By Kevin Thornton
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d"></script>
-<script src="../_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d"></script>
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
 
   <footer class="bd-footer">
   </footer>

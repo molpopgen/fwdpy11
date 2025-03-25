@@ -3,6 +3,12 @@
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+## 0.24.4
+
+Maintenance release.
+This release contains no new features or bug fixes.
+Instead, it contains several improvements to dependency management and the build system.
+
 ## 0.24.3
 
 Bug fix:

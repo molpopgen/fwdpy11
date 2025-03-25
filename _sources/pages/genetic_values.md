@@ -9,20 +9,20 @@ For some background, see {ref}`definitions`.
 
 ```{eval-rst}
 .. autoclass:: fwdpy11.Additive
-    :members: asdict, fromdict, asblack, shape, genetic_values, maps_to_fitness, maps_to_trait_value
+    :members: asdict, fromdict, shape, genetic_values, maps_to_fitness, maps_to_trait_value
 ```
 
 ```{eval-rst}
 .. autoclass:: fwdpy11.Multiplicative
-    :members: asdict, fromdict, asblack, shape, genetic_values, maps_to_fitness, maps_to_trait_value
+    :members: asdict, fromdict, shape, genetic_values, maps_to_fitness, maps_to_trait_value
 ```
 
 ```{eval-rst}
 .. autoclass:: fwdpy11.GBR
-    :members: asdict, fromdict, asblack, shape, genetic_values, maps_to_fitness, maps_to_trait_value
+    :members: asdict, fromdict, shape, genetic_values, maps_to_fitness, maps_to_trait_value
 ```
 
 ```{eval-rst}
 .. autoclass:: fwdpy11.AdditivePleiotropy
-    :members: asdict, fromdict, asblack, shape, genetic_values, maps_to_fitness, maps_to_trait_value
+    :members: asdict, fromdict, shape, genetic_values, maps_to_fitness, maps_to_trait_value
 ```

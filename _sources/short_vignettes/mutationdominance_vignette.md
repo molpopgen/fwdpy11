@@ -104,7 +104,7 @@ for s in np.arange(0.1, 1, 0.1):
 
 ```{code-cell}
 des = fwdpy11.DiscreteDESD(beg=0, end=1, weight=1, joint_dist=joint_dist)
-print(des.asblack())
+print(des)
 ```
 
 The result is that mutations with smaller effect sizes are more common (larger weights) and more dominant.

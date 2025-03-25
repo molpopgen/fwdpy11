@@ -1,13 +1,12 @@
 
-
 <!DOCTYPE html>
 
 
-<html lang="en" >
+<html lang="en" data-content_root="../" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Genetic values &#8212; fwdpy11 manual</title>
   
@@ -15,52 +14,49 @@
   
   <script data-cfasync="false">
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
-    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
-<link href="../_static/styles/bootstrap.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
 
   
-  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d" />
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/clipboard.min.js"></script>
-    <script src="../_static/copybutton.js"></script>
-    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
-    <script src="../_static/design-tabs.js"></script>
-    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
-const thebe_selector = ".thebe,.cell"
-const thebe_selector_input = "pre"
-const thebe_selector_output = ".output, .cell_output"
-</script>
-    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'pages/genetic_values';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -75,19 +71,23 @@ const thebe_selector_output = ".output, .cell_output"
 
   
   
-  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
   
   <input type="checkbox"
           class="sidebar-toggle"
-          name="__primary"
-          id="__primary"/>
-  <label class="overlay overlay-primary" for="__primary"></label>
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
   
   <input type="checkbox"
           class="sidebar-toggle"
-          name="__secondary"
-          id="__secondary"/>
-  <label class="overlay overlay-secondary" for="__secondary"></label>
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
   
   <div class="search-button__wrapper">
     <div class="search-button__overlay"></div>
@@ -109,12 +109,20 @@ const thebe_selector_output = ".output, .cell_output"
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
 </form></div>
   </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
   
-    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
-    </nav>
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
   
+
   <div class="bd-container">
     <div class="bd-container__inner bd-page-width">
+      
+      
       
       <div class="bd-sidebar-primary bd-sidebar">
         
@@ -129,6 +137,9 @@ const thebe_selector_output = ".output, .cell_output"
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
         <div class="sidebar-primary-item">
+
+  
+    
   
 
 <a class="navbar-brand logo" href="../intro.html">
@@ -137,10 +148,22 @@ const thebe_selector_output = ".output, .cell_output"
   
   
   
+  
     <p class="title logo__title">fwdpy11 manual</p>
   
 </a></div>
-        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         
         <ul class="nav bd-sidenav bd-sidenav__home-link">
@@ -287,7 +310,7 @@ const thebe_selector_output = ".output, .cell_output"
 
       </div>
       
-      <main id="main-content" class="bd-main">
+      <main id="main-content" class="bd-main" role="main">
         
         
 
@@ -296,14 +319,14 @@ const thebe_selector_output = ".output, .cell_output"
           <div class="bd-content">
             <div class="bd-article-container">
               
-              <div class="bd-header-article">
+              <div class="bd-header-article d-print-none">
 <div class="header-article-items header-article__inner">
   
     <div class="header-article-items__start">
       
-        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
   <span class="fa-solid fa-bars"></span>
-</label></div>
+</button></div>
       
     </div>
   
@@ -425,24 +448,28 @@ const thebe_selector_output = ".output, .cell_output"
 </button>
 
 
+
 <script>
 document.write(`
-  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
-    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
-    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
   </button>
 `);
 </script>
 
+
 <script>
 document.write(`
-  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
   </button>
 `);
 </script>
-
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
 </div></div>
       
     </div>
@@ -458,6 +485,56 @@ document.write(`
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.DiploidGeneticValue"><code class="docutils literal notranslate"><span class="pre">DiploidGeneticValue</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.DiploidGeneticValue.genetic_values"><code class="docutils literal notranslate"><span class="pre">DiploidGeneticValue.genetic_values</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.DiploidGeneticValue.maps_to_fitness"><code class="docutils literal notranslate"><span class="pre">DiploidGeneticValue.maps_to_fitness</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.DiploidGeneticValue.maps_to_trait_value"><code class="docutils literal notranslate"><span class="pre">DiploidGeneticValue.maps_to_trait_value</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.DiploidGeneticValue.shape"><code class="docutils literal notranslate"><span class="pre">DiploidGeneticValue.shape</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.Additive"><code class="docutils literal notranslate"><span class="pre">Additive</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.Additive.asdict"><code class="docutils literal notranslate"><span class="pre">Additive.asdict()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.Additive.fromdict"><code class="docutils literal notranslate"><span class="pre">Additive.fromdict()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.Additive.genetic_values"><code class="docutils literal notranslate"><span class="pre">Additive.genetic_values</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.Additive.maps_to_fitness"><code class="docutils literal notranslate"><span class="pre">Additive.maps_to_fitness</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.Additive.maps_to_trait_value"><code class="docutils literal notranslate"><span class="pre">Additive.maps_to_trait_value</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.Additive.shape"><code class="docutils literal notranslate"><span class="pre">Additive.shape</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.Multiplicative"><code class="docutils literal notranslate"><span class="pre">Multiplicative</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.Multiplicative.asdict"><code class="docutils literal notranslate"><span class="pre">Multiplicative.asdict()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.Multiplicative.fromdict"><code class="docutils literal notranslate"><span class="pre">Multiplicative.fromdict()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.Multiplicative.genetic_values"><code class="docutils literal notranslate"><span class="pre">Multiplicative.genetic_values</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.Multiplicative.maps_to_fitness"><code class="docutils literal notranslate"><span class="pre">Multiplicative.maps_to_fitness</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.Multiplicative.maps_to_trait_value"><code class="docutils literal notranslate"><span class="pre">Multiplicative.maps_to_trait_value</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.Multiplicative.shape"><code class="docutils literal notranslate"><span class="pre">Multiplicative.shape</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.GBR"><code class="docutils literal notranslate"><span class="pre">GBR</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.GBR.asdict"><code class="docutils literal notranslate"><span class="pre">GBR.asdict()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.GBR.fromdict"><code class="docutils literal notranslate"><span class="pre">GBR.fromdict()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.GBR.genetic_values"><code class="docutils literal notranslate"><span class="pre">GBR.genetic_values</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.GBR.maps_to_fitness"><code class="docutils literal notranslate"><span class="pre">GBR.maps_to_fitness</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.GBR.maps_to_trait_value"><code class="docutils literal notranslate"><span class="pre">GBR.maps_to_trait_value</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.GBR.shape"><code class="docutils literal notranslate"><span class="pre">GBR.shape</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.AdditivePleiotropy"><code class="docutils literal notranslate"><span class="pre">AdditivePleiotropy</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.AdditivePleiotropy.asdict"><code class="docutils literal notranslate"><span class="pre">AdditivePleiotropy.asdict()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.AdditivePleiotropy.fromdict"><code class="docutils literal notranslate"><span class="pre">AdditivePleiotropy.fromdict()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.AdditivePleiotropy.genetic_values"><code class="docutils literal notranslate"><span class="pre">AdditivePleiotropy.genetic_values</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.AdditivePleiotropy.maps_to_fitness"><code class="docutils literal notranslate"><span class="pre">AdditivePleiotropy.maps_to_fitness</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.AdditivePleiotropy.maps_to_trait_value"><code class="docutils literal notranslate"><span class="pre">AdditivePleiotropy.maps_to_trait_value</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.AdditivePleiotropy.shape"><code class="docutils literal notranslate"><span class="pre">AdditivePleiotropy.shape</span></code></a></li>
+</ul>
+</li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -465,50 +542,50 @@ document.write(`
               
                 
 <div id="searchbox"></div>
-                <article class="bd-article" role="main">
+                <article class="bd-article">
                   
   <section class="tex2jax_ignore mathjax_ignore" id="genetic-values">
-<h1>Genetic values<a class="headerlink" href="#genetic-values" title="Permalink to this heading">#</a></h1>
+<h1>Genetic values<a class="headerlink" href="#genetic-values" title="Link to this heading">#</a></h1>
 <p>For some background, see <a class="reference internal" href="definitions.html#definitions"><span class="std std-ref">Definitions</span></a>.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="fwdpy11.DiploidGeneticValue">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">DiploidGeneticValue</span></span><a class="headerlink" href="#fwdpy11.DiploidGeneticValue" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">DiploidGeneticValue</span></span><a class="headerlink" href="#fwdpy11.DiploidGeneticValue" title="Link to this definition">#</a></dt>
 <dd><p>ABC for genetic value calculations for diploid members of <a class="reference internal" href="types.html#fwdpy11.DiploidPopulation" title="fwdpy11.DiploidPopulation"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiploidPopulation</span></code></a></p>
 <dl class="py property">
 <dt class="sig sig-object py" id="fwdpy11.DiploidGeneticValue.genetic_values">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">genetic_values</span></span><a class="headerlink" href="#fwdpy11.DiploidGeneticValue.genetic_values" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">genetic_values</span></span><a class="headerlink" href="#fwdpy11.DiploidGeneticValue.genetic_values" title="Link to this definition">#</a></dt>
 <dd><p>Return the list of genetic values.</p>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 0.3.0.</span></p>
+<p><span class="versionmodified added">Added in version 0.3.0.</span></p>
 </div>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="fwdpy11.DiploidGeneticValue.maps_to_fitness">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">maps_to_fitness</span></span><a class="headerlink" href="#fwdpy11.DiploidGeneticValue.maps_to_fitness" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">maps_to_fitness</span></span><a class="headerlink" href="#fwdpy11.DiploidGeneticValue.maps_to_fitness" title="Link to this definition">#</a></dt>
 <dd><p>Returns True if object represents a mapping directly to fitness, and
 False otherwise.</p>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 0.7.0.</span></p>
+<p><span class="versionmodified added">Added in version 0.7.0.</span></p>
 </div>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="fwdpy11.DiploidGeneticValue.maps_to_trait_value">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">maps_to_trait_value</span></span><a class="headerlink" href="#fwdpy11.DiploidGeneticValue.maps_to_trait_value" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">maps_to_trait_value</span></span><a class="headerlink" href="#fwdpy11.DiploidGeneticValue.maps_to_trait_value" title="Link to this definition">#</a></dt>
 <dd><p>Returns True if object represents a trait value, and
 False otherwise.</p>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 0.7.0.</span></p>
+<p><span class="versionmodified added">Added in version 0.7.0.</span></p>
 </div>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="fwdpy11.DiploidGeneticValue.shape">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">shape</span></span><a class="headerlink" href="#fwdpy11.DiploidGeneticValue.shape" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">shape</span></span><a class="headerlink" href="#fwdpy11.DiploidGeneticValue.shape" title="Link to this definition">#</a></dt>
 <dd><p>Return the dimensions of the genetic values.</p>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 0.3.0.</span></p>
+<p><span class="versionmodified added">Added in version 0.3.0.</span></p>
 </div>
 </dd></dl>
 
@@ -516,7 +593,7 @@ False otherwise.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fwdpy11.Additive">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">Additive</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scaling</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gvalue_to_fitness</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ndemes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.Additive" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">Additive</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scaling</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gvalue_to_fitness</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ndemes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.Additive" title="Link to this definition">#</a></dt>
 <dd><p>Additive effects on genetic values.</p>
 <p>This class has the following attributes, whose names
 are also <cite>kwargs</cite> for intitialization.  The attribute names
@@ -543,58 +620,52 @@ and e, respectively.</p>
 low-level C++ class</p>
 </div>
 <dl class="py method">
-<dt class="sig sig-object py" id="fwdpy11.Additive.asblack">
-<span class="sig-name descname"><span class="pre">asblack</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.Additive.asblack" title="Permalink to this definition">#</a></dt>
-<dd><p>Return a string representation formatted with black</p>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="fwdpy11.Additive.asdict">
-<span class="sig-name descname"><span class="pre">asdict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.Additive.asdict" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">asdict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.Additive.asdict" title="Link to this definition">#</a></dt>
 <dd><p>Return dict representation</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fwdpy11.Additive.fromdict">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fromdict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.Additive.fromdict" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fromdict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.Additive.fromdict" title="Link to this definition">#</a></dt>
 <dd><p>Build an instance from a dictionary</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="fwdpy11.Additive.genetic_values">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">genetic_values</span></span><a class="headerlink" href="#fwdpy11.Additive.genetic_values" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">genetic_values</span></span><a class="headerlink" href="#fwdpy11.Additive.genetic_values" title="Link to this definition">#</a></dt>
 <dd><p>Return the list of genetic values.</p>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 0.3.0.</span></p>
+<p><span class="versionmodified added">Added in version 0.3.0.</span></p>
 </div>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="fwdpy11.Additive.maps_to_fitness">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">maps_to_fitness</span></span><a class="headerlink" href="#fwdpy11.Additive.maps_to_fitness" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">maps_to_fitness</span></span><a class="headerlink" href="#fwdpy11.Additive.maps_to_fitness" title="Link to this definition">#</a></dt>
 <dd><p>Returns True if object represents a mapping directly to fitness, and
 False otherwise.</p>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 0.7.0.</span></p>
+<p><span class="versionmodified added">Added in version 0.7.0.</span></p>
 </div>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="fwdpy11.Additive.maps_to_trait_value">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">maps_to_trait_value</span></span><a class="headerlink" href="#fwdpy11.Additive.maps_to_trait_value" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">maps_to_trait_value</span></span><a class="headerlink" href="#fwdpy11.Additive.maps_to_trait_value" title="Link to this definition">#</a></dt>
 <dd><p>Returns True if object represents a trait value, and
 False otherwise.</p>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 0.7.0.</span></p>
+<p><span class="versionmodified added">Added in version 0.7.0.</span></p>
 </div>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="fwdpy11.Additive.shape">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">shape</span></span><a class="headerlink" href="#fwdpy11.Additive.shape" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">shape</span></span><a class="headerlink" href="#fwdpy11.Additive.shape" title="Link to this definition">#</a></dt>
 <dd><p>Return the dimensions of the genetic values.</p>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 0.3.0.</span></p>
+<p><span class="versionmodified added">Added in version 0.3.0.</span></p>
 </div>
 </dd></dl>
 
@@ -602,7 +673,7 @@ False otherwise.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fwdpy11.Multiplicative">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">Multiplicative</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scaling</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gvalue_to_fitness</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ndemes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.Multiplicative" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">Multiplicative</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scaling</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gvalue_to_fitness</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ndemes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.Multiplicative" title="Link to this definition">#</a></dt>
 <dd><p>Multiplicative effects on genetic values.</p>
 <p>This class has the following attributes, whose names
 are also <cite>kwargs</cite> for intitialization.  The attribute names
@@ -629,58 +700,52 @@ and e, respectively.</p>
 low-level C++ class</p>
 </div>
 <dl class="py method">
-<dt class="sig sig-object py" id="fwdpy11.Multiplicative.asblack">
-<span class="sig-name descname"><span class="pre">asblack</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.Multiplicative.asblack" title="Permalink to this definition">#</a></dt>
-<dd><p>Return a string representation formatted with black</p>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="fwdpy11.Multiplicative.asdict">
-<span class="sig-name descname"><span class="pre">asdict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.Multiplicative.asdict" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">asdict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.Multiplicative.asdict" title="Link to this definition">#</a></dt>
 <dd><p>Return dict representation</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fwdpy11.Multiplicative.fromdict">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fromdict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.Multiplicative.fromdict" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fromdict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.Multiplicative.fromdict" title="Link to this definition">#</a></dt>
 <dd><p>Build an instance from a dictionary</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="fwdpy11.Multiplicative.genetic_values">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">genetic_values</span></span><a class="headerlink" href="#fwdpy11.Multiplicative.genetic_values" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">genetic_values</span></span><a class="headerlink" href="#fwdpy11.Multiplicative.genetic_values" title="Link to this definition">#</a></dt>
 <dd><p>Return the list of genetic values.</p>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 0.3.0.</span></p>
+<p><span class="versionmodified added">Added in version 0.3.0.</span></p>
 </div>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="fwdpy11.Multiplicative.maps_to_fitness">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">maps_to_fitness</span></span><a class="headerlink" href="#fwdpy11.Multiplicative.maps_to_fitness" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">maps_to_fitness</span></span><a class="headerlink" href="#fwdpy11.Multiplicative.maps_to_fitness" title="Link to this definition">#</a></dt>
 <dd><p>Returns True if object represents a mapping directly to fitness, and
 False otherwise.</p>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 0.7.0.</span></p>
+<p><span class="versionmodified added">Added in version 0.7.0.</span></p>
 </div>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="fwdpy11.Multiplicative.maps_to_trait_value">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">maps_to_trait_value</span></span><a class="headerlink" href="#fwdpy11.Multiplicative.maps_to_trait_value" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">maps_to_trait_value</span></span><a class="headerlink" href="#fwdpy11.Multiplicative.maps_to_trait_value" title="Link to this definition">#</a></dt>
 <dd><p>Returns True if object represents a trait value, and
 False otherwise.</p>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 0.7.0.</span></p>
+<p><span class="versionmodified added">Added in version 0.7.0.</span></p>
 </div>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="fwdpy11.Multiplicative.shape">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">shape</span></span><a class="headerlink" href="#fwdpy11.Multiplicative.shape" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">shape</span></span><a class="headerlink" href="#fwdpy11.Multiplicative.shape" title="Link to this definition">#</a></dt>
 <dd><p>Return the dimensions of the genetic values.</p>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 0.3.0.</span></p>
+<p><span class="versionmodified added">Added in version 0.3.0.</span></p>
 </div>
 </dd></dl>
 
@@ -688,7 +753,7 @@ False otherwise.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fwdpy11.GBR">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">GBR</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gvalue_to_fitness</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.GBR" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">GBR</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gvalue_to_fitness</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.GBR" title="Link to this definition">#</a></dt>
 <dd><p>The “gene-based recessive” trait model described in Thornton et al.
 2013 <a class="reference external" href="http://dx.doi.org/10.1371/journal.pgen.1003258">http://dx.doi.org/10.1371/journal.pgen.1003258</a> and Sanjak et al. 2017
 <a class="reference external" href="http://dx.doi.org/10.1371/journal.pgen.1006573">http://dx.doi.org/10.1371/journal.pgen.1006573</a>.</p>
@@ -711,58 +776,52 @@ also determine the order of positional arguments:</p>
 low-level C++ class</p>
 </div>
 <dl class="py method">
-<dt class="sig sig-object py" id="fwdpy11.GBR.asblack">
-<span class="sig-name descname"><span class="pre">asblack</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.GBR.asblack" title="Permalink to this definition">#</a></dt>
-<dd><p>Return a string representation formatted with black</p>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="fwdpy11.GBR.asdict">
-<span class="sig-name descname"><span class="pre">asdict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.GBR.asdict" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">asdict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.GBR.asdict" title="Link to this definition">#</a></dt>
 <dd><p>Return dict representation</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fwdpy11.GBR.fromdict">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fromdict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.GBR.fromdict" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fromdict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.GBR.fromdict" title="Link to this definition">#</a></dt>
 <dd><p>Build an instance from a dictionary</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="fwdpy11.GBR.genetic_values">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">genetic_values</span></span><a class="headerlink" href="#fwdpy11.GBR.genetic_values" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">genetic_values</span></span><a class="headerlink" href="#fwdpy11.GBR.genetic_values" title="Link to this definition">#</a></dt>
 <dd><p>Return the list of genetic values.</p>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 0.3.0.</span></p>
+<p><span class="versionmodified added">Added in version 0.3.0.</span></p>
 </div>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="fwdpy11.GBR.maps_to_fitness">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">maps_to_fitness</span></span><a class="headerlink" href="#fwdpy11.GBR.maps_to_fitness" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">maps_to_fitness</span></span><a class="headerlink" href="#fwdpy11.GBR.maps_to_fitness" title="Link to this definition">#</a></dt>
 <dd><p>Returns True if object represents a mapping directly to fitness, and
 False otherwise.</p>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 0.7.0.</span></p>
+<p><span class="versionmodified added">Added in version 0.7.0.</span></p>
 </div>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="fwdpy11.GBR.maps_to_trait_value">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">maps_to_trait_value</span></span><a class="headerlink" href="#fwdpy11.GBR.maps_to_trait_value" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">maps_to_trait_value</span></span><a class="headerlink" href="#fwdpy11.GBR.maps_to_trait_value" title="Link to this definition">#</a></dt>
 <dd><p>Returns True if object represents a trait value, and
 False otherwise.</p>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 0.7.0.</span></p>
+<p><span class="versionmodified added">Added in version 0.7.0.</span></p>
 </div>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="fwdpy11.GBR.shape">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">shape</span></span><a class="headerlink" href="#fwdpy11.GBR.shape" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">shape</span></span><a class="headerlink" href="#fwdpy11.GBR.shape" title="Link to this definition">#</a></dt>
 <dd><p>Return the dimensions of the genetic values.</p>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 0.3.0.</span></p>
+<p><span class="versionmodified added">Added in version 0.3.0.</span></p>
 </div>
 </dd></dl>
 
@@ -770,7 +829,7 @@ False otherwise.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fwdpy11.AdditivePleiotropy">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">AdditivePleiotropy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ndimensions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">focal_trait</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gvalue_to_fitness</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.AdditivePleiotropy" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">AdditivePleiotropy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ndimensions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">focal_trait</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gvalue_to_fitness</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.AdditivePleiotropy" title="Link to this definition">#</a></dt>
 <dd><p>Multivariate trait values under strictly additive effects.</p>
 <p>Calculate the trait value for a diploid in a
 <a class="reference internal" href="types.html#fwdpy11.DiploidPopulation" title="fwdpy11.DiploidPopulation"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiploidPopulation</span></code></a> for a multidimensional trait.</p>
@@ -796,58 +855,52 @@ also determine the order of positional arguments:</p>
 low-level C++ class</p>
 </div>
 <dl class="py method">
-<dt class="sig sig-object py" id="fwdpy11.AdditivePleiotropy.asblack">
-<span class="sig-name descname"><span class="pre">asblack</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.AdditivePleiotropy.asblack" title="Permalink to this definition">#</a></dt>
-<dd><p>Return a string representation formatted with black</p>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="fwdpy11.AdditivePleiotropy.asdict">
-<span class="sig-name descname"><span class="pre">asdict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.AdditivePleiotropy.asdict" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">asdict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.AdditivePleiotropy.asdict" title="Link to this definition">#</a></dt>
 <dd><p>Return dict representation</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fwdpy11.AdditivePleiotropy.fromdict">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fromdict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.AdditivePleiotropy.fromdict" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fromdict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.AdditivePleiotropy.fromdict" title="Link to this definition">#</a></dt>
 <dd><p>Build an instance from a dictionary</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="fwdpy11.AdditivePleiotropy.genetic_values">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">genetic_values</span></span><a class="headerlink" href="#fwdpy11.AdditivePleiotropy.genetic_values" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">genetic_values</span></span><a class="headerlink" href="#fwdpy11.AdditivePleiotropy.genetic_values" title="Link to this definition">#</a></dt>
 <dd><p>Return the list of genetic values.</p>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 0.3.0.</span></p>
+<p><span class="versionmodified added">Added in version 0.3.0.</span></p>
 </div>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="fwdpy11.AdditivePleiotropy.maps_to_fitness">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">maps_to_fitness</span></span><a class="headerlink" href="#fwdpy11.AdditivePleiotropy.maps_to_fitness" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">maps_to_fitness</span></span><a class="headerlink" href="#fwdpy11.AdditivePleiotropy.maps_to_fitness" title="Link to this definition">#</a></dt>
 <dd><p>Returns True if object represents a mapping directly to fitness, and
 False otherwise.</p>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 0.7.0.</span></p>
+<p><span class="versionmodified added">Added in version 0.7.0.</span></p>
 </div>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="fwdpy11.AdditivePleiotropy.maps_to_trait_value">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">maps_to_trait_value</span></span><a class="headerlink" href="#fwdpy11.AdditivePleiotropy.maps_to_trait_value" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">maps_to_trait_value</span></span><a class="headerlink" href="#fwdpy11.AdditivePleiotropy.maps_to_trait_value" title="Link to this definition">#</a></dt>
 <dd><p>Returns True if object represents a trait value, and
 False otherwise.</p>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 0.7.0.</span></p>
+<p><span class="versionmodified added">Added in version 0.7.0.</span></p>
 </div>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="fwdpy11.AdditivePleiotropy.shape">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">shape</span></span><a class="headerlink" href="#fwdpy11.AdditivePleiotropy.shape" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">shape</span></span><a class="headerlink" href="#fwdpy11.AdditivePleiotropy.shape" title="Link to this definition">#</a></dt>
 <dd><p>Return the dimensions of the genetic values.</p>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 0.3.0.</span></p>
+<p><span class="versionmodified added">Added in version 0.3.0.</span></p>
 </div>
 </dd></dl>
 
@@ -880,8 +933,10 @@ False otherwise.</p>
 
               
               
-                <footer class="bd-footer-article">
-                  <!-- Previous / next buttons -->
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
 <div class="prev-next-area">
     <a class="left-prev"
        href="../technical/writingplugins.html"
@@ -908,10 +963,67 @@ False otherwise.</p>
             
             
               
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.DiploidGeneticValue"><code class="docutils literal notranslate"><span class="pre">DiploidGeneticValue</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.DiploidGeneticValue.genetic_values"><code class="docutils literal notranslate"><span class="pre">DiploidGeneticValue.genetic_values</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.DiploidGeneticValue.maps_to_fitness"><code class="docutils literal notranslate"><span class="pre">DiploidGeneticValue.maps_to_fitness</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.DiploidGeneticValue.maps_to_trait_value"><code class="docutils literal notranslate"><span class="pre">DiploidGeneticValue.maps_to_trait_value</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.DiploidGeneticValue.shape"><code class="docutils literal notranslate"><span class="pre">DiploidGeneticValue.shape</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.Additive"><code class="docutils literal notranslate"><span class="pre">Additive</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.Additive.asdict"><code class="docutils literal notranslate"><span class="pre">Additive.asdict()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.Additive.fromdict"><code class="docutils literal notranslate"><span class="pre">Additive.fromdict()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.Additive.genetic_values"><code class="docutils literal notranslate"><span class="pre">Additive.genetic_values</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.Additive.maps_to_fitness"><code class="docutils literal notranslate"><span class="pre">Additive.maps_to_fitness</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.Additive.maps_to_trait_value"><code class="docutils literal notranslate"><span class="pre">Additive.maps_to_trait_value</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.Additive.shape"><code class="docutils literal notranslate"><span class="pre">Additive.shape</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.Multiplicative"><code class="docutils literal notranslate"><span class="pre">Multiplicative</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.Multiplicative.asdict"><code class="docutils literal notranslate"><span class="pre">Multiplicative.asdict()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.Multiplicative.fromdict"><code class="docutils literal notranslate"><span class="pre">Multiplicative.fromdict()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.Multiplicative.genetic_values"><code class="docutils literal notranslate"><span class="pre">Multiplicative.genetic_values</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.Multiplicative.maps_to_fitness"><code class="docutils literal notranslate"><span class="pre">Multiplicative.maps_to_fitness</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.Multiplicative.maps_to_trait_value"><code class="docutils literal notranslate"><span class="pre">Multiplicative.maps_to_trait_value</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.Multiplicative.shape"><code class="docutils literal notranslate"><span class="pre">Multiplicative.shape</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.GBR"><code class="docutils literal notranslate"><span class="pre">GBR</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.GBR.asdict"><code class="docutils literal notranslate"><span class="pre">GBR.asdict()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.GBR.fromdict"><code class="docutils literal notranslate"><span class="pre">GBR.fromdict()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.GBR.genetic_values"><code class="docutils literal notranslate"><span class="pre">GBR.genetic_values</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.GBR.maps_to_fitness"><code class="docutils literal notranslate"><span class="pre">GBR.maps_to_fitness</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.GBR.maps_to_trait_value"><code class="docutils literal notranslate"><span class="pre">GBR.maps_to_trait_value</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.GBR.shape"><code class="docutils literal notranslate"><span class="pre">GBR.shape</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.AdditivePleiotropy"><code class="docutils literal notranslate"><span class="pre">AdditivePleiotropy</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.AdditivePleiotropy.asdict"><code class="docutils literal notranslate"><span class="pre">AdditivePleiotropy.asdict()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.AdditivePleiotropy.fromdict"><code class="docutils literal notranslate"><span class="pre">AdditivePleiotropy.fromdict()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.AdditivePleiotropy.genetic_values"><code class="docutils literal notranslate"><span class="pre">AdditivePleiotropy.genetic_values</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.AdditivePleiotropy.maps_to_fitness"><code class="docutils literal notranslate"><span class="pre">AdditivePleiotropy.maps_to_fitness</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.AdditivePleiotropy.maps_to_trait_value"><code class="docutils literal notranslate"><span class="pre">AdditivePleiotropy.maps_to_trait_value</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.AdditivePleiotropy.shape"><code class="docutils literal notranslate"><span class="pre">AdditivePleiotropy.shape</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
             
           </div>
           <footer class="bd-footer-content">
-            <div class="bd-footer-content__inner">
+            
 <div class="bd-footer-content__inner container">
   
   <div class="footer-item">
@@ -924,9 +1036,10 @@ By Kevin Thornton
   
   <div class="footer-item">
     
+
   <p class="copyright">
     
-      © Copyright 2022.
+      © Copyright 2023.
       <br/>
     
   </p>
@@ -941,7 +1054,7 @@ By Kevin Thornton
     
   </div>
   
-</div></div>
+</div>
           </footer>
         
 
@@ -950,8 +1063,8 @@ By Kevin Thornton
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d"></script>
-<script src="../_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d"></script>
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
 
   <footer class="bd-footer">
   </footer>

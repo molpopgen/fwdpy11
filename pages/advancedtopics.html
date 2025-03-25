@@ -1,13 +1,12 @@
 
-
 <!DOCTYPE html>
 
 
-<html lang="en" >
+<html lang="en" data-content_root="../" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Advanced topics &#8212; fwdpy11 manual</title>
   
@@ -15,52 +14,49 @@
   
   <script data-cfasync="false">
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
-    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
-<link href="../_static/styles/bootstrap.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
 
   
-  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d" />
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/clipboard.min.js"></script>
-    <script src="../_static/copybutton.js"></script>
-    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
-    <script src="../_static/design-tabs.js"></script>
-    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
-const thebe_selector = ".thebe,.cell"
-const thebe_selector_input = "pre"
-const thebe_selector_output = ".output, .cell_output"
-</script>
-    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'pages/advancedtopics';</script>
@@ -77,19 +73,23 @@ const thebe_selector_output = ".output, .cell_output"
 
   
   
-  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
   
   <input type="checkbox"
           class="sidebar-toggle"
-          name="__primary"
-          id="__primary"/>
-  <label class="overlay overlay-primary" for="__primary"></label>
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
   
   <input type="checkbox"
           class="sidebar-toggle"
-          name="__secondary"
-          id="__secondary"/>
-  <label class="overlay overlay-secondary" for="__secondary"></label>
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
   
   <div class="search-button__wrapper">
     <div class="search-button__overlay"></div>
@@ -111,12 +111,20 @@ const thebe_selector_output = ".output, .cell_output"
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
 </form></div>
   </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
   
-    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
-    </nav>
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
   
+
   <div class="bd-container">
     <div class="bd-container__inner bd-page-width">
+      
+      
       
       <div class="bd-sidebar-primary bd-sidebar">
         
@@ -131,6 +139,9 @@ const thebe_selector_output = ".output, .cell_output"
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
         <div class="sidebar-primary-item">
+
+  
+    
   
 
 <a class="navbar-brand logo" href="../intro.html">
@@ -139,10 +150,22 @@ const thebe_selector_output = ".output, .cell_output"
   
   
   
+  
     <p class="title logo__title">fwdpy11 manual</p>
   
 </a></div>
-        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         
         <ul class="nav bd-sidenav bd-sidenav__home-link">
@@ -289,7 +312,7 @@ const thebe_selector_output = ".output, .cell_output"
 
       </div>
       
-      <main id="main-content" class="bd-main">
+      <main id="main-content" class="bd-main" role="main">
         
         
 
@@ -298,14 +321,14 @@ const thebe_selector_output = ".output, .cell_output"
           <div class="bd-content">
             <div class="bd-article-container">
               
-              <div class="bd-header-article">
+              <div class="bd-header-article d-print-none">
 <div class="header-article-items header-article__inner">
   
     <div class="header-article-items__start">
       
-        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
   <span class="fa-solid fa-bars"></span>
-</label></div>
+</button></div>
       
     </div>
   
@@ -427,26 +450,28 @@ const thebe_selector_output = ".output, .cell_output"
 </button>
 
 
+
 <script>
 document.write(`
-  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
-    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
-    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
   </button>
 `);
 </script>
 
+
 <script>
 document.write(`
-  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
   </button>
 `);
 </script>
-<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="fa-solid fa-list"></span>
-</label>
+</button>
 </div></div>
       
     </div>
@@ -476,29 +501,78 @@ document.write(`
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#supporting-time-dependent-models">Supporting time-dependent models</a></li>
 </ul>
 </li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#performance">Performance</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#performance">Performance</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.strict_additive_effects"><code class="docutils literal notranslate"><span class="pre">fwdpy11.strict_additive_effects()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.additive_effects"><code class="docutils literal notranslate"><span class="pre">fwdpy11.additive_effects()</span></code></a></li>
+</ul>
+</li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#technical-issues">Technical issues</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abstract-base-classes">Abstract base classes</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#initializing-the-super-class">Initializing the super class</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#attrs"><code class="docutils literal notranslate"><span class="pre">attrs</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#custom-decorators">Custom decorators</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#custom-decorators">Custom decorators</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.custom_genetic_value_decorators.genetic_value_is_trait_default_clone"><code class="docutils literal notranslate"><span class="pre">fwdpy11.custom_genetic_value_decorators.genetic_value_is_trait_default_clone()</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.custom_genetic_value_decorators.__init__"><code class="docutils literal notranslate"><span class="pre">fwdpy11.custom_genetic_value_decorators.__init__()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.custom_genetic_value_decorators.genetic_value_noise_default_clone"><code class="docutils literal notranslate"><span class="pre">fwdpy11.custom_genetic_value_decorators.genetic_value_noise_default_clone()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.custom_genetic_value_decorators.default_update"><code class="docutils literal notranslate"><span class="pre">fwdpy11.custom_genetic_value_decorators.default_update()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#genetic-value-to-fitness-maps">Genetic value to fitness maps</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-data-type">The data type</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-data-type">The data type</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.DiploidGeneticValueToFitnessData"><code class="docutils literal notranslate"><span class="pre">fwdpy11.DiploidGeneticValueToFitnessData</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.DiploidGeneticValueToFitnessData.offspring_metadata"><code class="docutils literal notranslate"><span class="pre">fwdpy11.DiploidGeneticValueToFitnessData.offspring_metadata</span></code></a></li>
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.DiploidGeneticValueToFitnessData.offspring_metadata_index"><code class="docutils literal notranslate"><span class="pre">fwdpy11.DiploidGeneticValueToFitnessData.offspring_metadata_index</span></code></a></li>
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.DiploidGeneticValueToFitnessData.parent1_metadata"><code class="docutils literal notranslate"><span class="pre">fwdpy11.DiploidGeneticValueToFitnessData.parent1_metadata</span></code></a></li>
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.DiploidGeneticValueToFitnessData.parent2_metadata"><code class="docutils literal notranslate"><span class="pre">fwdpy11.DiploidGeneticValueToFitnessData.parent2_metadata</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#genetic-value-noise">Genetic value “noise”</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">The data type</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">The data type</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.DiploidGeneticValueNoiseData"><code class="docutils literal notranslate"><span class="pre">fwdpy11.DiploidGeneticValueNoiseData</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.DiploidGeneticValueNoiseData.rng"><code class="docutils literal notranslate"><span class="pre">fwdpy11.DiploidGeneticValueNoiseData.rng</span></code></a></li>
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.DiploidGeneticValueNoiseData.offspring_metadata"><code class="docutils literal notranslate"><span class="pre">fwdpy11.DiploidGeneticValueNoiseData.offspring_metadata</span></code></a></li>
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.DiploidGeneticValueNoiseData.offspring_metadata_index"><code class="docutils literal notranslate"><span class="pre">fwdpy11.DiploidGeneticValueNoiseData.offspring_metadata_index</span></code></a></li>
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.DiploidGeneticValueNoiseData.parent1_metadata"><code class="docutils literal notranslate"><span class="pre">fwdpy11.DiploidGeneticValueNoiseData.parent1_metadata</span></code></a></li>
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.DiploidGeneticValueNoiseData.parent2_metadata"><code class="docutils literal notranslate"><span class="pre">fwdpy11.DiploidGeneticValueNoiseData.parent2_metadata</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#new-genetic-value-models">New genetic value models</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-abstract-base-class">The abstract base class</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-abstract-base-class">The abstract base class</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.PyDiploidGeneticValue"><code class="docutils literal notranslate"><span class="pre">fwdpy11.PyDiploidGeneticValue</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.PyDiploidGeneticValue.__init__"><code class="docutils literal notranslate"><span class="pre">fwdpy11.PyDiploidGeneticValue.__init__()</span></code></a></li>
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.PyDiploidGeneticValue.calculate_gvalue"><code class="docutils literal notranslate"><span class="pre">fwdpy11.PyDiploidGeneticValue.calculate_gvalue()</span></code></a></li>
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.PyDiploidGeneticValue.genetic_value_to_fitness"><code class="docutils literal notranslate"><span class="pre">fwdpy11.PyDiploidGeneticValue.genetic_value_to_fitness()</span></code></a></li>
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.PyDiploidGeneticValue.update"><code class="docutils literal notranslate"><span class="pre">fwdpy11.PyDiploidGeneticValue.update()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#outline-of-user-defined-classes">Outline of user-defined classes</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#method-requirements">Method requirements</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#example-strictly-additive-effects-on-a-trait">Example: strictly additive effects on a trait</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#more-complex-scenarios-such-as-social-interactions">More complex scenarios (such as social interactions)</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-data-types">The data types</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-data-types">The data types</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.PyDiploidGeneticValueData"><code class="docutils literal notranslate"><span class="pre">fwdpy11.PyDiploidGeneticValueData</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#rng"><code class="docutils literal notranslate"><span class="pre">rng</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#pop"><code class="docutils literal notranslate"><span class="pre">pop</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#offspring_metadata"><code class="docutils literal notranslate"><span class="pre">offspring_metadata</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#parent1_metadata"><code class="docutils literal notranslate"><span class="pre">parent1_metadata</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#parent2_metadata"><code class="docutils literal notranslate"><span class="pre">parent2_metadata</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#offspring_metadata_index"><code class="docutils literal notranslate"><span class="pre">offspring_metadata_index</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -513,12 +587,12 @@ document.write(`
               
                 
 <div id="searchbox"></div>
-                <article class="bd-article" role="main">
+                <article class="bd-article">
                   
   <section class="tex2jax_ignore mathjax_ignore" id="advanced-topics">
-<span id="advancedtopics"></span><h1>Advanced topics<a class="headerlink" href="#advanced-topics" title="Permalink to this heading">#</a></h1>
+<span id="advancedtopics"></span><h1>Advanced topics<a class="headerlink" href="#advanced-topics" title="Link to this heading">#</a></h1>
 <section id="executing-multiple-replicates-in-parallel-using-concurrent-futures">
-<h2>Executing multiple replicates in parallel using <code class="docutils literal notranslate"><span class="pre">concurrent.futures</span></code><a class="headerlink" href="#executing-multiple-replicates-in-parallel-using-concurrent-futures" title="Permalink to this heading">#</a></h2>
+<h2>Executing multiple replicates in parallel using <code class="docutils literal notranslate"><span class="pre">concurrent.futures</span></code><a class="headerlink" href="#executing-multiple-replicates-in-parallel-using-concurrent-futures" title="Link to this heading">#</a></h2>
 <p>You have many options when it comes to running many replicates of a model.
 For example, you could write a single Python script plus a shell script
 that your local cluster understands, sending your simulation to hundreds
@@ -541,12 +615,12 @@ than returning them.</p></li>
 <li><p>If you do return something to the main “collector”
 process, keep it simple!</p></li>
 <li><p>Random number seeds are set in <code class="docutils literal notranslate"><span class="pre">__main__</span></code> using
-<a class="reference external" href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.randint.html#numpy.random.randint" title="(in NumPy v2.1)"><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.random.randint()</span></code></a> after calling
-<a class="reference external" href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.seed.html#numpy.random.seed" title="(in NumPy v2.1)"><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.random.seed()</span></code></a> using a user-provided seed.</p></li>
+<a class="reference external" href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.randint.html#numpy.random.randint" title="(in NumPy v2.2)"><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.random.randint()</span></code></a> after calling
+<a class="reference external" href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.seed.html#numpy.random.seed" title="(in NumPy v2.2)"><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.random.seed()</span></code></a> using a user-provided seed.</p></li>
 </ul>
 </section>
 <section id="how-long-to-run-the-simulation">
-<span id="howlongtorun"></span><h2>How long to run the simulation<a class="headerlink" href="#how-long-to-run-the-simulation" title="Permalink to this heading">#</a></h2>
+<span id="howlongtorun"></span><h2>How long to run the simulation<a class="headerlink" href="#how-long-to-run-the-simulation" title="Link to this heading">#</a></h2>
 <p>Deciding how long to run a simulation depends on whether or not
 a “burn in” phase is required to get the model to statistical
 equilibrium.  For example, if you want to get the steady-state
@@ -593,7 +667,7 @@ to get rid of this problem, but it is simply easier to start
 with a tree sequence from <code class="docutils literal notranslate"><span class="pre">msprime</span></code>.</p>
 </section>
 <section id="the-eyre-walker-model-of-complex-traits">
-<span id="eyre-walker"></span><h2>The “Eyre-Walker” model of complex traits<a class="headerlink" href="#the-eyre-walker-model-of-complex-traits" title="Permalink to this heading">#</a></h2>
+<span id="eyre-walker"></span><h2>The “Eyre-Walker” model of complex traits<a class="headerlink" href="#the-eyre-walker-model-of-complex-traits" title="Link to this heading">#</a></h2>
 <p><span id="id3">[<a class="reference internal" href="../misc/bibliography.html#id24" title="Adam Eyre-Walker. Evolution in health and medicine sackler colloquium: genetic architecture of a complex trait and its implications for fitness and genome-wide association studies. Proc. Natl. Acad. Sci. U. S. A., 107 Suppl 1:1752–1756, January 2010.">EW10</a>]</span> describes a model relating mutations with
 fitness effect <span class="math notranslate nohighlight">\(S = |2Ns|\)</span> to <span class="math notranslate nohighlight">\(z\)</span>, their effect on
 a phenotype/trait according to <span class="math notranslate nohighlight">\(z = \delta S^\tau(1+\epsilon)\)</span>.
@@ -609,8 +683,8 @@ We’ll run a small population for a few generations.  This model will be nowher
 near equilibrium, but we’re just using it as an example:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fwdpy11</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">fwdpy11</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
 <span class="n">N</span> <span class="o">=</span> <span class="mi">1000</span>
 <span class="n">sregions</span> <span class="o">=</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">ExpS</span><span class="p">(</span><span class="n">beg</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">mean</span><span class="o">=-</span><span class="mi">20</span><span class="p">,</span> <span class="n">scaling</span><span class="o">=</span><span class="mi">2</span> <span class="o">*</span> <span class="n">N</span><span class="p">)]</span>
@@ -643,7 +717,7 @@ near equilibrium, but we’re just using it as an example:</p>
 <p>Define a function relating <span class="math notranslate nohighlight">\(S\)</span> to <span class="math notranslate nohighlight">\(z\)</span>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">getz</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">sigma</span><span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">getz</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">sigma</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="p">:</span>
         <span class="n">delta</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="k">else</span><span class="p">:</span>
@@ -799,17 +873,17 @@ a frequency below <span class="math notranslate nohighlight">\(x\)</span> if the
 </ul>
 </section>
 <section id="writing-genetic-value-classes-in-python">
-<span id="gvalues-python"></span><h2>Writing genetic value classes in Python<a class="headerlink" href="#writing-genetic-value-classes-in-python" title="Permalink to this heading">#</a></h2>
+<span id="gvalues-python"></span><h2>Writing genetic value classes in Python<a class="headerlink" href="#writing-genetic-value-classes-in-python" title="Link to this heading">#</a></h2>
 <p>Version <code class="docutils literal notranslate"><span class="pre">0.9.0</span></code> added the ability to write custom genetic value types in
 Python.  Such classes are useful for prototyping new models
 and/or generating example models for teaching/illustrating concepts.</p>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 0.9.0.</span></p>
+<p><span class="versionmodified added">Added in version 0.9.0.</span></p>
 </div>
 <section id="concepts">
-<h3>Concepts<a class="headerlink" href="#concepts" title="Permalink to this heading">#</a></h3>
+<h3>Concepts<a class="headerlink" href="#concepts" title="Link to this heading">#</a></h3>
 <section id="the-dimensionality-of-a-model">
-<span id="python-genetic-value-dimensions"></span><h4>The “dimensionality” of a model<a class="headerlink" href="#the-dimensionality-of-a-model" title="Permalink to this heading">#</a></h4>
+<span id="python-genetic-value-dimensions"></span><h4>The “dimensionality” of a model<a class="headerlink" href="#the-dimensionality-of-a-model" title="Link to this heading">#</a></h4>
 <p><code class="docutils literal notranslate"><span class="pre">fwdpy11</span></code> supports both univariate and multivariate trait simulations.
 Thus, a genetic value implicitly has a dimensionality. For the
 case of a standard population-genetic simulation where mutations
@@ -841,13 +915,13 @@ in place for simulations of Gaussian stabilizing selection with pleiotropy.</p>
 </div>
 </section>
 <section id="supporting-time-dependent-models">
-<span id="python-genetic-value-update-desc"></span><h4>Supporting time-dependent models<a class="headerlink" href="#supporting-time-dependent-models" title="Permalink to this heading">#</a></h4>
+<span id="python-genetic-value-update-desc"></span><h4>Supporting time-dependent models<a class="headerlink" href="#supporting-time-dependent-models" title="Link to this heading">#</a></h4>
 <p>Genetic value methods may have dynamic states that depend on some
 state of the population.  For example, something may change once
 <code class="docutils literal notranslate"><span class="pre">pop.generation</span> <span class="pre">&gt;</span> <span class="pre">x</span></code>.</p>
 <p>To support such time-dependent states, classes have a method with
 the following signature:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pop</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pop</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="k">pass</span>
 </pre></div>
 </div>
@@ -858,7 +932,7 @@ use any information from <code class="docutils literal notranslate"><span class=
 </section>
 </section>
 <section id="performance">
-<h3>Performance<a class="headerlink" href="#performance" title="Permalink to this heading">#</a></h3>
+<h3>Performance<a class="headerlink" href="#performance" title="Link to this heading">#</a></h3>
 <p>It will be hard to get “awesome” performance with Python genetic
 value classes.  The culprit are abstract methods that get called
 once per offspring.  That’s simply a lot of Python/C++ boundary
@@ -876,7 +950,7 @@ type.</p>
 <p><code class="docutils literal notranslate"><span class="pre">fwdpy11</span></code> provides the following helper functions to improve efficiency:</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="fwdpy11.strict_additive_effects">
-<span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">strict_additive_effects</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.strict_additive_effects" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">strict_additive_effects</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.strict_additive_effects" title="Link to this definition">#</a></dt>
 <dd><p>This function computes the sum of effect sizes in a
 diploid genome, ignoring dominance.  The return value
 is an offset from zero, so add 1.0 to convert to a
@@ -899,7 +973,7 @@ fitness if needed.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fwdpy11.additive_effects">
-<span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">additive_effects</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.additive_effects" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">additive_effects</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.additive_effects" title="Link to this definition">#</a></dt>
 <dd><p>This function computes the sum of effect sizes in a
 diploid genome, accounting for dominance.  The return value
 is an offset from zero, so add 1.0 to convert to a
@@ -921,7 +995,7 @@ fitness if needed.</p>
 </dd></dl>
 
 <p>The first function is equivalent to the following Python code:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">strict_additive_effects</span><span class="p">(</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">strict_additive_effects</span><span class="p">(</span>
     <span class="n">pop</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">,</span>
     <span class="n">metadata</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidMetadata</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
@@ -937,17 +1011,17 @@ fitness if needed.</p>
 accounting for dominance effects.</p>
 </section>
 <section id="technical-issues">
-<h3>Technical issues<a class="headerlink" href="#technical-issues" title="Permalink to this heading">#</a></h3>
+<h3>Technical issues<a class="headerlink" href="#technical-issues" title="Link to this heading">#</a></h3>
 <p>This section discusses some important technicalities.</p>
 <section id="abstract-base-classes">
-<h4>Abstract base classes<a class="headerlink" href="#abstract-base-classes" title="Permalink to this heading">#</a></h4>
+<h4>Abstract base classes<a class="headerlink" href="#abstract-base-classes" title="Link to this heading">#</a></h4>
 <p>In object oriented lingo, the <code class="docutils literal notranslate"><span class="pre">fwdpy11</span></code> base classes here are <em>abstract
 base classes</em> or <code class="docutils literal notranslate"><span class="pre">ABCs</span></code>.  This means that they simply describe a required
 interface.  When you inherit from an ABC, you must fill in the details
 of that interface.</p>
 </section>
 <section id="initializing-the-super-class">
-<h4>Initializing the super class<a class="headerlink" href="#initializing-the-super-class" title="Permalink to this heading">#</a></h4>
+<h4>Initializing the super class<a class="headerlink" href="#initializing-the-super-class" title="Link to this heading">#</a></h4>
 <p>When writing object-oriented code, it is important that a derived
 class properly initialize the base class.  In Python, base
 classes are often called <code class="docutils literal notranslate"><span class="pre">superclasses</span></code> and derived classes are
@@ -955,8 +1029,8 @@ classes are often called <code class="docutils literal notranslate"><span class=
 <p>The idiomatic approach in <code class="docutils literal notranslate"><span class="pre">Python</span> <span class="pre">3</span></code> is:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Base</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-   <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Base</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+   <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
        <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="s2">&quot;I am a Base&quot;</span>
 </pre></div>
 </div>
@@ -964,8 +1038,8 @@ classes are often called <code class="docutils literal notranslate"><span class=
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Derived</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
-   <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Derived</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+   <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
        <span class="bp">self</span><span class="o">.</span><span class="n">d</span> <span class="o">=</span> <span class="s2">&quot;I am a Derived&quot;</span>
        <span class="nb">super</span><span class="p">(</span><span class="n">Derived</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 </pre></div>
@@ -1001,7 +1075,7 @@ things will fall apart due to differences between Python’s MRO and C++’s mec
 <p>The examples that follow take their advice.</p>
 </section>
 <section id="attrs">
-<h4><code class="docutils literal notranslate"><span class="pre">attrs</span></code><a class="headerlink" href="#attrs" title="Permalink to this heading">#</a></h4>
+<h4><code class="docutils literal notranslate"><span class="pre">attrs</span></code><a class="headerlink" href="#attrs" title="Link to this heading">#</a></h4>
 <p>The <a class="reference external" href="https://www.attrs.org">attrs</a> package provides a library
 of convenient class decorators that significantly reduce the amount
 of “boiler plate” code needed to write Python
@@ -1013,13 +1087,13 @@ initialize the base.</p>
 <code class="docutils literal notranslate"><span class="pre">attrs</span></code>.</p>
 </section>
 <section id="custom-decorators">
-<h4>Custom decorators<a class="headerlink" href="#custom-decorators" title="Permalink to this heading">#</a></h4>
+<h4>Custom decorators<a class="headerlink" href="#custom-decorators" title="Link to this heading">#</a></h4>
 <p>Speaking of decorators, we provide several that make writing genetic
 value types a bit easier.  You will see concrete examples using them
 later.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="fwdpy11.custom_genetic_value_decorators.genetic_value_is_trait_default_clone">
-<span class="sig-prename descclassname"><span class="pre">&#64;</span></span><span class="sig-prename descclassname"><span class="pre">fwdpy11.custom_genetic_value_decorators.</span></span><span class="sig-name descname"><span class="pre">genetic_value_is_trait_default_clone</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ndim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.custom_genetic_value_decorators.genetic_value_is_trait_default_clone" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">&#64;</span></span><span class="sig-prename descclassname"><span class="pre">fwdpy11.custom_genetic_value_decorators.</span></span><span class="sig-name descname"><span class="pre">genetic_value_is_trait_default_clone</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ndim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.custom_genetic_value_decorators.genetic_value_is_trait_default_clone" title="Link to this definition">#</a></dt>
 <dd><p>This decorator is a <em>class</em> that adds the ability
 for custom types to be passed to classes derived from
 <a class="reference internal" href="genetic_values.html#fwdpy11.DiploidGeneticValue" title="fwdpy11.DiploidGeneticValue"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiploidGeneticValue</span></code></a>.</p>
@@ -1031,7 +1105,7 @@ See [here](<a class="github reference external" href="https://github.com/pybind/
 for some of the gory details.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="fwdpy11.custom_genetic_value_decorators.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.custom_genetic_value_decorators.__init__" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.custom_genetic_value_decorators.__init__" title="Link to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>ndim</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – The dimensionality of the model</p>
@@ -1044,7 +1118,7 @@ for some of the gory details.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fwdpy11.custom_genetic_value_decorators.genetic_value_noise_default_clone">
-<span class="sig-prename descclassname"><span class="pre">&#64;</span></span><span class="sig-prename descclassname"><span class="pre">fwdpy11.custom_genetic_value_decorators.</span></span><span class="sig-name descname"><span class="pre">genetic_value_noise_default_clone</span></span><a class="headerlink" href="#fwdpy11.custom_genetic_value_decorators.genetic_value_noise_default_clone" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">&#64;</span></span><span class="sig-prename descclassname"><span class="pre">fwdpy11.custom_genetic_value_decorators.</span></span><span class="sig-name descname"><span class="pre">genetic_value_noise_default_clone</span></span><a class="headerlink" href="#fwdpy11.custom_genetic_value_decorators.genetic_value_noise_default_clone" title="Link to this definition">#</a></dt>
 <dd><p>This is the analog to
 <a class="reference internal" href="#fwdpy11.custom_genetic_value_decorators.genetic_value_is_trait_default_clone" title="fwdpy11.custom_genetic_value_decorators.genetic_value_is_trait_default_clone"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.custom_genetic_value_decorators.genetic_value_is_trait_default_clone</span></code></a>
 for noise objects inheriting from <a class="reference internal" href="gvaluenoise.html#fwdpy11.GeneticValueNoise" title="fwdpy11.GeneticValueNoise"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GeneticValueNoise</span></code></a>.</p>
@@ -1053,10 +1127,10 @@ for noise objects inheriting from <a class="reference internal" href="gvaluenois
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fwdpy11.custom_genetic_value_decorators.default_update">
-<span class="sig-prename descclassname"><span class="pre">&#64;</span></span><span class="sig-prename descclassname"><span class="pre">fwdpy11.custom_genetic_value_decorators.</span></span><span class="sig-name descname"><span class="pre">default_update</span></span><a class="headerlink" href="#fwdpy11.custom_genetic_value_decorators.default_update" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">&#64;</span></span><span class="sig-prename descclassname"><span class="pre">fwdpy11.custom_genetic_value_decorators.</span></span><span class="sig-name descname"><span class="pre">default_update</span></span><a class="headerlink" href="#fwdpy11.custom_genetic_value_decorators.default_update" title="Link to this definition">#</a></dt>
 <dd><p>This decorator adds the following function to <code class="docutils literal notranslate"><span class="pre">cls</span></code>,
 which is a no-op function:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="n">pop</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="n">pop</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">):</span>
     <span class="k">pass</span>
 </pre></div>
 </div>
@@ -1070,40 +1144,40 @@ implementation of this no-op.</p>
 </section>
 </section>
 <section id="genetic-value-to-fitness-maps">
-<span id="python-gvalue-to-fitness"></span><h3>Genetic value to fitness maps<a class="headerlink" href="#genetic-value-to-fitness-maps" title="Permalink to this heading">#</a></h3>
+<span id="python-gvalue-to-fitness"></span><h3>Genetic value to fitness maps<a class="headerlink" href="#genetic-value-to-fitness-maps" title="Link to this heading">#</a></h3>
 <p>Here, one derives a new class from <a class="reference internal" href="gvalue_to_fitness.html#fwdpy11.GeneticValueIsTrait" title="fwdpy11.GeneticValueIsTrait"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GeneticValueIsTrait</span></code></a>.
 The basic form of such a class is:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fwdpy11</span>
-<span class="kn">import</span> <span class="nn">fwdpy11.custom_genetic_value_decorators</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">fwdpy11</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">fwdpy11.custom_genetic_value_decorators</span>
 
 
 <span class="nd">@fwdpy11</span><span class="o">.</span><span class="n">custom_genetic_value_decorators</span><span class="o">.</span><span class="n">genetic_value_is_trait_default_clone</span><span class="p">()</span>
-<span class="k">class</span> <span class="nc">MyGeneticValueToFitness</span><span class="p">(</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">GeneticValueIsTrait</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">MyGeneticValueToFitness</span><span class="p">(</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">GeneticValueIsTrait</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># Do NOT call super()!</span>
         <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GeneticValueIsTrait</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidGeneticValueToFitnessData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidGeneticValueToFitnessData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="k">pass</span>
 
-    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="n">pop</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="n">pop</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">pass</span>
 </pre></div>
 </div>
 <p>If the object does not need to manage an internal state that changes over time,
 we can simplify a bit with another decorator:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fwdpy11</span>
-<span class="kn">import</span> <span class="nn">fwdpy11.custom_genetic_value_decorators</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">fwdpy11</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">fwdpy11.custom_genetic_value_decorators</span>
 
 
 <span class="nd">@fwdpy11</span><span class="o">.</span><span class="n">custom_genetic_value_decorators</span><span class="o">.</span><span class="n">default_update</span>
 <span class="nd">@fwdpy11</span><span class="o">.</span><span class="n">custom_genetic_value_decorators</span><span class="o">.</span><span class="n">genetic_value_is_trait_default_clone</span><span class="p">()</span>
-<span class="k">class</span> <span class="nc">MyGeneticValueToFitness</span><span class="p">(</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">GeneticValueIsTrait</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">MyGeneticValueToFitness</span><span class="p">(</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">GeneticValueIsTrait</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># Do NOT call super()!</span>
         <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GeneticValueIsTrait</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidGeneticValueToFitnessData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidGeneticValueToFitnessData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="k">pass</span>
 </pre></div>
 </div>
@@ -1111,56 +1185,56 @@ we can simplify a bit with another decorator:</p>
 <a class="reference internal" href="gvalue_to_fitness.html#fwdpy11.GaussianStabilizingSelection" title="fwdpy11.GaussianStabilizingSelection"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GaussianStabilizingSelection</span></code></a> in Python for a single trait.
 The second example implements a model
 where the optimum changes to a new value each generation. (Note that
-the second model requires that <a class="reference external" href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.seed.html#numpy.random.seed" title="(in NumPy v2.1)"><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.random.seed()</span></code></a> be called elsewhere
+the second model requires that <a class="reference external" href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.seed.html#numpy.random.seed" title="(in NumPy v2.2)"><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.random.seed()</span></code></a> be called elsewhere
 so that results are reproducible.)</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">math</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
 
-<span class="kn">import</span> <span class="nn">attr</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">attr</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
-<span class="kn">import</span> <span class="nn">fwdpy11</span>
-<span class="kn">import</span> <span class="nn">fwdpy11.custom_genetic_value_decorators</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">fwdpy11</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">fwdpy11.custom_genetic_value_decorators</span>
 
-<span class="kn">from</span> <span class="nn">fwdpy11._types</span> <span class="kn">import</span> <span class="n">ForwardDemesGraph</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">fwdpy11._types</span><span class="w"> </span><span class="kn">import</span> <span class="n">ForwardDemesGraph</span>
 
 
 <span class="nd">@fwdpy11</span><span class="o">.</span><span class="n">custom_genetic_value_decorators</span><span class="o">.</span><span class="n">default_update</span>
 <span class="nd">@fwdpy11</span><span class="o">.</span><span class="n">custom_genetic_value_decorators</span><span class="o">.</span><span class="n">genetic_value_is_trait_default_clone</span><span class="p">()</span>
 <span class="nd">@attr</span><span class="o">.</span><span class="n">s</span><span class="p">()</span>
-<span class="k">class</span> <span class="nc">PyGSS</span><span class="p">(</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">GeneticValueIsTrait</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">PyGSS</span><span class="p">(</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">GeneticValueIsTrait</span><span class="p">):</span>
     <span class="n">opt</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">()</span>
     <span class="n">VS</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">__attrs_post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__attrs_post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GeneticValueIsTrait</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidGeneticValueToFitnessData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidGeneticValueToFitnessData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">e</span> <span class="o">**</span> <span class="p">(</span>
             <span class="o">-</span><span class="p">((</span><span class="n">data</span><span class="o">.</span><span class="n">offspring_metadata</span><span class="o">.</span><span class="n">g</span> <span class="o">+</span> <span class="n">data</span><span class="o">.</span><span class="n">offspring_metadata</span><span class="o">.</span><span class="n">e</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">opt</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
             <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">VS</span><span class="p">)</span>
         <span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">validate_timings</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">deme</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">demography</span><span class="p">:</span> <span class="n">ForwardDemesGraph</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">validate_timings</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">deme</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">demography</span><span class="p">:</span> <span class="n">ForwardDemesGraph</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">pass</span>
 
 
 <span class="nd">@fwdpy11</span><span class="o">.</span><span class="n">custom_genetic_value_decorators</span><span class="o">.</span><span class="n">genetic_value_is_trait_default_clone</span><span class="p">()</span>
 <span class="nd">@attr</span><span class="o">.</span><span class="n">s</span><span class="p">()</span>
-<span class="k">class</span> <span class="nc">PyGSSRandomOptimum</span><span class="p">(</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">GeneticValueIsTrait</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">PyGSSRandomOptimum</span><span class="p">(</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">GeneticValueIsTrait</span><span class="p">):</span>
     <span class="n">opt</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">()</span>
     <span class="n">VS</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">__attrs_post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__attrs_post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GeneticValueIsTrait</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">optima</span> <span class="o">=</span> <span class="p">[]</span>
 
-    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidGeneticValueToFitnessData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidGeneticValueToFitnessData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">e</span> <span class="o">**</span> <span class="p">(</span>
             <span class="o">-</span><span class="p">((</span><span class="n">data</span><span class="o">.</span><span class="n">offspring_metadata</span><span class="o">.</span><span class="n">g</span> <span class="o">+</span> <span class="n">data</span><span class="o">.</span><span class="n">offspring_metadata</span><span class="o">.</span><span class="n">e</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">opt</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
             <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">VS</span><span class="p">)</span>
         <span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pop</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pop</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">opt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span>
             <span class="mf">0.0</span><span class="p">,</span>
             <span class="mf">1.0</span><span class="p">,</span>
@@ -1168,18 +1242,18 @@ so that results are reproducible.)</p>
         <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">optima</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">pop</span><span class="o">.</span><span class="n">generation</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">opt</span><span class="p">))</span>
 
-    <span class="k">def</span> <span class="nf">validate_timings</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">deme</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">demography</span><span class="p">:</span> <span class="n">ForwardDemesGraph</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">validate_timings</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">deme</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">demography</span><span class="p">:</span> <span class="n">ForwardDemesGraph</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">pass</span>
 </pre></div>
 </div>
 <section id="the-data-type">
-<h4>The data type<a class="headerlink" href="#the-data-type" title="Permalink to this heading">#</a></h4>
+<h4>The data type<a class="headerlink" href="#the-data-type" title="Link to this heading">#</a></h4>
 <p>The type passed into the <code class="docutils literal notranslate"><span class="pre">__call__</span></code> function is:</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="fwdpy11.DiploidGeneticValueToFitnessData">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">DiploidGeneticValueToFitnessData</span></span><a class="headerlink" href="#fwdpy11.DiploidGeneticValueToFitnessData" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">DiploidGeneticValueToFitnessData</span></span><a class="headerlink" href="#fwdpy11.DiploidGeneticValueToFitnessData" title="Link to this definition">#</a></dt>
 <dd><div class="versionadded">
-<p><span class="versionmodified added">New in version 0.9.0.</span></p>
+<p><span class="versionmodified added">Added in version 0.9.0.</span></p>
 </div>
 <p>This class supports the buffer protocol, which exposes the
 genetic values array.  The most efficient access will
@@ -1187,7 +1261,7 @@ be via a <a class="reference external" href="https://docs.python.org/3/library/s
 <p>Instances of this class have the following attributes:</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fwdpy11.DiploidGeneticValueToFitnessData.offspring_metadata">
-<span class="sig-name descname"><span class="pre">offspring_metadata</span></span><a class="headerlink" href="#fwdpy11.DiploidGeneticValueToFitnessData.offspring_metadata" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">offspring_metadata</span></span><a class="headerlink" href="#fwdpy11.DiploidGeneticValueToFitnessData.offspring_metadata" title="Link to this definition">#</a></dt>
 <dd><p>An instance of <a class="reference internal" href="types.html#fwdpy11.DiploidMetadata" title="fwdpy11.DiploidMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiploidMetadata</span></code></a>, giving you
 access to those fields that have been assigned to the offspring.
 (This is a <em>copy</em> of the metadata from the C++ side.)</p>
@@ -1195,7 +1269,7 @@ access to those fields that have been assigned to the offspring.
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fwdpy11.DiploidGeneticValueToFitnessData.offspring_metadata_index">
-<span class="sig-name descname"><span class="pre">offspring_metadata_index</span></span><a class="headerlink" href="#fwdpy11.DiploidGeneticValueToFitnessData.offspring_metadata_index" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">offspring_metadata_index</span></span><a class="headerlink" href="#fwdpy11.DiploidGeneticValueToFitnessData.offspring_metadata_index" title="Link to this definition">#</a></dt>
 <dd><p>A 64 bit integer that gives the location (index) of
 <code class="docutils literal notranslate"><span class="pre">offspring_metadata</span></code> in <a class="reference internal" href="types.html#fwdpy11.DiploidPopulation.diploid_metadata" title="fwdpy11.DiploidPopulation.diploid_metadata"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.DiploidPopulation.diploid_metadata</span></code></a>.
 This index is useful in the event of mass migrations via copies,
@@ -1205,13 +1279,13 @@ and this value.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fwdpy11.DiploidGeneticValueToFitnessData.parent1_metadata">
-<span class="sig-name descname"><span class="pre">parent1_metadata</span></span><a class="headerlink" href="#fwdpy11.DiploidGeneticValueToFitnessData.parent1_metadata" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">parent1_metadata</span></span><a class="headerlink" href="#fwdpy11.DiploidGeneticValueToFitnessData.parent1_metadata" title="Link to this definition">#</a></dt>
 <dd><p>The first parent’s metadata (<a class="reference internal" href="types.html#fwdpy11.DiploidMetadata" title="fwdpy11.DiploidMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiploidMetadata</span></code></a>).</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fwdpy11.DiploidGeneticValueToFitnessData.parent2_metadata">
-<span class="sig-name descname"><span class="pre">parent2_metadata</span></span><a class="headerlink" href="#fwdpy11.DiploidGeneticValueToFitnessData.parent2_metadata" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">parent2_metadata</span></span><a class="headerlink" href="#fwdpy11.DiploidGeneticValueToFitnessData.parent2_metadata" title="Link to this definition">#</a></dt>
 <dd><p>The second parent’s metadata (<a class="reference internal" href="types.html#fwdpy11.DiploidMetadata" title="fwdpy11.DiploidMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiploidMetadata</span></code></a>).</p>
 </dd></dl>
 
@@ -1220,15 +1294,15 @@ and this value.</p>
 </section>
 </section>
 <section id="genetic-value-noise">
-<h3>Genetic value “noise”<a class="headerlink" href="#genetic-value-noise" title="Permalink to this heading">#</a></h3>
+<h3>Genetic value “noise”<a class="headerlink" href="#genetic-value-noise" title="Link to this heading">#</a></h3>
 <p>A custom “noise” class inherits from <a class="reference internal" href="gvaluenoise.html#fwdpy11.GeneticValueNoise" title="fwdpy11.GeneticValueNoise"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GeneticValueNoise</span></code></a>.
 A minimal implementation has the following form:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@fwdpy11</span><span class="o">.</span><span class="n">custom_genetic_value_decorators</span><span class="o">.</span><span class="n">genetic_value_noise_default_clone</span>
-<span class="k">class</span> <span class="nc">MyGeneticValueNoise</span><span class="p">(</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">GeneticValueNoise</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidGeneticValueNoiseData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">MyGeneticValueNoise</span><span class="p">(</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">GeneticValueNoise</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidGeneticValueNoiseData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="k">pass</span>
 
-    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="n">pop</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="n">pop</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">pass</span>
 </pre></div>
 </div>
@@ -1237,40 +1311,40 @@ the decorator
 <a class="reference internal" href="#fwdpy11.custom_genetic_value_decorators.genetic_value_noise_default_clone" title="fwdpy11.custom_genetic_value_decorators.genetic_value_noise_default_clone"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.custom_genetic_value_decorators.genetic_value_noise_default_clone</span></code></a>.</p>
 <p>A simple example from the test suite implements Gaussian noise with mean zero
 and standard deviation <code class="docutils literal notranslate"><span class="pre">0.1</span></code>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fwdpy11</span>
-<span class="kn">import</span> <span class="nn">fwdpy11.custom_genetic_value_decorators</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">fwdpy11</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">fwdpy11.custom_genetic_value_decorators</span>
 
 
 <span class="nd">@fwdpy11</span><span class="o">.</span><span class="n">custom_genetic_value_decorators</span><span class="o">.</span><span class="n">default_update</span>
 <span class="nd">@fwdpy11</span><span class="o">.</span><span class="n">custom_genetic_value_decorators</span><span class="o">.</span><span class="n">genetic_value_noise_default_clone</span>
-<span class="k">class</span> <span class="nc">PyNoise</span><span class="p">(</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">GeneticValueNoise</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">PyNoise</span><span class="p">(</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">GeneticValueNoise</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GeneticValueNoise</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidGeneticValueNoiseData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidGeneticValueNoiseData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">gsl_ran_gaussian_ziggurat</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">rng</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>See <a class="reference internal" href="gslrandom.html#fwdpy11.gsl_ran_gaussian_ziggurat" title="fwdpy11.gsl_ran_gaussian_ziggurat"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.gsl_ran_gaussian_ziggurat()</span></code></a> for details on that function.</p>
 <section id="id10">
-<h4>The data type<a class="headerlink" href="#id10" title="Permalink to this heading">#</a></h4>
+<h4>The data type<a class="headerlink" href="#id10" title="Link to this heading">#</a></h4>
 <dl class="py class">
 <dt class="sig sig-object py" id="fwdpy11.DiploidGeneticValueNoiseData">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">DiploidGeneticValueNoiseData</span></span><a class="headerlink" href="#fwdpy11.DiploidGeneticValueNoiseData" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">DiploidGeneticValueNoiseData</span></span><a class="headerlink" href="#fwdpy11.DiploidGeneticValueNoiseData" title="Link to this definition">#</a></dt>
 <dd><div class="versionadded">
-<p><span class="versionmodified added">New in version 0.9.0.</span></p>
+<p><span class="versionmodified added">Added in version 0.9.0.</span></p>
 </div>
 <p>Instances of this class have the following attributes:</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fwdpy11.DiploidGeneticValueNoiseData.rng">
-<span class="sig-name descname"><span class="pre">rng</span></span><a class="headerlink" href="#fwdpy11.DiploidGeneticValueNoiseData.rng" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">rng</span></span><a class="headerlink" href="#fwdpy11.DiploidGeneticValueNoiseData.rng" title="Link to this definition">#</a></dt>
 <dd><p>The simulation’s random number generation, an
 instance of <a class="reference internal" href="types.html#fwdpy11.GSLrng" title="fwdpy11.GSLrng"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GSLrng</span></code></a></p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fwdpy11.DiploidGeneticValueNoiseData.offspring_metadata">
-<span class="sig-name descname"><span class="pre">offspring_metadata</span></span><a class="headerlink" href="#fwdpy11.DiploidGeneticValueNoiseData.offspring_metadata" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">offspring_metadata</span></span><a class="headerlink" href="#fwdpy11.DiploidGeneticValueNoiseData.offspring_metadata" title="Link to this definition">#</a></dt>
 <dd><p>An instance of <a class="reference internal" href="types.html#fwdpy11.DiploidMetadata" title="fwdpy11.DiploidMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiploidMetadata</span></code></a>, giving you
 access to those fields that have been assigned to the offspring.
 (This is a <em>copy</em> of the metadata from the C++ side.)</p>
@@ -1278,7 +1352,7 @@ access to those fields that have been assigned to the offspring.
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fwdpy11.DiploidGeneticValueNoiseData.offspring_metadata_index">
-<span class="sig-name descname"><span class="pre">offspring_metadata_index</span></span><a class="headerlink" href="#fwdpy11.DiploidGeneticValueNoiseData.offspring_metadata_index" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">offspring_metadata_index</span></span><a class="headerlink" href="#fwdpy11.DiploidGeneticValueNoiseData.offspring_metadata_index" title="Link to this definition">#</a></dt>
 <dd><p>A 64 bit integer that gives the location (index) of
 <code class="docutils literal notranslate"><span class="pre">offspring_metadata</span></code> in <a class="reference internal" href="types.html#fwdpy11.DiploidPopulation.diploid_metadata" title="fwdpy11.DiploidPopulation.diploid_metadata"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.DiploidPopulation.diploid_metadata</span></code></a>.
 This index is useful in the event of mass migrations via copies,
@@ -1288,13 +1362,13 @@ and this value.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fwdpy11.DiploidGeneticValueNoiseData.parent1_metadata">
-<span class="sig-name descname"><span class="pre">parent1_metadata</span></span><a class="headerlink" href="#fwdpy11.DiploidGeneticValueNoiseData.parent1_metadata" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">parent1_metadata</span></span><a class="headerlink" href="#fwdpy11.DiploidGeneticValueNoiseData.parent1_metadata" title="Link to this definition">#</a></dt>
 <dd><p>The first parent’s metadata (<a class="reference internal" href="types.html#fwdpy11.DiploidMetadata" title="fwdpy11.DiploidMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiploidMetadata</span></code></a>).</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fwdpy11.DiploidGeneticValueNoiseData.parent2_metadata">
-<span class="sig-name descname"><span class="pre">parent2_metadata</span></span><a class="headerlink" href="#fwdpy11.DiploidGeneticValueNoiseData.parent2_metadata" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">parent2_metadata</span></span><a class="headerlink" href="#fwdpy11.DiploidGeneticValueNoiseData.parent2_metadata" title="Link to this definition">#</a></dt>
 <dd><p>The first parent’s metadata (<a class="reference internal" href="types.html#fwdpy11.DiploidMetadata" title="fwdpy11.DiploidMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiploidMetadata</span></code></a>).</p>
 </dd></dl>
 
@@ -1303,22 +1377,22 @@ and this value.</p>
 </section>
 </section>
 <section id="new-genetic-value-models">
-<h3>New genetic value models<a class="headerlink" href="#new-genetic-value-models" title="Permalink to this heading">#</a></h3>
+<h3>New genetic value models<a class="headerlink" href="#new-genetic-value-models" title="Link to this heading">#</a></h3>
 <section id="the-abstract-base-class">
-<h4>The abstract base class<a class="headerlink" href="#the-abstract-base-class" title="Permalink to this heading">#</a></h4>
+<h4>The abstract base class<a class="headerlink" href="#the-abstract-base-class" title="Link to this heading">#</a></h4>
 <p>The ABC type is <a class="reference internal" href="#fwdpy11.PyDiploidGeneticValue" title="fwdpy11.PyDiploidGeneticValue"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.PyDiploidGeneticValue</span></code></a>:</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="fwdpy11.PyDiploidGeneticValue">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">PyDiploidGeneticValue</span></span><a class="headerlink" href="#fwdpy11.PyDiploidGeneticValue" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">PyDiploidGeneticValue</span></span><a class="headerlink" href="#fwdpy11.PyDiploidGeneticValue" title="Link to this definition">#</a></dt>
 <dd><dl class="py method">
 <dt class="sig sig-object py" id="fwdpy11.PyDiploidGeneticValue.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.PyDiploidGeneticValue.__init__" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.PyDiploidGeneticValue.__init__" title="Link to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>ndim</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – </p></li>
-<li><p><strong>genetic_value_to_fitness</strong> (<a class="reference internal" href="gvalue_to_fitness.html#fwdpy11.GeneticValueIsTrait" title="fwdpy11.GeneticValueIsTrait"><em>fwdpy11.GeneticValueIsTrait</em></a><em> or </em><em>None</em>) – </p></li>
-<li><p><strong>noise</strong> (<a class="reference internal" href="gvaluenoise.html#fwdpy11.GeneticValueNoise" title="fwdpy11.GeneticValueNoise"><em>fwdpy11.GeneticValueNoise</em></a><em> or </em><em>None</em>) – </p></li>
+<li><p><strong>ndim</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>)</p></li>
+<li><p><strong>genetic_value_to_fitness</strong> (<a class="reference internal" href="gvalue_to_fitness.html#fwdpy11.GeneticValueIsTrait" title="fwdpy11.GeneticValueIsTrait"><em>fwdpy11.GeneticValueIsTrait</em></a><em> or </em><em>None</em>)</p></li>
+<li><p><strong>noise</strong> (<a class="reference internal" href="gvaluenoise.html#fwdpy11.GeneticValueNoise" title="fwdpy11.GeneticValueNoise"><em>fwdpy11.GeneticValueNoise</em></a><em> or </em><em>None</em>)</p></li>
 </ul>
 </dd>
 </dl>
@@ -1326,7 +1400,7 @@ and this value.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fwdpy11.PyDiploidGeneticValue.calculate_gvalue">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">calculate_gvalue</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.PyDiploidGeneticValue.calculate_gvalue" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">calculate_gvalue</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.PyDiploidGeneticValue.calculate_gvalue" title="Link to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>data</strong> (<a class="reference internal" href="#fwdpy11.PyDiploidGeneticValueData" title="fwdpy11.PyDiploidGeneticValueData"><em>fwdpy11.PyDiploidGeneticValueData</em></a>) – Input data</p>
@@ -1343,7 +1417,7 @@ and this value.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fwdpy11.PyDiploidGeneticValue.genetic_value_to_fitness">
-<span class="sig-name descname"><span class="pre">genetic_value_to_fitness</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.PyDiploidGeneticValue.genetic_value_to_fitness" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">genetic_value_to_fitness</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.PyDiploidGeneticValue.genetic_value_to_fitness" title="Link to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>data</strong> (<a class="reference internal" href="#fwdpy11.DiploidGeneticValueToFitnessData" title="fwdpy11.DiploidGeneticValueToFitnessData"><em>fwdpy11.DiploidGeneticValueToFitnessData</em></a>) – Input data</p>
@@ -1373,7 +1447,7 @@ rest of the population. See <a class="reference internal" href="#more-complex-gv
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fwdpy11.PyDiploidGeneticValue.update">
-<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.PyDiploidGeneticValue.update" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.PyDiploidGeneticValue.update" title="Link to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>pop</strong> (<a class="reference internal" href="types.html#fwdpy11.DiploidPopulation" title="fwdpy11.DiploidPopulation"><em>fwdpy11.DiploidPopulation</em></a>) – The population being simulated</p>
@@ -1394,24 +1468,24 @@ the decorator
 
 </section>
 <section id="outline-of-user-defined-classes">
-<h4>Outline of user-defined classes<a class="headerlink" href="#outline-of-user-defined-classes" title="Permalink to this heading">#</a></h4>
+<h4>Outline of user-defined classes<a class="headerlink" href="#outline-of-user-defined-classes" title="Link to this heading">#</a></h4>
 <p>The form of a custom genetic value type inherits from the ABC
 described above and would look something like this:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyGeneticValueObject</span><span class="p">(</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">PyDiploidGeneticValue</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MyGeneticValueObject</span><span class="p">(</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">PyDiploidGeneticValue</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
         <span class="c1"># Do not call super()!</span>
         <span class="n">fwdpy11</span><span class="o">.</span><span class="n">PyDiploidGeneticValue</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">calculate_gvalue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">PyDiploidGeneticValueData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">calculate_gvalue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">PyDiploidGeneticValueData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="k">pass</span>
 
-    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pop</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pop</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">pass</span>
 </pre></div>
 </div>
 </section>
 <section id="method-requirements">
-<h4>Method requirements<a class="headerlink" href="#method-requirements" title="Permalink to this heading">#</a></h4>
+<h4>Method requirements<a class="headerlink" href="#method-requirements" title="Link to this heading">#</a></h4>
 <p><a class="reference internal" href="#fwdpy11.PyDiploidGeneticValue" title="fwdpy11.PyDiploidGeneticValue"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.PyDiploidGeneticValue</span></code></a> <em>does</em> provide a default <code class="docutils literal notranslate"><span class="pre">update</span></code>
 function that updates the genetic-value-to-fitness-map and noise objects.</p>
 <p>If your model can allow a no-op <code class="docutils literal notranslate"><span class="pre">update</span></code> function, you may apply
@@ -1443,22 +1517,22 @@ resistance in the short term was to implement the current approach.</p>
 </div>
 </section>
 <section id="example-strictly-additive-effects-on-a-trait">
-<h4>Example: strictly additive effects on a trait<a class="headerlink" href="#example-strictly-additive-effects-on-a-trait" title="Permalink to this heading">#</a></h4>
+<h4>Example: strictly additive effects on a trait<a class="headerlink" href="#example-strictly-additive-effects-on-a-trait" title="Link to this heading">#</a></h4>
 <p>Here is an example of a strict additive model of a trait,
 taken from the test suite. You’ll notice that we are accessing
 arrays on the <code class="docutils literal notranslate"><span class="pre">C++</span></code> using Python <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#memoryview" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">memoryview</span></code></a> objects.
 This is a <em>very</em> efficient method, and much faster
-than creating a temporary, non-owning <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fwdpy11</span>
-<span class="kn">import</span> <span class="nn">fwdpy11.custom_genetic_value_decorators</span>
+than creating a temporary, non-owning <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">fwdpy11</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">fwdpy11.custom_genetic_value_decorators</span>
 
 
 <span class="nd">@fwdpy11</span><span class="o">.</span><span class="n">custom_genetic_value_decorators</span><span class="o">.</span><span class="n">default_update</span>
-<span class="k">class</span> <span class="nc">PyAdditive</span><span class="p">(</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">PyDiploidGeneticValue</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gvalue_to_fitness</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">noise</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">PyAdditive</span><span class="p">(</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">PyDiploidGeneticValue</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gvalue_to_fitness</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">noise</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="n">fwdpy11</span><span class="o">.</span><span class="n">PyDiploidGeneticValue</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">gvalue_to_fitness</span><span class="p">,</span> <span class="n">noise</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">calculate_gvalue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">PyDiploidGeneticValueData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">calculate_gvalue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">PyDiploidGeneticValueData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="n">s</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">strict_additive_effects</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">offspring_metadata</span><span class="p">)</span>
         <span class="nb">memoryview</span><span class="p">(</span><span class="n">data</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span>
         <span class="k">return</span> <span class="n">s</span>
@@ -1466,7 +1540,7 @@ than creating a temporary, non-owning <a class="reference external" href="https:
 </div>
 <p>If you want to account for the heterozygous effect of mutations, then the
 most explicit approach is probably to use <a class="reference external" href="https://docs.python.org/3/library/collections.html#collections.Counter" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">collections.Counter</span></code></a>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">calculate_gvalue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">calculate_gvalue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
     <span class="n">s</span> <span class="o">=</span> <span class="mf">0.0</span>
     <span class="n">c</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
     <span class="n">pop</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">pop</span>
@@ -1492,7 +1566,7 @@ most explicit approach is probably to use <a class="reference external" href="ht
 with <a class="reference internal" href="#fwdpy11.additive_effects" title="fwdpy11.additive_effects"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.additive_effects()</span></code></a>.</p>
 </section>
 <section id="more-complex-scenarios-such-as-social-interactions">
-<span id="more-complex-gvalue-models"></span><h4>More complex scenarios (such as social interactions)<a class="headerlink" href="#more-complex-scenarios-such-as-social-interactions" title="Permalink to this heading">#</a></h4>
+<span id="more-complex-gvalue-models"></span><h4>More complex scenarios (such as social interactions)<a class="headerlink" href="#more-complex-scenarios-such-as-social-interactions" title="Link to this heading">#</a></h4>
 <p>Some models are not easily implemented with the genetic value +
 genetic value to fitness map + noise trio of types defined here.
 The reason has to do with how these types are applied during a simulation,
@@ -1500,14 +1574,14 @@ which is described in more detail <a class="reference internal" href="../technic
 in <a class="reference internal" href="../technical/genetic_values.html#gvalue-simulation-behavior"><span class="std std-ref">this section</span></a> specifically.</p>
 </section>
 <section id="the-data-types">
-<h4>The data types<a class="headerlink" href="#the-data-types" title="Permalink to this heading">#</a></h4>
+<h4>The data types<a class="headerlink" href="#the-data-types" title="Link to this heading">#</a></h4>
 <dl class="py class">
 <dt class="sig sig-object py" id="fwdpy11.PyDiploidGeneticValueData">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">PyDiploidGeneticValueData</span></span><a class="headerlink" href="#fwdpy11.PyDiploidGeneticValueData" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">PyDiploidGeneticValueData</span></span><a class="headerlink" href="#fwdpy11.PyDiploidGeneticValueData" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 0.9.0.</span></p>
+<p><span class="versionmodified added">Added in version 0.9.0.</span></p>
 </div>
 <p>This class supports the buffer protocol, which exposes the
 genetic values array.  The most efficient access will
@@ -1515,38 +1589,38 @@ be via a <a class="reference external" href="https://docs.python.org/3/library/s
 <p>Instances of this class have the following attributes:</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="rng">
-<span class="sig-name descname"><span class="pre">rng</span></span><a class="headerlink" href="#rng" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">rng</span></span><a class="headerlink" href="#rng" title="Link to this definition">#</a></dt>
 <dd><p>The simulation’s random number generation, an
 instance of <a class="reference internal" href="types.html#fwdpy11.GSLrng" title="fwdpy11.GSLrng"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GSLrng</span></code></a></p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pop">
-<span class="sig-name descname"><span class="pre">pop</span></span><a class="headerlink" href="#pop" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">pop</span></span><a class="headerlink" href="#pop" title="Link to this definition">#</a></dt>
 <dd><p>The population, an instance of <a class="reference internal" href="types.html#fwdpy11.DiploidPopulation" title="fwdpy11.DiploidPopulation"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiploidPopulation</span></code></a></p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="offspring_metadata">
-<span class="sig-name descname"><span class="pre">offspring_metadata</span></span><a class="headerlink" href="#offspring_metadata" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">offspring_metadata</span></span><a class="headerlink" href="#offspring_metadata" title="Link to this definition">#</a></dt>
 <dd><p>The offspring’s <a class="reference internal" href="types.html#fwdpy11.DiploidMetadata" title="fwdpy11.DiploidMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiploidMetadata</span></code></a></p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="parent1_metadata">
-<span class="sig-name descname"><span class="pre">parent1_metadata</span></span><a class="headerlink" href="#parent1_metadata" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">parent1_metadata</span></span><a class="headerlink" href="#parent1_metadata" title="Link to this definition">#</a></dt>
 <dd><p>The first parent’s <a class="reference internal" href="types.html#fwdpy11.DiploidMetadata" title="fwdpy11.DiploidMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiploidMetadata</span></code></a></p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="parent2_metadata">
-<span class="sig-name descname"><span class="pre">parent2_metadata</span></span><a class="headerlink" href="#parent2_metadata" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">parent2_metadata</span></span><a class="headerlink" href="#parent2_metadata" title="Link to this definition">#</a></dt>
 <dd><p>The second parent’s <a class="reference internal" href="types.html#fwdpy11.DiploidMetadata" title="fwdpy11.DiploidMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiploidMetadata</span></code></a></p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="offspring_metadata_index">
-<span class="sig-name descname"><span class="pre">offspring_metadata_index</span></span><a class="headerlink" href="#offspring_metadata_index" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">offspring_metadata_index</span></span><a class="headerlink" href="#offspring_metadata_index" title="Link to this definition">#</a></dt>
 <dd><p>A 64 bit integer that gives the location (index) of
 <code class="docutils literal notranslate"><span class="pre">offspring_metadata</span></code> in <a class="reference internal" href="types.html#fwdpy11.DiploidPopulation.diploid_metadata" title="fwdpy11.DiploidPopulation.diploid_metadata"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.DiploidPopulation.diploid_metadata</span></code></a>.
 This index is useful in the event of mass migrations via copies,
@@ -1558,7 +1632,7 @@ and this value.</p>
 </section>
 </section>
 <section id="subtleties-of-starting-finishing-tree-sequences-using-msprime">
-<span id="msprime-subtleties"></span><h2>Subtleties of starting/finishing tree sequences using <code class="docutils literal notranslate"><span class="pre">msprime</span></code><a class="headerlink" href="#subtleties-of-starting-finishing-tree-sequences-using-msprime" title="Permalink to this heading">#</a></h2>
+<span id="msprime-subtleties"></span><h2>Subtleties of starting/finishing tree sequences using <code class="docutils literal notranslate"><span class="pre">msprime</span></code><a class="headerlink" href="#subtleties-of-starting-finishing-tree-sequences-using-msprime" title="Link to this heading">#</a></h2>
 <p>Some care is required starting a simulation from a tree sequence (see <a class="reference internal" href="../short_vignettes/initpops_vignette.html#precapitation"><span class="std std-ref">here</span></a>) or finishing a simulation with one (see <a class="reference internal" href="../short_vignettes/recapitation.html#recapitation"><span class="std std-ref">here</span></a>).</p>
 <p>If simulating with discrete recombination positions, it may be important to realize that the current stable releases of <code class="docutils literal notranslate"><span class="pre">msprime</span></code> model continuous recombination breakpoints.
 A future <code class="docutils literal notranslate"><span class="pre">msprime</span></code> release will support discretized positions.</p>
@@ -1600,8 +1674,10 @@ A more general example, for a genome of length <code class="docutils literal not
 
               
               
-                <footer class="bd-footer-article">
-                  <!-- Previous / next buttons -->
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
 <div class="prev-next-area">
     <a class="left-prev"
        href="definitions.html"
@@ -1630,6 +1706,7 @@ A more general example, for a genome of length <code class="docutils literal not
               
                 <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
+
   <div class="sidebar-secondary-item">
   <div class="page-toc tocsection onthispage">
     <i class="fa-solid fa-list"></i> Contents
@@ -1645,29 +1722,78 @@ A more general example, for a genome of length <code class="docutils literal not
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#supporting-time-dependent-models">Supporting time-dependent models</a></li>
 </ul>
 </li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#performance">Performance</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#performance">Performance</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.strict_additive_effects"><code class="docutils literal notranslate"><span class="pre">fwdpy11.strict_additive_effects()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.additive_effects"><code class="docutils literal notranslate"><span class="pre">fwdpy11.additive_effects()</span></code></a></li>
+</ul>
+</li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#technical-issues">Technical issues</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abstract-base-classes">Abstract base classes</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#initializing-the-super-class">Initializing the super class</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#attrs"><code class="docutils literal notranslate"><span class="pre">attrs</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#custom-decorators">Custom decorators</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#custom-decorators">Custom decorators</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.custom_genetic_value_decorators.genetic_value_is_trait_default_clone"><code class="docutils literal notranslate"><span class="pre">fwdpy11.custom_genetic_value_decorators.genetic_value_is_trait_default_clone()</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.custom_genetic_value_decorators.__init__"><code class="docutils literal notranslate"><span class="pre">fwdpy11.custom_genetic_value_decorators.__init__()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.custom_genetic_value_decorators.genetic_value_noise_default_clone"><code class="docutils literal notranslate"><span class="pre">fwdpy11.custom_genetic_value_decorators.genetic_value_noise_default_clone()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.custom_genetic_value_decorators.default_update"><code class="docutils literal notranslate"><span class="pre">fwdpy11.custom_genetic_value_decorators.default_update()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#genetic-value-to-fitness-maps">Genetic value to fitness maps</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-data-type">The data type</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-data-type">The data type</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.DiploidGeneticValueToFitnessData"><code class="docutils literal notranslate"><span class="pre">fwdpy11.DiploidGeneticValueToFitnessData</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.DiploidGeneticValueToFitnessData.offspring_metadata"><code class="docutils literal notranslate"><span class="pre">fwdpy11.DiploidGeneticValueToFitnessData.offspring_metadata</span></code></a></li>
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.DiploidGeneticValueToFitnessData.offspring_metadata_index"><code class="docutils literal notranslate"><span class="pre">fwdpy11.DiploidGeneticValueToFitnessData.offspring_metadata_index</span></code></a></li>
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.DiploidGeneticValueToFitnessData.parent1_metadata"><code class="docutils literal notranslate"><span class="pre">fwdpy11.DiploidGeneticValueToFitnessData.parent1_metadata</span></code></a></li>
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.DiploidGeneticValueToFitnessData.parent2_metadata"><code class="docutils literal notranslate"><span class="pre">fwdpy11.DiploidGeneticValueToFitnessData.parent2_metadata</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#genetic-value-noise">Genetic value “noise”</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">The data type</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">The data type</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.DiploidGeneticValueNoiseData"><code class="docutils literal notranslate"><span class="pre">fwdpy11.DiploidGeneticValueNoiseData</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.DiploidGeneticValueNoiseData.rng"><code class="docutils literal notranslate"><span class="pre">fwdpy11.DiploidGeneticValueNoiseData.rng</span></code></a></li>
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.DiploidGeneticValueNoiseData.offspring_metadata"><code class="docutils literal notranslate"><span class="pre">fwdpy11.DiploidGeneticValueNoiseData.offspring_metadata</span></code></a></li>
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.DiploidGeneticValueNoiseData.offspring_metadata_index"><code class="docutils literal notranslate"><span class="pre">fwdpy11.DiploidGeneticValueNoiseData.offspring_metadata_index</span></code></a></li>
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.DiploidGeneticValueNoiseData.parent1_metadata"><code class="docutils literal notranslate"><span class="pre">fwdpy11.DiploidGeneticValueNoiseData.parent1_metadata</span></code></a></li>
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.DiploidGeneticValueNoiseData.parent2_metadata"><code class="docutils literal notranslate"><span class="pre">fwdpy11.DiploidGeneticValueNoiseData.parent2_metadata</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#new-genetic-value-models">New genetic value models</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-abstract-base-class">The abstract base class</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-abstract-base-class">The abstract base class</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.PyDiploidGeneticValue"><code class="docutils literal notranslate"><span class="pre">fwdpy11.PyDiploidGeneticValue</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.PyDiploidGeneticValue.__init__"><code class="docutils literal notranslate"><span class="pre">fwdpy11.PyDiploidGeneticValue.__init__()</span></code></a></li>
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.PyDiploidGeneticValue.calculate_gvalue"><code class="docutils literal notranslate"><span class="pre">fwdpy11.PyDiploidGeneticValue.calculate_gvalue()</span></code></a></li>
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.PyDiploidGeneticValue.genetic_value_to_fitness"><code class="docutils literal notranslate"><span class="pre">fwdpy11.PyDiploidGeneticValue.genetic_value_to_fitness()</span></code></a></li>
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.PyDiploidGeneticValue.update"><code class="docutils literal notranslate"><span class="pre">fwdpy11.PyDiploidGeneticValue.update()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#outline-of-user-defined-classes">Outline of user-defined classes</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#method-requirements">Method requirements</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#example-strictly-additive-effects-on-a-trait">Example: strictly additive effects on a trait</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#more-complex-scenarios-such-as-social-interactions">More complex scenarios (such as social interactions)</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-data-types">The data types</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-data-types">The data types</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#fwdpy11.PyDiploidGeneticValueData"><code class="docutils literal notranslate"><span class="pre">fwdpy11.PyDiploidGeneticValueData</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#rng"><code class="docutils literal notranslate"><span class="pre">rng</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#pop"><code class="docutils literal notranslate"><span class="pre">pop</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#offspring_metadata"><code class="docutils literal notranslate"><span class="pre">offspring_metadata</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#parent1_metadata"><code class="docutils literal notranslate"><span class="pre">parent1_metadata</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#parent2_metadata"><code class="docutils literal notranslate"><span class="pre">parent2_metadata</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#offspring_metadata_index"><code class="docutils literal notranslate"><span class="pre">offspring_metadata_index</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -1681,7 +1807,7 @@ A more general example, for a genome of length <code class="docutils literal not
             
           </div>
           <footer class="bd-footer-content">
-            <div class="bd-footer-content__inner">
+            
 <div class="bd-footer-content__inner container">
   
   <div class="footer-item">
@@ -1694,9 +1820,10 @@ By Kevin Thornton
   
   <div class="footer-item">
     
+
   <p class="copyright">
     
-      © Copyright 2022.
+      © Copyright 2023.
       <br/>
     
   </p>
@@ -1711,7 +1838,7 @@ By Kevin Thornton
     
   </div>
   
-</div></div>
+</div>
           </footer>
         
 
@@ -1720,8 +1847,8 @@ By Kevin Thornton
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d"></script>
-<script src="../_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d"></script>
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
 
   <footer class="bd-footer">
   </footer>

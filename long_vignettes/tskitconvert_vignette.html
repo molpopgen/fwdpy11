@@ -1,13 +1,12 @@
 
-
 <!DOCTYPE html>
 
 
-<html lang="en" >
+<html lang="en" data-content_root="../" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Converting data to tskit format &#8212; fwdpy11 manual</title>
   
@@ -15,52 +14,49 @@
   
   <script data-cfasync="false">
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
-    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
-<link href="../_static/styles/bootstrap.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
 
   
-  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d" />
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/clipboard.min.js"></script>
-    <script src="../_static/copybutton.js"></script>
-    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
-    <script src="../_static/design-tabs.js"></script>
-    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
-const thebe_selector = ".thebe,.cell"
-const thebe_selector_input = "pre"
-const thebe_selector_output = ".output, .cell_output"
-</script>
-    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'long_vignettes/tskitconvert_vignette';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -75,19 +71,23 @@ const thebe_selector_output = ".output, .cell_output"
 
   
   
-  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
   
   <input type="checkbox"
           class="sidebar-toggle"
-          name="__primary"
-          id="__primary"/>
-  <label class="overlay overlay-primary" for="__primary"></label>
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
   
   <input type="checkbox"
           class="sidebar-toggle"
-          name="__secondary"
-          id="__secondary"/>
-  <label class="overlay overlay-secondary" for="__secondary"></label>
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
   
   <div class="search-button__wrapper">
     <div class="search-button__overlay"></div>
@@ -109,12 +109,20 @@ const thebe_selector_output = ".output, .cell_output"
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
 </form></div>
   </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
   
-    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
-    </nav>
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
   
+
   <div class="bd-container">
     <div class="bd-container__inner bd-page-width">
+      
+      
       
       <div class="bd-sidebar-primary bd-sidebar">
         
@@ -129,6 +137,9 @@ const thebe_selector_output = ".output, .cell_output"
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
         <div class="sidebar-primary-item">
+
+  
+    
   
 
 <a class="navbar-brand logo" href="../intro.html">
@@ -137,10 +148,22 @@ const thebe_selector_output = ".output, .cell_output"
   
   
   
+  
     <p class="title logo__title">fwdpy11 manual</p>
   
 </a></div>
-        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         
         <ul class="nav bd-sidenav bd-sidenav__home-link">
@@ -287,7 +310,7 @@ const thebe_selector_output = ".output, .cell_output"
 
       </div>
       
-      <main id="main-content" class="bd-main">
+      <main id="main-content" class="bd-main" role="main">
         
         
 
@@ -296,14 +319,14 @@ const thebe_selector_output = ".output, .cell_output"
           <div class="bd-content">
             <div class="bd-article-container">
               
-              <div class="bd-header-article">
+              <div class="bd-header-article d-print-none">
 <div class="header-article-items header-article__inner">
   
     <div class="header-article-items__start">
       
-        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
   <span class="fa-solid fa-bars"></span>
-</label></div>
+</button></div>
       
     </div>
   
@@ -425,26 +448,28 @@ const thebe_selector_output = ".output, .cell_output"
 </button>
 
 
+
 <script>
 document.write(`
-  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
-    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
-    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
   </button>
 `);
 </script>
 
+
 <script>
 document.write(`
-  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
   </button>
 `);
 </script>
-<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="fa-solid fa-list"></span>
-</label>
+</button>
 </div></div>
       
     </div>
@@ -486,10 +511,10 @@ document.write(`
               
                 
 <div id="searchbox"></div>
-                <article class="bd-article" role="main">
+                <article class="bd-article">
                   
   <section class="tex2jax_ignore mathjax_ignore" id="converting-data-to-tskit-format">
-<span id="tskitconvert-vignette"></span><h1>Converting data to tskit format<a class="headerlink" href="#converting-data-to-tskit-format" title="Permalink to this heading">#</a></h1>
+<span id="tskitconvert-vignette"></span><h1>Converting data to tskit format<a class="headerlink" href="#converting-data-to-tskit-format" title="Link to this heading">#</a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The examples in this vignette involve population objects with no ancestry.
@@ -502,8 +527,8 @@ This is intentional, as it keeps the execution times to a minimum while still il
 <span class="expanded">Hide code cell source</span>
 </summary>
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">demes</span>
-<span class="kn">import</span> <span class="nn">fwdpy11</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">demes</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">fwdpy11</span>
 </pre></div>
 </div>
 </div>
@@ -522,7 +547,7 @@ The <a class="reference internal" href="tskit_metadata_vignette.html#tskit-metad
 <li><p>Optionally, top-level metadata are encoded, which is controlled by keyword arguments to <a class="reference internal" href="../pages/types.html#fwdpy11.DiploidPopulation.dump_tables_to_tskit" title="fwdpy11.DiploidPopulation.dump_tables_to_tskit"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.DiploidPopulation.dump_tables_to_tskit()</span></code></a>.</p></li>
 </ol>
 <section id="obtaining-a-tskit-tree-sequence">
-<h2>Obtaining a <code class="docutils literal notranslate"><span class="pre">tskit</span></code> tree sequence<a class="headerlink" href="#obtaining-a-tskit-tree-sequence" title="Permalink to this heading">#</a></h2>
+<h2>Obtaining a <code class="docutils literal notranslate"><span class="pre">tskit</span></code> tree sequence<a class="headerlink" href="#obtaining-a-tskit-tree-sequence" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
@@ -553,7 +578,7 @@ The <a class="reference internal" href="tskit_metadata_vignette.html#tskit-metad
 However, certain tasks would be easier if this type knew about the metadata generated by <code class="docutils literal notranslate"><span class="pre">fwdpy11</span></code>.</p>
 </section>
 <section id="metadata">
-<h2>Metadata<a class="headerlink" href="#metadata" title="Permalink to this heading">#</a></h2>
+<h2>Metadata<a class="headerlink" href="#metadata" title="Link to this heading">#</a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">tskit</span></code> data model includes <a class="reference external" href="https://tskit.dev/tskit/docs/stable/metadata.html">metadata</a>.
 Metadata means anything not strictly needed for operations on trees/tree sequences.
 Examples may include population names, properties of mutations such as selection coefficients, geographic locations of individuals, etc..
@@ -562,7 +587,7 @@ See the <code class="docutils literal notranslate"><span class="pre">tskit</span
 <p>Metadata can also include “top-level” information that is stored as metadata for the tree sequence (or <a class="reference external" href="https://tskit.dev/tskit/docs/stable/python-api.html#tskit.TableCollection" title="(in Project name not set)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tskit.TableCollection</span></code></a>) itself.
 Much of this vignette concerns top-level metadata.</p>
 <section id="metadata-schema">
-<h3>Metadata schema<a class="headerlink" href="#metadata-schema" title="Permalink to this heading">#</a></h3>
+<h3>Metadata schema<a class="headerlink" href="#metadata-schema" title="Link to this heading">#</a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">tskit</span></code> metadata require a specification, or <em>schema</em>, that is used to validate the metadata contents.</p>
 <p>The top-level metadata schema is:</p>
 <div class="cell docutils container">
@@ -616,13 +641,13 @@ To do this, we use incomplete data (populations with no ancestry) to illustrate 
 </section>
 </section>
 <section id="populating-top-level-metadata">
-<h2>Populating top-level metadata<a class="headerlink" href="#populating-top-level-metadata" title="Permalink to this heading">#</a></h2>
+<h2>Populating top-level metadata<a class="headerlink" href="#populating-top-level-metadata" title="Link to this heading">#</a></h2>
 <p>Top-level metadata are an attempt to improve reproducibility.
 However, all of these features are optional.
 Because a simulation project using Python may be very complex, with many local and non-local imports, etc., fully documenting the top-level metadata and/or “provenance” may be impractical.
 In some cases, reproducibility may instead by best managed by a <code class="docutils literal notranslate"><span class="pre">git</span></code> repository where script and <code class="docutils literal notranslate"><span class="pre">Makefile</span></code>/<code class="docutils literal notranslate"><span class="pre">Snakefile</span></code> work flows coexist.</p>
 <section id="adding-random-number-seeds">
-<h3>Adding random number seeds<a class="headerlink" href="#adding-random-number-seeds" title="Permalink to this heading">#</a></h3>
+<h3>Adding random number seeds<a class="headerlink" href="#adding-random-number-seeds" title="Link to this heading">#</a></h3>
 <p>You may add a random number seed to the top-level metadata.
 Doing so is optional because we cannot guarantee that you used this seed to construct a <a class="reference internal" href="../pages/types.html#fwdpy11.GSLrng" title="fwdpy11.GSLrng"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GSLrng</span></code></a> and then immediately run the simulation.
 For example, if you built the <code class="docutils literal notranslate"><span class="pre">rng</span></code> object and then simulated two replicates, the seed is only valid to reproduce the first.
@@ -656,17 +681,15 @@ You do not know the state of the <code class="docutils literal notranslate"><spa
 <span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">ts</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">dump_tables_to_tskit</span><span class="p">(</span><span class="n">seed</span><span class="o">=-</span><span class="mi">4616</span><span class="p">)</span>
 
 <span class="nn">File ~/work/fwdpy11/fwdpy11/fwdpy11/_types/diploid_population.py:385,</span> in <span class="ni">DiploidPopulation.dump_tables_to_tskit</span><span class="nt">(self, model_params, population_metadata, data, seed, parameters, destructive)</span>
-<span class="g g-Whitespace">    </span><span class="mi">298</span> <span class="k">def</span> <span class="nf">dump_tables_to_tskit</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">298</span> <span class="k">def</span><span class="w"> </span><span class="nf">dump_tables_to_tskit</span><span class="p">(</span>
 <span class="g g-Whitespace">    </span><span class="mi">299</span>     <span class="bp">self</span><span class="p">,</span>
 <span class="g g-Whitespace">    </span><span class="mi">300</span>     <span class="o">*</span><span class="p">,</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">306</span>     <span class="n">destructive</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>    <span class="mi">306</span>     <span class="n">destructive</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 <span class="g g-Whitespace">    </span><span class="mi">307</span> <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">tskit</span><span class="o">.</span><span class="n">TreeSequence</span><span class="p">:</span>
 <span class="g g-Whitespace">    </span><span class="mi">308</span><span class="w">     </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="g g-Whitespace">    </span><span class="mi">309</span><span class="sd">     Dump the population&#39;s TableCollection into</span>
 <span class="g g-Whitespace">    </span><span class="mi">310</span><span class="sd">     an tskit TreeSequence</span>
-<span class="sd">   (...)</span>
-<span class="g g-Whitespace">    </span><span class="mi">383</span><span class="sd"> </span>
+<span class="sd">   (...)    383 </span>
 <span class="g g-Whitespace">    </span><span class="mi">384</span><span class="sd">     &quot;&quot;&quot;</span>
 <span class="ne">--&gt; </span><span class="mi">385</span>     <span class="k">return</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">tskit_tools</span><span class="o">.</span><span class="n">_dump_tables_to_tskit</span><span class="o">.</span><span class="n">_dump_tables_to_tskit</span><span class="p">(</span>
 <span class="g g-Whitespace">    </span><span class="mi">386</span>         <span class="bp">self</span><span class="p">,</span>
@@ -692,7 +715,7 @@ You do not know the state of the <code class="docutils literal notranslate"><spa
 </div>
 </section>
 <section id="adding-modelparams-objects">
-<h3>Adding <code class="docutils literal notranslate"><span class="pre">ModelParams</span></code> objects<a class="headerlink" href="#adding-modelparams-objects" title="Permalink to this heading">#</a></h3>
+<h3>Adding <code class="docutils literal notranslate"><span class="pre">ModelParams</span></code> objects<a class="headerlink" href="#adding-modelparams-objects" title="Link to this heading">#</a></h3>
 <p>Another optional top-level metadata item are instances of <a class="reference internal" href="../pages/model_params.html#fwdpy11.ModelParams" title="fwdpy11.ModelParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.ModelParams</span></code></a>.
 Including this is optional for several reasons, but a big one is that this class can be arbitrarily hard to serialize.
 The examples listed below will work with types provided by <code class="docutils literal notranslate"><span class="pre">fwdpy11</span></code> (although we haven’t tested them all!), but user-defined types may be more challenging.</p>
@@ -729,7 +752,18 @@ The examples listed below will work with types provided by <code class="docutils
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ts</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">dump_tables_to_tskit</span><span class="p">(</span><span class="n">model_params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span>
-<span class="n">recovered_params</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="nb">eval</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;model_params&quot;</span><span class="p">]))</span> 
+<span class="k">def</span><span class="w"> </span><span class="nf">rebuild_params</span><span class="p">(</span><span class="n">md</span><span class="p">):</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">copy</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">inspect</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">fwdpy11</span>
+    <span class="n">md</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">md</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="n">fwdpy11</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">md</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">inspect</span><span class="o">.</span><span class="n">isclass</span><span class="p">(</span><span class="nb">eval</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;fwdpy11.</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)):</span>
+                <span class="n">md</span> <span class="o">=</span> <span class="n">md</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="s2">&quot;fwdpy11.&quot;</span> <span class="o">+</span> <span class="n">i</span><span class="p">)</span>
+    <span class="n">recovered_params</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="nb">eval</span><span class="p">(</span><span class="n">md</span><span class="p">))</span> 
+    <span class="k">return</span> <span class="n">recovered_params</span>
+<span class="n">recovered_params</span> <span class="o">=</span> <span class="n">rebuild_params</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;model_params&quot;</span><span class="p">])</span>
 <span class="k">assert</span> <span class="n">recovered_params</span> <span class="o">==</span> <span class="n">params</span>
 </pre></div>
 </div>
@@ -743,7 +777,7 @@ The examples listed below will work with types provided by <code class="docutils
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>fwdpy11.ForwardDemesGraph(yaml=&#39;time_units: generations\ngeneration_time: 1\ndemes:\n- name: deme0\n  epochs:\n  - {end_time: 0, start_size: 1000}\n&#39;, burnin=1, burnin_is_exact=False, round_non_integer_sizes=False)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>ForwardDemesGraph(yaml=&#39;time_units: generations\ngeneration_time: 1\ndemes:\n- name: deme0\n  epochs:\n  - {end_time: 0, start_size: 1000}\n&#39;, burnin=1, burnin_is_exact=False, round_non_integer_sizes=False)
 </pre></div>
 </div>
 </div>
@@ -767,7 +801,7 @@ demes:
 </div>
 </section>
 <section id="user-defined-metadata">
-<h3>User-defined metadata<a class="headerlink" href="#user-defined-metadata" title="Permalink to this heading">#</a></h3>
+<h3>User-defined metadata<a class="headerlink" href="#user-defined-metadata" title="Link to this heading">#</a></h3>
 <p>It may be useful to store arbitrary data in the output.
 For example, this could be a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> containing information obtained from a <a class="reference internal" href="../short_vignettes/recorders_vignette.html#recorders-vignette"><span class="std std-ref">time series</span></a> analysis of a simulation.</p>
 <p>The simplest situation is to use a <code class="docutils literal notranslate"><span class="pre">dict</span></code> containing simple objects:</p>
@@ -787,11 +821,11 @@ For example, this could be a <a class="reference external" href="https://docs.py
 <p>Any use of user-defined types will require conversion to string, however:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyData</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MyData</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
 
-    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;MyData(x=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="si">}</span><span class="s2">)&quot;</span>
 
 <span class="c1"># Send in the str representation:</span>
@@ -817,7 +851,7 @@ Further, if the data are very large, then other output formats are likely more a
 </section>
 </section>
 <section id="setting-population-table-metadata">
-<h2>Setting population table metadata<a class="headerlink" href="#setting-population-table-metadata" title="Permalink to this heading">#</a></h2>
+<h2>Setting population table metadata<a class="headerlink" href="#setting-population-table-metadata" title="Link to this heading">#</a></h2>
 <p>This example involves simulating a multi-deme model.</p>
 <div class="cell tag_hide-input docutils container">
 <details class="hide above-input">
@@ -951,8 +985,10 @@ mapping a deme’s integer id (index) to data.</p>
 
               
               
-                <footer class="bd-footer-article">
-                  <!-- Previous / next buttons -->
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
 <div class="prev-next-area">
     <a class="left-prev"
        href="demes_event_timings.html"
@@ -981,6 +1017,7 @@ mapping a deme’s integer id (index) to data.</p>
               
                 <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
+
   <div class="sidebar-secondary-item">
   <div class="page-toc tocsection onthispage">
     <i class="fa-solid fa-list"></i> Contents
@@ -1007,7 +1044,7 @@ mapping a deme’s integer id (index) to data.</p>
             
           </div>
           <footer class="bd-footer-content">
-            <div class="bd-footer-content__inner">
+            
 <div class="bd-footer-content__inner container">
   
   <div class="footer-item">
@@ -1020,9 +1057,10 @@ By Kevin Thornton
   
   <div class="footer-item">
     
+
   <p class="copyright">
     
-      © Copyright 2022.
+      © Copyright 2023.
       <br/>
     
   </p>
@@ -1037,7 +1075,7 @@ By Kevin Thornton
     
   </div>
   
-</div></div>
+</div>
           </footer>
         
 
@@ -1046,8 +1084,8 @@ By Kevin Thornton
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d"></script>
-<script src="../_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d"></script>
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
 
   <footer class="bd-footer">
   </footer>

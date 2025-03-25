@@ -36,8 +36,6 @@ The C++ test suite requires:
 :::{warning}
 `conda` users **must** install all of these dependencies using that system, including the compilers!
 See [here](https://docs.conda.io/projects/conda-build/en/latest/resources/compiler-tools.html) for info about `conda` compilers for Linux and for macOS.
-
-The `requirements/` folder of the source code repository contains a list of minimal `conda` dependencies that we use for CI.
 :::
 
 #### Python
@@ -45,7 +43,7 @@ The `requirements/` folder of the source code repository contains a list of mini
 To reproduce the environments that we use for CI and deployment:
 
 ```sh
-python3 -m pip install -r requirements/development.txt
+uv sync --no-install-package --all-groups
 ```
 
 ```{note}
