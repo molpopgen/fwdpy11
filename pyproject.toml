@@ -62,8 +62,8 @@ dev = [
 ]
 
 doc = [
-    "jupyter-book~=0.15.1",
-    "pydata-sphinx-theme==0.13.1",
+    "jupyter-book>=1",
+    "pydata-sphinx-theme",
     "matplotlib",
     "msprime",
     "pandas",
