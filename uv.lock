@@ -640,6 +640,9 @@ lint = [
     { name = "flake8" },
     { name = "flake8-bugbear" },
 ]
+msprime = [
+    { name = "msprime" },
+]
 
 [package.metadata]
 requires-dist = [
@@ -660,7 +663,7 @@ build = [
 dev = [
     { name = "build" },
     { name = "hypothesis", specifier = "==6.56.4" },
-    { name = "msprime", specifier = "~=1.3.0" },
+    { name = "msprime" },
     { name = "pytest" },
     { name = "pytest-xdist" },
     { name = "twine" },
@@ -680,6 +683,7 @@ lint = [
     { name = "flake8" },
     { name = "flake8-bugbear" },
 ]
+msprime = [{ name = "msprime" }]
 
 [[package]]
 name = "greenlet"
