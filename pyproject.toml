@@ -58,7 +58,7 @@ dev = [
 #and running tests
     "pytest",
     "pytest-xdist",
-    "hypothesis==6.56.4",
+    "hypothesis",
     "build",
     "twine",
     {include-group = "msprime"}
