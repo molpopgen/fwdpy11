@@ -1,6 +1,5 @@
 from typing import IO, Dict, Iterable, List, Optional, Tuple, Union
 
-import demes
 import fwdpy11._types
 import fwdpy11.tskit_tools._dump_tables_to_tskit
 import numpy as np
