@@ -21,8 +21,8 @@ from typing import List, Optional, Union
 
 import numpy as np
 
-from .._fwdpy11 import _data_matrix_from_tables, _make_data_matrix
-from .._types import DataMatrix, DiploidPopulation, TableCollection
+from .._fwdpy11 import _data_matrix_from_tables
+from .._types import DataMatrix, TableCollection
 
 
 def data_matrix_from_tables(

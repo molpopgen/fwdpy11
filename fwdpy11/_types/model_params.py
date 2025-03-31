@@ -22,7 +22,6 @@ import typing
 import warnings
 
 import attr
-import demes
 import fwdpy11
 import numpy as np
 from fwdpy11.class_decorators import (

@@ -17,12 +17,9 @@
 # along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-import enum
 import typing
-import warnings
 
 import attr
-import demes
 import numpy as np
 
 

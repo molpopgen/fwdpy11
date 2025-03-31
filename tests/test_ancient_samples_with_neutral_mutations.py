@@ -16,8 +16,6 @@
 # You should have received a copy of the GNU General Public License
 # along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 #
-import warnings
-
 from hypothesis import settings, given, HealthCheck
 from hypothesis.strategies import booleans, integers
 

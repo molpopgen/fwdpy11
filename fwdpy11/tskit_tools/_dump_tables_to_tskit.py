@@ -19,7 +19,6 @@
 
 import json
 import typing
-import warnings
 
 import fwdpy11.tskit_tools
 import fwdpy11.tskit_tools.metadata_schema
