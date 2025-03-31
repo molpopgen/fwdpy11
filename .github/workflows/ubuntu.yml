@@ -42,6 +42,7 @@ jobs:
 
       - name: Install apt dependencies
         run: |
+            sudo apt update
             sudo apt install --fix-missing -y libgsl-dev cmake autoconf libboost-test-dev libboost-program-options-dev valgrind
 
       - name: Install cbindgen
