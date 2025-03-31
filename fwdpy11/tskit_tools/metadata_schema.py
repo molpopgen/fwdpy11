@@ -107,38 +107,40 @@ PopulationMetadata = tskit.metadata.MetadataSchema(
 #    We don't want to lose precision in case anyone
 #    wants to try to recalculate diploid phenotypes/fitnesses
 
+_minimal_mutation_metadata = {
+    "codec": "struct",
+    "type": ["object", "null"],
+    "name": "Mutation metadata",
+    "properties": {
+        "s": {"type": "number", "binaryFormat": "d"},
+        "h": {"type": "number", "binaryFormat": "d"},
+        "origin": {"type": "number", "binaryFormat": "i"},
+        "neutral": {"type": "number", "binaryFormat": "?"},
+        "label": {"type": "number", "binaryFormat": "H"},
+        "key": {"type": "number", "binaryFormat": "Q"},
+    },
+    "additionalProperties": False,
+}
+
 MutationMetadata = tskit.metadata.MetadataSchema(
+    copy.deepcopy(_minimal_mutation_metadata)
+)
+
+_minimal_mutation_metadata["name"] += " with vectors"
+_minimal_mutation_metadata["properties"].update(
     {
-        "codec": "struct",
-        "type": ["object", "null"],
-        "name": "Mutation metadata",
-        "properties": {
-            "s": {"type": "number", "binaryFormat": "d"},
-            "h": {"type": "number", "binaryFormat": "d"},
-            "origin": {"type": "number", "binaryFormat": "i"},
-            "neutral": {"type": "number", "binaryFormat": "?"},
-            "label": {"type": "number", "binaryFormat": "H"},
-            "key": {"type": "number", "binaryFormat": "Q"},
+        "esizes": {
+            "type": "array",
+            "items": {"type": "number", "binaryFormat": "d"},
         },
-        "additionalProperties": False,
+        "heffects": {
+            "type": "array",
+            "items": {"type": "number", "binaryFormat": "d"},
+        },
     }
 )
 
-_MutationMetaWithVectorsDict = copy.deepcopy(MutationMetadata.schema)
-
-_MutationMetaWithVectorsDict["name"] = "Mutation metadata with vectors"
-_MutationMetaWithVectorsDict["properties"]["esizes"] = {
-    "type": "array",
-    "items": {"type": "number", "binaryFormat": "d"},
-}
-_MutationMetaWithVectorsDict["properties"]["heffects"] = {
-    "type": "array",
-    "items": {"type": "number", "binaryFormat": "d"},
-}
-
-MutationMetadataWithVectors = tskit.metadata.MetadataSchema(
-    _MutationMetaWithVectorsDict
-)
+MutationMetadataWithVectors = tskit.metadata.MetadataSchema(_minimal_mutation_metadata)
 
 
 def generate_individual_metadata(
