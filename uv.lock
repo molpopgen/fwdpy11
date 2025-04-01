@@ -2799,15 +2799,6 @@ wheels = [
 ]
 
 [[package]]
-name = "svgwrite"
-version = "1.4.3"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/16/c1/263d4e93b543390d86d8eb4fc23d9ce8a8d6efd146f9427364109004fa9b/svgwrite-1.4.3.zip", hash = "sha256:a8fbdfd4443302a6619a7f76bc937fc683daf2628d9b737c891ec08b8ce524c3", size = 189516 }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/84/15/640e399579024a6875918839454025bb1d5f850bb70d96a11eabb644d11c/svgwrite-1.4.3-py3-none-any.whl", hash = "sha256:bb6b2b5450f1edbfa597d924f9ac2dd099e625562e492021d7dd614f65f8a22d", size = 67122 },
-]
-
-[[package]]
 name = "tabulate"
 version = "0.9.0"
 source = { registry = "https://pypi.org/simple" }
@@ -2884,24 +2875,26 @@ wheels = [
 
 [[package]]
 name = "tskit"
-version = "0.6.0"
+version = "0.6.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "jsonschema" },
     { name = "numpy" },
-    { name = "svgwrite" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/01/dc/6962a28d6e2eac38f088fced8b0e62fff683bd5fa7e6c25bd38306ea6433/tskit-0.6.0.tar.gz", hash = "sha256:9dda2acc84ae8dab3484dfedcb721807a4efe48e159f74f24b07789404b54106", size = 856071 }
+sdist = { url = "https://files.pythonhosted.org/packages/6c/c1/2b3c601e9e7abbfb6ca43c521cd7ef7659706fe14a5b997cbae5cef97d4f/tskit-0.6.2.tar.gz", hash = "sha256:d8c13e73331b962a9d3c352c1768e52ba62687b6316705ecec6a04558d575581", size = 874070 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/6c/aa/920474fc6867e31b8e043702525fd187b32541fce4b05e7e38e1b1556fa1/tskit-0.6.0-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:cef80d5d58487e19ee5bc07c5ec26a628fface49c008e25f83a061ba1667c887", size = 737907 },
-    { url = "https://files.pythonhosted.org/packages/c3/6e/496f99aeac66f5e6b80424f45106a2ab97adbfe4590a229bc9bd99bac347/tskit-0.6.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:595fdcf1c959fe9daecfe7846f8b6caed459c29c3b58073c2ad33693749850b2", size = 1303045 },
-    { url = "https://files.pythonhosted.org/packages/af/66/310ab4b132fbcb7f3d8ec0c69377913904a2b1f2987de9c0492fa10345a9/tskit-0.6.0-cp310-cp310-win_amd64.whl", hash = "sha256:d8a0d8cf82f9958343b13ef57156fd0299de822f74308bbb6d00ed57a19c3a0b", size = 467477 },
-    { url = "https://files.pythonhosted.org/packages/37/5d/2bb9f6f886b958dba130173f4488dbc28fd0a2756de7e8ed7fa72c58590d/tskit-0.6.0-cp311-cp311-macosx_10_9_universal2.whl", hash = "sha256:b046889e0aaaed9f0b36d38a07fde50ec82ddb168135c60aacd5dc00ee763fbf", size = 737902 },
-    { url = "https://files.pythonhosted.org/packages/09/78/259b3fa103461ba37ac3b952a680acac78d2881b549bbe0a46599049a226/tskit-0.6.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:be5b616443b517991146adaa1030215d1d0a7c1e450ee449c7e8bff790d32b0b", size = 1305456 },
-    { url = "https://files.pythonhosted.org/packages/18/73/977a2b43eaaa060b5d9913d586b5d19f73516c2e3c368b8af701e4970335/tskit-0.6.0-cp311-cp311-win_amd64.whl", hash = "sha256:574125f92f44290cc001dade1b2ccdf258dfa53ab9a4cce51cb9a9fa90c8812a", size = 467479 },
-    { url = "https://files.pythonhosted.org/packages/b8/e6/0fdb864bcbeac27761d0a189bf50481010d47a43c158180a3efa473fc68e/tskit-0.6.0-cp312-cp312-macosx_10_13_universal2.whl", hash = "sha256:e542be11771b88e9c09c5fc3bd9523b0bfe9121d208bb06bb7372e33cc69409e", size = 740234 },
-    { url = "https://files.pythonhosted.org/packages/e6/99/1d88fcf929cf070da67733597541dbe3894232ff187c06bc59dc8192d35b/tskit-0.6.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:0bfe50e8df357b4bdaf283f47635ab449562c08fec4619eeadb594acadafccc2", size = 1314174 },
-    { url = "https://files.pythonhosted.org/packages/a7/87/4b92c24c2b88cb1574f46e0c21a48ae65960d855f6cf36988ae17c335d76/tskit-0.6.0-cp312-cp312-win_amd64.whl", hash = "sha256:efcb54d9fe8293653531ba91dd8950eb0cea6c1bf8fd6a9286e4d44ee1c820e4", size = 467758 },
+    { url = "https://files.pythonhosted.org/packages/89/a4/34e06484dda3e40a0c1fc02fffd1ac9e5bad68133ce612922219ca4910b4/tskit-0.6.2-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:cf3658b25f060cbbd239aee2cb8f45d880586bf10ecb82f7857e1994b4e770fc", size = 749248 },
+    { url = "https://files.pythonhosted.org/packages/30/8c/c80dab786deb6443c68fd762625848a3d5b900a9c5731a5fc8d306033fd6/tskit-0.6.2-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:14e15b8e06f40672d5f5e01067ba0be73dd5049e123bed00f1ebdec49acb0690", size = 1322311 },
+    { url = "https://files.pythonhosted.org/packages/90/c4/ea772e18fa68ddf731f1d29153f267db5852480cb6decb86b93c14694753/tskit-0.6.2-cp310-cp310-win_amd64.whl", hash = "sha256:2660c4aa5303011924c0eb19cc8db9d3ae9a83b104c5a2ef1da2681c032ad228", size = 472875 },
+    { url = "https://files.pythonhosted.org/packages/72/f3/f36f7ae10006d2858f9e716ddec30b96080c13e0edb74ecbeb52cdc362db/tskit-0.6.2-cp311-cp311-macosx_10_9_universal2.whl", hash = "sha256:66cd4cf9b999210c3455bd31b99a4686b470a6d7027666057be4fc2d3f32b5ad", size = 749247 },
+    { url = "https://files.pythonhosted.org/packages/12/59/ed9f5fe62756229e3cd614c93cf06d87d7f776b746958781c29b2464f497/tskit-0.6.2-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:713e2f94332b6203ea60cceb92098fdcf3637292e599245e55937d2c2832e5df", size = 1324520 },
+    { url = "https://files.pythonhosted.org/packages/da/34/4cd3ff5d0fe6098e5f295926084a7b41a4c993d7c306d4c80d861a838304/tskit-0.6.2-cp311-cp311-win_amd64.whl", hash = "sha256:8ecf6b111bec0777c4d3000ab79b74c93b033f0dc1accf7f91ce0367d7253cd7", size = 472873 },
+    { url = "https://files.pythonhosted.org/packages/9e/21/56ebee911ace4979c6bf13020a0686033a986a52b0c2ce889a8885f45f7c/tskit-0.6.2-cp312-cp312-macosx_10_13_universal2.whl", hash = "sha256:a8e2052ef2610bd645ad93d90430bc293676b56b7dd0a71bed037f5a2c2e6fb1", size = 751362 },
+    { url = "https://files.pythonhosted.org/packages/15/02/eed581bc086906a582cb598e139c0fca49a1e38d0e9f3b1269f9645f1918/tskit-0.6.2-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:738b108b483a5e8686dde5413c4566edceb2372720ea721edb82cb0931973011", size = 1325276 },
+    { url = "https://files.pythonhosted.org/packages/af/9a/f136616a1ee62845c515ad20be43bb831e26a234d719bb5b885e69921a50/tskit-0.6.2-cp312-cp312-win_amd64.whl", hash = "sha256:ece157ea069ca0288f5a3dea79f23da3071851090bda5c91757a5e5b87f5ed84", size = 472349 },
+    { url = "https://files.pythonhosted.org/packages/c5/56/a7eef4db9367c5a2175beaf6c0994a55d440f6185de96aff458864e639e3/tskit-0.6.2-cp313-cp313-macosx_10_13_universal2.whl", hash = "sha256:a8a4d7532bb30271f1609661afb8a38c781648a074df7f92ef0e8f44ff07117c", size = 751344 },
+    { url = "https://files.pythonhosted.org/packages/99/f1/a90edd81b2e71164ddf6f4825d19997159ce1e983ef16995ce2c88968f9a/tskit-0.6.2-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:14761a0cde7c01149c14f9eb2a826ac50f30dc4c4504df28b8438588e7570637", size = 1325266 },
+    { url = "https://files.pythonhosted.org/packages/a7/44/2060983ade2c38b8831265b59c2b7fd262f520df7504d08ba298c1fe4810/tskit-0.6.2-cp313-cp313-win_amd64.whl", hash = "sha256:da6e405531003d0250d3bf7cba8ab6621db09d4e422fd6dd9f1a208a566e1449", size = 472385 },
 ]
 
 [[package]]
