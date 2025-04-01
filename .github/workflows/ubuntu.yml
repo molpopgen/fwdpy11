@@ -43,7 +43,7 @@ jobs:
       - name: Install apt dependencies
         run: |
             sudo apt update
-            sudo apt install --fix-missing -y libgsl-dev cmake autoconf libboost-test-dev libboost-program-options-dev valgrind
+            sudo apt install --fix-missing -y libgsl-dev autoconf libboost-test-dev libboost-program-options-dev valgrind
 
       - name: Install cbindgen
         uses: baptiste0928/cargo-install@v3

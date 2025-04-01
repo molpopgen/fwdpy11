@@ -54,7 +54,7 @@ jobs:
 
       - name: Install apt dependencies
         run: |
-          sudo apt install --fix-missing -y libgsl-dev cmake 
+          sudo apt install --fix-missing -y libgsl-dev
 
       - name: rustc version
         run: |
