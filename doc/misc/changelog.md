@@ -9,6 +9,7 @@ Maintenance release.
 
 * Make mutation metadata work with tskit 0.6.1. (PR {pr}`1364`)
 * Clean up unused imports. (PR {pr}`1362`)
+* Fix pinning of rust toolchain version. (PR {pr}`1370`)
 
 ## 0.24.4
 
