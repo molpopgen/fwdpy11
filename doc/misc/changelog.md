@@ -3,6 +3,13 @@
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+## 0.24.5
+
+Maintenance release.
+
+* Make mutation metadata work with tskit 0.6.1. (PR {pr}`1364`)
+* Clean up unused imports. (PR {pr}`1362`)
+
 ## 0.24.4
 
 Maintenance release.
