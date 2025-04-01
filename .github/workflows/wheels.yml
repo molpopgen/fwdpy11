@@ -117,7 +117,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Download sdist
-        uses: actions/download-artifact@v4.1.9
+        uses: actions/download-artifact@v4.2.1
         with:
           name: sdist
       - name: Set up Python
@@ -159,7 +159,7 @@ jobs:
         with:
           access_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Download sdist
-        uses: actions/download-artifact@v4.1.9
+        uses: actions/download-artifact@v4.2.1
         with:
           name: linux-wheels
       - uses: actions/setup-python@v5
@@ -188,7 +188,7 @@ jobs:
         with:
           access_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Download sdist
-        uses: actions/download-artifact@v4.1.9
+        uses: actions/download-artifact@v4.2.1
         with:
           name: ${{ matrix.os }}-wheels
       - uses: actions/setup-python@v5
@@ -213,7 +213,7 @@ jobs:
         with:
           access_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Download all
-        uses: actions/download-artifact@v4.1.9
+        uses: actions/download-artifact@v4.2.1
       - name: Move to dist
         run: |
           mkdir dist
