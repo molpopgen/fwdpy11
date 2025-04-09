@@ -11,7 +11,7 @@ init_GeneticValueIsFitness(py::module& m)
         .def(py::init<std::size_t>())
         .def(py::pickle(
             [](const fwdpy11::GeneticValueIsFitness& g) {
-                return py::make_tuple(g.total_dim);
+                return py::make_tuple(g.ndim());
             },
             [](py::tuple t) {
                 std::size_t ndim = t[0].cast<std::size_t>();

@@ -42,7 +42,7 @@ init_DiploidGeneticValue(py::module& m)
         .def_property_readonly(
             "maps_to_fitness",
             [](const fwdpy11::DiploidGeneticValue& self) {
-                return self.gv2w->isfitness;
+                return self.gv2w->is_fitness();
             },
             R"delim(
         Returns True if object represents a mapping directly to fitness, and
@@ -53,7 +53,7 @@ init_DiploidGeneticValue(py::module& m)
         .def_property_readonly(
             "maps_to_trait_value",
             [](const fwdpy11::DiploidGeneticValue& self) {
-                return !self.gv2w->isfitness;
+                return !self.gv2w->is_fitness();
             },
             R"delim(
         Returns True if object represents a trait value, and

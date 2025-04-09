@@ -39,8 +39,8 @@ namespace fwdpy11
 
         MultivariateGSSmo(const std::vector<PleiotropicOptima> &po)
             : GeneticValueIsTrait{po.empty() ? 0 : po[0].optima.size()}, optima(po),
-              current_timepoint(0),
-              current_timepoint_optima{}, VW{std::numeric_limits<double>::quiet_NaN()}
+              current_timepoint(0), current_timepoint_optima{},
+              VW{std::numeric_limits<double>::quiet_NaN()}
         {
             if (po.empty())
                 {
@@ -54,9 +54,10 @@ namespace fwdpy11
                                 "invalid when value for PleiotropicOptima");
                         }
                 }
+            auto x = po[0].optima.size();
             for (auto &o : optima)
                 {
-                    if (o.optima.size() != total_dim)
+                    if (o.optima.size() != x)
                         {
                             throw std::invalid_argument(
                                 "all lists of optima must be the same length");
@@ -71,7 +72,7 @@ namespace fwdpy11
         double
         operator()(const DiploidGeneticValueToFitnessData data) const override
         {
-            if (data.gvalues.get().size() != total_dim)
+            if (data.gvalues.get().size() != optima[0].optima.size())
                 {
                     throw std::runtime_error("dimension mismatch");
                 }
@@ -115,8 +116,13 @@ namespace fwdpy11
         {
             update_details(pop);
         }
+
+        std::size_t
+        ndim() const
+        {
+            return optima[0].optima.size();
+        }
     };
 } // namespace fwdpy11
 
 #endif
-

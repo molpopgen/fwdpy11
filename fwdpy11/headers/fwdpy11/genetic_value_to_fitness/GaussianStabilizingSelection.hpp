@@ -15,17 +15,18 @@ namespace fwdpy11
 
       public:
         explicit GaussianStabilizingSelection(const GSSmo &input)
-            : GeneticValueIsTrait(input.total_dim), pimpl(input.clone())
+            : GeneticValueIsTrait(input.ndim()), pimpl(input.clone())
         {
         }
 
         explicit GaussianStabilizingSelection(const MultivariateGSSmo &input)
-            : GeneticValueIsTrait(input.total_dim), pimpl(input.clone())
+            : GeneticValueIsTrait(input.ndim()), pimpl(input.clone())
         {
         }
 
         double
-        operator()(const DiploidGeneticValueToFitnessData data) const final {
+        operator()(const DiploidGeneticValueToFitnessData data) const final
+        {
             return this->pimpl->operator()(data);
         }
 
