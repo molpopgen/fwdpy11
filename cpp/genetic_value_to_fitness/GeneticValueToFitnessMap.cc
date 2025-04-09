@@ -12,7 +12,7 @@ init_GeneticValueToFitnessMap(py::module& m)
         .def_property_readonly(
             "shape",
             [](const fwdpy11::GeneticValueToFitnessMap& self) {
-                return pybind11::make_tuple(self.total_dim);
+                return pybind11::make_tuple(self.ndim());
             },
             R"delim(
         Returns the shape (dimensonality) of the object
@@ -21,7 +21,9 @@ init_GeneticValueToFitnessMap(py::module& m)
         )delim")
         .def_property_readonly(
             "maps_to_fitness",
-            [](const fwdpy11::GeneticValueToFitnessMap& self) { return self.isfitness; },
+            [](const fwdpy11::GeneticValueToFitnessMap& self) {
+                return self.is_fitness();
+            },
             R"delim(
         Returns True if object represents a mapping directly to fitness, and
         False otherwise.
@@ -31,7 +33,7 @@ init_GeneticValueToFitnessMap(py::module& m)
         .def_property_readonly(
             "maps_to_trait_value",
             [](const fwdpy11::GeneticValueToFitnessMap& self) {
-                return !self.isfitness;
+                return !self.is_fitness();
             },
             R"delim(
         Returns True if object represents a trait value, and
@@ -40,4 +42,3 @@ init_GeneticValueToFitnessMap(py::module& m)
         .. versionadded:: 0.7.0
         )delim");
 }
-

@@ -24,10 +24,14 @@
 
 namespace fwdpy11
 {
-    struct GeneticValueIsFitness : public GeneticValueToFitnessMap
+    class GeneticValueIsFitness : public GeneticValueToFitnessMap
     {
+      private:
+        std::size_t dim;
+
+      public:
         explicit GeneticValueIsFitness(std::size_t ndim)
-            : GeneticValueToFitnessMap(ndim, maps_to_fitness(true))
+            : GeneticValueToFitnessMap(), dim(ndim)
         {
         }
 
@@ -45,7 +49,17 @@ namespace fwdpy11
         std::shared_ptr<GeneticValueToFitnessMap>
         clone() const override
         {
-            return std::make_shared<GeneticValueIsFitness>(this->total_dim);
+            return std::make_shared<GeneticValueIsFitness>(this->dim);
+        }
+
+        std::size_t
+        ndim() const override
+        {
+            return this->dim;
+        }
+
+        bool is_fitness() const override {
+            return true;
         }
     };
 } // namespace fwdpy11
