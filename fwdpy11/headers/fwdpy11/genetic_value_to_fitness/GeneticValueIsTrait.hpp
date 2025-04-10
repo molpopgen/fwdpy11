@@ -24,15 +24,10 @@
 
 namespace fwdpy11
 {
-    class GeneticValueIsTrait : public GeneticValueToFitnessMap
+    struct GeneticValueIsTrait : public GeneticValueToFitnessMap
     /// Another ABC.  Effectively a type trait
     {
-      private:
-        std::size_t dim;
-
-      public:
-        explicit GeneticValueIsTrait(std::size_t ndim)
-            : GeneticValueToFitnessMap(), dim(ndim)
+        explicit GeneticValueIsTrait() : GeneticValueToFitnessMap()
         {
         }
         virtual ~GeneticValueIsTrait() = default;
@@ -40,15 +35,8 @@ namespace fwdpy11
         GeneticValueIsTrait(GeneticValueIsTrait&&) = default;
         GeneticValueIsTrait& operator=(const GeneticValueIsTrait&) = delete;
         GeneticValueIsTrait& operator=(GeneticValueIsTrait&&) = default;
-        std::size_t
-        ndim() const override
-        {
-            return this->dim;
-        }
 
-        bool
-        is_fitness() const override
-        {
+        bool is_fitness() const final {
             return false;
         }
     };
