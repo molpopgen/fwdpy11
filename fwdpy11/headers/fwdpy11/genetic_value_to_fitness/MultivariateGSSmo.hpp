@@ -38,7 +38,7 @@ namespace fwdpy11
         double VW;
 
         MultivariateGSSmo(const std::vector<PleiotropicOptima> &po)
-            : GeneticValueIsTrait{po.empty() ? 0 : po[0].optima.size()}, optima(po),
+            : GeneticValueIsTrait{}, optima(po),
               current_timepoint(0), current_timepoint_optima{},
               VW{std::numeric_limits<double>::quiet_NaN()}
         {

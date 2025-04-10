@@ -3,7 +3,7 @@ def _make_cloner(cls, base, *args):
         # create a new object without initializing it
         cloned = cls.__new__(cls)
         # clone C++ state
-        base.__init__(cloned, *args)
+        base.__init__(cloned)
         # clone Python state
         cloned.__dict__.update(self.__dict__)
         return cloned
@@ -19,7 +19,7 @@ class genetic_value_is_trait_default_clone(object):
     def __call__(self, cls):
         from fwdpy11 import GeneticValueIsTrait
 
-        return _make_cloner(cls, GeneticValueIsTrait, self.ndim)
+        return _make_cloner(cls, GeneticValueIsTrait)
 
 
 def genetic_value_noise_default_clone(cls):

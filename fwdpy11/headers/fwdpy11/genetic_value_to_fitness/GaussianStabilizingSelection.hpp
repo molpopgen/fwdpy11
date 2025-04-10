@@ -15,12 +15,12 @@ namespace fwdpy11
 
       public:
         explicit GaussianStabilizingSelection(const GSSmo &input)
-            : GeneticValueIsTrait(input.ndim()), pimpl(input.clone())
+            : GeneticValueIsTrait(), pimpl(input.clone())
         {
         }
 
         explicit GaussianStabilizingSelection(const MultivariateGSSmo &input)
-            : GeneticValueIsTrait(input.ndim()), pimpl(input.clone())
+            : GeneticValueIsTrait(), pimpl(input.clone())
         {
         }
 
@@ -40,6 +40,12 @@ namespace fwdpy11
         clone() const final
         {
             return this->pimpl->clone();
+        }
+
+        std::size_t
+        ndim() const override
+        {
+            return pimpl->ndim();
         }
     };
 }
