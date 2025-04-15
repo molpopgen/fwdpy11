@@ -23,6 +23,7 @@
 #include <vector>
 #include <fwdpy11/rng.hpp>
 #include <fwdpy11/types/DiploidPopulation.hpp>
+#include <fwdpy11/genetic_values/DiploidGeneticValueCalculation.hpp>
 #include <fwdpy11/genetic_value_to_fitness/GeneticValueToFitnessMap.hpp>
 #include <fwdpy11/genetic_value_to_fitness/GeneticValueIsFitness.hpp>
 #include <fwdpy11/genetic_value_noise/NoNoise.hpp>
@@ -69,37 +70,42 @@ namespace fwdpy11
         }
 
         // The type is move-only
-        virtual DiploidGeneticValue() = default;
+        ~DiploidGeneticValue() = default;
         DiploidGeneticValue(const DiploidGeneticValue&) = delete;
         DiploidGeneticValue(DiploidGeneticValue&&) = default;
         DiploidGeneticValue& operator=(const DiploidGeneticValue&) = delete;
         DiploidGeneticValue& operator=(DiploidGeneticValue&&) = default;
 
-        virtual double calculate_gvalue(const DiploidGeneticValueData data) = 0;
+        // virtual double calculate_gvalue(const DiploidGeneticValueData data) = 0;
 
-        virtual void update(const DiploidPopulation& pop) = 0;
+        void update(const DiploidPopulation& pop) {
+            this->model->update(pop);
+            this->noise_fxn->update(pop);
+            this->gv2w->update(pop);
+        }
 
         // To be called from w/in a simulation
         inline void
         operator()(DiploidGeneticValueData data)
         {
-            data.offspring_metadata.get().g = model->operator()(data);
-            data.offspring_metadata.get().e = noise(DiploidGeneticValueNoiseData(data));
-            data.offspring_metadata.get().w = genetic_value_to_fitness(
-                DiploidGeneticValueToFitnessData(data, gvalues));
+            data.offspring_metadata.get().g = model->calculate_gvalue(data);
+            data.offspring_metadata.get().e
+                = noise_fxn->operator()(DiploidGeneticValueNoiseData(data));
+            data.offspring_metadata.get().w
+                = gv2w->operator()(DiploidGeneticValueToFitnessData(data, gvalues));
         }
 
-        virtual double
-        genetic_value_to_fitness(const DiploidGeneticValueToFitnessData data)
-        {
-            return gv2w->operator()(data);
-        }
+        // virtual double
+        // genetic_value_to_fitness(const DiploidGeneticValueToFitnessData data)
+        // {
+        //     return gv2w->operator()(data);
+        // }
 
-        virtual double
-        noise(const DiploidGeneticValueNoiseData data) const
-        {
-            return noise_fxn->operator()(data);
-        }
+        // virtual double
+        // noise(const DiploidGeneticValueNoiseData data) const
+        // {
+        //     return noise_fxn->operator()(data);
+        // }
     };
 } //namespace fwdpy11
 
