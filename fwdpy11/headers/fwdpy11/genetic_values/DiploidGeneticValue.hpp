@@ -49,26 +49,27 @@ namespace fwdpy11
         }
 
       public:
-        std::size_t total_dim;
         std::vector<double> gvalues;
         // Even though these are stored as shared_ptr,
         // this class is non-copyable because its state
         // may change over time via the various update
         // functions.
+        std::shared_ptr<DiploidGeneticValueCalculation> model;
         std::shared_ptr<GeneticValueToFitnessMap> gv2w;
         std::shared_ptr<GeneticValueNoise> noise_fxn;
 
-        DiploidGeneticValue(std::size_t ndim, const GeneticValueToFitnessMap* gv2w_,
+        DiploidGeneticValue(const DiploidGeneticValueCalculation& model_,
+                            const GeneticValueToFitnessMap* gv2w_,
                             const GeneticValueNoise* noise)
-            : total_dim(ndim), gvalues(total_dim, 0.),
+            : model(model_.clone()), gvalues(model_.ndim(), 0.),
               gv2w{process_input<GeneticValueToFitnessMap, GeneticValueIsFitness,
-                                 std::size_t>(gv2w_, ndim)},
+                                 std::size_t>(gv2w_, model_.ndim())},
               noise_fxn{process_input<GeneticValueNoise, NoNoise>(noise)}
         {
         }
 
         // The type is move-only
-        virtual ~DiploidGeneticValue() = default;
+        virtual DiploidGeneticValue() = default;
         DiploidGeneticValue(const DiploidGeneticValue&) = delete;
         DiploidGeneticValue(DiploidGeneticValue&&) = default;
         DiploidGeneticValue& operator=(const DiploidGeneticValue&) = delete;
@@ -82,7 +83,7 @@ namespace fwdpy11
         inline void
         operator()(DiploidGeneticValueData data)
         {
-            data.offspring_metadata.get().g = calculate_gvalue(data);
+            data.offspring_metadata.get().g = model->operator()(data);
             data.offspring_metadata.get().e = noise(DiploidGeneticValueNoiseData(data));
             data.offspring_metadata.get().w = genetic_value_to_fitness(
                 DiploidGeneticValueToFitnessData(data, gvalues));
