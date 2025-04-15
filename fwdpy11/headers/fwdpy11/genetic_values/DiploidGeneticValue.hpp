@@ -19,7 +19,7 @@
 #ifndef FWDPY11_DIPLOID_GENETIC_VALUE_HPP__
 #define FWDPY11_DIPLOID_GENETIC_VALUE_HPP__
 
-#include <cstdint>
+#include <stdexcept>
 #include <vector>
 #include <fwdpy11/rng.hpp>
 #include <fwdpy11/types/DiploidPopulation.hpp>
@@ -67,6 +67,12 @@ namespace fwdpy11
                                  std::size_t>(gv2w_, model_.ndim())},
               noise_fxn{process_input<GeneticValueNoise, NoNoise>(noise)}
         {
+            if (model->ndim() != gv2w->ndim())
+                {
+                    throw std::invalid_argument(
+                        "GeneticValueToFitnessMap and DiploidGeneticValueCalculation "
+                        "must have identical dimensions");
+                }
         }
 
         // The type is move-only
