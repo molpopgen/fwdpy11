@@ -62,7 +62,7 @@ namespace fwdpy11
         DiploidGeneticValue(const DiploidGeneticValueCalculation& model_,
                             const GeneticValueToFitnessMap* gv2w_,
                             const GeneticValueNoise* noise)
-            : model(model_.clone()), gvalues(model_.ndim(), 0.),
+            : gvalues(model_.ndim(), 0.), model(model_.clone()),
               gv2w{process_input<GeneticValueToFitnessMap, GeneticValueIsFitness,
                                  std::size_t>(gv2w_, model_.ndim())},
               noise_fxn{process_input<GeneticValueNoise, NoNoise>(noise)}
@@ -78,7 +78,9 @@ namespace fwdpy11
 
         // virtual double calculate_gvalue(const DiploidGeneticValueData data) = 0;
 
-        void update(const DiploidPopulation& pop) {
+        void
+        update(const DiploidPopulation& pop)
+        {
             this->model->update(pop);
             this->noise_fxn->update(pop);
             this->gv2w->update(pop);
