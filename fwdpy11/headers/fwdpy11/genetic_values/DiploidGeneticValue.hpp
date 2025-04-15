@@ -103,6 +103,10 @@ namespace fwdpy11
                 = gv2w->operator()(DiploidGeneticValueToFitnessData(data, gvalues));
         }
 
+        std::size_t total_dim() const {
+            return model->ndim();
+        }
+
         // virtual double
         // genetic_value_to_fitness(const DiploidGeneticValueToFitnessData data)
         // {

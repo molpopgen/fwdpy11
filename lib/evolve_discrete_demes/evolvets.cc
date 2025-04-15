@@ -435,7 +435,7 @@ evolve_with_tree_sequences(
                 }
             pop.record_ancient_samples(individuals);
             pop.update_ancient_sample_genetic_value_matrix(
-                individuals, genetics.gvalue[0]->total_dim);
+                individuals, genetics.gvalue[0]->total_dim());
             track_ancestral_counts(individuals, &last_preserved_generation,
                                    last_preserved_generation_counts, pop);
         }
@@ -654,7 +654,7 @@ evolve_with_tree_sequences(
                 {
                     pop.record_ancient_samples(sr.samples);
                     pop.update_ancient_sample_genetic_value_matrix(
-                        sr.samples, genetics.gvalue[0]->total_dim);
+                        sr.samples, genetics.gvalue[0]->total_dim());
                     track_ancestral_counts(sr.samples, &last_preserved_generation,
                                            last_preserved_generation_counts, pop);
                     // Finally, clear the input
