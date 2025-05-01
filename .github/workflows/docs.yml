@@ -42,8 +42,9 @@ jobs:
           version: "=0.24.3" 
 
       - name: Install the latest version of uv
-        uses: astral-sh/setup-uv@v5
+        uses: astral-sh/setup-uv@v6
         with:
+          activate-environment: true
           version: "latest"
           python-version: ${{ matrix.python-version }}
 
