@@ -3,7 +3,7 @@
 requires = [
     "scikit-build-core==0.11.1",
     "setuptools_scm==7.1.0",
-    "pybind11[global]==2.12.0",
+    "pybind11[global]==3.0",
     "numpy >= 2.0"
 ]
 build-backend = "scikit_build_core.build"
@@ -40,7 +40,7 @@ requires-python = ">=3.10, <3.14"
 build = [
     "scikit-build-core==0.11.1",
     "setuptools_scm==7.1.0",
-    "pybind11[global]==2.12.0",
+    "pybind11[global]==3.0",
     "numpy >= 2.0"
 ]
 format = [
