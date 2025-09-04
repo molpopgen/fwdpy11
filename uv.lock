@@ -1,5 +1,5 @@
 version = 1
-revision = 2
+revision = 3
 requires-python = ">=3.10, <3.14"
 resolution-markers = [
     "python_full_version >= '3.12'",
@@ -2875,26 +2875,26 @@ wheels = [
 
 [[package]]
 name = "tskit"
-version = "0.6.3"
+version = "0.6.4"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "jsonschema" },
     { name = "numpy" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/35/b9/b2c7058f0199628255af81b288a688432b25cf9e116758af93ce212143ff/tskit-0.6.3.tar.gz", hash = "sha256:6dba3cf693214c3105d8cddcd696ae0e3102366937e029a6aa65cd98e71b55f2", size = 874055, upload-time = "2025-04-28T16:16:18.424Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/94/95/2c2d8bdaae4a3948181de68d1fac0569d9c937a42f7ccfcf097f9a428721/tskit-0.6.4.tar.gz", hash = "sha256:bdac1bb7e3ae3d1f562ec191b5d840156e082dd2adc6af7c41b170c4fb1be792", size = 874772, upload-time = "2025-05-21T18:18:18.343Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/1d/3a/cae9035d50fc9ba7a96306a2812c9a973b616c9c40e8eb0bd1fac5742e0f/tskit-0.6.3-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:fb736a08496183e58f4ce8785014cc7987d358198964507959d463a658517c2d", size = 749245, upload-time = "2025-04-28T16:15:48.139Z" },
-    { url = "https://files.pythonhosted.org/packages/40/31/ad19d76e68072d141ac1f9c595305110a4f68f7ca05579a9cfb40f5dbf39/tskit-0.6.3-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:b6448ce5fc3ebf5ca180b67020b7ddc909ba1791bcc4bb16fab90bd241faa5c5", size = 1322314, upload-time = "2025-04-28T16:15:50.736Z" },
-    { url = "https://files.pythonhosted.org/packages/f1/83/55e03ac70405676d41904b5f22f7d3460abd21fc753f87f83e7ea9c811d2/tskit-0.6.3-cp310-cp310-win_amd64.whl", hash = "sha256:b913805fc71f901f3ae2ef2b1a3d96825adc8f90d6b03af966c165d6f966dc7c", size = 472878, upload-time = "2025-04-28T16:15:52.848Z" },
-    { url = "https://files.pythonhosted.org/packages/92/b4/05be6806ec44a641d66b2e6ef2a34827a6341876ca9862bb87ff0346db39/tskit-0.6.3-cp311-cp311-macosx_10_9_universal2.whl", hash = "sha256:982cbeb1bade21bc73289e529549585abf40b5e6c26fc85eac6b6e94465bbc13", size = 749250, upload-time = "2025-04-28T16:15:54.377Z" },
-    { url = "https://files.pythonhosted.org/packages/99/bc/5f8ffc3afbe0d54c2d1da7814222e8dbd63dac5c440ab2ca5b3ed80f3ac7/tskit-0.6.3-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:81a4d264a6dfa43fd94f9460090d27a7c57258a7ce4bab2380ef1d26dbd6be7d", size = 1324521, upload-time = "2025-04-28T16:15:55.938Z" },
-    { url = "https://files.pythonhosted.org/packages/0f/ca/9ce824c8c5842dccd85c113854d886a9bedd6b710d64ee4d613add41633c/tskit-0.6.3-cp311-cp311-win_amd64.whl", hash = "sha256:7c4097ee3749a7e358467ee373334588246ff8412dee3d57bfddef1c7557f0ff", size = 472877, upload-time = "2025-04-28T16:15:58.061Z" },
-    { url = "https://files.pythonhosted.org/packages/e0/f1/1d2f6e39f848dabb8d6fa16189f293a2c08d846984ae714dfcbc00c97c83/tskit-0.6.3-cp312-cp312-macosx_10_13_universal2.whl", hash = "sha256:817b5007f9cb683fd643a3869b9015644cf1c31f9b7874eb8508c5308ce1b413", size = 751361, upload-time = "2025-04-28T16:15:59.694Z" },
-    { url = "https://files.pythonhosted.org/packages/dd/6b/46d33d640d1bfce3ee0704191d6aa011b077702f201327bfd7d3fc0403f7/tskit-0.6.3-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:69cf3ae2355ff7a99b02d9ec1ad403ecab42f4e3128743876a58b9933ad462a0", size = 1325276, upload-time = "2025-04-28T16:16:01.461Z" },
-    { url = "https://files.pythonhosted.org/packages/81/f2/bb91c71d31a811a2fd1af282e21bbd26a44bff322503e8cc6572685f8f55/tskit-0.6.3-cp312-cp312-win_amd64.whl", hash = "sha256:c33ad93cacd75d9a620562b744cda0fab0aaf9035f419eb62c04d9e8d1fcd17f", size = 472346, upload-time = "2025-04-28T16:16:03.618Z" },
-    { url = "https://files.pythonhosted.org/packages/b6/1d/5a07ec8f5cef4c3f9186b5c1bac57396785a97e27bc061eba5119bb08a7a/tskit-0.6.3-cp313-cp313-macosx_10_13_universal2.whl", hash = "sha256:3ebabedb35622a6d328692db1cd9e28c396b8af0b3a9997018459647eecab886", size = 751343, upload-time = "2025-04-28T16:16:05.708Z" },
-    { url = "https://files.pythonhosted.org/packages/6f/0f/1651c5250ad5e5dfcafb603cc2de73cdd30dc88dd5497567979d5de30a89/tskit-0.6.3-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:cf6c1778f2a8e6922cb09cfc389347bc617daf22e069b4bc66a474acf2eb7d4a", size = 1325267, upload-time = "2025-04-28T16:16:07.346Z" },
-    { url = "https://files.pythonhosted.org/packages/64/75/b0bee9e5ebcfb2e82c122c39697a09b52e657cdd3c0ade92a50b5244c54e/tskit-0.6.3-cp313-cp313-win_amd64.whl", hash = "sha256:7b5a326c28c2f0a4700e9062bc4cf2c355d0bde2e61da0c892bcc57cd74eab88", size = 472380, upload-time = "2025-04-28T16:16:09.242Z" },
+    { url = "https://files.pythonhosted.org/packages/c2/62/ad90df9d323780f578b287374f42784cdd2f6a6b92577002b0dafe931d6b/tskit-0.6.4-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:1c6e230ccf6733b928c1c3bd9cb14a1e820211932c4e528505fa1918a043c87c", size = 748027, upload-time = "2025-05-21T18:17:48.832Z" },
+    { url = "https://files.pythonhosted.org/packages/86/ab/1bfb4a193557f3c93d84c7f2ddb43c50a321d6dd097423e88a69d6761e8a/tskit-0.6.4-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:65760e95f0887f7f142025a11815f76a099fb2c1831c7046ca67e27f864c32cb", size = 1321017, upload-time = "2025-05-21T18:17:50.955Z" },
+    { url = "https://files.pythonhosted.org/packages/46/8b/c04c86ab3b2d443eec23259c2932f63af021dc4043036cebea4f63b89f1d/tskit-0.6.4-cp310-cp310-win_amd64.whl", hash = "sha256:184afd2720fa1f3d096e8902e35c2a155d785ba786c9dfe2fa86674943271674", size = 470679, upload-time = "2025-05-21T18:17:53.196Z" },
+    { url = "https://files.pythonhosted.org/packages/ed/28/547acef423709fad5b70bbc68332c1fa0a4c1887ec4e76cb93a433a95bbb/tskit-0.6.4-cp311-cp311-macosx_10_9_universal2.whl", hash = "sha256:510fd219f2c6d5d669e178a3ea1e4cd60d7fc0b40a50fae4859a6a8f35d2394a", size = 748024, upload-time = "2025-05-21T18:17:54.919Z" },
+    { url = "https://files.pythonhosted.org/packages/88/0d/5816ee9ac9708f2e1def387e36b2d0763bdea2267db3ff4a55c17f079e85/tskit-0.6.4-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:4b631d38c352b618c3ede33515cf97ffcbc24e3a4252b6979a80b1770434a534", size = 1322885, upload-time = "2025-05-21T18:17:56.958Z" },
+    { url = "https://files.pythonhosted.org/packages/bd/db/b98964916b3f9c603f8ad92045db0c050ca4699a976051acdc1368085c3c/tskit-0.6.4-cp311-cp311-win_amd64.whl", hash = "sha256:e121226092816a1e36b2835aa0348e652c09bdf0604a936f63c4fd0d64ca6422", size = 470677, upload-time = "2025-05-21T18:17:58.584Z" },
+    { url = "https://files.pythonhosted.org/packages/b4/cf/d2a1c6a6ad29b16310b60bf08dd5b1d1e4e0d23819c49284662373c9fc54/tskit-0.6.4-cp312-cp312-macosx_10_13_universal2.whl", hash = "sha256:8fd5a0c94f302f5fe69a9f7a662b8ddf8219e4dc7325a1990b279afd084bb649", size = 749765, upload-time = "2025-05-21T18:18:00.234Z" },
+    { url = "https://files.pythonhosted.org/packages/80/46/1630514e8a9f97a8f75e805a7872fb3083119d7e421309e05e99d5f5ca66/tskit-0.6.4-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:f086e648a624004343882ca57f9365d5005cc2e472113b61874c9403c14be272", size = 1324515, upload-time = "2025-05-21T18:18:02.461Z" },
+    { url = "https://files.pythonhosted.org/packages/07/44/2116904f37ffe1db0e675b4c70b70cdaf7ab38b474cd546f6ff9d46de4b9/tskit-0.6.4-cp312-cp312-win_amd64.whl", hash = "sha256:507eee5b20c5e47202d90a70143c601aef3b3ec70321b5251c2e6d896b1e0722", size = 470047, upload-time = "2025-05-21T18:18:04.185Z" },
+    { url = "https://files.pythonhosted.org/packages/c5/d7/5ee3b118281f2a7032f5d38fca0ee7e11bf7cf1823d2dbfa5a991ccf3497/tskit-0.6.4-cp313-cp313-macosx_10_13_universal2.whl", hash = "sha256:66f07b76f18ad576a7585b6e4d9e46d58994e3df1dd2d1808d32d294354695cf", size = 749773, upload-time = "2025-05-21T18:18:06.48Z" },
+    { url = "https://files.pythonhosted.org/packages/f2/6d/6368c2ffbccb4d7ee8d82096f1ad0b3cb0d639b958c408589cceff09600e/tskit-0.6.4-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:bfb40717382cf47b8844c1f73d73c1e7ca7f63e6a506e7f859f0980667677de2", size = 1324529, upload-time = "2025-05-21T18:18:08.674Z" },
+    { url = "https://files.pythonhosted.org/packages/ee/b9/5b092c5b409cad0005b560622b34f9fd38fe0945939974671306fedef30a/tskit-0.6.4-cp313-cp313-win_amd64.whl", hash = "sha256:c6b1f1b22e5d55a906ee33bca33447500df0cf5b12ec20926773ca1e3c3c8931", size = 470097, upload-time = "2025-05-21T18:18:11.022Z" },
 ]
 
 [[package]]
