@@ -1,25 +1,21 @@
-FROM ubuntu:jammy
+FROM ghcr.io/astral-sh/uv:python3.13-trixie AS build
 
 # Once this image is built:
 # If you have a script $HOME/tmp/foo.py,
 # you can run it via
-# docker run --rm -v $HOME/tmp:/app fwdpy11 python3 /app/foo.py
+# docker run --rm -v $HOME/tmp:/work:z fwdpy11 sh -c ". /app/venv/bin activate && python3 /work/foo.py"
 WORKDIR /app
 
 COPY . /app
+ENV PATH /root/.cargo/bin:$PATH
 
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -qq -y install \
-  gcc \
-  git \
-  g++ \
   libgsl-dev \
-  python3 \
-  python3-dev \
-  python3-venv \
-  python3-pip \
-  curl \
   && rm -rf /var/lib/apt/lists/* \
-  && rm -rf build \
+  && rm -rf build dist \
+  # For some reason, installing rustup with apt and then setting the toolchain
+  # results in Corrosion being unable to find a valid toolchain.
+  # We should try to fix this later.
   && curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | bash -s -- -y \
   && . "$HOME/.cargo/env" \
   # Pin the rustc toolchain to a specific version.
@@ -31,19 +27,13 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -qq -y install \
   && cargo install --locked cbindgen@0.24.3 \
   && rustc --version \
   && cbindgen --version \
-  && ls -lhrt
+  && uv build . \
+  && uv venv /app/venv \
+  && . /app/venv/bin/activate \
+  && ls -lhrt dist \
+  && uv pip install dist/fwdpy11*.whl
 
-RUN . "$HOME/.cargo/env" \
-  && python3 -m venv venv \
-  && . venv/bin/activate \
-  && python -m pip install --upgrade pip \
-  && python -m pip install build \
-  && python -m build . \
-  && deactivate \
-  && python3 -m pip install dist/fwdpy11*.whl \
-  && rm -rf venv \
-  && python3 -m venv /venv \
-  && . /venv/bin/activate \
-  && python3 -m pip install dist/fwdpy11*.whl \
-  && cd / \
-  && rm -rf /app /root/.cargo
+FROM python:3.13-slim-trixie
+COPY --from=build /app/venv /app/venv
+# Make sure the GSL runtime is present
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -qq -y install libgsl28 && apt clean 
