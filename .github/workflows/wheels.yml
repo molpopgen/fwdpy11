@@ -47,7 +47,7 @@ jobs:
     strategy:
       matrix:
         rust: [1.62.1]
-        os: [macos-14, macos-13]
+        os: [macos-14]
     steps:
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.12.1
@@ -181,7 +181,7 @@ jobs:
     strategy:
       matrix:
         python: ["3.12", "3.13"]
-        os: [macos-14, macos-13]
+        os: [macos-14]
     steps:
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.12.1
