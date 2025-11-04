@@ -7,7 +7,7 @@ FROM ghcr.io/astral-sh/uv:python3.13-trixie AS build
 WORKDIR /app
 
 COPY . /app
-ENV PATH /root/.cargo/bin:$PATH
+ENV PATH=/root/.cargo/bin:$PATH
 
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -qq -y install \
   libgsl-dev \
