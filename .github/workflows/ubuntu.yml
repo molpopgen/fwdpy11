@@ -35,7 +35,7 @@ jobs:
           toolchain: ${{ matrix.rust }}
 
       - name: Install the latest version of uv
-        uses: astral-sh/setup-uv@v6
+        uses: astral-sh/setup-uv@v7
         with:
           activate-environment: true
           version: "latest"
