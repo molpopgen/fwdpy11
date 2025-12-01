@@ -69,7 +69,7 @@ def make_generic_mutation_metadata(origin_time):
 def make_treeseq_with_one_row_containing_bad_metadata(seed, callback):
     ts = msprime.sim_ancestry(5, population_size=10000, random_seed=seed)
 
-    tables = ts.tables
+    tables = ts.tables.copy()
 
     tables.mutations.metadata_schema = (
         fwdpy11.tskit_tools.metadata_schema.MutationMetadata
@@ -113,7 +113,7 @@ def test_import_msprime_mutations(seed, seed2):
         random_seed=seed,
     )
     np.random.seed(seed2)
-    tables = ts.tables
+    tables = ts.tables.copy()
     tables.mutations.metadata_schema = (
         fwdpy11.tskit_tools.metadata_schema.MutationMetadata
     )

@@ -1467,7 +1467,7 @@ class TestRecapitation(unittest.TestCase):
         """
         # NOTE: the dump, clear, add row bit is to make msprime
         # happy
-        tables = self.tskit_ts.tables
+        tables = self.tskit_ts.tables.copy()
         tables.populations.clear()
         tables.populations.add_row()
         coalesced_ts = msprime.sim_ancestry(
