@@ -650,7 +650,7 @@ requires-dist = [
     { name = "demes", specifier = "~=0.2.2" },
     { name = "deprecated" },
     { name = "numpy", specifier = ">=1.23.5" },
-    { name = "tskit", specifier = ">=0.5.6" },
+    { name = "tskit", specifier = ">=1.0.0" },
 ]
 
 [package.metadata.requires-dev]
