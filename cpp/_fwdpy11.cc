@@ -25,7 +25,7 @@ void init_array_proxies(py::module &m);
 void initialize_functions(py::module &m);
 void init_demes(py::module &m);
 
-PYBIND11_MODULE(_fwdpy11, m)
+PYBIND11_MODULE(_fwdpy11, m, py::multiple_interpreters::not_supported())
 {
     initialize_fwdpp_types(m);
     initialize_fwdpy11_types(m);
