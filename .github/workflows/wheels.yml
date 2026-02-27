@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.12.1
+        uses: styfle/cancel-workflow-action@0.13.0
         with:
           access_token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -50,7 +50,7 @@ jobs:
         os: [macos-14]
     steps:
       - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.12.1
+        uses: styfle/cancel-workflow-action@0.13.0
         with:
           access_token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -82,7 +82,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.12.1
+        uses: styfle/cancel-workflow-action@0.13.0
         with:
           access_token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -111,7 +111,7 @@ jobs:
         rust: [1.62.1]
     steps:
       - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.12.1
+        uses: styfle/cancel-workflow-action@0.13.0
         with:
           access_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Checkout
@@ -155,7 +155,7 @@ jobs:
         python: ["3.11", "3.12", "3.13", "3.14"]
     steps:
       - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.12.1
+        uses: styfle/cancel-workflow-action@0.13.0
         with:
           access_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Download sdist
@@ -184,7 +184,7 @@ jobs:
         os: [macos-14]
     steps:
       - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.12.1
+        uses: styfle/cancel-workflow-action@0.13.0
         with:
           access_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Download sdist
@@ -209,7 +209,7 @@ jobs:
     needs: ['manylinux2_28', 'manylinux2_28_test', 'manylinux2_28_test_install_wheel', 'macos_test_install_wheel']
     steps:
       - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.12.1
+        uses: styfle/cancel-workflow-action@0.13.0
         with:
           access_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Download all
