@@ -29,7 +29,7 @@ dependencies = [
     "demes ~= 0.2.2",
     "Deprecated",
 ]
-requires-python = ">=3.10, <3.14"
+requires-python = ">=3.11, <3.15"
 
 [dependency-groups]
 # NOTE: we are doing a very odd hack here!
@@ -105,7 +105,7 @@ test-requires = "pytest msprime hypothesis"
 build-frontend = "build"
 
 [tool.cibuildwheel.macos]
-build = "cp3{12,13}-*"
+build = "cp3{13,14}-*"
 before-all = "./deployment/macos_wheels/install_gsl.sh"
 
 [tool.cibuildwheel.linux]
@@ -113,6 +113,7 @@ build = "cp*manylinux*"
 manylinux-x86_64-image = "manylinux_2_28"
 before-all = "./deployment/linux_wheels/cibuildwheel.sh"
 archs = "x86_64"
+skip = "cp314t-*"
 # skip = "pp* *musllinux*"
 
 [tool.uv]

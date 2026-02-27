@@ -107,7 +107,7 @@ jobs:
     needs: ['build_sdist']
     strategy:
       matrix:
-        python: ["3.10", "3.11", "3.12", "3.13"]
+        python: ["3.11", "3.12", "3.13", "3.14"]
         rust: [1.62.1]
     steps:
       - name: Cancel Previous Runs
@@ -152,7 +152,7 @@ jobs:
     needs: ['manylinux2_28']
     strategy:
       matrix:
-        python: ["3.10", "3.11", "3.12", "3.13"]
+        python: ["3.11", "3.12", "3.13", "3.14"]
     steps:
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.12.1
@@ -180,7 +180,7 @@ jobs:
     needs: ['macos-wheels']
     strategy:
       matrix:
-        python: ["3.12", "3.13"]
+        python: ["3.13", "3.14"]
         os: [macos-14]
     steps:
       - name: Cancel Previous Runs
