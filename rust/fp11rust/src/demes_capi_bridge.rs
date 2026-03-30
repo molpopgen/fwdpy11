@@ -145,7 +145,7 @@ pub unsafe extern "C" fn demes_forward_graph_model_end_time(
     status: *mut i32,
     graph: *const OpaqueForwardGraph,
 ) -> f64 {
-    forward_graph_model_end_time(status, graph)
+    forward_graph_model_end_time(graph, status)
 }
 
 #[no_mangle]

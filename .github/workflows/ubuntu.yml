@@ -12,7 +12,7 @@ jobs:
         python: [ "3.11", "3.12", "3.13", "3.14" ]
         os:  [ ubuntu-24.04, ubuntu-24.04-arm ]
         compiler: [gcc, clang14]
-        rust: [1.62.1]
+        rust: [1.66.1]
     defaults:
       run:
         shell: bash

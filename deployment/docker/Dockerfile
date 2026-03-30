@@ -22,7 +22,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -qq -y install \
   # Rust 1.64.0 will change the minimum glibc ABI
   # to a version incompatibly with manylinux_2014,
   # so we need to be careful in general.
-  && rustup override set 1.62.1 \
+  && rustup override set 1.66.1 \
   # Pin cbindgen 
   && cargo install --locked cbindgen@0.24.3 \
   && rustc --version \
