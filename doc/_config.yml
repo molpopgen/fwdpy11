@@ -46,11 +46,10 @@ sphinx:
     todo_include_todos: true
     intersphinx_mapping:
       python: ["https://docs.python.org/3/", null]
-      tskit: ["https://tskit.readthedocs.io/en/stable", null]
+      tskit: ["https://tskit.dev/tskit/docs/stable/", null]
       msprime: ["https://tskit.dev/msprime/docs/latest", null]
       attrs: ["https://www.attrs.org/en/stable", null]
-      scipy: ['http://docs.scipy.org/doc/scipy', null]
-      numpy: ['http://docs.scipy.org/doc/numpy', null]
+      numpy: ['https://numpy.org/doc/stable/', null]
       pandas: ['http://pandas.pydata.org/pandas-docs/stable/', null]
       demes: ['https://popsim-consortium.github.io/demes-docs/main/', null]
     # Idea taken from msprime.
