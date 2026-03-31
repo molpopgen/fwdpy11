@@ -15,7 +15,7 @@ jobs:
       matrix:
         python: [ "3.13", "3.14" ]
         os:  [ macos-14, macos-15 ]
-        rust: [1.62.1]
+        rust: [1.66.1]
     defaults:
       run:
         shell: bash
