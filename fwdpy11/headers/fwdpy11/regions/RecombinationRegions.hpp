@@ -101,21 +101,24 @@ namespace fwdpy11
     {
         std::vector<std::unique_ptr<PoissonCrossoverGenerator>> poisson_callbacks;
         std::vector<std::unique_ptr<NonPoissonCrossoverGenerator>> non_poisson_callbacks;
+        std::vector<std::size_t> nonzero_mean_poisson_indexes;
         fwdpp::gsl_ran_discrete_t_ptr poisson_lookup;
         double sum_poisson_means;
         GeneralizedGeneticMap(
             std::vector<std::unique_ptr<PoissonCrossoverGenerator>> pc,
             std::vector<std::unique_ptr<NonPoissonCrossoverGenerator>> nc)
             : poisson_callbacks(std::move(pc)), non_poisson_callbacks(std::move(nc)),
+              nonzero_mean_poisson_indexes(),
               poisson_lookup(nullptr), sum_poisson_means(0.0)
         {
             std::vector<double> means;
-            for (auto& i : poisson_callbacks)
+            for (std::size_t i=0;i<poisson_callbacks.size();++i)
                 {
-                    if (i->mean_number_xovers() > 0.0)
+                    if (poisson_callbacks[i]->mean_number_xovers() > 0.0)
                         {
-                            sum_poisson_means += i->mean_number_xovers();
-                            means.push_back(i->mean_number_xovers());
+                            sum_poisson_means += poisson_callbacks[i]->mean_number_xovers();
+                            means.push_back(poisson_callbacks[i]->mean_number_xovers());
+                            nonzero_mean_poisson_indexes.push_back(i);
                         }
                 }
             if (!means.empty())
@@ -133,7 +136,7 @@ namespace fwdpy11
             for (unsigned i = 0; i < nc; ++i)
                 {
                     auto region = gsl_ran_discrete(rng.get(), poisson_lookup.get());
-                    poisson_callbacks[region]->breakpoint(rng, rv);
+                    poisson_callbacks[nonzero_mean_poisson_indexes[region]]->breakpoint(rng, rv);
                 }
             for (auto& i : non_poisson_callbacks)
                 {
