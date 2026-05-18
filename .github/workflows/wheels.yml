@@ -19,13 +19,13 @@ jobs:
           access_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
             submodules: true
             fetch-depth: 0
 
       - name: Set up Python 3.9
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: 3.9
 
@@ -36,7 +36,7 @@ jobs:
           python -m build -s .
 
       - name: Upload sdist
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: sdist
           path: dist
@@ -46,8 +46,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        rust: [1.62.1]
-        os: [macos-14, macos-13]
+        rust: [1.66.1]
+        os: [macos-14]
     steps:
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.12.1
@@ -55,7 +55,7 @@ jobs:
           access_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
             submodules: true
             fetch-depth: 0
@@ -69,10 +69,10 @@ jobs:
           cache-key: ${{ matrix.os }}
 
       - name: Build wheels
-        uses: pypa/cibuildwheel@v2.23.2
+        uses: pypa/cibuildwheel@v3.3.0
 
       - name: Upload Wheels
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: ${{ matrix.os }}-wheels
           path: wheelhouse
@@ -87,16 +87,16 @@ jobs:
           access_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
             submodules: true
             fetch-depth: 0
 
       - name: Build wheels
-        uses: pypa/cibuildwheel@v2.23.2
+        uses: pypa/cibuildwheel@v3.3.0
 
       - name: Upload Wheels
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: linux-wheels
           path: wheelhouse
@@ -107,21 +107,21 @@ jobs:
     needs: ['build_sdist']
     strategy:
       matrix:
-        python: ["3.10", "3.11", "3.12", "3.13"]
-        rust: [1.62.1]
+        python: ["3.11", "3.12", "3.13", "3.14"]
+        rust: [1.66.1]
     steps:
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.12.1
         with:
           access_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Download sdist
-        uses: actions/download-artifact@v4.2.1
+        uses: actions/download-artifact@v6.0.0
         with:
           name: sdist
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python }}
       - name: Install cbindgen
@@ -152,17 +152,17 @@ jobs:
     needs: ['manylinux2_28']
     strategy:
       matrix:
-        python: ["3.10", "3.11", "3.12", "3.13"]
+        python: ["3.11", "3.12", "3.13", "3.14"]
     steps:
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.12.1
         with:
           access_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Download sdist
-        uses: actions/download-artifact@v4.2.1
+        uses: actions/download-artifact@v6.0.0
         with:
           name: linux-wheels
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python }}
       - name: install into venv
@@ -180,18 +180,18 @@ jobs:
     needs: ['macos-wheels']
     strategy:
       matrix:
-        python: ["3.12", "3.13"]
-        os: [macos-14, macos-13]
+        python: ["3.13", "3.14"]
+        os: [macos-14]
     steps:
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.12.1
         with:
           access_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Download sdist
-        uses: actions/download-artifact@v4.2.1
+        uses: actions/download-artifact@v6.0.0
         with:
           name: ${{ matrix.os }}-wheels
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python }}
       - name: install into venv
@@ -213,7 +213,7 @@ jobs:
         with:
           access_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Download all
-        uses: actions/download-artifact@v4.2.1
+        uses: actions/download-artifact@v6.0.0
       - name: Move to dist
         run: |
           mkdir dist

@@ -104,7 +104,7 @@ namespace fwdpy11
             const GeneticValueNoise* noise_)
             : DiploidGeneticValue{ndim, gv2w_, noise_}, gv{clamp}, aa_scaling(scaling),
               make_return_value(std::move(mrv)),
-              callback(init_callback(ndim, aa_scaling)), isfitness(gv2w->isfitness)
+              callback(init_callback(ndim, aa_scaling)), isfitness(gv2w->is_fitness())
         {
         }
 

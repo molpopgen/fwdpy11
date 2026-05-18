@@ -13,9 +13,9 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        python: [ "3.12", "3.13" ]
-        os:  [ macos-14, macos-13 ]
-        rust: [1.62.1]
+        python: [ "3.13", "3.14" ]
+        os:  [ macos-14, macos-15 ]
+        rust: [1.66.1]
     defaults:
       run:
         shell: bash
@@ -26,11 +26,11 @@ jobs:
           access_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           submodules: true
       - name: Set up Python ${{ matrix.python }}
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python }}
       - name: Install cbindgen
@@ -45,8 +45,9 @@ jobs:
           brew install gsl
 
       - name: Install the latest version of uv
-        uses: astral-sh/setup-uv@v5
+        uses: astral-sh/setup-uv@v7
         with:
+          activate-environment: true
           version: "latest"
           python-version: ${{ matrix.python }}
 

@@ -161,7 +161,7 @@ def test_multiple_export_recreate_evolve_steps():
 
 def test_start_pop_from_treeseq_without_mutations(pop):
     ts = pop.dump_tables_to_tskit()
-    tables = ts.tables
+    tables = ts.tables.copy()
     nm = len(tables.mutations)
     tables.mutations.clear()
     tables.sites.clear()

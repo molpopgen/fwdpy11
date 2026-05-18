@@ -8,6 +8,7 @@
 #include <fwdpy11/rng.hpp>
 #include <limits>
 #include <memory>
+#include <stdexcept>
 
 BOOST_AUTO_TEST_SUITE(test_core_genetic_map_regions)
 
@@ -144,6 +145,23 @@ BOOST_AUTO_TEST_CASE(test_poisson_point)
     BOOST_REQUIRE_EQUAL(
         std::count_if(begin(bp), end(bp) - 1, [](auto x) { return x >= 0 && x < 1.0; }),
         bp.size() - 1);
+}
+
+BOOST_AUTO_TEST_CASE(test_poisson_components_with_mean_zero)
+{
+    std::vector<std::unique_ptr<fwdpy11::PoissonCrossoverGenerator>> callbacks;
+    callbacks.push_back(
+        std::make_unique<fwdpy11_core::PoissonInterval>(0, 1, 1.0, false));
+    callbacks.push_back(
+        std::make_unique<fwdpy11_core::PoissonInterval>(2, 3, 0.0, false));
+    callbacks.push_back(
+        std::make_unique<fwdpy11_core::PoissonInterval>(3, 4, 1.0, false));
+    callbacks.push_back(
+        std::make_unique<fwdpy11_core::PoissonInterval>(4, 5, 0.0, false));
+    auto map = fwdpy11::GeneralizedGeneticMap(std::move(callbacks), {});
+    BOOST_CHECK_EQUAL(map.nonzero_mean_poisson_indexes.size(), 2);
+    BOOST_CHECK_EQUAL(map.nonzero_mean_poisson_indexes[0], 0);
+    BOOST_CHECK_EQUAL(map.nonzero_mean_poisson_indexes[1], 2);
 }
 
 BOOST_AUTO_TEST_CASE(test_binomial_interval_map)

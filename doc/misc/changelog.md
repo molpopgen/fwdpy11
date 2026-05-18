@@ -3,6 +3,22 @@
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+## 0.24.6
+
+Bug fix:
+
+* fix error (c++) in filtering poisson intervals with mean of zero. (PR {pr}`1427`)
+
+Back end changes:
+
+* `GeneticValueIsTrait` is now an abstract class. PR {pr}`1377`
+* `GeneticValueToFitnessMap` is now an abstract class. PR{pr}`1375`
+
+Build system:
+
+* Supported Python versions changed to 3.11 to 3.14
+* Dockerfile fixes. (PR {pr}`1403`)
+
 ## 0.24.5
 
 Maintenance release.

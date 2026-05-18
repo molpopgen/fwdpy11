@@ -21,25 +21,13 @@
 
 #include <memory>
 #include <fwdpy11/types/DiploidPopulation.hpp>
-#include <fwdpy11/genetic_values/default_update.hpp>
-#include <fwdpp/util/named_type.hpp>
 #include <fwdpy11/genetic_value_data/genetic_value_data.hpp>
 
 namespace fwdpy11
 {
-    struct genetic_value_maps_to_fitness
-    {
-    };
-
-    using maps_to_fitness
-        = fwdpp::strong_types::named_type<bool, genetic_value_maps_to_fitness>;
-
     struct GeneticValueToFitnessMap
     {
-        std::size_t total_dim;
-        bool isfitness;
-        explicit GeneticValueToFitnessMap(std::size_t ndim, const maps_to_fitness& m)
-            : total_dim{ndim}, isfitness{m.get()}
+        GeneticValueToFitnessMap()
         {
         }
 
@@ -49,10 +37,12 @@ namespace fwdpy11
         GeneticValueToFitnessMap& operator=(const GeneticValueToFitnessMap&) = delete;
         GeneticValueToFitnessMap& operator=(GeneticValueToFitnessMap&&) = default;
 
-        virtual double
-        operator()(const DiploidGeneticValueToFitnessData /*data*/) const = 0;
+        virtual double operator()(const DiploidGeneticValueToFitnessData /*data*/) const
+            = 0;
         virtual void update(const DiploidPopulation& /*pop*/) = 0;
         virtual std::shared_ptr<GeneticValueToFitnessMap> clone() const = 0;
+        virtual bool is_fitness() const = 0;
+        virtual std::size_t ndim() const = 0;
     };
 } //namespace fwdpy11
 

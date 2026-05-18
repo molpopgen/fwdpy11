@@ -16,7 +16,7 @@ namespace fwdpy11
         std::vector<Optimum> optima;
 
         GSSmo(std::vector<Optimum> optima_)
-            : GeneticValueIsTrait{1}, VS{std::numeric_limits<double>::quiet_NaN()},
+            : GeneticValueIsTrait{}, VS{std::numeric_limits<double>::quiet_NaN()},
               opt{std::numeric_limits<double>::quiet_NaN()}, current_optimum(0),
               optima(std::move(optima_))
         {
@@ -79,6 +79,12 @@ namespace fwdpy11
         clone() const override
         {
             return std::make_shared<GSSmo>(optima);
+        }
+
+        std::size_t
+        ndim() const override
+        {
+            return 1;
         }
     };
 } // namespace fwdpy11

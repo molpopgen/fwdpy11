@@ -14,7 +14,7 @@ jobs:
       matrix:
         compiler: [gcc]
         python-version: ["3.12"]
-        rust: [1.62.1]
+        rust: [1.66.1]
     defaults:
       run:
         shell: bash
@@ -25,7 +25,7 @@ jobs:
           access_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           submodules: true
           fetch-depth: 0
@@ -42,13 +42,14 @@ jobs:
           version: "=0.24.3" 
 
       - name: Install the latest version of uv
-        uses: astral-sh/setup-uv@v5
+        uses: astral-sh/setup-uv@v7
         with:
+          activate-environment: true
           version: "latest"
           python-version: ${{ matrix.python-version }}
 
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
 
@@ -81,7 +82,7 @@ jobs:
 
       - name: Upload artifacts
         if: github.event_name == 'release'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: docs_output
           path: docs_output/
@@ -96,9 +97,9 @@ jobs:
         shell: bash
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Download artifact
-        uses: actions/download-artifact@v4.2.1
+        uses: actions/download-artifact@v6.0.0
         with:
           # Artifact name
           name: docs_output # optional

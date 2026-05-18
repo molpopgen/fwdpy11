@@ -28,6 +28,12 @@ class GeneticValueIsTraitTrampoline : public fwdpy11::GeneticValueIsTrait
         PYBIND11_OVERLOAD_PURE(void, fwdpy11::GeneticValueIsTrait, update, pop);
     }
 
+    std::size_t
+    ndim() const
+    {
+        PYBIND11_OVERLOAD_PURE(std::size_t, fwdpy11::GeneticValueIsTrait, ndim);
+    }
+
     std::shared_ptr<fwdpy11::GeneticValueToFitnessMap>
     clone() const override
     // Implementation details from pybind11 issue 1049
@@ -49,7 +55,7 @@ init_GeneticValueIsTrait(py::module& m)
         m, "GeneticValueIsTrait",
         "ABC for functions mapping genetic values representing traits to "
         "fitness.")
-        .def(py::init<std::size_t>(), py::arg("ndim") = 1);
+        .def(py::init<>());
 
     py::class_<fwdpy11::DiploidGeneticValueToFitnessData>(
         m, "DiploidGeneticValueToFitnessData", py::buffer_protocol())
