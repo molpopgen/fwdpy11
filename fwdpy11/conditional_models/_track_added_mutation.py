@@ -158,6 +158,11 @@ def _integer_count_details(
                 f"deme {deme} not present "
                 f"at time {pop.generation}. Deme sizes are {deme_sizes}"
             )
+        # TODO: do we mean the global pop size or should we be
+        # considering only the deme size?
+        # NOTE: the min/max inputs get set based on the local deme
+        # size before being passed here, which is definitely confusing
+        # b/c one has to know what the caller of this function is doing!
         for c in [minimum, maximum]:
             if c >= 2 * pop.N:
                 raise ValueError(
@@ -186,8 +191,8 @@ def _get_allele_count_range(
         )
     elif isinstance(mutation_parameters.frequency, FrequencyRange):
         if mutation_parameters.deme is None:
-            lo = int(np.ceil(mutation_parameters.frequency.minimum * pop.N))
-            hi = int(np.floor(mutation_parameters.frequency.minimum * pop.N))
+            lo = int(np.ceil(mutation_parameters.frequency.minimum * 2 * pop.N))
+            hi = int(np.floor(mutation_parameters.frequency.maximum * 2 * pop.N))
         else:
             deme_sizes = pop.deme_sizes(as_dict=True)
             if mutation_parameters.deme not in deme_sizes:
@@ -198,12 +203,14 @@ def _get_allele_count_range(
             lo = int(
                 np.ceil(
                     mutation_parameters.frequency.minimum
+                    * 2
                     * deme_sizes[mutation_parameters.deme]
                 )
             )
             hi = int(
                 np.floor(
-                    mutation_parameters.frequency.minimum
+                    mutation_parameters.frequency.maximum
+                    * 2
                     * deme_sizes[mutation_parameters.deme]
                 )
             )
