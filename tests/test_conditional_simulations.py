@@ -16,7 +16,6 @@
 # You should have received a copy of the GNU General Public License
 # along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 #
-
 from hypothesis import settings, given
 from hypothesis.strategies import booleans, integers
 
@@ -24,6 +23,7 @@ import demes
 import fwdpy11
 import fwdpy11.conditional_models
 import msprime
+import numpy as np
 import pytest
 
 from fwdpy11_test_utilities import seed_list
@@ -769,3 +769,60 @@ def test_github_issue_1093(seed, when):
         until=7,
         sampling_policy=fwdpy11.conditional_models.AncientSamplePolicy.DURATION,
     )
+
+
+# Test for GH issue 1447
+@pytest.mark.parametrize("seed", seed_list(1512512, 5))
+def test_frequency_range(seed):
+    initial_ts = msprime.sim_ancestry(
+        samples=2000,
+        population_size=2000,
+        recombination_rate=1e-7,
+        random_seed=seed,
+        sequence_length=500000,
+    )
+    samples = [i for i in initial_ts.samples()]
+    assert all([initial_ts.node(i).time == 0.0 for i in samples])
+    left = 0.495
+    right = 0.505
+    min_freq = 0.1
+    max_freq = 0.3
+    min_sample_num = np.ceil(min_freq * initial_ts.num_samples)
+    max_sample_num = np.floor(max_freq * initial_ts.num_samples)
+    valid_branches = False
+    for tree in initial_ts.trees(tracked_samples=samples):
+        if left < tree.interval.right and tree.interval.left < right:
+            for node in tree.nodes():
+                nt = tree.num_tracked_samples(node)
+                if nt >= min_sample_num and nt < max_sample_num:
+                    valid_branches = True
+    pop = fwdpy11.DiploidPopulation.create_from_tskit(initial_ts)
+    pdict = {
+        "recregions": [fwdpy11.PoissonInterval(0, 500000, 1e-7, discrete=True)],
+        # Here, gvalue as multiplicative(2.0) means 1, 1+hs, 1+2s.
+        "gvalue": fwdpy11.Multiplicative(2.0),
+        "rates": (0, 0, None),
+        "prune_selected": False,
+        "simlen": 200,
+        # burnin minimum 10 from heuristic and from Ferrari et al, 2025
+        "demography": fwdpy11.ForwardDemesGraph.tubes([2000], burnin=10),
+    }
+    params = fwdpy11.ModelParams(**pdict)
+    ALPHA = 400.0
+    # dropped in the middle of the sequence
+    sweep_site = fwdpy11.conditional_models.NewMutationParameters(
+        frequency=fwdpy11.conditional_models.FrequencyRange(0.1, 0.3),
+        data=fwdpy11.NewMutationData(effect_size=ALPHA / 2 / pop.N, dominance=1),
+        position=fwdpy11.conditional_models.PositionRange(left=0.495, right=0.505),
+    )
+    try:
+        _ = fwdpy11.conditional_models.selective_sweep(
+            fwdpy11.GSLrng(seed),
+            pop,
+            params,
+            sweep_site,
+            fwdpy11.conditional_models.GlobalFixation(),
+            return_when_stopping_condition_met=True,  # stopping when sweep fixed
+        )
+    except fwdpy11.conditional_models.AddMutationFailure:
+        assert valid_branches is False
