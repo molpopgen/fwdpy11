@@ -82,7 +82,7 @@ jobs:
 
       - name: Upload artifacts
         if: github.event_name == 'release'
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: docs_output
           path: docs_output/
@@ -108,6 +108,7 @@ jobs:
       - name: Deploy to GitHub Pages
         uses: Cecilapp/GitHub-Pages-deploy@v3
         env:
-          GITHUB_TOKEN: ${{ secrets.ACTIONS }} 
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
         with:
           build_dir: docs_output/
+          email: krthornt@uci.edu
