@@ -27,22 +27,22 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=a3416100" />
-    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
   
   <!-- So that users can add custom icons -->
-  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="../_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
 
     <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
@@ -53,7 +53,7 @@
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="../_static/togglebutton.js?v=b8b12719"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
@@ -63,6 +63,7 @@
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'pages/advancedtopics';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Different effect sizes of mutations in different demes" href="mvdes.html" />
@@ -70,20 +71,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
   </head>
-  
-  
-  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
-
+  <body data-default-mode="">
   
   
   <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
   
   <div id="pst-scroll-pixel-helper"></div>
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
-
+  
+  
+  
   
   <dialog id="pst-search-dialog">
     
@@ -109,7 +116,51 @@
 </div>
 
   
-    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
     </header>
   
 
@@ -477,7 +528,7 @@
                 <h2> Contents </h2>
             </div>
             <nav aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#executing-multiple-replicates-in-parallel-using-concurrent-futures">Executing multiple replicates in parallel using <code class="docutils literal notranslate"><span class="pre">concurrent.futures</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-long-to-run-the-simulation">How long to run the simulation</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-eyre-walker-model-of-complex-traits">The “Eyre-Walker” model of complex traits</a></li>
@@ -583,7 +634,7 @@
 For example, you could write a single Python script plus a shell script
 that your local cluster understands, sending your simulation to hundreds
 of compute nodes.</p>
-<p>This section introduces <a class="reference external" href="https://docs.python.org/3/library/concurrent.futures.html#module-concurrent.futures" title="(in Python v3.13)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">concurrent.futures</span></code></a> as a method to execute
+<p>This section introduces <a class="reference external" href="https://docs.python.org/3/library/concurrent.futures.html#module-concurrent.futures" title="(in Python v3.14)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">concurrent.futures</span></code></a> as a method to execute
 many replicates in separate Python <em>processes</em> using a single script.</p>
 <p>Fully worked-out examples of varying complexity can be found here:</p>
 <ul class="simple">
@@ -601,8 +652,8 @@ than returning them.</p></li>
 <li><p>If you do return something to the main “collector”
 process, keep it simple!</p></li>
 <li><p>Random number seeds are set in <code class="docutils literal notranslate"><span class="pre">__main__</span></code> using
-<a class="reference external" href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.randint.html#numpy.random.randint" title="(in NumPy v2.2)"><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.random.randint()</span></code></a> after calling
-<a class="reference external" href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.seed.html#numpy.random.seed" title="(in NumPy v2.2)"><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.random.seed()</span></code></a> using a user-provided seed.</p></li>
+<a class="reference external" href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.randint.html#numpy.random.randint" title="(in NumPy v2.5)"><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.random.randint()</span></code></a> after calling
+<a class="reference external" href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.seed.html#numpy.random.seed" title="(in NumPy v2.5)"><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.random.seed()</span></code></a> using a user-provided seed.</p></li>
 </ul>
 </section>
 <section id="how-long-to-run-the-simulation">
@@ -629,8 +680,8 @@ For example, for a neutral model, the distribution of the
 number of mutations under an infinitely-many sites model
 for a small sample should match <code class="docutils literal notranslate"><span class="pre">msprime</span></code> very well.
 For a steady-state model of recurrent hitch-hiking
-<span id="id1">[<a class="reference internal" href="../misc/bibliography.html#id22" title="N L Kaplan, R R Hudson, and C H Langley. The “hitchhiking effect” revisited. Genetics, 123(4):887–899, December 1989.">KHL89</a>]</span>, results from small samples
-should match coalescent simulations such as <span id="id2">[<a class="reference internal" href="../misc/bibliography.html#id19" title="Andrew D Kern and Daniel R Schrider. Discoal: flexible coalescent simulations with selection. Bioinformatics, 32(24):3839–3841, December 2016.">KS16</a>]</span>.
+<span class="bibtex-citation" id="id1">[<a class="reference internal" href="../misc/bibliography.html#id22" title="N L Kaplan, R R Hudson, and C H Langley. The “hitchhiking effect” revisited. Genetics, 123(4):887–899, December 1989.">KHL89</a>]</span>, results from small samples
+should match coalescent simulations such as <span class="bibtex-citation" id="id2">[<a class="reference internal" href="../misc/bibliography.html#id19" title="Andrew D Kern and Daniel R Schrider. Discoal: flexible coalescent simulations with selection. Bioinformatics, 32(24):3839–3841, December 2016.">KS16</a>]</span>.
 Clearly, all of the different methods
 should match analytical results where possible.</p></li>
 <li><p>You probably want all of your trees to be fully coalesced
@@ -654,7 +705,7 @@ with a tree sequence from <code class="docutils literal notranslate"><span class
 </section>
 <section id="the-eyre-walker-model-of-complex-traits">
 <span id="eyre-walker"></span><h2>The “Eyre-Walker” model of complex traits<a class="headerlink" href="#the-eyre-walker-model-of-complex-traits" title="Link to this heading">#</a></h2>
-<p><span id="id3">[<a class="reference internal" href="../misc/bibliography.html#id24" title="Adam Eyre-Walker. Evolution in health and medicine sackler colloquium: genetic architecture of a complex trait and its implications for fitness and genome-wide association studies. Proc. Natl. Acad. Sci. U. S. A., 107 Suppl 1:1752–1756, January 2010.">EW10</a>]</span> describes a model relating mutations with
+<p><span class="bibtex-citation" id="id3">[<a class="reference internal" href="../misc/bibliography.html#id24" title="Adam Eyre-Walker. Evolution in health and medicine sackler colloquium: genetic architecture of a complex trait and its implications for fitness and genome-wide association studies. Proc. Natl. Acad. Sci. U. S. A., 107 Suppl 1:1752–1756, January 2010.">EW10</a>]</span> describes a model relating mutations with
 fitness effect <span class="math notranslate nohighlight">\(S = |2Ns|\)</span> to <span class="math notranslate nohighlight">\(z\)</span>, their effect on
 a phenotype/trait according to <span class="math notranslate nohighlight">\(z = \delta S^\tau(1+\epsilon)\)</span>.
 Here, <span class="math notranslate nohighlight">\(\epsilon\)</span> is a draw from a Gaussian distribution with mean zero,
@@ -832,12 +883,12 @@ to abuse this.  More often than not, you’ll just break stuff.)</p>
 <p>I feel that some comments about this model are warranted:</p>
 <ul class="simple">
 <li><p>The model is a simplification of earlier work by Keightley and Hill
-(<span id="id4">[<a class="reference internal" href="../misc/bibliography.html#id29" title="P D Keightley and W G Hill. Quantitative genetic variability maintained by mutation-stabilizing selection balance in finite populations. Genet. Res., 52(1):33–43, August 1988.">KH88</a>]</span>, <span id="id5">[<a class="reference internal" href="../misc/bibliography.html#id30" title="Peter D Keightley and William G Hill. Variation maintained in quantitative traits with Mutation-Selection balance: pleiotropic Side-Effects on fitness traits. Proceedings of the Royal Society of London B: Biological Sciences, 242(1304):95–100, November 1990.">KH90</a>]</span>), which should be cited
-alongside <span id="id6">[<a class="reference internal" href="../misc/bibliography.html#id24" title="Adam Eyre-Walker. Evolution in health and medicine sackler colloquium: genetic architecture of a complex trait and its implications for fitness and genome-wide association studies. Proc. Natl. Acad. Sci. U. S. A., 107 Suppl 1:1752–1756, January 2010.">EW10</a>]</span>.</p></li>
-<li><p><span id="id7">[<a class="reference internal" href="../misc/bibliography.html#id29" title="P D Keightley and W G Hill. Quantitative genetic variability maintained by mutation-stabilizing selection balance in finite populations. Genet. Res., 52(1):33–43, August 1988.">KH88</a>]</span> and <span id="id8">[<a class="reference internal" href="../misc/bibliography.html#id30" title="Peter D Keightley and William G Hill. Variation maintained in quantitative traits with Mutation-Selection balance: pleiotropic Side-Effects on fitness traits. Proceedings of the Royal Society of London B: Biological Sciences, 242(1304):95–100, November 1990.">KH90</a>]</span>) show that this model predicts heritability
+(<span class="bibtex-citation" id="id4">[<a class="reference internal" href="../misc/bibliography.html#id29" title="P D Keightley and W G Hill. Quantitative genetic variability maintained by mutation-stabilizing selection balance in finite populations. Genet. Res., 52(1):33–43, August 1988.">KH88</a>]</span>, <span class="bibtex-citation" id="id5">[<a class="reference internal" href="../misc/bibliography.html#id30" title="Peter D Keightley and William G Hill. Variation maintained in quantitative traits with Mutation-Selection balance: pleiotropic Side-Effects on fitness traits. Proceedings of the Royal Society of London B: Biological Sciences, 242(1304):95–100, November 1990.">KH90</a>]</span>), which should be cited
+alongside <span class="bibtex-citation" id="id6">[<a class="reference internal" href="../misc/bibliography.html#id24" title="Adam Eyre-Walker. Evolution in health and medicine sackler colloquium: genetic architecture of a complex trait and its implications for fitness and genome-wide association studies. Proc. Natl. Acad. Sci. U. S. A., 107 Suppl 1:1752–1756, January 2010.">EW10</a>]</span>.</p></li>
+<li><p><span class="bibtex-citation" id="id7">[<a class="reference internal" href="../misc/bibliography.html#id29" title="P D Keightley and W G Hill. Quantitative genetic variability maintained by mutation-stabilizing selection balance in finite populations. Genet. Res., 52(1):33–43, August 1988.">KH88</a>]</span> and <span class="bibtex-citation" id="id8">[<a class="reference internal" href="../misc/bibliography.html#id30" title="Peter D Keightley and William G Hill. Variation maintained in quantitative traits with Mutation-Selection balance: pleiotropic Side-Effects on fitness traits. Proceedings of the Royal Society of London B: Biological Sciences, 242(1304):95–100, November 1990.">KH90</a>]</span>) show that this model predicts heritability
 (the genetic variance) is linear-ish with <code class="docutils literal notranslate"><span class="pre">N</span></code>, with the details depending
 somewhat on the model parameters.  The biological reasonableness
-of that prediction is dubious.  <span id="id9">[<a class="reference internal" href="../misc/bibliography.html#id17" title="Toby Johnson and Nick Barton. Theoretical models of selection and mutation on quantitative traits. Philos. Trans. R. Soc. Lond. B Biol. Sci., 360(1459):1411–1425, July 2005.">JB05</a>]</span> discuss this point
+of that prediction is dubious.  <span class="bibtex-citation" id="id9">[<a class="reference internal" href="../misc/bibliography.html#id17" title="Toby Johnson and Nick Barton. Theoretical models of selection and mutation on quantitative traits. Philos. Trans. R. Soc. Lond. B Biol. Sci., 360(1459):1411–1425, July 2005.">JB05</a>]</span> discuss this point
 in some detail, and give other relevant references.</p></li>
 <li><p>Depending somewhat on the parameters of the <code class="docutils literal notranslate"><span class="pre">getz</span></code> function, one will eventually
 generate an intermediate-frequency variant with a massive <span class="math notranslate nohighlight">\(z\)</span>,
@@ -952,7 +1003,7 @@ fitness if needed.</p>
 <dd class="field-even"><p>Sum of effect sizes</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)">float</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)">float</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -975,7 +1026,7 @@ fitness if needed.</p>
 <dd class="field-even"><p>Sum of effect sizes (accounting for heterozygous effects)</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)">float</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)">float</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1094,7 +1145,7 @@ for some of the gory details.</p>
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.custom_genetic_value_decorators.__init__" title="Link to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>ndim</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – The dimensionality of the model</p>
+<dd class="field-odd"><p><strong>ndim</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – The dimensionality of the model</p>
 </dd>
 </dl>
 <p>The default is <code class="docutils literal notranslate"><span class="pre">ndim=1</span></code>.</p>
@@ -1171,7 +1222,7 @@ we can simplify a bit with another decorator:</p>
 <a class="reference internal" href="gvalue_to_fitness.html#fwdpy11.GaussianStabilizingSelection" title="fwdpy11.GaussianStabilizingSelection"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GaussianStabilizingSelection</span></code></a> in Python for a single trait.
 The second example implements a model
 where the optimum changes to a new value each generation. (Note that
-the second model requires that <a class="reference external" href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.seed.html#numpy.random.seed" title="(in NumPy v2.2)"><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.random.seed()</span></code></a> be called elsewhere
+the second model requires that <a class="reference external" href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.seed.html#numpy.random.seed" title="(in NumPy v2.5)"><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.random.seed()</span></code></a> be called elsewhere
 so that results are reproducible.)</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
 
@@ -1243,7 +1294,7 @@ so that results are reproducible.)</p>
 </div>
 <p>This class supports the buffer protocol, which exposes the
 genetic values array.  The most efficient access will
-be via a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#memoryview" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">memoryview</span></code></a>.</p>
+be via a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#memoryview" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">memoryview</span></code></a>.</p>
 <p>Instances of this class have the following attributes:</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fwdpy11.DiploidGeneticValueToFitnessData.offspring_metadata">
@@ -1376,7 +1427,7 @@ and this value.</p>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>ndim</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>)</p></li>
+<li><p><strong>ndim</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>)</p></li>
 <li><p><strong>genetic_value_to_fitness</strong> (<a class="reference internal" href="gvalue_to_fitness.html#fwdpy11.GeneticValueIsTrait" title="fwdpy11.GeneticValueIsTrait"><em>fwdpy11.GeneticValueIsTrait</em></a><em> or </em><em>None</em>)</p></li>
 <li><p><strong>noise</strong> (<a class="reference internal" href="gvaluenoise.html#fwdpy11.GeneticValueNoise" title="fwdpy11.GeneticValueNoise"><em>fwdpy11.GeneticValueNoise</em></a><em> or </em><em>None</em>)</p></li>
 </ul>
@@ -1396,7 +1447,7 @@ and this value.</p>
 <a class="reference internal" href="types.html#fwdpy11.DiploidMetadata.g" title="fwdpy11.DiploidMetadata.g"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.DiploidMetadata.g</span></code></a></p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)">float</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)">float</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1412,7 +1463,7 @@ and this value.</p>
 <dd class="field-even"><p>fitness</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)">float</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)">float</a></p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -1485,7 +1536,7 @@ responsibilities:</p>
 <ol class="arabic simple">
 <li><p>It must return a value that will populate the genetic value
 field of the offspring’s metadata (<a class="reference internal" href="types.html#fwdpy11.DiploidMetadata.g" title="fwdpy11.DiploidMetadata.g"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.DiploidMetadata.g</span></code></a>).</p></li>
-<li><p>It also needs to populate an array of <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> that represents
+<li><p>It also needs to populate an array of <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> that represents
 the genetic values for all trait dimensions. See <a class="reference internal" href="#python-genetic-value-dimensions"><span class="std std-ref">here</span></a>.
 For the common case of a one-dimensional genetic value,
 you populate element <code class="docutils literal notranslate"><span class="pre">0</span></code> of this array with value that you
@@ -1506,9 +1557,9 @@ resistance in the short term was to implement the current approach.</p>
 <h4>Example: strictly additive effects on a trait<a class="headerlink" href="#example-strictly-additive-effects-on-a-trait" title="Link to this heading">#</a></h4>
 <p>Here is an example of a strict additive model of a trait,
 taken from the test suite. You’ll notice that we are accessing
-arrays on the <code class="docutils literal notranslate"><span class="pre">C++</span></code> using Python <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#memoryview" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">memoryview</span></code></a> objects.
+arrays on the <code class="docutils literal notranslate"><span class="pre">C++</span></code> using Python <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#memoryview" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">memoryview</span></code></a> objects.
 This is a <em>very</em> efficient method, and much faster
-than creating a temporary, non-owning <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>.</p>
+than creating a temporary, non-owning <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">fwdpy11</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">fwdpy11.custom_genetic_value_decorators</span>
 
@@ -1525,7 +1576,7 @@ than creating a temporary, non-owning <a class="reference external" href="https:
 </pre></div>
 </div>
 <p>If you want to account for the heterozygous effect of mutations, then the
-most explicit approach is probably to use <a class="reference external" href="https://docs.python.org/3/library/collections.html#collections.Counter" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">collections.Counter</span></code></a>:</p>
+most explicit approach is probably to use <a class="reference external" href="https://docs.python.org/3/library/collections.html#collections.Counter" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">collections.Counter</span></code></a>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">calculate_gvalue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
     <span class="n">s</span> <span class="o">=</span> <span class="mf">0.0</span>
     <span class="n">c</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
@@ -1571,7 +1622,7 @@ in <a class="reference internal" href="../technical/genetic_values.html#gvalue-s
 </div>
 <p>This class supports the buffer protocol, which exposes the
 genetic values array.  The most efficient access will
-be via a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#memoryview" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">memoryview</span></code></a>.</p>
+be via a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#memoryview" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">memoryview</span></code></a>.</p>
 <p>Instances of this class have the following attributes:</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="rng">
@@ -1699,7 +1750,7 @@ A more general example, for a genome of length <code class="docutils literal not
     <i class="fa-solid fa-list"></i> Contents
   </div>
   <nav class="bd-toc-nav page-toc">
-    <ul class="visible nav section-nav flex-column">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#executing-multiple-replicates-in-parallel-using-concurrent-futures">Executing multiple replicates in parallel using <code class="docutils literal notranslate"><span class="pre">concurrent.futures</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-long-to-run-the-simulation">How long to run the simulation</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-eyre-walker-model-of-complex-traits">The “Eyre-Walker” model of complex traits</a></li>
@@ -1834,8 +1885,8 @@ By Kevin Thornton
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
-<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
 
   <footer class="bd-footer">
   </footer>

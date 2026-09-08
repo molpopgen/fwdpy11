@@ -27,22 +27,22 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=a3416100" />
-    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
   
   <!-- So that users can add custom icons -->
-  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="../_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
 
     <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
@@ -53,7 +53,7 @@
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="../_static/togglebutton.js?v=b8b12719"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
@@ -63,6 +63,7 @@
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'pages/tsoverview';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Data structures related to tree sequences" href="tstypes.html" />
@@ -70,20 +71,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
   </head>
-  
-  
-  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
-
+  <body data-default-mode="">
   
   
   <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
   
   <div id="pst-scroll-pixel-helper"></div>
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
-
+  
+  
+  
   
   <dialog id="pst-search-dialog">
     
@@ -109,7 +116,51 @@
 </div>
 
   
-    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
     </header>
   
 
@@ -477,7 +528,7 @@
                 <h2> Contents </h2>
             </div>
             <nav aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#trees-and-tables">Trees and tables</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#relating-an-evolving-population-to-node-and-edge-tables">Relating an evolving population to node and edge tables</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tree-sequence-simplification">Tree sequence simplification</a></li>
@@ -497,17 +548,17 @@
 <p><code class="docutils literal notranslate"><span class="pre">fwdpy11</span></code> 0.2.0 added support for tree sequence recording (<code class="docutils literal notranslate"><span class="pre">TSR</span></code>),
 which is a method to both speed up forward-time simulations and to
 track the entire genealogical history of the simulation.
-The key reference describing <code class="docutils literal notranslate"><span class="pre">TSR</span></code> is <span id="id1">[<a class="reference internal" href="../misc/bibliography.html#id20" title="Jerome Kelleher, Alison M Etheridge, and Gilean McVean. Efficient coalescent simulation and genealogical analysis for large sample sizes. PLoS Comput. Biol., 12(5):e1004842, May 2016.">KEM16</a>]</span>, which in turn relies
-heavily on concepts described in <span id="id2">[<a class="reference internal" href="../misc/bibliography.html#id20" title="Jerome Kelleher, Alison M Etheridge, and Gilean McVean. Efficient coalescent simulation and genealogical analysis for large sample sizes. PLoS Comput. Biol., 12(5):e1004842, May 2016.">KEM16</a>]</span>.</p>
+The key reference describing <code class="docutils literal notranslate"><span class="pre">TSR</span></code> is <span class="bibtex-citation" id="id1">[<a class="reference internal" href="../misc/bibliography.html#id20" title="Jerome Kelleher, Alison M Etheridge, and Gilean McVean. Efficient coalescent simulation and genealogical analysis for large sample sizes. PLoS Comput. Biol., 12(5):e1004842, May 2016.">KEM16</a>]</span>, which in turn relies
+heavily on concepts described in <span class="bibtex-citation" id="id2">[<a class="reference internal" href="../misc/bibliography.html#id20" title="Jerome Kelleher, Alison M Etheridge, and Gilean McVean. Efficient coalescent simulation and genealogical analysis for large sample sizes. PLoS Comput. Biol., 12(5):e1004842, May 2016.">KEM16</a>]</span>.</p>
 <p>The goal of <code class="docutils literal notranslate"><span class="pre">TSR</span></code> is to track a set of tables that contain the trees describing the ancestry of the population.</p>
 <section id="trees-and-tables">
 <h2>Trees and tables<a class="headerlink" href="#trees-and-tables" title="Link to this heading">#</a></h2>
 <p>To start out, let us consider the following tree:</p>
 <div class="cell tag_hide-input docutils container">
-<details class="hide above-input">
+<details class="admonition hide above-input">
 <summary aria-label="Toggle hidden content">
-<span class="collapsed">Show code cell source</span>
-<span class="expanded">Hide code cell source</span>
+<p class="collapsed admonition-title">Show code cell source</p>
+<p class="expanded admonition-title">Hide code cell source</p>
 </summary>
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">tskit</span>
@@ -531,19 +582,19 @@ heavily on concepts described in <span id="id2">[<a class="reference internal" h
 </details>
 </div>
 <figure class="align-default" id="example-tree">
-<img alt="../_images/8611a09ea79eeaccd77cb4ec00b3f2cfa48ec2d6863565fb09159c96521b8ad1.svg" src="../_images/8611a09ea79eeaccd77cb4ec00b3f2cfa48ec2d6863565fb09159c96521b8ad1.svg" />
+<img alt="../_images/7f1d8b4305395eea730040d50ef8226dc958e22c34a794d7cb1ea5fc0cd5e245.svg" src="../_images/7f1d8b4305395eea730040d50ef8226dc958e22c34a794d7cb1ea5fc0cd5e245.svg" />
 <figcaption>
 <p><span class="caption-number">Fig. 3 </span><span class="caption-text">A tree with seven nodes.</span><a class="headerlink" href="#example-tree" title="Link to this image">#</a></p>
 </figcaption>
 </figure>
 <p>This tree is the “marginal” history of a genomic segment covering the half-open interval <span class="math notranslate nohighlight">\([0, 1)\)</span>.
 In other words, all genomic positions in this interval have the same ancestry, and recombination results in different intervals having different trees.</p>
-<p>Following <span id="id3">[<a class="reference internal" href="../misc/bibliography.html#id20" title="Jerome Kelleher, Alison M Etheridge, and Gilean McVean. Efficient coalescent simulation and genealogical analysis for large sample sizes. PLoS Comput. Biol., 12(5):e1004842, May 2016.">KEM16</a>]</span>, we can represent the above tree using two tables:</p>
+<p>Following <span class="bibtex-citation" id="id3">[<a class="reference internal" href="../misc/bibliography.html#id20" title="Jerome Kelleher, Alison M Etheridge, and Gilean McVean. Efficient coalescent simulation and genealogical analysis for large sample sizes. PLoS Comput. Biol., 12(5):e1004842, May 2016.">KEM16</a>]</span>, we can represent the above tree using two tables:</p>
 <div class="cell tag_hide-input docutils container">
-<details class="hide above-input">
+<details class="admonition hide above-input">
 <summary aria-label="Toggle hidden content">
-<span class="collapsed">Show code cell source</span>
-<span class="expanded">Hide code cell source</span>
+<p class="collapsed admonition-title">Show code cell source</p>
+<p class="expanded admonition-title">Hide code cell source</p>
 </summary>
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
@@ -561,10 +612,10 @@ In other words, all genomic positions in this interval have the same ancestry, a
 </div>
 <p>First we have the <code class="docutils literal notranslate"><span class="pre">nodes</span></code>:</p>
 <div class="cell tag_hide-input docutils container">
-<details class="hide above-input">
+<details class="admonition hide above-input">
 <summary aria-label="Toggle hidden content">
-<span class="collapsed">Show code cell source</span>
-<span class="expanded">Hide code cell source</span>
+<p class="collapsed admonition-title">Show code cell source</p>
+<p class="expanded admonition-title">Hide code cell source</p>
 </summary>
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nodes</span>
@@ -637,10 +688,10 @@ In other words, all genomic positions in this interval have the same ancestry, a
 </div>
 <p>Second, we have the <code class="docutils literal notranslate"><span class="pre">edges</span></code>:</p>
 <div class="cell tag_hide-input docutils container">
-<details class="hide above-input">
+<details class="admonition hide above-input">
 <summary aria-label="Toggle hidden content">
-<span class="collapsed">Show code cell source</span>
-<span class="expanded">Hide code cell source</span>
+<p class="collapsed admonition-title">Show code cell source</p>
+<p class="expanded admonition-title">Hide code cell source</p>
 </summary>
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">edges</span>
@@ -823,7 +874,7 @@ We implement a Wright-Fisher model for a diploid population without recombinatio
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/dcd39479d62163a18ab875564af9cfa9deb4fd3dc72b5d23ceb40277d8d7b849.svg" src="../_images/dcd39479d62163a18ab875564af9cfa9deb4fd3dc72b5d23ceb40277d8d7b849.svg" />
+<img alt="../_images/1fa9ac4e73b0724f7b956488d348b4f0024afb062eb29618fa7083a47a93d2ee.svg" src="../_images/1fa9ac4e73b0724f7b956488d348b4f0024afb062eb29618fa7083a47a93d2ee.svg" />
 </div>
 </div>
 <p>The resulting tree contains information for extinct lineages as well as redundant node information.  Note
@@ -844,7 +895,7 @@ Here, our sample nodes will be those nodes corresponding to the individuals aliv
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/acca9bcfcedd03f299a0c9e777b1c797b683326b345f24f580a00ba062aabe4d.svg" src="../_images/acca9bcfcedd03f299a0c9e777b1c797b683326b345f24f580a00ba062aabe4d.svg" />
+<img alt="../_images/43a9731f8af97e98b74a16f1270832983a4b1131913a42920ca20f65eaff3029.svg" src="../_images/43a9731f8af97e98b74a16f1270832983a4b1131913a42920ca20f65eaff3029.svg" />
 </div>
 </div>
 <p>That’s much nicer!  The simplified tree shows now the <em>input</em> node ids are remapped to <em>output</em> node ids
@@ -929,7 +980,7 @@ See <a class="reference internal" href="../short_vignettes/recorders_vignette.ht
     <i class="fa-solid fa-list"></i> Contents
   </div>
   <nav class="bd-toc-nav page-toc">
-    <ul class="visible nav section-nav flex-column">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#trees-and-tables">Trees and tables</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#relating-an-evolving-population-to-node-and-edge-tables">Relating an evolving population to node and edge tables</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tree-sequence-simplification">Tree sequence simplification</a></li>
@@ -981,8 +1032,8 @@ By Kevin Thornton
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
-<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
 
   <footer class="bd-footer">
   </footer>

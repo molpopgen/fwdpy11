@@ -32,7 +32,7 @@ ts = msprime.sim_ancestry(100,
 ```
 
 ```{code-cell} python
-tables = ts.tables
+tables = ts.tables.copy()
 ```
 
 Add the `fwdpy11` mutation metadata schema:
