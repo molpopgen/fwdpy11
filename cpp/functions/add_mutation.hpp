@@ -34,6 +34,8 @@ struct new_mutation_data
 };
 
 std::size_t add_mutation(const fwdpy11::GSLrng_t& rng, const double left,
-                         const double right, const fwdpp::ts::table_index_t ndescendants,
+                         const double right,
+                         const fwdpp::ts::table_index_t ndescendants_min,
+                         const fwdpp::ts::table_index_t ndescendants_max,
                          const fwdpp::ts::table_index_t deme,
                          const new_mutation_data& data, fwdpy11::DiploidPopulation& pop);

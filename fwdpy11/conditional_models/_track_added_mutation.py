@@ -169,7 +169,7 @@ def _integer_count_details(
                     f"count {c} "
                     f"is not compatible with total population size of {pop.N}"
                 )
-    return range(minimum, maximum + 1)
+    return (minimum, maximum + 1)
 
 
 def _get_allele_count_range(
@@ -235,22 +235,21 @@ def _copy_pop_and_add_mutation(
     if when is None or when == 0:
         count_range = _get_allele_count_range(pop, mutation_parameters)
 
-        for c in count_range:
-            pcopy = copy.deepcopy(pop)
-            _mutation_params = {
-                "window": (
-                    mutation_parameters.position.left,
-                    mutation_parameters.position.right,
-                ),
-                "ndescendants": c,
-                "data": mutation_parameters.data,
-                "deme": mutation_parameters.deme,
-            }
-            idx = pcopy.add_mutation(rng, **_mutation_params)
-            if idx is not None:
-                final_count = c
-                break
-        if idx is None:
+        pcopy = copy.deepcopy(pop)
+        _mutation_params = {
+            "window": (
+                mutation_parameters.position.left,
+                mutation_parameters.position.right,
+            ),
+            "ndescendants": count_range,
+            "data": mutation_parameters.data,
+            "deme": mutation_parameters.deme,
+        }
+        idx = pcopy.add_mutation(rng, **_mutation_params)
+        if idx is not None:
+            print(count_range, idx, pcopy.mcounts[idx])
+            final_count = pcopy.mcounts[idx]
+        else:
             raise AddMutationFailure("failed to add mutation")
         out_params = copy.deepcopy(params)
     else:
@@ -264,22 +263,19 @@ def _copy_pop_and_add_mutation(
         fwdpy11.evolvets(rng, pcopy, pre_sweep_params, **evolvets_options.asdict())
 
         count_range = _get_allele_count_range(pcopy, mutation_parameters)
-        for c in count_range:
-            _mutation_params = {
-                "window": (
-                    mutation_parameters.position.left,
-                    mutation_parameters.position.right,
-                ),
-                "ndescendants": c,
-                "data": mutation_parameters.data,
-                "deme": mutation_parameters.deme,
-            }
-            idx = pcopy.add_mutation(rng, **_mutation_params)
-            if idx is not None:
-                final_count = c
-                break
-
-        if idx is None:
+        _mutation_params = {
+            "window": (
+                mutation_parameters.position.left,
+                mutation_parameters.position.right,
+            ),
+            "ndescendants": count_range,
+            "data": mutation_parameters.data,
+            "deme": mutation_parameters.deme,
+        }
+        idx = pcopy.add_mutation(rng, **_mutation_params)
+        if idx is not None:
+            final_count = pcopy.mcounts[idx]
+        else:
             raise AddMutationFailure("failed to add mutation")
         sweep_pdict = {k: v for k, v in pre_sweep_params.asdict().items()}
         sweep_pdict["simlen"] = params.simlen - pcopy.generation

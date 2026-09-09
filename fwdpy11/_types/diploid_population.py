@@ -451,7 +451,7 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
         rng: fwdpy11.GSLrng,
         *,
         window: Tuple[float, float] = None,
-        ndescendants: int = 1,
+        ndescendants: Union[int, Tuple[int]] = 1,
         deme: Optional[int] = None,
         data: NewMutationData = None,
     ) -> Optional[int]:
@@ -469,10 +469,13 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
                        the mutation. The default is `None`, meaning
                        the window is the entire genome.
         :type window: tuple[float, float]
-        :param ndescendants: The number of alive nodes carrying the new
-                             mutation. Default is `1`, implying that a
+        :param ndescendants: Tuple representing the range of alive nodes
+                             carrying the new mutation.
+                             Default is `1`, implying that a
                              singleton mutation will be generated.
-        :type ndescendants: int
+                             When a tuple is input, it represents
+                             [min, max) values for the allele count of the
+                             added mutation.
         :param deme: The deme in which to place the new mutation
                      The default is `None`, meaning that alive node demes are
                      not considered.
@@ -525,8 +528,21 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
 
         from fwdpy11._fwdpy11 import _add_mutation
 
+        try:
+            ndescendants_min, ndescendants_max = ndescendants[0], ndescendants[1]
+            assert len(ndescendants) == 2
+        except TypeError:
+            ndescendants_min, ndescendants_max = ndescendants, ndescendants + 1
+
         key = _add_mutation(
-            rng, _window[0], _window[1], ndescendants, _deme, data, self
+            rng,
+            _window[0],
+            _window[1],
+            ndescendants_min,
+            ndescendants_max,
+            _deme,
+            data,
+            self,
         )
         if key == np.iinfo(np.uint64).max:
             return None
