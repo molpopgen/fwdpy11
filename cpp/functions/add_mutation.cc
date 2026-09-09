@@ -17,6 +17,7 @@
 // along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 //
 #include <cmath>
+#include <iterator>
 #include <limits>
 #include <vector>
 #include <stdexcept>
@@ -47,9 +48,9 @@ new_mutation_data::new_mutation_data(double e, double h, std::vector<double> esi
         {
             throw std::invalid_argument("new mutation must have non-zero effect size");
         }
-    if (!std::isfinite(e) || std::any_of(begin(esizes), end(esizes), [](double d) {
-            return !std::isfinite(d);
-        }))
+    if (!std::isfinite(e)
+        || std::any_of(begin(esizes), end(esizes),
+                       [](double d) { return !std::isfinite(d); }))
         {
             throw std::invalid_argument("all effect size values must be finite");
         }
@@ -180,11 +181,11 @@ namespace
                                         if (deme < 0
                                             || std::all_of(
                                                 begin(descendants), end(descendants),
-                                                [&pop,
-                                                 deme](fwdpp::ts::table_index_t i) {
-                                                    return pop.tables->nodes[i].deme
-                                                           == deme;
-                                                }))
+                                                [&pop, deme](fwdpp::ts::table_index_t i)
+                                                    {
+                                                        return pop.tables->nodes[i].deme
+                                                               == deme;
+                                                    }))
                                             {
                                                 if (node_has_valid_time(
                                                         pop.tables->nodes, n,
@@ -259,7 +260,8 @@ namespace
 // Returns size_t max value if no candidates are found.
 std::size_t
 add_mutation(const fwdpy11::GSLrng_t& rng, const double left, const double right,
-             const fwdpp::ts::table_index_t ndescendants,
+             const fwdpp::ts::table_index_t ndescendants_min,
+             const fwdpp::ts::table_index_t ndescendants_max,
              const fwdpp::ts::table_index_t deme, const new_mutation_data& data,
              fwdpy11::DiploidPopulation& pop)
 {
@@ -290,13 +292,21 @@ add_mutation(const fwdpy11::GSLrng_t& rng, const double left, const double right
             throw std::invalid_argument(
                 "a population must have ancestry in order to add mutations");
         }
-    if (ndescendants < 1)
+    if (ndescendants_min < 1)
         {
             throw std::invalid_argument("number of descendants must be >= 1");
         }
-    if (static_cast<decltype(pop.N)>(ndescendants) >= 2 * pop.N)
+    if (ndescendants_max <= ndescendants_min)
         {
-            throw std::invalid_argument("ndescendants must be < 2*pop.N");
+            throw std::invalid_argument("ndescendants_max must be > ndescendants_min");
+        }
+    if (static_cast<decltype(pop.N)>(ndescendants_min) >= 2 * pop.N)
+        {
+            throw std::invalid_argument("ndescendants_min must be < 2*pop.N");
+        }
+    if (static_cast<decltype(pop.N)>(ndescendants_max) >= 2 * pop.N)
+        {
+            throw std::invalid_argument("ndescendants_max must be < 2*pop.N");
         }
     if (deme >= 0)
         {
@@ -323,14 +333,33 @@ add_mutation(const fwdpy11::GSLrng_t& rng, const double left, const double right
                     throw std::invalid_argument(
                         "no alive individuals have the desired deme id");
                 }
-            if (static_cast<unsigned>(ndescendants) >= 2 * deme_sizes[deme])
+            if (static_cast<unsigned>(ndescendants_min) >= 2 * deme_sizes[deme])
                 {
-                    throw std::invalid_argument("ndescendants must be < 2*(deme size)");
+                    throw std::invalid_argument(
+                        "ndescendants_min must be < 2*(deme size)");
+                }
+            if (static_cast<unsigned>(ndescendants_max) >= 2 * deme_sizes[deme])
+                {
+                    throw std::invalid_argument(
+                        "ndescendants_max must be < 2*(deme size)");
                 }
         }
 
     std::size_t new_mutation_key = std::numeric_limits<std::size_t>::max();
-    auto candidates = generate_canidate_list(left, right, ndescendants, deme, pop);
+    std::vector<candidate_node_map> candidates;
+    std::vector<int> counts;
+
+    for (auto ndescendants_i = ndescendants_min; ndescendants_i < ndescendants_max; ++ndescendants_i)
+        {
+            auto candidates_i
+                = generate_canidate_list(left, right, ndescendants_i, deme, pop);
+            for(std::size_t j = 0 ; j < candidates_i.size() ; ++j) {
+                counts.push_back(ndescendants_i);
+            }
+            candidates.insert(std::end(candidates),
+                              std::make_move_iterator(std::begin(candidates_i)),
+                              std::make_move_iterator(std::end(candidates_i)));
+        }
 
     if (candidates.empty())
         {
@@ -388,15 +417,16 @@ add_mutation(const fwdpy11::GSLrng_t& rng, const double left, const double right
     new_mutation_key = fwdpy11::infsites_Mutation(
         empty, pop.mutations, pop.mut_lookup, false, mutation_node_time,
         // The lambdas will simply transfer input parameters to the new object.
-        [&rng, &candidate_data]() {
-            return fwdpy11_core::internal::gsl_ran_flat(rng, candidate_data.left,
-                                                        candidate_data.right);
-        },
+        [&rng, &candidate_data]()
+            {
+                return fwdpy11_core::internal::gsl_ran_flat(rng, candidate_data.left,
+                                                            candidate_data.right);
+            },
         [&data]() { return data.effect_size; },
         [&data](double) { return data.dominance; }, [&data]() { return data.esizes; },
         [&data]() { return data.heffects; }, data.label);
 
-    pop.mcounts.push_back(ndescendants);
+    pop.mcounts.push_back(counts[candidate]);
     if (pop.mutations.size() != pop.mcounts.size())
         {
             throw std::runtime_error("mutations.size() != mcounts.size()");
@@ -451,9 +481,8 @@ add_mutation(const fwdpy11::GSLrng_t& rng, const double left, const double right
             auto itr = std::upper_bound(
                 begin(pop.haploid_genomes[nodes_to_haploid_genome[n]].smutations),
                 end(pop.haploid_genomes[nodes_to_haploid_genome[n]].smutations),
-                new_mutation_key, [&pop](const auto new_key, const auto key) {
-                    return pop.mutations[new_key].pos < pop.mutations[key].pos;
-                });
+                new_mutation_key, [&pop](const auto new_key, const auto key)
+                    { return pop.mutations[new_key].pos < pop.mutations[key].pos; });
             std::copy(begin(pop.haploid_genomes[nodes_to_haploid_genome[n]].smutations),
                       itr, std::back_inserter(new_genome.smutations));
             new_genome.smutations.push_back(new_mutation_key);
