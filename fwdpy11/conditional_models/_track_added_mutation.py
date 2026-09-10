@@ -247,7 +247,6 @@ def _copy_pop_and_add_mutation(
         }
         idx = pcopy.add_mutation(rng, **_mutation_params)
         if idx is not None:
-            print(count_range, idx, pcopy.mcounts[idx])
             final_count = pcopy.mcounts[idx]
         else:
             raise AddMutationFailure("failed to add mutation")
