@@ -36,6 +36,7 @@
 #include <gsl/gsl_randist.h>
 
 #include "add_mutation.hpp"
+#include "fwdpp/ts/definitions.hpp"
 
 new_mutation_data::new_mutation_data(double e, double h, std::vector<double> esizes,
                                      std::vector<double> heffects,
@@ -76,14 +77,15 @@ namespace
         fwdpp::ts::table_index_t node, parent;
         // The sample nodes below node
         std::vector<fwdpp::ts::table_index_t> descendants;
-        double node_time, parent_time, tree_span;
+        double node_time, parent_time, proportional_branch_length, tree_span;
 
         candidate_node_map(double l, double r, fwdpp::ts::table_index_t n,
                            fwdpp::ts::table_index_t p,
                            std::vector<fwdpp::ts::table_index_t> d, double a, double b,
-                           double c)
+                           double blen, double c)
             : left{l}, right{r}, node{n}, parent{p}, descendants{std::move(d)},
-              node_time{a}, parent_time{b}, tree_span{c}
+              node_time{a}, parent_time{b}, proportional_branch_length{blen},
+              tree_span{c}
         {
         }
     };
@@ -155,6 +157,33 @@ namespace
                 auto& tree = tv.tree();
                 if (tree.left < right && tree.right >= left)
                     {
+                        auto total_time = 0.0;
+                        {
+                            fwdpp::ts::node_iterator ni(tree,
+                                                        fwdpp::ts::nodes_preorder());
+                            auto n = ni();
+                            while (n != fwdpp::ts::NULL_INDEX)
+                                {
+                                    // Tree that are not fully-coalesced, etc., can
+                                    // have node with NULL parents.
+                                    // For this case, we do not know the branch length
+                                    // and the node cannot contribute to total time.
+                                    // (Also, tree root(s)!)
+                                    if (tree.parents[n] != fwdpp::ts::NULL_INDEX)
+                                        {
+                                            total_time
+                                                += (pop.tables->nodes[n].time
+                                                    - pop.tables->nodes[tree.parents[n]]
+                                                          .time);
+                                        }
+                                    n = ni();
+                                }
+                        }
+                        if (total_time <= 0.0 || !std::isfinite(total_time))
+                            {
+                                throw std::runtime_error(
+                                    "invalid value for total time on tree");
+                            }
                         fwdpp::ts::node_iterator ni(tree, fwdpp::ts::nodes_preorder());
                         auto n = ni();
                         while (n != fwdpp::ts::NULL_INDEX)
@@ -191,15 +220,22 @@ namespace
                                                         pop.tables->nodes, n,
                                                         tree.parents[n]))
                                                     {
+                                                        auto parent_time
+                                                            = pop.tables
+                                                                  ->nodes
+                                                                      [tree.parents[n]]
+                                                                  .time;
+                                                        auto node_time
+                                                            = pop.tables->nodes[n].time;
+
                                                         candidates.emplace_back(
                                                             std::max(tree.left, left),
                                                             std::min(tree.right, right),
                                                             n, tree.parents[n],
                                                             std::move(descendants),
-                                                            pop.tables->nodes[n].time,
-                                                            pop.tables
-                                                                ->nodes[tree.parents[n]]
-                                                                .time,
+                                                            node_time, parent_time,
+                                                            (node_time - parent_time)
+                                                                / total_time,
                                                             std::min(tree.right, right)
                                                                 - std::max(left,
                                                                            tree.left));
@@ -212,6 +248,14 @@ namespace
                 if (tree.left >= right)
                     {
                         break;
+                    }
+            }
+        for (auto& c : candidates)
+            {
+                if (!std::isfinite(c.proportional_branch_length))
+                    {
+                        throw std::runtime_error(
+                            "invalid value for proportional_branch_length");
                     }
             }
         return candidates;
@@ -349,13 +393,15 @@ add_mutation(const fwdpy11::GSLrng_t& rng, const double left, const double right
     std::vector<candidate_node_map> candidates;
     std::vector<int> counts;
 
-    for (auto ndescendants_i = ndescendants_min; ndescendants_i < ndescendants_max; ++ndescendants_i)
+    for (auto ndescendants_i = ndescendants_min; ndescendants_i < ndescendants_max;
+         ++ndescendants_i)
         {
             auto candidates_i
                 = generate_canidate_list(left, right, ndescendants_i, deme, pop);
-            for(std::size_t j = 0 ; j < candidates_i.size() ; ++j) {
-                counts.push_back(ndescendants_i);
-            }
+            for (std::size_t j = 0; j < candidates_i.size(); ++j)
+                {
+                    counts.push_back(ndescendants_i);
+                }
             candidates.insert(std::end(candidates),
                               std::make_move_iterator(std::begin(candidates_i)),
                               std::make_move_iterator(std::end(candidates_i)));
@@ -379,7 +425,7 @@ add_mutation(const fwdpy11::GSLrng_t& rng, const double left, const double right
                 {
                     throw std::runtime_error("invalid tree span of <= 0.0");
                 }
-            candidate_weights.push_back((c.node_time - c.parent_time) * c.tree_span);
+            candidate_weights.push_back((c.proportional_branch_length) * c.tree_span);
         }
     auto discrete
         = gsl_ran_discrete_preproc(candidates.size(), candidate_weights.data());
