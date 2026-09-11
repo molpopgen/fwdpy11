@@ -329,6 +329,9 @@ def _track_added_mutation(
     :param return_when_stopping_condition_met: If `True`,
         return to calling environment once `stopping_condition` is satisfied.
         If `False`, simulate to the end of the model.
+
+    Internally, this function depends on :func:`fwdpy11.DiploidPopulation.add_mutation`.
+    See the documentation of that function for additional details.
     """
 
     if pop.generation > 0:

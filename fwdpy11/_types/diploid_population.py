@@ -506,6 +506,13 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
         * The genetic values of individuals are not updated by this function.
           Such updates will happen when the population begins evolution
           forwards in time.
+        * When `ndescendants` specifies a range of values `[min, max)`, we assign
+          weights to nodes. These weights are 0.0 if the number of sample descendants
+          below the node is not in `[min, max)`. Otherwise, the weights are a function
+          of the proportional branch length of the node on a given tree times the proportional
+          overlap of the tree's span with `window`.
+          Note that nodes without parents do not have branch lengths.
+          Such nodes are not considered as candidantes and are assigned a weight of 0.0
 
         Exceptions:
 
