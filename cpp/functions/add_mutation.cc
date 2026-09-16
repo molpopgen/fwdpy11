@@ -155,7 +155,7 @@ namespace
         while (tv())
             {
                 auto& tree = tv.tree();
-                if (tree.left < right && tree.right >= left)
+                if (tree.left < right && tree.right > left)
                     {
                         auto total_time = 0.0;
                         {
@@ -423,7 +423,7 @@ add_mutation(const fwdpy11::GSLrng_t& rng, const double left, const double right
                 }
             if (c.tree_span <= 0.0)
                 {
-                    throw std::runtime_error("invalid tree span of <= 0.0");
+                    throw std::runtime_error("invalid overlap length of <= 0.0");
                 }
             candidate_weights.push_back((c.proportional_branch_length) * c.tree_span);
         }
