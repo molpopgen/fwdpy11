@@ -14,11 +14,11 @@ init_DiploidGeneticValue(py::module& m)
         .def_property_readonly(
             "shape",
             [](const fwdpy11::DiploidGeneticValue& self) {
-                if (self.total_dim > 1 && self.total_dim != self.gvalues.size())
+                if (self.total_dim() > 1 && self.total_dim() != self.gvalues.size())
                     {
                         throw std::runtime_error("dimensionality mismatch");
                     }
-                return pybind11::make_tuple(self.total_dim);
+                return pybind11::make_tuple(self.total_dim());
             },
             R"delim(
                                Return the dimensions of the genetic values.

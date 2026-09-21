@@ -17,7 +17,7 @@
 // along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 //
 #include <pybind11/pybind11.h>
-#include <fwdpy11/genetic_values/DiploidGeneticValue.hpp>
+#include <fwdpy11/genetic_values/DiploidGeneticValueCalculation.hpp>
 #include <fwdpy11/genetic_value_to_fitness/GeneticValueIsTrait.hpp>
 #include <fwdpp/fitness_models.hpp>
 
@@ -43,13 +43,10 @@ struct PyDiploidGeneticValueData
     }
 };
 
-class PyDiploidGeneticValue : public fwdpy11::DiploidGeneticValue
+class PyDiploidGeneticValue : public fwdpy11::DiploidGeneticValueCalculation
 {
   public:
-    PyDiploidGeneticValue(std::size_t ndim,
-                          const fwdpy11::GeneticValueToFitnessMap* gvalue_to_fitness_map,
-                          const fwdpy11::GeneticValueNoise* noise)
-        : fwdpy11::DiploidGeneticValue(ndim, gvalue_to_fitness_map, noise)
+    PyDiploidGeneticValue() : fwdpy11::DiploidGeneticValueCalculation()
     {
     }
 };
@@ -63,30 +60,13 @@ class PyDiploidGeneticValueTrampoline : public PyDiploidGeneticValue
     calculate_gvalue(const fwdpy11::DiploidGeneticValueData input_data) override
     {
         PYBIND11_OVERLOAD_PURE(double, PyDiploidGeneticValue, calculate_gvalue,
-                               PyDiploidGeneticValueData(input_data, this->gvalues));
-    }
-
-    double
-    genetic_value_to_fitness(
-        const fwdpy11::DiploidGeneticValueToFitnessData input_data) override
-    // NOTE: see https://pybind11.readthedocs.io/en/stable/advanced/classes.html#extended-trampoline-class-functionality
-    {
-        pybind11::gil_scoped_acquire gil; // Acquire the GIL while in this scope.
-        // Try to look up the overloaded method on the Python side.
-        pybind11::function overload
-            = pybind11::get_overload(this, "genetic_value_to_fitness");
-        if (overload)
-            {
-                auto obj = overload(input_data);
-                return obj.cast<double>();
-            }
-        return this->gv2w->operator()(input_data);
+                               PyDiploidGeneticValueData(input_data));
     }
 
     void
     update(const fwdpy11::DiploidPopulation& pop) override
     {
-        PYBIND11_OVERLOAD_PURE(void, PyDiploidGeneticValue, update, pop);
+        PYBIND11_OVERLOAD_PURE(void, PyDiploidGeneticValueCalculation, update, pop);
     }
 };
 
@@ -118,12 +98,9 @@ additive_effects(const fwdpy11::DiploidPopulation& pop,
 void
 init_PyDiploidGeneticValue(py::module& m)
 {
-    py::class_<PyDiploidGeneticValue, fwdpy11::DiploidGeneticValue,
-               PyDiploidGeneticValueTrampoline>(m, "_PyDiploidGeneticValue")
-        .def(py::init<std::size_t, const fwdpy11::GeneticValueToFitnessMap*,
-                      const fwdpy11::GeneticValueNoise*>(),
-             py::arg("ndim"), py::arg("genetic_value_to_fitness"),
-             py::arg("noise"));
+    py::class_<PyDiploidGeneticValue, fwdpy11::DiploidGeneticValueCalculation,
+               PyDiploidGeneticValueTrampoline>(m, "_PyDiploidGeneticValueCalculation")
+        .def(py::init<>());
 
     py::class_<PyDiploidGeneticValueData>(m, "PyDiploidGeneticValueData",
                                           py::buffer_protocol())

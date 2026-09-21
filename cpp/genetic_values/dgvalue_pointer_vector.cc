@@ -39,7 +39,7 @@ namespace
             }
         for (std::size_t i = 1; i < rv.size(); ++i)
             {
-                if (rv[i - 1]->total_dim != rv[i]->total_dim)
+                if (rv[i - 1]->total_dim() != rv[i]->total_dim())
                     {
                         rv.clear();
                         throw std::invalid_argument(
