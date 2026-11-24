@@ -4,7 +4,8 @@
 #include <limits>
 #include <type_traits>
 #include <functional>
-#include "../DiploidGeneticValue.hpp"
+#include "../DiploidGeneticValueCalculation.hpp"
+#include "fwdpy11/genetic_value_to_fitness/GeneticValueToFitnessMap.hpp"
 #include <fwdpy11/genetic_values/site_dependent_genetic_value.hpp>
 #include <fwdpy11/genetic_value_noise/GeneticValueNoise.hpp>
 
@@ -13,7 +14,8 @@ namespace fwdpy11
     template <typename single_deme_het_fxn, typename single_deme_hom_fxn,
               typename multi_deme_het_fxn, typename multi_deme_hom_fxn,
               int starting_value>
-    class stateless_site_dependent_genetic_value_wrapper : public DiploidGeneticValue
+    class stateless_site_dependent_genetic_value_wrapper
+        : public DiploidGeneticValueCalculation
     {
       private:
         struct single_deme_callback
@@ -55,22 +57,24 @@ namespace fwdpy11
                 std::size_t deme = metadata.deme;
                 return gv(
                     pop.diploids[diploid_index], pop.haploid_genomes, pop.mutations,
-                    [deme, this](double& d, const Mutation& mut) {
-                        if (deme >= mut.esizes.size() || deme >= mut.heffects.size())
-                            {
-                                throw std::invalid_argument(
-                                    "deme index is out of range");
-                            }
-                        return multi_deme_aa(deme, d, mut);
-                    },
-                    [deme, this](double& d, const Mutation& mut) {
-                        if (deme >= mut.esizes.size() || deme >= mut.heffects.size())
-                            {
-                                throw std::invalid_argument(
-                                    "deme index is out of range");
-                            }
-                        return multi_deme_Aa(deme, d, mut);
-                    },
+                    [deme, this](double& d, const Mutation& mut)
+                        {
+                            if (deme >= mut.esizes.size() || deme >= mut.heffects.size())
+                                {
+                                    throw std::invalid_argument(
+                                        "deme index is out of range");
+                                }
+                            return multi_deme_aa(deme, d, mut);
+                        },
+                    [deme, this](double& d, const Mutation& mut)
+                        {
+                            if (deme >= mut.esizes.size() || deme >= mut.heffects.size())
+                                {
+                                    throw std::invalid_argument(
+                                        "deme index is out of range");
+                                }
+                            return multi_deme_Aa(deme, d, mut);
+                        },
                     starting_value);
             }
         };
@@ -92,24 +96,27 @@ namespace fwdpy11
         }
 
         fwdpy11::site_dependent_genetic_value gv;
+        std::vector<double> gvalues;
         double aa_scaling;
         make_return_value_t make_return_value;
         callback_type callback;
-        bool isfitness;
+        std::unique_ptr<GeneticValueToFitnessMap> gv2w;
+        std::unique_ptr<GeneticValueNoise> noise;
 
       public:
         stateless_site_dependent_genetic_value_wrapper(
             std::size_t ndim, double scaling, make_return_value_t mrv,
             std::function<bool(double)> clamp, const GeneticValueToFitnessMap* gv2w_,
             const GeneticValueNoise* noise_)
-            : DiploidGeneticValue{ndim, gv2w_, noise_}, gv{clamp}, aa_scaling(scaling),
-              make_return_value(std::move(mrv)),
-              callback(init_callback(ndim, aa_scaling)), isfitness(gv2w->is_fitness())
+            : DiploidGeneticValueCalculation(), gv{clamp}, gvalues{},
+              aa_scaling(scaling), make_return_value(std::move(mrv)),
+              callback(init_callback(ndim, aa_scaling)), gv2w(gv2w_->clone()),
+              noise(noise_->clone())
         {
         }
 
         double
-        calculate_gvalue(const DiploidGeneticValueData data) override
+        calculate_gvalue(const DiploidGeneticValueData data) 
         {
             gvalues[0] = make_return_value(
                 callback(gv, data.offspring_metadata.get().label,
@@ -118,7 +125,7 @@ namespace fwdpy11
         }
 
         void
-        update(const fwdpy11::DiploidPopulation& /*pop*/) override
+        update(const fwdpy11::DiploidPopulation& /*pop*/) 
         {
         }
 
@@ -131,7 +138,7 @@ namespace fwdpy11
         bool
         is_fitness() const
         {
-            return isfitness;
+            return this->gv2w->is_fitness();
         }
     };
 } // namespace fwdpy11

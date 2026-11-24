@@ -19,10 +19,11 @@
 #ifndef FWDPY11_DIPLOID_GENETIC_VALUE_HPP__
 #define FWDPY11_DIPLOID_GENETIC_VALUE_HPP__
 
-#include <cstdint>
+#include <stdexcept>
 #include <vector>
 #include <fwdpy11/rng.hpp>
 #include <fwdpy11/types/DiploidPopulation.hpp>
+#include <fwdpy11/genetic_values/DiploidGeneticValueCalculation.hpp>
 #include <fwdpy11/genetic_value_to_fitness/GeneticValueToFitnessMap.hpp>
 #include <fwdpy11/genetic_value_to_fitness/GeneticValueIsFitness.hpp>
 #include <fwdpy11/genetic_value_noise/NoNoise.hpp>
@@ -49,56 +50,74 @@ namespace fwdpy11
         }
 
       public:
-        std::size_t total_dim;
         std::vector<double> gvalues;
         // Even though these are stored as shared_ptr,
         // this class is non-copyable because its state
         // may change over time via the various update
         // functions.
+        std::shared_ptr<DiploidGeneticValueCalculation> model;
         std::shared_ptr<GeneticValueToFitnessMap> gv2w;
         std::shared_ptr<GeneticValueNoise> noise_fxn;
 
-        DiploidGeneticValue(std::size_t ndim, const GeneticValueToFitnessMap* gv2w_,
+        DiploidGeneticValue(const DiploidGeneticValueCalculation& model_,
+                            const GeneticValueToFitnessMap* gv2w_,
                             const GeneticValueNoise* noise)
-            : total_dim(ndim), gvalues(total_dim, 0.),
+            : gvalues(model_.ndim(), 0.), model(model_.clone()),
               gv2w{process_input<GeneticValueToFitnessMap, GeneticValueIsFitness,
-                                 std::size_t>(gv2w_, ndim)},
+                                 std::size_t>(gv2w_, model_.ndim())},
               noise_fxn{process_input<GeneticValueNoise, NoNoise>(noise)}
         {
+            if (model->ndim() != gv2w->ndim())
+                {
+                    throw std::invalid_argument(
+                        "GeneticValueToFitnessMap and DiploidGeneticValueCalculation "
+                        "must have identical dimensions");
+                }
         }
 
         // The type is move-only
-        virtual ~DiploidGeneticValue() = default;
+        ~DiploidGeneticValue() = default;
         DiploidGeneticValue(const DiploidGeneticValue&) = delete;
         DiploidGeneticValue(DiploidGeneticValue&&) = default;
         DiploidGeneticValue& operator=(const DiploidGeneticValue&) = delete;
         DiploidGeneticValue& operator=(DiploidGeneticValue&&) = default;
 
-        virtual double calculate_gvalue(const DiploidGeneticValueData data) = 0;
+        // virtual double calculate_gvalue(const DiploidGeneticValueData data) = 0;
 
-        virtual void update(const DiploidPopulation& pop) = 0;
+        void
+        update(const DiploidPopulation& pop)
+        {
+            this->model->update(pop);
+            this->noise_fxn->update(pop);
+            this->gv2w->update(pop);
+        }
 
         // To be called from w/in a simulation
         inline void
         operator()(DiploidGeneticValueData data)
         {
-            data.offspring_metadata.get().g = calculate_gvalue(data);
-            data.offspring_metadata.get().e = noise(DiploidGeneticValueNoiseData(data));
-            data.offspring_metadata.get().w = genetic_value_to_fitness(
-                DiploidGeneticValueToFitnessData(data, gvalues));
+            data.offspring_metadata.get().g = model->calculate_gvalue(data);
+            data.offspring_metadata.get().e
+                = noise_fxn->operator()(DiploidGeneticValueNoiseData(data));
+            data.offspring_metadata.get().w
+                = gv2w->operator()(DiploidGeneticValueToFitnessData(data, gvalues));
         }
 
-        virtual double
-        genetic_value_to_fitness(const DiploidGeneticValueToFitnessData data)
-        {
-            return gv2w->operator()(data);
+        std::size_t total_dim() const {
+            return model->ndim();
         }
 
-        virtual double
-        noise(const DiploidGeneticValueNoiseData data) const
-        {
-            return noise_fxn->operator()(data);
-        }
+        // virtual double
+        // genetic_value_to_fitness(const DiploidGeneticValueToFitnessData data)
+        // {
+        //     return gv2w->operator()(data);
+        // }
+
+        // virtual double
+        // noise(const DiploidGeneticValueNoiseData data) const
+        // {
+        //     return noise_fxn->operator()(data);
+        // }
     };
 } //namespace fwdpy11
 
